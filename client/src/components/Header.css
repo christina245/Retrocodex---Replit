@@ -80,11 +80,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: -70px;
 }
 
 .logo-tagline-image {
-  width: 253px;
-  height: 92px;
+  width: 295px;
+  height: 108px;
   object-fit: contain;
 }
 
