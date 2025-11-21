@@ -40,19 +40,19 @@
 }
 
 .social-logo {
-  width: 30px;
-  height: 30px;
+  width: 21px;
+  height: 21px;
   object-fit: contain;
 }
 
 .social-logo-reddit {
-  width: 33px;
-  height: 33px;
+  width: 23px;
+  height: 23px;
 }
 
 .social-logo-bluesky {
-  width: 32px;
-  height: 28px;
+  width: 22px;
+  height: 20px;
 }
 
 .donate-button {

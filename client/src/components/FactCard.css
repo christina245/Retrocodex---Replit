@@ -99,7 +99,7 @@
   background: rgba(44, 44, 44, 0.05);
   color: #dc143c;
   border: none;
-  padding: 15px;
+  padding: 12px 15px;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
@@ -108,7 +108,7 @@
   transition: background 0.2s;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 4px;
 }
 
 .learn-more-button:hover {
