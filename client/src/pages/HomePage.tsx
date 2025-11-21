@@ -33,7 +33,7 @@ const allFacts: Fact[] = [
     category: "HEALTH & FITNESS",
     categoryColor: "#F2994A",
     myth: "The Food Pyramid is the model for a healthy, balanced diet.",
-    truth: "The Food Pyramid's hierarchy reflected the food industry's influence on nutrition guidelines rather than modern science. Many nutritionists now recommend more balanced portions."
+    truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions."
   },
   {
     id: "4",
@@ -45,7 +45,7 @@ const allFacts: Fact[] = [
   {
     id: "5",
     category: "SOCIAL SCIENCES",
-    categoryColor: "#EB5757",
+    categoryColor: "#0167A2",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention."
   },

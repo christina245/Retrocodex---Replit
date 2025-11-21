@@ -6,7 +6,7 @@ const categories = [
   { name: "LIFE SCIENCES", icon: Dna, color: "#6FCF97", path: "/category/life-sciences" },
   { name: "EVERYDAY LIFE", icon: Home, color: "#9B51E0", path: "/category/everyday-life" },
   { name: "HEALTH & FITNESS", icon: Dumbbell, color: "#F2994A", path: "/category/health-fitness" },
-  { name: "SOCIAL SCIENCES", icon: Users, color: "#EB5757", path: "/category/social-sciences" },
+  { name: "SOCIAL SCIENCES", icon: Users, color: "#0167A2", path: "/category/social-sciences" },
   { name: "GENDER & SEXUALITY", icon: Heart, color: "#E91E63", path: "/category/gender-sexuality" },
   { name: "OTHER", icon: Zap, color: "#2C2C2C", path: "/category/other" },
 ];

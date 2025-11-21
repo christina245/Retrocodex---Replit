@@ -1,5 +1,16 @@
-import { MessageCircle, Bookmark, Share2, X, Check } from "lucide-react";
+import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap } from "lucide-react";
 import "./FactCard.css";
+
+const categoryIcons = {
+  "HISTORY": Scroll,
+  "LIFE SCIENCES": Dna,
+  "EVERYDAY LIFE": Home,
+  "HEALTH & FITNESS": Dumbbell,
+  "SOCIAL SCIENCES": Users,
+  "GENDER & SEXUALITY": Heart,
+  "OTHER": Zap,
+  "OTHER • LINGUISTICS": Zap,
+};
 
 export interface Fact {
   id: string;
@@ -18,6 +29,7 @@ interface FactCardProps {
 
 export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
   const truthTextSize = fact.truth.length > 180 ? "truth-text-long" : "truth-text-short";
+  const CategoryIcon = categoryIcons[fact.category as keyof typeof categoryIcons] || Zap;
   
   return (
     <div className="fact-card-wrapper">
@@ -28,8 +40,9 @@ export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
         {/* Category Header */}
         <div 
           className="fact-category"
-          style={{ backgroundColor: `${fact.categoryColor}0D` }}
+          style={{ backgroundColor: `${fact.categoryColor}33` }}
         >
+          <CategoryIcon size={10} style={{ color: fact.categoryColor }} className="category-icon-small" />
           <span className="category-badge">{fact.category}</span>
         </div>
 
