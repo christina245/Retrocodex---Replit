@@ -17,6 +17,8 @@ interface FactCardProps {
 }
 
 export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
+  const truthTextSize = fact.truth.length > 180 ? "truth-text-long" : "truth-text-short";
+  
   return (
     <div className="fact-card-wrapper">
       <div 
@@ -35,19 +37,17 @@ export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
         <div className="fact-content">
           {/* Myth */}
           <div className="fact-section">
-            <div className="fact-label">YOU MIGHT HAVE BEEN TAUGHT</div>
             <div className="fact-statement myth">
               <X className="fact-icon myth-icon" />
-              <p className="fact-text">"{fact.myth}"</p>
+              <p className="fact-text myth-text">"{fact.myth}"</p>
             </div>
           </div>
 
           {/* Truth */}
           <div className="fact-section">
-            <div className="fact-label">CURRENT UNDERSTANDING AS OF 2025</div>
             <div className="fact-statement truth">
               <Check className="fact-icon truth-icon" />
-              <p className="fact-text">{fact.truth}</p>
+              <p className={`fact-text truth-text ${truthTextSize}`}>{fact.truth}</p>
             </div>
           </div>
 

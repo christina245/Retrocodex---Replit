@@ -22,9 +22,10 @@
 
 .facts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 290px);
+  grid-template-columns: repeat(2, 460px);
   gap: 2rem 1.5rem;
   justify-content: start;
+  margin-left: 140px;
 }
 
 .sidebar {

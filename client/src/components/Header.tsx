@@ -2,6 +2,7 @@ import { Search } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/orange reddit logo_1763699489181.png";
+import logoImage from "@assets/logo and tagline_1763702017162.png";
 import "./Header.css";
 
 interface HeaderProps {
@@ -59,15 +60,11 @@ export function Header({ onMenuClick }: HeaderProps) {
 
         {/* Logo & Tagline */}
         <div className="header-branding">
-          <div className="logo">
-            <img 
-              src="/attached_assets/line logo_1763697164032.png" 
-              alt="Retrocodex Logo" 
-              className="logo-image"
-            />
-            <span className="logo-text">Retrocodex</span>
-          </div>
-          <p className="tagline">A place to unlearn outdated or untrue beliefs ✓</p>
+          <img 
+            src={logoImage} 
+            alt="Retrocodex - A place to unlearn outdated or untrue lessons in" 
+            className="logo-tagline-image"
+          />
         </div>
 
         {/* Search & Actions */}

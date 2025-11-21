@@ -26,6 +26,7 @@
 .category-nav-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
   min-width: min-content;
@@ -36,7 +37,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.625rem 1rem;
-  border: 1px solid #e5e5e5;
+  border: 1px solid transparent;
   border-radius: 6px;
   background: white;
   text-decoration: none;
@@ -47,6 +48,7 @@
 
 .category-item:hover {
   background: #fafafa;
+  border: 1px solid #e5e5e5;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
