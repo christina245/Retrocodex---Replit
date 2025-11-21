@@ -1,0 +1,142 @@
+.email-signup-banner {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.banner-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.banner-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.banner-input {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  color: #2C2C2C;
+  background: white;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  padding: 0.75rem;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.banner-input::placeholder {
+  color: #999;
+}
+
+.banner-input:focus {
+  outline: none;
+  border-color: #FF5353;
+}
+
+.banner-submit {
+  background: #FF5353;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.banner-submit:hover:not(:disabled) {
+  background: #e64848;
+}
+
+.banner-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.banner-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.benefits-intro {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  color: #2C2C2C;
+  margin: 0;
+  font-weight: 500;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.benefits-list li {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.5;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.benefits-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0.375rem;
+  color: #FF5353;
+  font-weight: bold;
+}
+
+.benefits-note {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.benefits-note strong {
+  color: #2C2C2C;
+}
+
+.banner-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.banner-social-link {
+  color: #2C2C2C;
+  font-size: 1.5rem;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-social-link:hover {
+  color: #FF5353;
+}

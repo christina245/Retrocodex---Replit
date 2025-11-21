@@ -1,0 +1,176 @@
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { Header } from "@/components/Header";
+import { HamburgerMenu } from "@/components/HamburgerMenu";
+import { CategoryNav } from "@/components/CategoryNav";
+import { TabSelector } from "@/components/TabSelector";
+import { FactCard, type Fact } from "@/components/FactCard";
+import { EmailSignupBanner } from "@/components/EmailSignupBanner";
+import { SaveModal } from "@/components/SaveModal";
+import { ShareModal } from "@/components/ShareModal";
+import { Footer } from "@/components/Footer";
+import "./HomePage.css";
+
+const allFacts: Fact[] = [
+  {
+    id: "1",
+    category: "HISTORY",
+    categoryColor: "#F5D547",
+    myth: "Christopher Columbus discovered the Americas.",
+    truth: "Columbus only reached Central and South America. He wasn't even close to what is now the United States. Native peoples had established rich civilizations over thousands of years."
+  },
+  {
+    id: "2",
+    category: "LIFE SCIENCES",
+    categoryColor: "#6FCF97",
+    myth: "You only use 10% of your brain.",
+    truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture."
+  },
+  {
+    id: "3",
+    category: "HEALTH & FITNESS",
+    categoryColor: "#F2994A",
+    myth: "The Food Pyramid is the model for a healthy, balanced diet.",
+    truth: "The Food Pyramid's hierarchy reflected the food industry's influence on nutrition guidelines rather than modern science. Many nutritionists now recommend more balanced portions."
+  },
+  {
+    id: "4",
+    category: "EVERYDAY LIFE",
+    categoryColor: "#9B51E0",
+    myth: "Too much sugar makes kids hyper.",
+    truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation."
+  },
+  {
+    id: "5",
+    category: "SOCIAL SCIENCES",
+    categoryColor: "#EB5757",
+    myth: "People have different learning styles, such as being a visual or auditory learner.",
+    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention."
+  },
+  {
+    id: "6",
+    category: "OTHER • LINGUISTICS",
+    categoryColor: "#2C2C2C",
+    myth: "I before E except after C.",
+    truth: "English has a lot of words where that 'rule' doesn't hold up. Words like 'science,' 'height,' 'their,' 'protein,' 'caffeine,' 'vein,' 'beige,' 'neighbor,' 'weird,' 'seize,' and many others break this 'rule.'"
+  },
+  {
+    id: "7",
+    category: "LIFE SCIENCES",
+    categoryColor: "#6FCF97",
+    myth: "Human blood is actually blue until it comes into contact with oxygen.",
+    truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself."
+  },
+  {
+    id: "8",
+    category: "EVERYDAY LIFE",
+    categoryColor: "#9B51E0",
+    myth: "Humans swallow an average of 8 spiders in their sleep every year.",
+    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths."
+  },
+  {
+    id: "9",
+    category: "HISTORY",
+    categoryColor: "#F5D547",
+    myth: "Marie Antoinette ignorantly said 'Let them eat cake' regarding the French Revolution.",
+    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda."
+  }
+];
+
+export default function HomePage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const emailMutation = useMutation({
+    mutationFn: async ({ email, source }: { email: string; source: string }) => {
+      return await apiRequest("POST", "/api/emails", { email, source });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "We'll notify you when accounts are available.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/emails"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to submit email. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleEmailSubmit = async (email: string, source: string) => {
+    await emailMutation.mutateAsync({ email, source });
+  };
+
+  const handleSaveClick = () => {
+    setIsSaveModalOpen(true);
+  };
+
+  const handleShareClick = (fact: Fact) => {
+    setShareModalFact(fact);
+  };
+
+  const handleCommentClick = () => {
+    toast({
+      title: "Coming Soon",
+      description: "Individual fact pages with comments are in development.",
+    });
+  };
+
+  const displayedFacts = activeTab === "featured" 
+    ? allFacts.slice(0, 6) 
+    : allFacts.slice(-3);
+
+  return (
+    <div className="page-wrapper">
+      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <CategoryNav />
+      <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+
+      <main className="main-content">
+        <div className="content-container">
+          <div className="facts-grid">
+            {displayedFacts.map((fact) => (
+              <FactCard
+                key={fact.id}
+                fact={fact}
+                onSave={handleSaveClick}
+                onShare={() => handleShareClick(fact)}
+                onComment={handleCommentClick}
+              />
+            ))}
+          </div>
+
+          <aside className="sidebar">
+            <EmailSignupBanner 
+              onSubmit={(email) => handleEmailSubmit(email, "signup-banner")} 
+            />
+          </aside>
+        </div>
+      </main>
+
+      <Footer />
+
+      <SaveModal
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onSubmit={(email) => handleEmailSubmit(email, "save-modal")}
+      />
+      <ShareModal
+        isOpen={shareModalFact !== null}
+        onClose={() => setShareModalFact(null)}
+        fact={shareModalFact}
+      />
+    </div>
+  );
+}

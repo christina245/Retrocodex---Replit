@@ -1,0 +1,64 @@
+.category-nav {
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-nav::-webkit-scrollbar {
+  height: 4px;
+}
+
+.category-nav::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.category-nav::-webkit-scrollbar-thumb {
+  background: #d5d5d5;
+  border-radius: 2px;
+}
+
+.category-nav::-webkit-scrollbar-thumb:hover {
+  background: #c5c5c5;
+}
+
+.category-nav-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  min-width: min-content;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  background: white;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.category-item:hover {
+  background: #fafafa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.category-icon {
+  flex-shrink: 0;
+}
+
+.category-name {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2C2C2C;
+  letter-spacing: 0.025em;
+}

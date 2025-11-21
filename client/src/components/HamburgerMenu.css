@@ -1,0 +1,83 @@
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.3s ease;
+}
+
+.hamburger-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1), 0 0 40px rgba(0, 0, 0, 0.05);
+  z-index: 999;
+  padding: 2rem;
+  animation: slideIn 0.3s ease;
+}
+
+.menu-close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #2C2C2C;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.menu-close-button:hover {
+  color: #FF5353;
+}
+
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 3rem;
+}
+
+.menu-link {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1rem;
+  color: #2C2C2C;
+  text-decoration: none;
+  padding: 20px;
+  border-radius: 10px;
+  transition: background-color 0.2s;
+  display: block;
+  text-align: center;
+}
+
+.menu-link:hover {
+  background: rgba(255, 83, 83, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

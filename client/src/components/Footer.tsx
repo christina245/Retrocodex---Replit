@@ -1,0 +1,119 @@
+import { FaInstagram, FaReddit, FaBluesky } from "react-icons/fa6";
+import "./Footer.css";
+
+export function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+        {/* About Retrocodex */}
+        <div className="footer-column">
+          <h3 className="footer-heading">About Retrocodex</h3>
+          <ul className="footer-links">
+            <li><a href="#" data-testid="link-footer-faqs">FAQs</a></li>
+            <li><a href="#" data-testid="link-footer-about">What we're about</a></li>
+            <li><a href="#" data-testid="link-footer-blog">Blog</a></li>
+          </ul>
+        </div>
+
+        {/* Fact Categories */}
+        <div className="footer-column">
+          <h3 className="footer-heading">Fact categories</h3>
+          <ul className="footer-links">
+            <li><a href="#" data-testid="link-footer-history">History</a></li>
+            <li><a href="#" data-testid="link-footer-life-sciences">Life sciences</a></li>
+            <li><a href="#" data-testid="link-footer-everyday">Everyday life</a></li>
+            <li><a href="#" data-testid="link-footer-social">Social sciences</a></li>
+            <li><a href="#" data-testid="link-footer-gender">Gender & sexuality</a></li>
+            <li><a href="#" data-testid="link-footer-miscellaneous">Miscellaneous</a></li>
+          </ul>
+        </div>
+
+        {/* Get in Touch */}
+        <div className="footer-column">
+          <h3 className="footer-heading">Get in touch</h3>
+          <ul className="footer-links">
+            <li>
+              <a 
+                href="https://buymeacoffee.com/retrocodex" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                data-testid="link-footer-donate"
+              >
+                Support our team
+              </a>
+            </li>
+            <li>
+              <a 
+                href="https://form.typeform.com/to/pal6ZbpG" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                data-testid="link-footer-submit"
+              >
+                Submit a new fact/correction
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Join the Community */}
+        <div className="footer-column">
+          <h3 className="footer-heading">Join the community</h3>
+          <div className="footer-social">
+            <a 
+              href="https://instagram.com/retrocodex.facts" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="footer-social-link"
+              data-testid="link-footer-instagram"
+              aria-label="Follow us on Instagram"
+            >
+              <FaInstagram />
+            </a>
+            <a 
+              href="https://reddit.com/r/LearnedWrong" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="footer-social-link"
+              data-testid="link-footer-reddit"
+              aria-label="Join us on Reddit"
+            >
+              <FaReddit />
+            </a>
+            <a 
+              href="https://bsky.app/profile/the-retrocodex.bsky.social" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="footer-social-link"
+              data-testid="link-footer-bluesky"
+              aria-label="Follow us on Bluesky"
+            >
+              <FaBluesky />
+            </a>
+          </div>
+          <a 
+            href="https://buymeacoffee.com/retrocodex" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="footer-donate-button"
+            data-testid="button-footer-donate"
+          >
+            Donate
+          </a>
+        </div>
+      </div>
+
+      {/* Bottom Links */}
+      <div className="footer-bottom">
+        <div className="footer-bottom-links">
+          <a href="#" data-testid="link-footer-privacy">Privacy Policy</a>
+          <span>•</span>
+          <a href="#" data-testid="link-footer-terms">Terms of Use</a>
+          <span>•</span>
+          <a href="#" data-testid="link-footer-disclaimer">Disclaimers</a>
+          <span>•</span>
+          <a href="#" data-testid="link-footer-cookie">Cookie Policy</a>
+        </div>
+      </div>
+    </footer>
+  );
+}

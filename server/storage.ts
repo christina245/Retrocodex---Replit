@@ -1,38 +1,41 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { 
+  emailSubscriptions, 
+  type EmailSubscription, 
+  type InsertEmailSubscription 
+} from "@shared/schema";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  // Email subscriptions
+  createEmailSubscription(subscription: InsertEmailSubscription): Promise<EmailSubscription>;
+  getAllEmailSubscriptions(): Promise<EmailSubscription[]>;
+  getEmailSubscriptionByEmail(email: string): Promise<EmailSubscription | undefined>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<string, User>;
-
-  constructor() {
-    this.users = new Map();
+export class DatabaseStorage implements IStorage {
+  async createEmailSubscription(subscription: InsertEmailSubscription): Promise<EmailSubscription> {
+    const [result] = await db
+      .insert(emailSubscriptions)
+      .values(subscription)
+      .returning();
+    return result;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getAllEmailSubscriptions(): Promise<EmailSubscription[]> {
+    return await db
+      .select()
+      .from(emailSubscriptions)
+      .orderBy(desc(emailSubscriptions.createdAt));
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getEmailSubscriptionByEmail(email: string): Promise<EmailSubscription | undefined> {
+    const [result] = await db
+      .select()
+      .from(emailSubscriptions)
+      .where(eq(emailSubscriptions.email, email));
+    return result || undefined;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

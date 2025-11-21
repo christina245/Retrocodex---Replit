@@ -1,0 +1,32 @@
+.tab-selector {
+  display: flex;
+  gap: 1rem;
+  padding: 0 2rem;
+  margin-top: 1.5rem;
+}
+
+.tab-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  background: transparent;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  background: #f5f5f5;
+}
+
+.tab-button.active {
+  background: #2C2C2C;
+  color: white;
+}
+
+.tab-button.active:hover {
+  background: #1a1a1a;
+}
