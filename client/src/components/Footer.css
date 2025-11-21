@@ -11,7 +11,8 @@
   padding: 0 2rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2.5rem;
+  gap: 1.25rem;
+  justify-content: end;
 }
 
 .footer-column {
