@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { FaInstagram, FaReddit, FaBluesky } from "react-icons/fa6";
+import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
+import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
+import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
 import "./EmailSignupBanner.css";
 
 interface EmailSignupBannerProps {
@@ -71,7 +73,7 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
           data-testid="link-banner-instagram"
           aria-label="Join us on Instagram"
         >
-          <FaInstagram />
+          <img src={instagramLogo} alt="Instagram" className="banner-social-logo" />
         </a>
         <a 
           href="https://reddit.com/r/LearnedWrong" 
@@ -81,7 +83,7 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
           data-testid="link-banner-reddit"
           aria-label="Join us on Reddit"
         >
-          <FaReddit />
+          <img src={redditLogo} alt="Reddit" className="banner-social-logo banner-social-logo-reddit" />
         </a>
         <a 
           href="https://bsky.app/profile/the-retrocodex.bsky.social" 
@@ -91,7 +93,7 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
           data-testid="link-banner-bluesky"
           aria-label="Join us on Bluesky"
         >
-          <FaBluesky />
+          <img src={blueskyLogo} alt="Bluesky" className="banner-social-logo banner-social-logo-bluesky" />
         </a>
       </div>
     </div>

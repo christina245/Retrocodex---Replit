@@ -3,7 +3,7 @@
   border: 1px solid #e5e5e5;
   border-radius: 8px;
   padding: 1.5rem;
-  max-width: 300px;
+  max-width: 270px;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -59,6 +59,8 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
+  width: fit-content;
+  align-self: stretch;
 }
 
 .banner-submit:hover:not(:disabled) {
@@ -132,12 +134,28 @@
 .banner-social-link {
   color: #2C2C2C;
   font-size: 1.5rem;
-  transition: color 0.2s;
+  transition: opacity 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .banner-social-link:hover {
-  color: #FF5353;
+  opacity: 0.7;
+}
+
+.banner-social-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.banner-social-logo-bluesky {
+  width: 32px;
+  height: 28px;
+}
+
+.banner-social-logo-reddit {
+  width: 33px;
+  height: 33px;
 }

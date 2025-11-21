@@ -34,7 +34,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               data-testid="link-reddit"
               aria-label="Visit us on Reddit"
             >
-              <img src={redditLogo} alt="Reddit" className="social-logo" />
+              <img src={redditLogo} alt="Reddit" className="social-logo social-logo-reddit" />
             </a>
             <a 
               href="https://bsky.app/profile/the-retrocodex.bsky.social" 
