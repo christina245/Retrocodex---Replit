@@ -1,4 +1,5 @@
 import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap } from "lucide-react";
+import forwardArrow from "@assets/forward triangle_1763705098229.png";
 import "./FactCard.css";
 
 const categoryIcons = {
@@ -28,7 +29,6 @@ interface FactCardProps {
 }
 
 export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
-  const truthTextSize = fact.truth.length > 180 ? "truth-text-long" : "truth-text-short";
   const CategoryIcon = categoryIcons[fact.category as keyof typeof categoryIcons] || Zap;
   
   return (
@@ -60,7 +60,7 @@ export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
           <div className="fact-section">
             <div className="fact-statement truth">
               <Check className="fact-icon truth-icon" />
-              <p className={`fact-text truth-text ${truthTextSize}`}>{fact.truth}</p>
+              <p className="fact-text truth-text">{fact.truth}</p>
             </div>
           </div>
 
@@ -69,6 +69,7 @@ export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
             className="learn-more-button"
             data-testid={`button-learn-more-${fact.id}`}
           >
+            <img src={forwardArrow} alt="" className="learn-more-arrow" />
             Learn more
           </button>
         </div>

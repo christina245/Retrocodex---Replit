@@ -32,7 +32,7 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
       <form onSubmit={handleSubmit} className="banner-form">
         <input
           type="email"
-          placeholder="EMAIL"
+          placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="banner-input"

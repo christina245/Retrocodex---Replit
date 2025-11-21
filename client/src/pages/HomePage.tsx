@@ -38,14 +38,14 @@ const allFacts: Fact[] = [
   {
     id: "4",
     category: "EVERYDAY LIFE",
-    categoryColor: "#9B51E0",
+    categoryColor: "#0167A2",
     myth: "Too much sugar makes kids hyper.",
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation."
   },
   {
     id: "5",
     category: "SOCIAL SCIENCES",
-    categoryColor: "#0167A2",
+    categoryColor: "#9B51E0",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention."
   },
@@ -66,7 +66,7 @@ const allFacts: Fact[] = [
   {
     id: "8",
     category: "EVERYDAY LIFE",
-    categoryColor: "#9B51E0",
+    categoryColor: "#0167A2",
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths."
   },

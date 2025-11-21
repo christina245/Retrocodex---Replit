@@ -9,7 +9,7 @@
   padding: 0 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
 .header-top-row {
@@ -78,8 +78,8 @@
 }
 
 .logo-tagline-image {
-  height: auto;
-  max-width: 100%;
+  width: 421px;
+  height: 154px;
   object-fit: contain;
 }
 
