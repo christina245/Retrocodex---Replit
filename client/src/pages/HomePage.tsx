@@ -56,6 +56,14 @@ const allFacts: Fact[] = [
   },
   {
     id: "6",
+    category: "GENDER & SEXUALITY",
+    categoryColor: "#FC5AA8",
+    myth: "Men and women have very different brains.",
+    truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
+    dateAdded: "2024-11-21"
+  },
+  {
+    id: "7",
     category: "OTHER • LINGUISTICS",
     categoryColor: "#2C2C2C",
     myth: "I before E except after C.",
@@ -63,7 +71,7 @@ const allFacts: Fact[] = [
     dateAdded: "2024-11-12"
   },
   {
-    id: "7",
+    id: "8",
     category: "LIFE SCIENCES",
     categoryColor: "#6FCF97",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
@@ -71,7 +79,7 @@ const allFacts: Fact[] = [
     dateAdded: "2024-11-15"
   },
   {
-    id: "8",
+    id: "9",
     category: "EVERYDAY LIFE",
     categoryColor: "#0167A2",
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
@@ -79,7 +87,7 @@ const allFacts: Fact[] = [
     dateAdded: "2024-11-18"
   },
   {
-    id: "9",
+    id: "10",
     category: "HISTORY",
     categoryColor: "#F5D547",
     myth: "Marie Antoinette ignorantly said 'Let them eat cake' regarding the French Revolution.",
