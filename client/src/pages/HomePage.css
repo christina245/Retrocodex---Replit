@@ -16,7 +16,7 @@
   padding: 0 2rem;
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 1rem;
+  column-gap: 0.4rem;
   align-items: start;
 }
 
@@ -24,7 +24,7 @@
   display: grid;
   grid-template-columns: repeat(2, 460px);
   gap: 2rem 1.5rem;
-  justify-content: start;
+  justify-content: end;
 }
 
 .sidebar {
