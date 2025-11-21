@@ -52,7 +52,7 @@
   background: #FF5353;
   color: white;
   border: none;
-  padding: 20px;
+  padding: 12px 20px;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
   font-size: 0.875rem;
@@ -60,7 +60,7 @@
   cursor: pointer;
   transition: background 0.2s;
   width: fit-content;
-  align-self: stretch;
+  align-self: center;
 }
 
 .banner-submit:hover:not(:disabled) {
