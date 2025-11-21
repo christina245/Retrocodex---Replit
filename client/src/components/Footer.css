@@ -9,9 +9,8 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.25rem;
+  display: flex;
+  gap: 2rem;
   justify-content: end;
 }
 
