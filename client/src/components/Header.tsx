@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
-import logoImage from "@assets/logo and tagline bigger_1763702835004.png";
+import logoImage from "@assets/logo and tagline_1763710148682.png";
 import "./Header.css";
 
 interface HeaderProps {
