@@ -19,6 +19,7 @@ export interface Fact {
   categoryColor: string;
   myth: string;
   truth: string;
+  dateAdded?: string;
 }
 
 interface FactCardProps {

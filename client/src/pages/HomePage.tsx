@@ -19,63 +19,72 @@ const allFacts: Fact[] = [
     category: "HISTORY",
     categoryColor: "#F5D547",
     myth: "Christopher Columbus discovered the Americas.",
-    truth: "Columbus only reached Central and South America. He wasn't even close to what is now the United States. Native peoples had established rich civilizations over thousands of years."
+    truth: "Columbus only reached Central and South America. He wasn't even close to what is now the United States. Native peoples had established rich civilizations over thousands of years.",
+    dateAdded: "2024-10-15"
   },
   {
     id: "2",
     category: "LIFE SCIENCES",
     categoryColor: "#6FCF97",
     myth: "You only use 10% of your brain.",
-    truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture."
+    truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
+    dateAdded: "2024-10-22"
   },
   {
     id: "3",
     category: "HEALTH & FITNESS",
     categoryColor: "#F2994A",
     myth: "The Food Pyramid is the model for a healthy, balanced diet.",
-    truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions."
+    truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
+    dateAdded: "2024-11-01"
   },
   {
     id: "4",
     category: "EVERYDAY LIFE",
     categoryColor: "#0167A2",
     myth: "Too much sugar makes kids hyper.",
-    truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation."
+    truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
+    dateAdded: "2024-11-05"
   },
   {
     id: "5",
     category: "SOCIAL SCIENCES",
     categoryColor: "#9B51E0",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
-    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention."
+    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention.",
+    dateAdded: "2024-11-08"
   },
   {
     id: "6",
     category: "OTHER • LINGUISTICS",
     categoryColor: "#2C2C2C",
     myth: "I before E except after C.",
-    truth: "English has a lot of words where that 'rule' doesn't hold up. Words like 'science,' 'height,' 'their,' 'protein,' 'caffeine,' 'vein,' 'beige,' 'neighbor,' 'weird,' 'seize,' and many others break this 'rule.'"
+    truth: "English has a lot of words where that 'rule' doesn't hold up. Words like 'science,' 'height,' 'their,' 'protein,' 'caffeine,' 'vein,' 'beige,' 'neighbor,' 'weird,' 'seize,' and many others break this 'rule.'",
+    dateAdded: "2024-11-12"
   },
   {
     id: "7",
     category: "LIFE SCIENCES",
     categoryColor: "#6FCF97",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
-    truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself."
+    truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
+    dateAdded: "2024-11-15"
   },
   {
     id: "8",
     category: "EVERYDAY LIFE",
     categoryColor: "#0167A2",
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
-    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths."
+    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
+    dateAdded: "2024-11-18"
   },
   {
     id: "9",
     category: "HISTORY",
     categoryColor: "#F5D547",
     myth: "Marie Antoinette ignorantly said 'Let them eat cake' regarding the French Revolution.",
-    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda."
+    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
+    dateAdded: "2024-11-20"
   }
 ];
 
@@ -127,8 +136,11 @@ export default function HomePage() {
   };
 
   const displayedFacts = activeTab === "featured" 
-    ? allFacts.slice(0, 6) 
-    : allFacts.slice(-3);
+    ? allFacts 
+    : [...allFacts].sort((a, b) => {
+        if (!a.dateAdded || !b.dateAdded) return 0;
+        return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+      });
 
   return (
     <div className="page-wrapper">
