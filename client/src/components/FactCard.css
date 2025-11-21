@@ -84,8 +84,8 @@
 
 .learn-more-button {
   margin-top: auto;
-  background: linear-gradient(90deg, #EB5757 0%, #999 100%);
-  color: white;
+  background: #d9d9d9;
+  color: #dc143c;
   border: none;
   padding: 0.625rem 1.25rem;
   border-radius: 6px;
@@ -93,11 +93,12 @@
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: background 0.2s;
+  align-self: flex-end;
 }
 
 .learn-more-button:hover {
-  opacity: 0.9;
+  background: #cccccc;
 }
 
 .fact-actions {

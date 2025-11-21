@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
-import { FaInstagram, FaTiktok } from "react-icons/fa";
-import { FaXTwitter, FaBluesky } from "react-icons/fa6";
+import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
+import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
+import redditLogo from "@assets/orange reddit logo_1763699489181.png";
 import "./Header.css";
 
 interface HeaderProps {
@@ -21,27 +22,27 @@ export function Header({ onMenuClick }: HeaderProps) {
             data-testid="link-instagram"
             aria-label="Visit us on Instagram"
           >
-            <FaInstagram />
+            <img src={instagramLogo} alt="Instagram" className="social-logo" />
+          </a>
+          <a 
+            href="http://reddit.com/r/LearnedWrong" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="social-icon"
+            data-testid="link-reddit"
+            aria-label="Visit us on Reddit"
+          >
+            <img src={redditLogo} alt="Reddit" className="social-logo" />
           </a>
           <a 
             href="https://bsky.app/profile/the-retrocodex.bsky.social" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="social-icon"
+            className="social-icon social-icon-bluesky"
             data-testid="link-bluesky"
             aria-label="Visit us on Bluesky"
           >
-            <FaBluesky />
-          </a>
-          <a 
-            href="https://x.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="social-icon"
-            data-testid="link-twitter"
-            aria-label="Visit us on X (Twitter)"
-          >
-            <FaXTwitter />
+            <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
           </a>
         </div>
 
