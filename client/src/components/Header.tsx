@@ -2,7 +2,9 @@ import { Search } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
-import logoImage from "@assets/logo and tagline_1763710148682.png";
+import logoImage from "@assets/logo only_1763795492352.png";
+import taglineImage from "@assets/tagline only_1763795492353.png";
+import donateIcon from "@assets/money circle 1_1763795764969.png";
 import "./Header.css";
 
 interface HeaderProps {
@@ -13,8 +15,8 @@ export function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="header">
       <div className="header-container">
-        {/* Top Row: Social Links, Search, Submit Fact, Hamburger */}
-        <div className="header-top-row">
+        {/* Left Section: Social Icons & Donate Button */}
+        <div className="header-left-section">
           <div className="header-social">
             <a 
               href="https://instagram.com/retrocodex.facts" 
@@ -47,48 +49,64 @@ export function Header({ onMenuClick }: HeaderProps) {
               <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
             </a>
           </div>
-          
-          <div className="header-actions">
-            <button 
-              className="search-button" 
-              data-testid="button-search"
-              aria-label="Search facts"
-              disabled
-              title="Search coming soon"
-            >
-              <Search size={20} />
-            </button>
-            <a 
-              href="https://form.typeform.com/to/pal6ZbpG" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="submit-fact-button"
-              data-testid="button-submit-fact"
-            >
-              Submit a Fact
-            </a>
-            <button 
-              className="hamburger-button" 
-              onClick={onMenuClick}
-              data-testid="button-menu"
-              aria-label="Open menu"
-            >
-              <div className="hamburger-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </button>
-          </div>
+          <a 
+            href="https://buymeacoffee.com/retrocodex" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="donate-button"
+            data-testid="button-donate"
+          >
+            <img src={donateIcon} alt="" className="donate-icon" />
+            Donate
+          </a>
         </div>
 
         {/* Logo & Tagline */}
         <div className="header-branding">
           <img 
             src={logoImage} 
-            alt="Retrocodex - A place to unlearn outdated or untrue lessons in" 
-            className="logo-tagline-image"
+            alt="Retrocodex" 
+            className="logo-image"
           />
+          <img 
+            src={taglineImage} 
+            alt="A place to unlearn outdated or untrue lessons in" 
+            className="tagline-image"
+          />
+        </div>
+
+        {/* Right Section: Search, Submit Fact, Hamburger */}
+        <div className="header-actions">
+          <button 
+            className="search-button" 
+            data-testid="button-search"
+            aria-label="Search facts"
+            disabled
+            title="Search coming soon"
+          >
+            <Search size={20} />
+          </button>
+          <a 
+            href="https://form.typeform.com/to/pal6ZbpG" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="submit-fact-button"
+            data-testid="button-submit-fact"
+          >
+            Submit a Fact
+          </a>
+          <button 
+            className="hamburger-button" 
+            onClick={onMenuClick}
+            data-testid="button-menu"
+            aria-label="Open menu"
+          >
+            <div className="hamburger-icon">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </button>
         </div>
       </div>
     </header>

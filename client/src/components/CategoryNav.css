@@ -7,7 +7,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  margin-top: -10px;
+  margin-top: 0;
 }
 
 .category-nav::-webkit-scrollbar {

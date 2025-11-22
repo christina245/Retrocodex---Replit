@@ -8,21 +8,22 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
-  flex-direction: column;
-  gap: 0px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
-.header-top-row {
+.header-left-section {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .header-social {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 20px;
 }
 
 .social-icon {
@@ -57,7 +58,7 @@
 
 .donate-button {
   background: white;
-  border: 1px solid #e5e5e5;
+  border: 1px solid rgba(255, 83, 83, 0.2);
   color: #2C2C2C;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -67,26 +68,46 @@
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .donate-button:hover {
-  background: #f5f5f5;
+  background: #FF5353;
+  color: white;
+  border-color: #FF5353;
+}
+
+.donate-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%);
+  transition: filter 0.2s;
+}
+
+.donate-button:hover .donate-icon {
+  filter: brightness(0) saturate(100%) invert(1);
 }
 
 .header-branding {
-  text-align: center;
-  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: -20px;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
-.logo-tagline-image {
+.logo-image {
+  width: 206px;
+  height: auto;
+  object-fit: contain;
+}
+
+.tagline-image {
   width: 295px;
-  height: 108px;
+  height: auto;
   object-fit: contain;
 }
 
@@ -94,7 +115,6 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 20px;
 }
 
 .search-button {
