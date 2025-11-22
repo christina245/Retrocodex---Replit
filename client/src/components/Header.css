@@ -59,11 +59,10 @@
 }
 
 .donate-button {
-  background: white;
-  border: 1px solid rgba(255, 83, 83, 0.2);
+  background: none;
+  border: none;
   color: #2C2C2C;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 0.25rem;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
@@ -73,12 +72,25 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  line-height: 1;
 }
 
 .donate-button:hover {
-  background: #FF5353;
-  color: white;
-  border-color: #FF5353;
+  color: #FF5353;
+}
+
+.donate-button:focus-visible {
+  outline: 2px solid #FF5353;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.donate-text {
+  text-decoration: none;
+}
+
+.donate-button:hover .donate-text {
+  text-decoration: underline;
 }
 
 .donate-icon {
@@ -86,11 +98,6 @@
   height: 12px;
   object-fit: contain;
   filter: brightness(0) saturate(100%);
-  transition: filter 0.2s;
-}
-
-.donate-button:hover .donate-icon {
-  filter: brightness(0) saturate(100%) invert(1);
 }
 
 .header-branding {

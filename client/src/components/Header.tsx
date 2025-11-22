@@ -55,9 +55,10 @@ export function Header({ onMenuClick }: HeaderProps) {
             rel="noopener noreferrer"
             className="donate-button"
             data-testid="button-donate"
+            aria-label="Donate to Retrocodex"
           >
             <img src={donateIcon} alt="" className="donate-icon" />
-            Donate
+            <span className="donate-text">Donate</span>
           </a>
         </div>
 
