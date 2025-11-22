@@ -105,20 +105,26 @@
   font-size: 12px;
   font-weight: 300;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
 .learn-more-button:hover {
-  background: rgba(44, 44, 44, 0.08);
+  background: #FF5353;
+  color: white;
+}
+
+.learn-more-button:hover .learn-more-arrow {
+  filter: brightness(0) saturate(100%) invert(1);
 }
 
 .learn-more-arrow {
   width: 20px;
   height: 10px;
   object-fit: contain;
+  transition: filter 0.2s;
 }
 
 .fact-actions {
