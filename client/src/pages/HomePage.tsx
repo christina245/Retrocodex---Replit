@@ -5,6 +5,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
+import { HeroSection } from "@/components/HeroSection";
 import { TabSelector } from "@/components/TabSelector";
 import { FactCard, type Fact } from "@/components/FactCard";
 import { EmailSignupBanner } from "@/components/EmailSignupBanner";
@@ -159,6 +160,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <div className="content-container">
+          <HeroSection />
           <div className="facts-grid">
             {displayedFacts.map((fact) => (
               <FactCard

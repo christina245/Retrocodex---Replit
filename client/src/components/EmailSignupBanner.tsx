@@ -52,15 +52,14 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
       </form>
 
       <div className="banner-benefits">
-        <p className="benefits-intro">With an account, you'll be able to:</p>
+        <p className="benefits-intro"><strong>With an account, you can:</strong></p>
         <ul className="benefits-list">
           <li>Vote on whether you were taught a myth or the updated truth</li>
           <li>Discuss and debate on what should and when you graduated from school</li>
           <li>And later on, view maps that show where outdated teaching is more prevalent than others</li>
         </ul>
         <p className="benefits-note">
-          In the meantime, you can still <strong>vote</strong> with your <strong>voice!</strong> 
-          Join discussions with other users of Retrocodex via:
+          In the meantime, you can still join discussions with other unlearners at:
         </p>
       </div>
 
