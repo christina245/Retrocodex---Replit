@@ -62,7 +62,7 @@
   background: white;
   border: 1px solid rgba(255, 83, 83, 0.2);
   color: #2C2C2C;
-  padding: 0.375rem 0.515625rem;
+  padding: 0.375rem 0.375rem 0.375rem 0.515625rem;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
@@ -120,6 +120,7 @@
   width: 295px;
   height: auto;
   object-fit: contain;
+  margin-bottom: 7px;
 }
 
 .header-actions {

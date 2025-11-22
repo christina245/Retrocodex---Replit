@@ -74,6 +74,12 @@
   text-align: center;
 }
 
+.share-icon-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
 .share-preview-section {
   border-top: 1px solid #e5e5e5;
   padding-top: 1.5rem;

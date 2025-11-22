@@ -42,7 +42,7 @@ export function SaveModal({ isOpen, onClose, onSubmit }: SaveModalProps) {
 
         <div className="save-modal-illustration">
           <img 
-            src="/attached_assets/commenting unavailable in beta_1763696438040.png" 
+            src="/attached_assets/under construction_1763805760257.jpg" 
             alt="Under construction" 
             className="construction-image"
           />

@@ -4,6 +4,7 @@ import { RiMessengerLine } from "react-icons/ri";
 import { BsSendFill } from "react-icons/bs";
 import { useState } from "react";
 import type { Fact } from "./FactCard";
+import smsIcon from "@assets/sms icon_1763805965172.png";
 import "./ShareModal.css";
 
 interface ShareModalProps {
@@ -90,7 +91,7 @@ export function ShareModal({ isOpen, onClose, fact }: ShareModalProps) {
           </div>
 
           <div className="share-option inactive" data-tooltip="Unavailable in beta">
-            <BsSendFill size={24} />
+            <img src={smsIcon} alt="" className="share-icon-image" />
             <span>SMS</span>
           </div>
         </div>
