@@ -4,7 +4,7 @@ import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
 import logoImage from "@assets/logo only_1763795492352.png";
 import taglineImage from "@assets/tagline only_1763795492353.png";
-import donateIcon from "@assets/money circle 1_1763795764969.png";
+import donateIcon from "@assets/donate icon_1763804850230.png";
 import "./Header.css";
 
 interface HeaderProps {
