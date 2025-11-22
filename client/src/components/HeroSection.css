@@ -1,7 +1,8 @@
 .hero-section {
-  grid-column: 1 / -1;
-  justify-self: end;
   margin: 10px 0;
+  align-self: flex-start;
+  position: relative;
+  left: calc(100% - 920px);
 }
 
 .hero-container {
@@ -114,7 +115,8 @@
 
 @media (max-width: 1200px) {
   .hero-section {
-    justify-self: center;
+    align-self: center;
+    left: 0;
   }
   
   .hero-container {

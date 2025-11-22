@@ -160,17 +160,19 @@ export default function HomePage() {
 
       <main className="main-content">
         <div className="content-container">
-          <HeroSection />
-          <div className="facts-grid">
-            {displayedFacts.map((fact) => (
-              <FactCard
-                key={fact.id}
-                fact={fact}
-                onSave={handleSaveClick}
-                onShare={() => handleShareClick(fact)}
-                onComment={handleCommentClick}
-              />
-            ))}
+          <div className="main-column">
+            <HeroSection />
+            <div className="facts-grid">
+              {displayedFacts.map((fact) => (
+                <FactCard
+                  key={fact.id}
+                  fact={fact}
+                  onSave={handleSaveClick}
+                  onShare={() => handleShareClick(fact)}
+                  onComment={handleCommentClick}
+                />
+              ))}
+            </div>
           </div>
 
           <aside className="sidebar">

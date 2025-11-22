@@ -20,11 +20,16 @@
   align-items: start;
 }
 
+.main-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 460px);
   gap: 2rem 1.5rem;
-  justify-content: end;
 }
 
 .sidebar {
@@ -42,8 +47,8 @@
     position: static;
   }
 
-  .facts-grid {
-    justify-content: center;
+  .main-column {
+    align-items: center;
   }
 }
 
