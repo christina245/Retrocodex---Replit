@@ -1,6 +1,6 @@
 .header {
   background: white;
-  padding: 5px 0 1rem 0;
+  padding: 10px 0 2rem 0;
 }
 
 .header-container {
@@ -16,14 +16,16 @@
 
 .header-left-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 15px;
 }
 
-.header-social {
+.social-icons-column {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .social-icon {
@@ -94,9 +96,10 @@
 .header-branding {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
+  margin: 0 auto;
 }
 
 .logo-image {
@@ -197,12 +200,13 @@
     order: -1;
   }
 
-  .header-social {
+  .header-left-section {
     order: 1;
+    flex-direction: column;
   }
 
-  .donate-button {
-    order: 2;
+  .social-icons-column {
+    margin-left: 0;
   }
 
   .header-actions {

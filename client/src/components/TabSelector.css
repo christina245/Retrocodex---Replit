@@ -27,6 +27,7 @@
 .tab-button.active {
   background: #2C2C2C;
   color: white;
+  padding: 0.625rem 0.625rem;
 }
 
 .tab-button.active:hover {

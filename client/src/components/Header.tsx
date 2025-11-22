@@ -17,7 +17,7 @@ export function Header({ onMenuClick }: HeaderProps) {
       <div className="header-container">
         {/* Left Section: Social Icons & Donate Button */}
         <div className="header-left-section">
-          <div className="header-social">
+          <div className="social-icons-column">
             <a 
               href="https://instagram.com/retrocodex.facts" 
               target="_blank" 
