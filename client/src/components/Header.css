@@ -1,6 +1,6 @@
 .header {
   background: white;
-  padding: 10px 0 1rem 0;
+  padding: 5px 0 1rem 0;
 }
 
 .header-container {
@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .social-icon {
@@ -81,7 +81,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: -40px;
+  margin-top: -20px;
 }
 
 .logo-tagline-image {
@@ -94,7 +94,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .search-button {
