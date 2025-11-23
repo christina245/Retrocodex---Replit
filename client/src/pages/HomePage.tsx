@@ -158,9 +158,10 @@ export default function HomePage() {
       <CategoryNav />
 
       <main className="main-content">
+        <HeroSection />
+        
         <div className="content-container">
           <div className="main-column">
-            <HeroSection />
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
             <div className="facts-grid">
               {displayedFacts.map((fact) => (
