@@ -1,0 +1,36 @@
+.fact-key {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.fact-key-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.fact-key-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.fact-key-icon.myth-icon {
+  color: #FF5353;
+}
+
+.fact-key-icon.truth-icon {
+  color: #6FCF97;
+  margin-right: 15px;
+}
+
+.fact-key-text {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #878787;
+}

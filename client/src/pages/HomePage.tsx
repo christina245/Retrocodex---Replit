@@ -8,6 +8,7 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { HeroSection } from "@/components/HeroSection";
 import { TabSelector } from "@/components/TabSelector";
 import { FactCard, type Fact } from "@/components/FactCard";
+import { FactKey } from "@/components/FactKey";
 import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
@@ -166,16 +167,21 @@ export default function HomePage() {
           <div className="content-container">
           <div className="main-column">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="facts-grid align-offset">
-              {displayedFacts.map((fact) => (
-                <FactCard
-                  key={fact.id}
-                  fact={fact}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                />
-              ))}
+            <div className="facts-section align-offset">
+              <div className="fact-key-wrapper">
+                <FactKey />
+              </div>
+              <div className="facts-grid-container">
+                {displayedFacts.map((fact) => (
+                  <FactCard
+                    key={fact.id}
+                    fact={fact}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
