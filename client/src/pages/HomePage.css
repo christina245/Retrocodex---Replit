@@ -23,7 +23,6 @@
 .main-column {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
 }
 
 .facts-grid {
@@ -35,8 +34,6 @@
 .sidebar {
   position: relative;
   align-self: start;
-  margin-top: 0;
-  padding-top: calc(345px + 20px + 2.5rem);
 }
 
 /* Responsive adjustments */
