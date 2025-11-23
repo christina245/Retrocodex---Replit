@@ -158,7 +158,7 @@ export default function HomePage() {
       <CategoryNav />
 
       <main className="main-content">
-        <div className="content-max">
+        <div className="hero-wrapper">
           <HeroSection />
         </div>
         
