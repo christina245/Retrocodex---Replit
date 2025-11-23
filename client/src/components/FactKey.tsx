@@ -4,7 +4,7 @@ import "./FactKey.css";
 export function FactKey() {
   return (
     <div className="fact-key" data-testid="fact-key">
-      <div className="fact-key-item">
+      <div className="fact-key-item myth-item">
         <X className="fact-key-icon myth-icon" />
         <span className="fact-key-text">What you may have learned</span>
       </div>

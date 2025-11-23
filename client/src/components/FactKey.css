@@ -1,21 +1,24 @@
 .fact-key {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  align-items: flex-start;
   margin-bottom: 16px;
 }
 
 .fact-key-item {
   display: flex;
   align-items: flex-start;
-  gap: 6px;
+  gap: 4px;
+}
+
+.fact-key-item.myth-item {
+  margin-right: 15px;
 }
 
 .fact-key-icon {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  margin-top: 1px;
+  margin-top: 0;
 }
 
 .fact-key-icon.myth-icon {
@@ -24,7 +27,6 @@
 
 .fact-key-icon.truth-icon {
   color: #6FCF97;
-  margin-right: 15px;
 }
 
 .fact-key-text {
