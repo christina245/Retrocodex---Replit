@@ -4,11 +4,6 @@
   gap: 5px;
 }
 
-.red-triangle {
-  color: #FF5353;
-  flex-shrink: 0;
-}
-
 .category-chip-group {
   display: flex;
   align-items: center;
@@ -18,8 +13,8 @@
 .category-chip {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
   background: white;
   border: 1px solid #E5E5E5;
   border-radius: 20px;
@@ -28,21 +23,20 @@
 }
 
 .category-chip:hover {
-  background: #F5F5F5;
-  border-color: #D0D0D0;
+  background: #fafafa;
+  border-color: #e5e5e5;
 }
 
 .category-icon {
-  font-size: 14px;
-  color: #2C2C2C;
+  flex-shrink: 0;
 }
 
 .category-text {
   font-family: 'Public Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 800;
   color: #2C2C2C;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.025em;
 }
 
 .dot-separator {

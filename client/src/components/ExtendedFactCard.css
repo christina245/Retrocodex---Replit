@@ -13,11 +13,14 @@
 
 .extended-fact-card::-webkit-scrollbar-track {
   background: transparent;
+  margin-top: 20px;
+  margin-right: 5px;
 }
 
 .extended-fact-card::-webkit-scrollbar-thumb {
   background: rgba(255, 83, 83, 0.5);
   border-radius: 10px;
+  margin-top: 20px;
 }
 
 .extended-fact-card::-webkit-scrollbar-thumb:hover {
@@ -25,7 +28,7 @@
 }
 
 .extended-fact-content {
-  padding: 15px;
+  padding: 20px;
 }
 
 .fact-section {

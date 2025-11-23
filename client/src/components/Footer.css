@@ -12,7 +12,7 @@
   padding-right: 100px;
   display: flex;
   gap: 4rem;
-  justify-content: end;
+  justify-content: start;
 }
 
 .footer-column {

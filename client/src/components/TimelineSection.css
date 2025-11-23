@@ -50,6 +50,7 @@
 
 .timeline-content::-webkit-scrollbar-track {
   background: transparent;
+  margin-top: 20px;
 }
 
 .timeline-content::-webkit-scrollbar-thumb {

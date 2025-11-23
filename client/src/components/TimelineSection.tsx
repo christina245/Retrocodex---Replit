@@ -40,7 +40,7 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
           aria-selected={activeTab === "timeline"}
           aria-controls="timeline-panel"
         >
-          Timeline & Photos
+          How This Information Evolved
         </button>
         <button
           id="tab-nuances"
@@ -58,9 +58,7 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
       <div className="timeline-content">
         {activeTab === "timeline" ? (
           <div role="tabpanel" id="timeline-panel" aria-labelledby="tab-timeline">
-            <div className="timeline-header">
-              <h3 className="timeline-title">HOW THIS KNOWLEDGE EVOLVED</h3>
-            </div>
+            
             <div className="timeline-columns">
               <div className="timeline-text-column">
                 {timeline.map((event, index) => (

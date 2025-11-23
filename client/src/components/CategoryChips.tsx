@@ -1,41 +1,23 @@
-import { ChevronLeft } from "lucide-react";
-import { 
-  FaBookOpen, 
-  FaFlask, 
-  FaHome, 
-  FaHeartbeat, 
-  FaUsers, 
-  FaVenusMars, 
-  FaEllipsisH 
-} from "react-icons/fa";
+import { getCategoryConfig } from "@shared/categories";
+import { Zap } from "lucide-react";
 import "./CategoryChips.css";
 
 interface CategoryChipsProps {
   categories: string[];
 }
 
-const categoryIcons: Record<string, any> = {
-  "History": FaBookOpen,
-  "Life Sciences": FaFlask,
-  "Everyday Life": FaHome,
-  "Health & Fitness": FaHeartbeat,
-  "Social Sciences": FaUsers,
-  "Gender & Sexuality": FaVenusMars,
-  "Other": FaEllipsisH,
-};
-
 export default function CategoryChips({ categories }: CategoryChipsProps) {
   return (
     <div className="category-chips" data-testid="category-chips">
-      <ChevronLeft className="red-triangle" size={16} />
-      
       {categories.map((category, index) => {
-        const Icon = categoryIcons[category] || FaEllipsisH;
+        const config = getCategoryConfig(category);
+        const Icon = config?.icon || Zap;
+        const color = config?.color || "#2C2C2C";
         
         return (
           <div key={category} className="category-chip-group">
             <div className="category-chip">
-              <Icon className="category-icon" />
+              <Icon className="category-icon" size={20} style={{ color }} />
               <span className="category-text">{category.toUpperCase()}</span>
             </div>
             {index < categories.length - 1 && <span className="dot-separator">•</span>}
