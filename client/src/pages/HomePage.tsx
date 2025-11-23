@@ -166,9 +166,9 @@ export default function HomePage() {
         <div className="content-max">
           <div className="content-container">
           <div className="main-column">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
             <div className="facts-section align-offset">
-              <div className="fact-key-wrapper">
+              <div className="tabs-and-key-container">
+                <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
                 <FactKey />
               </div>
               <div className="facts-grid-container">

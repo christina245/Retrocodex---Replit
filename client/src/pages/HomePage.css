@@ -43,19 +43,18 @@
 }
 
 .facts-section {
-  display: grid;
-  grid-template-columns: 460px 460px;
-  gap: 0 1.5rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
 }
 
-.fact-key-wrapper {
-  grid-column: 2;
-  margin-bottom: 12px;
+.tabs-and-key-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 10px;
 }
 
 .facts-grid-container {
-  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(2, 460px);
   gap: 2rem 1.5rem;
@@ -90,12 +89,10 @@
 }
 
 @media (max-width: 640px) {
-  .facts-section {
-    grid-template-columns: 1fr;
-  }
-
-  .fact-key-wrapper {
-    grid-column: 1;
+  .tabs-and-key-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
   .facts-grid-container {

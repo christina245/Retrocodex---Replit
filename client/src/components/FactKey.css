@@ -1,7 +1,6 @@
 .fact-key {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 16px;
+  align-items: center;
 }
 
 .fact-key-item {
