@@ -156,12 +156,12 @@ export default function HomePage() {
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <CategoryNav />
-      <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
 
       <main className="main-content">
         <div className="content-container">
           <div className="main-column">
             <HeroSection />
+            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
             <div className="facts-grid">
               {displayedFacts.map((fact) => (
                 <FactCard

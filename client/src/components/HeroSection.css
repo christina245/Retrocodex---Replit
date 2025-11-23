@@ -1,13 +1,12 @@
 .hero-section {
-  margin: 10px 0;
-  align-self: flex-start;
-  position: relative;
-  left: calc(100% - 944px);
+  margin: 10px 0 10px 0;
+  margin-left: calc(140px - 2rem);
 }
 
 .hero-container {
   background: #2C2C2C;
   width: 1160px;
+  max-width: calc(100vw - 140px);
   height: 345px;
   display: flex;
   gap: 75px;
@@ -111,10 +110,9 @@
   text-align: center;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .hero-section {
-    align-self: center;
-    left: 0;
+    margin-left: 0;
   }
   
   .hero-container {

@@ -1,10 +1,15 @@
 .tab-selector {
   display: flex;
   gap: 1rem;
-  padding: 0 2rem;
-  padding-left: 140px;
-  margin-top: calc(0.6rem + 15px);
+  padding-left: calc(140px - 2rem);
   margin-bottom: 0.3rem;
+}
+
+@media (max-width: 1400px) {
+  .tab-selector {
+    padding-left: 0;
+    justify-content: center;
+  }
 }
 
 .tab-button {

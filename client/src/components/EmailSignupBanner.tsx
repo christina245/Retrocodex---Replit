@@ -26,7 +26,7 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
   };
 
   return (
-    <div className="email-signup-banner">
+    <div className="email-signup-banner" data-testid="email-signup-banner">
       <h3 className="banner-title">
         Be notified when user accounts are available.
       </h3>
