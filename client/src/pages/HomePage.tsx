@@ -158,12 +158,15 @@ export default function HomePage() {
       <CategoryNav />
 
       <main className="main-content">
-        <HeroSection />
+        <div className="content-max">
+          <HeroSection />
+        </div>
         
-        <div className="content-container">
+        <div className="content-max">
+          <div className="content-container">
           <div className="main-column">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="facts-grid">
+            <div className="facts-grid align-offset">
               {displayedFacts.map((fact) => (
                 <FactCard
                   key={fact.id}
@@ -181,6 +184,7 @@ export default function HomePage() {
               onSubmit={(email) => handleEmailSubmit(email, "signup-banner")} 
             />
           </aside>
+          </div>
         </div>
       </main>
 

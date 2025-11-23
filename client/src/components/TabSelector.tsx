@@ -7,7 +7,7 @@ interface TabSelectorProps {
 
 export function TabSelector({ activeTab, onTabChange }: TabSelectorProps) {
   return (
-    <div className="tab-selector">
+    <div className="tab-selector align-offset">
       <button
         className={`tab-button ${activeTab === "featured" ? "active" : ""}`}
         onClick={() => onTabChange("featured")}

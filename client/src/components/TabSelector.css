@@ -1,13 +1,13 @@
 .tab-selector {
   display: flex;
   gap: 1rem;
-  padding-left: calc(140px - 2rem);
+  margin-top: 10px;
   margin-bottom: 0.3rem;
 }
 
 @media (max-width: 1400px) {
   .tab-selector {
-    padding-left: 0;
+    margin-top: 0;
     justify-content: center;
   }
 }
