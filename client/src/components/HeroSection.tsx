@@ -9,8 +9,8 @@ export function HeroSection() {
   const currentDate = `${month}. ${day}, ${year}`;
 
   return (
-    <section className="hero-section align-offset">
-      <div className="hero-container">
+    <section className="hero-section">
+      <div className="hero-container" data-testid="hero-container">
         <div className="hero-content">
           <div className="hero-tag">
             <div className="hero-tag-line"></div>
