@@ -1,4 +1,5 @@
 import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap } from "lucide-react";
+import { Link } from "wouter";
 import forwardArrow from "@assets/forward triangle_1763705098229.png";
 import "./FactCard.css";
 
@@ -20,6 +21,7 @@ export interface Fact {
   myth: string;
   truth: string;
   dateAdded?: string;
+  link?: string;
 }
 
 interface FactCardProps {
@@ -66,13 +68,24 @@ export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
           </div>
 
           {/* Learn More Button */}
-          <button 
-            className="learn-more-button"
-            data-testid={`button-learn-more-${fact.id}`}
-          >
-            <img src={forwardArrow} alt="" className="learn-more-arrow" />
-            Learn more
-          </button>
+          {fact.link ? (
+            <Link 
+              href={fact.link}
+              className="learn-more-button"
+              data-testid={`button-learn-more-${fact.id}`}
+            >
+              <img src={forwardArrow} alt="" className="learn-more-arrow" />
+              Learn more
+            </Link>
+          ) : (
+            <button 
+              className="learn-more-button"
+              data-testid={`button-learn-more-${fact.id}`}
+            >
+              <img src={forwardArrow} alt="" className="learn-more-arrow" />
+              Learn more
+            </button>
+          )}
         </div>
       </div>
 

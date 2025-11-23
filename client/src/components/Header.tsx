@@ -8,75 +8,77 @@ import donateIcon from "@assets/donate icon_1763804850230.png";
 import "./Header.css";
 
 interface HeaderProps {
-  onMenuClick: () => void;
+  onMenuClick?: () => void;
+  variant?: "default" | "simplified";
 }
 
-export function Header({ onMenuClick }: HeaderProps) {
+export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
   return (
-    <header className="header">
+    <header className={`header ${variant === "simplified" ? "header-simplified" : ""}`}>
       <div className="header-container">
-        {/* Left Section: Social Icons & Donate Button */}
-        <div className="header-left-section">
-          <div className="social-icons-column">
+        {variant === "default" && (
+          <div className="header-left-section">
+            <div className="social-icons-column">
+              <a 
+                href="https://instagram.com/retrocodex.facts" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon"
+                data-testid="link-instagram"
+                aria-label="Visit us on Instagram"
+              >
+                <img src={instagramLogo} alt="Instagram" className="social-logo" />
+              </a>
+              <a 
+                href="http://reddit.com/r/LearnedWrong" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon"
+                data-testid="link-reddit"
+                aria-label="Visit us on Reddit"
+              >
+                <img src={redditLogo} alt="Reddit" className="social-logo social-logo-reddit" />
+              </a>
+              <a 
+                href="https://bsky.app/profile/the-retrocodex.bsky.social" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon social-icon-bluesky"
+                data-testid="link-bluesky"
+                aria-label="Visit us on Bluesky"
+              >
+                <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
+              </a>
+            </div>
             <a 
-              href="https://instagram.com/retrocodex.facts" 
+              href="https://buymeacoffee.com/retrocodex" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="social-icon"
-              data-testid="link-instagram"
-              aria-label="Visit us on Instagram"
+              className="donate-button"
+              data-testid="button-donate"
+              aria-label="Donate to Retrocodex"
             >
-              <img src={instagramLogo} alt="Instagram" className="social-logo" />
-            </a>
-            <a 
-              href="http://reddit.com/r/LearnedWrong" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="social-icon"
-              data-testid="link-reddit"
-              aria-label="Visit us on Reddit"
-            >
-              <img src={redditLogo} alt="Reddit" className="social-logo social-logo-reddit" />
-            </a>
-            <a 
-              href="https://bsky.app/profile/the-retrocodex.bsky.social" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="social-icon social-icon-bluesky"
-              data-testid="link-bluesky"
-              aria-label="Visit us on Bluesky"
-            >
-              <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
+              <img src={donateIcon} alt="" className="donate-icon" />
+              <span className="donate-text">Donate</span>
             </a>
           </div>
-          <a 
-            href="https://buymeacoffee.com/retrocodex" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="donate-button"
-            data-testid="button-donate"
-            aria-label="Donate to Retrocodex"
-          >
-            <img src={donateIcon} alt="" className="donate-icon" />
-            <span className="donate-text">Donate</span>
-          </a>
-        </div>
+        )}
 
-        {/* Logo & Tagline */}
         <div className="header-branding">
           <img 
             src={logoImage} 
             alt="Retrocodex" 
             className="logo-image"
           />
-          <img 
-            src={taglineImage} 
-            alt="A place to unlearn outdated or untrue lessons in" 
-            className="tagline-image"
-          />
+          {variant === "default" && (
+            <img 
+              src={taglineImage} 
+              alt="A place to unlearn outdated or untrue lessons in" 
+              className="tagline-image"
+            />
+          )}
         </div>
 
-        {/* Right Section: Search, Submit Fact, Hamburger */}
         <div className="header-actions">
           <button 
             className="search-button" 
@@ -96,18 +98,20 @@ export function Header({ onMenuClick }: HeaderProps) {
           >
             Submit a Fact
           </a>
-          <button 
-            className="hamburger-button" 
-            onClick={onMenuClick}
-            data-testid="button-menu"
-            aria-label="Open menu"
-          >
-            <div className="hamburger-icon">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </button>
+          {onMenuClick && (
+            <button 
+              className="hamburger-button" 
+              onClick={onMenuClick}
+              data-testid="button-menu"
+              aria-label="Open menu"
+            >
+              <div className="hamburger-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </button>
+          )}
         </div>
       </div>
     </header>

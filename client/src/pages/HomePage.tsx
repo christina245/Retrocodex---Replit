@@ -21,8 +21,8 @@ const allFacts: Fact[] = [
     category: "HISTORY",
     categoryColor: "#F5D547",
     myth: "Christopher Columbus discovered the Americas.",
-    truth: "Columbus only reached Central and South America. He wasn't even close to what is now the United States. Native peoples had established rich civilizations over thousands of years.",
-    dateAdded: "2024-10-15"
+    truth: "Columbus only reached Central and South America. He never actually reached North America. At the time, Indigenous peoples had already been living in throughout the Americas for thousands of years.",
+    dateAdded: "2025-10-15"
   },
   {
     id: "2",
@@ -30,7 +30,8 @@ const allFacts: Fact[] = [
     categoryColor: "#6FCF97",
     myth: "You only use 10% of your brain.",
     truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
-    dateAdded: "2024-10-22"
+    dateAdded: "2025-10-22",
+    link: "/fact/brain-10-percent"
   },
   {
     id: "3",
@@ -38,7 +39,7 @@ const allFacts: Fact[] = [
     categoryColor: "#F2994A",
     myth: "The Food Pyramid is the model for a healthy, balanced diet.",
     truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
-    dateAdded: "2024-11-01"
+    dateAdded: "2025-11-01"
   },
   {
     id: "4",
@@ -46,7 +47,7 @@ const allFacts: Fact[] = [
     categoryColor: "#0167A2",
     myth: "Too much sugar makes kids hyper.",
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
-    dateAdded: "2024-11-05"
+    dateAdded: "2025-11-05"
   },
   {
     id: "5",
@@ -54,7 +55,7 @@ const allFacts: Fact[] = [
     categoryColor: "#9B51E0",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention.",
-    dateAdded: "2024-11-08"
+    dateAdded: "2025-11-08"
   },
   {
     id: "6",
@@ -62,7 +63,7 @@ const allFacts: Fact[] = [
     categoryColor: "#FC5AA8",
     myth: "Men and women have very different brains.",
     truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
-    dateAdded: "2024-11-21"
+    dateAdded: "2025-11-21"
   },
   {
     id: "7",
@@ -70,7 +71,7 @@ const allFacts: Fact[] = [
     categoryColor: "#2C2C2C",
     myth: "I before E except after C.",
     truth: "English has a lot of words where that 'rule' doesn't hold up. Words like 'science,' 'height,' 'their,' 'protein,' 'caffeine,' 'vein,' 'beige,' 'neighbor,' 'weird,' 'seize,' and many others break this 'rule.'",
-    dateAdded: "2024-11-12"
+    dateAdded: "2025-11-12"
   },
   {
     id: "8",
@@ -78,7 +79,7 @@ const allFacts: Fact[] = [
     categoryColor: "#6FCF97",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
     truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
-    dateAdded: "2024-11-15"
+    dateAdded: "2025-11-15"
   },
   {
     id: "9",
@@ -86,7 +87,7 @@ const allFacts: Fact[] = [
     categoryColor: "#0167A2",
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
-    dateAdded: "2024-11-18"
+    dateAdded: "2025-11-18"
   },
   {
     id: "10",
@@ -94,7 +95,7 @@ const allFacts: Fact[] = [
     categoryColor: "#F5D547",
     myth: "Marie Antoinette ignorantly said 'Let them eat cake' regarding the French Revolution.",
     truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
-    dateAdded: "2024-11-20"
+    dateAdded: "2025-11-20"
   }
 ];
 

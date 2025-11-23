@@ -1,0 +1,52 @@
+.category-chips {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.red-triangle {
+  color: #FF5353;
+  flex-shrink: 0;
+}
+
+.category-chip-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #E5E5E5;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.category-chip:hover {
+  background: #F5F5F5;
+  border-color: #D0D0D0;
+}
+
+.category-icon {
+  font-size: 14px;
+  color: #2C2C2C;
+}
+
+.category-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #2C2C2C;
+  letter-spacing: 0.5px;
+}
+
+.dot-separator {
+  color: #2C2C2C;
+  font-size: 14px;
+  font-weight: bold;
+}

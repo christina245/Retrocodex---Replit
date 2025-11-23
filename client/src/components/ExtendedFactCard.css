@@ -1,0 +1,123 @@
+.extended-fact-card {
+  height: 515px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.extended-fact-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.extended-fact-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.extended-fact-card::-webkit-scrollbar-thumb {
+  background: rgba(255, 83, 83, 0.5);
+  border-radius: 10px;
+}
+
+.extended-fact-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 83, 83, 0.7);
+}
+
+.extended-fact-content {
+  padding: 15px;
+}
+
+.fact-section {
+  margin-bottom: 24px;
+}
+
+.fact-section:last-child {
+  margin-bottom: 0;
+}
+
+.fact-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.label-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: #878787;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fact-icon {
+  flex-shrink: 0;
+}
+
+.fact-icon-myth {
+  color: #FF5353;
+}
+
+.fact-icon-truth {
+  color: #4CAF50;
+}
+
+.fact-icon-sources {
+  color: #878787;
+}
+
+.fact-myth,
+.fact-truth {
+  font-family: 'Merriweather', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C2C2C;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.fact-details,
+.fact-more-details {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.sources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.source-item {
+  display: block;
+}
+
+.editorial-source {
+  margin-bottom: 8px;
+}
+
+.source-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+}
+
+.academic-source {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #2C2C2C;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.academic-source:hover {
+  color: #FF5353;
+  text-decoration: underline;
+}
