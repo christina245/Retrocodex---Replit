@@ -10,6 +10,12 @@
   padding: 1rem 0 2rem 0;
 }
 
+.hero-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .content-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -30,6 +36,7 @@
   display: grid;
   grid-template-columns: repeat(2, 460px);
   gap: 2rem 1.5rem;
+  margin-left: calc(140px - 2rem);
 }
 
 .sidebar {
@@ -52,6 +59,10 @@
 
   .main-column {
     align-items: center;
+  }
+  
+  .facts-grid {
+    margin-left: 0;
   }
   
 }
