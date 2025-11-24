@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useParams } from "wouter";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
+import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
@@ -8,6 +10,7 @@ import "./SingleFactPage.css";
 
 export default function SingleFactPage() {
   const { id } = useParams();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const factData = {
     id: "brain-10-percent",
@@ -65,7 +68,8 @@ export default function SingleFactPage() {
 
   return (
     <div className="single-fact-page">
-      <SingleFactHeader />
+      <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
+      <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       
       <div className="page-content">
         <div className="category-row">
