@@ -1,4 +1,6 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
 import howToWinFriends from "@assets/how to win friends 1936 version 1_1763930466764.png";
 import limitlessCover from "@assets/limitless cover_1763930486983.jpg";
 import lucyPoster from "@assets/Lucy - Quad Movie Poster (Crop)_1763930493964.png";
@@ -66,10 +68,22 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
                   <div key={index} className="timeline-event" data-testid={`timeline-event-${index}`}>
                     <div className="timeline-line"></div>
                     <div className="timeline-year">{event.year}</div>
-                    <div 
-                      className="timeline-text"
-                      dangerouslySetInnerHTML={{ __html: event.text }}
-                    />
+                    <div className="timeline-text">
+                      <ReactMarkdown
+                        rehypePlugins={[rehypeSanitize]}
+                        components={{
+                          p: ({ children }) => <>{children}</>,
+                          em: ({ children }) => <em>{children}</em>,
+                          a: ({ href, children }) => (
+                            <a href={href} target="_blank" rel="noopener noreferrer">
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
+                        {event.text}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 ))}
               </div>
