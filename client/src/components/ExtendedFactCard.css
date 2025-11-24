@@ -85,7 +85,7 @@
 .fact-details,
 .fact-more-details {
   font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
   line-height: 1.6;
@@ -130,13 +130,14 @@
 .floating-actions {
   position: sticky;
   bottom: 12px;
-  right: 20px;
+  right: 10px;
   display: flex;
   justify-content: flex-end;
-  gap: 20px;
+  gap: 10px;
   z-index: 10;
   pointer-events: none;
   margin-top: -56px;
+  padding-right: 15px;
 }
 
 .floating-actions > * {

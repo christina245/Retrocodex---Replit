@@ -132,14 +132,14 @@
 }
 
 .timeline-photo {
-  max-width: 35%;
+  max-width: 80%;
   height: auto;
   display: block;
 }
 
 .timeline-photo-wrapper:nth-child(1) .timeline-photo,
 .timeline-photo-wrapper:nth-child(2) .timeline-photo {
-  max-width: 25%;
+  max-width: 80%;
 }
 
 .timeline-photo.rounded {

@@ -67,7 +67,7 @@ export default function SingleFactPage() {
     myth: '"You only use 10% of your brain."',
     truth: "You use nearly all of your brain at any given time.",
     category: ["Life Sciences", "Social Sciences"],
-    details: "Brain imaging shows that nearly all regions are active at different times, even during simple tasks and while sleeping. The myth likely came from misinterpretations of neuroscience research and has been popularized by movies and self-help claims.",
+    details: "Brain imaging shows that nearly all regions are active at different times, even during simple tasks and while sleeping.",
     moreDetails: "People often lose noticeable abilities with damage to just small portions of the brain, which is inconsistent with it being 90% unused. It is possible that this myth may be a misinterpretation of the fact that some parts of the brain may be less active than others.",
     sources: [
       {
@@ -99,7 +99,31 @@ export default function SingleFactPage() {
       },
       {
         year: "1999",
-        text: 'Psychology professor Barry Beyerstein, who had been publishing influential neuroscience critiques of brain myths and pseudoscience since 1985, publishes "Whence Cometh the Myth that We Only Use 10% of our Brains?”'
+        text: 'The book Mind Myths is released with a section by psychology professor Barry Beyerstein called "Whence Cometh the Myth that We Only Use 10% of our Brains?”'
+      },
+      {
+        year: "2002",
+        text: ' The OECD identifies the myth as one of several “neuromyths” commonly perpetuated by educators.'
+      },
+      {
+        year: "2011",
+        text: 'The film Limitless is released: the film depicts the protagonist’s evolution after he takes a nootropic drug that claims to give him full use of his brain as opposed to “only 20%”.'
+      },
+      {
+        year: "2014",
+        text: 'The film Lucy is released with a similar premise as Limitless, where the protagonist also takes a drug that allows her to use "100% of her brain."'
+      },
+      {
+        year: "2017",
+        text: "Psychologists find that 56% of educators still perpetuate neuromyths. These results were also consistent with a similar 2012 study conducted in the UK and the Netherlands."
+      },
+      {
+        year: "2024",
+        text: 'A comprehensive review emphasizes that advanced neuroimaging techniques, such as PET scans and functional magnetic resonance imaging (fMRI), unequivocally demonstrate that virtually all parts of the brain are interconnected and functionally active, even during periods of rest or sleep. The authors of the 2024 review point out that retaining 90% of a metabolically expensive organ like the brain if it were truly unused would be scientifically improbable: "If the parts of the brain are unnecessary and unused, then they must be removed or disappear, according to the rule of the theory of evolution".'
+      },
+      {
+        year: "2025",
+        text: 'Articles debunking this myth are still being published in recent years, such as “The 10-Percent-of-Your-Brain Myth That Just Won’t Die” in 2021 from Discover Magazine, “Do we only use 10 percent of our brain?” by MIT in 2024, and “Beyond the Myth That We Use Only 10 Percent of Our Brains” from Psychology Today in 2025. This suggests the myth is still commonly circulating, although it isn’t specified where it’s being taught.'
       }
     ],
     photos: [
@@ -113,7 +137,7 @@ export default function SingleFactPage() {
       },
       { 
         src: "Lucy - Quad Movie Poster (Crop)",
-        hasTransparentBg: true
+        hasTransparentBg: false
       }
     ],
     addedDate: "Nov. 23, 2025",
