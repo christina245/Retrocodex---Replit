@@ -1,4 +1,4 @@
-import { X, Check, BookOpen } from "lucide-react";
+import { X, Check, BookOpen, Bookmark, Share2 } from "lucide-react";
 import mcgovernLogo from "@assets/mcgovern svg (1)_1763940847877.png";
 import apsLogo from "@assets/Association_for_Psychological_Science_Logo_-_PNG 1_1763930617322.png";
 import "./ExtendedFactCard.css";
@@ -19,6 +19,8 @@ interface ExtendedFactCardProps {
     moreDetails?: string;
     sources: Source[];
   };
+  onSave?: () => void;
+  onShare?: () => void;
 }
 
 const logoMap: Record<string, string> = {
@@ -26,7 +28,7 @@ const logoMap: Record<string, string> = {
   "Association_for_Psychological_Science_Logo_-_PNG 1": apsLogo,
 };
 
-export default function ExtendedFactCard({ fact }: ExtendedFactCardProps) {
+export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFactCardProps) {
   return (
     <div className="extended-fact-card" data-testid="extended-fact-card">
       <div className="extended-fact-content">
@@ -87,6 +89,25 @@ export default function ExtendedFactCard({ fact }: ExtendedFactCardProps) {
               ))}
           </div>
         </div>
+      </div>
+
+      <div className="floating-actions">
+        <button 
+          className="floating-action-button"
+          onClick={onSave}
+          data-testid="button-save-extended"
+          aria-label="Save fact"
+        >
+          <Bookmark size={20} />
+        </button>
+        <button 
+          className="floating-action-button"
+          onClick={onShare}
+          data-testid="button-share-extended"
+          aria-label="Share fact"
+        >
+          <Share2 size={20} />
+        </button>
       </div>
     </div>
   );
