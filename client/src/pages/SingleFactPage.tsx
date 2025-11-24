@@ -1,5 +1,5 @@
 import { useParams } from "wouter";
-import { Header } from "@/components/Header";
+import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
@@ -65,7 +65,7 @@ export default function SingleFactPage() {
 
   return (
     <div className="single-fact-page">
-      <Header variant="simplified" />
+      <SingleFactHeader />
       
       <div className="page-content">
         <div className="category-row">
