@@ -12,6 +12,7 @@ interface TimelineEvent {
 interface Photo {
   src: string;
   hasTransparentBg: boolean;
+  caption?: string;
 }
 
 interface TimelineSectionProps {
@@ -65,7 +66,10 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
                   <div key={index} className="timeline-event" data-testid={`timeline-event-${index}`}>
                     <div className="timeline-line"></div>
                     <div className="timeline-year">{event.year}</div>
-                    <div className="timeline-text">{event.text}</div>
+                    <div 
+                      className="timeline-text"
+                      dangerouslySetInnerHTML={{ __html: event.text }}
+                    />
                   </div>
                 ))}
               </div>
@@ -79,6 +83,11 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
                       className={`timeline-photo ${photo.hasTransparentBg ? "" : "rounded"}`}
                       data-testid={`timeline-photo-${index}`}
                     />
+                    {photo.caption && (
+                      <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
+                        {photo.caption}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
