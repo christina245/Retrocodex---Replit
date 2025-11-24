@@ -46,6 +46,10 @@ export default function SingleFactPage() {
       {
         year: "1936",
         text: 'The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers throughout the twentieth century. The self-help book How to Win Friends and Influence People by Dale Carnegie is released in 1936 with a foreword by broadcaster Lowell Thomas, who wrote "Professor William James of Harvard used to say that the average man develops only ten per cent of his latent mental ability."'
+      },
+      {
+        year: "1999",
+        text: 'Psychology professor Barry Beyerstein, who had been publishing influential neuroscience critiques of brain myths and pseudoscience since 1985, publishes "Whence Cometh the Myth that We Only Use 10% of our Brains?”'
       }
     ],
     photos: [
