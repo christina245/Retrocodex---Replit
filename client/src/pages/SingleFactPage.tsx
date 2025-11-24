@@ -99,11 +99,11 @@ export default function SingleFactPage() {
       },
       {
         year: "1936",
-        text: 'The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers throughout the twentieth century. The self-help book <i><a href="https://en.wikipedia.org/wiki/How_to_Win_Friends_and_Influence_People" target="_blank">How to Win Friends and Influence People</a></i> by Dale Carnegie is released in 1936 with a foreword by broadcaster Lowell Thomas, who wrote "Professor William James of Harvard used to say that the average man develops only ten per cent of his latent mental ability."'
+        text: 'The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers throughout the twentieth century. The self-help book *[How to Win Friends and Influence People](https://en.wikipedia.org/wiki/How_to_Win_Friends_and_Influence_People)* by Dale Carnegie is released in 1936 with a foreword by broadcaster Lowell Thomas, who wrote "Professor William James of Harvard used to say that the average man develops only ten per cent of his latent mental ability."'
       },
       {
         year: "1999",
-        text: 'The book <i>Mind Myths</i> is released with a section by psychology professor Barry Beyerstein called "Whence Cometh the Myth that We Only Use 10% of our Brains?”'
+        text: 'The book *Mind Myths* is released with a section by psychology professor Barry Beyerstein called "Whence Cometh the Myth that We Only Use 10% of our Brains?”'
       },
       {
         year: "2002",
@@ -111,11 +111,11 @@ export default function SingleFactPage() {
       },
       {
         year: "2011",
-        text: 'The film <i>Limitless</i> is released: the film depicts the protagonist’s evolution after he takes a nootropic drug that claims to give him full use of his brain as opposed to “only 20%”.'
+        text: 'The film *Limitless* is released: the film depicts the protagonist’s evolution after he takes a nootropic drug that claims to give him full use of his brain as opposed to “only 20%”.'
       },
       {
         year: "2014",
-        text: 'The film <i>Lucy</i> is released with a similar premise as Limitless, where the protagonist also takes a drug that allows her to use "100% of her brain."'
+        text: 'The film *Lucy* is released with a similar premise as Limitless, where the protagonist also takes a drug that allows her to use "100% of her brain."'
       },
       {
         year: "2017",
