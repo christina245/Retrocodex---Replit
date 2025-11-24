@@ -14,8 +14,8 @@ export default function SingleFactPage() {
     myth: '"You only use 10% of your brain."',
     truth: "You use nearly all of your brain at any given time.",
     category: ["Life Sciences", "Social Sciences"],
-    details: "Brain imaging research shows that nearly all regions of the brain are active at different times, even during simple tasks and while sleeping. The myth that we only use 10% has been debunked through neuroscience research and has been popularized by movies and self-help claims.",
-    moreDetails: "As Adam Grant, author of 'Evolution of the Human Brain and the Myth of the Unexploited 90%' (PLoS Biol, 2004, Vol. 2(3):E11), suggests in his article:",
+    details: "Brain imaging shows that nearly all regions are active at different times, even during simple tasks and while sleeping. The myth likely came from misinterpretations of neuroscience research and has been popularized by movies and self-help claims.",
+    moreDetails: "People often lose noticeable abilities with damage to just small portions of the brain, which is inconsistent with it being 90% unused. It is possible that this myth may be a misinterpretation of the fact that some parts of the brain may be less active than others.",
     sources: [
       {
         type: "editorial",
@@ -31,18 +31,18 @@ export default function SingleFactPage() {
       },
       {
         type: "academic",
-        name: 'How to Win Friends and Influence People" from 1936, released in 1937 by Dale Carnegie',
-        url: "#"
+        name: 'S. Anum et al., “Evolution of the Human Brain and the Myth of its Ten-Percent Use,” None, Sep. 2024, doi: 10.30884/seh/2024.02.02.',
+        url: "https://www.sociostudies.org/upload/socionauki.ru/journal/seh/2024_2/002_Anum.pdf"
       }
     ],
     timeline: [
       {
         year: "1907",
-        text: "Psychologist William James suggested that people only utilize a fraction of their mental capacity. However, James referred to potential capacity rather than literal brain usage, a nuance lost in terms of habit, motivation, and conscious utilization of existing faculties, rather than a literal 90% of the brain sitting empty."
+        text: "Psychologist William James suggested that people utilize only a fraction of their mental capacity. However, James referred to psychological capability and mental potential in terms of habit, motivation, and conscious utilization of existing faculties, rather than a literal percentage of brain tissue humans employ."
       },
       {
         year: "1936",
-        text: "The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers. Lowell Thomas, who wrote the forward for 'Professor William James of Harvard used to say that 'the average man develops only ten per cent of his latent mental ability.'"
+        text: 'The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers throughout the twentieth century. The self-help book How to Win Friends and Influence People by Dale Carnegie is released in 1936 with a foreword by broadcaster Lowell Thomas, who wrote "Professor William James of Harvard used to say that the average man develops only ten per cent of his latent mental ability."'
       }
     ],
     photos: [

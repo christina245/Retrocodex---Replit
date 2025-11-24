@@ -1,5 +1,5 @@
 import { X, Check, BookOpen } from "lucide-react";
-import mcgovernLogo from "@assets/mcgovern svg_1763930576954.png";
+import mcgovernLogo from "@assets/mcgovern svg (1)_1763940847877.png";
 import apsLogo from "@assets/Association_for_Psychological_Science_Logo_-_PNG 1_1763930617322.png";
 import "./ExtendedFactCard.css";
 
