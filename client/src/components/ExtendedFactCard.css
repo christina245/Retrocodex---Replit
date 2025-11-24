@@ -72,7 +72,14 @@
   color: #878787;
 }
 
-.fact-myth,
+.fact-myth {
+  font-family: 'Merriweather', serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #2C2C2C;
+  line-height: 1.5;
+  margin: 0 0 0 0;
+}
 .fact-truth {
   font-family: 'Merriweather', serif;
   font-size: 18px;

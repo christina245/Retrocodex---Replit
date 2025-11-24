@@ -99,7 +99,7 @@ export default function SingleFactPage() {
       },
       {
         year: "1936",
-        text: 'The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers throughout the twentieth century. The self-help book *[How to Win Friends and Influence People](https://en.wikipedia.org/wiki/How_to_Win_Friends_and_Influence_People)* by Dale Carnegie is released in 1936 with a foreword by broadcaster Lowell Thomas, who [wrote "Professor William James of Harvard used to say that the average man develops only ten per cent of his latent mental ability."](https://web.archive.org/web/20110515143209/http://www.cyberspacei.com/englishwiz/library/friends/how_to_win_friends.htm)'
+        text: 'The myth becomes commercially popularized through its adoption and promotion by self-help authors and motivational speakers throughout the twentieth century. The self-help book *[How to Win Friends and Influence People](https://en.wikipedia.org/wiki/How_to_Win_Friends_and_Influence_People)* by Dale Carnegie is released in 1936 with a foreword by broadcaster [Lowell Thomas, who wrote](https://web.archive.org/web/20110515143209/http://www.cyberspacei.com/englishwiz/library/friends/how_to_win_friends.htm) "Professor William James of Harvard used to say that the average man develops only ten per cent of his latent mental ability."'
       },
       {
         year: "1999",
