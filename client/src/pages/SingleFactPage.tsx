@@ -3,6 +3,7 @@ import { useParams } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { Pencil } from "lucide-react";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { SaveModal } from "@/components/SaveModal";
@@ -165,6 +166,19 @@ export default function SingleFactPage() {
               : `Added on ${factData.addedDate}`
             }
           </div>
+        </div>
+
+        <div className="suggest-edit-row">
+          <a 
+            href="https://form.typeform.com/to/hTpNhNJH" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="suggest-edit-link"
+            data-testid="link-suggest-edit"
+          >
+            <Pencil className="suggest-edit-icon" />
+            <span className="suggest-edit-text">Suggest an edit</span>
+          </a>
         </div>
 
         <div className="content-grid">
