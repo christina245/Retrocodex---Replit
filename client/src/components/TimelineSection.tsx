@@ -99,7 +99,20 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
                     />
                     {photo.caption && (
                       <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
-                        {photo.caption}
+                        <ReactMarkdown
+                          rehypePlugins={[rehypeSanitize]}
+                          components={{
+                            p: ({ children }) => <>{children}</>,
+                            em: ({ children }) => <em>{children}</em>,
+                            a: ({ href, children }) => (
+                              <a href={href} target="_blank" rel="noopener noreferrer">
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {photo.caption}
+                        </ReactMarkdown>
                       </div>
                     )}
                   </div>
