@@ -78,8 +78,8 @@
 
 .timeline-columns {
   display: grid;
-  grid-template-columns: 1fr 0.9fr;
-  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
 }
 
 .timeline-text-column {
@@ -122,18 +122,24 @@
   display: flex;
   flex-direction: column;
   gap: 40px;
+  align-items: center;
 }
 
 .timeline-photo-wrapper {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .timeline-photo {
-  width: 80%;
+  max-width: 35%;
   height: auto;
   display: block;
-  justify-content: center;
-  padding-left: 50px;
+}
+
+.timeline-photo-wrapper:nth-child(1) .timeline-photo,
+.timeline-photo-wrapper:nth-child(2) .timeline-photo {
+  max-width: 25%;
 }
 
 .timeline-photo.rounded {
