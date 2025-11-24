@@ -1,16 +1,66 @@
 import { useState } from "react";
 import { useParams } from "wouter";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
+import { SaveModal } from "@/components/SaveModal";
+import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
 import TimelineSection from "@/components/TimelineSection";
+import type { Fact } from "@/components/FactCard";
 import "./SingleFactPage.css";
 
 export default function SingleFactPage() {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const emailMutation = useMutation({
+    mutationFn: async ({ email, source }: { email: string; source: string }) => {
+      return await apiRequest("POST", "/api/emails", { email, source });
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "We'll notify you when accounts are available.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/emails"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to submit email. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleEmailSubmit = async (email: string, source: string) => {
+    await emailMutation.mutateAsync({ email, source });
+  };
+
+  const handleSaveClick = () => {
+    setIsSaveModalOpen(true);
+  };
+
+  const handleShareClick = () => {
+    const factForShare: Fact = {
+      id: factData.id,
+      category: factData.category[0] || "OTHER",
+      categoryColor: "#6FCF97",
+      myth: factData.myth,
+      truth: factData.truth,
+      link: `/fact/${factData.id}`,
+    };
+    setShareModalFact(factForShare);
+  };
 
   const factData = {
     id: "brain-10-percent",
@@ -88,7 +138,11 @@ export default function SingleFactPage() {
 
         <div className="content-grid">
           <div className="left-column">
-            <ExtendedFactCard fact={factData} />
+            <ExtendedFactCard 
+              fact={factData}
+              onSave={handleSaveClick}
+              onShare={handleShareClick}
+            />
           </div>
 
           <div className="right-column">
@@ -99,6 +153,20 @@ export default function SingleFactPage() {
           </div>
         </div>
       </div>
+
+      <SaveModal 
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onSubmit={handleEmailSubmit}
+      />
+      
+      {shareModalFact && (
+        <ShareModal 
+          isOpen={!!shareModalFact}
+          onClose={() => setShareModalFact(null)}
+          fact={shareModalFact}
+        />
+      )}
 
       <Footer />
     </div>
