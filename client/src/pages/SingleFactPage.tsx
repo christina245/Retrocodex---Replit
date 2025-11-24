@@ -134,17 +134,17 @@ export default function SingleFactPage() {
       { 
         src: "how to win friends 1936 version 1",
         hasTransparentBg: false,
-        caption: "1936 edition of *How to Win Friends and Influence People*, which would become one of the most influential self-help books of the 20th century."
+        caption: "1936 edition of *[How to Win Friends and Influence People](https://en.wikipedia.org/wiki/How_to_Win_Friends_and_Influence_People)*, which would become one of the most influential self-help books of the 20th century."
       },
       { 
         src: "limitless cover",
         hasTransparentBg: false,
-        caption: "Film poster of Limitless (2011)"
+        caption: "Film poster of *[Limitless](https://www.imdb.com/title/tt1219289/)* (2011)"
       },
       { 
         src: "Lucy - Quad Movie Poster (Crop)",
         hasTransparentBg: false,
-        caption: "Film poster of Lucy (2014) where it explicitly references the 10% myth."
+        caption: "Film poster of *[Lucy](https://www.imdb.com/title/tt2872732/)* (2014) where it explicitly references the 10% myth."
       }
     ],
     addedDate: "Nov. 23, 2025",
