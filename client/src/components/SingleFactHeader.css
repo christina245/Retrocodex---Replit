@@ -1,0 +1,95 @@
+.single-fact-header {
+  background: white;
+  border-bottom: 1px solid #E5E5E5;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.single-fact-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 50px;
+  min-height: 80px;
+}
+
+.header-logo .logo-image {
+  height: 40px;
+  width: auto;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-button {
+  background: transparent;
+  border: none;
+  color: #2C2C2C;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.search-button:hover:not(:disabled) {
+  color: #FF5353;
+}
+
+.search-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.submit-fact-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #FF5353;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.submit-fact-button:hover {
+  background: #E64848;
+}
+
+.hamburger-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+}
+
+.hamburger-icon span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #2C2C2C;
+  transition: all 0.2s;
+}
+
+.hamburger-button:hover .hamburger-icon span {
+  background: #FF5353;
+}
