@@ -86,7 +86,7 @@
 .below-content-grid {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 2rem;
+  gap: 1rem;
   margin-top: 0;
 }
 
@@ -95,5 +95,9 @@
 }
 
 .sidebar-column {
-  width: 280px;
+  width: 460px;
+}
+
+.email-banner-wrapper {
+  margin-top: 25px;
 }

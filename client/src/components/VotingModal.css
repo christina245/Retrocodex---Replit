@@ -1,0 +1,67 @@
+.voting-modal {
+  max-width: 400px;
+  text-align: center;
+}
+
+.voting-modal-illustration {
+  margin-bottom: 20px;
+}
+
+.voting-modal-illustration .construction-image {
+  width: 120px;
+  height: auto;
+}
+
+.voting-modal-title {
+  font-family: 'Merriweather', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #2C2C2C;
+  margin: 0 0 15px 0;
+  line-height: 1.4;
+}
+
+.voting-modal-description {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.voting-modal-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.voting-modal-action .reddit-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.voting-modal-action .reddit-icon {
+  width: 34px;
+  height: 33px;
+  object-fit: contain;
+}
+
+.voting-modal-action .visit-community-button {
+  display: inline-block;
+  background: #FF5353;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.voting-modal-action .visit-community-button:hover {
+  background: #E64545;
+}

@@ -9,6 +9,8 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { CommentsSection } from "@/components/CommentsSection";
+import { Poll } from "@/components/Poll";
+import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
@@ -203,7 +205,21 @@ export default function SingleFactPage() {
             <CommentsSection />
           </div>
           <div className="sidebar-column">
-            {/* Reserved for poll and email banner / future ads */}
+            <Poll 
+              question="Were you taught this information?"
+              options={[
+                "Yes",
+                "No",
+                "Not sure",
+                "Other",
+                "Yes, but after graduating high school",
+                "Yes, outside of school",
+                "I was taught the presently accurate version"
+              ]}
+            />
+            <div className="email-banner-wrapper">
+              <EmailSignupBanner onSubmit={(email) => handleEmailSubmit(email, "single-fact-page")} />
+            </div>
           </div>
         </div>
       </div>

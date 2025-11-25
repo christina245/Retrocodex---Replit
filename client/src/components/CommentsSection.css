@@ -1,21 +1,22 @@
 .comments-section {
-  margin-top: 10px;
+  margin-top: 5px;
   padding-top: 0;
   max-width: 700px;
 }
 
 .comment-input-container {
   cursor: pointer;
+  align-content: start;
 }
 
 .comment-input {
   width: 100%;
   max-width: 700px;
-  max-height: 70px;
-  min-height: 50px;
+  max-height: 110px;
+  min-height: 90px;
   padding: 14px 16px;
   border: 1px solid #D9D9D9;
-  border-radius: 4px;
+  border-radius: 10px;
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
@@ -170,13 +171,13 @@
 }
 
 .comment-body p + p {
-  margin-top: 16px;
+  margin-top: 9px;
 }
 
 .comment-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   justify-content: flex-end;
 }
 
