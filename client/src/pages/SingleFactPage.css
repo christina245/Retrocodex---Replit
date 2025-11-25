@@ -82,3 +82,18 @@
 .right-column {
   height: 515px;
 }
+
+.below-content-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  margin-top: 0;
+}
+
+.comments-column {
+  max-width: 700px;
+}
+
+.sidebar-column {
+  width: 280px;
+}

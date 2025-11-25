@@ -8,6 +8,7 @@ import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
+import { CommentsSection } from "@/components/CommentsSection";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
@@ -194,6 +195,15 @@ export default function SingleFactPage() {
               timeline={factData.timeline} 
               photos={factData.photos}
             />
+          </div>
+        </div>
+
+        <div className="below-content-grid">
+          <div className="comments-column">
+            <CommentsSection />
+          </div>
+          <div className="sidebar-column">
+            {/* Reserved for poll and email banner / future ads */}
           </div>
         </div>
       </div>
