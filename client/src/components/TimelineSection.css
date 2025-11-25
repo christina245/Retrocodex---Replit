@@ -167,43 +167,8 @@
 }
 
 .nuances-content {
-  padding: 0 50px;
+  padding: 20px;
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
-}
-
-.nuance-box {
-  background: rgba(44, 44, 44, 0.05);
-  margin: 5px 0;
-  padding: 15px;
-}
-
-.nuance-box-controversial {
-  background: rgba(228, 80, 80, 0.05);
-}
-
-.nuance-category {
-  display: inline-block;
-  background: #2C2C2C;
-  color: #FFFFFF;
-  padding: 10px 12px;
-  font-family: 'Public Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 10px;
-}
-
-.nuance-category-controversial {
-  background: #E45050;
-}
-
-.nuance-text {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #2C2C2C;
-  line-height: 1.6;
 }
