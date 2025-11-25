@@ -17,9 +17,16 @@ interface Photo {
   caption?: string;
 }
 
+interface NuanceItem {
+  category: string;
+  text: string;
+  isControversial?: boolean;
+}
+
 interface TimelineSectionProps {
   timeline: TimelineEvent[];
   photos: Photo[];
+  nuances?: NuanceItem[];
 }
 
 const photoMap: Record<string, string> = {
@@ -28,7 +35,7 @@ const photoMap: Record<string, string> = {
   "Lucy - Quad Movie Poster (Crop)": lucyPoster,
 };
 
-export default function TimelineSection({ timeline, photos }: TimelineSectionProps) {
+export default function TimelineSection({ timeline, photos, nuances = [] }: TimelineSectionProps) {
   const [activeTab, setActiveTab] = useState<"timeline" | "nuances">("timeline");
 
   return (
@@ -122,7 +129,27 @@ export default function TimelineSection({ timeline, photos }: TimelineSectionPro
           </div>
         ) : (
           <div role="tabpanel" id="nuances-panel" aria-labelledby="tab-nuances" className="nuances-content">
-            <p>Nuances and controversy content will be added here.</p>
+            {nuances.length > 0 ? (
+              nuances.map((nuance, index) => (
+                <div 
+                  key={index} 
+                  className={`nuance-box ${nuance.isControversial ? "nuance-box-controversial" : ""}`}
+                  data-testid={`nuance-box-${index}`}
+                >
+                  <div 
+                    className={`nuance-category ${nuance.isControversial ? "nuance-category-controversial" : ""}`}
+                    data-testid={`nuance-category-${index}`}
+                  >
+                    {nuance.category}
+                  </div>
+                  <div className="nuance-text" data-testid={`nuance-text-${index}`}>
+                    {nuance.text}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="nuances-empty">No nuances or controversy noted for this fact.</p>
+            )}
           </div>
         )}
       </div>

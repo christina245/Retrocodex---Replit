@@ -151,6 +151,18 @@ export default function SingleFactPage() {
         caption: "Film poster of *[Lucy](https://www.imdb.com/title/tt2872732/)* (2014) where it explicitly references the 10% myth."
       }
     ],
+    nuances: [
+      {
+        category: "Semantics",
+        text: 'It is possible that the term "use" in the myth might be intended to mean "actively use": neuroscientists have indeed observed that only a fraction of neurons fire at any given moment. A region\'s momentary neuron inactivity may have been conflated with it being unused altogether.',
+        isControversial: false
+      },
+      {
+        category: "Marketing",
+        text: 'While some media such as The Other 90% do not typically claim that humans use only 10% of their brains, their language can inadvertently reinforce the myth. Titles that reference "the other 90%" or "untapped potential" are often interpreted by readers as referring to unused brain capacity rather than unrecognized capabilities. Because the myth is already well known in popular culture, this phrasing can create the false impression that reputable sources support a biological claim.',
+        isControversial: false
+      }
+    ],
     addedDate: "Nov. 23, 2025",
     updatedDate: null
   };
@@ -196,6 +208,7 @@ export default function SingleFactPage() {
             <TimelineSection 
               timeline={factData.timeline} 
               photos={factData.photos}
+              nuances={factData.nuances}
             />
           </div>
         </div>
