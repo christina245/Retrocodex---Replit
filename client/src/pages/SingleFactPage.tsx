@@ -160,25 +160,24 @@ export default function SingleFactPage() {
       <div className="page-content">
         <div className="category-row">
           <CategoryChips categories={factData.category} />
-          <div className="date-label">
-            {factData.updatedDate 
-              ? `Last updated ${factData.updatedDate}` 
-              : `Added on ${factData.addedDate}`
-            }
+          <div className="right-info">
+            <a 
+              href="https://form.typeform.com/to/hTpNhNJH" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="suggest-edit-link"
+              data-testid="link-suggest-edit"
+            >
+              <Pencil className="suggest-edit-icon" />
+              <span className="suggest-edit-text">Suggest an edit</span>
+            </a>
+            <div className="date-label">
+              {factData.updatedDate 
+                ? `Last updated ${factData.updatedDate}` 
+                : `Added on ${factData.addedDate}`
+              }
+            </div>
           </div>
-        </div>
-
-        <div className="suggest-edit-row">
-          <a 
-            href="https://form.typeform.com/to/hTpNhNJH" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="suggest-edit-link"
-            data-testid="link-suggest-edit"
-          >
-            <Pencil className="suggest-edit-icon" />
-            <span className="suggest-edit-text">Suggest an edit</span>
-          </a>
         </div>
 
         <div className="content-grid">
