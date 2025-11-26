@@ -1,5 +1,6 @@
-import { XCircle, CheckSquare, MessageSquare, Bookmark, Share2 } from "lucide-react";
-import forwardArrow from "@assets/forward triangle_1763705098229.png";
+import { X, Check, MessageCircle, Bookmark, Share2 } from "lucide-react";
+import { Link } from "wouter";
+import forwardArrow from "@assets/forward triangle red.png";
 import "./CategoryFactCard.css";
 
 export interface CategoryFact {
@@ -26,17 +27,14 @@ export function CategoryFactCard({
   onShare, 
   onComment 
 }: CategoryFactCardProps) {
-  const handleLearnMore = () => {
-    if (fact.link) {
-      window.location.href = fact.link;
-    }
-  };
+  const factLink = fact.link || `/fact/${fact.id}`;
 
   return (
     <div className="category-fact-card-wrapper">
       <div 
         className="category-fact-card"
         style={{ '--card-category-color': categoryColor } as React.CSSProperties}
+        data-testid={`card-fact-${fact.id}`}
       >
         <div className="category-fact-header">
           {fact.tags && fact.tags.length > 0 && (
@@ -53,44 +51,42 @@ export function CategoryFactCard({
         <div className="category-fact-content">
           <div className="category-fact-section">
             <div className="category-fact-statement">
-              <XCircle size={18} className="category-fact-icon myth-icon" />
+              <X className="category-fact-icon myth-icon" />
               <p className="category-fact-text myth-text">{fact.myth}</p>
             </div>
             
             <div className="category-fact-statement">
-              <CheckSquare size={18} className="category-fact-icon truth-icon" />
+              <Check className="category-fact-icon truth-icon" />
               <p className="category-fact-text truth-text">{fact.truth}</p>
             </div>
           </div>
 
-          {fact.link && (
-            <button 
-              className="category-learn-more-button"
-              onClick={handleLearnMore}
-              data-testid={`button-learn-more-${fact.id}`}
-            >
-              <img src={forwardArrow} alt="" className="category-learn-more-arrow" />
-              Learn more
-            </button>
-          )}
+          <Link 
+            href={factLink}
+            className="category-learn-more-button"
+            data-testid={`button-learn-more-${fact.id}`}
+          >
+            <img src={forwardArrow} alt="" className="category-learn-more-arrow" />
+            Learn more
+          </Link>
         </div>
       </div>
 
       <div className="category-fact-actions">
-        <button 
-          className="category-action-button" 
-          onClick={onComment}
+        <Link 
+          href={factLink}
+          className="category-action-button"
           data-testid={`button-comment-${fact.id}`}
         >
-          <MessageSquare size={14} />
+          <MessageCircle size={16} />
           <span>0 comments</span>
-        </button>
+        </Link>
         <button 
           className="category-action-button" 
           onClick={onSave}
           data-testid={`button-save-${fact.id}`}
         >
-          <Bookmark size={14} />
+          <Bookmark size={16} />
           <span>Save</span>
         </button>
         <button 
@@ -98,7 +94,7 @@ export function CategoryFactCard({
           onClick={onShare}
           data-testid={`button-share-${fact.id}`}
         >
-          <Share2 size={14} />
+          <Share2 size={16} />
           <span>Share</span>
         </button>
       </div>
