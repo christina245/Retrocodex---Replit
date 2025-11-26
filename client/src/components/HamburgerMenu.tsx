@@ -37,7 +37,7 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
           <a href="#" className="menu-link" data-testid="link-about">
             About
           </a>
-          <a href="#" className="menu-link" data-testid="link-blog">
+          <a href="/articles" className="menu-link" data-testid="link-blog">
             Blog
           </a>
           <a href="#" className="menu-link" data-testid="link-recommended">

@@ -64,7 +64,7 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
           </div>
         )}
 
-        <div className="header-branding">
+        <a href="/" className="header-branding" data-testid="link-home-logo">
           <img 
             src={logoImage} 
             alt="Retrocodex" 
@@ -77,7 +77,7 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
               className="tagline-image"
             />
           )}
-        </div>
+        </a>
 
         <div className="header-actions">
           <button 
