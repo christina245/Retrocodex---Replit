@@ -55,7 +55,7 @@
 
 .hero-title {
   font-family: 'Merriweather', serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 32px;
   color: #FFFFFF;
   margin: 0;
@@ -69,11 +69,11 @@
 
 .hero-summary {
   font-family: 'Public Sans', sans-serif;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
   color: #FFFFFF;
   margin: 1rem 0;
-  line-height: 1.12;
+  line-height: 1.15;
 }
 
 .hero-date {

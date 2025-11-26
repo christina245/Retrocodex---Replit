@@ -7,6 +7,7 @@ import HomePage from "@/pages/HomePage";
 import AdminPage from "@/pages/AdminPage";
 import SingleFactPage from "@/pages/SingleFactPage";
 import ArticlesPage from "@/pages/ArticlesPage";
+import HistoryPage from "@/pages/HistoryPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/admin" component={AdminPage} />
       <Route path="/fact/:id" component={SingleFactPage} />
       <Route path="/articles" component={ArticlesPage} />
+      <Route path="/category/history" component={HistoryPage} />
       <Route component={NotFound} />
     </Switch>
   );

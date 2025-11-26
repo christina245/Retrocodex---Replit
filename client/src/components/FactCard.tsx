@@ -1,6 +1,6 @@
 import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap, Activity, HeartHandshake, DiamondPlus } from "lucide-react";
 import { Link } from "wouter";
-import forwardArrow from "@assets/forward triangle_1763705098229.png";
+import forwardArrow from "@assets/forward triangle red.png";
 import "./FactCard.css";
 
 const categoryIcons = {

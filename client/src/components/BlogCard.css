@@ -1,7 +1,7 @@
 .blog-card {
   width: 330px;
-  height: 375px;
-  background: white;
+  height: 390px;
+  background: #FCFCFC;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -11,8 +11,9 @@
 }
 
 .blog-card:hover {
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
 
 .blog-card-image-container {
   width: 100%;
@@ -55,7 +56,7 @@
   font-family: 'Public Sans', sans-serif;
   font-weight: 400;
   font-size: 12px;
-  text-transform: lowercase;
+  text-transform: none;
 }
 
 .blog-card-category-icon {
@@ -98,8 +99,9 @@
   font-family: 'Public Sans', sans-serif;
   font-weight: 500;
   font-size: 10px;
-  color: #FF5353;
+  color: #2C2C2C;
   background: rgba(255, 83, 83, 0.15);
   padding: 4px 10px;
   border-radius: 20px;
+  margin-top: 10px;
 }

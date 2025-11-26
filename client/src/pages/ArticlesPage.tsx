@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
 import workInProgressImage from "@assets/No articles found (yet)._1764112278730.png";
 import thanksgivingImage from "@assets/thanksgiving myths stock photo_1763852604175.jpg";
-import holidayFamilyImage from "@assets/stock_images/family_gathering_din_daf20666.jpg";
+import holidayFamilyImage from "@assets/family at the holidays.jpg";
 import "./ArticlesPage.css";
 
 const CATEGORY_OPTIONS = [
@@ -52,7 +52,7 @@ const BLOG_POSTS: BlogPost[] = [
     dateValue: new Date(2025, 10, 27),
     category: "Everyday Life",
     categoryIcon: Home,
-    categoryColor: "#0167A2",
+    categoryColor: "#2C2C2C",
     title: "8 Myths You Might Hear At Holiday Family Reunions",
     summary: "Every holiday season, millions of Americans return home to familiar food, familiar traditions, and familiar misconceptions passed down through generations. Whether it's an aunt insisting that cold weather...",
     tags: ["Facts"]
@@ -64,7 +64,7 @@ const BLOG_POSTS: BlogPost[] = [
     dateValue: new Date(2025, 10, 23),
     category: "History",
     categoryIcon: Scroll,
-    categoryColor: "#F5D547",
+    categoryColor: "#2C2C2C",
     title: "5 Myths You Might Have Learned About Thanksgiving",
     summary: "Did you know that there's no solid record that turkey was actually served at the 1621 \"first Thanksgiving meal\"? Let's take a closer look at the real history behind the iconic American holiday, from the...",
     tags: ["Facts"]

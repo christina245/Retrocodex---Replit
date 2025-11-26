@@ -68,3 +68,19 @@
   color: #2C2C2C;
   letter-spacing: 0.025em;
 }
+
+.category-item-selected {
+  background: #2C2C2C;
+  border-color: #2C2C2C;
+}
+
+.category-item-selected:hover {
+  background: #2C2C2C;
+  border-color: #2C2C2C;
+  transform: none;
+  box-shadow: none;
+}
+
+.category-item-selected .category-name {
+  color: white;
+}
