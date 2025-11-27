@@ -118,26 +118,25 @@ export default function HistoryPage() {
         </div>
 
         <div className="history-content-area">
+          <div className="history-tabs-row">
+            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="history-key-container">
+              <FactKey />
+            </div>
+          </div>
+
           <div className="history-content-container">
-            <div className="history-main-column">
-              <div className="history-facts-section">
-                <div className="history-tabs-and-key-container">
-                  <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-                  <FactKey />
-                </div>
-                <div className="history-facts-grid">
-                  {displayedFacts.map((fact) => (
-                    <CategoryFactCard
-                      key={fact.id}
-                      fact={fact}
-                      categoryColor={CATEGORY_COLOR}
-                      onSave={handleSaveClick}
-                      onShare={() => handleShareClick(fact)}
-                      onComment={handleCommentClick}
-                    />
-                  ))}
-                </div>
-              </div>
+            <div className="history-facts-grid">
+              {displayedFacts.map((fact) => (
+                <CategoryFactCard
+                  key={fact.id}
+                  fact={fact}
+                  categoryColor={CATEGORY_COLOR}
+                  onSave={handleSaveClick}
+                  onShare={() => handleShareClick(fact)}
+                  onComment={handleCommentClick}
+                />
+              ))}
             </div>
 
             <aside className="history-sidebar">

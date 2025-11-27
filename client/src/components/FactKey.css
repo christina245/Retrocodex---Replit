@@ -1,25 +1,19 @@
 .fact-key {
   display: flex;
-  align-items: baseline;
-  margin-top: 25px;
-  margin-left: 30px;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .fact-key-item {
   display: flex;
-  align-items: end;
+  align-items: center;
   gap: 4px;
-}
-
-.fact-key-item.myth-item {
-  margin-right: 15px;
 }
 
 .fact-key-icon {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  margin-top: 3px;
 }
 
 .fact-key-icon.myth-icon {
@@ -35,6 +29,5 @@
   font-weight: 400;
   font-size: 10px;
   line-height: 1.4;
-  padding-top: 3px;
   color: #878787;
 }
