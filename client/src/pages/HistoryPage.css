@@ -8,9 +8,10 @@
 .history-main-content {
   flex: 1;
   padding: 0 50px;
-  max-width: 100%;
+  max-width: 90%;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 }
 
 .history-intro-row {
@@ -42,7 +43,7 @@
 .history-photo {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: end;
 }
 
 .history-photo-img {
@@ -55,6 +56,8 @@
 
 .history-content-area {
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .history-tabs-row {
