@@ -26,7 +26,7 @@
 }
 
 .align-offset {
-  margin-left: 140px;
+  margin-left: 70px;
 }
 
 .content-container {
@@ -56,7 +56,7 @@
 
 .facts-grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 460px);
+  grid-template-columns: repeat(2, 515px);
   gap: 18px;
 }
 

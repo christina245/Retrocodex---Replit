@@ -4,9 +4,14 @@
   gap: 0.525rem;
 }
 
+.fact-card-row {
+  display: flex;
+  gap: 0;
+}
+
 .fact-card {
-  width: 460px;
-  height: 300px;
+  width: 515px;
+  height: 250px;
   background: rgba(217, 217, 217, 0.1);
   border: none;
   border-radius: 8px;
@@ -21,11 +26,13 @@
 }
 
 .fact-category {
-  padding: 0.75rem 1rem;
+  height: 35px;
+  padding: 0 1rem;
   border-bottom: 1px solid #f0f0f0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .category-icon-small {
@@ -40,14 +47,32 @@
   letter-spacing: 0.015em;
 }
 
+.fact-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
 .fact-content {
-  padding: 1.25rem;
-  padding-bottom: 40px;
+  padding: 1rem;
+  padding-left: 15px;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   flex: 1;
-  position: relative;
+  overflow: hidden;
+}
+
+.fact-photo {
+  width: 140px;
+  flex-shrink: 0;
+  background: #e0e0e0;
+}
+
+.fact-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .fact-section {
@@ -92,10 +117,19 @@
   font-size: 14px;
 }
 
+.fact-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.fact-actions {
+  display: flex;
+  gap: 1rem;
+}
+
 .learn-more-button {
-  position: absolute;
-  bottom: 10px;
-  right: 1.25rem;
   background: rgba(44, 44, 44, 0.05);
   color: #dc143c;
   border: none;
@@ -109,6 +143,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  text-decoration: none;
 }
 
 .learn-more-button:hover {
@@ -125,12 +160,6 @@
   height: 10px;
   object-fit: contain;
   transition: filter 0.2s;
-}
-
-.fact-actions {
-  display: flex;
-  gap: 1rem;
-  padding: 0 0.5rem;
 }
 
 .action-button {
