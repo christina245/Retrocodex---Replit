@@ -5,6 +5,7 @@ import { BsSendFill } from "react-icons/bs";
 import { useState } from "react";
 import type { Fact } from "./FactCard";
 import smsIcon from "@assets/sms icon_1763805965172.png";
+import lineLogo from "@assets/line logo_1763697164032.png";
 import "./ShareModal.css";
 
 interface ShareModalProps {
@@ -106,7 +107,7 @@ export function ShareModal({ isOpen, onClose, fact }: ShareModalProps) {
                 <p className="preview-subtitle">Learn more about this fact and view sources</p>
               </div>
               <img 
-                src="/attached_assets/line logo_1763697164032.png" 
+                src={lineLogo} 
                 alt="Retrocodex" 
                 className="preview-logo"
               />

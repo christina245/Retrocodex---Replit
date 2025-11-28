@@ -11,7 +11,7 @@
 
 .category-fact-card {
   width: 515px;
-  height: 250px;
+  height: 270px;
   background: rgba(217, 217, 217, 0.1);
   border: none;
   border-radius: 8px;
@@ -28,11 +28,12 @@
 .category-fact-header {
   height: 35px;
   background: var(--card-category-color);
+  opacity: 0.3;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 0 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
   flex-shrink: 0;
 }
 
