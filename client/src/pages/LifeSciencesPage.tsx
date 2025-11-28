@@ -12,70 +12,71 @@ import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
-import coliseumImage from "@assets/stock_images/history cover photo.png";
-import "./HistoryPage.css";
+import coverImage from "@assets/life sciences_1764363998621.png";
+import "./LifeSciencesPage.css";
 
-import photoColumbus from "@assets/stock_images/christopher columbus.png";
-import photoVikings from "@assets/stock_images/vikings.png";
-import photoPlymouth from "@assets/stock_images/pilgrims.png";
-import photoThanksgiving from "@assets/stock_images/the first thanksgiving.png";
-import photoMarie from "@assets/stock_images/marie antoinette.png";
-import photoPilgrim from "@assets/stock_images/pilgrims with buckles.png";
+import photoBrain from "@assets/stock_images/neon brain.png";
+import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
+import photoBlood from "@assets/stock_images/blood cells.png";
+import photoSenses from "@assets/humans 5 senses_1764363998622.png";
+import photoViruses from "@assets/viruses_1764363998620.png";
+import photoColds from "@assets/catching a cold_1764363998621.png";
 
-const historyFacts: CategoryFact[] = [
+const lifeSciencesFacts: CategoryFact[] = [
   {
-    id: "columbus",
-    myth: '"Christopher Columbus discovered North America in 1492."',
-    truth: "Columbus only reached Central and South America where several indigenous tribes had already established distinctive civilizations.",
+    id: "brain-10-percent",
+    myth: '"You only use 10% of your brain."',
+    truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
     tags: [],
-    dateAdded: "2025-10-15",
-    coverPhoto: photoColumbus
+    dateAdded: "2025-10-22",
+    link: "/fact/brain-10-percent",
+    coverPhoto: photoBrain
   },
   {
-    id: "vikings-helmets",
-    myth: '"Vikings usually wore horned helmets."',
-    truth: "Archaeological evidence has yet to find a horned helmet originating in the Viking era. The horned helmets found originate in the Bronze Age, 2000 years before Vikings.",
+    id: "dinosaurs-scaly",
+    myth: '"Dinosaurs were all scaly reptiles."',
+    truth: "Fossil evidence shows that some dinosaurs, especially those related to birds, had feathers or feather-like coverings.",
     tags: [],
     dateAdded: "2025-11-20",
-    coverPhoto: photoVikings
+    coverPhoto: photoDinosaurs
   },
   {
-    id: "plymouth-rock",
-    myth: '"The Pilgrims initially landed at Plymouth Rock in 1620."',
-    truth: "There are no records of where they landed exactly.",
+    id: "blood-blue",
+    myth: '"Human blood is actually blue until it comes into contact with oxygen."',
+    truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
     tags: [],
-    dateAdded: "2025-11-25",
-    coverPhoto: photoPlymouth
+    dateAdded: "2025-11-15",
+    coverPhoto: photoBlood
   },
   {
-    id: "thanksgiving-turkey",
-    myth: '"Turkey was served at the First Thanksgiving meal in 1621."',
-    truth: "The only bird on record was just 'fowl'. Turkeys were abundant at the time, so it was possible but not guaranteed. The association between turkey and Thanksgiving was actually popularized by a writer in the 19th century.",
+    id: "five-senses",
+    myth: '"Humans only have 5 senses: sight, touch, taste, smell, and sound."',
+    truth: "Neuroscientists believe we have up to 33 senses, such as proprioception, thermoception, kinaesthesia, and more.",
     tags: [],
-    dateAdded: "2025-11-26",
-    coverPhoto: photoThanksgiving
+    dateAdded: "2025-11-22",
+    coverPhoto: photoSenses
   },
   {
-    id: "marie-antoinette",
-    myth: '"Marie Antoinette ignorantly said \'Let them eat cake\' regarding the French Revolution."',
-    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
+    id: "viruses-alive",
+    myth: '"Viruses, unlike bacteria, aren\'t alive."',
+    truth: "It's still debated whether viruses are alive or not. Some recently discovered viruses carry genes similar to living beings.",
+    tags: [],
+    dateAdded: "2025-11-23",
+    coverPhoto: photoViruses
+  },
+  {
+    id: "colds-from-cold",
+    myth: '"You catch colds from being cold."',
+    truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
     tags: [],
     dateAdded: "2025-11-24",
-    coverPhoto: photoMarie
-  },
-  {
-    id: "pilgrim-clothing",
-    myth: '"The Pilgrims usually wore black clothes with big buckles."',
-    truth: "They wore colorful clothing in everyday life. The black outfits they're typically depicted with were for formal, rarer occasions.",
-    tags: [],
-    dateAdded: "2025-11-27",
-    coverPhoto: photoPilgrim
+    coverPhoto: photoColds
   }
 ];
 
-const CATEGORY_COLOR = "#F5D547";
+const CATEGORY_COLOR = "#6FCF97";
 
-export default function HistoryPage() {
+export default function LifeSciencesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
@@ -123,51 +124,47 @@ export default function HistoryPage() {
   };
 
   const displayedFacts = activeTab === "featured" 
-    ? historyFacts 
-    : [...historyFacts].sort((a, b) => {
+    ? lifeSciencesFacts 
+    : [...lifeSciencesFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
 
   return (
-    <div className="history-page">
+    <div className="life-sciences-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="HISTORY" />
+      <CategoryNav selectedCategory="LIFE SCIENCES" />
 
-      <main className="history-main-content">
-        <div className="history-intro-row">
-          <div className="history-description">
+      <main className="life-sciences-main-content">
+        <div className="life-sciences-intro-row">
+          <div className="life-sciences-description">
             <p>
-              Some historical facts are totally false, misunderstood, or just outdated. 
-              Historical knowledge is always changing as new evidence emerges, new methods 
-              of analysis develop, and previously overlooked voices finally become heard.
+              Life science is a fast-moving field, and many popular "facts" about biology, evolution, and human health simply haven't kept up with modern research. This page dives into some of the most widespread myths about living organisms—from dinosaurs and animals to human senses, viruses, bacteria, and plant biology—and explains what scientists have uncovered since those ideas first took hold.
             </p>
             <p>
-              History lessons vary by region and culture. You may have been taught the same 
-              historical events from a different perspective compared to folks from other 
-              parts of the world, adding even more nuance to what we know now.
+              You'll learn why the Brontosaurus was thought to be a mistake, why human blood never actually turns blue, and how the tongue-map diagram spread despite being debunked decades ago.
             </p>
           </div>
-          <div className="history-photo">
+          <div className="life-sciences-photo">
             <img 
-              src={coliseumImage} 
-              alt="The Coliseum in Rome" 
-              className="history-photo-img"
+              src={coverImage} 
+              alt="Life Sciences - Panda in nature" 
+              className="life-sciences-photo-img"
             />
           </div>
         </div>
 
-        <div className="history-content-area">
-          <div className="history-tabs-row">
+        <div className="life-sciences-content-area">
+          <div className="life-sciences-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="history-key-container">
+            <div className="life-sciences-key-container">
               <FactKey />
             </div>
           </div>
 
-          <div className="history-content-container">
-            <div className="history-facts-grid">
+          <div className="life-sciences-content-container">
+            <div className="life-sciences-facts-grid">
               {displayedFacts.map((fact) => (
                 <CategoryFactCard
                   key={fact.id}
@@ -180,9 +177,9 @@ export default function HistoryPage() {
               ))}
             </div>
 
-            <aside className="history-sidebar">
+            <aside className="life-sciences-sidebar">
               <EmailSignupBanner 
-                onSubmit={(email) => handleEmailSubmit(email, "history-page")} 
+                onSubmit={(email) => handleEmailSubmit(email, "life-sciences-page")} 
               />
             </aside>
           </div>
@@ -202,7 +199,7 @@ export default function HistoryPage() {
           onClose={() => setShareModalFact(null)}
           fact={{
             id: shareModalFact.id,
-            category: "HISTORY",
+            category: "LIFE SCIENCES",
             categoryColor: CATEGORY_COLOR,
             myth: shareModalFact.myth,
             truth: shareModalFact.truth,

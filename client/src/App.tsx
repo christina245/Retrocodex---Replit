@@ -8,6 +8,7 @@ import AdminPage from "@/pages/AdminPage";
 import SingleFactPage from "@/pages/SingleFactPage";
 import ArticlesPage from "@/pages/ArticlesPage";
 import HistoryPage from "@/pages/HistoryPage";
+import LifeSciencesPage from "@/pages/LifeSciencesPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/fact/:id" component={SingleFactPage} />
       <Route path="/articles" component={ArticlesPage} />
       <Route path="/category/history" component={HistoryPage} />
+      <Route path="/category/life-sciences" component={LifeSciencesPage} />
       <Route component={NotFound} />
     </Switch>
   );

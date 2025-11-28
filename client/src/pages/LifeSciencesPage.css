@@ -1,0 +1,129 @@
+.life-sciences-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.life-sciences-main-content {
+  flex: 1;
+  padding: 0 25px;
+  max-width: 95%;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.life-sciences-intro-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.life-sciences-description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  justify-content: center;
+}
+
+.life-sciences-description p {
+  margin: 0 0 1rem 0;
+}
+
+.life-sciences-description p:last-child {
+  margin-bottom: 0;
+}
+
+.life-sciences-photo {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.life-sciences-photo-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.life-sciences-content-area {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.life-sciences-tabs-row {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.life-sciences-key-container {
+  margin-left: auto;
+  margin-right: calc(280px + 1.5rem);
+}
+
+.life-sciences-content-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.life-sciences-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.life-sciences-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .life-sciences-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .life-sciences-key-container {
+    margin-right: calc(280px + 1.5rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .life-sciences-intro-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .life-sciences-content-container {
+    flex-direction: column;
+  }
+
+  .life-sciences-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .life-sciences-key-container {
+    display: none;
+  }
+
+  .life-sciences-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .life-sciences-main-content {
+    padding: 0 20px;
+  }
+}
