@@ -19,7 +19,7 @@ import photoColumbus from "@assets/stock_images/columbus-card.jpg";
 import photoVikings from "@assets/stock_images/vikings-card.jpg";
 import photoPlymouth from "@assets/stock_images/plymouth-rock-card.jpg";
 import photoThanksgiving from "@assets/stock_images/thanksgiving-card.jpg";
-import photoMarie from "@assets/stock_images/marie-antoinette-card.jpg";
+import photoMarie from "@assets/stock_images/marie antoinette.png";
 import photoPilgrim from "@assets/stock_images/pilgrim-clothing-card.jpg";
 
 const historyFacts: CategoryFact[] = [

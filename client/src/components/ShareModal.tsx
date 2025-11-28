@@ -5,7 +5,7 @@ import { BsSendFill } from "react-icons/bs";
 import { useState } from "react";
 import type { Fact } from "./FactCard";
 import smsIcon from "@assets/sms icon_1763805965172.png";
-import lineLogo from "@assets/line logo_1763697164032.png";
+import lineLogo from "@assets/line logo white background.png";
 import "./ShareModal.css";
 
 interface ShareModalProps {
