@@ -78,8 +78,8 @@
 
 .history-facts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 460px);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
 }
 
 .history-sidebar {

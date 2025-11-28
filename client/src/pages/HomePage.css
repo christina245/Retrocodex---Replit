@@ -57,7 +57,7 @@
 .facts-grid-container {
   display: grid;
   grid-template-columns: repeat(2, 460px);
-  gap: 2rem 1.5rem;
+  gap: 18px;
 }
 
 .sidebar {
