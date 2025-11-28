@@ -164,33 +164,32 @@ export default function HomePage() {
           <HeroSection />
         </div>
         
-        <div className="content-max">
-          <div className="content-container">
-          <div className="main-column">
-            <div className="facts-section align-offset">
-              <div className="tabs-and-key-container">
-                <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-                <FactKey />
-              </div>
-              <div className="facts-grid-container">
-                {displayedFacts.map((fact) => (
-                  <FactCard
-                    key={fact.id}
-                    fact={fact}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                  />
-                ))}
-              </div>
+        <div className="content-area">
+          <div className="tabs-row">
+            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="key-container">
+              <FactKey />
             </div>
           </div>
 
-          <aside className="sidebar">
-            <EmailSignupBanner 
-              onSubmit={(email) => handleEmailSubmit(email, "signup-banner")} 
-            />
-          </aside>
+          <div className="content-container">
+            <div className="facts-grid">
+              {displayedFacts.map((fact) => (
+                <FactCard
+                  key={fact.id}
+                  fact={fact}
+                  onSave={handleSaveClick}
+                  onShare={() => handleShareClick(fact)}
+                  onComment={handleCommentClick}
+                />
+              ))}
+            </div>
+
+            <aside className="sidebar">
+              <EmailSignupBanner 
+                onSubmit={(email) => handleEmailSubmit(email, "signup-banner")} 
+              />
+            </aside>
           </div>
         </div>
       </main>
