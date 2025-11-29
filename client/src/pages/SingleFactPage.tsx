@@ -3,11 +3,12 @@ import { useParams } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Pencil } from "lucide-react";
+import { Pencil, BellRing } from "lucide-react";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
+import { SubscribeModal } from "@/components/SubscribeModal";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { EmailSignupBanner } from "@/components/EmailSignupBanner";
@@ -22,7 +23,9 @@ export default function SingleFactPage() {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
+  const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -56,6 +59,10 @@ export default function SingleFactPage() {
 
   const handleSaveClick = () => {
     setIsSaveModalOpen(true);
+  };
+
+  const handleSubscribeClick = () => {
+    setIsSubscribeModalOpen(true);
   };
 
   const handleShareClick = () => {
@@ -176,21 +183,43 @@ export default function SingleFactPage() {
         <div className="category-row">
           <CategoryChips categories={factData.category} />
           <div className="right-info">
-            <a 
-              href="https://form.typeform.com/to/hTpNhNJH" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="suggest-edit-link"
-              data-testid="link-suggest-edit"
+            <div 
+              className="subscribe-button-container"
+              onMouseEnter={() => setShowSubscribeTooltip(true)}
+              onMouseLeave={() => setShowSubscribeTooltip(false)}
             >
-              <Pencil className="suggest-edit-icon" />
-              <span className="suggest-edit-text">Suggest an edit</span>
-            </a>
-            <div className="date-label">
-              {factData.updatedDate 
-                ? `Last updated ${factData.updatedDate}` 
-                : `Added on ${factData.addedDate}`
-              }
+              <button 
+                className="subscribe-button"
+                onClick={handleSubscribeClick}
+                data-testid="button-subscribe"
+                aria-label="Subscribe to fact updates"
+              >
+                <BellRing className="subscribe-icon" />
+                <span>Subscribe</span>
+              </button>
+              {showSubscribeTooltip && (
+                <div className="subscribe-tooltip" data-testid="tooltip-subscribe">
+                  Stay updated if this information evolves. We'll notify you when this fact is revised, when new research is published, or when meaningful discussion happens. You control what you receive.
+                </div>
+              )}
+            </div>
+            <div className="edit-date-cell">
+              <a 
+                href="https://form.typeform.com/to/hTpNhNJH" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="suggest-edit-link"
+                data-testid="link-suggest-edit"
+              >
+                <Pencil className="suggest-edit-icon" />
+                <span className="suggest-edit-text">Suggest an edit</span>
+              </a>
+              <div className="date-label">
+                {factData.updatedDate 
+                  ? `Last updated ${factData.updatedDate}` 
+                  : `Added on ${factData.addedDate}`
+                }
+              </div>
             </div>
           </div>
         </div>
@@ -240,7 +269,13 @@ export default function SingleFactPage() {
       <SaveModal 
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)}
-        onSubmit={handleEmailSubmit}
+        onSubmit={(email) => handleEmailSubmit(email, "save-modal")}
+      />
+
+      <SubscribeModal 
+        isOpen={isSubscribeModalOpen}
+        onClose={() => setIsSubscribeModalOpen(false)}
+        onSubmit={(email) => handleEmailSubmit(email, "subscribe-modal")}
       />
       
       {shareModalFact && (

@@ -194,16 +194,16 @@
 
   .fact-card {
     width: 100%;
-    height: 270px;
+    height: 310px;
   }
 
   .fact-body {
-    gap: 25px;
+    gap: 10px;
   }
 
   .fact-content {
-    padding: 1rem;
-    padding-left: 15px;
+    padding: 0.75rem;
+    padding-left: 7px;
     flex: 1;
   }
 
