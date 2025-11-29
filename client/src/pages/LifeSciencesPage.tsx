@@ -12,6 +12,7 @@ import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
+import { CategoryFilter } from "@/components/CategoryFilter";
 import coverImage from "@assets/life sciences_1764363998621.png";
 import "./LifeSciencesPage.css";
 
@@ -79,6 +80,7 @@ const CATEGORY_COLOR = "#6FCF97";
 export default function LifeSciencesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const { toast } = useToast();
@@ -158,6 +160,12 @@ export default function LifeSciencesPage() {
         <div className="life-sciences-content-area">
           <div className="life-sciences-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="life-sciences-filter-container">
+              <CategoryFilter 
+                selectedFilters={selectedFilters} 
+                onFilterChange={setSelectedFilters} 
+              />
+            </div>
             <div className="life-sciences-key-container">
               <FactKey />
             </div>

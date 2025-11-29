@@ -12,6 +12,7 @@ import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
+import { CategoryFilter } from "@/components/CategoryFilter";
 import coliseumImage from "@assets/stock_images/history cover photo.png";
 import "./HistoryPage.css";
 
@@ -78,6 +79,7 @@ const CATEGORY_COLOR = "#F5D547";
 export default function HistoryPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const { toast } = useToast();
@@ -161,6 +163,12 @@ export default function HistoryPage() {
         <div className="history-content-area">
           <div className="history-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="history-filter-container">
+              <CategoryFilter 
+                selectedFilters={selectedFilters} 
+                onFilterChange={setSelectedFilters} 
+              />
+            </div>
             <div className="history-key-container">
               <FactKey />
             </div>
