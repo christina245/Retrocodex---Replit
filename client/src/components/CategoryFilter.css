@@ -4,6 +4,8 @@
   gap: 8px;
   position: relative;
   flex-wrap: wrap;
+  padding-top: 9px;
+  padding-left: 10px;
 }
 
 .category-filter-label {
@@ -18,7 +20,7 @@
 
 .category-filter-text {
   font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   color: #2C2C2C;
 }
@@ -34,7 +36,7 @@
   background: none;
   border: none;
   font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #2C2C2C;
   cursor: pointer;

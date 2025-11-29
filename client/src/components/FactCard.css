@@ -185,3 +185,63 @@
 .action-button svg {
   flex-shrink: 0;
 }
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .fact-card-wrapper {
+    width: 100%;
+  }
+
+  .fact-card {
+    width: 100%;
+    height: 270px;
+  }
+
+  .fact-body {
+    gap: 25px;
+  }
+
+  .fact-content {
+    padding: 1rem;
+    padding-left: 15px;
+    flex: 1;
+  }
+
+  .fact-photo {
+    width: 30%;
+    min-width: 30%;
+  }
+
+  .myth-text {
+    font-size: 12px;
+  }
+
+  .truth-text {
+    font-size: 12px;
+  }
+
+  .fact-footer {
+    padding: 0 0.25rem;
+  }
+
+  .action-button {
+    font-size: 10px;
+    gap: 0.25rem;
+    padding: 0.25rem 0.375rem;
+  }
+
+  .action-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .learn-more-button {
+    font-size: 10px;
+    padding: 10px 12px 10px 8px;
+  }
+
+  .learn-more-arrow {
+    width: 16px;
+    height: 8px;
+  }
+}

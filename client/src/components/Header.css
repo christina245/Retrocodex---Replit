@@ -210,30 +210,57 @@
   background: #FF5353;
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
+  .header {
+    padding: 8px 0 12px 0;
+  }
+
   .header-container {
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 0 12px;
+    align-items: flex-start;
   }
 
   .header-branding {
     position: static;
     transform: none;
-    order: -1;
-    margin: 0 auto;
+    order: 1;
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  .logo-image {
+    width: 140px;
+  }
+
+  .tagline-image {
+    width: 160px;
+    margin-bottom: 0;
   }
 
   .header-left-section {
-    order: 1;
-    flex-direction: column;
-  }
-
-  .social-icons-column {
-    margin-left: 0;
+    display: none;
   }
 
   .header-actions {
-    order: 3;
+    order: 2;
+    gap: 0.5rem;
+    margin-left: auto;
+    padding-right: 4px;
+  }
+
+  .submit-fact-button {
+    display: none;
+  }
+
+  .search-button {
+    padding: 0.375rem;
+  }
+
+  .hamburger-button {
+    padding: 0.375rem;
   }
 }
