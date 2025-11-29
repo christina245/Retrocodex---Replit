@@ -135,6 +135,14 @@
   margin-bottom: 7px;
 }
 
+.tagline-desktop {
+  display: block;
+}
+
+.tagline-mobile {
+  display: none;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -236,7 +244,12 @@
     width: 140px;
   }
 
-  .tagline-image {
+  .tagline-desktop {
+    display: none;
+  }
+
+  .tagline-mobile {
+    display: block;
     width: 160px;
     margin-bottom: 0;
   }
