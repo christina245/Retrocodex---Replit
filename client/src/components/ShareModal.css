@@ -206,5 +206,7 @@
 @media (max-width: 640px) {
   .share-options {
     grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 }

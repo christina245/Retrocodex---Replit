@@ -37,10 +37,10 @@
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  background: #2C2C2C;
-  color: white;
+  background: rgba(44, 44, 44, 0.05);
+  color: #FF5353;
   border: none;
-  padding: 0.5rem 0.875rem;
+  padding: 0.7rem 0.875rem;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
   font-size: 0.75rem;
@@ -50,7 +50,8 @@
 }
 
 .subscribe-button:hover {
-  background: #1a1a1a;
+  background: #FF5353;
+  color: #FFFFFF
 }
 
 .subscribe-icon {
