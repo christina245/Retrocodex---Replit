@@ -4,6 +4,7 @@ import "./RelatedFacts.css";
 import leftRightBrainImg from "@assets/left and right brain_1764566485121.png";
 import intelligenceImg from "@assets/intelligence_1764566485120.png";
 import fiveSensesImg from "@assets/humans 5 senses_1764363998622.png";
+import learningStylesImg from "@assets/stock_images/people studying.png"
 
 interface RelatedFact {
   id: string;
@@ -24,7 +25,7 @@ const defaultRelatedFacts: RelatedFact[] = [
   {
     id: "learning-styles",
     myth: '"We have distinct learning styles, such as visual or auditory."',
-    image: ""
+    image: learningStylesImg
   },
   {
     id: "intelligence-brain-size",
