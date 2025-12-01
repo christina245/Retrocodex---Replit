@@ -196,7 +196,7 @@
 /* Mobile layout - photo on right like homepage */
 @media (max-width: 768px) {
   .category-fact-card-wrapper {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
   }
 

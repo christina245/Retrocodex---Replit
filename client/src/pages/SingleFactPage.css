@@ -162,6 +162,20 @@
 }
 
 .sidebar-column {
-  width: 280px;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+}
+
+.sidebar-bottom-row {
+  display: flex;
+  gap: 10px;
+}
+
+.sidebar-bottom-row .related-facts {
+  flex: 1;
+}
+
+.sidebar-bottom-row .email-banner-wrapper {
+  flex-shrink: 0;
 }

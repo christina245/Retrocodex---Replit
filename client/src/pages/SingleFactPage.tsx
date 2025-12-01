@@ -11,6 +11,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { SubscribeModal } from "@/components/SubscribeModal";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
+import { RelatedFacts } from "@/components/RelatedFacts";
 import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
@@ -259,8 +260,11 @@ export default function SingleFactPage() {
                 "I was taught the presently accurate version"
               ]}
             />
-            <div className="email-banner-wrapper">
-              <EmailSignupBanner onSubmit={(email) => handleEmailSubmit(email, "single-fact-page")} />
+            <div className="sidebar-bottom-row">
+              <RelatedFacts />
+              <div className="email-banner-wrapper">
+                <EmailSignupBanner onSubmit={(email) => handleEmailSubmit(email, "single-fact-page")} />
+              </div>
             </div>
           </div>
         </div>
