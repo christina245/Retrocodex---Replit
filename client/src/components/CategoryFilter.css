@@ -117,14 +117,13 @@
 }
 
 .category-filter-apply-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
+  justify-content: center;
   background: rgba(44, 44, 44, 0.05);
   color: #dc143c;
   border: none;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
@@ -132,6 +131,7 @@
   cursor: pointer;
   transition: all 0.2s;
   margin-top: 4px;
+  align-self: flex-end;
 }
 
 .category-filter-apply-button:hover {

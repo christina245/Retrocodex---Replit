@@ -95,7 +95,6 @@ export function CategoryFilter({ selectedFilters, onFilterChange }: CategoryFilt
                 onClick={handleApplyFilter}
                 data-testid="button-apply-filter"
               >
-                <Filter size={14} />
                 <span>Filter</span>
               </button>
             </div>
