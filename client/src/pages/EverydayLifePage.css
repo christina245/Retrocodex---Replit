@@ -1,0 +1,150 @@
+.everyday-life-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.everyday-life-main-content {
+  flex: 1;
+  padding: 0 25px;
+  max-width: 95%;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.everyday-life-intro-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.everyday-life-description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  justify-content: center;
+}
+
+.everyday-life-description p {
+  margin: 0 0 1rem 0;
+}
+
+.everyday-life-description p:last-child {
+  margin-bottom: 0;
+}
+
+.everyday-life-photo {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.everyday-life-photo-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.everyday-life-content-area {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.everyday-life-tabs-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 50px;
+}
+
+.everyday-life-filter-container {
+  flex-shrink: 0;
+}
+
+.everyday-life-key-container {
+  margin-left: auto;
+  width: 515px;
+  flex-shrink: 0;
+}
+
+.everyday-life-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.everyday-life-content-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.everyday-life-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.everyday-life-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .everyday-life-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .everyday-life-key-container {
+    width: auto;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .everyday-life-intro-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .everyday-life-tabs-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .everyday-life-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .everyday-life-content-container {
+    flex-direction: column;
+  }
+
+  .everyday-life-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .everyday-life-key-container {
+    display: none;
+  }
+
+  .everyday-life-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .everyday-life-main-content {
+    padding: 0 20px;
+  }
+}
