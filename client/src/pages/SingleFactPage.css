@@ -170,10 +170,12 @@
 .sidebar-bottom-row {
   display: flex;
   gap: 10px;
+  align-items: flex-start;
 }
 
 .sidebar-bottom-row .related-facts {
   flex: 1;
+  height: auto;
 }
 
 .sidebar-bottom-row .email-banner-wrapper {
