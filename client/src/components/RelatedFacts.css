@@ -2,7 +2,7 @@
   background: #2C2C2C;
   border-radius: 8px;
   padding: 0.75rem;
-  max-height: 410px;
+  max-height: 500px;
 }
 
 .related-facts-header {
@@ -13,13 +13,14 @@
   text-align: center;
   margin: 0;
   margin-top: 9px;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .related-facts-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .related-fact-item {
