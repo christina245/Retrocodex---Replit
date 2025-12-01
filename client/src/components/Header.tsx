@@ -5,7 +5,6 @@ import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
 import logoImage from "@assets/logo only_1763795492352.png";
 import taglineImage from "@assets/tagline only_1763795492353.png";
 import taglineMobileImage from "@assets/a place to unlearn mobile_1764442802968.png";
-import donateIcon from "@assets/donate icon_1763804850230.png";
 import "./Header.css";
 
 interface HeaderProps {
@@ -51,17 +50,6 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
                 <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
               </a>
             </div>
-            <a 
-              href="https://buymeacoffee.com/retrocodex" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="donate-button"
-              data-testid="button-donate"
-              aria-label="Donate to Retrocodex"
-            >
-              <img src={donateIcon} alt="" className="donate-icon" />
-              <span className="donate-text">Donate</span>
-            </a>
           </div>
         )}
 
@@ -122,6 +110,20 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
           )}
         </div>
       </div>
+      {variant === "default" && (
+        <div className="header-donate-row">
+          <a 
+            href="https://buymeacoffee.com/retrocodex" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="header-donate-button"
+            data-testid="button-donate"
+            aria-label="Donate to Retrocodex"
+          >
+            Donate
+          </a>
+        </div>
+      )}
     </header>
   );
 }
