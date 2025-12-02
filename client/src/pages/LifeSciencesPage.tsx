@@ -125,6 +125,13 @@ export default function LifeSciencesPage() {
     });
   };
 
+  const handleBetaClick = () => {
+    toast({
+      title: "Under Development",
+      description: "Individual fact pages are still under development. Check back soon!",
+    });
+  };
+
   const displayedFacts = activeTab === "featured" 
     ? lifeSciencesFacts 
     : [...lifeSciencesFacts].sort((a, b) => {
@@ -181,6 +188,7 @@ export default function LifeSciencesPage() {
                   onSave={handleSaveClick}
                   onShare={() => handleShareClick(fact)}
                   onComment={handleCommentClick}
+                  onBetaClick={handleBetaClick}
                 />
               ))}
             </div>

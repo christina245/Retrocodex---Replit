@@ -12,6 +12,7 @@ export interface CategoryFact {
   link?: string;
   dateAdded?: string;
   coverPhoto?: string;
+  betaOnly?: boolean;
 }
 
 interface CategoryFactCardProps {
@@ -20,6 +21,7 @@ interface CategoryFactCardProps {
   onSave?: () => void;
   onShare?: () => void;
   onComment?: () => void;
+  onBetaClick?: () => void;
 }
 
 export function CategoryFactCard({ 
@@ -27,10 +29,20 @@ export function CategoryFactCard({
   categoryColor,
   onSave, 
   onShare, 
-  onComment 
+  onComment,
+  onBetaClick
 }: CategoryFactCardProps) {
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
+
+  const handleBetaLinkClick = (e: React.MouseEvent) => {
+    if (fact.betaOnly) {
+      e.preventDefault();
+      if (onBetaClick) {
+        onBetaClick();
+      }
+    }
+  };
 
   return (
     <div className="category-fact-card-wrapper">
@@ -85,6 +97,7 @@ export function CategoryFactCard({
             href={factLink}
             className="category-action-button"
             data-testid={`button-comment-${fact.id}`}
+            onClick={handleBetaLinkClick}
           >
             <MessageCircle size={16} />
             <span>0 comments</span>
@@ -111,6 +124,7 @@ export function CategoryFactCard({
           href={factLink}
           className="category-learn-more-button"
           data-testid={`button-learn-more-${fact.id}`}
+          onClick={handleBetaLinkClick}
         >
           <img src={forwardArrow} alt="" className="category-learn-more-arrow" />
           Learn more

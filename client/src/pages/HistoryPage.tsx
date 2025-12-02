@@ -124,6 +124,13 @@ export default function HistoryPage() {
     });
   };
 
+  const handleBetaClick = () => {
+    toast({
+      title: "Under Development",
+      description: "Individual fact pages are still under development. Check back soon!",
+    });
+  };
+
   const displayedFacts = activeTab === "featured" 
     ? historyFacts 
     : [...historyFacts].sort((a, b) => {
@@ -184,6 +191,7 @@ export default function HistoryPage() {
                   onSave={handleSaveClick}
                   onShare={() => handleShareClick(fact)}
                   onComment={handleCommentClick}
+                  onBetaClick={handleBetaClick}
                 />
               ))}
             </div>

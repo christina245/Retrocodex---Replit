@@ -110,6 +110,13 @@ export default function EverydayLifePage() {
     });
   };
 
+  const handleBetaClick = () => {
+    toast({
+      title: "Under Development",
+      description: "Individual fact pages are still under development. Check back soon!",
+    });
+  };
+
   const displayedFacts = activeTab === "featured" 
     ? everydayLifeFacts 
     : [...everydayLifeFacts].sort((a, b) => {
@@ -166,6 +173,7 @@ export default function EverydayLifePage() {
                   onSave={handleSaveClick}
                   onShare={() => handleShareClick(fact)}
                   onComment={handleCommentClick}
+                  onBetaClick={handleBetaClick}
                 />
               ))}
             </div>
