@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Download, Lock, Plus, FileText, Mail, X, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, type Source, type TimelineEntry, type Nuance, type Fact } from "@shared/schema";
 import "./AdminPage.css";
+import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
 
 interface EmailSubscription {
   id: string;
@@ -490,7 +491,7 @@ export default function AdminPage() {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="sidebar-header">
-          <h2 className="sidebar-title">Retrocodex</h2>
+          <img src={logoIcon} alt="Retrocodex" className="sidebar-logo" />
           <span className="sidebar-subtitle">Admin Panel</span>
         </div>
         
