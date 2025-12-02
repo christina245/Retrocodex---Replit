@@ -1,6 +1,6 @@
 .header {
   background: white;
-  padding: 10px 0 1rem 0;
+  padding: 10px 0 0.1rem 0;
 }
 
 .header-simplified .header-container {
@@ -70,6 +70,7 @@
 .header-donate-row {
   max-width: 1400px;
   margin: 0 auto;
+  margin-top: 1rem;
   padding: 0 2rem;
   display: flex;
   justify-content: flex-end;
@@ -80,7 +81,7 @@
   color: #dc143c;
   border: none;
   padding: 7px 10px;
-  border-radius: 6px;
+  border-radius: 5px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   font-weight: 300;
@@ -98,7 +99,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   flex-shrink: 0;
   position: absolute;
   left: 50%;
@@ -159,7 +160,7 @@
   background: #FF5353;
   color: white;
   border: none;
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem 0.8rem;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
   font-size: 0.875rem;
