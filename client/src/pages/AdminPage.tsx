@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState, useCallback } from "react";
-import { Download, Lock, Plus, FileText, Mail, ChevronDown, ChevronUp, X, GripVertical } from "lucide-react";
-import { CATEGORIES, OTHER_SUBCATEGORIES, type Source, type TimelineEntry, type Nuance } from "@shared/schema";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { Download, Lock, Plus, FileText, Mail, X, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight } from "lucide-react";
+import { CATEGORIES, OTHER_SUBCATEGORIES, type Source, type TimelineEntry, type Nuance, type Fact } from "@shared/schema";
 import "./AdminPage.css";
 
 interface EmailSubscription {
@@ -11,7 +11,7 @@ interface EmailSubscription {
   createdAt: string;
 }
 
-type AdminView = "add-fact" | "add-blog" | "emails";
+type AdminView = "add-fact" | "add-blog" | "emails" | "view-facts";
 
 const AVAILABLE_TAGS = [
   "Popular",
@@ -27,18 +27,28 @@ function generateId(): string {
 }
 
 export default function AdminPage() {
+  const queryClient = useQueryClient();
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
   const [currentView, setCurrentView] = useState<AdminView>("add-fact");
   
+  // Edit mode state
+  const [editingFactId, setEditingFactId] = useState<string | null>(null);
+  
+  // View Facts pagination
+  const [factsPage, setFactsPage] = useState(1);
+  const FACTS_PER_PAGE = 10;
+  
   // Form state for Add New Fact
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
+  const [coverPhoto, setCoverPhoto] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [subcategory, setSubcategory] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [featured, setFeatured] = useState(false);
+  const [betaOnly, setBetaOnly] = useState(false);
   const [mythHeader, setMythHeader] = useState("");
   const [mythDetails, setMythDetails] = useState("");
   const [truthHeader, setTruthHeader] = useState("");
@@ -72,6 +82,72 @@ export default function AdminPage() {
     enabled: isAuthenticated && currentView === "emails",
   });
 
+  const { data: facts, isLoading: factsLoading, error: factsError } = useQuery<Fact[]>({
+    queryKey: ["/api/facts"],
+    queryFn: async () => {
+      const response = await fetch("/api/facts", {
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        }
+      });
+
+      if (response.status === 401) {
+        throw new Error("Invalid password");
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch facts");
+      }
+
+      return response.json();
+    },
+    enabled: isAuthenticated && (currentView === "view-facts" || currentView === "add-fact"),
+  });
+
+  // Reset form when switching to add mode
+  const resetForm = () => {
+    setEditingFactId(null);
+    setTitle("");
+    setSlug("");
+    setCoverPhoto("");
+    setSelectedCategories([]);
+    setSubcategory("");
+    setSelectedTags([]);
+    setFeatured(false);
+    setBetaOnly(false);
+    setMythHeader("");
+    setMythDetails("");
+    setTruthHeader("");
+    setTruthDetails("");
+    setSources([{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
+    setTimeline([]);
+    setNuances([]);
+    setSubmitMessage("");
+  };
+
+  // Load fact data for editing
+  const loadFactForEdit = (fact: Fact) => {
+    setEditingFactId(fact.id);
+    setTitle(fact.title);
+    setSlug(fact.slug);
+    setCoverPhoto(fact.coverPhoto || "");
+    setSelectedCategories(fact.categories);
+    setSubcategory(fact.subcategory || "");
+    setSelectedTags(fact.tags || []);
+    setFeatured(fact.featured || false);
+    setBetaOnly(fact.betaOnly || false);
+    setMythHeader(fact.mythHeader);
+    setMythDetails(fact.mythDetails);
+    setTruthHeader(fact.truthHeader);
+    setTruthDetails(fact.truthDetails);
+    setSources(fact.sources && fact.sources.length > 0 
+      ? fact.sources 
+      : [{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
+    setTimeline(fact.timeline || []);
+    setNuances(fact.nuances || []);
+    setCurrentView("add-fact");
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!password) {
@@ -84,14 +160,16 @@ export default function AdminPage() {
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
-    // Auto-generate slug from title
-    const generatedSlug = value
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-    setSlug(generatedSlug);
+    // Only auto-generate slug for new facts
+    if (!editingFactId) {
+      const generatedSlug = value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+      setSlug(generatedSlug);
+    }
   };
 
   const handleCategoryChange = (category: string, checked: boolean) => {
@@ -110,6 +188,30 @@ export default function AdminPage() {
       setSelectedTags([...selectedTags, tag]);
     } else {
       setSelectedTags(selectedTags.filter(t => t !== tag));
+    }
+  };
+
+  // Cover photo upload
+  const uploadCoverPhoto = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/uploads", {
+        method: "POST",
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        },
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+      
+      const data = await response.json();
+      setCoverPhoto(data.url);
+    } catch (error) {
+      console.error("Failed to upload cover photo:", error);
+      alert("Failed to upload cover photo");
     }
   };
 
@@ -258,10 +360,12 @@ export default function AdminPage() {
     const factData = {
       title,
       slug,
+      coverPhoto: coverPhoto || undefined,
       categories: selectedCategories,
       subcategory: selectedCategories.includes("Other") ? subcategory : undefined,
       tags: selectedTags,
       featured,
+      betaOnly,
       mythHeader,
       mythDetails,
       truthHeader,
@@ -272,8 +376,11 @@ export default function AdminPage() {
     };
 
     try {
-      const response = await fetch("/api/facts", {
-        method: "POST",
+      const url = editingFactId ? `/api/facts/${editingFactId}` : "/api/facts";
+      const method = editingFactId ? "PUT" : "POST";
+      
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Basic ' + btoa('admin:' + password)
@@ -284,26 +391,20 @@ export default function AdminPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to create fact");
+        throw new Error(data.message || `Failed to ${editingFactId ? 'update' : 'create'} fact`);
       }
 
-      setSubmitMessage("Fact created successfully!");
-      // Reset form
-      setTitle("");
-      setSlug("");
-      setSelectedCategories([]);
-      setSubcategory("");
-      setSelectedTags([]);
-      setFeatured(false);
-      setMythHeader("");
-      setMythDetails("");
-      setTruthHeader("");
-      setTruthDetails("");
-      setSources([{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
-      setTimeline([]);
-      setNuances([]);
+      setSubmitMessage(`Fact ${editingFactId ? 'updated' : 'created'} successfully!`);
+      
+      // Invalidate facts query to refresh the list
+      queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
+      
+      // Reset form for new entries
+      if (!editingFactId) {
+        resetForm();
+      }
     } catch (error) {
-      setSubmitMessage(error instanceof Error ? error.message : "Failed to create fact");
+      setSubmitMessage(error instanceof Error ? error.message : `Failed to ${editingFactId ? 'update' : 'create'} fact`);
     } finally {
       setIsSubmitting(false);
     }
@@ -332,6 +433,21 @@ export default function AdminPage() {
     a.click();
     window.URL.revokeObjectURL(url);
   };
+
+  // Get the category color for fact cards
+  const getCategoryColor = (categories: string[]): string => {
+    if (categories.includes("History")) return "#4A90A4";
+    if (categories.includes("Life Sciences")) return "#7CB342";
+    if (categories.includes("Health & Fitness")) return "#E91E63";
+    if (categories.includes("Social Sciences")) return "#9C27B0";
+    if (categories.includes("Gender & Sexuality")) return "#FF9800";
+    if (categories.includes("Everyday Life")) return "#795548";
+    return "#878787";
+  };
+
+  // Pagination for View Facts
+  const totalPages = facts ? Math.ceil(facts.length / FACTS_PER_PAGE) : 0;
+  const paginatedFacts = facts ? facts.slice((factsPage - 1) * FACTS_PER_PAGE, factsPage * FACTS_PER_PAGE) : [];
 
   if (!isAuthenticated) {
     return (
@@ -381,11 +497,20 @@ export default function AdminPage() {
         <nav className="sidebar-nav">
           <button
             className={`sidebar-nav-item ${currentView === 'add-fact' ? 'active' : ''}`}
-            onClick={() => setCurrentView('add-fact')}
+            onClick={() => { resetForm(); setCurrentView('add-fact'); }}
             data-testid="nav-add-fact"
           >
             <Plus size={18} />
             <span>Add New Fact</span>
+          </button>
+          
+          <button
+            className={`sidebar-nav-item ${currentView === 'view-facts' ? 'active' : ''}`}
+            onClick={() => setCurrentView('view-facts')}
+            data-testid="nav-view-facts"
+          >
+            <Eye size={18} />
+            <span>View Facts</span>
           </button>
           
           <button
@@ -412,7 +537,23 @@ export default function AdminPage() {
       <main className="admin-main">
         {currentView === 'add-fact' && (
           <div className="admin-content">
-            <h1 className="content-title">Add New Fact</h1>
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">{editingFactId ? 'Edit Fact' : 'Add New Fact'}</h1>
+                {editingFactId && (
+                  <p className="content-subtitle">Editing: {title || 'Untitled'}</p>
+                )}
+              </div>
+              {editingFactId && (
+                <button 
+                  onClick={resetForm}
+                  className="cancel-edit-button"
+                  data-testid="button-cancel-edit"
+                >
+                  Cancel Edit
+                </button>
+              )}
+            </div>
             
             <form onSubmit={handleSubmit} className="fact-form">
               {/* Section 1: Basic Info */}
@@ -445,6 +586,36 @@ export default function AdminPage() {
                     data-testid="input-slug"
                     required
                   />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Cover Photo</label>
+                  <p className="form-hint">This image will display on the fact card</p>
+                  <div className="upload-area">
+                    {coverPhoto ? (
+                      <div className="uploaded-preview">
+                        <img src={coverPhoto} alt="Cover photo" className="cover-photo-preview" />
+                        <button
+                          type="button"
+                          onClick={() => setCoverPhoto("")}
+                          className="remove-upload-button"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) uploadCoverPhoto(file);
+                        }}
+                        className="file-input"
+                        data-testid="input-cover-photo"
+                      />
+                    )}
+                  </div>
                 </div>
 
                 <div className="form-group">
@@ -518,6 +689,22 @@ export default function AdminPage() {
               {/* Section 2: Myth & Truth */}
               <section className="form-section">
                 <h2 className="section-title">Section 2 — Myth & Truth</h2>
+                
+                <div className="form-group">
+                  <label className="checkbox-label beta-toggle">
+                    <input
+                      type="checkbox"
+                      checked={betaOnly}
+                      onChange={(e) => setBetaOnly(e.target.checked)}
+                      className="checkbox-input"
+                      data-testid="checkbox-beta-only"
+                    />
+                    <span>Only add fact card for beta</span>
+                  </label>
+                  <p className="form-hint" style={{ marginTop: '0.5rem', marginLeft: '1.75rem' }}>
+                    The fact card will appear on category pages, but clicking it will show "individual fact pages are still under development"
+                  </p>
+                </div>
                 
                 <div className="form-group">
                   <label className="form-label">
@@ -845,10 +1032,105 @@ export default function AdminPage() {
                   disabled={isSubmitting}
                   data-testid="button-submit-fact"
                 >
-                  {isSubmitting ? "Creating..." : "Create Fact"}
+                  {isSubmitting ? (editingFactId ? "Saving..." : "Creating...") : (editingFactId ? "Save Changes" : "Create Fact")}
                 </button>
               </div>
             </form>
+          </div>
+        )}
+
+        {currentView === 'view-facts' && (
+          <div className="admin-content admin-content-wide">
+            <header className="content-header">
+              <div>
+                <h1 className="content-title">View Facts</h1>
+                <p className="content-subtitle" data-testid="text-facts-count">
+                  {facts?.length || 0} {facts?.length === 1 ? 'fact' : 'facts'} total
+                </p>
+              </div>
+            </header>
+
+            {factsLoading ? (
+              <div className="loading-message" data-testid="text-loading">Loading facts...</div>
+            ) : factsError ? (
+              <div className="error-container">
+                <div className="error-message" data-testid="text-error">
+                  {factsError instanceof Error ? factsError.message : "Failed to load facts"}
+                </div>
+              </div>
+            ) : paginatedFacts.length > 0 ? (
+              <>
+                <div className="facts-grid" data-testid="facts-grid">
+                  {paginatedFacts.map((fact) => (
+                    <div 
+                      key={fact.id} 
+                      className="admin-fact-card"
+                      onClick={() => loadFactForEdit(fact)}
+                      data-testid={`card-fact-${fact.id}`}
+                    >
+                      <div className="admin-fact-card-image">
+                        {fact.coverPhoto ? (
+                          <img src={fact.coverPhoto} alt={fact.title} />
+                        ) : (
+                          <div className="admin-fact-card-placeholder">
+                            <FileText size={32} />
+                          </div>
+                        )}
+                        <div className="admin-fact-card-overlay">
+                          <Edit2 size={20} />
+                          <span>Edit Fact</span>
+                        </div>
+                      </div>
+                      <div className="admin-fact-card-content">
+                        <div className="admin-fact-card-category" style={{ backgroundColor: getCategoryColor(fact.categories) }}>
+                          {fact.categories[0] || 'Uncategorized'}
+                        </div>
+                        <h3 className="admin-fact-card-title">{fact.title}</h3>
+                        <p className="admin-fact-card-myth">"{fact.mythHeader}"</p>
+                        <div className="admin-fact-card-meta">
+                          {fact.betaOnly && (
+                            <span className="beta-badge">Beta Only</span>
+                          )}
+                          {fact.featured && (
+                            <span className="featured-badge">Featured</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="pagination">
+                    <button
+                      onClick={() => setFactsPage(p => Math.max(1, p - 1))}
+                      disabled={factsPage === 1}
+                      className="pagination-button"
+                      data-testid="button-prev-page"
+                    >
+                      <ChevronLeft size={18} />
+                      Previous
+                    </button>
+                    <span className="pagination-info">
+                      Page {factsPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() => setFactsPage(p => Math.min(totalPages, p + 1))}
+                      disabled={factsPage === totalPages}
+                      className="pagination-button"
+                      data-testid="button-next-page"
+                    >
+                      Next
+                      <ChevronRight size={18} />
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="empty-state">
+                <p data-testid="text-empty">No facts created yet. Click "Add New Fact" to create one.</p>
+              </div>
+            )}
           </div>
         )}
 
