@@ -142,8 +142,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/facts - Get all facts (password protected for admin)
-  app.get("/api/facts", requireAuth, async (req, res) => {
+  // GET /api/facts - Get all facts (public)
+  app.get("/api/facts", async (req, res) => {
     try {
       const facts = await storage.getAllFacts();
       res.json(facts);
