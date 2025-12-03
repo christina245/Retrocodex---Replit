@@ -1,0 +1,150 @@
+.health-fitness-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.health-fitness-main-content {
+  flex: 1;
+  padding: 0 25px;
+  max-width: 95%;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.health-fitness-intro-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.health-fitness-description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  justify-content: center;
+}
+
+.health-fitness-description p {
+  margin: 0 0 1rem 0;
+}
+
+.health-fitness-description p:last-child {
+  margin-bottom: 0;
+}
+
+.health-fitness-photo {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.health-fitness-photo-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.health-fitness-content-area {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.health-fitness-tabs-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 50px;
+}
+
+.health-fitness-filter-container {
+  flex-shrink: 0;
+}
+
+.health-fitness-key-container {
+  margin-left: 4rem;
+  width: 515px;
+  flex-shrink: 0;
+}
+
+.health-fitness-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.health-fitness-content-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.health-fitness-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.health-fitness-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .health-fitness-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .health-fitness-key-container {
+    width: auto;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .health-fitness-intro-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .health-fitness-tabs-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .health-fitness-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .health-fitness-content-container {
+    flex-direction: column;
+  }
+
+  .health-fitness-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .health-fitness-key-container {
+    display: none;
+  }
+
+  .health-fitness-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .health-fitness-main-content {
+    padding: 0 20px;
+  }
+}

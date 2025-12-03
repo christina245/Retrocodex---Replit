@@ -10,6 +10,7 @@ import ArticlesPage from "@/pages/ArticlesPage";
 import HistoryPage from "@/pages/HistoryPage";
 import LifeSciencesPage from "@/pages/LifeSciencesPage";
 import EverydayLifePage from "@/pages/EverydayLifePage";
+import HealthFitnessPage from "@/pages/HealthFitnessPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/category/history" component={HistoryPage} />
       <Route path="/category/life-sciences" component={LifeSciencesPage} />
       <Route path="/category/everyday-life" component={EverydayLifePage} />
+      <Route path="/category/health-fitness" component={HealthFitnessPage} />
       <Route component={NotFound} />
     </Switch>
   );
