@@ -37,7 +37,7 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
             <X className="fact-icon fact-icon-myth" size={16} />
             <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
           </div>
-          <p className="fact-myth">{fact.myth}</p>
+          <p className="fact-myth">"{fact.myth}"</p>
         </div>
 
         <div className="fact-section">

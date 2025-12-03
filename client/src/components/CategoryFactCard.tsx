@@ -69,7 +69,7 @@ export function CategoryFactCard({
               <div className="category-fact-section">
                 <div className="category-fact-statement">
                   <X className="category-fact-icon myth-icon" />
-                  <p className="category-fact-text myth-text">{fact.myth}</p>
+                  <p className="category-fact-text myth-text">"{fact.myth}"</p>
                 </div>
                 
                 <div className="category-fact-statement">

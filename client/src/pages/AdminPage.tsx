@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { Download, Lock, Plus, FileText, Mail, X, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, type Source, type TimelineEntry, type Nuance, type Fact } from "@shared/schema";
 import "./AdminPage.css";
 import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
@@ -1086,8 +1086,26 @@ export default function AdminPage() {
                         <div className="admin-fact-card-category" style={{ backgroundColor: getCategoryColor(fact.categories) }}>
                           {fact.categories[0] || 'Uncategorized'}
                         </div>
-                        <h3 className="admin-fact-card-title">{fact.title}</h3>
-                        <p className="admin-fact-card-myth">"{fact.mythHeader}"</p>
+                        <div className="admin-fact-card-section">
+                          <div className="admin-fact-card-label myth-label">
+                            <X size={14} className="admin-fact-icon myth-icon" />
+                            <span>MYTH</span>
+                          </div>
+                          <p className="admin-fact-card-myth">"{fact.mythHeader}"</p>
+                          {fact.mythDetails && (
+                            <p className="admin-fact-card-details">{fact.mythDetails}</p>
+                          )}
+                        </div>
+                        <div className="admin-fact-card-section">
+                          <div className="admin-fact-card-label truth-label">
+                            <Check size={14} className="admin-fact-icon truth-icon" />
+                            <span>TRUTH</span>
+                          </div>
+                          <p className="admin-fact-card-truth">{fact.truthHeader}</p>
+                          {fact.truthDetails && (
+                            <p className="admin-fact-card-details">{fact.truthDetails}</p>
+                          )}
+                        </div>
                         <div className="admin-fact-card-meta">
                           {fact.betaOnly && (
                             <span className="beta-badge">Beta Only</span>

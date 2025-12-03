@@ -903,12 +903,55 @@
   margin-bottom: 0.75rem;
 }
 
-.admin-fact-card-title {
-  font-family: 'Merriweather', serif;
-  font-size: 1rem;
+.admin-fact-card-section {
+  margin-bottom: 0.75rem;
+}
+
+.admin-fact-card-section:last-of-type {
+  margin-bottom: 0.5rem;
+}
+
+.admin-fact-card-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.25rem;
+}
+
+.admin-fact-card-label span {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.625rem;
   font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.admin-fact-card-label.myth-label {
+  color: #FF5353;
+}
+
+.admin-fact-card-label.truth-label {
+  color: #5BAD77;
+}
+
+.admin-fact-icon {
+  flex-shrink: 0;
+}
+
+.admin-fact-icon.myth-icon {
+  color: #FF5353;
+}
+
+.admin-fact-icon.truth-icon {
+  color: #5BAD77;
+}
+
+.admin-fact-card-myth {
+  font-family: 'Merriweather', serif;
+  font-size: 0.8125rem;
+  font-style: italic;
   color: #2C2C2C;
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -916,13 +959,24 @@
   overflow: hidden;
 }
 
-.admin-fact-card-myth {
+.admin-fact-card-truth {
   font-family: 'Merriweather', serif;
-  font-size: 0.875rem;
-  font-style: italic;
+  font-size: 0.8125rem;
+  color: #2C2C2C;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-fact-card-details {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
   color: #878787;
-  margin: 0 0 0.75rem 0;
-  line-height: 1.5;
+  margin: 0.25rem 0 0 0;
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
