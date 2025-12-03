@@ -61,7 +61,7 @@ const everydayLifeFacts: CategoryFact[] = [
   }
 ];
 
-const CATEGORY_COLOR = "#0167A2";
+const CATEGORY_COLOR = "#00AEED";
 
 export default function EverydayLifePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
