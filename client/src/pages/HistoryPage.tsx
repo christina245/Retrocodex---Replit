@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
@@ -85,6 +86,36 @@ export default function HistoryPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Fetch facts from database
+  const { data: dbFacts = [] } = useQuery<Fact[]>({
+    queryKey: ["/api/facts"],
+  });
+
+  // Filter database facts to only include History category and convert to CategoryFact format
+  const databaseHistoryFacts: CategoryFact[] = useMemo(() => {
+    return dbFacts
+      .filter(fact => fact.categories.includes("History"))
+      .map(fact => ({
+        id: fact.id,
+        myth: fact.mythHeader,
+        truth: fact.truthHeader,
+        tags: fact.tags || [],
+        dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+        link: `/fact/${fact.slug}`,
+        coverPhoto: fact.coverPhoto || undefined,
+        betaOnly: fact.betaOnly || false,
+      }));
+  }, [dbFacts]);
+
+  // Merge static facts with database facts (database facts appear after static ones)
+  const allHistoryFacts = useMemo(() => {
+    // Get IDs of static facts to avoid duplicates
+    const staticIds = new Set(historyFacts.map(f => f.id));
+    // Filter out any database facts that might have same ID as static ones
+    const uniqueDbFacts = databaseHistoryFacts.filter(f => !staticIds.has(f.id));
+    return [...historyFacts, ...uniqueDbFacts];
+  }, [databaseHistoryFacts]);
+
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
       return await apiRequest("POST", "/api/emails", { email, source });
@@ -132,8 +163,8 @@ export default function HistoryPage() {
   };
 
   const displayedFacts = activeTab === "featured" 
-    ? historyFacts 
-    : [...historyFacts].sort((a, b) => {
+    ? allHistoryFacts 
+    : [...allHistoryFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });

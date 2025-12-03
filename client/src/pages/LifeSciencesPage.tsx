@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
@@ -86,6 +87,34 @@ export default function LifeSciencesPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Fetch facts from database
+  const { data: dbFacts = [] } = useQuery<Fact[]>({
+    queryKey: ["/api/facts"],
+  });
+
+  // Filter database facts to only include Life Sciences category and convert to CategoryFact format
+  const databaseLifeSciencesFacts: CategoryFact[] = useMemo(() => {
+    return dbFacts
+      .filter(fact => fact.categories.includes("Life Sciences"))
+      .map(fact => ({
+        id: fact.id,
+        myth: fact.mythHeader,
+        truth: fact.truthHeader,
+        tags: fact.tags || [],
+        dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+        link: `/fact/${fact.slug}`,
+        coverPhoto: fact.coverPhoto || undefined,
+        betaOnly: fact.betaOnly || false,
+      }));
+  }, [dbFacts]);
+
+  // Merge static facts with database facts (database facts appear after static ones)
+  const allLifeSciencesFacts = useMemo(() => {
+    const staticIds = new Set(lifeSciencesFacts.map(f => f.id));
+    const uniqueDbFacts = databaseLifeSciencesFacts.filter(f => !staticIds.has(f.id));
+    return [...lifeSciencesFacts, ...uniqueDbFacts];
+  }, [databaseLifeSciencesFacts]);
+
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
       return await apiRequest("POST", "/api/emails", { email, source });
@@ -133,8 +162,8 @@ export default function LifeSciencesPage() {
   };
 
   const displayedFacts = activeTab === "featured" 
-    ? lifeSciencesFacts 
-    : [...lifeSciencesFacts].sort((a, b) => {
+    ? allLifeSciencesFacts 
+    : [...allLifeSciencesFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
