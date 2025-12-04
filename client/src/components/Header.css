@@ -15,7 +15,7 @@
 .header-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -67,20 +67,14 @@
   height: 20px;
 }
 
-.header-donate-row {
-  max-width: 1400px;
-  margin: 0 auto;
-  margin-top: 1rem;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
 .header-donate-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   background: rgba(44, 44, 44, 0.05);
   color: #dc143c;
   border: none;
-  padding: 7px 10px;
+  padding: 4px 8px;
   border-radius: 5px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
@@ -92,6 +86,17 @@
 
 .header-donate-button:hover {
   background: #FF5353;
+  color: white;
+}
+
+.header-donate-icon {
+  width: 16px;
+  height: 16px;
+  color: #dc143c;
+  transition: color 0.2s;
+}
+
+.header-donate-button:hover .header-donate-icon {
   color: white;
 }
 
@@ -109,7 +114,7 @@
 }
 
 .logo-image {
-  width: 206px;
+  width: 210px;
   height: auto;
   object-fit: contain;
 }
@@ -118,7 +123,7 @@
   width: 295px;
   height: auto;
   object-fit: contain;
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 
 .tagline-desktop {
@@ -241,10 +246,6 @@
   }
 
   .header-left-section {
-    display: none;
-  }
-
-  .header-donate-row {
     display: none;
   }
 

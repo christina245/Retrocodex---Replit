@@ -7,10 +7,10 @@ export function Footer() {
       <div className="footer-container">
         {/* About Retrocodex */}
         <div className="footer-column">
-          <h3 className="footer-heading">About Retrocodex</h3>
+          <h3 className="footer-heading">About</h3>
           <ul className="footer-links">
-            <li><a href="#" data-testid="link-footer-faqs">FAQs</a></li>
-            <li><a href="#" data-testid="link-footer-about">What we're about</a></li>
+
+            <li><a href="#" data-testid="link-footer-about">About the site</a></li>
             <li><a href="#" data-testid="link-footer-blog">Blog</a></li>
           </ul>
         </div>
@@ -39,7 +39,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 data-testid="link-footer-donate"
               >
-                Support our team
+                Contact
               </a>
             </li>
             <li>
@@ -49,7 +49,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 data-testid="link-footer-submit"
               >
-                Submit a new fact/correction
+                Submit a new fact
               </a>
             </li>
           </ul>

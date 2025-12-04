@@ -1,8 +1,8 @@
-import { Search } from "lucide-react";
+import { Search, HandHeart } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
-import logoImage from "@assets/logo only_1763795492352.png";
+import logoImage from "@assets/white background logo 2.png";
 import taglineImage from "@assets/tagline only_1763795492353.png";
 import taglineMobileImage from "@assets/a place to unlearn mobile_1764442802968.png";
 import "./Header.css";
@@ -48,6 +48,17 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
                 aria-label="Visit us on Bluesky"
               >
                 <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
+              </a>
+              <a 
+                href="https://buymeacoffee.com/retrocodex" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="header-donate-button"
+                data-testid="button-donate"
+                aria-label="Donate to Retrocodex"
+              >
+                <HandHeart size={16} className="header-donate-icon" />
+                Donate
               </a>
             </div>
           </div>
@@ -110,20 +121,6 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
           )}
         </div>
       </div>
-      {variant === "default" && (
-        <div className="header-donate-row">
-          <a 
-            href="https://buymeacoffee.com/retrocodex" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="header-donate-button"
-            data-testid="button-donate"
-            aria-label="Donate to Retrocodex"
-          >
-            Donate
-          </a>
-        </div>
-      )}
     </header>
   );
 }
