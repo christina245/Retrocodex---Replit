@@ -38,7 +38,7 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
           <X size={24} />
         </button>
         <nav className="menu-nav">
-          <a href="#" className="menu-link" data-testid="link-about">
+          <a href="/about" className="menu-link" data-testid="link-about">
             About
           </a>
           <a href="/articles" className="menu-link" data-testid="link-blog">

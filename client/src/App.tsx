@@ -14,6 +14,7 @@ import HealthFitnessPage from "@/pages/HealthFitnessPage";
 import SocialSciencesPage from "@/pages/SocialSciencesPage";
 import GenderSexualityPage from "@/pages/GenderSexualityPage";
 import OtherCategoriesPage from "@/pages/OtherCategoriesPage";
+import AboutPage from "@/pages/AboutPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/category/social-sciences" component={SocialSciencesPage} />
       <Route path="/category/gender-sexuality" component={GenderSexualityPage} />
       <Route path="/category/other" component={OtherCategoriesPage} />
+      <Route path="/about" component={AboutPage} />
       <Route component={NotFound} />
     </Switch>
   );
