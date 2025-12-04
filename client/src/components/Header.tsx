@@ -70,20 +70,6 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
             alt="Retrocodex" 
             className="logo-image"
           />
-          {variant === "default" && (
-            <>
-              <img 
-                src={taglineImage} 
-                alt="A place to unlearn outdated or untrue lessons in" 
-                className="tagline-image tagline-desktop"
-              />
-              <img 
-                src={taglineMobileImage} 
-                alt="A place to unlearn outdated or untrue lessons in" 
-                className="tagline-image tagline-mobile"
-              />
-            </>
-          )}
         </a>
 
         <div className="header-actions">
@@ -121,6 +107,20 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
           )}
         </div>
       </div>
+      {variant === "default" && (
+        <div className="header-tagline-row">
+          <img 
+            src={taglineImage} 
+            alt="A place to unlearn outdated or untrue lessons in" 
+            className="tagline-image tagline-desktop"
+          />
+          <img 
+            src={taglineMobileImage} 
+            alt="A place to unlearn outdated or untrue lessons in" 
+            className="tagline-image tagline-mobile"
+          />
+        </div>
+      )}
     </header>
   );
 }

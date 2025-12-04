@@ -104,13 +104,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
   flex-shrink: 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   text-decoration: none;
   cursor: pointer;
+}
+
+.header-tagline-row {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
 }
 
 .logo-image {
@@ -243,6 +249,11 @@
     display: block;
     width: 160px;
     margin-bottom: 0;
+  }
+
+  .header-tagline-row {
+    justify-content: flex-start;
+    padding-left: 6px;
   }
 
   .header-left-section {
