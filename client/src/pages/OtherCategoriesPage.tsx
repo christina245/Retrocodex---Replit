@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
@@ -105,13 +106,25 @@ export default function OtherCategoriesPage() {
               className="subcategory-card"
               data-testid={`card-subcategory-${subcategory.id}`}
             >
-              <img 
-                src={subcategory.photo} 
-                alt={subcategory.name} 
-                className="subcategory-photo"
-              />
+              <Link 
+                href={`/category/other/${subcategory.id}`}
+                className="subcategory-photo-link"
+                data-testid={`link-subcategory-photo-${subcategory.id}`}
+              >
+                <img 
+                  src={subcategory.photo} 
+                  alt={subcategory.name} 
+                  className="subcategory-photo"
+                />
+              </Link>
               <div className="subcategory-content">
-                <h3 className="subcategory-name">{subcategory.name}</h3>
+                <Link 
+                  href={`/category/other/${subcategory.id}`}
+                  className="subcategory-name"
+                  data-testid={`link-subcategory-name-${subcategory.id}`}
+                >
+                  {subcategory.name}
+                </Link>
                 <p className="subcategory-description">{subcategory.description}</p>
               </div>
             </div>
