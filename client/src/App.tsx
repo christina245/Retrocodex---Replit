@@ -13,6 +13,7 @@ import EverydayLifePage from "@/pages/EverydayLifePage";
 import HealthFitnessPage from "@/pages/HealthFitnessPage";
 import SocialSciencesPage from "@/pages/SocialSciencesPage";
 import GenderSexualityPage from "@/pages/GenderSexualityPage";
+import OtherCategoriesPage from "@/pages/OtherCategoriesPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/category/health-fitness" component={HealthFitnessPage} />
       <Route path="/category/social-sciences" component={SocialSciencesPage} />
       <Route path="/category/gender-sexuality" component={GenderSexualityPage} />
+      <Route path="/category/other" component={OtherCategoriesPage} />
       <Route component={NotFound} />
     </Switch>
   );
