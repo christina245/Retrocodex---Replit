@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { HandHeart } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
@@ -6,7 +7,6 @@ import { EmailSignupBanner } from "@/components/EmailSignupBanner";
 import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import donateIcon from "@assets/donate icon_1763804850230.png";
 import "./AboutPage.css";
 
 export default function AboutPage() {
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 className="about-donate-button"
                 data-testid="button-about-donate"
               >
-                <img src={donateIcon} alt="" className="about-donate-icon" />
+                <HandHeart size={16} className="about-donate-icon" />
                 Donate
               </a>
             </div>

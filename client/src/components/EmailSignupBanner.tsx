@@ -54,9 +54,9 @@ export function EmailSignupBanner({ onSubmit }: EmailSignupBannerProps) {
       <div className="banner-benefits">
         <p className="benefits-intro"><strong>With an account, you can:</strong></p>
         <ul className="benefits-list">
-          <li>Vote on whether you were taught a myth or the updated truth</li>
-          <li>Discuss and debate on what should and when you graduated from school</li>
-          <li>And later on, view maps that show where outdated teaching is more prevalent than others</li>
+          <li>Vote on whether you were taught a myth or not</li>
+          <li>Share your experiences learning featured myth and where you grew up</li>
+          <li>And later on, view maps that show where each myth is most frequently reported by other users</li>
         </ul>
         <p className="benefits-note">
           In the meantime, you can still join discussions with other unlearners at:
