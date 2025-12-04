@@ -26,7 +26,8 @@ const socialSciencesFacts: CategoryFact[] = [
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention.",
     tags: [],
     dateAdded: "2025-11-08",
-    coverPhoto: photoLearning
+    coverPhoto: photoLearning,
+    betaOnly: true
   }
 ];
 

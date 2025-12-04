@@ -14,56 +14,26 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
-import coverImage from "@assets/everyday life_1764573292477.png";
-import "./EverydayLifePage.css";
+import coverImage from "@assets/gender_and_sexuality_(1)_1764810626965.png";
+import "./GenderSexualityPage.css";
 
-import photoGum from "@assets/chewing gum_1764576659258.png";
-import photoSpiders from "@assets/stock_images/plastic spiders.png";
-import photoHyperKids from "@assets/stock_images/hyper kids.png";
-import photoColds from "@assets/catching a cold_1764363998621.png";
+import photoGenderBrains from "@assets/stock_images/men vs women.png";
 
-const everydayLifeFacts: CategoryFact[] = [
+const genderSexualityFacts: CategoryFact[] = [
   {
-    id: "gum-seven-years",
-    myth: '"If you swallow gum, it\'ll stay in your stomach for seven years."',
-    truth: "Gum won't stay inside your body if swallowed. However, it can't be digested like other foods, so it passes through waste intact rather than broken down.",
+    id: "gender-brains",
+    myth: '"Men and women have very different brains."',
+    truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
     tags: [],
-    dateAdded: "2025-11-25",
-    link: "/fact/gum-seven-years",
-    coverPhoto: photoGum
-  },
-  {
-    id: "swallow-spiders",
-    myth: '"Humans swallow an average of 8 spiders in their sleep every year."',
-    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
-    tags: [],
-    dateAdded: "2025-11-18",
-    link: "/fact/swallow-spiders",
-    coverPhoto: photoSpiders
-  },
-  {
-    id: "sugar-hyper",
-    myth: '"Too much sugar makes kids hyper."',
-    truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
-    tags: [],
-    dateAdded: "2025-11-05",
-    link: "/fact/sugar-hyper",
-    coverPhoto: photoHyperKids
-  },
-  {
-    id: "colds-from-cold",
-    myth: '"You catch colds from being cold."',
-    truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
-    tags: [],
-    dateAdded: "2025-11-24",
-    link: "/fact/colds-from-cold",
-    coverPhoto: photoColds
+    dateAdded: "2025-11-21",
+    coverPhoto: photoGenderBrains,
+    betaOnly: true
   }
 ];
 
-const CATEGORY_COLOR = "#2A9BEC";
+const CATEGORY_COLOR = "#FC5AA8";
 
-export default function EverydayLifePage() {
+export default function GenderSexualityPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -72,15 +42,13 @@ export default function EverydayLifePage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch facts from database
   const { data: dbFacts = [] } = useQuery<Fact[]>({
     queryKey: ["/api/facts"],
   });
 
-  // Filter database facts to only include Everyday Life category and convert to CategoryFact format
-  const databaseEverydayLifeFacts: CategoryFact[] = useMemo(() => {
+  const databaseGenderFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.categories.includes("Everyday Life"))
+      .filter(fact => fact.categories.includes("Gender & Sexuality"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,
@@ -93,12 +61,11 @@ export default function EverydayLifePage() {
       }));
   }, [dbFacts]);
 
-  // Merge static facts with database facts (database facts appear after static ones)
-  const allEverydayLifeFacts = useMemo(() => {
-    const staticIds = new Set(everydayLifeFacts.map(f => f.id));
-    const uniqueDbFacts = databaseEverydayLifeFacts.filter(f => !staticIds.has(f.id));
-    return [...everydayLifeFacts, ...uniqueDbFacts];
-  }, [databaseEverydayLifeFacts]);
+  const allGenderFacts = useMemo(() => {
+    const staticIds = new Set(genderSexualityFacts.map(f => f.id));
+    const uniqueDbFacts = databaseGenderFacts.filter(f => !staticIds.has(f.id));
+    return [...genderSexualityFacts, ...uniqueDbFacts];
+  }, [databaseGenderFacts]);
 
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
@@ -147,53 +114,53 @@ export default function EverydayLifePage() {
   };
 
   const displayedFacts = activeTab === "featured" 
-    ? allEverydayLifeFacts 
-    : [...allEverydayLifeFacts].sort((a, b) => {
+    ? allGenderFacts 
+    : [...allGenderFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
 
   return (
-    <div className="everyday-life-page">
+    <div className="gender-sexuality-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="EVERYDAY LIFE" />
+      <CategoryNav selectedCategory="GENDER & SEXUALITY" />
 
-      <main className="everyday-life-main-content">
-        <div className="everyday-life-intro-row">
-          <div className="everyday-life-description">
+      <main className="gender-sexuality-main-content">
+        <div className="gender-sexuality-intro-row">
+          <div className="gender-sexuality-description">
             <p>
-              Everyday life is full of little "facts" we absorb without ever checking where they came from. Family sayings, schoolyard rumors, well-meaning advice from adults, and catchy lines from old advertisements often blend together into a kind of informal rulebook for living. Claims such as "breakfast is the most important meal of the day" may not be true, but they persist because they're memorable, comforting, or framed as simple rules for staying healthy, polite, or responsible.
+              Many myths—like the idea that "men and women have very different brains"—took hold long before modern neuroscience existed. Early researchers often interpreted small, inconsistent findings through the lens of their own cultural expectations, reinforcing stereotypes rather than challenging them. These misconceptions were amplified by centuries of sexism, attempts to justify rigid gender roles, and pop-science articles that overstated weak or misrepresented data. Today, we know that brain differences within each gender are far larger than differences between genders, and that human behavior is shaped by biology, culture, and lived experience—not simplistic binaries.
             </p>
             <p>
-              Many of these myths didn't originate as deliberate falsehoods, but as misunderstandings, exaggerations, or outdated beliefs passed through generations. Everyday myths reveal how information spreads in the absence of formal teaching: not through textbooks or experts, but through habits, culture, and repetition. This collection explores the roots, evidence, and cultural history behind these familiar claims.
+              Other widespread myths, such as the claim that "being LGBT is a Western concept," grew out of colonialism, incomplete histories, and efforts to control people's identities. Many societies around the world long recognized same-sex relationships, third genders, and gender-diverse roles, but these traditions were suppressed or erased by outside forces. Limited research, political agendas, and cultural gatekeeping allowed these myths to spread and persist.
             </p>
           </div>
-          <div className="everyday-life-photo">
+          <div className="gender-sexuality-photo">
             <img 
               src={coverImage} 
-              alt="Everyday Life - Couple at holiday market" 
-              className="everyday-life-photo-img"
+              alt="Pink and blue balloons" 
+              className="gender-sexuality-photo-img"
             />
           </div>
         </div>
 
-        <div className="everyday-life-content-area">
-          <div className="everyday-life-tabs-row">
+        <div className="gender-sexuality-content-area">
+          <div className="gender-sexuality-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="everyday-life-filter-container">
+            <div className="gender-sexuality-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
             </div>
-            <div className="everyday-life-key-container">
+            <div className="gender-sexuality-key-container">
               <FactKey />
             </div>
           </div>
 
-          <div className="everyday-life-content-container">
-            <div className="everyday-life-facts-grid">
+          <div className="gender-sexuality-content-container">
+            <div className="gender-sexuality-facts-grid">
               {displayedFacts.map((fact) => (
                 <CategoryFactCard
                   key={fact.id}
@@ -207,9 +174,9 @@ export default function EverydayLifePage() {
               ))}
             </div>
 
-            <aside className="everyday-life-sidebar">
+            <aside className="gender-sexuality-sidebar">
               <EmailSignupBanner 
-                onSubmit={(email) => handleEmailSubmit(email, "everyday-life-page")} 
+                onSubmit={(email) => handleEmailSubmit(email, "gender-sexuality-page")} 
               />
             </aside>
           </div>
@@ -229,7 +196,7 @@ export default function EverydayLifePage() {
           onClose={() => setShareModalFact(null)}
           fact={{
             id: shareModalFact.id,
-            category: "EVERYDAY LIFE",
+            category: "GENDER & SEXUALITY",
             categoryColor: CATEGORY_COLOR,
             myth: shareModalFact.myth,
             truth: shareModalFact.truth,

@@ -12,6 +12,7 @@ import LifeSciencesPage from "@/pages/LifeSciencesPage";
 import EverydayLifePage from "@/pages/EverydayLifePage";
 import HealthFitnessPage from "@/pages/HealthFitnessPage";
 import SocialSciencesPage from "@/pages/SocialSciencesPage";
+import GenderSexualityPage from "@/pages/GenderSexualityPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/category/everyday-life" component={EverydayLifePage} />
       <Route path="/category/health-fitness" component={HealthFitnessPage} />
       <Route path="/category/social-sciences" component={SocialSciencesPage} />
+      <Route path="/category/gender-sexuality" component={GenderSexualityPage} />
       <Route component={NotFound} />
     </Switch>
   );

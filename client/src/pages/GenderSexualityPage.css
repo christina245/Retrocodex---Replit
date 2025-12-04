@@ -1,0 +1,150 @@
+.gender-sexuality-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.gender-sexuality-main-content {
+  flex: 1;
+  padding: 0 25px;
+  max-width: 95%;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.gender-sexuality-intro-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.gender-sexuality-description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  justify-content: center;
+}
+
+.gender-sexuality-description p {
+  margin: 0 0 1rem 0;
+}
+
+.gender-sexuality-description p:last-child {
+  margin-bottom: 0;
+}
+
+.gender-sexuality-photo {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.gender-sexuality-photo-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.gender-sexuality-content-area {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gender-sexuality-tabs-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 50px;
+}
+
+.gender-sexuality-filter-container {
+  flex-shrink: 0;
+}
+
+.gender-sexuality-key-container {
+  margin-left: 4rem;
+  width: 515px;
+  flex-shrink: 0;
+}
+
+.gender-sexuality-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.gender-sexuality-content-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.gender-sexuality-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.gender-sexuality-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .gender-sexuality-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gender-sexuality-key-container {
+    width: auto;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .gender-sexuality-intro-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .gender-sexuality-tabs-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .gender-sexuality-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .gender-sexuality-content-container {
+    flex-direction: column;
+  }
+
+  .gender-sexuality-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gender-sexuality-key-container {
+    display: none;
+  }
+
+  .gender-sexuality-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .gender-sexuality-main-content {
+    padding: 0 20px;
+  }
+}
