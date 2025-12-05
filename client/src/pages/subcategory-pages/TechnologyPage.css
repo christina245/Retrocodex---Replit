@@ -1,0 +1,157 @@
+.technology-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.technology-main-content {
+  flex: 1;
+  padding: 0 40px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.technology-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C2C2C;
+  text-decoration: none;
+  margin: 30px 0 25px 0;
+  transition: color 0.2s ease;
+}
+
+.technology-breadcrumb:hover {
+  color: #FF5353;
+  text-decoration: underline;
+  text-decoration-color: #FF5353;
+}
+
+.technology-header-section {
+  margin-top: 0;
+}
+
+.technology-intro-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.technology-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.technology-content-area {
+  margin-top: 20px;
+  margin-left: 0px;
+  margin-right: auto;
+}
+
+.technology-tabs-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 50px;
+}
+
+.technology-filter-container {
+  flex-shrink: 0;
+}
+
+.technology-key-container {
+  margin-left: 4rem;
+  width: 515px;
+  flex-shrink: 0;
+}
+
+.technology-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.technology-content-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.technology-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.technology-no-facts {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  color: #666;
+  grid-column: 1 / -1;
+}
+
+.technology-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .technology-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .technology-key-container {
+    width: auto;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .technology-tabs-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .technology-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .technology-content-container {
+    flex-direction: column;
+  }
+
+  .technology-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .technology-key-container {
+    display: none;
+  }
+
+  .technology-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .technology-main-content {
+    padding: 0 20px;
+  }
+
+  .technology-title {
+    font-size: 32px;
+  }
+
+  .technology-breadcrumb {
+    font-size: 16px;
+  }
+}

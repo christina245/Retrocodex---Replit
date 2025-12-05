@@ -1,0 +1,157 @@
+.earth-science-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.earth-science-main-content {
+  flex: 1;
+  padding: 0 40px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.earth-science-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C2C2C;
+  text-decoration: none;
+  margin: 30px 0 25px 0;
+  transition: color 0.2s ease;
+}
+
+.earth-science-breadcrumb:hover {
+  color: #FF5353;
+  text-decoration: underline;
+  text-decoration-color: #FF5353;
+}
+
+.earth-science-header-section {
+  margin-top: 0;
+}
+
+.earth-science-intro-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.earth-science-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.earth-science-content-area {
+  margin-top: 20px;
+  margin-left: 0px;
+  margin-right: auto;
+}
+
+.earth-science-tabs-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  gap: 50px;
+}
+
+.earth-science-filter-container {
+  flex-shrink: 0;
+}
+
+.earth-science-key-container {
+  margin-left: 4rem;
+  width: 515px;
+  flex-shrink: 0;
+}
+
+.earth-science-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.earth-science-content-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.earth-science-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.earth-science-no-facts {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  color: #666;
+  grid-column: 1 / -1;
+}
+
+.earth-science-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+@media (max-width: 1200px) {
+  .earth-science-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .earth-science-key-container {
+    width: auto;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .earth-science-tabs-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .earth-science-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .earth-science-content-container {
+    flex-direction: column;
+  }
+
+  .earth-science-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .earth-science-key-container {
+    display: none;
+  }
+
+  .earth-science-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .earth-science-main-content {
+    padding: 0 20px;
+  }
+
+  .earth-science-title {
+    font-size: 32px;
+  }
+
+  .earth-science-breadcrumb {
+    font-size: 16px;
+  }
+}

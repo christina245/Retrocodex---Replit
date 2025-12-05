@@ -14,9 +14,19 @@ import HealthFitnessPage from "@/pages/HealthFitnessPage";
 import SocialSciencesPage from "@/pages/SocialSciencesPage";
 import GenderSexualityPage from "@/pages/GenderSexualityPage";
 import OtherCategoriesPage from "@/pages/OtherCategoriesPage";
-import FoodPage from "@/pages/FoodPage";
 import AboutPage from "@/pages/AboutPage";
 import NotFound from "@/pages/not-found";
+
+import AnimalsPage from "@/pages/subcategory-pages/AnimalsPage";
+import AstronomyPage from "@/pages/subcategory-pages/AstronomyPage";
+import BeautyPage from "@/pages/subcategory-pages/BeautyPage";
+import EarthSciencePage from "@/pages/subcategory-pages/EarthSciencePage";
+import FoodPage from "@/pages/subcategory-pages/FoodPage";
+import LinguisticsPage from "@/pages/subcategory-pages/LinguisticsPage";
+import MusicPage from "@/pages/subcategory-pages/MusicPage";
+import PhysicsPage from "@/pages/subcategory-pages/PhysicsPage";
+import TechnologyPage from "@/pages/subcategory-pages/TechnologyPage";
+import UncategorizedPage from "@/pages/subcategory-pages/UncategorizedPage";
 
 function Router() {
   return (
@@ -32,7 +42,16 @@ function Router() {
       <Route path="/category/social-sciences" component={SocialSciencesPage} />
       <Route path="/category/gender-sexuality" component={GenderSexualityPage} />
       <Route path="/category/other" component={OtherCategoriesPage} />
+      <Route path="/category/other/animals" component={AnimalsPage} />
+      <Route path="/category/other/astronomy" component={AstronomyPage} />
+      <Route path="/category/other/beauty" component={BeautyPage} />
+      <Route path="/category/other/earth-science" component={EarthSciencePage} />
       <Route path="/category/other/food" component={FoodPage} />
+      <Route path="/category/other/linguistics" component={LinguisticsPage} />
+      <Route path="/category/other/music" component={MusicPage} />
+      <Route path="/category/other/physics" component={PhysicsPage} />
+      <Route path="/category/other/technology" component={TechnologyPage} />
+      <Route path="/category/other/uncategorized" component={UncategorizedPage} />
       <Route path="/about" component={AboutPage} />
       <Route component={NotFound} />
     </Switch>
