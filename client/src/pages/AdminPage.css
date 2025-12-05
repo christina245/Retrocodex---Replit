@@ -1075,3 +1075,228 @@
     justify-content: center;
   }
 }
+
+/* Radio Group */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.9375rem;
+  color: #2C2C2C;
+}
+
+.radio-input {
+  width: 18px;
+  height: 18px;
+  accent-color: #FF5353;
+}
+
+/* Author Preview */
+.author-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8f8f8;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-name {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #2C2C2C;
+}
+
+/* Toggle Checkbox */
+.toggle-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.toggle-checkbox input[type="checkbox"]:checked + span {
+  color: #FF5353;
+  font-weight: 500;
+}
+
+/* Related Articles Selector */
+.related-articles-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: #f8f8f8;
+  border-radius: 8px;
+}
+
+/* Blog Posts Grid */
+.blog-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.admin-blog-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-blog-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.admin-blog-card-image {
+  position: relative;
+  height: 180px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.admin-blog-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-blog-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #ccc;
+}
+
+.admin-blog-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.admin-blog-card:hover .admin-blog-card-overlay {
+  opacity: 1;
+}
+
+.admin-blog-card-overlay span {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.admin-blog-card-content {
+  padding: 1rem;
+}
+
+.admin-blog-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.admin-blog-card-category {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(44, 44, 44, 0.1);
+  color: #2C2C2C;
+  border-radius: 4px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.draft-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(135, 135, 135, 0.15);
+  color: #878787;
+  border-radius: 4px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-blog-card-title {
+  font-family: 'Merriweather', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-blog-card-summary {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  color: #878787;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-blog-card-author {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.8125rem;
+  color: #878787;
+}
+
+.admin-blog-card-date {
+  color: #aaa;
+}
+
+/* Responsive for Blog Posts */
+@media (max-width: 768px) {
+  .blog-posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-blog-card-image {
+    height: 160px;
+  }
+}

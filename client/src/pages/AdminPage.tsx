@@ -1,9 +1,12 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight } from "lucide-react";
-import { CATEGORIES, OTHER_SUBCATEGORIES, type Source, type TimelineEntry, type Nuance, type Fact } from "@shared/schema";
+import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper } from "lucide-react";
+import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
+import TiptapEditor from "@/components/TiptapEditor";
+import "@/components/TiptapEditor.css";
 import "./AdminPage.css";
 import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
+import adminAvatar from "@assets/favicon_round_1764970500110.png";
 
 interface EmailSubscription {
   id: string;
@@ -12,7 +15,7 @@ interface EmailSubscription {
   createdAt: string;
 }
 
-type AdminView = "add-fact" | "add-blog" | "emails" | "view-facts";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts";
 
 const AVAILABLE_TAGS = [
   "Popular",
@@ -41,6 +44,32 @@ export default function AdminPage() {
   const [factsPage, setFactsPage] = useState(1);
   const FACTS_PER_PAGE = 10;
   
+  // Blog post edit mode
+  const [editingBlogId, setEditingBlogId] = useState<string | null>(null);
+  
+  // Blog post pagination
+  const [blogPage, setBlogPage] = useState(1);
+  const BLOGS_PER_PAGE = 10;
+  
+  // Form state for Blog Post
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogSlug, setBlogSlug] = useState("");
+  const [blogSummary, setBlogSummary] = useState("");
+  const [blogCoverImage, setBlogCoverImage] = useState("");
+  const [blogCoverCaption, setBlogCoverCaption] = useState("");
+  const [blogCategory, setBlogCategory] = useState("");
+  const [blogTags, setBlogTags] = useState<string[]>([]);
+  const [blogContent, setBlogContent] = useState<any>(null);
+  const [blogContentHtml, setBlogContentHtml] = useState("");
+  const [blogAuthorType, setBlogAuthorType] = useState<"Staff" | "Guest">("Staff");
+  const [blogAuthorName, setBlogAuthorName] = useState("Retrocodex Admin");
+  const [blogAuthorLink, setBlogAuthorLink] = useState("");
+  const [blogHeroFeatured, setBlogHeroFeatured] = useState(false);
+  const [blogPublished, setBlogPublished] = useState(false);
+  const [blogRelatedIds, setBlogRelatedIds] = useState<string[]>([]);
+  const [isBlogSubmitting, setIsBlogSubmitting] = useState(false);
+  const [blogSubmitMessage, setBlogSubmitMessage] = useState("");
+
   // Form state for Add New Fact
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -105,6 +134,28 @@ export default function AdminPage() {
     enabled: isAuthenticated && (currentView === "view-facts" || currentView === "add-fact"),
   });
 
+  const { data: blogPosts, isLoading: blogPostsLoading, error: blogPostsError } = useQuery<BlogPost[]>({
+    queryKey: ["/api/blog-posts"],
+    queryFn: async () => {
+      const response = await fetch("/api/blog-posts", {
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        }
+      });
+
+      if (response.status === 401) {
+        throw new Error("Invalid password");
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch blog posts");
+      }
+
+      return response.json();
+    },
+    enabled: isAuthenticated && (currentView === "view-blog" || currentView === "add-blog"),
+  });
+
   // Reset form when switching to add mode
   const resetForm = () => {
     setEditingFactId(null);
@@ -124,6 +175,191 @@ export default function AdminPage() {
     setTimeline([]);
     setNuances([]);
     setSubmitMessage("");
+  };
+
+  // Reset blog form
+  const resetBlogForm = () => {
+    setEditingBlogId(null);
+    setBlogTitle("");
+    setBlogSlug("");
+    setBlogSummary("");
+    setBlogCoverImage("");
+    setBlogCoverCaption("");
+    setBlogCategory("");
+    setBlogTags([]);
+    setBlogContent(null);
+    setBlogContentHtml("");
+    setBlogAuthorType("Staff");
+    setBlogAuthorName("Retrocodex Admin");
+    setBlogAuthorLink("");
+    setBlogHeroFeatured(false);
+    setBlogPublished(false);
+    setBlogRelatedIds([]);
+    setBlogSubmitMessage("");
+  };
+
+  // Load blog post for editing
+  const loadBlogForEdit = (post: BlogPost) => {
+    setEditingBlogId(post.id);
+    setBlogTitle(post.title);
+    setBlogSlug(post.slug);
+    setBlogSummary(post.summary);
+    setBlogCoverImage(post.coverImage || "");
+    setBlogCoverCaption(post.coverImageCaption || "");
+    setBlogCategory(post.category);
+    setBlogTags(post.tags || []);
+    setBlogContent(post.content);
+    setBlogContentHtml(post.contentHtml || "");
+    setBlogAuthorType((post.authorType as "Staff" | "Guest") || "Staff");
+    setBlogAuthorName(post.authorName || "Retrocodex Admin");
+    setBlogAuthorLink(post.authorLink || "");
+    setBlogHeroFeatured(post.heroFeatured || false);
+    setBlogPublished(post.published || false);
+    setBlogRelatedIds(post.relatedManualIds || []);
+    setCurrentView("add-blog");
+  };
+
+  const handleBlogTitleChange = (value: string) => {
+    setBlogTitle(value);
+    if (!editingBlogId) {
+      const generatedSlug = value
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim();
+      setBlogSlug(generatedSlug);
+    }
+  };
+
+  const handleBlogTagChange = (tag: string, checked: boolean) => {
+    if (checked) {
+      setBlogTags([...blogTags, tag]);
+    } else {
+      setBlogTags(blogTags.filter(t => t !== tag));
+    }
+  };
+
+  // Blog cover image upload
+  const uploadBlogCoverImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/uploads", {
+        method: "POST",
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        },
+        body: formData
+      });
+
+      if (!response.ok) throw new Error("Upload failed");
+      
+      const data = await response.json();
+      setBlogCoverImage(data.url);
+    } catch (error) {
+      console.error("Failed to upload cover image:", error);
+      alert("Failed to upload cover image");
+    }
+  };
+
+  // Blog content image upload (for Tiptap)
+  const uploadBlogContentImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("/api/uploads", {
+      method: "POST",
+      headers: {
+        'Authorization': 'Basic ' + btoa('admin:' + password)
+      },
+      body: formData
+    });
+
+    if (!response.ok) throw new Error("Upload failed");
+    
+    const data = await response.json();
+    return data.url;
+  };
+
+  // Blog form submission
+  const handleBlogSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsBlogSubmitting(true);
+    setBlogSubmitMessage("");
+
+    const blogData = {
+      title: blogTitle,
+      slug: blogSlug,
+      summary: blogSummary,
+      coverImage: blogCoverImage || undefined,
+      coverImageCaption: blogCoverCaption || undefined,
+      category: blogCategory,
+      tags: blogTags,
+      content: blogContent,
+      contentHtml: blogContentHtml,
+      authorName: blogAuthorType === "Staff" ? "Retrocodex Admin" : blogAuthorName,
+      authorType: blogAuthorType,
+      authorLink: blogAuthorType === "Guest" ? blogAuthorLink : undefined,
+      authorPhoto: blogAuthorType === "Staff" ? adminAvatar : undefined,
+      heroFeatured: blogHeroFeatured,
+      published: blogPublished,
+      relatedManualIds: blogRelatedIds.filter(id => id),
+    };
+
+    try {
+      const url = editingBlogId ? `/api/blog-posts/${editingBlogId}` : "/api/blog-posts";
+      const method = editingBlogId ? "PUT" : "POST";
+      
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        },
+        body: JSON.stringify(blogData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || `Failed to ${editingBlogId ? 'update' : 'create'} blog post`);
+      }
+
+      setBlogSubmitMessage(`Blog post ${editingBlogId ? 'updated' : 'created'} successfully!`);
+      
+      queryClient.invalidateQueries({ queryKey: ["/api/blog-posts"] });
+      
+      if (!editingBlogId) {
+        resetBlogForm();
+      }
+    } catch (error) {
+      setBlogSubmitMessage(error instanceof Error ? error.message : `Failed to ${editingBlogId ? 'update' : 'create'} blog post`);
+    } finally {
+      setIsBlogSubmitting(false);
+    }
+  };
+
+  // Delete blog post
+  const deleteBlogPost = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this blog post?")) return;
+
+    try {
+      const response = await fetch(`/api/blog-posts/${id}`, {
+        method: "DELETE",
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        }
+      });
+
+      if (!response.ok) throw new Error("Failed to delete blog post");
+      
+      queryClient.invalidateQueries({ queryKey: ["/api/blog-posts"] });
+    } catch (error) {
+      console.error("Failed to delete blog post:", error);
+      alert("Failed to delete blog post");
+    }
   };
 
   // Load fact data for editing
@@ -450,6 +686,10 @@ export default function AdminPage() {
   const totalPages = facts ? Math.ceil(facts.length / FACTS_PER_PAGE) : 0;
   const paginatedFacts = facts ? facts.slice((factsPage - 1) * FACTS_PER_PAGE, factsPage * FACTS_PER_PAGE) : [];
 
+  // Pagination for View Blog Posts
+  const totalBlogPages = blogPosts ? Math.ceil(blogPosts.length / BLOGS_PER_PAGE) : 0;
+  const paginatedBlogPosts = blogPosts ? blogPosts.slice((blogPage - 1) * BLOGS_PER_PAGE, blogPage * BLOGS_PER_PAGE) : [];
+
   if (!isAuthenticated) {
     return (
       <div className="admin-page">
@@ -516,11 +756,20 @@ export default function AdminPage() {
           
           <button
             className={`sidebar-nav-item ${currentView === 'add-blog' ? 'active' : ''}`}
-            onClick={() => setCurrentView('add-blog')}
+            onClick={() => { resetBlogForm(); setCurrentView('add-blog'); }}
             data-testid="nav-add-blog"
           >
             <FileText size={18} />
             <span>Add New Blog Post</span>
+          </button>
+          
+          <button
+            className={`sidebar-nav-item ${currentView === 'view-blog' ? 'active' : ''}`}
+            onClick={() => setCurrentView('view-blog')}
+            data-testid="nav-view-blog"
+          >
+            <Newspaper size={18} />
+            <span>View Blog Posts</span>
           </button>
           
           <button
@@ -1155,11 +1404,417 @@ export default function AdminPage() {
 
         {currentView === 'add-blog' && (
           <div className="admin-content">
-            <h1 className="content-title">Add New Blog Post</h1>
-            <div className="placeholder-content">
-              <FileText size={48} />
-              <p>Blog post creation coming soon!</p>
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">{editingBlogId ? 'Edit Blog Post' : 'Add New Blog Post'}</h1>
+                {editingBlogId && (
+                  <p className="content-subtitle">Editing: {blogTitle || 'Untitled'}</p>
+                )}
+              </div>
+              {editingBlogId && (
+                <button 
+                  onClick={resetBlogForm}
+                  className="cancel-edit-button"
+                  data-testid="button-cancel-blog-edit"
+                >
+                  Cancel Edit
+                </button>
+              )}
             </div>
+            
+            <form onSubmit={handleBlogSubmit} className="fact-form">
+              <section className="form-section">
+                <h2 className="section-title">Section 1 — Basic Info</h2>
+                
+                <div className="form-group">
+                  <label className="form-label">Title</label>
+                  <input
+                    type="text"
+                    value={blogTitle}
+                    onChange={(e) => handleBlogTitleChange(e.target.value)}
+                    className="form-input"
+                    placeholder="Enter blog post title..."
+                    data-testid="input-blog-title"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Slug</label>
+                  <p className="form-hint">URL-friendly version (auto-generated from title)</p>
+                  <input
+                    type="text"
+                    value={blogSlug}
+                    onChange={(e) => setBlogSlug(e.target.value)}
+                    className="form-input"
+                    placeholder="url-friendly-slug"
+                    data-testid="input-blog-slug"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Summary</label>
+                  <p className="form-hint">Brief description shown on article cards</p>
+                  <textarea
+                    value={blogSummary}
+                    onChange={(e) => setBlogSummary(e.target.value)}
+                    className="form-textarea"
+                    placeholder="Enter a brief summary..."
+                    data-testid="input-blog-summary"
+                    rows={3}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Cover Image</label>
+                  <p className="form-hint">This image will display on the article card and hero</p>
+                  <div className="upload-area">
+                    {blogCoverImage ? (
+                      <div className="uploaded-preview">
+                        <img src={blogCoverImage} alt="Cover" className="cover-photo-preview" />
+                        <button
+                          type="button"
+                          onClick={() => setBlogCoverImage("")}
+                          className="remove-upload-button"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) uploadBlogCoverImage(file);
+                        }}
+                        className="file-input"
+                        data-testid="input-blog-cover"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Cover Image Caption</label>
+                  <input
+                    type="text"
+                    value={blogCoverCaption}
+                    onChange={(e) => setBlogCoverCaption(e.target.value)}
+                    className="form-input"
+                    placeholder="Photo credit or description..."
+                    data-testid="input-blog-cover-caption"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Category</label>
+                  <select
+                    value={blogCategory}
+                    onChange={(e) => setBlogCategory(e.target.value)}
+                    className="form-select"
+                    data-testid="select-blog-category"
+                    required
+                  >
+                    <option value="">Select a category...</option>
+                    {CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Tags</label>
+                  <div className="checkbox-group">
+                    {BLOG_TAGS.map((tag) => (
+                      <label key={tag} className="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={blogTags.includes(tag)}
+                          onChange={(e) => handleBlogTagChange(tag, e.target.checked)}
+                          className="checkbox-input"
+                          data-testid={`checkbox-blog-tag-${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                        />
+                        <span>{tag}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="form-section">
+                <h2 className="section-title">Section 2 — Author</h2>
+                
+                <div className="form-group">
+                  <label className="form-label">Author Type</label>
+                  <div className="radio-group">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="authorType"
+                        value="Staff"
+                        checked={blogAuthorType === "Staff"}
+                        onChange={() => {
+                          setBlogAuthorType("Staff");
+                          setBlogAuthorName("Retrocodex Admin");
+                        }}
+                        className="radio-input"
+                        data-testid="radio-author-staff"
+                      />
+                      <span>Retrocodex Admin (Staff)</span>
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="authorType"
+                        value="Guest"
+                        checked={blogAuthorType === "Guest"}
+                        onChange={() => {
+                          setBlogAuthorType("Guest");
+                          setBlogAuthorName("");
+                        }}
+                        className="radio-input"
+                        data-testid="radio-author-guest"
+                      />
+                      <span>Guest Author</span>
+                    </label>
+                  </div>
+                </div>
+
+                {blogAuthorType === "Staff" && (
+                  <div className="author-preview">
+                    <img src={adminAvatar} alt="Retrocodex Admin" className="author-avatar" />
+                    <span className="author-name">Retrocodex Admin</span>
+                  </div>
+                )}
+
+                {blogAuthorType === "Guest" && (
+                  <>
+                    <div className="form-group">
+                      <label className="form-label">Guest Author Name</label>
+                      <input
+                        type="text"
+                        value={blogAuthorName}
+                        onChange={(e) => setBlogAuthorName(e.target.value)}
+                        className="form-input"
+                        placeholder="Enter guest author's name..."
+                        data-testid="input-guest-author-name"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">LinkedIn URL (optional)</label>
+                      <input
+                        type="url"
+                        value={blogAuthorLink}
+                        onChange={(e) => setBlogAuthorLink(e.target.value)}
+                        className="form-input"
+                        placeholder="https://linkedin.com/in/..."
+                        data-testid="input-guest-author-linkedin"
+                      />
+                    </div>
+                  </>
+                )}
+              </section>
+
+              <section className="form-section">
+                <h2 className="section-title">Section 3 — Content</h2>
+                <p className="form-hint">Use the toolbar to format text, add headings (H3), insert links, and add images with captions.</p>
+                
+                <div className="form-group">
+                  <TiptapEditor
+                    content={blogContent}
+                    onChange={(content, html) => {
+                      setBlogContent(content);
+                      setBlogContentHtml(html);
+                    }}
+                    onImageUpload={uploadBlogContentImage}
+                  />
+                </div>
+              </section>
+
+              <section className="form-section">
+                <h2 className="section-title">Section 4 — Publishing Options</h2>
+                
+                <div className="form-group">
+                  <label className="checkbox-label toggle-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={blogHeroFeatured}
+                      onChange={(e) => setBlogHeroFeatured(e.target.checked)}
+                      className="checkbox-input"
+                      data-testid="checkbox-hero-featured"
+                    />
+                    <span>Feature on Hero Section</span>
+                  </label>
+                  <p className="form-hint">This article will appear in the homepage hero carousel</p>
+                </div>
+
+                <div className="form-group">
+                  <label className="checkbox-label toggle-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={blogPublished}
+                      onChange={(e) => setBlogPublished(e.target.checked)}
+                      className="checkbox-input"
+                      data-testid="checkbox-published"
+                    />
+                    <span>Published</span>
+                  </label>
+                  <p className="form-hint">Only published articles will be visible to the public</p>
+                </div>
+
+                {blogPosts && blogPosts.length > 0 && (
+                  <div className="form-group">
+                    <label className="form-label">Related Articles (optional, select up to 4)</label>
+                    <p className="form-hint">Manually select related articles to display, or leave empty for auto-selection</p>
+                    <div className="related-articles-selector">
+                      {blogPosts
+                        .filter(post => post.id !== editingBlogId && post.published)
+                        .map(post => (
+                          <label key={post.id} className="checkbox-label">
+                            <input
+                              type="checkbox"
+                              checked={blogRelatedIds.includes(post.id)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  if (blogRelatedIds.length < 4) {
+                                    setBlogRelatedIds([...blogRelatedIds, post.id]);
+                                  }
+                                } else {
+                                  setBlogRelatedIds(blogRelatedIds.filter(id => id !== post.id));
+                                }
+                              }}
+                              disabled={!blogRelatedIds.includes(post.id) && blogRelatedIds.length >= 4}
+                              className="checkbox-input"
+                            />
+                            <span>{post.title}</span>
+                          </label>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </section>
+
+              <div className="form-actions">
+                {blogSubmitMessage && (
+                  <div className={`submit-message ${blogSubmitMessage.includes('success') ? 'success' : 'error'}`}>
+                    {blogSubmitMessage}
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  className="submit-button"
+                  disabled={isBlogSubmitting}
+                  data-testid="button-submit-blog"
+                >
+                  {isBlogSubmitting ? (editingBlogId ? "Saving..." : "Creating...") : (editingBlogId ? "Save Changes" : "Create Blog Post")}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {currentView === 'view-blog' && (
+          <div className="admin-content admin-content-wide">
+            <header className="content-header">
+              <div>
+                <h1 className="content-title">View Blog Posts</h1>
+                <p className="content-subtitle" data-testid="text-blog-count">
+                  {blogPosts?.length || 0} {blogPosts?.length === 1 ? 'post' : 'posts'} total
+                </p>
+              </div>
+            </header>
+
+            {blogPostsLoading ? (
+              <div className="loading-message" data-testid="text-loading">Loading blog posts...</div>
+            ) : blogPostsError ? (
+              <div className="error-container">
+                <div className="error-message" data-testid="text-error">
+                  {blogPostsError instanceof Error ? blogPostsError.message : "Failed to load blog posts"}
+                </div>
+              </div>
+            ) : paginatedBlogPosts.length > 0 ? (
+              <>
+                <div className="blog-posts-grid" data-testid="blog-posts-grid">
+                  {paginatedBlogPosts.map((post) => (
+                    <div 
+                      key={post.id} 
+                      className="admin-blog-card"
+                      onClick={() => loadBlogForEdit(post)}
+                      data-testid={`card-blog-${post.id}`}
+                    >
+                      <div className="admin-blog-card-image">
+                        {post.coverImage ? (
+                          <img src={post.coverImage} alt={post.title} />
+                        ) : (
+                          <div className="admin-blog-card-placeholder">
+                            <FileText size={32} />
+                          </div>
+                        )}
+                        <div className="admin-blog-card-overlay">
+                          <Edit2 size={20} />
+                          <span>Edit Post</span>
+                        </div>
+                      </div>
+                      <div className="admin-blog-card-content">
+                        <div className="admin-blog-card-meta">
+                          <span className="admin-blog-card-category">{post.category}</span>
+                          {post.heroFeatured && <span className="featured-badge">Hero Featured</span>}
+                          {!post.published && <span className="draft-badge">Draft</span>}
+                        </div>
+                        <h3 className="admin-blog-card-title">{post.title}</h3>
+                        <p className="admin-blog-card-summary">{post.summary}</p>
+                        <div className="admin-blog-card-author">
+                          <span>By {post.authorName}</span>
+                          {post.publishedAt && (
+                            <span className="admin-blog-card-date">
+                              {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                              })}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {totalBlogPages > 1 && (
+                  <div className="pagination">
+                    <button
+                      onClick={() => setBlogPage(p => Math.max(1, p - 1))}
+                      disabled={blogPage === 1}
+                      className="pagination-button"
+                      data-testid="button-prev-blog-page"
+                    >
+                      <ChevronLeft size={18} />
+                      Previous
+                    </button>
+                    <span className="pagination-info">
+                      Page {blogPage} of {totalBlogPages}
+                    </span>
+                    <button
+                      onClick={() => setBlogPage(p => Math.min(totalBlogPages, p + 1))}
+                      disabled={blogPage === totalBlogPages}
+                      className="pagination-button"
+                      data-testid="button-next-blog-page"
+                    >
+                      Next
+                      <ChevronRight size={18} />
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="empty-state">
+                <p data-testid="text-empty">No blog posts created yet. Click "Add New Blog Post" to create one.</p>
+              </div>
+            )}
           </div>
         )}
 
