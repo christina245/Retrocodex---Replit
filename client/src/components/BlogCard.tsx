@@ -1,4 +1,5 @@
 import { LucideIcon } from 'lucide-react';
+import { Link } from 'wouter';
 import './BlogCard.css';
 
 interface BlogCardProps {
@@ -25,6 +26,7 @@ export default function BlogCard({
   tags
 }: BlogCardProps) {
   return (
+    <Link href={`/articles/${id}`} className="blog-card-link" data-testid={`link-blog-card-${id}`}>
     <article className="blog-card" data-testid={`blog-card-${id}`}>
       <div className="blog-card-image-container">
         <img 
@@ -71,5 +73,6 @@ export default function BlogCard({
         </div>
       </div>
     </article>
+    </Link>
   );
 }

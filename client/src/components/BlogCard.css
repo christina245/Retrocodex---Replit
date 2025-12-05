@@ -1,3 +1,9 @@
+.blog-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .blog-card {
   width: 330px;
   height: 390px;

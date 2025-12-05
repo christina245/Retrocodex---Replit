@@ -10,13 +10,7 @@ export function HeroSection() {
   });
 
   const formatDate = (date: string | Date | null | undefined): string => {
-    if (!date) {
-      const now = new Date();
-      const month = now.toLocaleDateString('en-US', { month: 'short' });
-      const day = String(now.getDate()).padStart(2, '0');
-      const year = now.getFullYear();
-      return `${month}. ${day}, ${year}`;
-    }
+    if (!date) return "";
     const d = new Date(date);
     const month = d.toLocaleDateString('en-US', { month: 'short' });
     const day = String(d.getDate()).padStart(2, '0');
@@ -60,9 +54,11 @@ export function HeroSection() {
               {featuredPost.summary}
             </p>
             
-            <div className="hero-date" data-testid="text-hero-date">
-              {formatDate(featuredPost.publishedAt)}
-            </div>
+            {featuredPost.publishedAt && (
+              <div className="hero-date" data-testid="text-hero-date">
+                {formatDate(featuredPost.publishedAt)}
+              </div>
+            )}
           </div>
           
           <div className="hero-image-container">
