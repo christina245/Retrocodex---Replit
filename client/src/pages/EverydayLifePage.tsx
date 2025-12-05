@@ -29,6 +29,7 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "Gum won't stay inside your body if swallowed. However, it can't be digested like other foods, so it passes through waste intact rather than broken down.",
     tags: [],
     dateAdded: "2025-11-25",
+    link: "/fact/gum-seven-years",
     coverPhoto: photoGum,
     betaOnly: true
   },
@@ -38,6 +39,7 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
     tags: [],
     dateAdded: "2025-11-18",
+    link: "/fact/swallow-spiders",
     coverPhoto: photoSpiders,
     betaOnly: true
   },
@@ -47,6 +49,7 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
     tags: [],
     dateAdded: "2025-11-05",
+    link: "/fact/sugar-hyper",
     coverPhoto: photoHyperKids,
     betaOnly: true
   },
@@ -56,6 +59,7 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
     tags: [],
     dateAdded: "2025-11-24",
+    link: "/fact/colds-from-cold",
     coverPhoto: photoColds,
     betaOnly: true
   }
