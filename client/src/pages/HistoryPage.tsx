@@ -31,7 +31,8 @@ const historyFacts: CategoryFact[] = [
     truth: "Columbus only reached Central and South America where several indigenous tribes had already established distinctive civilizations.",
     tags: [],
     dateAdded: "2025-10-15",
-    coverPhoto: photoColumbus
+    coverPhoto: photoColumbus,
+    betaOnly: true
   },
   {
     id: "vikings-helmets",
@@ -39,7 +40,8 @@ const historyFacts: CategoryFact[] = [
     truth: "Archaeological evidence has yet to find a horned helmet originating in the Viking era. The horned helmets found originate in the Bronze Age, 2000 years before Vikings.",
     tags: [],
     dateAdded: "2025-11-20",
-    coverPhoto: photoVikings
+    coverPhoto: photoVikings,
+    betaOnly: true
   },
   {
     id: "plymouth-rock",
@@ -47,7 +49,8 @@ const historyFacts: CategoryFact[] = [
     truth: "There are no records of where they landed exactly.",
     tags: [],
     dateAdded: "2025-11-25",
-    coverPhoto: photoPlymouth
+    coverPhoto: photoPlymouth,
+    betaOnly: true
   },
   {
     id: "thanksgiving-turkey",
@@ -55,7 +58,8 @@ const historyFacts: CategoryFact[] = [
     truth: "The only bird on record was just 'fowl'. Turkeys were abundant at the time, so it was possible but not guaranteed. The association between turkey and Thanksgiving was actually popularized by a writer in the 19th century.",
     tags: [],
     dateAdded: "2025-11-26",
-    coverPhoto: photoThanksgiving
+    coverPhoto: photoThanksgiving,
+    betaOnly: true
   },
   {
     id: "marie-antoinette",
@@ -63,7 +67,8 @@ const historyFacts: CategoryFact[] = [
     truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
     tags: [],
     dateAdded: "2025-11-24",
-    coverPhoto: photoMarie
+    coverPhoto: photoMarie,
+    betaOnly: true
   },
   {
     id: "pilgrim-clothing",
@@ -71,7 +76,8 @@ const historyFacts: CategoryFact[] = [
     truth: "They wore colorful clothing in everyday life. The black outfits they're typically depicted with were for formal, rarer occasions.",
     tags: [],
     dateAdded: "2025-11-27",
-    coverPhoto: photoPilgrim
+    coverPhoto: photoPilgrim,
+    betaOnly: true
   }
 ];
 
@@ -157,8 +163,8 @@ export default function HistoryPage() {
 
   const handleBetaClick = () => {
     toast({
-      title: "Under Development",
-      description: "Individual fact pages are still under development. Check back soon!",
+      title: "Unavailable in beta",
+      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
     });
   };
 

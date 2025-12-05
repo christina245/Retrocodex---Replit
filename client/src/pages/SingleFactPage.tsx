@@ -80,7 +80,7 @@ export default function SingleFactPage() {
 
   const factData = {
     id: "brain-10-percent",
-    myth: '"You only use 10% of your brain."',
+    myth: "You only use 10% of your brain.",
     truth: "You use nearly all of your brain at any given time.",
     category: ["Life Sciences", "Social Sciences"],
     details: "Brain imaging shows that nearly all regions are active at different times, even during simple tasks and while sleeping.",
@@ -206,7 +206,7 @@ export default function SingleFactPage() {
             </div>
             <div className="edit-date-cell">
               <a 
-                href="https://form.typeform.com/to/hTpNhNJH" 
+                href="https://form.typeform.com/to/x2EOj8Ex" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="suggest-edit-link"

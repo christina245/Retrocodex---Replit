@@ -24,6 +24,7 @@ export interface Fact {
   dateAdded?: string;
   link?: string;
   coverPhoto?: string;
+  betaOnly?: boolean;
 }
 
 interface FactCardProps {
@@ -31,12 +32,22 @@ interface FactCardProps {
   onSave: () => void;
   onShare: () => void;
   onComment: () => void;
+  onBetaClick?: () => void;
 }
 
-export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
+export function FactCard({ fact, onSave, onShare, onComment, onBetaClick }: FactCardProps) {
   const CategoryIcon = categoryIcons[fact.category as keyof typeof categoryIcons] || Zap;
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
+
+  const handleBetaLinkClick = (e: React.MouseEvent) => {
+    if (fact.betaOnly) {
+      e.preventDefault();
+      if (onBetaClick) {
+        onBetaClick();
+      }
+    }
+  };
   
   return (
     <div className="fact-card-wrapper">
@@ -114,6 +125,7 @@ export function FactCard({ fact, onSave, onShare, onComment }: FactCardProps) {
           href={factLink}
           className="learn-more-button"
           data-testid={`button-learn-more-${fact.id}`}
+          onClick={handleBetaLinkClick}
         >
           <img src={forwardArrow} alt="" className="learn-more-arrow" />
           Learn more

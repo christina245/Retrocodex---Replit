@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import logoImage from "@assets/logo only_1763795492352.png";
+import logoImage from "@assets/white background logo.png";
 import "./SingleFactHeader.css";
 
 interface SingleFactHeaderProps {

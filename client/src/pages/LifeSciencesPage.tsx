@@ -40,7 +40,8 @@ const lifeSciencesFacts: CategoryFact[] = [
     truth: "Fossil evidence shows that some dinosaurs, especially those related to birds, had feathers or feather-like coverings.",
     tags: [],
     dateAdded: "2025-11-20",
-    coverPhoto: photoDinosaurs
+    coverPhoto: photoDinosaurs,
+    betaOnly: true
   },
   {
     id: "blood-blue",
@@ -48,7 +49,8 @@ const lifeSciencesFacts: CategoryFact[] = [
     truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
     tags: [],
     dateAdded: "2025-11-15",
-    coverPhoto: photoBlood
+    coverPhoto: photoBlood,
+    betaOnly: true
   },
   {
     id: "five-senses",
@@ -56,7 +58,8 @@ const lifeSciencesFacts: CategoryFact[] = [
     truth: "Neuroscientists believe we have up to 33 senses, such as proprioception, thermoception, kinaesthesia, and more.",
     tags: [],
     dateAdded: "2025-11-22",
-    coverPhoto: photoSenses
+    coverPhoto: photoSenses,
+    betaOnly: true
   },
   {
     id: "viruses-alive",
@@ -64,7 +67,8 @@ const lifeSciencesFacts: CategoryFact[] = [
     truth: "It's still debated whether viruses are alive or not. Some recently discovered viruses carry genes similar to living beings.",
     tags: [],
     dateAdded: "2025-11-23",
-    coverPhoto: photoViruses
+    coverPhoto: photoViruses,
+    betaOnly: true
   },
   {
     id: "colds-from-cold",
@@ -72,7 +76,8 @@ const lifeSciencesFacts: CategoryFact[] = [
     truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
     tags: [],
     dateAdded: "2025-11-24",
-    coverPhoto: photoColds
+    coverPhoto: photoColds,
+    betaOnly: true
   }
 ];
 
@@ -156,8 +161,8 @@ export default function LifeSciencesPage() {
 
   const handleBetaClick = () => {
     toast({
-      title: "Under Development",
-      description: "Individual fact pages are still under development. Check back soon!",
+      title: "Unavailable in beta",
+      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
     });
   };
 

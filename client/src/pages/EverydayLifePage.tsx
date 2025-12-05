@@ -29,8 +29,8 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "Gum won't stay inside your body if swallowed. However, it can't be digested like other foods, so it passes through waste intact rather than broken down.",
     tags: [],
     dateAdded: "2025-11-25",
-    link: "/fact/gum-seven-years",
-    coverPhoto: photoGum
+    coverPhoto: photoGum,
+    betaOnly: true
   },
   {
     id: "swallow-spiders",
@@ -38,8 +38,8 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
     tags: [],
     dateAdded: "2025-11-18",
-    link: "/fact/swallow-spiders",
-    coverPhoto: photoSpiders
+    coverPhoto: photoSpiders,
+    betaOnly: true
   },
   {
     id: "sugar-hyper",
@@ -47,8 +47,8 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
     tags: [],
     dateAdded: "2025-11-05",
-    link: "/fact/sugar-hyper",
-    coverPhoto: photoHyperKids
+    coverPhoto: photoHyperKids,
+    betaOnly: true
   },
   {
     id: "colds-from-cold",
@@ -56,8 +56,8 @@ const everydayLifeFacts: CategoryFact[] = [
     truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
     tags: [],
     dateAdded: "2025-11-24",
-    link: "/fact/colds-from-cold",
-    coverPhoto: photoColds
+    coverPhoto: photoColds,
+    betaOnly: true
   }
 ];
 
@@ -134,16 +134,16 @@ export default function EverydayLifePage() {
 
   const handleCommentClick = () => {
     toast({
-      title: "Coming Soon",
-      description: "Individual fact pages with comments are in development.",
+      title: "Unavailable in beta",
+      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
     });
   };
 
   const handleBetaClick = () => {
     toast({
-      title: "Under Development",
-      description: "Individual fact pages are still under development. Check back soon!",
-    });
+      title: "Unavailable in beta",
+        description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
+      });
   };
 
   const displayedFacts = activeTab === "featured" 

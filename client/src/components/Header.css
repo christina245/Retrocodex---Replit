@@ -74,7 +74,7 @@
   background: rgba(44, 44, 44, 0.05);
   color: #dc143c;
   border: none;
-  padding: 4px 8px;
+  padding: 6px 8px;
   border-radius: 5px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
@@ -115,7 +115,7 @@
 .header-tagline-row {
   display: flex;
   justify-content: center;
-  margin: 0;
+  margin-top: 5px;
   padding: 0;
 }
 
@@ -129,7 +129,7 @@
   width: 295px;
   height: auto;
   object-fit: contain;
-  margin-bottom: 5px;
+  margin-bottom: 1px;
 }
 
 .tagline-desktop {

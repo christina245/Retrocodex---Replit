@@ -34,7 +34,8 @@ const allFacts: Fact[] = [
     myth: "Christopher Columbus discovered the Americas.",
     truth: "Columbus only reached Central and South America. He never actually reached North America. At the time, Indigenous peoples had already been living in throughout the Americas for thousands of years.",
     dateAdded: "2025-10-15",
-    coverPhoto: photo1Columbus
+    coverPhoto: photo1Columbus,
+    betaOnly: true
   },
   {
     id: "2",
@@ -53,7 +54,8 @@ const allFacts: Fact[] = [
     myth: "The Food Pyramid is the model for a healthy, balanced diet.",
     truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
     dateAdded: "2025-11-01",
-    coverPhoto: photo3FoodPyramid
+    coverPhoto: photo3FoodPyramid,
+    betaOnly: true
   },
   {
     id: "4",
@@ -62,7 +64,8 @@ const allFacts: Fact[] = [
     myth: "Too much sugar makes kids hyper.",
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
     dateAdded: "2025-11-05",
-    coverPhoto: photo4HyperKids
+    coverPhoto: photo4HyperKids,
+    betaOnly: true
   },
   {
     id: "5",
@@ -71,7 +74,8 @@ const allFacts: Fact[] = [
     myth: "People have different learning styles, such as being a visual or auditory learner.",
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention.",
     dateAdded: "2025-11-08",
-    coverPhoto: photo5Learning
+    coverPhoto: photo5Learning,
+    betaOnly: true
   },
   {
     id: "6",
@@ -80,7 +84,8 @@ const allFacts: Fact[] = [
     myth: "Men and women have very different brains.",
     truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
     dateAdded: "2025-11-21",
-    coverPhoto: photo6Gender
+    coverPhoto: photo6Gender,
+    betaOnly: true
   },
   {
     id: "7",
@@ -89,7 +94,8 @@ const allFacts: Fact[] = [
     myth: "I before E except after C.",
     truth: "English has a lot of words where that 'rule' doesn't hold up. Words like 'science,' 'height,' 'their,' 'protein,' 'caffeine,' 'vein,' 'beige,' 'neighbor,' 'weird,' 'seize,' and many others break this 'rule.'",
     dateAdded: "2025-11-12",
-    coverPhoto: photo7Spelling
+    coverPhoto: photo7Spelling,
+    betaOnly: true
   },
   {
     id: "8",
@@ -98,7 +104,8 @@ const allFacts: Fact[] = [
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
     truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
     dateAdded: "2025-11-15",
-    coverPhoto: photo8Blood
+    coverPhoto: photo8Blood,
+    betaOnly: true
   },
   {
     id: "9",
@@ -107,7 +114,8 @@ const allFacts: Fact[] = [
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
     dateAdded: "2025-11-18",
-    coverPhoto: photo9Spiders
+    coverPhoto: photo9Spiders,
+    betaOnly: true
   },
   {
     id: "10",
@@ -116,7 +124,8 @@ const allFacts: Fact[] = [
     myth: "Marie Antoinette ignorantly said 'Let them eat cake' regarding the French Revolution.",
     truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
     dateAdded: "2025-11-20",
-    coverPhoto: photo10Marie
+    coverPhoto: photo10Marie,
+    betaOnly: true
   }
 ];
 
@@ -167,6 +176,13 @@ export default function HomePage() {
     });
   };
 
+  const handleBetaClick = () => {
+    toast({
+      title: "Unavailable in beta",
+      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
+    });
+  };
+
   const displayedFacts = activeTab === "featured" 
     ? allFacts 
     : [...allFacts].sort((a, b) => {
@@ -202,6 +218,7 @@ export default function HomePage() {
                   onSave={handleSaveClick}
                   onShare={() => handleShareClick(fact)}
                   onComment={handleCommentClick}
+                  onBetaClick={handleBetaClick}
                 />
               ))}
             </div>

@@ -108,8 +108,8 @@ export default function SocialSciencesPage() {
 
   const handleBetaClick = () => {
     toast({
-      title: "Under Development",
-      description: "Individual fact pages are still under development. Check back soon!",
+      title: "Unavailable in beta",
+      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
     });
   };
 
