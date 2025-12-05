@@ -7,6 +7,7 @@ import HomePage from "@/pages/HomePage";
 import AdminPage from "@/pages/AdminPage";
 import SingleFactPage from "@/pages/SingleFactPage";
 import ArticlesPage from "@/pages/ArticlesPage";
+import SingleBlogPage from "@/pages/SingleBlogPage";
 import HistoryPage from "@/pages/HistoryPage";
 import LifeSciencesPage from "@/pages/LifeSciencesPage";
 import EverydayLifePage from "@/pages/EverydayLifePage";
@@ -35,6 +36,7 @@ function Router() {
       <Route path="/admin" component={AdminPage} />
       <Route path="/fact/:id" component={SingleFactPage} />
       <Route path="/articles" component={ArticlesPage} />
+      <Route path="/articles/:slug" component={SingleBlogPage} />
       <Route path="/category/history" component={HistoryPage} />
       <Route path="/category/life-sciences" component={LifeSciencesPage} />
       <Route path="/category/everyday-life" component={EverydayLifePage} />
