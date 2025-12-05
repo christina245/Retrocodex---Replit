@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
 import { TabSelector } from "@/components/TabSelector";
+import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
 import { EmailSignupBanner } from "@/components/EmailSignupBanner";
@@ -18,6 +19,7 @@ import { ArrowLeft } from "lucide-react";
 import "./FoodPage.css";
 
 import photoFoodPyramid from "@assets/stock_images/food pyramid.png";
+import photoButter from "@assets/stock_images/butter.png"
 
 const foodFacts: CategoryFact[] = [
   {
@@ -26,6 +28,7 @@ const foodFacts: CategoryFact[] = [
     truth: "Not if they contain a significant amount of trans fats, which many of them do — particularly in stick form.",
     tags: [],
     dateAdded: "2025-12-01",
+    coverPhoto: photoButter,
     betaOnly: true
   },
   {
@@ -44,6 +47,7 @@ const SUBCATEGORY_COLOR = "#2C2C2C";
 export default function FoodPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const { toast } = useToast();
@@ -151,6 +155,12 @@ export default function FoodPage() {
         <div className="food-content-area">
           <div className="food-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <div className="food-filter-container">
+              <CategoryFilter 
+                selectedFilters={selectedFilters} 
+                onFilterChange={setSelectedFilters} 
+              />
+            </div>
             <div className="food-key-container">
               <FactKey />
             </div>
