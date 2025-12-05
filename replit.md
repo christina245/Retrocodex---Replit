@@ -39,6 +39,13 @@ Preferred communication style: Simple, everyday language.
 - `SaveModal` & `ShareModal`: Future functionality placeholders
 - `HamburgerMenu`: Slide-out navigation menu
 
+**Blog System Components (NEW)**
+- `ArticlesPage`: Lists published blog posts with category/tag filtering, fetches from `/api/blog-posts/published`
+- `SingleBlogPage`: Individual article view at `/articles/:slug` with inverted hero header, sidebar newsletter signup, and related articles
+- `BlogCard`: Card component for blog post previews with navigation links to individual articles
+- `HeroSection`: Displays featured blog posts from `/api/blog-posts/featured` with actual published dates
+- `TiptapEditor`: Rich text editor in admin panel for creating/editing blog posts
+
 ### Backend Architecture
 
 **Server Framework**
@@ -54,6 +61,9 @@ Preferred communication style: Simple, everyday language.
 **API Design**
 - RESTful API endpoints under `/api` prefix
 - Email subscription management (`POST /api/emails`, `GET /api/emails`)
+- Newsletter subscriptions (`POST /api/newsletter-subscriptions`)
+- Blog posts CRUD (`GET /api/blog-posts`, `GET /api/blog-posts/published`, `GET /api/blog-posts/featured`, `GET /api/blog-posts/:slug`, `POST /api/blog-posts`, `PUT /api/blog-posts/:id`, `DELETE /api/blog-posts/:id`)
+- File upload for cover images (`POST /api/upload`)
 - Basic HTTP authentication for admin routes using environment variable
 - Zod schema validation for request payloads
 
@@ -71,6 +81,8 @@ Preferred communication style: Simple, everyday language.
 
 **Schema Design**
 - `email_subscriptions`: Captures user emails with source tracking ('signup-banner' or 'save-modal')
+- `newsletter_subscriptions`: Separate table for newsletter signups (distinct from account emails)
+- `blog_posts`: WordPress-style blog posts with title, slug, summary, coverImage, category, tags (array), content (rich text), authorName, authorType (Staff/Guest), authorLink, authorPhoto, heroFeatured, published status, publishedAt, relatedManualIds (optional array for manual related article selection)
 - `users`: Planned table for future user authentication (currently unused)
 - UUID primary keys using PostgreSQL's `gen_random_uuid()`
 - Timestamps with automatic `defaultNow()` for creation tracking
