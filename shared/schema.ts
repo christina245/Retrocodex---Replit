@@ -129,3 +129,85 @@ export const insertFactSchema = z.object({
 
 export type InsertFact = z.infer<typeof insertFactSchema>;
 export type Fact = typeof facts.$inferSelect;
+
+// Blog post author types
+export const AUTHOR_TYPES = ["Staff", "Guest"] as const;
+
+// Blog post tag options
+export const BLOG_TAGS = [
+  "Facts",
+  "Seasonal", 
+  "Regional Lessons",
+  "Personal Stories",
+  "Website Announcements",
+  "Other"
+] as const;
+
+// Blog posts table for articles
+export const blogPosts = pgTable("blog_posts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  summary: text("summary").notNull(),
+  coverImage: text("cover_image"),
+  coverImageCaption: text("cover_image_caption"),
+  category: text("category").notNull(),
+  tags: text("tags").array().default([]),
+  content: jsonb("content"), // Tiptap JSON content
+  contentHtml: text("content_html"), // Pre-rendered HTML for display
+  authorName: text("author_name").notNull().default("Retrocodex Admin"),
+  authorType: text("author_type").notNull().default("Staff"), // 'Staff' or 'Guest'
+  authorLink: text("author_link"), // LinkedIn URL for guests
+  authorPhoto: text("author_photo"), // Profile photo URL
+  heroFeatured: boolean("hero_featured").default(false),
+  published: boolean("published").default(false),
+  publishedAt: timestamp("published_at"),
+  relatedManualIds: text("related_manual_ids").array().default([]), // Optional manual related articles
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertBlogPostSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase with hyphens only"),
+  summary: z.string().min(1, "Summary is required"),
+  coverImage: z.string().optional(),
+  coverImageCaption: z.string().optional(),
+  category: z.enum(CATEGORIES),
+  tags: z.array(z.enum(BLOG_TAGS)).default([]),
+  content: z.any().optional(), // Tiptap JSON
+  contentHtml: z.string().optional(),
+  authorName: z.string().default("Retrocodex Admin"),
+  authorType: z.enum(AUTHOR_TYPES).default("Staff"),
+  authorLink: z.string().url().optional().or(z.literal("")),
+  authorPhoto: z.string().optional(),
+  heroFeatured: z.boolean().default(false),
+  published: z.boolean().default(false),
+  publishedAt: z.date().optional(),
+  relatedManualIds: z.array(z.string()).default([]),
+});
+
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+export type BlogPost = typeof blogPosts.$inferSelect;
+
+// Newsletter subscriptions table (separate from account signups)
+export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull().unique(),
+  name: text("name"),
+  source: text("source").notNull().default("blog-sidebar"), // 'blog-sidebar', 'footer', etc.
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertNewsletterSubscriptionSchema = createInsertSchema(newsletterSubscriptions).pick({
+  email: true,
+  name: true,
+  source: true,
+}).extend({
+  email: z.string().email("Please enter a valid email address"),
+  name: z.string().optional(),
+  source: z.string().default("blog-sidebar"),
+});
+
+export type InsertNewsletterSubscription = z.infer<typeof insertNewsletterSubscriptionSchema>;
+export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect;
