@@ -456,14 +456,9 @@
 
 /* Beehiiv Section */
 .beehiiv-section {
-  padding: 0;
+  padding: 0 20px !important;
   border: none;
   background: transparent;
-}
-
-.beehiiv-section .sidebar-heading {
-  padding: 0;
-  margin: 0 0 12px 20px;
 }
 
 /* Related Articles */

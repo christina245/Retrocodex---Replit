@@ -1,65 +1,77 @@
 .article-share-modal {
-  max-width: 500px;
-  padding: 32px;
+  max-width: 600px;
+  padding: 2.5rem 2rem;
 }
 
 .article-share-modal-title {
-  font-family: 'Merriweather', serif;
-  font-size: 24px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1.375rem;
   font-weight: 700;
   color: #2C2C2C;
-  margin: 0 0 24px 0;
-  text-align: center;
+  margin: 0 0 2rem 0;
 }
 
 .article-share-options {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
 }
 
 .article-share-option {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 16px 8px;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
   border-radius: 8px;
-  background: #f8f8f8;
+  background: none;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  font-family: 'Public Sans', sans-serif;
-  font-size: 11px;
-  color: #2C2C2C;
-  text-decoration: none;
-}
-
-.article-share-option.active:hover {
-  background: #f0f0f0;
-}
-
-.article-share-option.inactive {
-  opacity: 0.5;
-  cursor: not-allowed;
   position: relative;
 }
 
-.article-share-option.inactive:hover::after {
+.article-share-option span {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.article-share-option.active {
+  color: #2C2C2C;
+}
+
+.article-share-option.active:hover {
+  background: #f5f5f5;
+}
+
+.article-share-option.inactive {
+  color: #d5d5d5;
+  cursor: not-allowed;
+}
+
+.article-share-option.inactive::after {
   content: attr(data-tooltip);
   position: absolute;
   bottom: 100%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-8px);
   background: #2C2C2C;
   color: white;
-  font-size: 10px;
-  padding: 6px 10px;
-  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
   white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
   z-index: 10;
-  margin-bottom: 8px;
+}
+
+.article-share-option.inactive:hover::after {
+  opacity: 1;
 }
 
 .article-share-icon-image {
@@ -70,17 +82,16 @@
 
 .article-share-preview-section {
   border-top: 1px solid #e5e5e5;
-  padding-top: 20px;
+  padding-top: 1.5rem;
 }
 
 .article-share-preview-label {
   font-family: 'Public Sans', sans-serif;
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #878787;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
+  color: #999;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
 }
 
 .article-share-preview-card {
@@ -158,17 +169,10 @@
   }
 }
 
-@media (max-width: 500px) {
-  .article-share-modal {
-    padding: 24px;
-    margin: 16px;
-  }
-  
+@media (max-width: 640px) {
   .article-share-options {
     grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .article-share-modal-title {
-    font-size: 20px;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 }
