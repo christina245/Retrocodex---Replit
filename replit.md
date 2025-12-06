@@ -39,12 +39,15 @@ Preferred communication style: Simple, everyday language.
 - `SaveModal` & `ShareModal`: Future functionality placeholders
 - `HamburgerMenu`: Slide-out navigation menu
 
-**Blog System Components (NEW)**
+**Blog System Components**
 - `ArticlesPage`: Lists published blog posts with category/tag filtering, fetches from `/api/blog-posts/published`
-- `SingleBlogPage`: Individual article view at `/articles/:slug` with inverted hero header, sidebar newsletter signup, and related articles
+- `SingleBlogPage`: Individual article view at `/articles/:slug` with sticky header, 60% width hero image (desktop), action buttons (comment/save/share), sidebar with Beehiiv newsletter embed, comments section, and related articles
 - `BlogCard`: Card component for blog post previews with navigation links to individual articles
 - `HeroSection`: Displays featured blog posts from `/api/blog-posts/featured` with actual published dates
 - `TiptapEditor`: Rich text editor in admin panel for creating/editing blog posts
+- `BeehiivBanner`: External newsletter subscription embed from Beehiiv service (270px x 264px)
+- `ArticleShareModal`: Share modal for blog articles with preview (cover image, title, summary) and copy link functionality
+- `CommentModal`: Comment modal placeholder directing users to Reddit community
 
 ### Backend Architecture
 
