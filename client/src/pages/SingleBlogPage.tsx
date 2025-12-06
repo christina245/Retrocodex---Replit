@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { 
-  ArrowLeft, 
   Calendar, 
   Tag, 
-  Folder, 
   Scroll, 
   Home, 
   HeartPulse, 
@@ -13,12 +11,19 @@ import {
   Dna, 
   User,
   HelpCircle,
+  MessageCircle,
+  Bookmark,
+  Share2,
   LucideIcon
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { Footer } from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
+import { SaveModal } from "@/components/SaveModal";
+import { CommentModal } from "@/components/CommentModal";
+import { ArticleShareModal } from "@/components/ArticleShareModal";
+import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { BlogPost } from "@shared/schema";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
 import "./SingleBlogPage.css";
@@ -50,8 +55,10 @@ const getCategoryColor = (category: string): string => {
 export default function SingleBlogPage() {
   const { slug } = useParams<{ slug: string }>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const commentsRef = useRef<HTMLDivElement>(null);
 
   const { data: post, isLoading, error } = useQuery<BlogPost>({
     queryKey: ["/api/blog-posts", slug],
@@ -62,27 +69,17 @@ export default function SingleBlogPage() {
     queryKey: ["/api/blog-posts/published"],
   });
 
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newsletterEmail) return;
-    
-    setNewsletterStatus("loading");
-    try {
-      const response = await fetch("/api/newsletter-subscriptions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: newsletterEmail, source: "blog-sidebar" }),
-      });
-      
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Failed to subscribe");
-      }
-      
-      setNewsletterStatus("success");
-      setNewsletterEmail("");
-    } catch {
-      setNewsletterStatus("error");
+  const handleSaveEmail = async (email: string) => {
+    await fetch("/api/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, source: "save-modal" }),
+    });
+  };
+
+  const scrollToComments = () => {
+    if (commentsRef.current) {
+      commentsRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -149,7 +146,6 @@ export default function SingleBlogPage() {
             <h1>Article Not Found</h1>
             <p>The article you're looking for doesn't exist or has been removed.</p>
             <Link href="/articles" className="back-link">
-              <ArrowLeft size={18} />
               Back to Articles
             </Link>
           </div>
@@ -159,53 +155,88 @@ export default function SingleBlogPage() {
     );
   }
 
+  const CategoryIcon = getCategoryIcon(post.category);
+  const categoryColor = getCategoryColor(post.category);
+
   return (
     <div className="single-blog-page">
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <div className="sticky-header-wrapper">
+        <Header onMenuClick={() => setIsMenuOpen(true)} />
+      </div>
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
       <article className="single-blog-main">
-        <div className="hero-section">
+        <div className="article-hero-section">
           {post.coverImage && (
-            <div className="hero-image-container">
-              <img 
-                src={post.coverImage} 
-                alt={post.title} 
-                className="hero-image"
-                data-testid="img-hero"
-              />
+            <div className="article-image-wrapper">
+              <div className="article-image-container">
+                <img 
+                  src={post.coverImage} 
+                  alt={post.title} 
+                  className="article-hero-image"
+                  data-testid="img-hero"
+                />
+              </div>
               {post.coverImageCaption && (
-                <p className="hero-caption">{post.coverImageCaption}</p>
+                <p className="article-image-caption">{post.coverImageCaption}</p>
               )}
             </div>
           )}
           
-          <div className="hero-title-container">
-            <h1 className="hero-title" data-testid="text-title">{post.title}</h1>
-            <div className="hero-meta">
-              <span className="hero-date" data-testid="text-date">
-                <Calendar size={14} />
-                {formatDate(post.publishedAt)}
-              </span>
-              <span className="hero-author" data-testid="text-author">
-                <img 
-                  src={post.authorPhoto || adminAvatar} 
-                  alt={post.authorName || "Retrocodex Admin"} 
-                  className="hero-author-avatar"
-                />
-                {post.authorLink ? (
-                  <a 
-                    href={post.authorLink} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="hero-author-link"
-                  >
-                    {post.authorName || "Retrocodex Admin"}
-                  </a>
-                ) : (
-                  post.authorName || "Retrocodex Admin"
-                )}
-              </span>
+          <div className="article-title-container">
+            <h1 className="article-title" data-testid="text-title">{post.title}</h1>
+            <div className="article-meta-row">
+              <div className="article-actions">
+                <button 
+                  className="article-action-button"
+                  onClick={scrollToComments}
+                  data-testid="button-comment-article"
+                >
+                  <MessageCircle size={16} />
+                  <span>0 comments</span>
+                </button>
+                <button 
+                  className="article-action-button"
+                  onClick={() => setIsSaveModalOpen(true)}
+                  data-testid="button-save-article"
+                >
+                  <Bookmark size={16} />
+                  <span>Save</span>
+                </button>
+                <button 
+                  className="article-action-button"
+                  onClick={() => setIsShareModalOpen(true)}
+                  data-testid="button-share-article"
+                >
+                  <Share2 size={16} />
+                  <span>Share</span>
+                </button>
+              </div>
+              <div className="article-date-author">
+                <span className="article-date" data-testid="text-date">
+                  <Calendar size={14} />
+                  {formatDate(post.publishedAt)}
+                </span>
+                <span className="article-author" data-testid="text-author">
+                  <img 
+                    src={post.authorPhoto || adminAvatar} 
+                    alt={post.authorName || "Retrocodex Admin"} 
+                    className="article-author-avatar"
+                  />
+                  {post.authorLink ? (
+                    <a 
+                      href={post.authorLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="article-author-link"
+                    >
+                      {post.authorName || "Retrocodex Admin"}
+                    </a>
+                  ) : (
+                    post.authorName || "Retrocodex Admin"
+                  )}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -217,6 +248,27 @@ export default function SingleBlogPage() {
               dangerouslySetInnerHTML={{ __html: post.contentHtml || "" }}
               data-testid="content-body"
             />
+
+            <div className="comments-section" ref={commentsRef}>
+              <h3 className="comments-heading">Comments</h3>
+              <div className="comments-placeholder">
+                <MessageCircle size={32} />
+                <p className="comments-unavailable-text">
+                  Commenting is currently unavailable in beta mode. We're working on it!
+                </p>
+                <p className="comments-redirect-text">
+                  If you'd like to share your thoughts, head over to our{" "}
+                  <a 
+                    href="http://reddit.com/r/LearnedWrong" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="comments-reddit-link"
+                  >
+                    Reddit community
+                  </a>
+                </p>
+              </div>
+            </div>
           </div>
 
           <aside className="article-sidebar">
@@ -227,8 +279,8 @@ export default function SingleBlogPage() {
                 className="sidebar-category-link"
                 data-testid="link-category"
               >
-                <Folder size={16} />
-                {post.category}
+                <CategoryIcon size={16} style={{ color: categoryColor }} />
+                <span className="sidebar-category-text">{post.category.toUpperCase()}</span>
               </Link>
             </div>
 
@@ -246,34 +298,9 @@ export default function SingleBlogPage() {
               </div>
             )}
 
-            <div className="sidebar-section newsletter-section">
-              <h3 className="sidebar-heading">Subscribe to Newsletter</h3>
-              <p className="newsletter-description">
-                Get the latest articles and fact-checks delivered to your inbox.
-              </p>
-              <form onSubmit={handleNewsletterSubmit} className="newsletter-form">
-                <input
-                  type="email"
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  placeholder="Your email address"
-                  className="newsletter-input"
-                  disabled={newsletterStatus === "loading" || newsletterStatus === "success"}
-                  data-testid="input-newsletter-email"
-                />
-                <button 
-                  type="submit" 
-                  className="newsletter-button"
-                  disabled={newsletterStatus === "loading" || newsletterStatus === "success"}
-                  data-testid="button-subscribe"
-                >
-                  {newsletterStatus === "loading" ? "..." : 
-                   newsletterStatus === "success" ? "Subscribed!" : "Subscribe"}
-                </button>
-              </form>
-              {newsletterStatus === "error" && (
-                <p className="newsletter-error">Failed to subscribe. Please try again.</p>
-              )}
+            <div className="sidebar-section beehiiv-section">
+              <h3 className="sidebar-heading">Subscribe</h3>
+              <BeehiivBanner />
             </div>
           </aside>
         </div>
@@ -302,6 +329,28 @@ export default function SingleBlogPage() {
       </article>
 
       <Footer />
+
+      <SaveModal
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onSubmit={handleSaveEmail}
+      />
+
+      <CommentModal
+        isOpen={isCommentModalOpen}
+        onClose={() => setIsCommentModalOpen(false)}
+      />
+
+      <ArticleShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        article={post ? {
+          slug: post.slug,
+          title: post.title,
+          summary: post.summary,
+          coverImage: post.coverImage
+        } : null}
+      />
     </div>
   );
 }

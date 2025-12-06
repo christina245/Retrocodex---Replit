@@ -1,0 +1,25 @@
+.beehiiv-banner-container {
+  width: 270px;
+  max-width: 100%;
+}
+
+.beehiiv-embed {
+  width: 270px;
+  height: 264px;
+  margin: 0;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  max-width: 100%;
+  border: none;
+}
+
+@media (max-width: 900px) {
+  .beehiiv-banner-container {
+    width: 100%;
+  }
+  
+  .beehiiv-embed {
+    width: 100%;
+  }
+}
