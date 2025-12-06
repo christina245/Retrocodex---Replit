@@ -69,7 +69,7 @@
   display: grid;
   grid-template-columns: 1fr 600px;
   gap: 50px;
-  align-items: start;
+  align-items: center;
 }
 
 /* Left column - text content */
@@ -91,7 +91,7 @@
 .article-title {
   font-family: 'Merriweather', serif;
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 800;
   color: #2C2C2C;
   margin: 0 0 16px 0;
   line-height: 1.3;
@@ -288,12 +288,18 @@
 .blog-body img {
   max-width: 100%;
   height: auto;
-  margin: 24px 0;
+  margin: 24px auto;
   border-radius: 8px;
+  display: block;
 }
 
 .blog-body figure {
   margin: 24px 0;
+  text-align: center;
+}
+
+.blog-body figure img {
+  margin: 0 auto 8px auto;
 }
 
 .blog-body figcaption {

@@ -53,13 +53,14 @@ const getCategoryIcon = (category: string): LucideIcon => {
 };
 
 const getCategoryColor = (category: string): string => {
-  switch (category) {
-    case "History": return "#2C2C2C";
-    case "Life Sciences": return "#4CAF50";
-    case "Everyday Life": return "#795548";
-    case "Health & Fitness": return "#E91E63";
-    case "Social Sciences": return "#2196F3";
-    case "Gender & Sexuality": return "#9C27B0";
+  switch (category?.toUpperCase()) {
+    case "HISTORY": return "#F5D547";
+    case "LIFE SCIENCES": return "#6FCF97";
+    case "EVERYDAY LIFE": return "#2A9BEC";
+    case "HEALTH & FITNESS": return "#F2994A";
+    case "SOCIAL SCIENCES": return "#9B51E0";
+    case "GENDER & SEXUALITY": return "#FC5AA8";
+    case "OTHER": return "#2C2C2C";
     default: return "#878787";
   }
 };
