@@ -64,18 +64,21 @@
   margin-top: 0;
 }
 
-.hero-title {
+.hero-container .hero-content .hero-link .hero-title {
   font-family: 'Merriweather', serif;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 32px;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   margin: 0;
   line-height: 1.3;
-  transition: text-decoration 0.2s;
+  text-decoration: none;
+  text-decoration-color: #FFFFFF;
 }
 
-.hero-link:hover .hero-title {
+.hero-container .hero-content .hero-link:hover .hero-title {
   text-decoration: underline;
+  text-decoration-color: #FFFFFF;
+  text-underline-offset: 4px;
 }
 
 .hero-summary {
@@ -215,7 +218,7 @@
     width: 24px;
   }
 
-  .hero-title {
+  .hero-container .hero-content .hero-link .hero-title {
     font-size: 16px;
     line-height: 1.3;
   }
