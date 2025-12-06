@@ -44,11 +44,10 @@ export default function BlogCard({
           </span>
           <span 
             className="blog-card-category"
-            style={{ color: categoryColor }}
             data-testid={`blog-card-category-${id}`}
           >
             <CategoryIcon size={14} style={{ color: categoryColor }} />
-            {category}
+            <span className="blog-card-category-text">{category}</span>
           </span>
         </div>
         
