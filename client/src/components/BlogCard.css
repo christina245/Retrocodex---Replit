@@ -6,7 +6,7 @@
 
 .blog-card {
   width: 330px;
-  height: 390px;
+  height: 410px;
   background: #FCFCFC;
   border-radius: 8px;
   overflow: hidden;
@@ -94,7 +94,7 @@
   margin: 0;
   margin-bottom: 20px;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex: 1;
