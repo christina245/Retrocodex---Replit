@@ -11,7 +11,7 @@ import { TabSelector } from "@/components/TabSelector";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
-import { EmailSignupBanner } from "@/components/EmailSignupBanner";
+import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
@@ -169,9 +169,7 @@ export default function LinguisticsPage() {
             </div>
 
             <aside className="linguistics-sidebar">
-              <EmailSignupBanner 
-                onSubmit={(email) => handleEmailSubmit(email, "linguistics-page")} 
-              />
+              <BeehiivBanner />
             </aside>
           </div>
         </div>

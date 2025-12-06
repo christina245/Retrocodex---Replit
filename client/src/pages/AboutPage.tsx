@@ -3,7 +3,7 @@ import { HandHeart } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
-import { EmailSignupBanner } from "@/components/EmailSignupBanner";
+import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -118,7 +118,7 @@ export default function AboutPage() {
           </div>
 
           <aside className="about-sidebar">
-            <EmailSignupBanner onSubmit={handleEmailSubmit} />
+            <BeehiivBanner />
           </aside>
         </div>
       </main>

@@ -12,7 +12,7 @@ import { SubscribeModal } from "@/components/SubscribeModal";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { RelatedFacts } from "@/components/RelatedFacts";
-import { EmailSignupBanner } from "@/components/EmailSignupBanner";
+import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
@@ -263,7 +263,7 @@ export default function SingleFactPage() {
             <div className="sidebar-bottom-row">
               <RelatedFacts />
               <div className="email-banner-wrapper">
-                <EmailSignupBanner onSubmit={(email) => handleEmailSubmit(email, "single-fact-page")} />
+                <BeehiivBanner />
               </div>
             </div>
           </div>
