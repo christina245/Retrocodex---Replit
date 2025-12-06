@@ -166,9 +166,15 @@ export default function LifeSciencesPage() {
     });
   };
 
+  const filteredFacts = selectedFilters.length > 0
+    ? allLifeSciencesFacts.filter(fact => 
+        fact.tags && fact.tags.some(tag => selectedFilters.includes(tag))
+      )
+    : allLifeSciencesFacts;
+
   const displayedFacts = activeTab === "featured" 
-    ? allLifeSciencesFacts 
-    : [...allLifeSciencesFacts].sort((a, b) => {
+    ? filteredFacts 
+    : [...filteredFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });

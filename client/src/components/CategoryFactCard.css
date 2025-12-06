@@ -27,19 +27,31 @@
 
 .category-fact-header {
   height: 35px;
-  background: var(--card-category-color);
-  opacity: 0.3;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 0 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
   flex-shrink: 0;
+}
+
+.category-fact-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--card-category-color);
+  opacity: 0.3;
+  z-index: 0;
 }
 
 .category-fact-tags {
   display: flex;
   gap: 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .category-fact-tag {
@@ -48,8 +60,8 @@
   font-weight: 300;
   color: white;
   background: #2C2C2C;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 7px 10px;
+  border-radius: 40px;
   white-space: nowrap;
 }
 
