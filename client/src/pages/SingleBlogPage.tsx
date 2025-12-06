@@ -167,78 +167,80 @@ export default function SingleBlogPage() {
 
       <article className="single-blog-main">
         <div className="article-hero-section">
-          <div className="article-title-container">
-            <h1 className="article-title" data-testid="text-title">{post.title}</h1>
-          </div>
-
-          {post.coverImage && (
-            <div className="article-image-wrapper">
-              <div className="article-image-container">
-                <img 
-                  src={post.coverImage} 
-                  alt={post.title} 
-                  className="article-hero-image"
-                  data-testid="img-hero"
-                />
+          <div className="article-hero-grid">
+            <div className="article-hero-text">
+              <span className="article-label">ARTICLE</span>
+              <h1 className="article-title" data-testid="text-title">{post.title}</h1>
+              <p className="article-summary" data-testid="text-summary">{post.summary}</p>
+              <div className="article-meta-row">
+                <span className="article-date" data-testid="text-date">
+                  <Calendar size={14} />
+                  {formatDate(post.publishedAt)}
+                </span>
+                <span className="article-author" data-testid="text-author">
+                  <span className="author-prefix">Author:</span>
+                  <img 
+                    src={post.authorPhoto || adminAvatar} 
+                    alt={post.authorName || "Retrocodex Admin"} 
+                    className="article-author-avatar"
+                  />
+                  {post.authorLink ? (
+                    <a 
+                      href={post.authorLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="article-author-link"
+                    >
+                      {post.authorName || "Retrocodex Admin"}
+                    </a>
+                  ) : (
+                    post.authorName || "Retrocodex Admin"
+                  )}
+                </span>
               </div>
-              {post.coverImageCaption && (
-                <p className="article-image-caption">{post.coverImageCaption}</p>
-              )}
+              <div className="article-actions">
+                <button 
+                  className="article-action-button"
+                  onClick={scrollToComments}
+                  data-testid="button-comment-article"
+                >
+                  <MessageCircle size={16} />
+                  <span>0 comments</span>
+                </button>
+                <button 
+                  className="article-action-button"
+                  onClick={() => setIsSaveModalOpen(true)}
+                  data-testid="button-save-article"
+                >
+                  <Bookmark size={16} />
+                  <span>Save</span>
+                </button>
+                <button 
+                  className="article-action-button"
+                  onClick={() => setIsShareModalOpen(true)}
+                  data-testid="button-share-article"
+                >
+                  <Share2 size={16} />
+                  <span>Share</span>
+                </button>
+              </div>
             </div>
-          )}
-          
-          <div className="article-meta-row">
-            <div className="article-date-author">
-              <span className="article-date" data-testid="text-date">
-                <Calendar size={14} />
-                {formatDate(post.publishedAt)}
-              </span>
-              <span className="article-author" data-testid="text-author">
-                <img 
-                  src={post.authorPhoto || adminAvatar} 
-                  alt={post.authorName || "Retrocodex Admin"} 
-                  className="article-author-avatar"
-                />
-                {post.authorLink ? (
-                  <a 
-                    href={post.authorLink} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="article-author-link"
-                  >
-                    {post.authorName || "Retrocodex Admin"}
-                  </a>
-                ) : (
-                  post.authorName || "Retrocodex Admin"
+
+            {post.coverImage && (
+              <div className="article-hero-image-wrapper">
+                <div className="article-image-container">
+                  <img 
+                    src={post.coverImage} 
+                    alt={post.title} 
+                    className="article-hero-image"
+                    data-testid="img-hero"
+                  />
+                </div>
+                {post.coverImageCaption && (
+                  <p className="article-image-caption">{post.coverImageCaption}</p>
                 )}
-              </span>
-            </div>
-            <div className="article-actions">
-              <button 
-                className="article-action-button"
-                onClick={scrollToComments}
-                data-testid="button-comment-article"
-              >
-                <MessageCircle size={16} />
-                <span>0 comments</span>
-              </button>
-              <button 
-                className="article-action-button"
-                onClick={() => setIsSaveModalOpen(true)}
-                data-testid="button-save-article"
-              >
-                <Bookmark size={16} />
-                <span>Save</span>
-              </button>
-              <button 
-                className="article-action-button"
-                onClick={() => setIsShareModalOpen(true)}
-                data-testid="button-share-article"
-              >
-                <Share2 size={16} />
-                <span>Share</span>
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         </div>
 
