@@ -57,10 +57,11 @@
 .category-fact-tag {
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 200;
+  letter-spacing: 0.02em;
   color: white;
   background: #2C2C2C;
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 30px;
   white-space: nowrap;
 }

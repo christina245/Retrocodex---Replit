@@ -22,8 +22,8 @@ import photoLearning from "@assets/stock_images/people studying.png";
 const socialSciencesFacts: CategoryFact[] = [
   {
     id: "learning-styles",
-    myth: '"People have different learning styles, such as being a visual or auditory learner."',
-    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention.",
+    myth: "People have different learning styles, such as being a visual or auditory learner.",
+    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. These preferences do not significantly influence overall learning outcomes or retention.",
     tags: [],
     dateAdded: "2025-11-08",
     coverPhoto: photoLearning,
@@ -31,7 +31,7 @@ const socialSciencesFacts: CategoryFact[] = [
   }
 ];
 
-const CATEGORY_COLOR = "#9B51E0";
+const CATEGORY_COLOR = "#EB02C8";
 
 export default function SocialSciencesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -25,7 +25,7 @@ import photoColds from "@assets/catching a cold_1764363998621.png";
 const everydayLifeFacts: CategoryFact[] = [
   {
     id: "gum-seven-years",
-    myth: '"If you swallow gum, it\'ll stay in your stomach for seven years."',
+    myth: "If you swallow gum, it\'ll stay in your stomach for seven years.",
     truth: "Gum won't stay inside your body if swallowed. However, it can't be digested like other foods, so it passes through waste intact rather than broken down.",
     tags: [],
     dateAdded: "2025-11-25",
@@ -35,7 +35,7 @@ const everydayLifeFacts: CategoryFact[] = [
   },
   {
     id: "swallow-spiders",
-    myth: '"Humans swallow an average of 8 spiders in their sleep every year."',
+    myth: "Humans swallow an average of 8 spiders in their sleep every year.",
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
     tags: [],
     dateAdded: "2025-11-18",
@@ -45,7 +45,7 @@ const everydayLifeFacts: CategoryFact[] = [
   },
   {
     id: "sugar-hyper",
-    myth: '"Too much sugar makes kids hyper."',
+    myth: "Eating too much sugar makes kids hyper.",
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
     tags: [],
     dateAdded: "2025-11-05",
@@ -55,9 +55,9 @@ const everydayLifeFacts: CategoryFact[] = [
   },
   {
     id: "colds-from-cold",
-    myth: '"You catch colds from being cold."',
+    myth: "You catch colds from being cold.",
     truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
-    tags: [],
+    tags: ["Partially true"],
     dateAdded: "2025-11-24",
     link: "/fact/colds-from-cold",
     coverPhoto: photoColds,

@@ -22,7 +22,7 @@ import photoGenderBrains from "@assets/stock_images/men vs women.png";
 const genderSexualityFacts: CategoryFact[] = [
   {
     id: "gender-brains",
-    myth: '"Men and women have very different brains."',
+    myth: "Men and women have very different brains.",
     truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
     tags: [],
     dateAdded: "2025-11-21",
@@ -31,7 +31,7 @@ const genderSexualityFacts: CategoryFact[] = [
   }
 ];
 
-const CATEGORY_COLOR = "#FC5AA8";
+const CATEGORY_COLOR = "#FF88AA";
 
 export default function GenderSexualityPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
