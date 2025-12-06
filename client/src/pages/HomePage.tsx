@@ -9,7 +9,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { TabSelector } from "@/components/TabSelector";
 import { FactCard, type Fact } from "@/components/FactCard";
 import { FactKey } from "@/components/FactKey";
-import { EmailSignupBanner } from "@/components/EmailSignupBanner";
+import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
@@ -224,9 +224,7 @@ export default function HomePage() {
             </div>
 
             <aside className="sidebar">
-              <EmailSignupBanner 
-                onSubmit={(email) => handleEmailSubmit(email, "signup-banner")} 
-              />
+              <BeehiivBanner />
             </aside>
           </div>
         </div>
