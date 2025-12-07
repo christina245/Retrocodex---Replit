@@ -27,6 +27,7 @@ import { ArticleShareModal } from "@/components/ArticleShareModal";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { BlogPost } from "@shared/schema";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
+import loadingLogoLight from "@assets/white_flat_logo_1765095431508.png";
 import "./SingleBlogPage.css";
 
 const getCategoryIcon = (category: string): LucideIcon => {
@@ -131,7 +132,12 @@ export default function SingleBlogPage() {
         <Header onMenuClick={() => setIsMenuOpen(true)} />
         <main className="single-blog-main">
           <div className="loading-container">
-            <p>Loading article...</p>
+            <img 
+              src={loadingLogoLight} 
+              alt="" 
+              className="loading-logo"
+              data-testid="img-loading-logo"
+            />
           </div>
         </main>
         <Footer />

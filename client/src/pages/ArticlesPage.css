@@ -91,10 +91,20 @@
   padding: 0 50px;
 }
 
-.loading-state p {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 16px;
-  color: #878787;
+.loading-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  animation: pulse-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-loading {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .empty-state-image {

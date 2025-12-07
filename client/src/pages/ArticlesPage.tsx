@@ -17,6 +17,7 @@ import { Footer } from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
 import { BlogPost } from "@shared/schema";
 import workInProgressImage from "@assets/No articles found (yet)._1764112278730.png";
+import loadingLogoLight from "@assets/white_flat_logo_1765095431508.png";
 import "./ArticlesPage.css";
 
 const CATEGORY_OPTIONS = [
@@ -181,7 +182,12 @@ export default function ArticlesPage() {
 
         {isLoading ? (
           <div className="loading-state" data-testid="loading-state">
-            <p>Loading articles...</p>
+            <img 
+              src={loadingLogoLight} 
+              alt="" 
+              className="loading-logo"
+              data-testid="img-loading-logo"
+            />
           </div>
         ) : hasArticles ? (
           <div className="articles-grid" data-testid="articles-grid">

@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { BlogPost } from "@shared/schema";
 import thanksgivingPhoto from "@assets/thanksgiving myths stock photo_1763852604175.jpg";
+import loadingLogoDark from "@assets/inverted_logo_1765095605820.png";
 import "./HeroSection.css";
 
 export function HeroSection() {
@@ -24,7 +25,14 @@ export function HeroSection() {
     return (
       <section className="hero-section">
         <div className="hero-container" data-testid="hero-container">
-          <div className="hero-loading">Loading featured article...</div>
+          <div className="hero-loading">
+            <img 
+              src={loadingLogoDark} 
+              alt="" 
+              className="hero-loading-logo"
+              data-testid="img-loading-logo"
+            />
+          </div>
         </div>
       </section>
     );
