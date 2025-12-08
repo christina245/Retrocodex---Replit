@@ -118,7 +118,7 @@
   font-size: 15px;
   font-weight: 400;
   color: #2C2C2C;
-  line-height: 1.6;
+  line-height: 1.9;
   margin: 0 0 24px 0;
 }
 
@@ -164,7 +164,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 80px;
 }
 
 .article-action-button {
@@ -177,13 +177,13 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   cursor: pointer;
-  padding: 6px 8px;
-  border-radius: 4px;
+  padding: 8px 5px;
+  border-radius: 10px;
   transition: all 0.2s;
 }
 
 .article-action-button:hover {
-  color: #2C2C2C;
+  color: #FF5353;
   background: #f5f5f5;
 }
 
@@ -408,7 +408,7 @@
   align-self: start;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 3px;
 }
 
 .sidebar-section {
