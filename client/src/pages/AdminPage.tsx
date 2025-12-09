@@ -636,10 +636,9 @@ export default function AdminPage() {
       // Invalidate facts query to refresh the list
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
       
-      // Reset form for new entries
-      if (!editingFactId) {
-        resetForm();
-      }
+      // Reset form and redirect to View Facts page
+      resetForm();
+      setCurrentView('view-facts');
     } catch (error) {
       setSubmitMessage(error instanceof Error ? error.message : `Failed to ${editingFactId ? 'update' : 'create'} fact`);
     } finally {
