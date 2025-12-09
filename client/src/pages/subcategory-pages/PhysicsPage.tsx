@@ -35,7 +35,7 @@ export default function PhysicsPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.categories.includes("Physics"))
+      .filter(fact => fact.subcategory === "Physics")
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

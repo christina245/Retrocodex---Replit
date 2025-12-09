@@ -35,7 +35,7 @@ export default function AstronomyPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.categories.includes("Astronomy"))
+      .filter(fact => fact.subcategory === "Astronomy")
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

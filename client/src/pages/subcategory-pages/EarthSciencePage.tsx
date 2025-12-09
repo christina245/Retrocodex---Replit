@@ -35,7 +35,7 @@ export default function EarthSciencePage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.categories.includes("Earth Science"))
+      .filter(fact => fact.subcategory === "Earth Science")
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

@@ -46,7 +46,7 @@ export default function LinguisticsPage() {
 
   const databaseFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.categories.includes("Linguistics"))
+      .filter(fact => fact.subcategory === "Linguistics")
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

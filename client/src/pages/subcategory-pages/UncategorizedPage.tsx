@@ -35,7 +35,7 @@ export default function UncategorizedPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.categories.includes("Uncategorized"))
+      .filter(fact => fact.subcategory === "Uncategorized")
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,
