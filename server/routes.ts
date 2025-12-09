@@ -6,25 +6,11 @@ import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
-// Configure multer for file uploads
-const uploadStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(process.cwd(), "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, `${uniqueSuffix}${ext}`);
-  },
-});
-
+// Configure multer for memory storage (for Object Storage uploads)
 const upload = multer({
-  storage: uploadStorage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|svg|webp/;
@@ -98,21 +84,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // POST /api/uploads - Upload a file (password protected)
+  // POST /api/uploads - Upload a file to Object Storage (password protected)
   app.post("/api/uploads", requireAuth, upload.single("file"), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "No file uploaded" });
       }
-      const fileUrl = `/uploads/${req.file.filename}`;
-      res.json({ url: fileUrl });
+      const objectStorageService = new ObjectStorageService();
+      const objectPath = await objectStorageService.uploadBuffer(
+        req.file.buffer,
+        req.file.originalname,
+        req.file.mimetype
+      );
+      res.json({ url: objectPath });
     } catch (error) {
       console.error("Error uploading file:", error);
       res.status(500).json({ message: "Failed to upload file" });
     }
   });
 
-  // Serve uploaded files statically
+  // Serve files from Object Storage
+  app.get("/objects/:objectPath(*)", async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+      objectStorageService.downloadObject(objectFile, res);
+    } catch (error) {
+      console.error("Error serving object:", error);
+      if (error instanceof ObjectNotFoundError) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(500);
+    }
+  });
+
+  // Keep legacy /uploads route for backwards compatibility with existing data
   app.use("/uploads", (await import("express")).static(path.join(process.cwd(), "uploads")));
 
   // POST /api/facts - Create a new fact (password protected)
