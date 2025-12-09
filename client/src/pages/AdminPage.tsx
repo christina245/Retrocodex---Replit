@@ -77,6 +77,8 @@ export default function AdminPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [subcategory, setSubcategory] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [searchTags, setSearchTags] = useState<string[]>([]);
+  const [searchTagInput, setSearchTagInput] = useState("");
   const [featured, setFeatured] = useState(false);
   const [betaOnly, setBetaOnly] = useState(false);
   const [mythHeader, setMythHeader] = useState("");
@@ -165,6 +167,8 @@ export default function AdminPage() {
     setSelectedCategories([]);
     setSubcategory("");
     setSelectedTags([]);
+    setSearchTags([]);
+    setSearchTagInput("");
     setFeatured(false);
     setBetaOnly(false);
     setMythHeader("");
@@ -371,6 +375,8 @@ export default function AdminPage() {
     setSelectedCategories(fact.categories);
     setSubcategory(fact.subcategory || "");
     setSelectedTags(fact.tags || []);
+    setSearchTags(fact.searchTags || []);
+    setSearchTagInput("");
     setFeatured(fact.featured || false);
     setBetaOnly(fact.betaOnly || false);
     setMythHeader(fact.mythHeader);
@@ -601,6 +607,7 @@ export default function AdminPage() {
       categories: selectedCategories,
       subcategory: selectedCategories.includes("Other") ? subcategory : undefined,
       tags: selectedTags,
+      searchTags,
       featured,
       betaOnly,
       mythHeader,
@@ -918,6 +925,44 @@ export default function AdminPage() {
                         <span>{tag}</span>
                       </label>
                     ))}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Search Tags</label>
+                  <p className="form-hint">Press Enter to add tags. These help users find facts via search.</p>
+                  <div className="search-tags-container">
+                    <div className="search-tags-chips">
+                      {searchTags.map((tag) => (
+                        <span 
+                          key={tag} 
+                          className="search-tag-chip"
+                          onClick={() => setSearchTags(searchTags.filter(t => t !== tag))}
+                          data-testid={`search-tag-${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                          {tag}
+                          <X size={14} />
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      value={searchTagInput}
+                      onChange={(e) => setSearchTagInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const trimmedTag = searchTagInput.trim();
+                          if (trimmedTag && !searchTags.includes(trimmedTag)) {
+                            setSearchTags([...searchTags, trimmedTag]);
+                            setSearchTagInput("");
+                          }
+                        }
+                      }}
+                      className="form-input search-tag-input"
+                      placeholder="Type a tag and press Enter..."
+                      data-testid="input-search-tags"
+                    />
                   </div>
                 </div>
 

@@ -1300,3 +1300,47 @@
     height: 160px;
   }
 }
+
+/* Search Tags */
+.search-tags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.search-tags-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.search-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: #FF5353;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.search-tag-chip:hover {
+  background: #e64a4a;
+  transform: scale(1.02);
+}
+
+.search-tag-chip svg {
+  opacity: 0.8;
+}
+
+.search-tag-chip:hover svg {
+  opacity: 1;
+}
+
+.search-tag-input {
+  flex: 1;
+}
