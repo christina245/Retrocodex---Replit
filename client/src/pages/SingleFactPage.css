@@ -180,12 +180,14 @@
 }
 
 .sidebar-top-row .fact-tags {
-  flex-shrink: 0;
+  flex: 0 0 clamp(200px, 16vw, 240px);
   align-self: flex-start;
+  box-sizing: border-box;
 }
 
 .sidebar-top-row .related-facts {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   height: auto;
 }
 
