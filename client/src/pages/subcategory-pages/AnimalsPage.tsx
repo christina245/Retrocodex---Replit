@@ -25,7 +25,7 @@ const animalsFacts: CategoryFact[] = [
     id: "dinosaurs-scaly",
     myth: "Dinosaurs were all scaly reptiles.",
     truth: "Many dinosaurs, especially theropods, had feathers. Fossil evidence shows that feathers evolved long before flight and were likely used for insulation, display, or camouflage.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-12-01",
     coverPhoto: photoDinosaurs,
     betaOnly: true
@@ -54,7 +54,7 @@ export default function AnimalsPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,

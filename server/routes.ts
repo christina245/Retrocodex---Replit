@@ -159,14 +159,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/facts/by-tag/:tag - Get facts by tag (public)
+  // GET /api/facts/by-tag/:tag - Get facts by searchTags (public)
   app.get("/api/facts/by-tag/:tag", async (req, res) => {
     try {
       const tagSlug = req.params.tag;
       const tagName = tagSlug.replace(/-/g, ' ');
       const allFacts = await storage.getAllFacts();
       const matchingFacts = allFacts.filter(fact => 
-        fact.tags && fact.tags.some(t => 
+        fact.searchTags && fact.searchTags.some(t => 
           t.toLowerCase() === tagName.toLowerCase() || 
           t.toLowerCase().replace(/\s+/g, '-') === tagSlug.toLowerCase()
         )

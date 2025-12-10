@@ -29,7 +29,7 @@ const lifeSciencesFacts: CategoryFact[] = [
     id: "brain-10-percent",
     myth: "You only use 10% of your brain.",
     truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-10-22",
     link: "/fact/brain-10-percent",
     coverPhoto: photoBrain
@@ -38,7 +38,7 @@ const lifeSciencesFacts: CategoryFact[] = [
     id: "dinosaurs-scaly",
     myth: "Dinosaurs were all scaly reptiles.",
     truth: "Fossil evidence shows that some dinosaurs, especially those related to birds, had feathers or feather-like coverings.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-20",
     coverPhoto: photoDinosaurs,
     betaOnly: true
@@ -47,7 +47,7 @@ const lifeSciencesFacts: CategoryFact[] = [
     id: "blood-blue",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
     truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-15",
     coverPhoto: photoBlood,
     betaOnly: true
@@ -56,7 +56,7 @@ const lifeSciencesFacts: CategoryFact[] = [
     id: "five-senses",
     myth: "Humans only have 5 senses: sight, touch, taste, smell, and sound.",
     truth: "Neuroscientists believe we have up to 33 senses, such as proprioception, thermoception, kinaesthesia, and more.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-22",
     coverPhoto: photoSenses,
     betaOnly: true
@@ -65,7 +65,7 @@ const lifeSciencesFacts: CategoryFact[] = [
     id: "viruses-alive",
     myth: "Viruses, unlike bacteria, aren't alive.",
     truth: "It's still debated whether viruses are alive or not. Some recently discovered viruses carry genes similar to living beings.",
-    tags: ["Uncertain"],
+    factFilters: ["Uncertain"],
     dateAdded: "2025-11-23",
     coverPhoto: photoViruses,
     betaOnly: true
@@ -74,7 +74,7 @@ const lifeSciencesFacts: CategoryFact[] = [
     id: "colds-from-cold",
     myth: "You catch colds from being cold.",
     truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
-    tags: ["Partially true"],
+    factFilters: ["Partially true"],
     dateAdded: "2025-11-24",
     coverPhoto: photoColds,
     betaOnly: true
@@ -105,7 +105,7 @@ export default function LifeSciencesPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,
@@ -168,7 +168,7 @@ export default function LifeSciencesPage() {
 
   const filteredFacts = selectedFilters.length > 0
     ? allLifeSciencesFacts.filter(fact => 
-        fact.tags && fact.tags.some(tag => selectedFilters.includes(tag))
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
       )
     : allLifeSciencesFacts;
 

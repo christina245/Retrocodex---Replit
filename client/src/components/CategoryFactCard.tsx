@@ -8,7 +8,7 @@ export interface CategoryFact {
   id: string;
   myth: string;
   truth: string;
-  tags?: string[];
+  factFilters?: string[];
   link?: string;
   dateAdded?: string;
   coverPhoto?: string;
@@ -53,11 +53,11 @@ export function CategoryFactCard({
           data-testid={`card-fact-${fact.id}`}
         >
           <div className="category-fact-header">
-            {fact.tags && fact.tags.length > 0 && (
+            {fact.factFilters && fact.factFilters.length > 0 && (
               <div className="category-fact-tags">
-                {fact.tags.map((tag, index) => (
-                  <span key={index} className="category-fact-tag" data-testid={`tag-${tag.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {tag}
+                {fact.factFilters.map((filter, index) => (
+                  <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                    {filter}
                   </span>
                 ))}
               </div>

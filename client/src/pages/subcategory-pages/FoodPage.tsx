@@ -26,7 +26,7 @@ const foodFacts: CategoryFact[] = [
     id: "margarine-butter",
     myth: "Margarine is healthier than butter.",
     truth: "Not if they contain a significant amount of trans fats, which many of them do — particularly in stick form.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-12-01",
     coverPhoto: photoButter,
     betaOnly: true
@@ -35,7 +35,7 @@ const foodFacts: CategoryFact[] = [
     id: "food-pyramid",
     myth: "The Food Pyramid is the model for a healthy, balanced diet.",
     truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-01",
     coverPhoto: photoFoodPyramid,
     betaOnly: true
@@ -64,7 +64,7 @@ export default function FoodPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,

@@ -40,7 +40,7 @@ export default function BeautyPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,

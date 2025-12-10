@@ -23,7 +23,7 @@ const linguisticsFacts: CategoryFact[] = [
     id: "i-before-e",
     myth: "'I before E, except after C' is a reliable spelling rule.",
     truth: "This rule has so many exceptions that it's hardly reliable. Words like 'weird,' 'seize,' 'neither,' 'protein,' and 'science' all break the rule. Linguists estimate there are more exceptions than words that follow it.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-12-01",
     betaOnly: true
   }
@@ -51,7 +51,7 @@ export default function LinguisticsPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,

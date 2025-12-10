@@ -24,7 +24,7 @@ const genderSexualityFacts: CategoryFact[] = [
     id: "gender-brains",
     myth: "Men and women have very different brains.",
     truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-21",
     coverPhoto: photoGenderBrains,
     betaOnly: true
@@ -53,7 +53,7 @@ export default function GenderSexualityPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,

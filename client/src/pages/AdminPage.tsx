@@ -374,7 +374,7 @@ export default function AdminPage() {
     setCoverPhoto(fact.coverPhoto || "");
     setSelectedCategories(fact.categories);
     setSubcategory(fact.subcategory || "");
-    setSelectedTags(fact.tags || []);
+    setSelectedTags(fact.factFilters || []);
     setSearchTags(fact.searchTags || []);
     setSearchTagInput("");
     setFeatured(fact.featured || false);
@@ -606,7 +606,7 @@ export default function AdminPage() {
       coverPhoto: coverPhoto || undefined,
       categories: selectedCategories,
       subcategory: selectedCategories.includes("Other") ? subcategory : undefined,
-      tags: selectedTags,
+      factFilters: selectedTags,
       searchTags,
       featured,
       betaOnly,

@@ -24,7 +24,7 @@ const socialSciencesFacts: CategoryFact[] = [
     id: "learning-styles",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. These preferences do not significantly influence overall learning outcomes or retention.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-08",
     coverPhoto: photoLearning,
     betaOnly: true
@@ -53,7 +53,7 @@ export default function SocialSciencesPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,

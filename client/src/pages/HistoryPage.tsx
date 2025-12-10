@@ -29,7 +29,7 @@ const historyFacts: CategoryFact[] = [
     id: "columbus",
     myth: '"Christopher Columbus discovered North America in 1492."',
     truth: "Columbus only reached Central and South America where several indigenous tribes had already established distinctive civilizations.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-10-15",
     coverPhoto: photoColumbus,
     betaOnly: true
@@ -38,7 +38,7 @@ const historyFacts: CategoryFact[] = [
     id: "vikings-helmets",
     myth: '"Vikings usually wore horned helmets."',
     truth: "Archaeological evidence has yet to find a horned helmet originating in the Viking era. The horned helmets found originate in the Bronze Age, 2000 years before Vikings.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-20",
     coverPhoto: photoVikings,
     betaOnly: true
@@ -47,7 +47,7 @@ const historyFacts: CategoryFact[] = [
     id: "plymouth-rock",
     myth: '"The Pilgrims initially landed at Plymouth Rock in 1620."',
     truth: "There are no records of where they landed exactly.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-25",
     coverPhoto: photoPlymouth,
     betaOnly: true
@@ -56,7 +56,7 @@ const historyFacts: CategoryFact[] = [
     id: "thanksgiving-turkey",
     myth: '"Turkey was served at the First Thanksgiving meal in 1621."',
     truth: "The only bird on record was just 'fowl'. Turkeys were abundant at the time, so it was possible but not guaranteed. The association between turkey and Thanksgiving was actually popularized by a writer in the 19th century.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-26",
     coverPhoto: photoThanksgiving,
     betaOnly: true
@@ -65,7 +65,7 @@ const historyFacts: CategoryFact[] = [
     id: "marie-antoinette",
     myth: '"Marie Antoinette ignorantly said \'Let them eat cake\' regarding the French Revolution."',
     truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-24",
     coverPhoto: photoMarie,
     betaOnly: true
@@ -74,7 +74,7 @@ const historyFacts: CategoryFact[] = [
     id: "pilgrim-clothing",
     myth: '"The Pilgrims usually wore black clothes with big buckles."',
     truth: "They wore colorful clothing in everyday life. The black outfits they're typically depicted with were for formal, rarer occasions.",
-    tags: [],
+    factFilters: [],
     dateAdded: "2025-11-27",
     coverPhoto: photoPilgrim,
     betaOnly: true
@@ -105,7 +105,7 @@ export default function HistoryPage() {
         id: fact.id,
         myth: fact.mythHeader,
         truth: fact.truthHeader,
-        tags: fact.tags || [],
+        factFilters: fact.factFilters || [],
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,
