@@ -176,12 +176,11 @@
 .sidebar-top-row {
   display: flex;
   gap: 10px;
-  align-items: stretch;
+  align-items: flex-start;
 }
 
 .sidebar-top-row .fact-tags {
   flex: 0 0 clamp(195px, 16vw, 235px);
-  align-self: flex-start;
   box-sizing: border-box;
 }
 
@@ -193,5 +192,6 @@
 
 .email-banner-wrapper {
   width: 100%;
+  margin-top: 20px;
   overflow: visible;
 }

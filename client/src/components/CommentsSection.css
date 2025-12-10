@@ -1,5 +1,5 @@
 .comments-section {
-  margin-top: 5px;
+  margin-top: 0;
   padding-top: 0;
   max-width: 700px;
 }
@@ -23,6 +23,8 @@
   background: white;
   cursor: pointer;
   box-sizing: border-box;
+  vertical-align: top;
+  resize: none;
 }
 
 .comment-input::placeholder {
