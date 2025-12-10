@@ -41,4 +41,28 @@
   padding: 10px;
   border-radius: 5px;
   text-transform: lowercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.fact-tag-chip-clickable {
+  cursor: pointer;
+}
+
+.fact-tag-chip-clickable:hover {
+  background: #FF5353;
+}
+
+.fact-tag-chip-clickable:active {
+  background: #FF5353;
+}
+
+@media (hover: none) {
+  .fact-tag-chip-clickable:hover {
+    background: #2C2C2C;
+  }
+  
+  .fact-tag-chip-clickable:active {
+    background: #FF5353;
+  }
 }

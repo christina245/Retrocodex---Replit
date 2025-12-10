@@ -159,6 +159,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/facts/by-tag/:tag - Get facts by tag (public)
+  app.get("/api/facts/by-tag/:tag", async (req, res) => {
+    try {
+      const tagSlug = req.params.tag;
+      const tagName = tagSlug.replace(/-/g, ' ');
+      const allFacts = await storage.getAllFacts();
+      const matchingFacts = allFacts.filter(fact => 
+        fact.tags && fact.tags.some(t => 
+          t.toLowerCase() === tagName.toLowerCase() || 
+          t.toLowerCase().replace(/\s+/g, '-') === tagSlug.toLowerCase()
+        )
+      );
+      res.json(matchingFacts);
+    } catch (error) {
+      console.error("Error fetching facts by tag:", error);
+      res.status(500).json({ message: "Failed to fetch facts by tag" });
+    }
+  });
+
   // GET /api/facts/:slug - Get a fact by slug (public)
   app.get("/api/facts/:slug", async (req, res) => {
     try {

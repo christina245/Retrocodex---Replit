@@ -1,0 +1,143 @@
+.facts-by-tag-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.facts-by-tag-main-content {
+  flex: 1;
+  padding: 0 40px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.facts-by-tag-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 50px;
+  margin-top: 30px;
+}
+
+.facts-by-tag-header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.facts-by-tag-icon {
+  color: #2C2C2C;
+  flex-shrink: 0;
+}
+
+.facts-by-tag-intro-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.facts-by-tag-chip {
+  display: inline-block;
+  background: #2C2C2C;
+  color: #FFFFFF;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: lowercase;
+}
+
+.facts-by-tag-filter-container {
+  flex-shrink: 0;
+}
+
+.facts-by-tag-key-container {
+  margin-top: 20px;
+  width: 515px;
+}
+
+.facts-by-tag-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.facts-by-tag-content-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 50px;
+}
+
+.facts-by-tag-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.facts-by-tag-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+.facts-by-tag-loading,
+.facts-by-tag-empty {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  color: #878787;
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+}
+
+@media (max-width: 1200px) {
+  .facts-by-tag-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .facts-by-tag-key-container {
+    width: auto;
+    max-width: 515px;
+  }
+}
+
+@media (max-width: 900px) {
+  .facts-by-tag-header-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .facts-by-tag-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .facts-by-tag-content-container {
+    flex-direction: column;
+  }
+
+  .facts-by-tag-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .facts-by-tag-key-container {
+    display: none;
+  }
+
+  .facts-by-tag-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .facts-by-tag-main-content {
+    padding: 0 20px;
+  }
+
+  .facts-by-tag-intro-text {
+    font-size: 16px;
+  }
+}
