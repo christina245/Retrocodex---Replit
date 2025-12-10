@@ -347,7 +347,7 @@
 }
 
 /* Comments Section */
-.comments-section {
+.single-blog-page .comments-section {
   margin-top: 70px;
   padding-top: 40px;
   border-top: 1px solid #e5e5e5;
@@ -593,7 +593,7 @@
     font-size: 18px;
   }
   
-  .comments-section {
+  .single-blog-page .comments-section {
     margin-top: 50px;
     padding-top: 30px;
   }
