@@ -6,7 +6,8 @@
 
 .comment-input-container {
   cursor: pointer;
-  align-content: start;
+  margin: 0;
+  padding: 0;
 }
 
 .comment-input {

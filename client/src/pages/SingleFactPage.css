@@ -155,6 +155,7 @@
   grid-template-columns: 5fr 3fr;
   gap: 1rem;
   margin-top: 0;
+  align-items: start;
 }
 
 .comments-column {
@@ -192,6 +193,5 @@
 
 .email-banner-wrapper {
   width: 100%;
-  margin-top: 20px;
   overflow: visible;
 }
