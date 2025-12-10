@@ -13,6 +13,7 @@ import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { RelatedFacts } from "@/components/RelatedFacts";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
@@ -172,7 +173,8 @@ export default function SingleFactPage() {
       }
     ],
     addedDate: "Nov. 23, 2025",
-    updatedDate: null
+    updatedDate: null,
+    searchTags: ["neuroscience", "pseudoscience", "brain function", "neuromyths", "self-help", "productivity myths", "cognitive science"]
   };
 
   return (
@@ -260,8 +262,11 @@ export default function SingleFactPage() {
                 "I was taught the presently accurate version"
               ]}
             />
-            <div className="sidebar-bottom-row">
-              <RelatedFacts />
+            <div className="sidebar-bottom-section">
+              <div className="sidebar-top-row">
+                <FactTags tags={factData.searchTags} />
+                <RelatedFacts />
+              </div>
               <div className="email-banner-wrapper">
                 <BeehiivBanner />
               </div>

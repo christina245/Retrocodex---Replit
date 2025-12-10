@@ -167,17 +167,29 @@
   gap: 1rem;
 }
 
-.sidebar-bottom-row {
+.sidebar-bottom-section {
   display: flex;
-  gap: 10px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.sidebar-bottom-row .related-facts {
+.sidebar-top-row {
+  display: flex;
+  gap: 5px;
+  align-items: stretch;
+}
+
+.sidebar-top-row .fact-tags {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.sidebar-top-row .related-facts {
   flex: 1;
   height: auto;
 }
 
-.sidebar-bottom-row .email-banner-wrapper {
-  flex-shrink: 0;
+.email-banner-wrapper {
+  width: 100%;
+  overflow: visible;
 }

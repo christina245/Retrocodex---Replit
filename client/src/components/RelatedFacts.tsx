@@ -44,26 +44,30 @@ export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps)
     <div className="related-facts" data-testid="related-facts">
       <h3 className="related-facts-header">Related disproven facts</h3>
       <div className="related-facts-list">
-        {facts.map((fact) => (
-          <Link 
-            key={fact.id}
-            href={`/fact/${fact.id}`}
-            className="related-fact-item"
-            data-testid={`link-related-fact-${fact.id}`}
-          >
-            <div className="related-fact-image-container">
-              {fact.image ? (
-                <img 
-                  src={fact.image} 
-                  alt="" 
-                  className="related-fact-image"
-                />
-              ) : (
-                <div className="related-fact-image-placeholder" />
-              )}
-            </div>
-            <span className="related-fact-text">{fact.myth}</span>
-          </Link>
+        {facts.map((fact, index) => (
+          <div key={fact.id} className="related-fact-wrapper">
+            <Link 
+              href={`/fact/${fact.id}`}
+              className="related-fact-item"
+              data-testid={`link-related-fact-${fact.id}`}
+            >
+              <div className="related-fact-image-container">
+                {fact.image ? (
+                  <img 
+                    src={fact.image} 
+                    alt="" 
+                    className="related-fact-image"
+                  />
+                ) : (
+                  <div className="related-fact-image-placeholder" />
+                )}
+              </div>
+              <span className="related-fact-text">{fact.myth}</span>
+            </Link>
+            {index < facts.length - 1 && (
+              <div className="related-fact-separator" />
+            )}
+          </div>
         ))}
       </div>
     </div>
