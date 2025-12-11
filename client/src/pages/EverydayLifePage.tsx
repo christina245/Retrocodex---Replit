@@ -14,8 +14,11 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { Pagination } from "@/components/Pagination";
 import coverImage from "@assets/everyday life_1764573292477.png";
 import "./EverydayLifePage.css";
+
+const FACTS_PER_PAGE = 10;
 
 import photoGum from "@assets/chewing gum_1764576659258.png";
 import photoSpiders from "@assets/stock_images/plastic spiders.png";
@@ -73,6 +76,7 @@ export default function EverydayLifePage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -150,12 +154,36 @@ export default function EverydayLifePage() {
       });
   };
 
-  const displayedFacts = activeTab === "featured" 
+  // Sort facts based on active tab
+  const sortedFacts = activeTab === "featured" 
     ? allEverydayLifeFacts 
     : [...allEverydayLifeFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  // Apply filters
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredFacts.length / FACTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * FACTS_PER_PAGE;
+  const displayedFacts = filteredFacts.slice(startIndex, startIndex + FACTS_PER_PAGE);
+
+  // Reset to page 1 when filters or tab changes
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab: "featured" | "recent") => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="everyday-life-page">
@@ -184,11 +212,11 @@ export default function EverydayLifePage() {
 
         <div className="everyday-life-content-area">
           <div className="everyday-life-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="everyday-life-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
-                onFilterChange={setSelectedFilters} 
+                onFilterChange={handleFilterChange} 
               />
             </div>
             <div className="everyday-life-key-container">
@@ -197,18 +225,25 @@ export default function EverydayLifePage() {
           </div>
 
           <div className="everyday-life-content-container">
-            <div className="everyday-life-facts-grid">
-              {displayedFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor={CATEGORY_COLOR}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))}
+            <div className="everyday-life-facts-column">
+              <div className="everyday-life-facts-grid">
+                {displayedFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor={CATEGORY_COLOR}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))}
+              </div>
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
 
             <aside className="everyday-life-sidebar">

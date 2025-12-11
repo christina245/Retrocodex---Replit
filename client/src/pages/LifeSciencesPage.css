@@ -86,6 +86,11 @@
   gap: 1.5rem;
 }
 
+.life-sciences-facts-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .life-sciences-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);

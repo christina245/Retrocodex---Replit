@@ -86,6 +86,11 @@
   gap: 1.5rem;
 }
 
+.gender-sexuality-facts-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .gender-sexuality-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);

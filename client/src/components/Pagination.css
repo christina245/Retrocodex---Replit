@@ -1,0 +1,37 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.pagination-link {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #FF5353;
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.pagination-link:hover {
+  opacity: 0.7;
+}
+
+.pagination-link.active {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.pagination-ellipsis {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #FF5353;
+  padding: 8px 4px;
+}

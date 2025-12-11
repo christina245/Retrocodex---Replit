@@ -17,13 +17,12 @@ interface EmailSubscription {
 
 type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts";
 
-const AVAILABLE_TAGS = [
-  "Popular",
-  "Trending",
-  "New Discovery",
-  "Debunked",
-  "Partially True",
-  "Context Matters"
+const AVAILABLE_FACT_FILTERS = [
+  "Controversial",
+  "Regionally taught",
+  "Partially true",
+  "Official revision",
+  "Uncertain"
 ];
 
 function generateId(): string {
@@ -911,18 +910,18 @@ export default function AdminPage() {
                 )}
 
                 <div className="form-group">
-                  <label className="form-label">Tags</label>
+                  <label className="form-label">Fact Filters</label>
                   <div className="checkbox-group">
-                    {AVAILABLE_TAGS.map((tag) => (
-                      <label key={tag} className="checkbox-label">
+                    {AVAILABLE_FACT_FILTERS.map((filter) => (
+                      <label key={filter} className="checkbox-label">
                         <input
                           type="checkbox"
-                          checked={selectedTags.includes(tag)}
-                          onChange={(e) => handleTagChange(tag, e.target.checked)}
+                          checked={selectedTags.includes(filter)}
+                          onChange={(e) => handleTagChange(filter, e.target.checked)}
                           className="checkbox-input"
-                          data-testid={`checkbox-tag-${tag.toLowerCase().replace(/\s+/g, '-')}`}
+                          data-testid={`checkbox-filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}
                         />
-                        <span>{tag}</span>
+                        <span>{filter}</span>
                       </label>
                     ))}
                   </div>

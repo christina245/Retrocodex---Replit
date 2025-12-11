@@ -14,8 +14,11 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { Pagination } from "@/components/Pagination";
 import coliseumImage from "@assets/stock_images/history cover photo.png";
 import "./HistoryPage.css";
+
+const FACTS_PER_PAGE = 10;
 
 import photoColumbus from "@assets/stock_images/christopher columbus.png";
 import photoVikings from "@assets/stock_images/vikings.png";
@@ -89,6 +92,7 @@ export default function HistoryPage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -168,12 +172,36 @@ export default function HistoryPage() {
     });
   };
 
-  const displayedFacts = activeTab === "featured" 
+  // Sort facts based on active tab
+  const sortedFacts = activeTab === "featured" 
     ? allHistoryFacts 
     : [...allHistoryFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  // Apply filters
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredFacts.length / FACTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * FACTS_PER_PAGE;
+  const displayedFacts = filteredFacts.slice(startIndex, startIndex + FACTS_PER_PAGE);
+
+  // Reset to page 1 when filters or tab changes
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab: "featured" | "recent") => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="history-page">
@@ -206,11 +234,11 @@ export default function HistoryPage() {
 
         <div className="history-content-area">
           <div className="history-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="history-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
-                onFilterChange={setSelectedFilters} 
+                onFilterChange={handleFilterChange} 
               />
             </div>
             <div className="history-key-container">
@@ -219,18 +247,25 @@ export default function HistoryPage() {
           </div>
 
           <div className="history-content-container">
-            <div className="history-facts-grid">
-              {displayedFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor={CATEGORY_COLOR}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))}
+            <div className="history-facts-column">
+              <div className="history-facts-grid">
+                {displayedFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor={CATEGORY_COLOR}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))}
+              </div>
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
 
             <aside className="history-sidebar">

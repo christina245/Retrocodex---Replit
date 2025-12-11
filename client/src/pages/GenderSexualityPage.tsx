@@ -14,8 +14,11 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { Pagination } from "@/components/Pagination";
 import coverImage from "@assets/gender_and_sexuality_(1)_1764810626965.png";
 import "./GenderSexualityPage.css";
+
+const FACTS_PER_PAGE = 10;
 
 import photoGenderBrains from "@assets/stock_images/men vs women.png";
 
@@ -39,6 +42,7 @@ export default function GenderSexualityPage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -113,12 +117,36 @@ export default function GenderSexualityPage() {
     });
   };
 
-  const displayedFacts = activeTab === "featured" 
+  // Sort facts based on active tab
+  const sortedFacts = activeTab === "featured" 
     ? allGenderFacts 
     : [...allGenderFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  // Apply filters
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredFacts.length / FACTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * FACTS_PER_PAGE;
+  const displayedFacts = filteredFacts.slice(startIndex, startIndex + FACTS_PER_PAGE);
+
+  // Reset to page 1 when filters or tab changes
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab: "featured" | "recent") => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="gender-sexuality-page">
@@ -147,11 +175,11 @@ export default function GenderSexualityPage() {
 
         <div className="gender-sexuality-content-area">
           <div className="gender-sexuality-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="gender-sexuality-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
-                onFilterChange={setSelectedFilters} 
+                onFilterChange={handleFilterChange} 
               />
             </div>
             <div className="gender-sexuality-key-container">
@@ -160,18 +188,25 @@ export default function GenderSexualityPage() {
           </div>
 
           <div className="gender-sexuality-content-container">
-            <div className="gender-sexuality-facts-grid">
-              {displayedFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor={CATEGORY_COLOR}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))}
+            <div className="gender-sexuality-facts-column">
+              <div className="gender-sexuality-facts-grid">
+                {displayedFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor={CATEGORY_COLOR}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))}
+              </div>
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
 
             <aside className="gender-sexuality-sidebar">

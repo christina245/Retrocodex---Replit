@@ -14,8 +14,11 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { Pagination } from "@/components/Pagination";
 import coverImage from "@assets/life sciences_1764363998621.png";
 import "./LifeSciencesPage.css";
+
+const FACTS_PER_PAGE = 10;
 
 import photoBrain from "@assets/stock_images/neon brain.png";
 import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
@@ -25,60 +28,8 @@ import photoViruses from "@assets/viruses_1764363998620.png";
 import photoColds from "@assets/catching a cold_1764363998621.png";
 
 const lifeSciencesFacts: CategoryFact[] = [
-  {
-    id: "brain-10-percent",
-    myth: "You only use 10% of your brain.",
-    truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
-    factFilters: [],
-    dateAdded: "2025-10-22",
-    link: "/fact/brain-10-percent",
-    coverPhoto: photoBrain
-  },
-  {
-    id: "dinosaurs-scaly",
-    myth: "Dinosaurs were all scaly reptiles.",
-    truth: "Fossil evidence shows that some dinosaurs, especially those related to birds, had feathers or feather-like coverings.",
-    factFilters: [],
-    dateAdded: "2025-11-20",
-    coverPhoto: photoDinosaurs,
-    betaOnly: true
-  },
-  {
-    id: "blood-blue",
-    myth: "Human blood is actually blue until it comes into contact with oxygen.",
-    truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
-    factFilters: [],
-    dateAdded: "2025-11-15",
-    coverPhoto: photoBlood,
-    betaOnly: true
-  },
-  {
-    id: "five-senses",
-    myth: "Humans only have 5 senses: sight, touch, taste, smell, and sound.",
-    truth: "Neuroscientists believe we have up to 33 senses, such as proprioception, thermoception, kinaesthesia, and more.",
-    factFilters: [],
-    dateAdded: "2025-11-22",
-    coverPhoto: photoSenses,
-    betaOnly: true
-  },
-  {
-    id: "viruses-alive",
-    myth: "Viruses, unlike bacteria, aren't alive.",
-    truth: "It's still debated whether viruses are alive or not. Some recently discovered viruses carry genes similar to living beings.",
-    factFilters: ["Uncertain"],
-    dateAdded: "2025-11-23",
-    coverPhoto: photoViruses,
-    betaOnly: true
-  },
-  {
-    id: "colds-from-cold",
-    myth: "You catch colds from being cold.",
-    truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
-    factFilters: ["Partially true"],
-    dateAdded: "2025-11-24",
-    coverPhoto: photoColds,
-    betaOnly: true
-  }
+
+  
 ];
 
 const CATEGORY_COLOR = "#6FCF97";
@@ -89,6 +40,7 @@ export default function LifeSciencesPage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -166,18 +118,36 @@ export default function LifeSciencesPage() {
     });
   };
 
-  const filteredFacts = selectedFilters.length > 0
-    ? allLifeSciencesFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
-      )
-    : allLifeSciencesFacts;
-
-  const displayedFacts = activeTab === "featured" 
-    ? filteredFacts 
-    : [...filteredFacts].sort((a, b) => {
+  // Sort facts based on active tab
+  const sortedFacts = activeTab === "featured" 
+    ? allLifeSciencesFacts 
+    : [...allLifeSciencesFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  // Apply filters
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredFacts.length / FACTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * FACTS_PER_PAGE;
+  const displayedFacts = filteredFacts.slice(startIndex, startIndex + FACTS_PER_PAGE);
+
+  // Reset to page 1 when filters or tab changes
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+    setCurrentPage(1);
+  };
+
+  const handleTabChange = (tab: "featured" | "recent") => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="life-sciences-page">
@@ -206,11 +176,11 @@ export default function LifeSciencesPage() {
 
         <div className="life-sciences-content-area">
           <div className="life-sciences-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="life-sciences-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
-                onFilterChange={setSelectedFilters} 
+                onFilterChange={handleFilterChange} 
               />
             </div>
             <div className="life-sciences-key-container">
@@ -219,18 +189,25 @@ export default function LifeSciencesPage() {
           </div>
 
           <div className="life-sciences-content-container">
-            <div className="life-sciences-facts-grid">
-              {displayedFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor={CATEGORY_COLOR}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))}
+            <div className="life-sciences-facts-column">
+              <div className="life-sciences-facts-grid">
+                {displayedFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor={CATEGORY_COLOR}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))}
+              </div>
+              <Pagination 
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
 
             <aside className="life-sciences-sidebar">

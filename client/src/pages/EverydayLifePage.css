@@ -86,6 +86,11 @@
   gap: 1.5rem;
 }
 
+.everyday-life-facts-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .everyday-life-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);
