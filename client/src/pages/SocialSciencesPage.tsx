@@ -157,11 +157,12 @@ export default function SocialSciencesPage() {
       <main className="social-sciences-main-content">
         <div className="social-sciences-intro-row">
           <div className="social-sciences-description">
+            <p><b>The way humans work isn't as simple as we were taught growing up.</b></p>
             <p>
-              Many social science misconceptions come from psychology—fields where early research, catchy headlines, and simplified classroom diagrams often hardened into "truths." Ideas like the strict left-brain/right-brain divide or the notion that depression is merely a choice gained traction because they were easy to visualize, easy to repeat, and easy for media and pop culture to package. But as research progressed, these explanations proved far more complex and nuanced than the versions that entered everyday conversation.
+              Daily human interaction made it easy for assumptions to become accepted as fact, with certain phrases being socially ingrained by pop psychology and media even when after they were scientifically debunked.
             </p>
             <p>
-              This section uncovers where these myths originated, why they spread so widely, and what modern science actually tells us. Some were born from outdated experiments, others from misunderstandings of scientific terminology, and many from well-intentioned attempts to make human behavior feel predictable.
+              Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or assumptions based off limited personal experiences and the intuitive expectations that followed.
             </p>
           </div>
           <div className="social-sciences-photo">

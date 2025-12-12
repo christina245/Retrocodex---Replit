@@ -212,15 +212,13 @@ export default function HistoryPage() {
       <main className="history-main-content">
         <div className="history-intro-row">
           <div className="history-description">
+            <p><b>Your school history lessons might have left out certain critical perspectives. </b></p>
             <p>
-              Some historical facts are totally false, misunderstood, or just outdated. 
-              Historical knowledge is always changing as new evidence emerges, new methods 
-              of analysis develop, and previously overlooked voices finally become heard.
+              What we know about history is always evolving as new archaelogical records surface, modern analytical tools reinterpret old texts, and previously overlooked, marginalized voices finally become heard.
             </p>
             <p>
-              History lessons vary by region and culture. You may have been taught the same 
-              historical events from a different perspective compared to folks from other 
-              parts of the world, adding even more nuance to what we know now.
+             The media further exacerbated historical inaccuracies with its exaggerated or inaccurate portrayals of several societies. Throughout the world, the same events may be taught differently through culturally biased lenses serving regional interests rather than the full picture. When those perspectives collide with current scholarship, the story becomes more complex, yet more accurate.
+
             </p>
           </div>
           <div className="history-photo">

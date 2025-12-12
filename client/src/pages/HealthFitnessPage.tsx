@@ -157,11 +157,12 @@ export default function HealthFitnessPage() {
       <main className="health-fitness-main-content">
         <div className="health-fitness-intro-row">
           <div className="health-fitness-description">
+            <p><b>You might be more likely to reach your fitness goals when you stop carrying the weight of debunked quick-fix promises.</b></p>
             <p>
-              For many people who grew up in the 80s, 90s, and 2000s, health and fitness advice came from a mix of gym folklore, glossy magazine spreads, government food charts, and diet trends promoted by brands with something to sell. Early wellness marketing often turned oversimplified ideas into universal "rules," pushing strict step counts, rigid hydration targets, and one-size-fits-all approaches to eating.
+              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science. Popular media purposely kept readers hooked by publishing clickbait-like content about fat loss, muscle growth, stretching, weightlifting, and more that weren't fully scientifically accurate and thus effective. 
             </p>
             <p>
-              Gym culture layered on its own set of misconceptions about stretching, soreness, sweating, and how the body builds or loses muscle. Many myths spread because they made intuitive sense, or because they promised quick fixes like targeted fat loss or rapid detoxing. Others grew out of misunderstood studies, conservative medical advice, or consumer trends that rewarded catchy soundbites over nuance. And because these messages were repeated by teachers, parents, trainers, and ads across the world, they became deeply ingrained — even when they were based on outdated or incomplete science.
+              These oversimplified rules such as step counts, hydration quotas, universal meal plans spread as they kept promising results. However, the journey towards your fittest, healthiest self is far more complex than any single diet or exercise plan. 
             </p>
           </div>
           <div className="health-fitness-photo">

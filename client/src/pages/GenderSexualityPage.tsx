@@ -158,10 +158,11 @@ export default function GenderSexualityPage() {
         <div className="gender-sexuality-intro-row">
           <div className="gender-sexuality-description">
             <p>
-              Many myths—like the idea that "men and women have very different brains"—took hold long before modern neuroscience existed. Early researchers often interpreted small, inconsistent findings through the lens of their own cultural expectations, reinforcing stereotypes rather than challenging them. These misconceptions were amplified by centuries of sexism, attempts to justify rigid gender roles, and pop-science articles that overstated weak or misrepresented data. Today, we know that brain differences within each gender are far larger than differences between genders, and that human behavior is shaped by biology, culture, and lived experience—not simplistic binaries.
+              <b>Gender and sexuality have never been as binary as what many of us would like to believe.</b></p>
+              <p> Throughout history, views on gender and sexuality were often formed through prejudice, rigid social norms, superficial assumptions, or the attempt to reinforce power structures rather than factual data. The exclusion of women and sexual minorities from scientific and cultural authority further slowed progress towards understanding these complex topics.
             </p>
             <p>
-              Other widespread myths, such as the claim that "being LGBT is a Western concept," grew out of colonialism, incomplete histories, and efforts to control people's identities. Many societies around the world long recognized same-sex relationships, third genders, and gender-diverse roles, but these traditions were suppressed or erased by outside forces. Limited research, political agendas, and cultural gatekeeping allowed these myths to spread and persist.
+              Research now shows that human behavior and identity arise from a complex interplay of biology, environment, culture, and individual lived realities rather than narrow binary models. 
             </p>
           </div>
           <div className="gender-sexuality-photo">

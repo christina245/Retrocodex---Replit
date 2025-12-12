@@ -158,11 +158,11 @@ export default function LifeSciencesPage() {
       <main className="life-sciences-main-content">
         <div className="life-sciences-intro-row">
           <div className="life-sciences-description">
-            <p>
-              Life science is a fast-moving field, and many popular "facts" about biology, evolution, and human health simply haven't kept up with modern research. This page dives into some of the most widespread myths about living organisms—from dinosaurs and animals to human senses, viruses, bacteria, and plant biology—and explains what scientists have uncovered since those ideas first took hold.
+            <p><b>Let natural selection take its course on outdated life sciences facts.</b></p>
+             <p>Throughout most of history, we just didn't have the resources to study living things to the microscopic extent we do now. As these advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match the new evidence.
             </p>
             <p>
-              You'll learn why the Brontosaurus was thought to be a mistake, why human blood never actually turns blue, and how the tongue-map diagram spread despite being debunked decades ago.
+              From misinterpreted fossils, oversimplified diagrams, to outdated models of how our bodies sense, adapt, and interact with the world, much of the inaccurate life science education we've received may be unintentional. Sometimes, it's merely the result of outdated textbooks, genuine misunderstandings, or the technological and media limitations of the time such information first spread.
             </p>
           </div>
           <div className="life-sciences-photo">

@@ -194,11 +194,10 @@ export default function EverydayLifePage() {
       <main className="everyday-life-main-content">
         <div className="everyday-life-intro-row">
           <div className="everyday-life-description">
+            <p><b>What's the evidence debunking (or validating) the everyday folklore, urban legends, and old wives' tales from our elders?</b></p>
             <p>
-              Everyday life is full of little "facts" we absorb without ever checking where they came from. Family sayings, schoolyard rumors, well-meaning advice from adults, and catchy lines from old advertisements often blend together into a kind of informal rulebook for living. Claims such as "breakfast is the most important meal of the day" may not be true, but they persist because they're memorable, comforting, or framed as simple rules for staying healthy, polite, or responsible.
-            </p>
-            <p>
-              Many of these myths didn't originate as deliberate falsehoods, but as misunderstandings, exaggerations, or outdated beliefs passed through generations. Everyday myths reveal how information spreads in the absence of formal teaching: not through textbooks or experts, but through habits, culture, and repetition. This collection explores the roots, evidence, and cultural history behind these familiar claims.
+              These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.</p> 
+             <p>An old wives’ tale like “don’t go outside with wet hair or you’ll catch a cold” illustrates how these ideas take hold: it offered a simple, memorable rule for staying healthy in eras when the causes of illness were poorly understood. Over time, such claims become woven into family habits and cultural traditions.
             </p>
           </div>
           <div className="everyday-life-photo">
