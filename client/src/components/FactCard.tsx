@@ -4,7 +4,7 @@ import forwardArrow from "@assets/forward triangle red.png";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
 import "./FactCard.css";
 
-const categoryIcons = {
+const categoryIcons: Record<string, typeof Scroll> = {
   "HISTORY": Scroll,
   "LIFE SCIENCES": Dna,
   "EVERYDAY LIFE": Home,
@@ -12,8 +12,14 @@ const categoryIcons = {
   "SOCIAL SCIENCES": Users,
   "GENDER & SEXUALITY": HeartHandshake,
   "OTHER": DiamondPlus,
-  "OTHER • LINGUISTICS": DiamondPlus,
 };
+
+function getCategoryIcon(category: string) {
+  if (category.startsWith("OTHER")) {
+    return DiamondPlus;
+  }
+  return categoryIcons[category] || DiamondPlus;
+}
 
 export interface Fact {
   id: string;
@@ -36,7 +42,7 @@ interface FactCardProps {
 }
 
 export function FactCard({ fact, onSave, onShare, onComment, onBetaClick }: FactCardProps) {
-  const CategoryIcon = categoryIcons[fact.category as keyof typeof categoryIcons] || Zap;
+  const CategoryIcon = getCategoryIcon(fact.category);
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
 

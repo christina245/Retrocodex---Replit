@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Header } from "@/components/Header";
@@ -13,6 +13,7 @@ import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
+import type { Fact as DbFact } from "@shared/schema";
 import "./HomePage.css";
 
 import photo1Columbus from "@assets/stock_images/christopher columbus.png";
@@ -129,6 +130,16 @@ const allFacts: Fact[] = [
   }
 ];
 
+const CATEGORY_COLORS: Record<string, string> = {
+  "History": "#F5D547",
+  "Life Sciences": "#6FCF97",
+  "Health & Fitness": "#F2994A",
+  "Social Sciences": "#9B51E0",
+  "Gender & Sexuality": "#FC5AA8",
+  "Everyday Life": "#2A9BEC",
+  "Other": "#2C2C2C",
+};
+
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
@@ -136,6 +147,37 @@ export default function HomePage() {
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const { data: dbFacts = [] } = useQuery<DbFact[]>({
+    queryKey: ["/api/facts"],
+  });
+
+  const recentDbFacts: Fact[] = useMemo(() => {
+    return [...dbFacts]
+      .sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      })
+      .slice(0, 20)
+      .map(fact => {
+        const primaryCategory = fact.categories[0] || "Other";
+        const categoryDisplay = fact.subcategory 
+          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+          : primaryCategory.toUpperCase();
+        return {
+          id: fact.id,
+          category: categoryDisplay,
+          categoryColor: CATEGORY_COLORS[primaryCategory] || "#2C2C2C",
+          myth: fact.mythHeader,
+          truth: fact.truthHeader,
+          dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+          link: `/fact/${fact.slug}`,
+          coverPhoto: fact.coverPhoto || undefined,
+          betaOnly: fact.betaOnly || false,
+        };
+      });
+  }, [dbFacts]);
 
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
@@ -185,10 +227,12 @@ export default function HomePage() {
 
   const displayedFacts = activeTab === "featured" 
     ? allFacts 
-    : [...allFacts].sort((a, b) => {
-        if (!a.dateAdded || !b.dateAdded) return 0;
-        return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-      });
+    : recentDbFacts.length > 0 
+      ? recentDbFacts 
+      : [...allFacts].sort((a, b) => {
+          if (!a.dateAdded || !b.dateAdded) return 0;
+          return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+        });
 
   return (
     <div className="page-wrapper">
