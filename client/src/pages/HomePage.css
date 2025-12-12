@@ -64,6 +64,7 @@
 .sidebar {
   flex-shrink: 0;
   width: 280px;
+  min-height: 280px;
   position: sticky;
   top: 80px;
   align-self: flex-start;
