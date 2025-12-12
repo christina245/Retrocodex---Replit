@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -13,8 +13,12 @@ import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
+import { Pagination } from "@/components/Pagination";
 import type { Fact as DbFact } from "@shared/schema";
 import "./HomePage.css";
+
+const FACTS_PER_PAGE = 10;
+const MAX_RECENT_FACTS = 30;
 
 import photo1Columbus from "@assets/stock_images/christopher columbus.png";
 import photo2Brain from "@assets/stock_images/neon brain.png";
@@ -145,6 +149,7 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
+  const [recentPage, setRecentPage] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -159,7 +164,7 @@ export default function HomePage() {
         const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
         return dateB - dateA;
       })
-      .slice(0, 20)
+      .slice(0, MAX_RECENT_FACTS)
       .map(fact => {
         const primaryCategory = fact.categories[0] || "Other";
         const categoryDisplay = fact.subcategory 
@@ -178,6 +183,28 @@ export default function HomePage() {
         };
       });
   }, [dbFacts]);
+
+  const recentTotalPages = Math.max(1, Math.ceil(recentDbFacts.length / FACTS_PER_PAGE));
+  const clampedRecentPage = Math.min(recentPage, recentTotalPages);
+  const paginatedRecentFacts = recentDbFacts.slice(
+    (clampedRecentPage - 1) * FACTS_PER_PAGE,
+    clampedRecentPage * FACTS_PER_PAGE
+  );
+
+  const handleTabChange = (tab: "featured" | "recent") => {
+    setActiveTab(tab);
+    setRecentPage(1);
+  };
+
+  const handleRecentPageChange = (page: number) => {
+    setRecentPage(Math.min(page, recentTotalPages));
+  };
+
+  useEffect(() => {
+    if (recentPage > recentTotalPages) {
+      setRecentPage(Math.max(1, recentTotalPages));
+    }
+  }, [recentTotalPages, recentPage]);
 
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
@@ -227,12 +254,7 @@ export default function HomePage() {
 
   const displayedFacts = activeTab === "featured" 
     ? allFacts 
-    : recentDbFacts.length > 0 
-      ? recentDbFacts 
-      : [...allFacts].sort((a, b) => {
-          if (!a.dateAdded || !b.dateAdded) return 0;
-          return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-        });
+    : paginatedRecentFacts;
 
   return (
     <div className="page-wrapper">
@@ -247,24 +269,39 @@ export default function HomePage() {
         
         <div className="content-area">
           <div className="tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="key-container">
               <FactKey />
             </div>
           </div>
 
           <div className="content-container">
-            <div className="facts-grid">
-              {displayedFacts.map((fact) => (
-                <FactCard
-                  key={fact.id}
-                  fact={fact}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
+            <div className="facts-column">
+              <div className="facts-grid">
+                {displayedFacts.length > 0 ? (
+                  displayedFacts.map((fact) => (
+                    <FactCard
+                      key={fact.id}
+                      fact={fact}
+                      onSave={handleSaveClick}
+                      onShare={() => handleShareClick(fact)}
+                      onComment={handleCommentClick}
+                      onBetaClick={handleBetaClick}
+                    />
+                  ))
+                ) : activeTab === "recent" ? (
+                  <div className="empty-state" data-testid="empty-recent-facts">
+                    <p>No recent facts available yet. Check back soon!</p>
+                  </div>
+                ) : null}
+              </div>
+              {activeTab === "recent" && recentTotalPages > 1 && (
+                <Pagination
+                  currentPage={clampedRecentPage}
+                  totalPages={recentTotalPages}
+                  onPageChange={handleRecentPageChange}
                 />
-              ))}
+              )}
             </div>
 
             <aside className="sidebar">

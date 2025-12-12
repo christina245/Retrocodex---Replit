@@ -41,6 +41,20 @@
   gap: 1.5rem;
 }
 
+.facts-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+}
+
 .facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);
