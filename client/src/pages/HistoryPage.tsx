@@ -15,6 +15,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import coliseumImage from "@assets/stock_images/history cover photo.png";
 import "./HistoryPage.css";
 
@@ -246,24 +247,30 @@ export default function HistoryPage() {
 
           <div className="history-content-container">
             <div className="history-facts-column">
-              <div className="history-facts-grid">
-                {displayedFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor={CATEGORY_COLOR}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <>
+                  <div className="history-facts-grid">
+                    {displayedFacts.map((fact) => (
+                      <CategoryFactCard
+                        key={fact.id}
+                        fact={fact}
+                        categoryColor={CATEGORY_COLOR}
+                        onSave={handleSaveClick}
+                        onShare={() => handleShareClick(fact)}
+                        onComment={handleCommentClick}
+                        onBetaClick={handleBetaClick}
+                      />
+                    ))}
+                  </div>
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
                   />
-                ))}
-              </div>
-              <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
+                </>
+              )}
             </div>
 
             <aside className="history-sidebar">

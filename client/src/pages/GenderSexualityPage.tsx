@@ -15,6 +15,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import coverImage from "@assets/gender_and_sexuality_(1)_1764810626965.png";
 import "./GenderSexualityPage.css";
 
@@ -190,24 +191,30 @@ export default function GenderSexualityPage() {
 
           <div className="gender-sexuality-content-container">
             <div className="gender-sexuality-facts-column">
-              <div className="gender-sexuality-facts-grid">
-                {displayedFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor={CATEGORY_COLOR}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <>
+                  <div className="gender-sexuality-facts-grid">
+                    {displayedFacts.map((fact) => (
+                      <CategoryFactCard
+                        key={fact.id}
+                        fact={fact}
+                        categoryColor={CATEGORY_COLOR}
+                        onSave={handleSaveClick}
+                        onShare={() => handleShareClick(fact)}
+                        onComment={handleCommentClick}
+                        onBetaClick={handleBetaClick}
+                      />
+                    ))}
+                  </div>
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
                   />
-                ))}
-              </div>
-              <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
+                </>
+              )}
             </div>
 
             <aside className="gender-sexuality-sidebar">

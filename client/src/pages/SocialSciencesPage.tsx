@@ -15,6 +15,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import coverImage from "@assets/social_sciences_1764794020398.png";
 import "./SocialSciencesPage.css";
 
@@ -190,24 +191,30 @@ export default function SocialSciencesPage() {
 
           <div className="social-sciences-content-container">
             <div className="social-sciences-facts-column">
-              <div className="social-sciences-facts-grid">
-                {displayedFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor={CATEGORY_COLOR}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <>
+                  <div className="social-sciences-facts-grid">
+                    {displayedFacts.map((fact) => (
+                      <CategoryFactCard
+                        key={fact.id}
+                        fact={fact}
+                        categoryColor={CATEGORY_COLOR}
+                        onSave={handleSaveClick}
+                        onShare={() => handleShareClick(fact)}
+                        onComment={handleCommentClick}
+                        onBetaClick={handleBetaClick}
+                      />
+                    ))}
+                  </div>
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
                   />
-                ))}
-              </div>
-              <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
+                </>
+              )}
             </div>
 
             <aside className="social-sciences-sidebar">

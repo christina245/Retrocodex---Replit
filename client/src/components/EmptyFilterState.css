@@ -1,0 +1,13 @@
+.empty-filter-state {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 40px;
+}
+
+.empty-filter-state-image {
+  max-width: 390px;
+  width: 100%;
+  height: auto;
+}

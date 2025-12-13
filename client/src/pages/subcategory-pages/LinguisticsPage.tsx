@@ -16,6 +16,7 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./LinguisticsPage.css";
 
 const linguisticsFacts: CategoryFact[] = [
@@ -111,12 +112,18 @@ export default function LinguisticsPage() {
     });
   };
 
-  const displayedFacts = activeTab === "featured" 
+  const sortedFacts = activeTab === "featured" 
     ? allFacts 
     : [...allFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
 
   return (
     <div className="linguistics-page">
@@ -154,19 +161,23 @@ export default function LinguisticsPage() {
           </div>
 
           <div className="linguistics-content-container">
-            <div className="linguistics-facts-grid">
-              {displayedFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor={SUBCATEGORY_COLOR}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))}
-            </div>
+            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              <EmptyFilterState />
+            ) : (
+              <div className="linguistics-facts-grid">
+                {filteredFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor={SUBCATEGORY_COLOR}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))}
+              </div>
+            )}
 
             <aside className="linguistics-sidebar">
               <BeehiivBanner />

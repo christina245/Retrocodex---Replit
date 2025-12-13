@@ -15,6 +15,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import coverImage from "@assets/everyday life_1764573292477.png";
 import "./EverydayLifePage.css";
 
@@ -216,24 +217,30 @@ export default function EverydayLifePage() {
 
           <div className="everyday-life-content-container">
             <div className="everyday-life-facts-column">
-              <div className="everyday-life-facts-grid">
-                {displayedFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor={CATEGORY_COLOR}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <>
+                  <div className="everyday-life-facts-grid">
+                    {displayedFacts.map((fact) => (
+                      <CategoryFactCard
+                        key={fact.id}
+                        fact={fact}
+                        categoryColor={CATEGORY_COLOR}
+                        onSave={handleSaveClick}
+                        onShare={() => handleShareClick(fact)}
+                        onComment={handleCommentClick}
+                        onBetaClick={handleBetaClick}
+                      />
+                    ))}
+                  </div>
+                  <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
                   />
-                ))}
-              </div>
-              <Pagination 
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
+                </>
+              )}
             </div>
 
             <aside className="everyday-life-sidebar">

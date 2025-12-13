@@ -16,6 +16,7 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./AnimalsPage.css";
 
 import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
@@ -106,12 +107,18 @@ export default function AnimalsPage() {
     });
   };
 
-  const displayedFacts = activeTab === "featured" 
+  const sortedFacts = activeTab === "featured" 
     ? allFacts 
     : [...allFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
 
   return (
     <div className="animals-page">
@@ -149,19 +156,23 @@ export default function AnimalsPage() {
           </div>
 
           <div className="animals-content-container">
-            <div className="animals-facts-grid">
-              {displayedFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor={SUBCATEGORY_COLOR}
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))}
-            </div>
+            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              <EmptyFilterState />
+            ) : (
+              <div className="animals-facts-grid">
+                {filteredFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor={SUBCATEGORY_COLOR}
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))}
+              </div>
+            )}
 
             <aside className="animals-sidebar">
               <BeehiivBanner />

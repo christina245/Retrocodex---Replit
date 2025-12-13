@@ -16,6 +16,7 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./BeautyPage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -94,12 +95,18 @@ export default function BeautyPage() {
     });
   };
 
-  const displayedFacts = activeTab === "featured" 
+  const sortedFacts = activeTab === "featured" 
     ? allFacts 
     : [...allFacts].sort((a, b) => {
         if (!a.dateAdded || !b.dateAdded) return 0;
         return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       });
+
+  const filteredFacts = selectedFilters.length > 0
+    ? sortedFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : sortedFacts;
 
   return (
     <div className="beauty-page">
@@ -137,23 +144,27 @@ export default function BeautyPage() {
           </div>
 
           <div className="beauty-content-container">
-            <div className="beauty-facts-grid">
-              {displayedFacts.length > 0 ? (
-                displayedFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor={SUBCATEGORY_COLOR}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
-                  />
-                ))
-              ) : (
-                <p className="beauty-no-facts">No facts available yet. Check back soon!</p>
-              )}
-            </div>
+            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              <EmptyFilterState />
+            ) : (
+              <div className="beauty-facts-grid">
+                {filteredFacts.length > 0 ? (
+                  filteredFacts.map((fact) => (
+                    <CategoryFactCard
+                      key={fact.id}
+                      fact={fact}
+                      categoryColor={SUBCATEGORY_COLOR}
+                      onSave={handleSaveClick}
+                      onShare={() => handleShareClick(fact)}
+                      onComment={handleCommentClick}
+                      onBetaClick={handleBetaClick}
+                    />
+                  ))
+                ) : (
+                  <p className="beauty-no-facts">No facts available yet. Check back soon!</p>
+                )}
+              </div>
+            )}
 
             <aside className="beauty-sidebar">
               <BeehiivBanner />

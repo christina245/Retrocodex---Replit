@@ -15,6 +15,7 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { Tag } from "lucide-react";
+import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./FactsByTagPage.css";
 
 export default function FactsByTagPage() {
@@ -50,6 +51,12 @@ export default function FactsByTagPage() {
       betaOnly: false,
     }));
   }, [dbFacts]);
+
+  const filteredFacts = selectedFilters.length > 0
+    ? categoryFacts.filter(fact => 
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+      )
+    : categoryFacts;
 
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
@@ -123,25 +130,29 @@ export default function FactsByTagPage() {
         </div>
 
         <div className="facts-by-tag-content-container">
-          <div className="facts-by-tag-facts-grid">
-            {isLoading ? (
-              <p className="facts-by-tag-loading">Loading facts...</p>
-            ) : categoryFacts.length === 0 ? (
-              <p className="facts-by-tag-empty">No facts found with this tag.</p>
-            ) : (
-              categoryFacts.map((fact) => (
-                <CategoryFactCard
-                  key={fact.id}
-                  fact={fact}
-                  categoryColor="#2C2C2C"
-                  onSave={handleSaveClick}
-                  onShare={() => handleShareClick(fact)}
-                  onComment={handleCommentClick}
-                  onBetaClick={handleBetaClick}
-                />
-              ))
-            )}
-          </div>
+          {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+            <EmptyFilterState />
+          ) : (
+            <div className="facts-by-tag-facts-grid">
+              {isLoading ? (
+                <p className="facts-by-tag-loading">Loading facts...</p>
+              ) : filteredFacts.length === 0 ? (
+                <p className="facts-by-tag-empty">No facts found with this tag.</p>
+              ) : (
+                filteredFacts.map((fact) => (
+                  <CategoryFactCard
+                    key={fact.id}
+                    fact={fact}
+                    categoryColor="#2C2C2C"
+                    onSave={handleSaveClick}
+                    onShare={() => handleShareClick(fact)}
+                    onComment={handleCommentClick}
+                    onBetaClick={handleBetaClick}
+                  />
+                ))
+              )}
+            </div>
+          )}
 
           <aside className="facts-by-tag-sidebar">
             <BeehiivBanner />
