@@ -21,15 +21,7 @@ import "./AnimalsPage.css";
 import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
 
 const animalsFacts: CategoryFact[] = [
-  {
-    id: "dinosaurs-scaly",
-    myth: "Dinosaurs were all scaly reptiles.",
-    truth: "Many dinosaurs, especially theropods, had feathers. Fossil evidence shows that feathers evolved long before flight and were likely used for insulation, display, or camouflage.",
-    factFilters: [],
-    dateAdded: "2025-12-01",
-    coverPhoto: photoDinosaurs,
-    betaOnly: true
-  }
+  
 ];
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
