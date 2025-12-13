@@ -3,6 +3,7 @@ import { Filter, ChevronDown } from "lucide-react";
 import "./CategoryFilter.css";
 
 const FILTER_OPTIONS = [
+  "Context matters",
   "Controversial",
   "Regionally taught",
   "Partially true",

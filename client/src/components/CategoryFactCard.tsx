@@ -55,11 +55,14 @@ export function CategoryFactCard({
           <div className="category-fact-header">
             {fact.factFilters && fact.factFilters.length > 0 && (
               <div className="category-fact-tags">
-                {fact.factFilters.map((filter, index) => (
-                  <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {filter}
-                  </span>
-                ))}
+                {fact.factFilters.map((filter, index) => {
+                  const displayFilter = filter === "Context matters" ? "Context Matters" : filter;
+                  return (
+                    <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {displayFilter}
+                    </span>
+                  );
+                })}
               </div>
             )}
           </div>

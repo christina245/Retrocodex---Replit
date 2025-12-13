@@ -28,7 +28,7 @@ import photoColds from "@assets/catching a cold_1764363998621.png";
 const everydayLifeFacts: CategoryFact[] = [
   {
     id: "gum-seven-years",
-    myth: "If you swallow gum, it\'ll stay in your stomach for seven years.",
+    myth: "If you swallow gum, it'll stay in your stomach for seven years.",
     truth: "Gum won't stay inside your body if swallowed. However, it can't be digested like other foods, so it passes through waste intact rather than broken down.",
     factFilters: [],
     dateAdded: "2025-11-25",
@@ -56,16 +56,7 @@ const everydayLifeFacts: CategoryFact[] = [
     coverPhoto: photoHyperKids,
     betaOnly: true
   },
-  {
-    id: "colds-from-cold",
-    myth: "You catch colds from being cold.",
-    truth: "Colds are caused by viruses, not temperature. During cold weather, you're more likely to be indoors where viruses spread more easily.",
-    factFilters: ["Partially true"],
-    dateAdded: "2025-11-24",
-    link: "/fact/colds-from-cold",
-    coverPhoto: photoColds,
-    betaOnly: true
-  }
+ 
 ];
 
 const CATEGORY_COLOR = "#2A9BEC";
@@ -194,7 +185,7 @@ export default function EverydayLifePage() {
       <main className="everyday-life-main-content">
         <div className="everyday-life-intro-row">
           <div className="everyday-life-description">
-            <p><b>What's the evidence debunking (or validating) the everyday folklore, urban legends, and old wives' tales from our elders?</b></p>
+            <p><b>What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders?</b></p>
             <p>
               These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.</p> 
              <p>An old wives’ tale like “don’t go outside with wet hair or you’ll catch a cold” illustrates how these ideas take hold: it offered a simple, memorable rule for staying healthy in eras when the causes of illness were poorly understood. Over time, such claims become woven into family habits and cultural traditions.

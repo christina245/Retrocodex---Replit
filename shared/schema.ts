@@ -19,7 +19,7 @@ export const OTHER_SUBCATEGORIES = [
   "Astronomy",
   "Beauty",
   "Earth Science",
-  "Finance",
+  "Technology",
   "Food",
   "Linguistics",
   "Music",

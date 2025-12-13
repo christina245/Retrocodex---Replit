@@ -18,6 +18,7 @@ interface EmailSubscription {
 type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts";
 
 const AVAILABLE_FACT_FILTERS = [
+  "Context matters",
   "Controversial",
   "Regionally taught",
   "Partially true",
@@ -645,6 +646,8 @@ export default function AdminPage() {
       // Reset form and redirect to View Facts page
       resetForm();
       setCurrentView('view-facts');
+      setFactsPage(1);
+      window.scrollTo(0, 0);
     } catch (error) {
       setSubmitMessage(error instanceof Error ? error.message : `Failed to ${editingFactId ? 'update' : 'create'} fact`);
     } finally {
