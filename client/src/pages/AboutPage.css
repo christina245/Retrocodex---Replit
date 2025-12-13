@@ -25,6 +25,8 @@
 .about-sidebar {
   flex-shrink: 0;
   margin-top: 68px;
+  min-height: 280px;
+  align-self: flex-start;
 }
 
 .about-header {
