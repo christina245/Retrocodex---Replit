@@ -17,6 +17,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import loadingLogoDark from "@assets/inverted_logo_1765095605820.png";
 import "./EarthSciencePage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -30,7 +31,7 @@ export default function EarthSciencePage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: dbFacts = [] } = useQuery<Fact[]>({
+  const { data: dbFacts = [], isLoading } = useQuery<Fact[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -145,25 +146,30 @@ export default function EarthSciencePage() {
 
           <div className="earth-science-content-container">
             <div className="earth-science-facts-column">
-              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              {isLoading ? (
+                <div className="earth-science-loading-state" data-testid="loading-state">
+                  <img 
+                    src={loadingLogoDark} 
+                    alt="" 
+                    className="earth-science-loading-logo"
+                    data-testid="img-loading-logo"
+                  />
+                </div>
+              ) : filteredFacts.length === 0 && selectedFilters.length > 0 ? (
                 <EmptyFilterState />
               ) : (
                 <div className="earth-science-facts-grid">
-                  {filteredFacts.length > 0 ? (
-                    filteredFacts.map((fact) => (
-                      <CategoryFactCard
-                        key={fact.id}
-                        fact={fact}
-                        categoryColor={SUBCATEGORY_COLOR}
-                        onSave={handleSaveClick}
-                        onShare={() => handleShareClick(fact)}
-                        onComment={handleCommentClick}
-                        onBetaClick={handleBetaClick}
-                      />
-                    ))
-                  ) : (
-                    <p className="earth-science-no-facts">No facts available yet. Check back soon!</p>
-                  )}
+                  {filteredFacts.map((fact) => (
+                    <CategoryFactCard
+                      key={fact.id}
+                      fact={fact}
+                      categoryColor={SUBCATEGORY_COLOR}
+                      onSave={handleSaveClick}
+                      onShare={() => handleShareClick(fact)}
+                      onComment={handleCommentClick}
+                      onBetaClick={handleBetaClick}
+                    />
+                  ))}
                 </div>
               )}
             </div>

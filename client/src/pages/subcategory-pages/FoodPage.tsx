@@ -17,6 +17,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import loadingLogoDark from "@assets/inverted_logo_1765095605820.png";
 import "./FoodPage.css";
 
 import photoFoodPyramid from "@assets/stock_images/food pyramid.png";
@@ -54,7 +55,7 @@ export default function FoodPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: dbFacts = [] } = useQuery<Fact[]>({
+  const { data: dbFacts = [], isLoading } = useQuery<Fact[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -175,7 +176,16 @@ export default function FoodPage() {
 
           <div className="food-content-container">
             <div className="food-facts-column">
-              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              {isLoading ? (
+                <div className="food-loading-state" data-testid="loading-state">
+                  <img 
+                    src={loadingLogoDark} 
+                    alt="" 
+                    className="food-loading-logo"
+                    data-testid="img-loading-logo"
+                  />
+                </div>
+              ) : filteredFacts.length === 0 && selectedFilters.length > 0 ? (
                 <EmptyFilterState />
               ) : (
                 <div className="food-facts-grid">

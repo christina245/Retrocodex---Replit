@@ -88,6 +88,31 @@
   flex-direction: column;
 }
 
+.beauty-loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1048px;
+  min-height: 400px;
+}
+
+.beauty-loading-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  animation: pulse-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-loading {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
 .beauty-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);
