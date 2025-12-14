@@ -1,4 +1,4 @@
-import noFactsImage from "@assets/No_facts_found_(yet)._1765617294608.png";
+import noFactsImage from "@assets/No articles found (yet) longpng.png";
 import "./EmptyFilterState.css";
 
 export function EmptyFilterState() {
