@@ -6,7 +6,7 @@
 }
 
 .beauty-main-content {
-  flex: 1;
+ 
   padding: 0 40px;
   max-width: 95%;
   margin: 0 auto;
@@ -84,8 +84,8 @@
 }
 
 .beauty-facts-column {
-  flex: 1;
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .beauty-facts-grid {
