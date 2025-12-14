@@ -17,7 +17,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import loadingLogoDark from "@assets/inverted_logo_1765095605820.png";
+import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import "./AstronomyPage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -149,7 +149,7 @@ export default function AstronomyPage() {
               {isLoading ? (
                 <div className="astronomy-loading-state" data-testid="loading-state">
                   <img 
-                    src={loadingLogoDark} 
+                    src={loadingLogo} 
                     alt="" 
                     className="astronomy-loading-logo"
                     data-testid="img-loading-logo"
