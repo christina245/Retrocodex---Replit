@@ -83,6 +83,11 @@
   gap: 1.5rem;
 }
 
+.earth-science-facts-column {
+  flex: 1;
+  min-width: 0;
+}
+
 .earth-science-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);

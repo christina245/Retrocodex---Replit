@@ -144,27 +144,29 @@ export default function UncategorizedPage() {
           </div>
 
           <div className="uncategorized-content-container">
-            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
-              <EmptyFilterState />
-            ) : (
-              <div className="uncategorized-facts-grid">
-                {filteredFacts.length > 0 ? (
-                  filteredFacts.map((fact) => (
-                    <CategoryFactCard
-                      key={fact.id}
-                      fact={fact}
-                      categoryColor={SUBCATEGORY_COLOR}
-                      onSave={handleSaveClick}
-                      onShare={() => handleShareClick(fact)}
-                      onComment={handleCommentClick}
-                      onBetaClick={handleBetaClick}
-                    />
-                  ))
-                ) : (
-                  <p className="uncategorized-no-facts">No facts available yet. Check back soon!</p>
-                )}
-              </div>
-            )}
+            <div className="uncategorized-facts-column">
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <div className="uncategorized-facts-grid">
+                  {filteredFacts.length > 0 ? (
+                    filteredFacts.map((fact) => (
+                      <CategoryFactCard
+                        key={fact.id}
+                        fact={fact}
+                        categoryColor={SUBCATEGORY_COLOR}
+                        onSave={handleSaveClick}
+                        onShare={() => handleShareClick(fact)}
+                        onComment={handleCommentClick}
+                        onBetaClick={handleBetaClick}
+                      />
+                    ))
+                  ) : (
+                    <p className="uncategorized-no-facts">No facts available yet. Check back soon!</p>
+                  )}
+                </div>
+              )}
+            </div>
 
             <aside className="uncategorized-sidebar">
               <BeehiivBanner />

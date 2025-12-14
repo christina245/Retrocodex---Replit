@@ -161,23 +161,25 @@ export default function LinguisticsPage() {
           </div>
 
           <div className="linguistics-content-container">
-            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
-              <EmptyFilterState />
-            ) : (
-              <div className="linguistics-facts-grid">
-                {filteredFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor={SUBCATEGORY_COLOR}
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="linguistics-facts-column">
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <div className="linguistics-facts-grid">
+                  {filteredFacts.map((fact) => (
+                    <CategoryFactCard
+                      key={fact.id}
+                      fact={fact}
+                      categoryColor={SUBCATEGORY_COLOR}
+                      onSave={handleSaveClick}
+                      onShare={() => handleShareClick(fact)}
+                      onComment={handleCommentClick}
+                      onBetaClick={handleBetaClick}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
 
             <aside className="linguistics-sidebar">
               <BeehiivBanner />

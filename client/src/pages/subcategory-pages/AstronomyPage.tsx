@@ -144,27 +144,29 @@ export default function AstronomyPage() {
           </div>
 
           <div className="astronomy-content-container">
-            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
-              <EmptyFilterState />
-            ) : (
-              <div className="astronomy-facts-grid">
-                {filteredFacts.length > 0 ? (
-                  filteredFacts.map((fact) => (
-                    <CategoryFactCard
-                      key={fact.id}
-                      fact={fact}
-                      categoryColor={SUBCATEGORY_COLOR}
-                      onSave={handleSaveClick}
-                      onShare={() => handleShareClick(fact)}
-                      onComment={handleCommentClick}
-                      onBetaClick={handleBetaClick}
-                    />
-                  ))
-                ) : (
-                  <p className="astronomy-no-facts">No facts available yet. Check back soon!</p>
-                )}
-              </div>
-            )}
+            <div className="astronomy-facts-column">
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <div className="astronomy-facts-grid">
+                  {filteredFacts.length > 0 ? (
+                    filteredFacts.map((fact) => (
+                      <CategoryFactCard
+                        key={fact.id}
+                        fact={fact}
+                        categoryColor={SUBCATEGORY_COLOR}
+                        onSave={handleSaveClick}
+                        onShare={() => handleShareClick(fact)}
+                        onComment={handleCommentClick}
+                        onBetaClick={handleBetaClick}
+                      />
+                    ))
+                  ) : (
+                    <p className="astronomy-no-facts">No facts available yet. Check back soon!</p>
+                  )}
+                </div>
+              )}
+            </div>
 
             <aside className="astronomy-sidebar">
               <BeehiivBanner />

@@ -83,6 +83,11 @@
   gap: 1.5rem;
 }
 
+.astronomy-facts-column {
+  flex: 1;
+  min-width: 0;
+}
+
 .astronomy-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);

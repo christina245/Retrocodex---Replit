@@ -130,29 +130,31 @@ export default function FactsByTagPage() {
         </div>
 
         <div className="facts-by-tag-content-container">
-          {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
-            <EmptyFilterState />
-          ) : (
-            <div className="facts-by-tag-facts-grid">
-              {isLoading ? (
-                <p className="facts-by-tag-loading">Loading facts...</p>
-              ) : filteredFacts.length === 0 ? (
-                <p className="facts-by-tag-empty">No facts found with this tag.</p>
-              ) : (
-                filteredFacts.map((fact) => (
-                  <CategoryFactCard
-                    key={fact.id}
-                    fact={fact}
-                    categoryColor="#2C2C2C"
-                    onSave={handleSaveClick}
-                    onShare={() => handleShareClick(fact)}
-                    onComment={handleCommentClick}
-                    onBetaClick={handleBetaClick}
-                  />
-                ))
-              )}
-            </div>
-          )}
+          <div className="facts-by-tag-facts-column">
+            {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              <EmptyFilterState />
+            ) : (
+              <div className="facts-by-tag-facts-grid">
+                {isLoading ? (
+                  <p className="facts-by-tag-loading">Loading facts...</p>
+                ) : filteredFacts.length === 0 ? (
+                  <p className="facts-by-tag-empty">No facts found with this tag.</p>
+                ) : (
+                  filteredFacts.map((fact) => (
+                    <CategoryFactCard
+                      key={fact.id}
+                      fact={fact}
+                      categoryColor="#2C2C2C"
+                      onSave={handleSaveClick}
+                      onShare={() => handleShareClick(fact)}
+                      onComment={handleCommentClick}
+                      onBetaClick={handleBetaClick}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
 
           <aside className="facts-by-tag-sidebar">
             <BeehiivBanner />
