@@ -21,12 +21,6 @@ import "./LifeSciencesPage.css";
 
 const FACTS_PER_PAGE = 10;
 
-import photoBrain from "@assets/stock_images/neon brain.png";
-import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
-import photoBlood from "@assets/stock_images/blood cells.png";
-import photoSenses from "@assets/humans 5 senses_1764363998622.png";
-import photoViruses from "@assets/viruses_1764363998620.png";
-import photoColds from "@assets/catching a cold_1764363998621.png";
 
 const lifeSciencesFacts: CategoryFact[] = [
 
@@ -163,7 +157,7 @@ export default function LifeSciencesPage() {
              <p>Throughout most of history, we just didn't have the resources to study living things to the microscopic extent we do now. As these advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match the new evidence.
             </p>
             <p>
-              From misinterpreted fossils, oversimplified diagrams, to outdated models of how our bodies sense, adapt, and interact with the world, much of the inaccurate life science education we've received may be unintentional. Sometimes, it's merely the result of outdated textbooks, genuine misunderstandings, or the technological and media limitations of the time such information first spread.
+              From misinterpreted fossils, oversimplified diagrams, to outdated models of how our bodies sense, adapt, and interact with the world, much of the inaccurate life science education we've received may be unintentional. Sometimes, it's merely the result of outdated textbooks or genuine misunderstandings.
             </p>
           </div>
           <div className="life-sciences-photo">

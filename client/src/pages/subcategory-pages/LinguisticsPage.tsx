@@ -21,14 +21,7 @@ import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import "./LinguisticsPage.css";
 
 const linguisticsFacts: CategoryFact[] = [
-  {
-    id: "i-before-e",
-    myth: "'I before E, except after C' is a reliable spelling rule.",
-    truth: "This rule has so many exceptions that it's hardly reliable. Words like 'weird,' 'seize,' 'neither,' 'protein,' and 'science' all break the rule. Linguists estimate there are more exceptions than words that follow it.",
-    factFilters: [],
-    dateAdded: "2025-12-01",
-    betaOnly: true
-  }
+  
 ];
 
 const SUBCATEGORY_COLOR = "#2C2C2C";

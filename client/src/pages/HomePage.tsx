@@ -75,9 +75,9 @@ const allFacts: Fact[] = [
   {
     id: "5",
     category: "SOCIAL SCIENCES",
-    categoryColor: "#9B51E0",
+    categoryColor: "#EB02C8",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
-    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. Research shows they don't significantly influence overall learning outcomes or retention.",
+    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. They generally do not influence overall learning outcomes.",
     dateAdded: "2025-11-08",
     coverPhoto: photo5Learning,
     betaOnly: true
@@ -85,7 +85,7 @@ const allFacts: Fact[] = [
   {
     id: "6",
     category: "GENDER & SEXUALITY",
-    categoryColor: "#FC5AA8",
+    categoryColor: "#FF88AA",
     myth: "Men and women have very different brains.",
     truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
     dateAdded: "2025-11-21",
@@ -96,8 +96,8 @@ const allFacts: Fact[] = [
     id: "7",
     category: "OTHER • LINGUISTICS",
     categoryColor: "#2C2C2C",
-    myth: "I before E except after C.",
-    truth: "English has a lot of words where that 'rule' doesn't hold up. Words like 'science,' 'height,' 'their,' 'protein,' 'caffeine,' 'vein,' 'beige,' 'neighbor,' 'weird,' 'seize,' and many others break this 'rule.'",
+    myth: "A general spelling rule is I before E except after C.",
+    truth: "The English language has several words where this generalization does not apply: science, height, their, protein, caffeine, vein, beige, neighbor, weird, seize, and many others.",
     dateAdded: "2025-11-12",
     coverPhoto: photo7Spelling,
     betaOnly: true
@@ -107,7 +107,7 @@ const allFacts: Fact[] = [
     category: "LIFE SCIENCES",
     categoryColor: "#6FCF97",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
-    truth: "Deoxygenated blood is still red, just a darker shade. The myth likely have come from seeing veins appear blue through the skin, a visual effect, rather than the blood itself.",
+    truth: "Deoxygenated blood is still red, just a darker shade. Veins appear blue because blue light penetrates skin more efficiently than the rest of the visible light spectrum. The absorption makes the veins appear blue.",
     dateAdded: "2025-11-15",
     coverPhoto: photo8Blood,
     betaOnly: true
@@ -117,7 +117,7 @@ const allFacts: Fact[] = [
     category: "EVERYDAY LIFE",
     categoryColor: "#0167A2",
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
-    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
+    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away. This myth may have been purposely spread as a social experiment.",
     dateAdded: "2025-11-18",
     coverPhoto: photo9Spiders,
     betaOnly: true
@@ -126,8 +126,8 @@ const allFacts: Fact[] = [
     id: "10",
     category: "HISTORY",
     categoryColor: "#F5D547",
-    myth: "Marie Antoinette ignorantly said 'Let them eat cake' regarding the French Revolution.",
-    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess years before Marie Antoinette. It may have been misattributed to her as political propaganda.",
+    myth: "Marie Antoinette said 'Let them eat cake' regarding the French working class.",
+    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess. It may have been misattributed to her as political propaganda.",
     dateAdded: "2025-11-20",
     coverPhoto: photo10Marie,
     betaOnly: true

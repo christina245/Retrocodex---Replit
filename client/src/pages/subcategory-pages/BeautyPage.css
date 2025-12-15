@@ -90,10 +90,12 @@
 
 .beauty-loading-state {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 20px;
   justify-content: center;
   width: 100%;
   max-width: 1048px;
+  min-width: 1048px;
   min-height: 400px;
 }
 
