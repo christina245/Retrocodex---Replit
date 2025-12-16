@@ -21,32 +21,14 @@ import "./EverydayLifePage.css";
 
 const FACTS_PER_PAGE = 10;
 
-import photoGum from "@assets/chewing gum_1764576659258.png";
+
 import photoSpiders from "@assets/stock_images/plastic spiders.png";
 import photoHyperKids from "@assets/stock_images/hyper kids.png";
-import photoColds from "@assets/catching a cold_1764363998621.png";
+
 
 const everydayLifeFacts: CategoryFact[] = [
-  {
-    id: "gum-seven-years",
-    myth: "If you swallow gum, it'll stay in your stomach for seven years.",
-    truth: "Gum won't stay inside your body if swallowed. However, it can't be digested like other foods, so it passes through waste intact rather than broken down.",
-    factFilters: [],
-    dateAdded: "2025-11-25",
-    link: "/fact/gum-seven-years",
-    coverPhoto: photoGum,
-    betaOnly: true
-  },
-  {
-    id: "swallow-spiders",
-    myth: "Humans swallow an average of 8 spiders in their sleep every year.",
-    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away, not to mention spiders generally avoid humans and our mouths.",
-    factFilters: [],
-    dateAdded: "2025-11-18",
-    link: "/fact/swallow-spiders",
-    coverPhoto: photoSpiders,
-    betaOnly: true
-  },
+  
+
   {
     id: "sugar-hyper",
     myth: "Eating too much sugar makes kids hyper.",

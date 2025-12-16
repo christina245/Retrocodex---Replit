@@ -28,19 +28,19 @@ const subcategories: Subcategory[] = [
   {
     id: "animals",
     name: "ANIMALS",
-    description: "Challenging myths about animal behavior, intelligence, safety, and long-held assumptions about creatures from pets to wildlife.",
+    description: "Some animals may be safer or more dangerous than you think.",
     photo: photoAnimals
   },
   {
     id: "astronomy",
     name: "ASTRONOMY",
-    description: "Unpacking mistaken ideas about space, planets, stars, and how our understanding of the universe continues to evolve.",
+    description: "Mistaken ideas about space, planets, stars, and how our understanding of the universe continues to evolve.",
     photo: photoAstronomy
   },
   {
     id: "beauty",
     name: "BEAUTY",
-    description: "Clarifying misleading claims about skincare, hair, grooming, and products that promise results science doesn't support.",
+    description: "Several ingredients you were told to avoid in beauty products might not deserve that stigma. Some beauty tips and tricks you might have learned might not give you the glow-up you're looking for.",
     photo: photoBeauty
   },
   {
@@ -52,13 +52,13 @@ const subcategories: Subcategory[] = [
   {
     id: "food",
     name: "FOOD",
-    description: "Breaking down myths about nutrition, ingredients, cooking, and what's actually healthy versus marketing-driven beliefs.",
+    description: "Years of deceptive marketing have given us the wrong ideas of what foods and nutrients are actually healthy.",
     photo: photoFood
   },
   {
     id: "linguistics",
     name: "LINGUISTICS",
-    description: "Exploring misconceptions about language origins, dialects, grammar rules, and how languages truly change over time.",
+    description: "You've probably been pronouncing some words wrong for years. Some spelling and grammar rules you might have been taught were vast overgeneralizations.",
     photo: photoLinguistics
   },
   {
@@ -76,7 +76,7 @@ const subcategories: Subcategory[] = [
   {
     id: "technology",
     name: "TECHNOLOGY",
-    description: "Demystifying modern tech—AI, devices, privacy, security—and correcting misunderstandings about how digital systems work.",
+    description: "What is today's technology actually capable of? Is AI actually on par with human abilities?",
     photo: photoTechnology
   },
   {

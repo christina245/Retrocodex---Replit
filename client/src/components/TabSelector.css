@@ -16,7 +16,7 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  color: #666;
+  color: #878787;
   background: transparent;
   border: none;
   padding: 0.625rem 1.25rem;
@@ -36,5 +36,5 @@
 }
 
 .tab-button.active:hover {
-  background: #1a1a1a;
+  background: #2c2c2c;
 }
