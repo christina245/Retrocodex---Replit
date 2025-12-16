@@ -107,7 +107,7 @@ const allFacts: Fact[] = [
     category: "LIFE SCIENCES",
     categoryColor: "#6FCF97",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
-    truth: "Deoxygenated blood is still red, just a darker shade. Veins appear blue because blue light penetrates skin more efficiently than the rest of the visible light spectrum. The absorption makes the veins appear blue.",
+    truth: "Deoxygenated blood is still red, just a darker shade. Veins appear blue because blue light penetrates skin more efficiently than the rest of the visible light spectrum and is more easily absorbed.",
     dateAdded: "2025-11-15",
     coverPhoto: photo8Blood,
     betaOnly: true
