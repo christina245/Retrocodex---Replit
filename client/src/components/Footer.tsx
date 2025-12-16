@@ -1,4 +1,5 @@
 import { FaInstagram, FaReddit, FaBluesky } from "react-icons/fa6";
+import footerLogo from "@assets/footer_logo_1765927001444.png";
 import "./Footer.css";
 
 export function Footer() {
@@ -99,6 +100,18 @@ export function Footer() {
           >
             Donate
           </a>
+        </div>
+
+        {/* Footer Logo and Description */}
+        <div className="footer-brand">
+          <img 
+            src={footerLogo} 
+            alt="Retrocodex" 
+            className="footer-brand-logo"
+          />
+          <p className="footer-brand-description">
+            Retrocodex: Stuff You Might Have Learned Wrong is a living archive of commonly taught misconceptions from all over the world. It explores how each fact originated, why it persisted, and what the evidence really says.
+          </p>
         </div>
       </div>
 
