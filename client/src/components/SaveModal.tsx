@@ -1,36 +1,32 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect } from "react";
 import "./SaveModal.css";
 
 interface SaveModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (email: string) => Promise<void>;
+  onSubmit?: (email: string) => Promise<void>;
 }
 
-export function SaveModal({ isOpen, onClose, onSubmit }: SaveModalProps) {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export function SaveModal({ isOpen, onClose }: SaveModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      const script = document.createElement("script");
+      script.src = "https://subscribe-forms.beehiiv.com/embed.js";
+      script.async = true;
+      document.body.appendChild(script);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || isSubmitting) return;
-
-    setIsSubmitting(true);
-    try {
-      await onSubmit(email);
-      setEmail("");
-      onClose();
-    } finally {
-      setIsSubmitting(false);
+      return () => {
+        document.body.removeChild(script);
+      };
     }
-  };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content save-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content save-modal beehiiv-modal" onClick={(e) => e.stopPropagation()}>
         <button 
           className="modal-close"
           onClick={onClose}
@@ -40,41 +36,25 @@ export function SaveModal({ isOpen, onClose, onSubmit }: SaveModalProps) {
           <X size={24} />
         </button>
 
-        <div className="save-modal-illustration">
-          <img 
-            src="/attached_assets/under construction_1763805760257.jpg" 
-            alt="Under construction" 
-            className="construction-image"
+        <div className="beehiiv-embed-container">
+          <iframe 
+            src="https://subscribe-forms.beehiiv.com/56dceb78-1e7f-4515-be77-7f81baf1acfb" 
+            className="beehiiv-embed" 
+            data-testid="beehiiv-embed"
+            frameBorder="0" 
+            scrolling="no" 
+            style={{
+              width: "400px",
+              height: "353px",
+              margin: 0,
+              borderRadius: "0px",
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              maxWidth: "100%"
+            }}
+            title="Subscribe to newsletter"
           />
         </div>
-
-        <h2 className="save-modal-title">
-          Saving facts is currently unavailable in beta mode. We're working on it!
-        </h2>
-
-        <p className="save-modal-description">
-          Want to be notified when accounts are available so you can save whatever facts you want? We'll send you an email.
-        </p>
-
-        <form onSubmit={handleSubmit} className="save-modal-form">
-          <input
-            type="email"
-            placeholder="youremail@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="save-modal-input"
-            data-testid="input-email-save-modal"
-            required
-          />
-          <button 
-            type="submit"
-            className="save-modal-button"
-            disabled={isSubmitting}
-            data-testid="button-submit-save-modal"
-          >
-            {isSubmitting ? "Updating..." : "Update me"}
-          </button>
-        </form>
       </div>
     </div>
   );

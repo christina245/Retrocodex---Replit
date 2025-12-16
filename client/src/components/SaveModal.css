@@ -53,6 +53,22 @@
   text-align: center;
 }
 
+.beehiiv-modal {
+  padding: 2.5rem 1.5rem 1.5rem;
+  max-width: 440px;
+}
+
+.beehiiv-embed-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.beehiiv-embed {
+  border: none;
+}
+
 .save-modal-illustration {
   width: 200px;
   max-height: 200px;

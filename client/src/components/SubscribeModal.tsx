@@ -1,37 +1,32 @@
 import { X } from "lucide-react";
-import { useState } from "react";
-import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
+import { useEffect } from "react";
 import "./SubscribeModal.css";
 
 interface SubscribeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (email: string) => Promise<void>;
+  onSubmit?: (email: string) => Promise<void>;
 }
 
-export function SubscribeModal({ isOpen, onClose, onSubmit }: SubscribeModalProps) {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export function SubscribeModal({ isOpen, onClose }: SubscribeModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      const script = document.createElement("script");
+      script.src = "https://subscribe-forms.beehiiv.com/embed.js";
+      script.async = true;
+      document.body.appendChild(script);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || isSubmitting) return;
-
-    setIsSubmitting(true);
-    try {
-      await onSubmit(email);
-      setEmail("");
-      onClose();
-    } finally {
-      setIsSubmitting(false);
+      return () => {
+        document.body.removeChild(script);
+      };
     }
-  };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content subscribe-modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content subscribe-modal beehiiv-modal" onClick={(e) => e.stopPropagation()}>
         <button 
           className="modal-close"
           onClick={onClose}
@@ -41,67 +36,24 @@ export function SubscribeModal({ isOpen, onClose, onSubmit }: SubscribeModalProp
           <X size={24} />
         </button>
 
-        <div className="subscribe-modal-illustration">
-          <img 
-            src="/attached_assets/under construction_1763805760257.jpg" 
-            alt="Under construction" 
-            className="construction-image"
+        <div className="beehiiv-embed-container">
+          <iframe 
+            src="https://subscribe-forms.beehiiv.com/56dceb78-1e7f-4515-be77-7f81baf1acfb" 
+            className="beehiiv-embed" 
+            data-testid="beehiiv-embed"
+            frameBorder="0" 
+            scrolling="no" 
+            style={{
+              width: "400px",
+              height: "353px",
+              margin: 0,
+              borderRadius: "0px",
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              maxWidth: "100%"
+            }}
+            title="Subscribe to newsletter"
           />
-        </div>
-
-        <h2 className="subscribe-modal-title">
-          Subscribing is currently unavailable in beta mode. We're working on it!
-        </h2>
-
-        <p className="subscribe-modal-description">
-          If you'd like to be notified when this fact evolves, you'll be able to receive the updates you want after user accounts are enabled. Get on the email waitlist to be notified when that happens!
-        </p>
-
-        <form onSubmit={handleSubmit} className="subscribe-modal-form">
-          <input
-            type="email"
-            placeholder="youremail@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="subscribe-modal-input"
-            data-testid="input-email-subscribe-modal"
-            required
-          />
-          <button 
-            type="submit"
-            className="subscribe-modal-button"
-            disabled={isSubmitting}
-            data-testid="button-submit-subscribe-modal"
-          >
-            {isSubmitting ? "Updating..." : "Update me"}
-          </button>
-        </form>
-
-        <div className="subscribe-modal-community">
-          <p className="community-text">
-            In the meantime, <strong>join the official Reddit community</strong> where community members and Retrocodex admins currently post fact updates while sharing our personal views and experiences:
-          </p>
-          <div className="community-links">
-            <a 
-              href="http://reddit.com/r/LearnedWrong" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="reddit-icon-link"
-              data-testid="link-reddit-icon-subscribe"
-              aria-label="Visit Reddit community"
-            >
-              <img src={redditLogo} alt="Reddit" className="reddit-icon" />
-            </a>
-            <a 
-              href="http://reddit.com/r/LearnedWrong" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="visit-community-button"
-              data-testid="button-visit-community"
-            >
-              Visit community
-            </a>
-          </div>
         </div>
       </div>
     </div>
