@@ -198,11 +198,11 @@ export default function SingleFactPage() {
                 aria-label="Subscribe to fact updates"
               >
                 <BellRing className="subscribe-icon" />
-                <span>Subscribe</span>
+                <span>Follow</span>
               </button>
               {showSubscribeTooltip && (
                 <div className="subscribe-tooltip" data-testid="tooltip-subscribe">
-                  Stay updated if this information evolves. We'll notify you when this fact is revised, when new research is published, or when meaningful discussion happens. You control what you receive.
+                  Stay updated if this information evolves.
                 </div>
               )}
             </div>

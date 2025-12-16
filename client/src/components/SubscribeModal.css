@@ -17,10 +17,36 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  min-height: 353px;
+  position: relative;
 }
 
 .beehiiv-embed {
   border: none;
+}
+
+.modal-loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 353px;
+  max-width: 100%;
+}
+
+.modal-loading-logo {
+  width: 120px;
+  height: auto;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .subscribe-modal-illustration {
