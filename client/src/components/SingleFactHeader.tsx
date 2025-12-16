@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { Link } from "wouter";
 import logoImage from "@assets/white background logo.png";
 import "./SingleFactHeader.css";
 
@@ -11,11 +12,13 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
     <header className="single-fact-header">
       <div className="single-fact-header-container">
         <div className="header-logo">
-          <img 
-            src={logoImage} 
-            alt="Retrocodex" 
-            className="logo-image"
-          />
+          <Link href="/" data-testid="link-home-logo">
+            <img 
+              src={logoImage} 
+              alt="Retrocodex" 
+              className="logo-image"
+            />
+          </Link>
         </div>
 
         <div className="header-actions">
