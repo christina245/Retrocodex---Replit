@@ -167,7 +167,7 @@ export default function HomePage() {
       .slice(0, MAX_RECENT_FACTS)
       .map(fact => {
         const primaryCategory = fact.categories[0] || "Other";
-        const categoryDisplay = fact.subcategory 
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
           ? `OTHER • ${fact.subcategory.toUpperCase()}`
           : primaryCategory.toUpperCase();
         return {
