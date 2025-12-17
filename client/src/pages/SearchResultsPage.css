@@ -8,8 +8,7 @@
 .search-results-layout {
   display: flex;
   width: 100%;
-  column-gap: 30px;
-  padding: 0 20px 0 20px;
+  padding: 0 70px;
 }
 
 .search-results-main-content {
@@ -59,16 +58,27 @@
   margin: 0;
 }
 
-.search-results-filter-container {
-  flex-shrink: 0;
-}
-
-.search-results-key-container {
+.search-results-key-filter-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 515px));
+  gap: 18px;
   margin-top: 20px;
-  width: 515px;
 }
 
-.search-results-key-container .fact-key-text {
+.search-results-key-left {
+  display: flex;
+  align-items: center;
+}
+
+.search-results-key-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.search-results-key-left .fact-key-text,
+.search-results-key-right .fact-key-text {
   line-height: 1.2;
 }
 
@@ -79,14 +89,6 @@
   margin-top: 30px;
 }
 
-.search-results-sidebar {
-  flex-shrink: 0;
-  width: 280px;
-  position: sticky;
-  top: 80px;
-  align-self: flex-start;
-  margin-top: 30px;
-}
 
 /* Subcategory cards - matching Other category page */
 .search-results-subcategories-grid {
@@ -201,19 +203,14 @@
 
 @media (max-width: 1200px) {
   .search-results-facts-grid,
-  .search-results-subcategories-grid {
+  .search-results-subcategories-grid,
+  .search-results-key-filter-row {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .search-results-key-container {
-    width: auto;
-    max-width: 515px;
   }
 }
 
 @media (max-width: 900px) {
   .search-results-layout {
-    flex-direction: column;
     padding: 0 20px;
   }
 
@@ -222,26 +219,22 @@
     gap: 15px;
   }
 
-  .search-results-filter-container {
-    order: 3;
-    width: 100%;
-  }
-
   .search-results-facts-grid,
   .search-results-subcategories-grid {
     grid-template-columns: 1fr;
   }
 
-  .search-results-key-container {
+  .search-results-key-filter-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .search-results-key-left {
     display: none;
   }
 
-  .search-results-sidebar {
-    width: 100%;
-    position: static;
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+  .search-results-key-right {
+    justify-content: flex-start;
   }
   
   .search-subcategory-card {

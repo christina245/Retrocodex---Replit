@@ -10,7 +10,6 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
@@ -287,16 +286,19 @@ export default function SearchResultsPage() {
                 <span className="search-results-intro-text">Fact results for</span>
                 <span className="search-results-query">"{decodedQuery}"</span>
               </div>
-              <div className="search-results-filter-container">
+            </div>
+
+            <div className="search-results-key-filter-row">
+              <div className="search-results-key-left">
+                <FactKey />
+              </div>
+              <div className="search-results-key-right">
+                <FactKey />
                 <CategoryFilter 
                   selectedFilters={selectedFilters} 
                   onFilterChange={setSelectedFilters} 
                 />
               </div>
-            </div>
-
-            <div className="search-results-key-container">
-              <FactKey />
             </div>
 
             <div className="search-results-facts-grid">
@@ -339,10 +341,6 @@ export default function SearchResultsPage() {
           </div>
         )}
       </main>
-
-      <aside className="search-results-sidebar">
-        <BeehiivBanner />
-      </aside>
       </div>
 
       <Footer />
