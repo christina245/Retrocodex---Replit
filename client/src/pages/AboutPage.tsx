@@ -87,7 +87,7 @@ export default function AboutPage() {
             </ul>
 
             <p className="about-body">
-              Retrocodex is more than a static archive. It's a collective, dynamic effort to understand our shared history of misinformation so we can build a more informed future and not repeat past mistakes.
+              Understanding our shared history of misinformation is critical to preventing future misinformation, from the benign to the downright harmful. By learning from the past, we can better navigate the present and shape a more informed future.
             </p>
 
             <h2 className="about-cta-text" data-testid="text-about-cta">
