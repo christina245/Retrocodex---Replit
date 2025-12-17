@@ -1,14 +1,14 @@
 .footer {
   background: #FF5353;
   color: white;
-  padding: 3rem 0 1.5rem;
+  padding: 2.5rem 1rem 1.5rem;
   margin-top: 4rem;
 }
 
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 5rem;
   padding-right: 100px;
   display: flex;
   gap: 4rem;
@@ -103,7 +103,7 @@
 }
 
 .footer-brand-logo {
-  height: 50px;
+  height: 70px;
   width: auto;
   object-fit: contain;
   align-self: flex-start;
@@ -111,9 +111,9 @@
 
 .footer-brand-description {
   font-family: 'Public Sans', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   color: white;
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
