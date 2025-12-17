@@ -80,7 +80,7 @@
 
 .search-results-facts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 515px);
+  grid-template-columns: repeat(2, minmax(280px, 515px));
   gap: 18px;
 }
 
@@ -90,7 +90,6 @@
   position: sticky;
   top: 80px;
   align-self: flex-start;
-  margin-left: 30px;
 }
 
 /* Subcategory cards - matching Other category page */
@@ -243,7 +242,6 @@
   .search-results-sidebar {
     width: 100%;
     position: static;
-    margin-left: 0;
     display: flex;
     justify-content: center;
   }
