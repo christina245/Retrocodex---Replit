@@ -293,7 +293,6 @@ export default function SearchResultsPage() {
                 <FactKey />
               </div>
               <div className="search-results-key-right">
-                <FactKey />
                 <CategoryFilter 
                   selectedFilters={selectedFilters} 
                   onFilterChange={setSelectedFilters} 
