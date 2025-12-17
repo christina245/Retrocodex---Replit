@@ -14,14 +14,41 @@ interface ShareModalProps {
   fact: Fact | null;
 }
 
+// Map category display names to URL paths
+function getCategoryUrl(category: string): string {
+  const categoryMap: Record<string, string> = {
+    "HISTORY": "/category/history",
+    "LIFE SCIENCES": "/category/life-sciences",
+    "EVERYDAY LIFE": "/category/everyday-life",
+    "HEALTH & FITNESS": "/category/health-fitness",
+    "SOCIAL SCIENCES": "/category/social-sciences",
+    "GENDER & SEXUALITY": "/category/gender-sexuality",
+    "OTHER": "/category/other",
+    "OTHER: ANIMALS": "/category/other/animals",
+    "OTHER: ASTRONOMY": "/category/other/astronomy",
+    "OTHER: BEAUTY": "/category/other/beauty",
+    "OTHER: EARTH SCIENCE": "/category/other/earth-science",
+    "OTHER: FOOD": "/category/other/food",
+    "OTHER: LINGUISTICS": "/category/other/linguistics",
+    "OTHER: MUSIC": "/category/other/music",
+    "OTHER: PHYSICS": "/category/other/physics",
+    "OTHER: TECHNOLOGY": "/category/other/technology",
+    "OTHER: UNCATEGORIZED": "/category/other/uncategorized",
+  };
+  return categoryMap[category] || "/";
+}
+
 export function ShareModal({ isOpen, onClose, fact }: ShareModalProps) {
   const [showCopiedToast, setShowCopiedToast] = useState(false);
 
   const handleCopyLink = async () => {
     if (!fact) return;
     
-    // In production, this would be the actual fact URL
-    const url = `${window.location.origin}/fact/${fact.id}`;
+    // If fact has a dedicated page (link property), use that URL
+    // Otherwise, use the category page URL as fallback
+    const url = fact.link 
+      ? `${window.location.origin}${fact.link}`
+      : `${window.location.origin}${getCategoryUrl(fact.category)}`;
     
     try {
       await navigator.clipboard.writeText(url);

@@ -48,7 +48,7 @@ export default function AboutPage() {
             </h2>
 
             <p className="about-body">
-              Retrocodex is a living archive dedicated to collectively exploring how each misconception emerged, evolved, and persisted.
+              Retrocodex: Stuff You Might Have Learned Wrong is a living archive dedicated to collectively exploring how each misconception emerged, evolved, and persisted while accounting for diverse and contradictory perspectives.
             </p>
 
             <p className="about-body">
