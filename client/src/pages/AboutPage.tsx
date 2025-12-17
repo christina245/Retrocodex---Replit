@@ -60,7 +60,7 @@ export default function AboutPage() {
             </p>
 
             <p className="about-body">
-              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research is extremely labor-intensive, the rest of the pages will be added after a certain amount of users have signed up to assure adequate demand.
+              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research is extremely labor-intensive, the rest of the pages will be added after a certain amount of people are on the waitlist to assure adequate demand.
             </p>
 
             <p className="about-body">
