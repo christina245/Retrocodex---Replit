@@ -48,23 +48,23 @@ export default function AboutPage() {
             </h2>
 
             <p className="about-body">
-              Retrocodex is a living archive dedicated not just to correcting outdated facts, but to understanding how disinformation spreads in the first place.
+              Retrocodex is a living archive dedicated to collectively exploring how each misconception emerged, evolved, and persisted.
             </p>
 
             <p className="about-body">
-              Each disproven fact features a timeline showing how the misconception emerged, evolved, and was eventually debunked. You can explore the discoveries that shifted understanding, the controversies that shaped public perception, and the nuances that explain why the myth persisted.
+              In a living archive, new misconceptions are continuously added. Each entry is updated when new relevant discoveries arise. When user accounts become available, you'll be able to learn how other users were affected by each misconception, contribute your own experiences, and receive email updates when new information is discovered that further verifies or refutes the myth. 
             </p>
 
             <p className="about-body">
-              Beyond mapping the spread of disinformation, Retrocodex aims to make everybody's experiences with learning heard. When user accounts are ready, we'd love to hear from everybody where, when, and how you learned each misconception — whether in school, from family, through media, or simply by cultural osmosis.
+              At Retrocodex, facts are treated as something to be continually examined, not permanently settled. Even with the misconceptions debunked by the strongest evidence, new information can always emerge.
             </p>
 
             <p className="about-body">
-              As you can see, the website is currently in beta mode without registered users! Once there's enough traffic, we aim to build an interactive platform where registered users can vote, comment, discuss, and contribute to the collective record.
+              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research is extremely labor-intensive, the rest of the pages will be added after a certain amount of users have signed up to assure adequate demand.
             </p>
 
             <p className="about-body">
-              These features, along with the research and engineering behind them, require meaningful investment in software development, cybersecurity, fact-checking, photo licensing, and human expertise.
+              These features, along with the research and engineering behind them, require strong investment in software development, cybersecurity, fact-checking, copywriting, and human expertise.
             </p>
 
             <p className="about-body">
