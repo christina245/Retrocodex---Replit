@@ -14,9 +14,20 @@ import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
-import { Search, ChevronRight } from "lucide-react";
+import { Search } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./SearchResultsPage.css";
+
+import photoAnimals from "@assets/animals_1764816085493.png";
+import photoAstronomy from "@assets/astronomy_1764816085492.png";
+import photoBeauty from "@assets/beauty_1764816085492.png";
+import photoEarthScience from "@assets/earth_science_1764816085491.png";
+import photoFood from "@assets/food_1764816085491.png";
+import photoLinguistics from "@assets/linguistics_1764816085490.png";
+import photoMusic from "@assets/music_1764816085490.png";
+import photoPhysics from "@assets/physics_1764816085489.png";
+import photoTechnology from "@assets/tech_1764816085490.png";
+import photoUncategorized from "@assets/uncategorized_1764816085488.png";
 
 interface SearchResult {
   facts: Fact[];
@@ -41,17 +52,47 @@ const SUBCATEGORY_SLUGS: Record<string, string> = {
   "Uncategorized": "uncategorized",
 };
 
-const SUBCATEGORY_DESCRIPTIONS: Record<string, string> = {
-  "Animals": "Misconceptions about the creatures we share the world with",
-  "Astronomy": "Misconceptions about the cosmos and space exploration",
-  "Beauty": "Misconceptions about beauty standards and practices",
-  "Earth Science": "Misconceptions about our planet and natural phenomena",
-  "Technology": "Misconceptions about the digital world and innovations",
-  "Food": "Misconceptions about what we eat and nutrition",
-  "Linguistics": "Misconceptions about language and communication",
-  "Music": "Misconceptions about music, instruments, and artists",
-  "Physics": "Misconceptions about the fundamental laws of nature",
-  "Uncategorized": "Miscellaneous misconceptions that defy categorization",
+const SUBCATEGORY_DATA: Record<string, { description: string; photo: string }> = {
+  "Animals": { 
+    description: "Some animals may be safer or more dangerous than you think.",
+    photo: photoAnimals
+  },
+  "Astronomy": { 
+    description: "Mistaken ideas about space, planets, stars, and how our understanding of the universe continues to evolve.",
+    photo: photoAstronomy
+  },
+  "Beauty": { 
+    description: "Several ingredients you were told to avoid in beauty products might not deserve that stigma.",
+    photo: photoBeauty
+  },
+  "Earth Science": { 
+    description: "Addressing common errors about weather, climate, geology, oceans, and the forces that shape our planet.",
+    photo: photoEarthScience
+  },
+  "Technology": { 
+    description: "What is today's technology actually capable of? Is AI actually on par with human abilities?",
+    photo: photoTechnology
+  },
+  "Food": { 
+    description: "Years of deceptive marketing have given us the wrong ideas of what foods and nutrients are actually healthy.",
+    photo: photoFood
+  },
+  "Linguistics": { 
+    description: "You've probably been pronouncing some words wrong for years.",
+    photo: photoLinguistics
+  },
+  "Music": { 
+    description: "Revealing mistaken beliefs about music history, genres, theory, production, and how humans perceive and create sound.",
+    photo: photoMusic
+  },
+  "Physics": { 
+    description: "Untangling oversimplified or outdated ideas about motion, energy, forces, matter, and the nature of the physical world.",
+    photo: photoPhysics
+  },
+  "Uncategorized": { 
+    description: "A mix of widespread misconceptions that don't fit neatly elsewhere but expose how everyday assumptions can mislead us.",
+    photo: photoUncategorized
+  },
 };
 
 function highlightText(text: string, query: string): JSX.Element {
@@ -198,22 +239,41 @@ export default function SearchResultsPage() {
             </div>
 
             <div className="search-results-subcategories-grid">
-              {matchingSubcategories.map((subcategory) => (
-                <Link 
-                  key={subcategory} 
-                  href={`/category/other/${SUBCATEGORY_SLUGS[subcategory]}`}
-                  className="search-subcategory-card"
-                  data-testid={`link-subcategory-${SUBCATEGORY_SLUGS[subcategory]}`}
-                >
-                  <div className="search-subcategory-card-content">
-                    <h3 className="search-subcategory-title">{subcategory}</h3>
-                    <p className="search-subcategory-description">
-                      {SUBCATEGORY_DESCRIPTIONS[subcategory]}
-                    </p>
+              {matchingSubcategories.map((subcategory) => {
+                const data = SUBCATEGORY_DATA[subcategory];
+                const slug = SUBCATEGORY_SLUGS[subcategory];
+                return (
+                  <div 
+                    key={subcategory} 
+                    className="search-subcategory-card"
+                    data-testid={`card-subcategory-${slug}`}
+                  >
+                    <Link 
+                      href={`/category/other/${slug}`}
+                      className="search-subcategory-photo-link"
+                      data-testid={`link-subcategory-photo-${slug}`}
+                    >
+                      <img 
+                        src={data?.photo} 
+                        alt={subcategory} 
+                        className="search-subcategory-photo"
+                      />
+                    </Link>
+                    <div className="search-subcategory-content">
+                      <Link 
+                        href={`/category/other/${slug}`}
+                        className="search-subcategory-name"
+                        data-testid={`link-subcategory-name-${slug}`}
+                      >
+                        {subcategory.toUpperCase()}
+                      </Link>
+                      <p className="search-subcategory-description">
+                        {data?.description}
+                      </p>
+                    </div>
                   </div>
-                  <ChevronRight size={24} className="search-subcategory-arrow" />
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </section>
         )}
