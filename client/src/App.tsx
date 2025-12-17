@@ -19,6 +19,7 @@ import AboutPage from "@/pages/AboutPage";
 import NotFound from "@/pages/not-found";
 
 import FactsByTagPage from "@/pages/FactsByTagPage";
+import SearchResultsPage from "@/pages/SearchResultsPage";
 import AnimalsPage from "@/pages/subcategory-pages/AnimalsPage";
 import AstronomyPage from "@/pages/subcategory-pages/AstronomyPage";
 import BeautyPage from "@/pages/subcategory-pages/BeautyPage";
@@ -57,6 +58,7 @@ function Router() {
       <Route path="/category/other/uncategorized" component={UncategorizedPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/tags/:tagSlug" component={FactsByTagPage} />
+      <Route path="/search/:query" component={SearchResultsPage} />
       <Route component={NotFound} />
     </Switch>
   );

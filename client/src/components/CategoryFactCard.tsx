@@ -22,6 +22,26 @@ interface CategoryFactCardProps {
   onShare?: () => void;
   onComment?: () => void;
   onBetaClick?: () => void;
+  highlightQuery?: string;
+}
+
+function highlightText(text: string, query: string | undefined): JSX.Element {
+  if (!query || !query.trim()) return <>{text}</>;
+  
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  const parts = text.split(regex);
+  
+  return (
+    <>
+      {parts.map((part, index) => 
+        regex.test(part) ? (
+          <span key={index} className="search-highlight">{part}</span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
 }
 
 export function CategoryFactCard({ 
@@ -30,7 +50,8 @@ export function CategoryFactCard({
   onSave, 
   onShare, 
   onComment,
-  onBetaClick
+  onBetaClick,
+  highlightQuery
 }: CategoryFactCardProps) {
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
@@ -72,12 +93,12 @@ export function CategoryFactCard({
               <div className="category-fact-section">
                 <div className="category-fact-statement">
                   <X className="category-fact-icon myth-icon" />
-                  <p className="category-fact-text myth-text">"{fact.myth}"</p>
+                  <p className="category-fact-text myth-text">"{highlightText(fact.myth, highlightQuery)}"</p>
                 </div>
                 
                 <div className="category-fact-statement">
                   <Check className="category-fact-icon truth-icon" />
-                  <p className="category-fact-text truth-text">{fact.truth}</p>
+                  <p className="category-fact-text truth-text">{highlightText(fact.truth, highlightQuery)}</p>
                 </div>
               </div>
             </div>

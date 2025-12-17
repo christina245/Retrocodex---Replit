@@ -1,4 +1,6 @@
-import { Search, HandHeart } from "lucide-react";
+import { useState } from "react";
+import { useLocation } from "wouter";
+import { Search, HandHeart, X } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
@@ -13,6 +15,25 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [, navigate] = useLocation();
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search/${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
   return (
     <header className={`header ${variant === "simplified" ? "header-simplified" : ""}`}>
       <div className="header-container">
@@ -73,15 +94,41 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
         </a>
 
         <div className="header-actions">
-          <button 
-            className="search-button" 
-            data-testid="button-search"
-            aria-label="Search facts"
-            disabled
-            title="Search coming soon"
-          >
-            <Search size={20} />
-          </button>
+          {isSearchOpen ? (
+            <form onSubmit={handleSearchSubmit} className="header-search-form">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search facts..."
+                className="header-search-input"
+                data-testid="input-search"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  setSearchQuery("");
+                }}
+                className="header-search-close"
+                data-testid="button-search-close"
+                aria-label="Close search"
+              >
+                <X size={18} />
+              </button>
+            </form>
+          ) : (
+            <button 
+              className="search-button" 
+              data-testid="button-search"
+              aria-label="Search facts"
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <Search size={20} />
+            </button>
+          )}
           <a 
             href="https://form.typeform.com/to/pal6ZbpG" 
             target="_blank" 

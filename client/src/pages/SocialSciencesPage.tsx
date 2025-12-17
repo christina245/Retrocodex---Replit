@@ -160,10 +160,10 @@ export default function SocialSciencesPage() {
           <div className="social-sciences-description">
             <p><b>The way humans work isn't as simple as we were taught growing up.</b></p>
             <p>
-              Daily human interaction made it easy for assumptions to become accepted as fact, with certain phrases being socially ingrained by pop psychology and media even when after they were scientifically debunked.
+              Daily human interaction made it too easy for assumptions about each other to ingrain such powerful mental biases that they shaped entire fields of study.
             </p>
             <p>
-              Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or assumptions based off limited personal experiences and the intuitive expectations that followed.
+              Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the intuitive expectations that followed.
             </p>
           </div>
           <div className="social-sciences-photo">

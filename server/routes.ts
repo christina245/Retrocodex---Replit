@@ -178,6 +178,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/search - Search facts and subcategories (public)
+  app.get("/api/search", async (req, res) => {
+    try {
+      const query = (req.query.q as string || "").toLowerCase().trim();
+      
+      if (!query) {
+        return res.json({ facts: [], matchingSubcategories: [], tagOnlyFacts: [] });
+      }
+
+      const allFacts = await storage.getAllFacts();
+      
+      // Check for matching subcategories
+      const OTHER_SUBCATEGORIES = [
+        "Animals", "Astronomy", "Beauty", "Earth Science", "Technology",
+        "Food", "Linguistics", "Music", "Physics", "Uncategorized"
+      ];
+      
+      const matchingSubcategories = OTHER_SUBCATEGORIES.filter(sub => 
+        sub.toLowerCase().includes(query)
+      );
+
+      // Search facts by text content (title, mythHeader, truthHeader)
+      const textMatchFacts: any[] = [];
+      const tagOnlyFacts: any[] = [];
+
+      for (const fact of allFacts) {
+        const titleMatch = fact.title?.toLowerCase().includes(query);
+        const mythHeaderMatch = fact.mythHeader?.toLowerCase().includes(query);
+        const truthHeaderMatch = fact.truthHeader?.toLowerCase().includes(query);
+        
+        const hasTextMatch = titleMatch || mythHeaderMatch || truthHeaderMatch;
+        
+        // Check tag matches
+        const hasTagMatch = fact.searchTags?.some(tag => 
+          tag.toLowerCase().includes(query)
+        );
+
+        if (hasTextMatch) {
+          textMatchFacts.push({ ...fact, matchType: 'text' });
+        } else if (hasTagMatch) {
+          tagOnlyFacts.push({ ...fact, matchType: 'tag' });
+        }
+      }
+
+      res.json({ 
+        facts: textMatchFacts, 
+        matchingSubcategories,
+        tagOnlyFacts 
+      });
+    } catch (error) {
+      console.error("Error searching:", error);
+      res.status(500).json({ message: "Failed to search" });
+    }
+  });
+
   // GET /api/facts/:slug - Get a fact by slug (public)
   app.get("/api/facts/:slug", async (req, res) => {
     try {

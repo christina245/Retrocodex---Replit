@@ -1,0 +1,241 @@
+.search-results-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.search-results-main-content {
+  flex: 1;
+  padding: 0 40px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.search-results-section {
+  margin-top: 30px;
+}
+
+.search-results-section + .search-results-section {
+  margin-top: 50px;
+}
+
+.search-results-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 50px;
+}
+
+.search-results-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-results-icon {
+  color: #2C2C2C;
+  flex-shrink: 0;
+}
+
+.search-results-intro-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.search-results-query {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.search-results-filter-container {
+  flex-shrink: 0;
+}
+
+.search-results-key-container {
+  margin-top: 20px;
+  width: 515px;
+}
+
+.search-results-key-container .fact-key-text {
+  line-height: 1.2;
+}
+
+.search-results-content-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 30px;
+}
+
+.search-results-facts-column {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-results-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+}
+
+.search-results-sidebar {
+  flex-shrink: 0;
+  width: 280px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+}
+
+/* Subcategory cards */
+.search-results-subcategories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 515px);
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.search-subcategory-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #2C2C2C;
+  border-radius: 10px;
+  padding: 24px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-subcategory-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-subcategory-card-content {
+  flex: 1;
+}
+
+.search-subcategory-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0 0 8px 0;
+}
+
+.search-subcategory-description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.search-subcategory-arrow {
+  color: #FFFFFF;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+
+/* Empty state */
+.search-results-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.search-results-empty-icon {
+  color: #878787;
+  margin-bottom: 20px;
+}
+
+.search-results-empty-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0 0 10px 0;
+}
+
+.search-results-empty-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  color: #878787;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.search-results-loading {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  color: #878787;
+  text-align: center;
+  padding: 40px;
+}
+
+/* Search highlight */
+.search-highlight {
+  background-color: rgba(255, 83, 83, 0.2);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+@media (max-width: 1200px) {
+  .search-results-facts-grid,
+  .search-results-subcategories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .search-results-key-container {
+    width: auto;
+    max-width: 515px;
+  }
+}
+
+@media (max-width: 900px) {
+  .search-results-header-row {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .search-results-filter-container {
+    order: 3;
+    width: 100%;
+  }
+
+  .search-results-content-container {
+    flex-direction: column;
+  }
+
+  .search-results-facts-grid,
+  .search-results-subcategories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .search-results-key-container {
+    display: none;
+  }
+
+  .search-results-sidebar {
+    width: 100%;
+    position: static;
+  }
+
+  .search-results-main-content {
+    padding: 0 20px;
+  }
+
+  .search-results-intro-text,
+  .search-results-query {
+    font-size: 16px;
+  }
+}
