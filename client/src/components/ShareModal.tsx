@@ -16,7 +16,11 @@ interface ShareModalProps {
 
 // Map category display names to URL paths
 function getCategoryUrl(category: string): string {
+  // Normalize to uppercase and trim for consistent matching
+  const normalizedCategory = category.toUpperCase().trim();
+  
   const categoryMap: Record<string, string> = {
+    // Main categories
     "HISTORY": "/category/history",
     "LIFE SCIENCES": "/category/life-sciences",
     "EVERYDAY LIFE": "/category/everyday-life",
@@ -24,6 +28,8 @@ function getCategoryUrl(category: string): string {
     "SOCIAL SCIENCES": "/category/social-sciences",
     "GENDER & SEXUALITY": "/category/gender-sexuality",
     "OTHER": "/category/other",
+    
+    // Subcategories with "OTHER:" prefix
     "OTHER: ANIMALS": "/category/other/animals",
     "OTHER: ASTRONOMY": "/category/other/astronomy",
     "OTHER: BEAUTY": "/category/other/beauty",
@@ -34,8 +40,21 @@ function getCategoryUrl(category: string): string {
     "OTHER: PHYSICS": "/category/other/physics",
     "OTHER: TECHNOLOGY": "/category/other/technology",
     "OTHER: UNCATEGORIZED": "/category/other/uncategorized",
+    
+    // Standalone subcategory names (without prefix)
+    "ANIMALS": "/category/other/animals",
+    "ASTRONOMY": "/category/other/astronomy",
+    "BEAUTY": "/category/other/beauty",
+    "EARTH SCIENCE": "/category/other/earth-science",
+    "FOOD": "/category/other/food",
+    "LINGUISTICS": "/category/other/linguistics",
+    "MUSIC": "/category/other/music",
+    "PHYSICS": "/category/other/physics",
+    "TECHNOLOGY": "/category/other/technology",
+    "UNCATEGORIZED": "/category/other/uncategorized",
   };
-  return categoryMap[category] || "/";
+  
+  return categoryMap[normalizedCategory] || "/";
 }
 
 export function ShareModal({ isOpen, onClose, fact }: ShareModalProps) {
