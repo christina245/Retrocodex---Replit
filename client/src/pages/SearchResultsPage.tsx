@@ -219,7 +219,7 @@ export default function SearchResultsPage() {
     });
   };
 
-  const hasResults = matchingSubcategories.length > 0 || filteredFacts.length > 0;
+  const hasResults = matchingSubcategories.length > 0 || allFacts.length > 0;
 
   return (
     <div className="search-results-page">
@@ -227,7 +227,8 @@ export default function SearchResultsPage() {
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <CategoryNav />
 
-      <main className="search-results-main-content">
+      <div className="search-results-layout">
+        <main className="search-results-main-content">
         {matchingSubcategories.length > 0 && (
           <section className="search-results-section">
             <div className="search-results-header-row">
@@ -278,7 +279,7 @@ export default function SearchResultsPage() {
           </section>
         )}
 
-        {filteredFacts.length > 0 && (
+        {allFacts.length > 0 && (
           <section className="search-results-section">
             <div className="search-results-header-row">
               <div className="search-results-header-left">
@@ -298,31 +299,25 @@ export default function SearchResultsPage() {
               <FactKey />
             </div>
 
-            <div className="search-results-content-container">
-              <div className="search-results-facts-column">
-                {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
-                  <EmptyFilterState />
-                ) : (
-                  <div className="search-results-facts-grid">
-                    {filteredFacts.map((fact) => (
-                      <CategoryFactCard
-                        key={fact.id}
-                        fact={fact}
-                        categoryColor="#2C2C2C"
-                        onSave={handleSaveClick}
-                        onShare={() => handleShareClick(fact)}
-                        onComment={handleCommentClick}
-                        onBetaClick={handleBetaClick}
-                        highlightQuery={fact.matchType === 'text' ? decodedQuery : undefined}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <aside className="search-results-sidebar">
-                <BeehiivBanner />
-              </aside>
+            <div className="search-results-facts-grid">
+              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+                <EmptyFilterState />
+              ) : (
+                <>
+                  {filteredFacts.map((fact) => (
+                    <CategoryFactCard
+                      key={fact.id}
+                      fact={fact}
+                      categoryColor="#2C2C2C"
+                      onSave={handleSaveClick}
+                      onShare={() => handleShareClick(fact)}
+                      onComment={handleCommentClick}
+                      onBetaClick={handleBetaClick}
+                      highlightQuery={fact.matchType === 'text' ? decodedQuery : undefined}
+                    />
+                  ))}
+                </>
+              )}
             </div>
           </section>
         )}
@@ -344,6 +339,11 @@ export default function SearchResultsPage() {
           </div>
         )}
       </main>
+
+      <aside className="search-results-sidebar">
+        <BeehiivBanner />
+      </aside>
+      </div>
 
       <Footer />
 
