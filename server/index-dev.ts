@@ -8,6 +8,7 @@ import { createServer as createViteServer, createLogger } from "vite";
 
 import viteConfig from "../vite.config";
 import runApp from "./app";
+import { getMetaTagsForUrl, injectMetaTags } from "./metaTags";
 
 export async function setupVite(app: Express, server: Server) {
   const viteLogger = createLogger();
@@ -49,6 +50,11 @@ export async function setupVite(app: Express, server: Server) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
+      
+      // Inject dynamic meta tags based on URL
+      const metaData = await getMetaTagsForUrl(url);
+      template = injectMetaTags(template, metaData);
+      
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {

@@ -1,11 +1,10 @@
-import { X, Check, Copy } from "lucide-react";
-import { FaFacebook, FaWhatsapp, FaTelegram, FaFacebookMessenger, FaDiscord } from "react-icons/fa";
+import { X, Copy } from "lucide-react";
+import { FaFacebook, FaWhatsapp, FaTelegram, FaDiscord } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
 import { BsSendFill } from "react-icons/bs";
 import { useState } from "react";
 import type { Fact } from "./FactCard";
 import smsIcon from "@assets/sms icon_1763805965172.png";
-import lineLogo from "@assets/line logo white background.png";
 import "./ShareModal.css";
 
 interface ShareModalProps {
@@ -140,42 +139,6 @@ export function ShareModal({ isOpen, onClose, fact }: ShareModalProps) {
           <div className="share-option inactive" data-tooltip="Unavailable in beta">
             <img src={smsIcon} alt="" className="share-icon-image" />
             <span>SMS</span>
-          </div>
-        </div>
-
-        {/* Preview Section */}
-        <div className="share-preview-section">
-          <div className="share-preview-label">PREVIEW</div>
-          <div className="share-preview-card">
-            <div className="preview-header">
-              <div>
-                <h3 className="preview-title">Stuff You Might Have Learned Wrong</h3>
-                <p className="preview-subtitle">Learn more about this fact and view sources</p>
-              </div>
-              <img 
-                src={lineLogo} 
-                alt="Retrocodex" 
-                className="preview-logo"
-              />
-            </div>
-
-            <div className="preview-fact">
-              <div className="preview-fact-section">
-                <div className="preview-fact-label">YOU MIGHT HAVE BEEN TAUGHT</div>
-                <div className="preview-fact-statement">
-                  <X className="preview-fact-icon myth-icon" />
-                  <p className="preview-fact-text">"{fact.myth}"</p>
-                </div>
-              </div>
-
-              <div className="preview-fact-section">
-                <div className="preview-fact-label">CURRENT UNDERSTANDING AS OF 2025</div>
-                <div className="preview-fact-statement">
-                  <Check className="preview-fact-icon truth-icon" />
-                  <p className="preview-fact-text">{fact.truth}</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
