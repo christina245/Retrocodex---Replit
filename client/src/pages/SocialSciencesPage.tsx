@@ -35,7 +35,7 @@ const socialSciencesFacts: CategoryFact[] = [
   }
 ];
 
-const CATEGORY_COLOR = "#EB02C8";
+const CATEGORY_COLOR = "#E563D1";
 
 export default function SocialSciencesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

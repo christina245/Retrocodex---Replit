@@ -33,7 +33,7 @@ const historyFacts: CategoryFact[] = [
  
 ];
 
-const CATEGORY_COLOR = "#F5D547";
+const CATEGORY_COLOR = "#DFB600";
 
 export default function HistoryPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

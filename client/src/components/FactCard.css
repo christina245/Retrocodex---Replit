@@ -56,6 +56,7 @@
 .fact-content {
   padding: 1.2rem;
   padding-left: 15px;
+  padding-right: 30px;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -131,13 +132,13 @@
 
 .learn-more-button {
   background: rgba(44, 44, 44, 0.05);
-  color: #dc143c;
+  color: #FF5353;
   border: none;
   padding: 12px 15px 12px 10px;
-  border-radius: 6px;
+  border-radius: 5px;
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
