@@ -39,8 +39,8 @@ export async function getMetaTagsForUrl(url: string): Promise<MetaTagData> {
     try {
       const fact = await storage.getFactBySlug(slug);
       if (fact) {
-        // Use mythHeader for description, with fallback to default
-        const description = fact.mythHeader || DEFAULT_DESCRIPTION;
+        // Use truthHeader for description - shows the answer to the question (title)
+        const description = fact.truthHeader || DEFAULT_DESCRIPTION;
         return {
           title: fact.title || DEFAULT_TITLE,
           description: description,
