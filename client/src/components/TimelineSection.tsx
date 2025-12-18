@@ -1,20 +1,13 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
-import howToWinFriends from "@assets/how to win friends 1936 version 1_1763930466764.png";
-import limitlessCover from "@assets/limitless cover_1763930486983.jpg";
-import lucyPoster from "@assets/Lucy - Quad Movie Poster (Crop)_1763930493964.png";
 import "./TimelineSection.css";
 
 interface TimelineEvent {
   year: string;
   text: string;
-}
-
-interface Photo {
-  src: string;
-  hasTransparentBg: boolean;
-  caption?: string;
+  imageUrl?: string;
+  imageCaption?: string;
 }
 
 interface NuanceItem {
@@ -25,18 +18,19 @@ interface NuanceItem {
 
 interface TimelineSectionProps {
   timeline: TimelineEvent[];
-  photos: Photo[];
   nuances?: NuanceItem[];
 }
 
-const photoMap: Record<string, string> = {
-  "how to win friends 1936 version 1": howToWinFriends,
-  "limitless cover": limitlessCover,
-  "Lucy - Quad Movie Poster (Crop)": lucyPoster,
-};
-
-export default function TimelineSection({ timeline, photos, nuances = [] }: TimelineSectionProps) {
+export default function TimelineSection({ timeline, nuances = [] }: TimelineSectionProps) {
   const [activeTab, setActiveTab] = useState<"timeline" | "nuances">("timeline");
+  
+  // Extract photos from timeline entries that have images
+  const photos = timeline
+    .filter(entry => entry.imageUrl)
+    .map(entry => ({
+      src: entry.imageUrl!,
+      caption: entry.imageCaption
+    }));
 
   return (
     <div className="timeline-section" data-testid="timeline-section">
@@ -95,36 +89,38 @@ export default function TimelineSection({ timeline, photos, nuances = [] }: Time
                 ))}
               </div>
 
-              <div className="timeline-photos-column">
-                {photos.map((photo, index) => (
-                  <div key={index} className="timeline-photo-wrapper">
-                    <img
-                      src={photoMap[photo.src]}
-                      alt={`Timeline photo ${index + 1}`}
-                      className={`timeline-photo ${photo.hasTransparentBg ? "" : "rounded"}`}
-                      data-testid={`timeline-photo-${index}`}
-                    />
-                    {photo.caption && (
-                      <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
-                        <ReactMarkdown
-                          rehypePlugins={[rehypeSanitize]}
-                          components={{
-                            p: ({ children }) => <>{children}</>,
-                            em: ({ children }) => <em>{children}</em>,
-                            a: ({ href, children }) => (
-                              <a href={href} target="_blank" rel="noopener noreferrer">
-                                {children}
-                              </a>
-                            ),
-                          }}
-                        >
-                          {photo.caption}
-                        </ReactMarkdown>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              {photos.length > 0 && (
+                <div className="timeline-photos-column">
+                  {photos.map((photo, index) => (
+                    <div key={index} className="timeline-photo-wrapper">
+                      <img
+                        src={photo.src}
+                        alt={photo.caption || `Timeline photo ${index + 1}`}
+                        className="timeline-photo rounded"
+                        data-testid={`timeline-photo-${index}`}
+                      />
+                      {photo.caption && (
+                        <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
+                          <ReactMarkdown
+                            rehypePlugins={[rehypeSanitize]}
+                            components={{
+                              p: ({ children }) => <>{children}</>,
+                              em: ({ children }) => <em>{children}</em>,
+                              a: ({ href, children }) => (
+                                <a href={href} target="_blank" rel="noopener noreferrer">
+                                  {children}
+                                </a>
+                              ),
+                            }}
+                          >
+                            {photo.caption}
+                          </ReactMarkdown>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         ) : (

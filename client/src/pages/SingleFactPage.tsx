@@ -143,23 +143,6 @@ export default function SingleFactPage() {
         text: 'Articles debunking this myth are still being published in recent years, such as [“The 10-Percent-of-Your-Brain Myth That Just Won’t Die”](https://www.discovermagazine.com/the-10-percent-of-your-brain-myth-that-just-wont-die-42817) in 2021 from Discover Magazine, [“Do we only use 10 percent of our brain?”](https://mcgovern.mit.edu/2024/01/26/do-we-use-only-10-percent-of-our-brain/) by MIT in 2024, and [“Beyond the Myth That We Use Only 10 Percent of Our Brains”](https://www.psychologytoday.com/us/blog/common-sense-science/202505/beyond-the-myth-that-we-use-only-10-percent-of-our-brains) from Psychology Today in 2025. This suggests the myth is still commonly circulating, although it isn’t specified where it’s being taught.'
       }
     ],
-    photos: [
-      { 
-        src: "how to win friends 1936 version 1",
-        hasTransparentBg: false,
-        caption: "1936 edition of *[How to Win Friends and Influence People](https://en.wikipedia.org/wiki/How_to_Win_Friends_and_Influence_People)*, which would become one of the most influential self-help books of the 20th century."
-      },
-      { 
-        src: "limitless cover",
-        hasTransparentBg: false,
-        caption: "Film poster of *[Limitless](https://www.imdb.com/title/tt1219289/)* (2011)"
-      },
-      { 
-        src: "Lucy - Quad Movie Poster (Crop)",
-        hasTransparentBg: false,
-        caption: "Film poster of *[Lucy](https://www.imdb.com/title/tt2872732/)* (2014) where it explicitly references the 10% myth."
-      }
-    ],
     nuances: [
       {
         category: "Semantics",
@@ -239,7 +222,6 @@ export default function SingleFactPage() {
           <div className="right-column">
             <TimelineSection 
               timeline={factData.timeline} 
-              photos={factData.photos}
               nuances={factData.nuances}
             />
           </div>
