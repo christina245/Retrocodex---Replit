@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper } from "lucide-react";
+import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
@@ -40,8 +40,9 @@ export default function AdminPage() {
   // Edit mode state
   const [editingFactId, setEditingFactId] = useState<string | null>(null);
   
-  // View Facts pagination
+  // View Facts pagination and search
   const [factsPage, setFactsPage] = useState(1);
+  const [factsSearch, setFactsSearch] = useState("");
   const FACTS_PER_PAGE = 10;
   
   // Blog post edit mode
@@ -690,9 +691,24 @@ export default function AdminPage() {
     return "#878787";
   };
 
-  // Pagination for View Facts
-  const totalPages = facts ? Math.ceil(facts.length / FACTS_PER_PAGE) : 0;
-  const paginatedFacts = facts ? facts.slice((factsPage - 1) * FACTS_PER_PAGE, factsPage * FACTS_PER_PAGE) : [];
+  // Filter and Pagination for View Facts
+  const filteredFacts = facts ? facts.filter((fact) => {
+    if (!factsSearch.trim()) return true;
+    const searchLower = factsSearch.toLowerCase().trim();
+    const searchableText = [
+      fact.title,
+      fact.mythHeader,
+      fact.mythDetails,
+      fact.truthHeader,
+      fact.truthDetails,
+      ...fact.categories,
+      ...(fact.factFilters || []),
+      ...(fact.searchTags || [])
+    ].filter(Boolean).join(" ").toLowerCase();
+    return searchableText.includes(searchLower);
+  }) : [];
+  const totalPages = Math.ceil(filteredFacts.length / FACTS_PER_PAGE);
+  const paginatedFacts = filteredFacts.slice((factsPage - 1) * FACTS_PER_PAGE, factsPage * FACTS_PER_PAGE);
 
   // Pagination for View Blog Posts
   const totalBlogPages = blogPosts ? Math.ceil(blogPosts.length / BLOGS_PER_PAGE) : 0;
@@ -1341,10 +1357,40 @@ export default function AdminPage() {
               <div>
                 <h1 className="content-title">View Facts</h1>
                 <p className="content-subtitle" data-testid="text-facts-count">
-                  {facts?.length || 0} {facts?.length === 1 ? 'fact' : 'facts'} total
+                  {factsSearch ? `${filteredFacts.length} of ${facts?.length || 0}` : (facts?.length || 0)} {facts?.length === 1 ? 'fact' : 'facts'}{factsSearch ? ' matching' : ' total'}
                 </p>
               </div>
             </header>
+            
+            <div className="search-container">
+              <div className="search-input-wrapper">
+                <Search size={18} className="search-icon" />
+                <input
+                  type="text"
+                  value={factsSearch}
+                  onChange={(e) => {
+                    setFactsSearch(e.target.value);
+                    setFactsPage(1);
+                  }}
+                  placeholder="Search facts by text, category, or tags..."
+                  className="search-input"
+                  data-testid="input-facts-search"
+                />
+                {factsSearch && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFactsSearch("");
+                      setFactsPage(1);
+                    }}
+                    className="search-clear-button"
+                    data-testid="button-clear-search"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
 
             {factsLoading ? (
               <div className="loading-message" data-testid="text-loading">Loading facts...</div>
@@ -1442,7 +1488,11 @@ export default function AdminPage() {
               </>
             ) : (
               <div className="empty-state">
-                <p data-testid="text-empty">No facts created yet. Click "Add New Fact" to create one.</p>
+                <p data-testid="text-empty">
+                  {factsSearch 
+                    ? `No facts found matching "${factsSearch}". Try a different search term.`
+                    : 'No facts created yet. Click "Add New Fact" to create one.'}
+                </p>
               </div>
             )}
           </div>

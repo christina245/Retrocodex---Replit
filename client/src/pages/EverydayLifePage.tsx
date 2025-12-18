@@ -29,16 +29,7 @@ import photoHyperKids from "@assets/stock_images/hyper kids.png";
 const everydayLifeFacts: CategoryFact[] = [
   
 
-  {
-    id: "sugar-hyper",
-    myth: "Eating too much sugar makes kids hyper.",
-    truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
-    factFilters: [],
-    dateAdded: "2025-11-05",
-    link: "/fact/sugar-hyper",
-    coverPhoto: photoHyperKids,
-    betaOnly: true
-  },
+ 
  
 ];
 
