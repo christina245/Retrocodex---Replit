@@ -680,15 +680,15 @@ export default function AdminPage() {
     window.URL.revokeObjectURL(url);
   };
 
-  // Get the category color for fact cards
+  // Get the category color for fact cards (matching frontend colors)
   const getCategoryColor = (categories: string[]): string => {
-    if (categories.includes("History")) return "#4A90A4";
-    if (categories.includes("Life Sciences")) return "#7CB342";
-    if (categories.includes("Health & Fitness")) return "#E91E63";
-    if (categories.includes("Social Sciences")) return "#9C27B0";
-    if (categories.includes("Gender & Sexuality")) return "#FF9800";
-    if (categories.includes("Everyday Life")) return "#795548";
-    return "#878787";
+    if (categories.includes("History")) return "#F5D547";
+    if (categories.includes("Life Sciences")) return "#6FCF97";
+    if (categories.includes("Health & Fitness")) return "#F2994A";
+    if (categories.includes("Social Sciences")) return "#9B51E0";
+    if (categories.includes("Gender & Sexuality")) return "#FC5AA8";
+    if (categories.includes("Everyday Life")) return "#2A9BEC";
+    return "#2C2C2C";
   };
 
   // Filter and Pagination for View Facts
