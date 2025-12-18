@@ -41,6 +41,7 @@ export const timelineEntrySchema = z.object({
   header: z.string().min(1, "Header is required"),
   description: z.string().min(1, "Description is required"),
   imageUrl: z.string().optional(),
+  imageCaption: z.string().optional(),
   order: z.number(),
 });
 
