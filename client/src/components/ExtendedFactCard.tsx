@@ -1,13 +1,11 @@
 import { X, Check, BookOpen, Bookmark, Share2 } from "lucide-react";
-import mcgovernLogo from "@assets/mcgovern svg (1)_1763940847877.png";
-import apsLogo from "@assets/Association_for_Psychological_Science_Logo_-_PNG 1_1763930617322.png";
 import "./ExtendedFactCard.css";
 
 interface Source {
-  type: "editorial" | "academic";
-  name: string;
-  logo?: string;
-  url: string;
+  id: string;
+  citation: string;
+  link: string;
+  logoUrl?: string;
 }
 
 interface ExtendedFactCardProps {
@@ -22,11 +20,6 @@ interface ExtendedFactCardProps {
   onSave?: () => void;
   onShare?: () => void;
 }
-
-const logoMap: Record<string, string> = {
-  "mcgovern svg": mcgovernLogo,
-  "Association_for_Psychological_Science_Logo_-_PNG 1": apsLogo,
-};
 
 export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFactCardProps) {
   return (
@@ -59,34 +52,33 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
           </div>
           
           <div className="sources-list">
-            {fact.sources
-              .filter(s => s.type === "editorial")
-              .map((source, idx) => (
-                <div key={idx} className="source-item editorial-source">
-                  {source.logo && logoMap[source.logo] && (
+            {fact.sources.map((source, idx) => (
+              <div key={source.id} className="source-item">
+                {source.logoUrl && (
+                  <a
+                    href={source.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="source-logo-link"
+                  >
                     <img 
-                      src={logoMap[source.logo]} 
-                      alt={source.name} 
+                      src={source.logoUrl} 
+                      alt="Source logo" 
                       className="source-logo"
                     />
-                  )}
-                </div>
-              ))}
-            
-            {fact.sources
-              .filter(s => s.type === "academic")
-              .map((source, idx) => (
+                  </a>
+                )}
                 <a
-                  key={idx}
-                  href={source.url}
-                  className="source-item academic-source"
+                  href={source.link}
+                  className="source-citation"
                   target="_blank"
                   rel="noopener noreferrer"
                   data-testid={`source-link-${idx}`}
                 >
-                  {source.name}
+                  {source.citation}
                 </a>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -4,16 +4,19 @@ import rehypeSanitize from "rehype-sanitize";
 import "./TimelineSection.css";
 
 interface TimelineEvent {
+  id: string;
   year: string;
-  text: string;
+  header: string;
+  description: string;
   imageUrl?: string;
   imageCaption?: string;
+  order: number;
 }
 
 interface NuanceItem {
-  category: string;
-  text: string;
-  isControversial?: boolean;
+  id: string;
+  type: string;
+  body: string;
 }
 
 interface TimelineSectionProps {
@@ -66,10 +69,28 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
             <div className="timeline-columns">
               <div className="timeline-text-column">
                 {timeline.map((event, index) => (
-                  <div key={index} className="timeline-event" data-testid={`timeline-event-${index}`}>
+                  <div key={event.id} className="timeline-event" data-testid={`timeline-event-${index}`}>
                     <div className="timeline-line"></div>
                     <div className="timeline-year">{event.year}</div>
                     <div className="timeline-text">
+                      {event.header && (
+                        <div className="timeline-header">
+                          <ReactMarkdown
+                            rehypePlugins={[rehypeSanitize]}
+                            components={{
+                              p: ({ children }) => <>{children}</>,
+                              em: ({ children }) => <em>{children}</em>,
+                              a: ({ href, children }) => (
+                                <a href={href} target="_blank" rel="noopener noreferrer">
+                                  {children}
+                                </a>
+                              ),
+                            }}
+                          >
+                            {event.header}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                       <ReactMarkdown
                         rehypePlugins={[rehypeSanitize]}
                         components={{
@@ -82,7 +103,7 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                           ),
                         }}
                       >
-                        {event.text}
+                        {event.description}
                       </ReactMarkdown>
                     </div>
                   </div>
@@ -128,18 +149,31 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
             {nuances.length > 0 ? (
               nuances.map((nuance, index) => (
                 <div 
-                  key={index} 
-                  className={`nuance-box ${nuance.isControversial ? "nuance-box-controversial" : ""}`}
+                  key={nuance.id} 
+                  className="nuance-box"
                   data-testid={`nuance-box-${index}`}
                 >
                   <div 
-                    className={`nuance-category ${nuance.isControversial ? "nuance-category-controversial" : ""}`}
+                    className="nuance-category"
                     data-testid={`nuance-category-${index}`}
                   >
-                    {nuance.category}
+                    {nuance.type}
                   </div>
                   <div className="nuance-text" data-testid={`nuance-text-${index}`}>
-                    {nuance.text}
+                    <ReactMarkdown
+                      rehypePlugins={[rehypeSanitize]}
+                      components={{
+                        p: ({ children }) => <>{children}</>,
+                        em: ({ children }) => <em>{children}</em>,
+                        a: ({ href, children }) => (
+                          <a href={href} target="_blank" rel="noopener noreferrer">
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    >
+                      {nuance.body}
+                    </ReactMarkdown>
                   </div>
                 </div>
               ))

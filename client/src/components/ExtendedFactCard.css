@@ -102,35 +102,39 @@
 
 .sources-list {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 12px;
 }
 
 .source-item {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.editorial-source {
-  margin-bottom: 8px;
+.source-logo-link {
+  flex-shrink: 0;
 }
 
 .source-logo {
   height: 32px;
   width: auto;
+  max-width: 120px;
   object-fit: contain;
 }
 
-.academic-source {
+.source-citation {
   font-family: 'Public Sans', sans-serif;
   font-size: 10px;
   font-weight: 300;
   color: #2C2C2C;
   text-decoration: none;
   transition: all 0.2s;
+  line-height: 1.5;
 }
 
-.academic-source:hover {
+.source-citation:hover {
   color: #FF5353;
   text-decoration: underline;
 }
