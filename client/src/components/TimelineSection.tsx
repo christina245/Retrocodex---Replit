@@ -6,7 +6,6 @@ import "./TimelineSection.css";
 interface TimelineEvent {
   id: string;
   year: string;
-  header: string;
   description: string;
   imageUrl?: string;
   imageCaption?: string;
@@ -73,24 +72,6 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                     <div className="timeline-line"></div>
                     <div className="timeline-year">{event.year}</div>
                     <div className="timeline-text">
-                      {event.header && (
-                        <div className="timeline-header">
-                          <ReactMarkdown
-                            rehypePlugins={[rehypeSanitize]}
-                            components={{
-                              p: ({ children }) => <>{children}</>,
-                              em: ({ children }) => <em>{children}</em>,
-                              a: ({ href, children }) => (
-                                <a href={href} target="_blank" rel="noopener noreferrer">
-                                  {children}
-                                </a>
-                              ),
-                            }}
-                          >
-                            {event.header}
-                          </ReactMarkdown>
-                        </div>
-                      )}
                       <ReactMarkdown
                         rehypePlugins={[rehypeSanitize]}
                         components={{

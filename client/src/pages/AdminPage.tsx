@@ -503,9 +503,9 @@ export default function AdminPage() {
     setTimeline([...timeline, { 
       id: generateId(), 
       year: "", 
-      header: "", 
       description: "", 
       imageUrl: undefined,
+      imageCaption: undefined,
       order: timeline.length 
     }]);
   };
@@ -595,7 +595,7 @@ export default function AdminPage() {
     const validSources = sources.filter(s => s.citation && s.link);
     
     // Validate timeline entries
-    const validTimeline = timeline.filter(t => t.year && t.header && t.description);
+    const validTimeline = timeline.filter(t => t.year && t.description);
     
     // Validate nuances
     const validNuances = nuances.filter(n => n.type && n.body);
@@ -1180,30 +1180,16 @@ export default function AdminPage() {
                       </button>
                     </div>
                     
-                    <div className="form-row">
-                      <div className="form-group form-group-small">
-                        <label className="form-label">Year</label>
-                        <input
-                          type="text"
-                          value={entry.year}
-                          onChange={(e) => updateTimelineEntry(index, 'year', e.target.value)}
-                          className="form-input"
-                          placeholder="e.g., 1950"
-                          data-testid={`input-timeline-year-${index}`}
-                        />
-                      </div>
-
-                      <div className="form-group form-group-large">
-                        <label className="form-label">Header</label>
-                        <input
-                          type="text"
-                          value={entry.header}
-                          onChange={(e) => updateTimelineEntry(index, 'header', e.target.value)}
-                          className="form-input"
-                          placeholder="What happened..."
-                          data-testid={`input-timeline-header-${index}`}
-                        />
-                      </div>
+                    <div className="form-group">
+                      <label className="form-label">Year</label>
+                      <input
+                        type="text"
+                        value={entry.year}
+                        onChange={(e) => updateTimelineEntry(index, 'year', e.target.value)}
+                        className="form-input"
+                        placeholder="e.g., 1950"
+                        data-testid={`input-timeline-year-${index}`}
+                      />
                     </div>
 
                     <div className="form-group">

@@ -38,7 +38,6 @@ export const sourceSchema = z.object({
 export const timelineEntrySchema = z.object({
   id: z.string(),
   year: z.string().min(1, "Year is required"),
-  header: z.string().min(1, "Header is required"),
   description: z.string().min(1, "Description is required"),
   imageUrl: z.string().optional(),
   imageCaption: z.string().optional(),
