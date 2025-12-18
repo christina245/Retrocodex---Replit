@@ -1246,6 +1246,20 @@ export default function AdminPage() {
                         )}
                       </div>
                     </div>
+
+                    {entry.imageUrl && (
+                      <div className="form-group">
+                        <label className="form-label">Image Caption (Optional)</label>
+                        <input
+                          type="text"
+                          value={entry.imageCaption || ''}
+                          onChange={(e) => updateTimelineEntry(index, 'imageCaption', e.target.value)}
+                          className="form-input"
+                          placeholder="Caption for the image..."
+                          data-testid={`input-timeline-caption-${index}`}
+                        />
+                      </div>
+                    )}
                   </div>
                 ))}
 
