@@ -17,7 +17,7 @@
 
 .timeline-tab {
   font-family: 'Public Sans', sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   color: #878787;
   background: transparent;
   border: none;
@@ -103,8 +103,8 @@
 }
 
 .timeline-year {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
+  font-family: 'Merriweather', sans-serif;
+  font-size: 16px;
   font-weight: 600;
   color: #2C2C2C;
   margin-bottom: 6px;
@@ -112,10 +112,10 @@
 
 .timeline-text {
   font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .timeline-text a {
