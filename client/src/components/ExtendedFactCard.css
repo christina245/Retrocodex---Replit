@@ -33,7 +33,7 @@
 }
 
 .fact-section {
-  margin-bottom: 14px;
+  margin-bottom: 15px;
 }
 
 .fact-section:last-child {
@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .label-text {
@@ -53,7 +53,7 @@
   font-weight: 300;
   color: #878787;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .fact-icon {
@@ -78,15 +78,15 @@
   font-weight: 800;
   color: #2C2C2C;
   line-height: 1.5;
-  margin: 0 0 0 0;
+  margin: 0 0 10 0;
 }
 .fact-truth {
   font-family: 'Merriweather', serif;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 600;
   color: #2C2C2C;
   line-height: 1.5;
-  margin: 0 0 0 0;
+  margin: 0 0 10 0;
 }
 
 .fact-details,
@@ -95,8 +95,8 @@
   font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
-  line-height: 1.6;
-  margin: 3px 0;
+  line-height: 1.5;
+  margin: 1px 0;
   letter-spacing: normal;
 }
 
@@ -105,6 +105,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+  margin-top: -2px;
   margin-bottom: 12px;
 }
 
@@ -133,11 +134,11 @@
 
 .source-logo-citation {
   font-family: 'Public Sans', sans-serif;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 300;
   color: #2C2C2C;
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -152,18 +153,19 @@
 .sources-text-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  margin-top: -2px;
 }
 
 .source-text-item {
   font-family: 'Public Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 300;
+  font-size: 12px;
+  font-weight: 250;
   color: #2C2C2C;
-  text-decoration: none;
+  text-decoration: underline;
   line-height: 1.4;
-  padding: 6px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 3px 0;
+  border-bottom: 1px solid #ffffff;
   transition: color 0.2s;
 }
 

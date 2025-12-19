@@ -151,13 +151,13 @@
   .facts-grid {
     grid-template-columns: 1fr;
     gap: 18px;
-    width: 90%;
-    max-width: 90%;
+    width: 95%;
+    max-width: 95%;
     justify-items: center;
   }
 
   .sidebar {
-    width: 90%;
+    width: 95%;
     position: static;
     margin: 0 auto;
   }
