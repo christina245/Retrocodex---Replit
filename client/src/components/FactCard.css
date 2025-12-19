@@ -190,7 +190,7 @@
 /* Mobile layout */
 @media (max-width: 768px) {
   .fact-card-wrapper {
-    width: 95%;
+    width: 100%;
   }
 
   .fact-card {
