@@ -60,17 +60,15 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
                 rel="noopener noreferrer"
                 className="source-grid-item"
                 data-testid={`source-link-${idx}`}
-                title={source.citation}
               >
-                {source.logoUrl ? (
+                {source.logoUrl && (
                   <img 
                     src={source.logoUrl} 
-                    alt={source.citation} 
+                    alt="" 
                     className="source-logo"
                   />
-                ) : (
-                  <span className="source-citation-text">{source.citation}</span>
                 )}
+                <span className="source-citation-text">{source.citation}</span>
               </a>
             ))}
           </div>
