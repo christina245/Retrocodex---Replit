@@ -75,7 +75,7 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                       <ReactMarkdown
                         rehypePlugins={[rehypeSanitize]}
                         components={{
-                          p: ({ children }) => <>{children}</>,
+                          p: ({ children }) => <p style={{ marginBottom: '1em' }}>{children}</p>,
                           em: ({ children }) => <em>{children}</em>,
                           a: ({ href, children }) => (
                             <a href={href} target="_blank" rel="noopener noreferrer">
