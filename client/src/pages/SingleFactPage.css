@@ -180,15 +180,22 @@
   align-items: flex-start;
 }
 
-.sidebar-top-row .fact-tags {
-  flex: 0 0 clamp(195px, 16vw, 235px);
-  box-sizing: border-box;
-}
-
 .sidebar-top-row .related-facts {
   flex: 1 1 auto;
   min-width: 0;
   height: auto;
+}
+
+.tags-banner-column {
+  flex: 0 0 clamp(195px, 16vw, 235px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tags-banner-column .fact-tags {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .email-banner-wrapper {

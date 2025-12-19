@@ -223,10 +223,12 @@ export default function SingleFactPage() {
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
                 <RelatedFacts />
-                <FactTags tags={factData.searchTags || []} />
-              </div>
-              <div className="email-banner-wrapper">
-                <BeehiivBanner />
+                <div className="tags-banner-column">
+                  <FactTags tags={factData.searchTags || []} />
+                  <div className="email-banner-wrapper">
+                    <BeehiivBanner />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
