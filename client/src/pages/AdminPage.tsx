@@ -592,8 +592,15 @@ export default function AdminPage() {
     setIsSubmitting(true);
     setSubmitMessage("");
 
-    // Validate sources - filter out empty ones
-    const validSources = sources.filter(s => s.citation && s.link);
+    // Validate sources - filter out empty ones, preserve logoUrl
+    const validSources = sources
+      .filter(s => s.citation && s.link)
+      .map(s => ({
+        id: s.id,
+        citation: s.citation,
+        link: s.link,
+        logoUrl: s.logoUrl || undefined
+      }));
     
     // Validate timeline entries
     const validTimeline = timeline.filter(t => t.year && t.description);

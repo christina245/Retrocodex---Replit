@@ -22,6 +22,10 @@ interface ExtendedFactCardProps {
 }
 
 export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFactCardProps) {
+  // Split sources into those with logos and those without
+  const sourcesWithLogos = fact.sources.filter(s => s.logoUrl);
+  const textOnlySources = fact.sources.filter(s => !s.logoUrl);
+
   return (
     <div className="extended-fact-card" data-testid="extended-fact-card">
       <div className="extended-fact-content">
@@ -51,27 +55,46 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
             <span className="label-text">SOURCES</span>
           </div>
           
-          <div className="sources-grid">
-            {fact.sources.map((source, idx) => (
-              <a
-                key={source.id}
-                href={source.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="source-grid-item"
-                data-testid={`source-link-${idx}`}
-              >
-                {source.logoUrl && (
+          {/* Logo sources in 2-column grid */}
+          {sourcesWithLogos.length > 0 && (
+            <div className="sources-logo-grid">
+              {sourcesWithLogos.map((source, idx) => (
+                <a
+                  key={source.id}
+                  href={source.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="source-logo-item"
+                  data-testid={`source-logo-${idx}`}
+                >
                   <img 
                     src={source.logoUrl} 
-                    alt="" 
+                    alt={source.citation} 
                     className="source-logo"
                   />
-                )}
-                <span className="source-citation-text">{source.citation}</span>
-              </a>
-            ))}
-          </div>
+                  <span className="source-logo-citation">{source.citation}</span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Text-only sources in single column */}
+          {textOnlySources.length > 0 && (
+            <div className="sources-text-list">
+              {textOnlySources.map((source, idx) => (
+                <a
+                  key={source.id}
+                  href={source.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="source-text-item"
+                  data-testid={`source-text-${idx}`}
+                >
+                  {source.citation}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
