@@ -24,6 +24,7 @@ export function CategoryNav({ selectedCategory }: CategoryNavProps) {
             >
               <Icon 
                 size={20} 
+                strokeWidth={1.5}
                 className="category-icon" 
                 style={{ color: isSelected && isOther ? 'white' : category.color }} 
               />
