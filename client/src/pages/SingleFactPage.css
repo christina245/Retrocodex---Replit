@@ -2,12 +2,12 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #FAFAFA;
+  background: #FFFFFF;
 }
 
 .page-content {
   flex: 1;
-  padding: 0 40px;
+  padding: 0 20px 0 20px;
   max-width: 100%;
   margin: 0 auto;
 }
@@ -152,31 +152,37 @@
 
 .below-content-grid {
   display: grid;
-  grid-template-columns: 5fr 3fr;
-  gap: 1rem;
+  grid-template-columns: 4.5fr 3.5fr;
+  gap: 2rem;
   margin-top: 0;
   align-items: start;
 }
 
 .comments-column {
   max-width: 700px;
+  padding: 0 20px 0 20px;
 }
 
 .sidebar-column {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0rem;
+  align-items: flex-end;
+  margin-left: auto;
 }
 
 .sidebar-bottom-section {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
+  align-self: flex-end;
+  margin-left: auto;
+  width: fit-content;
 }
 
 .sidebar-top-row {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   align-items: flex-start;
 }
 
@@ -187,10 +193,10 @@
 }
 
 .tags-banner-column {
-  flex: 0 0 clamp(195px, 16vw, 235px);
+  flex: 0 0 clamp(180px, 10vw, 220px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
 .tags-banner-column .fact-tags {
