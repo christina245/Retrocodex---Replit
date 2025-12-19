@@ -51,33 +51,27 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
             <span className="label-text">SOURCES</span>
           </div>
           
-          <div className="sources-list">
+          <div className="sources-grid">
             {fact.sources.map((source, idx) => (
-              <div key={source.id} className="source-item">
-                {source.logoUrl && (
-                  <a
-                    href={source.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="source-logo-link"
-                  >
-                    <img 
-                      src={source.logoUrl} 
-                      alt="Source logo" 
-                      className="source-logo"
-                    />
-                  </a>
+              <a
+                key={source.id}
+                href={source.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="source-grid-item"
+                data-testid={`source-link-${idx}`}
+                title={source.citation}
+              >
+                {source.logoUrl ? (
+                  <img 
+                    src={source.logoUrl} 
+                    alt={source.citation} 
+                    className="source-logo"
+                  />
+                ) : (
+                  <span className="source-citation-text">{source.citation}</span>
                 )}
-                <a
-                  href={source.link}
-                  className="source-citation"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-testid={`source-link-${idx}`}
-                >
-                  {source.citation}
-                </a>
-              </div>
+              </a>
             ))}
           </div>
         </div>
