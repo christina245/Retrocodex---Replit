@@ -163,6 +163,7 @@
 
   .physics-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .physics-key-container {

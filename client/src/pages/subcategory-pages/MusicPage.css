@@ -163,6 +163,7 @@
 
   .music-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .music-key-container {

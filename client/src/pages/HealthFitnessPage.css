@@ -138,6 +138,7 @@
 
   .health-fitness-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .health-fitness-key-container {

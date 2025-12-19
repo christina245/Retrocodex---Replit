@@ -138,6 +138,7 @@
 
   .everyday-life-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .everyday-life-key-container {

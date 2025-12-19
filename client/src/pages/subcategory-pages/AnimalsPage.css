@@ -156,6 +156,7 @@
 
   .animals-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .animals-key-container {

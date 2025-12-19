@@ -87,6 +87,7 @@
 @media (max-width: 900px) {
   .subcategories-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .other-categories-main-content {

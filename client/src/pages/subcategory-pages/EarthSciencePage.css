@@ -163,6 +163,7 @@
 
   .earth-science-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .earth-science-key-container {

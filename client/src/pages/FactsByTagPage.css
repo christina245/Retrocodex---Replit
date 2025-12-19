@@ -127,6 +127,7 @@
 
   .facts-by-tag-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .facts-by-tag-key-container {

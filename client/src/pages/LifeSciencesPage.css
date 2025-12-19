@@ -138,6 +138,7 @@
 
   .life-sciences-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .life-sciences-key-container {

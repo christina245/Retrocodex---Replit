@@ -156,6 +156,7 @@
 
   .food-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .food-key-container {

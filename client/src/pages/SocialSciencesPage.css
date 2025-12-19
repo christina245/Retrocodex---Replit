@@ -138,6 +138,7 @@
 
   .social-sciences-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .social-sciences-key-container {

@@ -163,6 +163,7 @@
 
   .astronomy-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .astronomy-key-container {

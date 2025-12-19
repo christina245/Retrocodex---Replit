@@ -163,6 +163,7 @@
 
   .uncategorized-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .uncategorized-key-container {

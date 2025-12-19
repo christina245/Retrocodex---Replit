@@ -138,6 +138,7 @@
 
   .gender-sexuality-facts-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .gender-sexuality-key-container {
