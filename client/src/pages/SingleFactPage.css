@@ -194,6 +194,8 @@
 
 .tags-banner-column {
   flex: 0 0 270px;
+  width: 270px;
+  max-width: 270px;
   display: flex;
   flex-direction: column;
   gap: 20px;
