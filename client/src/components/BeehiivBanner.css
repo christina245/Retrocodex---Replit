@@ -16,7 +16,8 @@
 
 @media (max-width: 900px) {
   .beehiiv-banner-container {
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
   }
   
   .beehiiv-embed {
