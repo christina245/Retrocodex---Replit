@@ -193,7 +193,7 @@
 }
 
 .tags-banner-column {
-  flex: 0 0 clamp(180px, 10vw, 220px);
+  flex: 0 0 270px;
   display: flex;
   flex-direction: column;
   gap: 20px;
