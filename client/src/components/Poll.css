@@ -120,6 +120,8 @@
     min-height: auto;
     padding: 15px;
     padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
   }
 
   .poll-title {
@@ -142,9 +144,11 @@
 
   .poll-submit-button {
     position: relative;
-    width: 100%;
+    width: 30%;
     margin-top: 20px;
     bottom: auto;
-    right: auto;
+    margin-right: 10px;
+    margin-left: auto;
+    text-align: center;
   }
 }
