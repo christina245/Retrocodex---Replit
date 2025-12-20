@@ -100,9 +100,9 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
         </div>
       </div>
 
-      <div className="side-actions">
+      <div className="floating-actions">
         <button 
-          className="side-action-button"
+          className="floating-action-button"
           onClick={onSave}
           data-testid="button-save-extended"
           aria-label="Save fact"
@@ -110,7 +110,7 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
           <Bookmark size={20} />
         </button>
         <button 
-          className="side-action-button"
+          className="floating-action-button"
           onClick={onShare}
           data-testid="button-share-extended"
           aria-label="Share fact"
