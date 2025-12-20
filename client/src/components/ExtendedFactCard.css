@@ -218,3 +218,44 @@
 .floating-action-button:active {
   transform: scale(0.95);
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .extended-fact-card {
+    height: auto;
+    min-height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .extended-fact-content {
+    padding: 15px;
+  }
+
+  .fact-myth,
+  .fact-truth {
+    font-size: 16px;
+  }
+
+  .fact-details,
+  .fact-more-details {
+    font-size: 14px;
+  }
+
+  .sources-logo-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .source-logo {
+    height: 24px;
+  }
+
+  .floating-actions {
+    position: relative;
+    bottom: auto;
+    margin-top: 15px;
+    padding-right: 0;
+    justify-content: center;
+  }
+}

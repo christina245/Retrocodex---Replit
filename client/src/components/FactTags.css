@@ -66,3 +66,22 @@
     background: #FF5353;
   }
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .fact-tags {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+  }
+
+  .fact-tags-header {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .fact-tag-chip {
+    font-size: 11px;
+    padding: 8px;
+  }
+}

@@ -203,3 +203,132 @@
 .comment-action:hover {
   color: #878787;
 }
+
+/* Floating comment input for mobile */
+.floating-comment-input {
+  display: none;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .comments-section {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  /* Hide the regular input on mobile */
+  .comment-input-container {
+    display: none;
+  }
+
+  /* Show floating input on mobile */
+  .floating-comment-input {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+    padding: 12px 16px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    cursor: pointer;
+  }
+
+  .floating-input {
+    width: 100%;
+    min-height: 44px;
+    max-height: 44px;
+    padding: 12px 16px;
+    border: 1px solid #D9D9D9;
+    border-radius: 22px;
+    font-family: 'Public Sans', sans-serif;
+    font-size: 14px;
+    color: #2C2C2C;
+    background: #F5F5F5;
+    cursor: pointer;
+    resize: none;
+    box-sizing: border-box;
+  }
+
+  .floating-input::placeholder {
+    color: #878787;
+  }
+
+  .floating-input:focus {
+    outline: none;
+  }
+
+  /* Comments controls mobile layout */
+  .comments-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  /* Comment mobile layout - Reddit style */
+  .comment {
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 0;
+  }
+
+  .comment-avatar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .comment-avatar img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .comment-content {
+    padding-left: 0;
+  }
+
+  .comment-header {
+    flex-wrap: wrap;
+  }
+
+  .comment-user-info {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .info-separator {
+    display: none;
+  }
+
+  .comment-body {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  .comment-body p {
+    font-size: 14px;
+  }
+
+  .comment-actions {
+    justify-content: flex-start;
+    gap: 16px;
+    padding-top: 8px;
+    border-top: 1px solid #F0F0F0;
+  }
+
+  .comment-action span {
+    display: none;
+  }
+
+  .comment-action svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Add padding at bottom for floating input */
+  .comments-list {
+    padding-bottom: 80px;
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Filter, Search, MessageSquare, Heart, Bookmark, Share2, CornerUpLeft } from "lucide-react";
 import { CommentModal } from "./CommentModal";
 import bunnyAvatar from "@assets/dall-e bunny_1764050469609.png";
@@ -70,6 +70,45 @@ const sampleComments: Comment[] = [
 
 export function CommentsSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showFloatingInput, setShowFloatingInput] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+    return false;
+  });
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setShowFloatingInput(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Show floating input when comments section is in view
+          setShowFloatingInput(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.05, rootMargin: '-50px 0px 0px 0px' }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isMobile]);
 
   const handleInputClick = () => {
     setIsModalOpen(true);
@@ -80,7 +119,7 @@ export function CommentsSection() {
   };
 
   return (
-    <div className="comments-section">
+    <div className="comments-section" ref={sectionRef}>
       <div className="comment-input-container" onClick={handleInputClick}>
         <textarea
           placeholder="Share your knowledge about this fact"
@@ -159,6 +198,17 @@ export function CommentsSection() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+
+      {/* Floating comment input for mobile */}
+      {showFloatingInput && (
+        <div className="floating-comment-input" onClick={handleInputClick} data-testid="floating-comment-input">
+          <textarea
+            placeholder="Share your knowledge..."
+            className="floating-input"
+            readOnly
+          />
+        </div>
+      )}
     </div>
   );
 }

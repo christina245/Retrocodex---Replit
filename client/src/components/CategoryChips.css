@@ -44,3 +44,18 @@
   font-size: 14px;
   font-weight: bold;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .category-chips {
+    flex-wrap: wrap;
+  }
+
+  .category-chip {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .category-text {
+    font-size: 0.7rem;
+  }
+}

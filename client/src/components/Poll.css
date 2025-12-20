@@ -110,3 +110,41 @@
   background: #FF5353;
   color: white;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .poll-container {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: auto;
+    padding: 15px;
+    padding-bottom: 20px;
+  }
+
+  .poll-title {
+    font-size: 16px;
+    margin: 15px 0;
+  }
+
+  .poll-options {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .poll-column {
+    gap: 10px;
+  }
+
+  .poll-option-text {
+    font-size: 14px;
+  }
+
+  .poll-submit-button {
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
+    bottom: auto;
+    right: auto;
+  }
+}

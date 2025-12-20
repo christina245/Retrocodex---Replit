@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import "./TimelineSection.css";
@@ -25,6 +25,43 @@ interface TimelineSectionProps {
 
 export default function TimelineSection({ timeline, nuances = [] }: TimelineSectionProps) {
   const [activeTab, setActiveTab] = useState<"timeline" | "nuances">("timeline");
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(max-width: 768px)').matches;
+    }
+    return false;
+  });
+  const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    
+    // Set initial state
+    setIsMobile(mediaQuery.matches);
+    
+    // Listen for changes
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  const toggleAccordion = (id: string) => {
+    setOpenAccordions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  // Get photo for a specific timeline entry
+  const getEventPhoto = (event: TimelineEvent) => {
+    if (!event.imageUrl) return null;
+    return { src: event.imageUrl, caption: event.imageCaption };
+  };
   
   // Extract photos from timeline entries that have images
   const photos = timeline
@@ -65,65 +102,137 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
         {activeTab === "timeline" ? (
           <div role="tabpanel" id="timeline-panel" aria-labelledby="tab-timeline">
             
-            <div className="timeline-columns">
-              <div className="timeline-text-column">
-                {timeline.map((event, index) => (
-                  <div key={event.id} className="timeline-event" data-testid={`timeline-event-${index}`}>
-                    <div className="timeline-line"></div>
-                    <div className="timeline-year">{event.year}</div>
-                    <div className="timeline-text">
-                      <ReactMarkdown
-                        rehypePlugins={[rehypeSanitize]}
-                        components={{
-                          p: ({ children }) => <p style={{ marginBottom: '1em' }}>{children}</p>,
-                          em: ({ children }) => <em>{children}</em>,
-                          a: ({ href, children }) => (
-                            <a href={href} target="_blank" rel="noopener noreferrer">
-                              {children}
-                            </a>
-                          ),
-                        }}
+            {isMobile ? (
+              /* Mobile Accordion Layout */
+              <div className="timeline-accordion-list">
+                {timeline.map((event, index) => {
+                  const isOpen = openAccordions.has(event.id);
+                  const eventPhoto = getEventPhoto(event);
+                  return (
+                    <div key={event.id} className="timeline-accordion" data-testid={`timeline-accordion-${index}`}>
+                      <button
+                        className="timeline-accordion-header"
+                        onClick={() => toggleAccordion(event.id)}
+                        aria-expanded={isOpen}
+                        data-testid={`timeline-accordion-toggle-${index}`}
                       >
-                        {event.description}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {photos.length > 0 && (
-                <div className="timeline-photos-column">
-                  {photos.map((photo, index) => (
-                    <div key={index} className="timeline-photo-wrapper">
-                      <img
-                        src={photo.src}
-                        alt={photo.caption || `Timeline photo ${index + 1}`}
-                        className="timeline-photo rounded"
-                        data-testid={`timeline-photo-${index}`}
-                      />
-                      {photo.caption && (
-                        <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
-                          <ReactMarkdown
-                            rehypePlugins={[rehypeSanitize]}
-                            components={{
-                              p: ({ children }) => <>{children}</>,
-                              em: ({ children }) => <em>{children}</em>,
-                              a: ({ href, children }) => (
-                                <a href={href} target="_blank" rel="noopener noreferrer">
-                                  {children}
-                                </a>
-                              ),
-                            }}
-                          >
-                            {photo.caption}
-                          </ReactMarkdown>
+                        <span className={`accordion-triangle ${isOpen ? 'open' : ''}`}>▶</span>
+                        <span className="timeline-accordion-year">{event.year}</span>
+                      </button>
+                      {isOpen && (
+                        <div className="timeline-accordion-content">
+                          <div className="timeline-accordion-text">
+                            <ReactMarkdown
+                              rehypePlugins={[rehypeSanitize]}
+                              components={{
+                                p: ({ children }) => <p style={{ marginBottom: '1em' }}>{children}</p>,
+                                em: ({ children }) => <em>{children}</em>,
+                                a: ({ href, children }) => (
+                                  <a href={href} target="_blank" rel="noopener noreferrer">
+                                    {children}
+                                  </a>
+                                ),
+                              }}
+                            >
+                              {event.description}
+                            </ReactMarkdown>
+                          </div>
+                          {eventPhoto && (
+                            <div className="timeline-accordion-photo">
+                              <img
+                                src={eventPhoto.src}
+                                alt={eventPhoto.caption || `Timeline photo for ${event.year}`}
+                                className="timeline-photo rounded"
+                                data-testid={`timeline-accordion-photo-${index}`}
+                              />
+                              {eventPhoto.caption && (
+                                <div className="timeline-photo-caption" data-testid={`timeline-accordion-caption-${index}`}>
+                                  <ReactMarkdown
+                                    rehypePlugins={[rehypeSanitize]}
+                                    components={{
+                                      p: ({ children }) => <>{children}</>,
+                                      em: ({ children }) => <em>{children}</em>,
+                                      a: ({ href, children }) => (
+                                        <a href={href} target="_blank" rel="noopener noreferrer">
+                                          {children}
+                                        </a>
+                                      ),
+                                    }}
+                                  >
+                                    {eventPhoto.caption}
+                                  </ReactMarkdown>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
+                  );
+                })}
+              </div>
+            ) : (
+              /* Desktop Layout */
+              <div className="timeline-columns">
+                <div className="timeline-text-column">
+                  {timeline.map((event, index) => (
+                    <div key={event.id} className="timeline-event" data-testid={`timeline-event-${index}`}>
+                      <div className="timeline-line"></div>
+                      <div className="timeline-year">{event.year}</div>
+                      <div className="timeline-text">
+                        <ReactMarkdown
+                          rehypePlugins={[rehypeSanitize]}
+                          components={{
+                            p: ({ children }) => <p style={{ marginBottom: '1em' }}>{children}</p>,
+                            em: ({ children }) => <em>{children}</em>,
+                            a: ({ href, children }) => (
+                              <a href={href} target="_blank" rel="noopener noreferrer">
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {event.description}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              )}
-            </div>
+
+                {photos.length > 0 && (
+                  <div className="timeline-photos-column">
+                    {photos.map((photo, index) => (
+                      <div key={index} className="timeline-photo-wrapper">
+                        <img
+                          src={photo.src}
+                          alt={photo.caption || `Timeline photo ${index + 1}`}
+                          className="timeline-photo rounded"
+                          data-testid={`timeline-photo-${index}`}
+                        />
+                        {photo.caption && (
+                          <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
+                            <ReactMarkdown
+                              rehypePlugins={[rehypeSanitize]}
+                              components={{
+                                p: ({ children }) => <>{children}</>,
+                                em: ({ children }) => <em>{children}</em>,
+                                a: ({ href, children }) => (
+                                  <a href={href} target="_blank" rel="noopener noreferrer">
+                                    {children}
+                                  </a>
+                                ),
+                              }}
+                            >
+                              {photo.caption}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <div role="tabpanel" id="nuances-panel" aria-labelledby="tab-nuances" className="nuances-content">

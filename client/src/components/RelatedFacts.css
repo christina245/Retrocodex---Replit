@@ -75,3 +75,33 @@
   color: #FFFFFF;
   line-height: 1.4;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .related-facts {
+    max-height: none;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .related-facts-header {
+    font-size: 16px;
+    margin-bottom: 1rem;
+  }
+
+  .related-facts-list {
+    gap: 1rem;
+  }
+
+  .related-fact-image-container,
+  .related-fact-image,
+  .related-fact-image-placeholder {
+    width: 50px;
+    height: 50px;
+  }
+
+  .related-fact-text {
+    font-size: 13px;
+  }
+}
