@@ -55,6 +55,45 @@
   opacity: 0.5;
 }
 
+.header-search-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F5F5F5;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.header-search-input {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 200px;
+  color: #2C2C2C;
+}
+
+.header-search-input::placeholder {
+  color: #878787;
+}
+
+.search-close-button {
+  background: transparent;
+  border: none;
+  color: #878787;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.search-close-button:hover {
+  color: #FF5353;
+}
+
 .submit-fact-button {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
