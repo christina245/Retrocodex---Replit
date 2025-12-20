@@ -12,7 +12,6 @@ export function CategoryNav({ selectedCategory }: CategoryNavProps) {
         {CATEGORIES.map((category) => {
           const Icon = category.icon;
           const isSelected = selectedCategory?.toLowerCase() === category.name.toLowerCase();
-          const isOther = category.name === "OTHER";
           
           return (
             <a 
@@ -26,7 +25,7 @@ export function CategoryNav({ selectedCategory }: CategoryNavProps) {
                 size={20} 
                 strokeWidth={1.5}
                 className="category-icon" 
-                style={{ color: isSelected && isOther ? 'white' : category.color }} 
+                style={{ color: isSelected ? 'white' : category.color }} 
               />
               <span className="category-name">{category.name}</span>
             </a>
