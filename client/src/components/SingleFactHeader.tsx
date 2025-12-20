@@ -32,7 +32,7 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
   return (
     <header className="single-fact-header">
       <div className="single-fact-header-container">
-        <div className="header-logo">
+        <div className={`header-logo ${isSearchOpen ? 'header-logo-hidden-mobile' : ''}`}>
           <Link href="/" data-testid="link-home-logo">
             <img 
               src={logoImage} 
