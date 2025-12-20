@@ -3,7 +3,8 @@ import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Pencil, BellRing, Loader2 } from "lucide-react";
+import { Pencil, BellRing } from "lucide-react";
+import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { SaveModal } from "@/components/SaveModal";
@@ -98,9 +99,13 @@ export default function SingleFactPage() {
       <div className="single-fact-page">
         <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
         <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-        <div className="loading-container" data-testid="loading-state">
-          <Loader2 className="loading-spinner" />
-          <p>Loading fact...</p>
+        <div className="loading-state" data-testid="loading-state">
+          <img 
+            src={loadingLogo} 
+            alt="" 
+            className="loading-logo"
+            data-testid="img-loading-logo"
+          />
         </div>
         <Footer />
       </div>
