@@ -82,8 +82,7 @@ export function CommentsSection() {
   return (
     <div className="comments-section">
       <div className="comment-input-container" onClick={handleInputClick}>
-        <input
-          type="text"
+        <textarea
           placeholder="Share your knowledge about this fact"
           className="comment-input"
           readOnly
