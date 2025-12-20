@@ -152,7 +152,7 @@
 
 .below-content-grid {
   display: grid;
-  grid-template-columns: 4.5fr 3.5fr;
+  grid-template-columns: 5fr 3fr;
   gap: 2rem;
   margin-top: 0;
   align-items: start;
@@ -160,29 +160,28 @@
 
 .comments-column {
   max-width: 700px;
-  padding: 0 20px 0 20px;
+  padding: 0 0px 0 20px;
 }
 
 .sidebar-column {
   display: flex;
   flex-direction: column;
   gap: 0rem;
-  align-items: flex-end;
+  align-items: flex-start;
   margin-left: auto;
 }
 
 .sidebar-bottom-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  align-self: flex-end;
-  margin-left: auto;
-  width: fit-content;
+  gap: 15px;
+  width: 100%;
+  
 }
 
 .sidebar-top-row {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   align-items: flex-start;
 }
 
@@ -193,8 +192,8 @@
 }
 
 .tags-banner-column {
-  flex: 0 0 270px;
-  width: 270px;
+  flex: 0 0 240px;
+  width: 240px;
   max-width: 270px;
   display: flex;
   flex-direction: column;

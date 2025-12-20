@@ -25,11 +25,13 @@
   cursor: pointer;
   box-sizing: border-box;
   vertical-align: top;
+  align-items: flex-start; 
   resize: none;
 }
 
 .comment-input::placeholder {
   color: #D9D9D9;
+  
 }
 
 .comment-input:focus {
