@@ -103,25 +103,25 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
           <div role="tabpanel" id="timeline-panel" aria-labelledby="tab-timeline">
             
             {isMobile ? (
-              /* Mobile Accordion Layout */
-              <div className="timeline-accordion-list">
-                {timeline.map((event, index) => {
-                  const isOpen = openAccordions.has(event.id);
-                  const eventPhoto = getEventPhoto(event);
-                  return (
-                    <div key={event.id} className="timeline-accordion" data-testid={`timeline-accordion-${index}`}>
-                      <button
-                        className="timeline-accordion-header"
-                        onClick={() => toggleAccordion(event.id)}
-                        aria-expanded={isOpen}
-                        data-testid={`timeline-accordion-toggle-${index}`}
-                      >
-                        <span className={`accordion-triangle ${isOpen ? 'open' : ''}`}>▶</span>
-                        <span className="timeline-accordion-year">{event.year}</span>
-                      </button>
-                      {isOpen && (
-                        <div className="timeline-accordion-content">
-                          <div className="timeline-accordion-text">
+              /* Mobile: Single Accordion for entire timeline */
+              <div className="timeline-master-accordion" data-testid="timeline-master-accordion">
+                <button
+                  className="timeline-master-accordion-header"
+                  onClick={() => toggleAccordion('timeline-master')}
+                  aria-expanded={openAccordions.has('timeline-master')}
+                  data-testid="timeline-master-accordion-toggle"
+                >
+                  <span className={`accordion-triangle ${openAccordions.has('timeline-master') ? 'open' : ''}`}>▶</span>
+                  <span className="timeline-master-accordion-title">How this information evolved</span>
+                </button>
+                {openAccordions.has('timeline-master') && (
+                  <div className="timeline-master-accordion-content">
+                    {timeline.map((event, index) => {
+                      const eventPhoto = getEventPhoto(event);
+                      return (
+                        <div key={event.id} className="timeline-accordion-entry" data-testid={`timeline-entry-${index}`}>
+                          <div className="timeline-entry-year">{event.year}</div>
+                          <div className="timeline-entry-text">
                             <ReactMarkdown
                               rehypePlugins={[rehypeSanitize]}
                               components={{
@@ -138,15 +138,15 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                             </ReactMarkdown>
                           </div>
                           {eventPhoto && (
-                            <div className="timeline-accordion-photo">
+                            <div className="timeline-entry-photo">
                               <img
                                 src={eventPhoto.src}
                                 alt={eventPhoto.caption || `Timeline photo for ${event.year}`}
                                 className="timeline-photo rounded"
-                                data-testid={`timeline-accordion-photo-${index}`}
+                                data-testid={`timeline-entry-photo-${index}`}
                               />
                               {eventPhoto.caption && (
-                                <div className="timeline-photo-caption" data-testid={`timeline-accordion-caption-${index}`}>
+                                <div className="timeline-photo-caption" data-testid={`timeline-entry-caption-${index}`}>
                                   <ReactMarkdown
                                     rehypePlugins={[rehypeSanitize]}
                                     components={{
@@ -166,10 +166,10 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                             </div>
                           )}
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ) : (
               /* Desktop Layout */

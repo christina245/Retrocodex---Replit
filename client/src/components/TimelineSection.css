@@ -210,28 +210,20 @@
   line-height: 1.6;
 }
 
-/* Mobile Accordion Styles */
-.timeline-accordion-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+/* Mobile Master Accordion Styles */
+.timeline-master-accordion {
+  border: 1px solid #E5E5E5;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.timeline-accordion {
-  border-bottom: 1px solid #E5E5E5;
-}
-
-.timeline-accordion:last-child {
-  border-bottom: none;
-}
-
-.timeline-accordion-header {
+.timeline-master-accordion-header {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 12px 0;
-  background: transparent;
+  padding: 14px 16px;
+  background: #F9F9F9;
   border: none;
   cursor: pointer;
   text-align: left;
@@ -247,18 +239,34 @@
   transform: rotate(90deg);
 }
 
-.timeline-accordion-year {
-  font-family: 'Merriweather', serif;
-  font-size: 16px;
+.timeline-master-accordion-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
 }
 
-.timeline-accordion-content {
-  padding: 0 0 16px 20px;
+.timeline-master-accordion-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.timeline-accordion-text {
+.timeline-accordion-entry {
+  padding-left: 16px;
+  border-left: 2px solid #FF5353;
+}
+
+.timeline-entry-year {
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 8px;
+}
+
+.timeline-entry-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -266,23 +274,23 @@
   line-height: 1.6;
 }
 
-.timeline-accordion-text a {
+.timeline-entry-text a {
   color: #2C2C2C;
   text-decoration: underline;
 }
 
-.timeline-accordion-text a:hover {
+.timeline-entry-text a:hover {
   color: #FF5353;
 }
 
-.timeline-accordion-photo {
-  margin-top: 16px;
+.timeline-entry-photo {
+  margin-top: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.timeline-accordion-photo .timeline-photo {
+.timeline-entry-photo .timeline-photo {
   max-width: 100%;
   height: auto;
 }
