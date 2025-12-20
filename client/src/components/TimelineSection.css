@@ -210,11 +210,33 @@
   line-height: 1.6;
 }
 
+/* Mobile Section Styles */
+.timeline-section-mobile {
+  height: auto;
+  background: transparent;
+  box-shadow: none;
+}
+
+.mobile-accordions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.accordion-empty-message {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  font-style: italic;
+  margin: 0;
+}
+
 /* Mobile Master Accordion Styles */
 .timeline-master-accordion {
   border: 1px solid #E5E5E5;
   border-radius: 8px;
   overflow: hidden;
+  background: white;
 }
 
 .timeline-master-accordion-header {
