@@ -18,11 +18,11 @@ interface EmailSubscription {
 type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts";
 
 const AVAILABLE_FACT_FILTERS = [
-  "Context matters",
+  "Context Matters",
   "Controversial",
-  "Regionally taught",
-  "Partially true",
-  "Official revision",
+  "Regionally Taught",
+  "Partially True",
+  "Official Revision",
   "Uncertain"
 ];
 

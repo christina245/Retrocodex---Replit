@@ -25,6 +25,10 @@ interface CategoryFactCardProps {
   highlightQuery?: string;
 }
 
+function toTitleCase(str: string): string {
+  return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
+
 function highlightText(text: string, query: string | undefined): JSX.Element {
   if (!query || !query.trim()) return <>{text}</>;
   
@@ -76,14 +80,11 @@ export function CategoryFactCard({
           <div className="category-fact-header">
             {fact.factFilters && fact.factFilters.length > 0 && (
               <div className="category-fact-tags">
-                {fact.factFilters.map((filter, index) => {
-                  const displayFilter = filter === "Context matters" ? "Context Matters" : filter;
-                  return (
-                    <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                      {displayFilter}
-                    </span>
-                  );
-                })}
+                {fact.factFilters.map((filter, index) => (
+                  <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                    {toTitleCase(filter)}
+                  </span>
+                ))}
               </div>
             )}
           </div>

@@ -54,7 +54,7 @@ export default function FactsByTagPage() {
 
   const filteredFacts = selectedFilters.length > 0
     ? categoryFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.some(sf => sf.toLowerCase() === filter.toLowerCase()))
       )
     : categoryFacts;
 

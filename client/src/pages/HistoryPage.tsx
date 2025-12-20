@@ -132,7 +132,7 @@ export default function HistoryPage() {
   // Apply filters
   const filteredFacts = selectedFilters.length > 0
     ? sortedFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.some(sf => sf.toLowerCase() === filter.toLowerCase()))
       )
     : sortedFacts;
 

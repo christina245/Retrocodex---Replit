@@ -166,7 +166,7 @@ export default function SearchResultsPage() {
 
   const filteredFacts = selectedFilters.length > 0
     ? allFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.some(sf => sf.toLowerCase() === filter.toLowerCase()))
       )
     : allFacts;
 

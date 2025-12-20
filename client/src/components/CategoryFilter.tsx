@@ -2,12 +2,20 @@ import { useState, useRef, useEffect } from "react";
 import { Filter, ChevronDown } from "lucide-react";
 import "./CategoryFilter.css";
 
+function toTitleCase(str: string): string {
+  return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
+
+function includesCaseInsensitive(arr: string[], value: string): boolean {
+  return arr.some(item => item.toLowerCase() === value.toLowerCase());
+}
+
 const FILTER_OPTIONS = [
-  "Context matters",
+  "Context Matters",
   "Controversial",
-  "Regionally taught",
-  "Partially true",
-  "Official revision",
+  "Regionally Taught",
+  "Partially True",
+  "Official Revision",
   "Uncertain"
 ];
 
@@ -35,8 +43,8 @@ export function CategoryFilter({ selectedFilters, onFilterChange }: CategoryFilt
 
   const handleToggleOption = (option: string) => {
     setPendingFilters(prev => 
-      prev.includes(option) 
-        ? prev.filter(f => f !== option)
+      includesCaseInsensitive(prev, option) 
+        ? prev.filter(f => f.toLowerCase() !== option.toLowerCase())
         : [...prev, option]
     );
   };
@@ -47,7 +55,7 @@ export function CategoryFilter({ selectedFilters, onFilterChange }: CategoryFilt
   };
 
   const handleRemoveChip = (filter: string) => {
-    const newFilters = selectedFilters.filter(f => f !== filter);
+    const newFilters = selectedFilters.filter(f => f.toLowerCase() !== filter.toLowerCase());
     onFilterChange(newFilters);
     setPendingFilters(newFilters);
   };
@@ -83,7 +91,7 @@ export function CategoryFilter({ selectedFilters, onFilterChange }: CategoryFilt
                 <label key={option} className="category-filter-option">
                   <input
                     type="checkbox"
-                    checked={pendingFilters.includes(option)}
+                    checked={includesCaseInsensitive(pendingFilters, option)}
                     onChange={() => handleToggleOption(option)}
                     data-testid={`checkbox-filter-${option.toLowerCase().replace(/\s+/g, '-')}`}
                   />
@@ -110,7 +118,7 @@ export function CategoryFilter({ selectedFilters, onFilterChange }: CategoryFilt
               onClick={() => handleRemoveChip(filter)}
               data-testid={`chip-filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              {filter}
+              {toTitleCase(filter)}
             </button>
           ))}
         </div>

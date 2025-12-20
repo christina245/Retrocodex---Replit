@@ -24,15 +24,7 @@ const FACTS_PER_PAGE = 10;
 import photoFoodPyramid from "@assets/stock_images/food pyramid.png";
 
 const healthFitnessFacts: CategoryFact[] = [
-  {
-    id: "food-pyramid",
-    myth: "The Food Pyramid is the model for a healthy, balanced diet.",
-    truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
-    factFilters: [],
-    dateAdded: "2025-11-01",
-    coverPhoto: photoFoodPyramid,
-    betaOnly: true
-  }
+
 ];
 
 const CATEGORY_COLOR = "#F2994A";
@@ -129,7 +121,7 @@ export default function HealthFitnessPage() {
   // Apply filters
   const filteredFacts = selectedFilters.length > 0
     ? sortedFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.includes(filter))
+        fact.factFilters && fact.factFilters.some(filter => selectedFilters.some(sf => sf.toLowerCase() === filter.toLowerCase()))
       )
     : sortedFacts;
 
