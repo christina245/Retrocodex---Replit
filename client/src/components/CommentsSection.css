@@ -259,9 +259,9 @@
     outline: none;
   }
 
-  /* Comments controls mobile layout */
+  /* Comments controls mobile layout - search on top of filter */
   .comments-controls {
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 16px;
