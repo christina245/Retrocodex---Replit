@@ -363,7 +363,7 @@ export default function HomePage() {
         <div className="content-area">
           {activeTab === "regionally-taught" && (
             <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
-              Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, or communities shaped by local history and culture.
+              Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
             </p>
           )}
           <div className="key-container">
