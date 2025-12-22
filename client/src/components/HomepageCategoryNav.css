@@ -46,7 +46,8 @@
 }
 
 .homepage-category-tile-inactive:hover {
-  filter: brightness(1.15);
+  background-color: var(--category-color) !important;
+  filter: brightness(1.05);
 }
 
 .homepage-category-icon {
