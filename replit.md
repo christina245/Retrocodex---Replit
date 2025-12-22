@@ -34,7 +34,7 @@ Preferred communication style: Simple, everyday language.
 
 **Key Frontend Components**
 - `FactCard`: Displays myth vs. truth with category-specific styling
-- `CategoryNav`: Horizontal scrollable navigation for fact categories
+- `HomepageCategoryNav`: Colorful category navigation tiles with sticky positioning, active state red underline indicators, used across all pages with navigation
 - `EmailSignupBanner`: Sticky sidebar for email collection
 - `SaveModal` & `ShareModal`: Future functionality placeholders
 - `HamburgerMenu`: Slide-out navigation menu
@@ -85,6 +85,7 @@ Preferred communication style: Simple, everyday language.
 **Schema Design**
 - `email_subscriptions`: Captures user emails with source tracking ('signup-banner' or 'save-modal')
 - `newsletter_subscriptions`: Separate table for newsletter signups (distinct from account emails)
+- `facts`: Fact entries with title, slug, coverPhoto, categories (array), subcategory, factFilters, searchTags, featured, betaOnly, isTrending, isDebated (for homepage tab filtering), mythHeader, mythDetails, truthHeader, truthDetails, sources (JSON), timeline (JSON), nuances (JSON)
 - `blog_posts`: WordPress-style blog posts with title, slug, summary, coverImage, category, tags (array), content (rich text), authorName, authorType (Staff/Guest), authorLink, authorPhoto, heroFeatured, published status, publishedAt, relatedManualIds (optional array for manual related article selection)
 - `users`: Planned table for future user authentication (currently unused)
 - UUID primary keys using PostgreSQL's `gen_random_uuid()`

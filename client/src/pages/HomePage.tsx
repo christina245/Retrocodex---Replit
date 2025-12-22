@@ -276,6 +276,50 @@ export default function HomePage() {
       });
   }, [dbFacts]);
 
+  const trendingFacts: Fact[] = useMemo(() => {
+    return dbFacts
+      .filter(fact => fact.isTrending)
+      .map(fact => {
+        const primaryCategory = fact.categories[0] || "Other";
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
+          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+          : primaryCategory.toUpperCase();
+        return {
+          id: fact.id,
+          category: categoryDisplay,
+          categoryColor: CATEGORY_COLORS[primaryCategory] || "#2C2C2C",
+          myth: fact.mythHeader,
+          truth: fact.truthHeader,
+          dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+          link: `/fact/${fact.slug}`,
+          coverPhoto: fact.coverPhoto || undefined,
+          betaOnly: fact.betaOnly || false,
+        };
+      });
+  }, [dbFacts]);
+
+  const debatedFacts: Fact[] = useMemo(() => {
+    return dbFacts
+      .filter(fact => fact.isDebated)
+      .map(fact => {
+        const primaryCategory = fact.categories[0] || "Other";
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
+          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+          : primaryCategory.toUpperCase();
+        return {
+          id: fact.id,
+          category: categoryDisplay,
+          categoryColor: CATEGORY_COLORS[primaryCategory] || "#2C2C2C",
+          myth: fact.mythHeader,
+          truth: fact.truthHeader,
+          dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+          link: `/fact/${fact.slug}`,
+          coverPhoto: fact.coverPhoto || undefined,
+          betaOnly: fact.betaOnly || false,
+        };
+      });
+  }, [dbFacts]);
+
   const getDisplayedFacts = (): Fact[] => {
     switch (activeTab) {
       case "explore":
@@ -285,7 +329,9 @@ export default function HomePage() {
       case "regionally-taught":
         return regionallyTaughtFacts;
       case "trending":
+        return trendingFacts;
       case "debated":
+        return debatedFacts;
       default:
         return [];
     }

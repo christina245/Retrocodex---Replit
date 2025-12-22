@@ -82,6 +82,8 @@ export default function AdminPage() {
   const [searchTagInput, setSearchTagInput] = useState("");
   const [featured, setFeatured] = useState(false);
   const [betaOnly, setBetaOnly] = useState(false);
+  const [isTrending, setIsTrending] = useState(false);
+  const [isDebated, setIsDebated] = useState(false);
   const [mythHeader, setMythHeader] = useState("");
   const [mythDetails, setMythDetails] = useState("");
   const [truthHeader, setTruthHeader] = useState("");
@@ -172,6 +174,8 @@ export default function AdminPage() {
     setSearchTagInput("");
     setFeatured(false);
     setBetaOnly(false);
+    setIsTrending(false);
+    setIsDebated(false);
     setMythHeader("");
     setMythDetails("");
     setTruthHeader("");
@@ -380,6 +384,8 @@ export default function AdminPage() {
     setSearchTagInput("");
     setFeatured(fact.featured || false);
     setBetaOnly(fact.betaOnly || false);
+    setIsTrending(fact.isTrending || false);
+    setIsDebated(fact.isDebated || false);
     setMythHeader(fact.mythHeader);
     setMythDetails(fact.mythDetails);
     setTruthHeader(fact.truthHeader);
@@ -618,6 +624,8 @@ export default function AdminPage() {
       searchTags,
       featured,
       betaOnly,
+      isTrending,
+      isDebated,
       mythHeader,
       mythDetails,
       truthHeader,
@@ -853,6 +861,33 @@ export default function AdminPage() {
                     data-testid="input-title"
                     required
                   />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Homepage Tabs</label>
+                  <p className="form-hint">Select which homepage tabs this fact should appear in</p>
+                  <div className="checkbox-group">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={isTrending}
+                        onChange={(e) => setIsTrending(e.target.checked)}
+                        className="checkbox-input"
+                        data-testid="checkbox-trending"
+                      />
+                      <span>Trending</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={isDebated}
+                        onChange={(e) => setIsDebated(e.target.checked)}
+                        className="checkbox-input"
+                        data-testid="checkbox-debated"
+                      />
+                      <span>Debated</span>
+                    </label>
+                  </div>
                 </div>
 
                 <div className="form-group">
