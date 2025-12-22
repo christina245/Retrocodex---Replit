@@ -361,6 +361,11 @@ export default function HomePage() {
         <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
         <div className="content-area">
+          {activeTab === "regionally-taught" && (
+            <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
+              Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, or communities shaped by local history and culture.
+            </p>
+          )}
           <div className="key-container">
             <FactKey />
           </div>
