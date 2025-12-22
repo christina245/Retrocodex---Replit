@@ -308,7 +308,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          Unlearn myths and<br />outdated facts in
+          Unlearn myths and <br /> outdated lessons in
         </h1>
 
         <HomepageCategoryNav />

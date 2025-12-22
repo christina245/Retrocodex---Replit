@@ -7,7 +7,8 @@
 
 .main-content {
   flex: 1;
-  padding: 0 0 2rem 0;
+  padding: 0 50 2rem 0;
+  margin: 0 200 0 50;
   display: flex;
   flex-direction: column;
 }
@@ -18,10 +19,10 @@
   font-weight: 900;
   color: #2C2C2C;
   text-align: center;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.015em;
   line-height: 1.2;
   margin-top: 50px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   padding: 40 20px;
 }
 

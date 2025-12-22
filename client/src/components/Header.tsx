@@ -4,7 +4,7 @@ import { Search, HandHeart, X } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
-import logoImage from "@assets/white background logo 2.png";
+import logoImage from "@assets/retrocodex thicker logo beta.png";
 import taglineImage from "@assets/tagline only_1763795492353.png";
 import taglineMobileImage from "@assets/tagline_mobile_1766215766436.png";
 import "./Header.css";
@@ -77,7 +77,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
                 rel="noopener noreferrer"
                 className="header-donate-button"
                 data-testid="button-donate"
-                aria-label="Donate to Retrocodex"
+                aria-label="Support Retrocodex"
               >
                 <HandHeart size={16} className="header-donate-icon" />
                 Donate
