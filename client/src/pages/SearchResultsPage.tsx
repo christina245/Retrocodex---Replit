@@ -6,7 +6,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -224,7 +224,7 @@ export default function SearchResultsPage() {
     <div className="search-results-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav />
+      <HomepageCategoryNav sticky />
 
       <div className="search-results-layout">
         <main className="search-results-main-content">

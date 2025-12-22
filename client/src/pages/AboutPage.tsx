@@ -2,7 +2,7 @@ import { useState } from "react";
 import { HandHeart } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -36,7 +36,7 @@ export default function AboutPage() {
     <div className="about-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav />
+      <HomepageCategoryNav sticky />
 
       <main className="about-main">
         <div className="about-content-wrapper">

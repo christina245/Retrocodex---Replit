@@ -6,7 +6,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -108,7 +108,7 @@ export default function FactsByTagPage() {
     <div className="facts-by-tag-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav />
+      <HomepageCategoryNav sticky />
 
       <main className="facts-by-tag-main-content">
         <div className="facts-by-tag-header-row">

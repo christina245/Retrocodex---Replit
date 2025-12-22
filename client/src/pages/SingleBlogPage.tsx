@@ -17,7 +17,7 @@ import {
   LucideIcon
 } from "lucide-react";
 import { Header } from "@/components/Header";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { Footer } from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
@@ -170,7 +170,7 @@ export default function SingleBlogPage() {
     <div className="single-blog-page">
       <div className="sticky-header-wrapper">
         <Header onMenuClick={() => setIsMenuOpen(true)} />
-        <CategoryNav />
+        <HomepageCategoryNav sticky />
       </div>
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
@@ -142,7 +142,7 @@ export default function ArticlesPage() {
     <div className="articles-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav />
+      <HomepageCategoryNav sticky />
 
       <div className="hero-wrapper">
         <HeroSection />
