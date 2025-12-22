@@ -17,13 +17,14 @@ export function HomepageCategoryNav({ activeCategory, sticky = false }: Homepage
         {CATEGORIES.map((category) => {
           const Icon = category.icon;
           const isActive = activeCategory?.toLowerCase() === category.name.toLowerCase();
+          const isInactive = activeCategory && !isActive;
           
           return (
             <a 
               key={category.name}
               href={category.path}
-              className={`homepage-category-tile ${isActive ? 'homepage-category-tile-active' : ''}`}
-              style={{ backgroundColor: category.color } as React.CSSProperties}
+              className={`homepage-category-tile ${isActive ? 'homepage-category-tile-active' : ''} ${isInactive ? 'homepage-category-tile-inactive' : ''}`}
+              style={{ backgroundColor: isInactive ? '#878787' : category.color } as React.CSSProperties}
               data-testid={`link-homepage-category-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
             >
               <Icon 
@@ -32,7 +33,6 @@ export function HomepageCategoryNav({ activeCategory, sticky = false }: Homepage
                 className="homepage-category-icon"
               />
               <span className="homepage-category-name">{category.name}</span>
-              {isActive && <div className="homepage-category-tile-indicator" />}
             </a>
           );
         })}
