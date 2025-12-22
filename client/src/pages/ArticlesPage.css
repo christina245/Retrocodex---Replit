@@ -4,6 +4,12 @@
   flex-direction: column;
 }
 
+.articles-page .hero-wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 .articles-main {
   flex: 1;
   padding-top: 30px;

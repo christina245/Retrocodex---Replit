@@ -12,9 +12,10 @@ import "./Header.css";
 interface HeaderProps {
   onMenuClick?: () => void;
   variant?: "default" | "simplified";
+  hideTagline?: boolean;
 }
 
-export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
+export function Header({ onMenuClick, variant = "default", hideTagline = false }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [, navigate] = useLocation();
@@ -154,7 +155,7 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
           )}
         </div>
       </div>
-      {variant === "default" && (
+      {variant === "default" && !hideTagline && (
         <div className="header-tagline-row">
           <img 
             src={taglineImage} 

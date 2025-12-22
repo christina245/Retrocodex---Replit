@@ -13,6 +13,7 @@ import {
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CategoryNav } from "@/components/CategoryNav";
+import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import BlogCard from "@/components/BlogCard";
 import { BlogPost } from "@shared/schema";
@@ -142,6 +143,10 @@ export default function ArticlesPage() {
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <CategoryNav />
+
+      <div className="hero-wrapper">
+        <HeroSection />
+      </div>
 
       <main className="articles-main">
         <h1 className="articles-header" data-testid="text-articles-header">Recent articles</h1>

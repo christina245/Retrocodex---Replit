@@ -4,9 +4,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
-import { HeroSection } from "@/components/HeroSection";
-import { TabSelector } from "@/components/TabSelector";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
+import { HomepageTabs, type HomepageTabType } from "@/components/HomepageTabs";
 import { FactCard, type Fact } from "@/components/FactCard";
 import { FactKey } from "@/components/FactKey";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
@@ -35,7 +34,7 @@ const allFacts: Fact[] = [
   {
     id: "1",
     category: "HISTORY",
-    categoryColor: "#F5D547",
+    categoryColor: "#D29E00",
     myth: "Christopher Columbus discovered the Americas.",
     truth: "Columbus only reached Central and South America. He never actually reached North America. At the time, Indigenous peoples had already been living in throughout the Americas for thousands of years.",
     dateAdded: "2025-10-15",
@@ -45,7 +44,7 @@ const allFacts: Fact[] = [
   {
     id: "2",
     category: "LIFE SCIENCES",
-    categoryColor: "#6FCF97",
+    categoryColor: "#419F36",
     myth: "You only use 10% of your brain.",
     truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
     dateAdded: "2025-10-22",
@@ -55,7 +54,7 @@ const allFacts: Fact[] = [
   {
     id: "3",
     category: "HEALTH & FITNESS",
-    categoryColor: "#F2994A",
+    categoryColor: "#EC7200",
     myth: "The Food Pyramid is the model for a healthy, balanced diet.",
     truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
     dateAdded: "2025-11-01",
@@ -65,7 +64,7 @@ const allFacts: Fact[] = [
   {
     id: "4",
     category: "EVERYDAY LIFE",
-    categoryColor: "#2A9BEC",
+    categoryColor: "#0167A2",
     myth: "Too much sugar makes kids hyper.",
     truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
     dateAdded: "2025-11-05",
@@ -75,7 +74,7 @@ const allFacts: Fact[] = [
   {
     id: "5",
     category: "SOCIAL SCIENCES",
-    categoryColor: "#EB02C8",
+    categoryColor: "#9D0085",
     myth: "People have different learning styles, such as being a visual or auditory learner.",
     truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. They generally do not influence overall learning outcomes.",
     dateAdded: "2025-11-08",
@@ -85,7 +84,7 @@ const allFacts: Fact[] = [
   {
     id: "6",
     category: "GENDER & SEXUALITY",
-    categoryColor: "#FF88AA",
+    categoryColor: "#FF6F98",
     myth: "Men and women have very different brains.",
     truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
     dateAdded: "2025-11-21",
@@ -105,7 +104,7 @@ const allFacts: Fact[] = [
   {
     id: "8",
     category: "LIFE SCIENCES",
-    categoryColor: "#6FCF97",
+    categoryColor: "#419F36",
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
     truth: "Deoxygenated blood is still red, just a darker shade. Veins appear blue because blue light penetrates skin more efficiently than the rest of the visible light spectrum and is more easily absorbed.",
     dateAdded: "2025-11-15",
@@ -125,7 +124,7 @@ const allFacts: Fact[] = [
   {
     id: "10",
     category: "HISTORY",
-    categoryColor: "#F5D547",
+    categoryColor: "#D29E00",
     myth: "Marie Antoinette said 'Let them eat cake' regarding the French working class.",
     truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess. It may have been misattributed to her as political propaganda.",
     dateAdded: "2025-11-20",
@@ -135,18 +134,18 @@ const allFacts: Fact[] = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  "History": "#F5D547",
-  "Life Sciences": "#6FCF97",
-  "Health & Fitness": "#F2994A",
-  "Social Sciences": "#9B51E0",
-  "Gender & Sexuality": "#FC5AA8",
-  "Everyday Life": "#2A9BEC",
+  "History": "#D29E00",
+  "Life Sciences": "#419F36",
+  "Health & Fitness": "#EC7200",
+  "Social Sciences": "#9D0085",
+  "Gender & Sexuality": "#FF6F98",
+  "Everyday Life": "#0167A2",
   "Other": "#2C2C2C",
 };
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [activeTab, setActiveTab] = useState<HomepageTabType>("explore");
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [recentPage, setRecentPage] = useState(1);
@@ -191,7 +190,7 @@ export default function HomePage() {
     clampedRecentPage * FACTS_PER_PAGE
   );
 
-  const handleTabChange = (tab: "featured" | "recent") => {
+  const handleTabChange = (tab: HomepageTabType) => {
     setActiveTab(tab);
     setRecentPage(1);
   };
@@ -252,33 +251,78 @@ export default function HomePage() {
     });
   };
 
-  const displayedFacts = activeTab === "featured" 
-    ? allFacts 
-    : paginatedRecentFacts;
+  const regionallyTaughtFacts: Fact[] = useMemo(() => {
+    return dbFacts
+      .filter(fact => {
+        const filters = fact.factFilters || [];
+        return filters.some((f: string) => f.toLowerCase() === "regionally taught");
+      })
+      .map(fact => {
+        const primaryCategory = fact.categories[0] || "Other";
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
+          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+          : primaryCategory.toUpperCase();
+        return {
+          id: fact.id,
+          category: categoryDisplay,
+          categoryColor: CATEGORY_COLORS[primaryCategory] || "#2C2C2C",
+          myth: fact.mythHeader,
+          truth: fact.truthHeader,
+          dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+          link: `/fact/${fact.slug}`,
+          coverPhoto: fact.coverPhoto || undefined,
+          betaOnly: fact.betaOnly || false,
+        };
+      });
+  }, [dbFacts]);
+
+  const getDisplayedFacts = (): Fact[] => {
+    switch (activeTab) {
+      case "explore":
+        return allFacts;
+      case "new":
+        return paginatedRecentFacts;
+      case "regionally-taught":
+        return regionallyTaughtFacts;
+      case "trending":
+      case "debated":
+      default:
+        return [];
+    }
+  };
+
+  const displayedFacts = getDisplayedFacts();
+
+  const showPagination = activeTab === "new" && recentTotalPages > 1;
+  const showEmptyState = displayedFacts.length === 0;
+  const emptyStateMessage = (activeTab === "trending" || activeTab === "debated") 
+    ? "No facts have been added, check back later!"
+    : (activeTab === "regionally-taught")
+      ? "No regionally taught facts available yet. Check back soon!"
+      : "No facts available yet. Check back soon!";
 
   return (
     <div className="page-wrapper">
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav />
 
       <main className="main-content">
-        <div className="hero-wrapper">
-          <HeroSection />
-        </div>
-        
+        <h1 className="homepage-headline" data-testid="text-homepage-headline">
+          Unlearn myths and<br />outdated facts in
+        </h1>
+
+        <HomepageCategoryNav />
+        <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
+
         <div className="content-area">
-          <div className="tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
-            <div className="key-container">
-              <FactKey />
-            </div>
+          <div className="key-container">
+            <FactKey />
           </div>
 
           <div className="content-container">
             <div className="facts-column">
               <div className="facts-grid">
-                {displayedFacts.length > 0 ? (
+                {!showEmptyState ? (
                   displayedFacts.map((fact) => (
                     <FactCard
                       key={fact.id}
@@ -289,13 +333,13 @@ export default function HomePage() {
                       onBetaClick={handleBetaClick}
                     />
                   ))
-                ) : activeTab === "recent" ? (
-                  <div className="empty-state" data-testid="empty-recent-facts">
-                    <p>No recent facts available yet. Check back soon!</p>
+                ) : (
+                  <div className="empty-state" data-testid="empty-facts">
+                    <p>{emptyStateMessage}</p>
                   </div>
-                ) : null}
+                )}
               </div>
-              {activeTab === "recent" && recentTotalPages > 1 && (
+              {showPagination && (
                 <Pagination
                   currentPage={clampedRecentPage}
                   totalPages={recentTotalPages}
