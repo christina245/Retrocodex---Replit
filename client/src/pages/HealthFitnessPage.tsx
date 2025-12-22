@@ -5,7 +5,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { TabSelector } from "@/components/TabSelector";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -145,7 +145,7 @@ export default function HealthFitnessPage() {
     <div className="health-fitness-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="HEALTH & FITNESS" />
+      <HomepageCategoryNav activeCategory="HEALTH & FITNESS" sticky />
 
       <main className="health-fitness-main-content">
         <div className="health-fitness-intro-row">

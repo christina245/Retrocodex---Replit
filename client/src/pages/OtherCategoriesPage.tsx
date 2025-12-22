@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import "./OtherCategoriesPage.css";
 
@@ -94,7 +94,7 @@ export default function OtherCategoriesPage() {
     <div className="other-categories-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="OTHER" />
+      <HomepageCategoryNav activeCategory="OTHER" sticky />
 
       <main className="other-categories-main-content">
         <h1 className="other-categories-title">Other categories</h1>

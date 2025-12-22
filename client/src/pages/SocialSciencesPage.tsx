@@ -5,7 +5,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { TabSelector } from "@/components/TabSelector";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -153,7 +153,7 @@ export default function SocialSciencesPage() {
     <div className="social-sciences-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="SOCIAL SCIENCES" />
+      <HomepageCategoryNav activeCategory="SOCIAL SCIENCES" sticky />
 
       <main className="social-sciences-main-content">
         <div className="social-sciences-intro-row">

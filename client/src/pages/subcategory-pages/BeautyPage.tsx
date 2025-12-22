@@ -6,7 +6,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { TabSelector } from "@/components/TabSelector";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
@@ -113,7 +113,7 @@ export default function BeautyPage() {
     <div className="beauty-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="OTHER" />
+      <HomepageCategoryNav activeCategory="OTHER" sticky />
 
       <main className="beauty-main-content">
         <Link 

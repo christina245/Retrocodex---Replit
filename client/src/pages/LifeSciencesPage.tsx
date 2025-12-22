@@ -5,7 +5,7 @@ import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { CategoryNav } from "@/components/CategoryNav";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { TabSelector } from "@/components/TabSelector";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -148,7 +148,7 @@ export default function LifeSciencesPage() {
     <div className="life-sciences-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      <CategoryNav selectedCategory="LIFE SCIENCES" />
+      <HomepageCategoryNav activeCategory="LIFE SCIENCES" sticky />
 
       <main className="life-sciences-main-content">
         <div className="life-sciences-intro-row">

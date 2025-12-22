@@ -18,9 +18,11 @@
   font-weight: 900;
   color: #2C2C2C;
   text-align: center;
+  letter-spacing: 0.02em;
   line-height: 1.2;
-  margin: 70px 0 0 0;
-  padding: 0 20px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  padding: 40 20px;
 }
 
 .content-area {
@@ -32,7 +34,7 @@
 
 .key-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 16px;
 }
 

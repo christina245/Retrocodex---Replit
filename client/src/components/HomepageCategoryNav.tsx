@@ -1,18 +1,28 @@
 import { CATEGORIES } from "@shared/categories";
 import "./HomepageCategoryNav.css";
 
-export function HomepageCategoryNav() {
+interface HomepageCategoryNavProps {
+  activeCategory?: string;
+  sticky?: boolean;
+}
+
+export function HomepageCategoryNav({ activeCategory, sticky = false }: HomepageCategoryNavProps) {
+  const navClassName = sticky 
+    ? "homepage-category-nav homepage-category-nav-sticky" 
+    : "homepage-category-nav";
+
   return (
-    <nav className="homepage-category-nav" data-testid="homepage-category-nav">
+    <nav className={navClassName} data-testid="homepage-category-nav">
       <div className="homepage-category-nav-container">
         {CATEGORIES.map((category) => {
           const Icon = category.icon;
+          const isActive = activeCategory?.toLowerCase() === category.name.toLowerCase();
           
           return (
             <a 
               key={category.name}
               href={category.path}
-              className="homepage-category-tile"
+              className={`homepage-category-tile ${isActive ? 'homepage-category-tile-active' : ''}`}
               style={{ backgroundColor: category.color } as React.CSSProperties}
               data-testid={`link-homepage-category-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
             >
@@ -22,6 +32,7 @@ export function HomepageCategoryNav() {
                 className="homepage-category-icon"
               />
               <span className="homepage-category-name">{category.name}</span>
+              {isActive && <div className="homepage-category-tile-indicator" />}
             </a>
           );
         })}
