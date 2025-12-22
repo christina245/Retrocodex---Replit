@@ -23,7 +23,7 @@ export function CategoryNav({ selectedCategory }: CategoryNavProps) {
             >
               <Icon 
                 size={20} 
-                strokeWidth={1.5}
+                strokeWidth={2}
                 className="category-icon" 
                 style={{ color: isSelected ? 'white' : category.color }} 
               />

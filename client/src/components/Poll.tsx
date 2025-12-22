@@ -62,7 +62,7 @@ export function Poll({ question, options }: PollProps) {
           onClick={handleSubmit}
           data-testid="button-poll-submit"
         >
-          SUBMIT
+          Submit
         </button>
       </div>
 

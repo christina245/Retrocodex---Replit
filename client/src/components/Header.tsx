@@ -41,7 +41,7 @@ export function Header({ onMenuClick, variant = "default" }: HeaderProps) {
           <div className="header-left-section">
             <div className="social-icons-column">
               <a 
-                href="https://instagram.com/retrocodex.facts" 
+                href="https://instagram.com/stuffyoulearnedwrong" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="social-icon"
