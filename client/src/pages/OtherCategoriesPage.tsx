@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -89,6 +89,10 @@ const subcategories: Subcategory[] = [
 
 export default function OtherCategoriesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = "Other Categories | Retrocodex";
+  }, []);
 
   return (
     <div className="other-categories-page">
