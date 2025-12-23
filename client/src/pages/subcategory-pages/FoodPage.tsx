@@ -33,15 +33,7 @@ const foodFacts: CategoryFact[] = [
     coverPhoto: photoButter,
     betaOnly: true
   },
-  {
-    id: "food-pyramid",
-    myth: "The Food Pyramid is the model for a healthy, balanced diet.",
-    truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
-    factFilters: [],
-    dateAdded: "2025-11-01",
-    coverPhoto: photoFoodPyramid,
-    betaOnly: true
-  }
+  
 ];
 
 const SUBCATEGORY_COLOR = "#2C2C2C";

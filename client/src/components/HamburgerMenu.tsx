@@ -42,7 +42,7 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
             About
           </a>
           <a href="/articles" className="menu-link" data-testid="link-blog">
-            Blog
+            Articles
           </a>
       
         </nav>

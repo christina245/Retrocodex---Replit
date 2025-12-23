@@ -11,8 +11,8 @@ export function Footer() {
           <h3 className="footer-heading">About</h3>
           <ul className="footer-links">
 
-            <li><a href="#" data-testid="link-footer-about">About the site</a></li>
-            <li><a href="#" data-testid="link-footer-blog">Blog</a></li>
+            <li><a href="http://theretrocodex.com/about" data-testid="link-footer-about">What is Retrocodex?</a></li>
+            <li><a href="http://theretrocodex.com/articles" data-testid="link-footer-blog">Articles</a></li>
           </ul>
         </div>
 
@@ -20,13 +20,13 @@ export function Footer() {
         <div className="footer-column">
           <h3 className="footer-heading">Fact categories</h3>
           <ul className="footer-links">
-            <li><a href="https://retrocodex.replit.app/category/history" data-testid="link-footer-history">History</a></li>
-            <li><a href="https://retrocodex.replit.app/category/life-sciences" data-testid="link-footer-life-sciences">Life sciences</a></li>
-            <li><a href="https://retrocodex.replit.app/category/everyday-life" data-testid="link-footer-everyday">Everyday life</a></li>
-            <li><a href="https://retrocodex.replit.app/category/health-fitness" data-testid="link-footer-health">Health & fitness</a></li>
-            <li><a href="https://retrocodex.replit.app/category/social-sciences" data-testid="link-footer-social">Social sciences</a></li>
-            <li><a href="https://retrocodex.replit.app/category/gender-sexuality" data-testid="link-footer-gender">Gender & sexuality</a></li>
-            <li><a href="https://retrocodex.replit.app/category/other" data-testid="link-footer-miscellaneous">More categories</a></li>
+            <li><a href="http://theretrocodex.com/category/history" data-testid="link-footer-history">History</a></li>
+            <li><a href="http://theretrocodex.com/category/life-sciences" data-testid="link-footer-life-sciences">Life sciences</a></li>
+            <li><a href="http://theretrocodex.com/category/everyday-life" data-testid="link-footer-everyday">Everyday life</a></li>
+            <li><a href="http://theretrocodex.com/category/health-fitness" data-testid="link-footer-health">Health & fitness</a></li>
+            <li><a href="http://theretrocodex.com/category/social-sciences" data-testid="link-footer-social">Social sciences</a></li>
+            <li><a href="http://theretrocodex.com/category/gender-sexuality" data-testid="link-footer-gender">Gender & sexuality</a></li>
+            <li><a href="http://theretrocodex.com/category/other" data-testid="link-footer-miscellaneous">More categories</a></li>
           </ul>
         </div>
 
@@ -111,7 +111,7 @@ export function Footer() {
             className="footer-brand-logo"
           />
           <p className="footer-brand-description">
-            <b>Retrocodex: Stuff You Might Have Learned Wrong</b> is a living archive of commonly taught misconceptions from all over the world. It explores how each misconception originated, why it persisted, and what the evidence really says.
+            <b>Retrocodex: Stuff You Might Have Learned Wrong</b> is an evolving library of commonly taught misconceptions from all over the world. It explores how each misconception originated, why it persisted, and what the evidence really says.
           </p>
         </div>
       </div>
