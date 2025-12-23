@@ -31,8 +31,32 @@
   border-bottom: 1px solid rgba(255, 255, 255, .1);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
   flex-shrink: 0;
+}
+
+.fact-category-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fact-filter-tags {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.fact-filter-tag {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 200;
+  letter-spacing: 0.02em;
+  color: white;
+  background: #2C2C2C;
+  padding: 4px 10px;
+  border-radius: 30px;
+  white-space: nowrap;
 }
 
 .category-icon-small {

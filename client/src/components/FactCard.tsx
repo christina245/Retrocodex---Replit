@@ -31,6 +31,11 @@ export interface Fact {
   link?: string;
   coverPhoto?: string;
   betaOnly?: boolean;
+  factFilters?: string[];
+}
+
+function toTitleCase(str: string): string {
+  return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 }
 
 interface FactCardProps {
@@ -66,8 +71,19 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick }: Fact
             className="fact-category"
             style={{ backgroundColor: `${fact.categoryColor}33` }}
           >
-            <CategoryIcon size={12} style={{ color: fact.categoryColor }} className="category-icon-small" />
-            <span className="category-badge">{fact.category}</span>
+            <div className="fact-category-left">
+              <CategoryIcon size={12} style={{ color: fact.categoryColor }} className="category-icon-small" />
+              <span className="category-badge">{fact.category}</span>
+            </div>
+            {fact.factFilters && fact.factFilters.length > 0 && (
+              <div className="fact-filter-tags">
+                {fact.factFilters.map((filter, index) => (
+                  <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                    {toTitleCase(filter)}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="fact-body">

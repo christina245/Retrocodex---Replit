@@ -59,7 +59,8 @@ const allFacts: Fact[] = [
     truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic ambitions rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
     dateAdded: "2025-11-01",
     coverPhoto: photo3FoodPyramid,
-    betaOnly: true
+    betaOnly: true,
+    factFilters: ["Official Revision"]
   },
   {
     id: "4",
@@ -179,6 +180,7 @@ export default function HomePage() {
           link: `/fact/${fact.slug}`,
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
+          factFilters: fact.factFilters || undefined,
         };
       });
   }, [dbFacts]);
@@ -272,6 +274,7 @@ export default function HomePage() {
           link: `/fact/${fact.slug}`,
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
+          factFilters: fact.factFilters || undefined,
         };
       });
   }, [dbFacts]);
@@ -294,6 +297,7 @@ export default function HomePage() {
           link: `/fact/${fact.slug}`,
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
+          factFilters: fact.factFilters || undefined,
         };
       });
   }, [dbFacts]);
@@ -316,6 +320,7 @@ export default function HomePage() {
           link: `/fact/${fact.slug}`,
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
+          factFilters: fact.factFilters || undefined,
         };
       });
   }, [dbFacts]);
