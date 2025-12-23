@@ -366,6 +366,11 @@ export default function HomePage() {
               Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
             </p>
           )}
+          {activeTab === "trending" && (
+            <p className="tab-subheader" data-testid="text-trending-subheader">
+              Trending explores misinformation relevant to upcoming holidays or current events.
+            </p>
+          )}
           <div className="key-container">
             <FactKey />
           </div>

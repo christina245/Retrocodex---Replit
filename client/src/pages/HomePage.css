@@ -33,6 +33,15 @@
   margin-top: 24px;
 }
 
+.tab-subheader {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
 .key-container {
   display: flex;
   justify-content: flex-start;
