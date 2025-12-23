@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search, X } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import logoImage from "@assets/white background logo.png";
+import logoImage from "@assets/retrocodex thicker logo beta.png";
 import "./SingleFactHeader.css";
 
 interface SingleFactHeaderProps {
