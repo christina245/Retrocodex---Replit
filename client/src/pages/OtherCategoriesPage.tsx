@@ -28,31 +28,31 @@ const subcategories: Subcategory[] = [
   {
     id: "animals",
     name: "ANIMALS",
-    description: "Some animals may be safer or more dangerous than you think.",
+    description: "Some animals may be safer or more dangerous than you think. Popular ideas about animal behavior, intelligence, and instinct are often oversimplified, exaggerated, or based on outdated science.",
     photo: photoAnimals
   },
   {
     id: "astronomy",
     name: "ASTRONOMY",
-    description: "Mistaken ideas about space, planets, stars, and how our understanding of the universe continues to evolve.",
+    description: "Is Pluto a planet? What can you actually see from space? Common ideas about planets, stars, and the universe are often simplified or misunderstood.",
     photo: photoAstronomy
   },
   {
     id: "beauty",
     name: "BEAUTY",
-    description: "Several ingredients you were told to avoid in beauty products might not deserve that stigma. Some beauty tips and tricks you might have learned might not give you the glow-up you're looking for.",
+    description: "Certain ingredients in beauty products may have been unfairly stigmatized. Some beauty tips and tricks you might have learned won't give you the glow-up you're looking for.",
     photo: photoBeauty
   },
   {
     id: "earth-science",
     name: "EARTH SCIENCE",
-    description: "Addressing common errors about weather, climate, geology, oceans, and the forces that shape our planet.",
+    description: "As new discoveries are continuously unearthed, many facts about the environmental forces shaping our planet have evolved since the textbooks of our school days were published.",
     photo: photoEarthScience
   },
   {
     id: "food",
     name: "FOOD",
-    description: "Years of deceptive marketing have given us the wrong ideas of what foods and nutrients are actually healthy.",
+    description: "Many beliefs about nutrition, ingredients, and eating habits are frequently influenced by marketing, tradition, xenophobia, or outdated research rather than modern science.",
     photo: photoFood
   },
   {
@@ -64,25 +64,25 @@ const subcategories: Subcategory[] = [
   {
     id: "linguistics",
     name: "LINGUISTICS",
-    description: "You've probably been pronouncing some words wrong for years. Some spelling and grammar rules you might have been taught were vast overgeneralizations.",
+    description: "You've probably been pronouncing certain words wrong. Some spelling and grammar rules you might have been taught are vast overgeneralizations.",
     photo: photoLinguistics
   },
   {
     id: "music",
     name: "MUSIC",
-    description: "Revealing mistaken beliefs about music history, genres, theory, production, and how humans perceive and create sound.",
+    description: "Explore what facts about musicians, music production, and musical genres may have been distorted due to audience distaste or adoration.",
     photo: photoMusic
   },
   {
     id: "physics",
     name: "PHYSICS",
-    description: "Untangling oversimplified or outdated ideas about motion, energy, forces, matter, and the nature of the physical world.",
+    description: "Many of the simplified explanations we were taught growing up may have left behind important nuances about how motion, energy, and matter really behave.",
     photo: photoPhysics
   },
   {
     id: "technology",
     name: "TECHNOLOGY",
-    description: "What is today's technology actually capable of? Is AI actually on par with human abilities?",
+    description: "What is today's technology actually capable of? In an era of unusually rapid innovation, myths about tech's capabilities are easily spread by hype, media portrayals, or overgeneralizations.",
     photo: photoTechnology
   }
 ];
