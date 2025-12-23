@@ -38,7 +38,7 @@ function getCategoryUrl(category: string): string {
     "OTHER: MUSIC": "/category/other/music",
     "OTHER: PHYSICS": "/category/other/physics",
     "OTHER: TECHNOLOGY": "/category/other/technology",
-    "OTHER: UNCATEGORIZED": "/category/other/uncategorized",
+    "OTHER: HOLIDAYS": "/category/other/holidays",
     
     // Standalone subcategory names (without prefix)
     "ANIMALS": "/category/other/animals",
@@ -50,7 +50,7 @@ function getCategoryUrl(category: string): string {
     "MUSIC": "/category/other/music",
     "PHYSICS": "/category/other/physics",
     "TECHNOLOGY": "/category/other/technology",
-    "UNCATEGORIZED": "/category/other/uncategorized",
+    "HOLIDAYS": "/category/other/holidays",
   };
   
   return categoryMap[normalizedCategory] || "/";

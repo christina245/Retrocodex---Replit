@@ -29,7 +29,7 @@ import LinguisticsPage from "@/pages/subcategory-pages/LinguisticsPage";
 import MusicPage from "@/pages/subcategory-pages/MusicPage";
 import PhysicsPage from "@/pages/subcategory-pages/PhysicsPage";
 import TechnologyPage from "@/pages/subcategory-pages/TechnologyPage";
-import UncategorizedPage from "@/pages/subcategory-pages/UncategorizedPage";
+import HolidaysPage from "@/pages/subcategory-pages/HolidaysPage";
 
 function Router() {
   return (
@@ -55,7 +55,7 @@ function Router() {
       <Route path="/category/other/music" component={MusicPage} />
       <Route path="/category/other/physics" component={PhysicsPage} />
       <Route path="/category/other/technology" component={TechnologyPage} />
-      <Route path="/category/other/uncategorized" component={UncategorizedPage} />
+      <Route path="/category/other/holidays" component={HolidaysPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/tags/:tagSlug" component={FactsByTagPage} />
       <Route path="/search/:query" component={SearchResultsPage} />

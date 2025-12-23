@@ -1,18 +1,18 @@
-.uncategorized-page {
+.holidays-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: #FFFFFF;
 }
 
-.uncategorized-main-content {
+.holidays-main-content {
   flex: 1;
   padding: 0 40px;
   max-width: 95%;
   margin: 0 auto;
 }
 
-.uncategorized-breadcrumb {
+.holidays-breadcrumb {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -25,17 +25,17 @@
   transition: color 0.2s ease;
 }
 
-.uncategorized-breadcrumb:hover {
+.holidays-breadcrumb:hover {
   color: #FF5353;
   text-decoration: underline;
   text-decoration-color: #FF5353;
 }
 
-.uncategorized-header-section {
+.holidays-header-section {
   margin-top: 0;
 }
 
-.uncategorized-intro-text {
+.holidays-intro-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
@@ -43,7 +43,7 @@
   margin: 0;
 }
 
-.uncategorized-title {
+.holidays-title {
   font-family: 'Public Sans', sans-serif;
   font-size: 40px;
   font-weight: 900;
@@ -51,44 +51,44 @@
   margin: 0;
 }
 
-.uncategorized-content-area {
+.holidays-content-area {
   margin-top: 20px;
   margin-left: 0px;
   margin-right: auto;
 }
 
-.uncategorized-tabs-row {
+.holidays-tabs-row {
   display: flex;
   align-items: center;
   margin-bottom: 1.25rem;
   gap: 50px;
 }
 
-.uncategorized-filter-container {
+.holidays-filter-container {
   flex-shrink: 0;
 }
 
-.uncategorized-key-container {
+.holidays-key-container {
   margin-left: 4rem;
   width: 515px;
   flex-shrink: 0;
 }
 
-.uncategorized-key-container .fact-key-text {
+.holidays-key-container .fact-key-text {
   line-height: 1.2;
 }
 
-.uncategorized-content-container {
+.holidays-content-container {
   display: flex;
   gap: 1.5rem;
 }
 
-.uncategorized-facts-column {
+.holidays-facts-column {
   display: flex;
   flex-direction: column;
 }
 
-.uncategorized-loading-state {
+.holidays-loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,7 +98,7 @@
   min-height: 400px;
 }
 
-.uncategorized-loading-logo {
+.holidays-loading-logo {
   width: 60px;
   height: 60px;
   object-fit: contain;
@@ -114,20 +114,20 @@
   }
 }
 
-.uncategorized-facts-grid {
+.holidays-facts-grid {
   display: grid;
   grid-template-columns: repeat(2, 515px);
   gap: 18px;
 }
 
-.uncategorized-no-facts {
+.holidays-no-facts {
   font-family: 'Public Sans', sans-serif;
   font-size: 16px;
   color: #666;
   grid-column: 1 / -1;
 }
 
-.uncategorized-sidebar {
+.holidays-sidebar {
   flex-shrink: 0;
   width: 280px;
   position: sticky;
@@ -136,56 +136,56 @@
 }
 
 @media (max-width: 1200px) {
-  .uncategorized-facts-grid {
+  .holidays-facts-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .uncategorized-key-container {
+  .holidays-key-container {
     width: auto;
     max-width: 300px;
   }
 }
 
 @media (max-width: 900px) {
-  .uncategorized-tabs-row {
+  .holidays-tabs-row {
     flex-wrap: wrap;
     gap: 15px;
   }
 
-  .uncategorized-filter-container {
+  .holidays-filter-container {
     order: 3;
     width: 100%;
   }
 
-  .uncategorized-content-container {
+  .holidays-content-container {
     flex-direction: column;
   }
 
-  .uncategorized-facts-grid {
+  .holidays-facts-grid {
     grid-template-columns: 1fr;
     width: 100%;
     margin: 0 auto;
     justify-items: center;
   }
 
-  .uncategorized-key-container {
+  .holidays-key-container {
     display: none;
   }
 
-  .uncategorized-sidebar {
+  .holidays-sidebar {
     width: 100%;
     position: static;
   }
 
-  .uncategorized-main-content {
+  .holidays-main-content {
     padding: 0 20px;
   }
 
-  .uncategorized-title {
+  .holidays-title {
     font-size: 32px;
   }
 
-  .uncategorized-breadcrumb {
+  .holidays-breadcrumb {
     font-size: 16px;
   }
 }

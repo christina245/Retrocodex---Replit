@@ -18,11 +18,11 @@ import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
 import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
-import "./UncategorizedPage.css";
+import "./HolidaysPage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
 
-export default function UncategorizedPage() {
+export default function HolidaysPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
@@ -37,7 +37,7 @@ export default function UncategorizedPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Uncategorized")
+      .filter(fact => fact.subcategory === "Holidays")
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,
@@ -110,55 +110,55 @@ export default function UncategorizedPage() {
     : sortedFacts;
 
   return (
-    <div className="uncategorized-page">
+    <div className="holidays-page">
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 
-      <main className="uncategorized-main-content">
+      <main className="holidays-main-content">
         <Link 
           href="/category/other" 
-          className="uncategorized-breadcrumb"
+          className="holidays-breadcrumb"
           data-testid="link-back-other"
         >
           <ArrowLeft size={18} />
           <span>Other categories</span>
         </Link>
 
-        <div className="uncategorized-header-section">
-          <p className="uncategorized-intro-text">Misconceptions about</p>
-          <h1 className="uncategorized-title">Uncategorized</h1>
+        <div className="holidays-header-section">
+          <p className="holidays-intro-text">Misconceptions about</p>
+          <h1 className="holidays-title">Holidays</h1>
         </div>
 
-        <div className="uncategorized-content-area">
-          <div className="uncategorized-tabs-row">
+        <div className="holidays-content-area">
+          <div className="holidays-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
-            <div className="uncategorized-filter-container">
+            <div className="holidays-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
             </div>
-            <div className="uncategorized-key-container">
+            <div className="holidays-key-container">
               <FactKey />
             </div>
           </div>
 
-          <div className="uncategorized-content-container">
-            <div className="uncategorized-facts-column">
+          <div className="holidays-content-container">
+            <div className="holidays-facts-column">
               {isLoading ? (
-                <div className="uncategorized-loading-state" data-testid="loading-state">
+                <div className="holidays-loading-state" data-testid="loading-state">
                   <img 
                     src={loadingLogo} 
                     alt="" 
-                    className="uncategorized-loading-logo"
+                    className="holidays-loading-logo"
                     data-testid="img-loading-logo"
                   />
                 </div>
               ) : filteredFacts.length === 0 && selectedFilters.length > 0 ? (
                 <EmptyFilterState />
               ) : (
-                <div className="uncategorized-facts-grid">
+                <div className="holidays-facts-grid">
                   {filteredFacts.map((fact) => (
                     <CategoryFactCard
                       key={fact.id}
@@ -174,7 +174,7 @@ export default function UncategorizedPage() {
               )}
             </div>
 
-            <aside className="uncategorized-sidebar">
+            <aside className="holidays-sidebar">
               <BeehiivBanner />
             </aside>
           </div>
@@ -194,7 +194,7 @@ export default function UncategorizedPage() {
           onClose={() => setShareModalFact(null)}
           fact={{
             id: shareModalFact.id,
-            category: "UNCATEGORIZED",
+            category: "HOLIDAYS",
             categoryColor: SUBCATEGORY_COLOR,
             myth: shareModalFact.myth,
             truth: shareModalFact.truth,

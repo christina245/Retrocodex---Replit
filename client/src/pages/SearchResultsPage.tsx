@@ -26,7 +26,7 @@ import photoLinguistics from "@assets/linguistics_1764816085490.png";
 import photoMusic from "@assets/music_1764816085490.png";
 import photoPhysics from "@assets/physics_1764816085489.png";
 import photoTechnology from "@assets/tech_1764816085490.png";
-import photoUncategorized from "@assets/uncategorized_1764816085488.png";
+import photoHolidays from "@assets/holidays_1766472598101.png";
 
 interface SearchResult {
   facts: Fact[];
@@ -48,7 +48,7 @@ const SUBCATEGORY_SLUGS: Record<string, string> = {
   "Linguistics": "linguistics",
   "Music": "music",
   "Physics": "physics",
-  "Uncategorized": "uncategorized",
+  "Holidays": "holidays",
 };
 
 const SUBCATEGORY_DATA: Record<string, { description: string; photo: string }> = {
@@ -88,9 +88,9 @@ const SUBCATEGORY_DATA: Record<string, { description: string; photo: string }> =
     description: "Untangling oversimplified or outdated ideas about motion, energy, forces, matter, and the nature of the physical world.",
     photo: photoPhysics
   },
-  "Uncategorized": { 
-    description: "A mix of widespread misconceptions that don't fit neatly elsewhere but expose how everyday assumptions can mislead us.",
-    photo: photoUncategorized
+  "Holidays": { 
+    description: "Some of our holiday rituals may not mean what you think they mean. The real stories behind Christmas, Thanksgiving, Easter, and other holidays are often simplified, sanitized, or uncertain.",
+    photo: photoHolidays
   },
 };
 

@@ -11,11 +11,11 @@ import photoAstronomy from "@assets/astronomy_1764816085492.png";
 import photoBeauty from "@assets/beauty_1764816085492.png";
 import photoEarthScience from "@assets/earth_science_1764816085491.png";
 import photoFood from "@assets/food_1764816085491.png";
+import photoHolidays from "@assets/holidays_1766472598101.png";
 import photoLinguistics from "@assets/linguistics_1764816085490.png";
 import photoMusic from "@assets/music_1764816085490.png";
 import photoPhysics from "@assets/physics_1764816085489.png";
 import photoTechnology from "@assets/tech_1764816085490.png";
-import photoUncategorized from "@assets/uncategorized_1764816085488.png";
 
 interface Subcategory {
   id: string;
@@ -56,6 +56,12 @@ const subcategories: Subcategory[] = [
     photo: photoFood
   },
   {
+    id: "holidays",
+    name: "HOLIDAYS",
+    description: "Some of our holiday rituals may not mean what you think they mean. The real stories behind Christmas, Thanksgiving, Easter, and other holidays are often simplified, sanitized, or uncertain.",
+    photo: photoHolidays
+  },
+  {
     id: "linguistics",
     name: "LINGUISTICS",
     description: "You've probably been pronouncing some words wrong for years. Some spelling and grammar rules you might have been taught were vast overgeneralizations.",
@@ -78,12 +84,6 @@ const subcategories: Subcategory[] = [
     name: "TECHNOLOGY",
     description: "What is today's technology actually capable of? Is AI actually on par with human abilities?",
     photo: photoTechnology
-  },
-  {
-    id: "uncategorized",
-    name: "UNCATEGORIZED",
-    description: "A mix of widespread misconceptions that don't fit neatly elsewhere but expose how everyday assumptions can mislead us.",
-    photo: photoUncategorized
   }
 ];
 
