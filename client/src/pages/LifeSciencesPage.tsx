@@ -169,7 +169,7 @@ export default function LifeSciencesPage() {
           </div>
         </div>
 
-        <div className="life-sciences-content-area">
+        <div className="life-sciences-content-area" id="life-sciences-content-area">
           <div className="life-sciences-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="life-sciences-filter-container">
@@ -206,6 +206,7 @@ export default function LifeSciencesPage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    scrollTargetId="life-sciences-content-area"
                   />
                 </>
               )}

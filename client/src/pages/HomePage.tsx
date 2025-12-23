@@ -360,7 +360,7 @@ export default function HomePage() {
         <HomepageCategoryNav />
         <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-        <div className="content-area">
+        <div className="content-area" id="content-area">
           {activeTab === "regionally-taught" && (
             <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
               Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
@@ -400,6 +400,7 @@ export default function HomePage() {
                   currentPage={clampedRecentPage}
                   totalPages={recentTotalPages}
                   onPageChange={handleRecentPageChange}
+                  scrollTargetId="content-area"
                 />
               )}
             </div>

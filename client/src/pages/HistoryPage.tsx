@@ -179,7 +179,7 @@ export default function HistoryPage() {
           </div>
         </div>
 
-        <div className="history-content-area">
+        <div className="history-content-area" id="history-content-area">
           <div className="history-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="history-filter-container">
@@ -216,6 +216,7 @@ export default function HistoryPage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    scrollTargetId="history-content-area"
                   />
                 </>
               )}

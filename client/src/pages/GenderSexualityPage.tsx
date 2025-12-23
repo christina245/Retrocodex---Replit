@@ -175,7 +175,7 @@ export default function GenderSexualityPage() {
           </div>
         </div>
 
-        <div className="gender-sexuality-content-area">
+        <div className="gender-sexuality-content-area" id="gender-sexuality-content-area">
           <div className="gender-sexuality-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="gender-sexuality-filter-container">
@@ -212,6 +212,7 @@ export default function GenderSexualityPage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    scrollTargetId="gender-sexuality-content-area"
                   />
                 </>
               )}

@@ -174,7 +174,7 @@ export default function EverydayLifePage() {
           </div>
         </div>
 
-        <div className="everyday-life-content-area">
+        <div className="everyday-life-content-area" id="everyday-life-content-area">
           <div className="everyday-life-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="everyday-life-filter-container">
@@ -211,6 +211,7 @@ export default function EverydayLifePage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    scrollTargetId="everyday-life-content-area"
                   />
                 </>
               )}

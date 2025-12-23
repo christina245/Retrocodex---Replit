@@ -175,7 +175,7 @@ export default function SocialSciencesPage() {
           </div>
         </div>
 
-        <div className="social-sciences-content-area">
+        <div className="social-sciences-content-area" id="social-sciences-content-area">
           <div className="social-sciences-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="social-sciences-filter-container">
@@ -212,6 +212,7 @@ export default function SocialSciencesPage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    scrollTargetId="social-sciences-content-area"
                   />
                 </>
               )}

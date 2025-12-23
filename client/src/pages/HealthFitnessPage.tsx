@@ -167,7 +167,7 @@ export default function HealthFitnessPage() {
           </div>
         </div>
 
-        <div className="health-fitness-content-area">
+        <div className="health-fitness-content-area" id="health-fitness-content-area">
           <div className="health-fitness-tabs-row">
             <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
             <div className="health-fitness-filter-container">
@@ -204,6 +204,7 @@ export default function HealthFitnessPage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
+                    scrollTargetId="health-fitness-content-area"
                   />
                 </>
               )}

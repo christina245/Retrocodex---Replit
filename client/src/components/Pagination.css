@@ -2,36 +2,35 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
   margin-top: 40px;
   width: 100%;
 }
 
-.pagination-link {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  color: #FF5353;
+.pagination-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  padding: 8px 12px;
+  padding: 8px;
   cursor: pointer;
+  color: #FF5353;
   transition: opacity 0.2s ease;
 }
 
-.pagination-link:hover {
+.pagination-arrow:hover:not(:disabled) {
   opacity: 0.7;
 }
 
-.pagination-link.active {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.pagination-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
-.pagination-ellipsis {
+.pagination-info {
   font-family: 'Public Sans', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  color: #FF5353;
-  padding: 8px 4px;
+  color: #2C2C2C;
 }
