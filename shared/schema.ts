@@ -19,12 +19,12 @@ export const OTHER_SUBCATEGORIES = [
   "Astronomy",
   "Beauty",
   "Earth Science",
-  "Technology",
   "Food",
+  "Holidays",
   "Linguistics",
   "Music",
   "Physics",
-  "Uncategorized"
+  "Technology"
 ] as const;
 
 // Type definitions for JSON fields
