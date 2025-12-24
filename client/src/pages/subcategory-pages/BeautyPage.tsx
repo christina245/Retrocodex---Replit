@@ -37,7 +37,7 @@ export default function BeautyPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Beauty")
+      .filter(fact => fact.subcategories?.includes("Beauty"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

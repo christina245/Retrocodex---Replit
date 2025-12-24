@@ -37,7 +37,7 @@ export default function MusicPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Music")
+      .filter(fact => fact.subcategories?.includes("Music"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

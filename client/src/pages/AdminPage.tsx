@@ -76,7 +76,7 @@ export default function AdminPage() {
   const [slug, setSlug] = useState("");
   const [coverPhoto, setCoverPhoto] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [subcategory, setSubcategory] = useState("");
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [searchTags, setSearchTags] = useState<string[]>([]);
   const [searchTagInput, setSearchTagInput] = useState("");
@@ -168,7 +168,7 @@ export default function AdminPage() {
     setSlug("");
     setCoverPhoto("");
     setSelectedCategories([]);
-    setSubcategory("");
+    setSelectedSubcategories([]);
     setSelectedTags([]);
     setSearchTags([]);
     setSearchTagInput("");
@@ -378,7 +378,7 @@ export default function AdminPage() {
     setSlug(fact.slug);
     setCoverPhoto(fact.coverPhoto || "");
     setSelectedCategories(fact.categories);
-    setSubcategory(fact.subcategory || "");
+    setSelectedSubcategories(fact.subcategories || []);
     setSelectedTags(fact.factFilters || []);
     setSearchTags(fact.searchTags || []);
     setSearchTagInput("");
@@ -428,7 +428,7 @@ export default function AdminPage() {
     } else {
       setSelectedCategories(selectedCategories.filter(c => c !== category));
       if (category === "Other") {
-        setSubcategory("");
+        setSelectedSubcategories([]);
       }
     }
   };
@@ -619,7 +619,7 @@ export default function AdminPage() {
       slug,
       coverPhoto: coverPhoto || undefined,
       categories: selectedCategories,
-      subcategory: selectedCategories.includes("Other") ? subcategory : undefined,
+      subcategories: selectedCategories.includes("Other") ? selectedSubcategories : [],
       factFilters: selectedTags,
       searchTags,
       featured,
@@ -954,19 +954,27 @@ export default function AdminPage() {
 
                 {selectedCategories.includes("Other") && (
                   <div className="form-group">
-                    <label className="form-label">Subcategory</label>
-                    <select
-                      value={subcategory}
-                      onChange={(e) => setSubcategory(e.target.value)}
-                      className="form-select"
-                      data-testid="select-subcategory"
-                      required
-                    >
-                      <option value="">Select a subcategory...</option>
+                    <label className="form-label">Subcategories</label>
+                    <div className="checkbox-group">
                       {OTHER_SUBCATEGORIES.map((sub) => (
-                        <option key={sub} value={sub}>{sub}</option>
+                        <label key={sub} className="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={selectedSubcategories.includes(sub)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedSubcategories([...selectedSubcategories, sub]);
+                              } else {
+                                setSelectedSubcategories(selectedSubcategories.filter(s => s !== sub));
+                              }
+                            }}
+                            className="checkbox-input"
+                            data-testid={`checkbox-subcategory-${sub.toLowerCase().replace(/\s+/g, '-')}`}
+                          />
+                          <span>{sub}</span>
+                        </label>
                       ))}
-                    </select>
+                    </div>
                   </div>
                 )}
 

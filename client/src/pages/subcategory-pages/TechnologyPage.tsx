@@ -37,7 +37,7 @@ export default function TechnologyPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Technology")
+      .filter(fact => fact.subcategories?.includes("Technology"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

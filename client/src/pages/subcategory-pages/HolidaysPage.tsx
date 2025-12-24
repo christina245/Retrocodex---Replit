@@ -37,7 +37,7 @@ export default function HolidaysPage() {
 
   const allFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Holidays")
+      .filter(fact => fact.subcategories?.includes("Holidays"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

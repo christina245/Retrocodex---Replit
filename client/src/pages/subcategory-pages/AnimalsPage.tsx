@@ -43,7 +43,7 @@ export default function AnimalsPage() {
 
   const databaseFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Animals")
+      .filter(fact => fact.subcategories?.includes("Animals"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,

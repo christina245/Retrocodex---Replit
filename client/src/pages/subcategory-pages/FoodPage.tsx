@@ -53,7 +53,7 @@ export default function FoodPage() {
 
   const databaseFoodFacts: CategoryFact[] = useMemo(() => {
     return dbFacts
-      .filter(fact => fact.subcategory === "Food")
+      .filter(fact => fact.subcategories?.includes("Food"))
       .map(fact => ({
         id: fact.id,
         myth: fact.mythHeader,
