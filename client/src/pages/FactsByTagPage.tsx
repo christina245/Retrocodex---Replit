@@ -14,6 +14,7 @@ import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Tag } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./FactsByTagPage.css";
@@ -106,6 +107,13 @@ export default function FactsByTagPage() {
 
   return (
     <div className="facts-by-tag-page">
+      {tagName && (
+        <SEO 
+          title={`Tag: ${tagName}`}
+          description={`Explore facts tagged with "${tagName}" on Retrocodex. Discover misconceptions and learn the truth.`}
+          noIndex={true}
+        />
+      )}
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />

@@ -20,6 +20,7 @@ import { Header } from "@/components/Header";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import BlogCard from "@/components/BlogCard";
 import { SaveModal } from "@/components/SaveModal";
 import { CommentModal } from "@/components/CommentModal";
@@ -129,6 +130,7 @@ export default function SingleBlogPage() {
   if (isLoading) {
     return (
       <div className="single-blog-page">
+        <SEO title="Loading..." description="Loading article on Retrocodex." noIndex={true} />
         <Header onMenuClick={() => setIsMenuOpen(true)} />
         <main className="single-blog-main">
           <div className="loading-container">
@@ -148,6 +150,7 @@ export default function SingleBlogPage() {
   if (error || !post) {
     return (
       <div className="single-blog-page">
+        <SEO title="Article Not Found" description="The article you're looking for doesn't exist or has been removed." noIndex={true} />
         <Header onMenuClick={() => setIsMenuOpen(true)} />
         <main className="single-blog-main">
           <div className="error-container">
@@ -168,6 +171,11 @@ export default function SingleBlogPage() {
 
   return (
     <div className="single-blog-page">
+      <SEO 
+        title={post.title}
+        description={post.summary || `Read ${post.title} on Retrocodex.`}
+        image={post.coverImage || undefined}
+      />
       <div className="sticky-header-wrapper">
         <Header onMenuClick={() => setIsMenuOpen(true)} />
         <HomepageCategoryNav sticky />

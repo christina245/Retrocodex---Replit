@@ -16,6 +16,7 @@ import { RelatedFacts } from "@/components/RelatedFacts";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
 import TimelineSection from "@/components/TimelineSection";
@@ -97,6 +98,7 @@ export default function SingleFactPage() {
   if (isLoading) {
     return (
       <div className="single-fact-page">
+        <SEO title="Loading..." description="Loading fact on Retrocodex." noIndex={true} />
         <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
         <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <div className="loading-state" data-testid="loading-state">
@@ -115,6 +117,7 @@ export default function SingleFactPage() {
   if (error || !factData) {
     return (
       <div className="single-fact-page">
+        <SEO title="Fact Not Found" description="The fact you're looking for doesn't exist or has been removed." noIndex={true} />
         <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
         <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <div className="error-container" data-testid="error-state">
@@ -146,6 +149,11 @@ export default function SingleFactPage() {
 
   return (
     <div className="single-fact-page">
+      <SEO 
+        title={factData.title || factData.mythHeader}
+        description={`Myth: ${factData.mythHeader}. Truth: ${factData.truthHeader}`}
+        image={factData.coverPhoto || undefined}
+      />
       <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       

@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
+import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -111,6 +112,10 @@ export default function AstronomyPage() {
 
   return (
     <div className="astronomy-page">
+      <SEO 
+        title="Astronomy" 
+        description="Explore space and cosmos misconceptions. Learn what science reveals about stars, planets, and the universe." 
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />

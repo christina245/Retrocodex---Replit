@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
+import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -154,6 +155,10 @@ export default function HistoryPage() {
 
   return (
     <div className="history-page">
+      <SEO 
+        title="History" 
+        description="Explore historical misconceptions and discover what really happened. Separate fact from legend in history's most persistent myths." 
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="HISTORY" sticky />

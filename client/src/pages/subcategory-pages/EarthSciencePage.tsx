@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
+import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -111,6 +112,10 @@ export default function EarthSciencePage() {
 
   return (
     <div className="earth-science-page">
+      <SEO 
+        title="Earth Science" 
+        description="Explore misconceptions about geology, weather, climate, and our planet. Discover what science says about Earth." 
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />

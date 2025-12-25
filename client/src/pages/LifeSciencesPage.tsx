@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Fact } from "@shared/schema";
+import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -146,6 +147,10 @@ export default function LifeSciencesPage() {
 
   return (
     <div className="life-sciences-page">
+      <SEO 
+        title="Life Sciences" 
+        description="Uncover the truth about biology, ecology, and evolution. Learn what science has revealed about common life science misconceptions." 
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="LIFE SCIENCES" sticky />
