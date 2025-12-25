@@ -38,6 +38,7 @@ Preferred communication style: Simple, everyday language.
 - `EmailSignupBanner`: Sticky sidebar for email collection
 - `SaveModal` & `ShareModal`: Future functionality placeholders
 - `HamburgerMenu`: Slide-out navigation menu
+- `SEO`: Reusable component for setting page titles, meta descriptions, Open Graph tags, and canonical URLs. Editable directly in each page's TSX file.
 
 **Blog System Components**
 - `ArticlesPage`: Lists published blog posts with category/tag filtering, fetches from `/api/blog-posts/published`
@@ -150,6 +151,14 @@ Preferred communication style: Simple, everyday language.
 - Typeform integration for fact submission (external link)
 - Buy Me a Coffee for donations (external link)
 - Social media platforms (Instagram, Bluesky, X/Twitter) for engagement
+
+**SEO Implementation**
+- Reusable `SEO` component at `client/src/components/SEO.tsx`
+- Sets document title, meta description, canonical URL, and Open Graph tags
+- Applied to all pages with custom titles and descriptions editable in each page's TSX file
+- Dynamic pages (SingleFactPage, SingleBlogPage) use content data for meta tags
+- Search and tag pages use `noIndex` to prevent duplicate content penalties
+- Loading/error states have fallback SEO with `noIndex`
 
 **Future Integrations**
 - User authentication system (schema exists but not implemented)
