@@ -13,6 +13,7 @@ import { FactKey } from "@/components/FactKey";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { Search } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
 import "./SearchResultsPage.css";
@@ -222,6 +223,11 @@ export default function SearchResultsPage() {
 
   return (
     <div className="search-results-page">
+      <SEO 
+        title={decodedQuery ? `Search: ${decodedQuery}` : "Search"}
+        description={`Search results for "${decodedQuery}" on Retrocodex. Find facts and misconceptions related to your query.`}
+        noIndex={true}
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />

@@ -5,6 +5,7 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import "./AboutPage.css";
@@ -34,6 +35,10 @@ export default function AboutPage() {
 
   return (
     <div className="about-page">
+      <SEO 
+        title="About"
+        description="Learn about Retrocodex, a living archive dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />

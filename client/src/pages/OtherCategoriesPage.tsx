@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import "./OtherCategoriesPage.css";
 
 import photoAnimals from "@assets/animals_1764816085493.png";
@@ -90,12 +91,12 @@ const subcategories: Subcategory[] = [
 export default function OtherCategoriesPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    document.title = "Other Categories | Retrocodex";
-  }, []);
-
   return (
     <div className="other-categories-page">
+      <SEO 
+        title="Other Categories"
+        description="Explore additional fact categories including Animals, Astronomy, Beauty, Food, Music, Technology, and more. Discover misconceptions beyond the main topics."
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />

@@ -15,6 +15,7 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
+import { SEO } from "@/components/SEO";
 import BlogCard from "@/components/BlogCard";
 import { BlogPost } from "@shared/schema";
 import workInProgressImage from "@assets/No articles found (yet)._1764112278730.png";
@@ -140,6 +141,10 @@ export default function ArticlesPage() {
 
   return (
     <div className="articles-page">
+      <SEO 
+        title="Articles"
+        description="Read in-depth articles exploring misconceptions across history, science, health, and everyday life. Discover the stories behind common myths."
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />

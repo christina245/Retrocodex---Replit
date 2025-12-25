@@ -13,6 +13,7 @@ import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { Pagination } from "@/components/Pagination";
+import { SEO } from "@/components/SEO";
 import type { Fact as DbFact } from "@shared/schema";
 import "./HomePage.css";
 
@@ -354,6 +355,10 @@ export default function HomePage() {
 
   return (
     <div className="page-wrapper">
+      <SEO 
+        title="Retrocodex"
+        description="What have you been taught that's actually untrue? Explore a library of myths and misconceptions across history, life sciences, health and fitness, gender, and more."
+      />
       <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
