@@ -25,15 +25,7 @@ const FACTS_PER_PAGE = 10;
 import photoGenderBrains from "@assets/stock_images/men vs women.png";
 
 const genderSexualityFacts: CategoryFact[] = [
-  {
-    id: "gender-brains",
-    myth: "Men and women have very different brains.",
-    truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
-    factFilters: [],
-    dateAdded: "2025-11-21",
-    coverPhoto: photoGenderBrains,
-    betaOnly: true
-  }
+  
 ];
 
 const CATEGORY_COLOR = "#FF88AA";
@@ -153,7 +145,7 @@ export default function GenderSexualityPage() {
   return (
     <div className="gender-sexuality-page">
       <SEO 
-        title="Gender & Sexuality" 
+        title="Misconceptions About Gender & Sexuality" 
         description="Explore misconceptions about gender, sexuality, and relationships. Discover evidence-based perspectives on common beliefs." 
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
@@ -168,7 +160,7 @@ export default function GenderSexualityPage() {
               <p> Throughout history, views on gender and sexuality were often formed through prejudice, rigid social norms, superficial assumptions, or the attempt to reinforce power structures rather than factual data. The exclusion of women and sexual minorities from scientific and cultural authority further slowed progress towards understanding these complex topics.
             </p>
             <p>
-              Research now shows that human behavior and identity arise from a complex interplay of biology, environment, culture, and individual lived realities rather than narrow binary models. 
+              <b>Note:</b> To keep Retrocodex family-friendly, NSFW facts will be featured on a future page.
             </p>
           </div>
           <div className="gender-sexuality-photo">

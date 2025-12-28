@@ -88,7 +88,7 @@ const allFacts: Fact[] = [
     category: "GENDER & SEXUALITY",
     categoryColor: "#FF6F98",
     myth: "Men and women have very different brains.",
-    truth: "Men's and women's brains are far more similar than different. Traits such as spatial skills, verbal ability, or emotional processing fall on overlapping spectrums.",
+    truth: "While there are some differences on average, there is more functional overlap than not, and more variation within each sex than between the two sexes.",
     dateAdded: "2025-11-21",
     coverPhoto: photo6Gender,
     betaOnly: true

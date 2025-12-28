@@ -148,8 +148,8 @@ export default function LifeSciencesPage() {
   return (
     <div className="life-sciences-page">
       <SEO 
-        title="Life Sciences" 
-        description="Uncover the truth about biology, ecology, and evolution. Learn what science has revealed about common life science misconceptions." 
+        title="Misconceptions About Life Sciences" 
+        description="What facts have you been taught in the life sciences that are now outdated? Learn how the discoveries evolved." 
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

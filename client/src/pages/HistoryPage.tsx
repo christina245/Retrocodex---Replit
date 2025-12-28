@@ -156,8 +156,8 @@ export default function HistoryPage() {
   return (
     <div className="history-page">
       <SEO 
-        title="History" 
-        description="Explore historical misconceptions and discover what really happened. Separate fact from legend in history's most persistent myths." 
+        title="Misconceptions About History" 
+        description="What have you learned about historical figures or societies that isn't true? Separate fact from legend in history's most persistent myths." 
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

@@ -22,7 +22,7 @@ import "./HealthFitnessPage.css";
 
 const FACTS_PER_PAGE = 10;
 
-import photoFoodPyramid from "@assets/stock_images/food pyramid.png";
+
 
 const healthFitnessFacts: CategoryFact[] = [
 
@@ -157,10 +157,10 @@ export default function HealthFitnessPage() {
           <div className="health-fitness-description">
             <p><b>You might be more likely to reach your fitness goals when you stop carrying the weight of debunked quick-fix promises.</b></p>
             <p>
-              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science. Popular media purposely kept readers hooked by publishing clickbait-like content about fat loss, muscle growth, stretching, weightlifting, and more that weren't fully scientifically accurate and thus effective. 
+              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science. Popular media purposely kept readers hooked by publishing clickbait-like content about fat loss, muscle growth, stretching, weightlifting, and more that weren't fully scientifically accurate. But as they kept promising results, the public held on.
             </p>
             <p>
-              These oversimplified rules such as step counts, hydration quotas, universal meal plans spread as they kept promising results. However, the journey towards your fittest, healthiest self is far more complex than any single diet or exercise plan. 
+              Several failed fad diets later, many of us now understand that the journey towards your fittest, healthiest self is far more complex than a few generalizations.
             </p>
           </div>
           <div className="health-fitness-photo">

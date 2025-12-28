@@ -143,7 +143,7 @@ export default function ArticlesPage() {
     <div className="articles-page">
       <SEO 
         title="Articles"
-        description="Read in-depth articles exploring misconceptions across history, science, health, and everyday life. Discover the stories behind common myths."
+        description="Articles exploring misconceptions across history, science, health, and everyday life. Discover the stories behind common myths."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

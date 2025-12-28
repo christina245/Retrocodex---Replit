@@ -154,8 +154,8 @@ export default function EverydayLifePage() {
   return (
     <div className="everyday-life-page">
       <SEO 
-        title="Everyday Life" 
-        description="Challenge everyday assumptions and common knowledge. Find out what's true and what's myth in daily life topics." 
+        title="Misconceptions About Everyday Life" 
+        description="Challenge everyday assumptions and common knowledge from all over the world. Find out what's true and what's myth in everyday sayings you might hear from friends and family." 
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

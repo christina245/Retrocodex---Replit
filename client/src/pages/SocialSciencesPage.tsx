@@ -153,8 +153,8 @@ export default function SocialSciencesPage() {
   return (
     <div className="social-sciences-page">
       <SEO 
-        title="Social Sciences" 
-        description="Examine misconceptions about human behavior, society, and culture. Explore what research reveals about social science myths." 
+        title="Misconceptions In Social Sciences" 
+        description="Examine misconceptions about human behavior, society, and culture." 
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

@@ -36,7 +36,7 @@ export default function AboutPage() {
   return (
     <div className="about-page">
       <SEO 
-        title="About"
+        title="About Retrocodex: Stuff You Might Have Learned Wrong"
         description="Learn about Retrocodex, a living archive dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
