@@ -159,6 +159,15 @@ Preferred communication style: Simple, everyday language.
 - Dynamic pages (SingleFactPage, SingleBlogPage) use content data for meta tags
 - Search and tag pages use `noIndex` to prevent duplicate content penalties
 - Loading/error states have fallback SEO with `noIndex`
+- `FAQSchema` component at `client/src/components/FAQSchema.tsx` injects JSON-LD structured data for fact pages
+- Dynamic `/sitemap.xml` route generates sitemap including all static pages, facts, and blog posts
+- `/robots.txt` route allows all crawlers and points to sitemap at https://theretrocodex.com/sitemap.xml
+- SingleFactPage myth text rendered as H1 for SEO importance
+
+**Analytics**
+- Google Analytics 4 integration via `client/src/lib/analytics.ts`
+- Automatic page view tracking on route changes via `useAnalytics` hook
+- Environment variable: `VITE_GA_MEASUREMENT_ID`
 
 **Future Integrations**
 - User authentication system (schema exists but not implemented)
