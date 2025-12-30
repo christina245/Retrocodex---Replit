@@ -17,7 +17,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import coverImage from "@assets/health_and_fitness_1764736967989.png";
 import "./HealthFitnessPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -163,13 +162,6 @@ export default function HealthFitnessPage() {
             <p>
               Several failed fad diets later, many of us now understand that the journey towards your fittest, healthiest self is far more complex than a few generalizations.
             </p>
-          </div>
-          <div className="health-fitness-photo">
-            <img 
-              src={coverImage} 
-              alt="Woman lifting weights in a gym" 
-              className="health-fitness-photo-img"
-            />
           </div>
         </div>
 

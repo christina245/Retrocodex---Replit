@@ -15,12 +15,10 @@
 }
 
 .gender-sexuality-intro-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: block;
   margin-top: 20px;
   margin-bottom: 20px;
-  align-items: center;
+  padding-right: 50%;
 }
 
 .gender-sexuality-description {
@@ -118,8 +116,7 @@
 
 @media (max-width: 900px) {
   .gender-sexuality-intro-row {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    padding-right: 0;
   }
 
   .gender-sexuality-tabs-row {

@@ -17,7 +17,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import coverImage from "@assets/life sciences_1764363998621.png";
 import "./LifeSciencesPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -165,13 +164,6 @@ export default function LifeSciencesPage() {
             <p>
               From misinterpreted fossils, oversimplified diagrams, to outdated models of how our bodies sense, adapt, and interact with the world, much of the inaccurate life science education we've received may be unintentional. Sometimes, it's merely the result of outdated textbooks or genuine misunderstandings.
             </p>
-          </div>
-          <div className="life-sciences-photo">
-            <img 
-              src={coverImage} 
-              alt="Life Sciences - Panda in nature" 
-              className="life-sciences-photo-img"
-            />
           </div>
         </div>
 

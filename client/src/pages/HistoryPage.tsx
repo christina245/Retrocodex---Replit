@@ -17,7 +17,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import coliseumImage from "@assets/stock_images/history cover photo.png";
 import "./HistoryPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -175,13 +174,6 @@ export default function HistoryPage() {
              The media further exacerbated historical inaccuracies with its exaggerated or inaccurate portrayals of several societies. Throughout the world, the same events may be taught differently through culturally biased lenses serving regional interests rather than the full picture. When those perspectives collide with current scholarship, the story becomes more complex, yet more accurate.
 
             </p>
-          </div>
-          <div className="history-photo">
-            <img 
-              src={coliseumImage} 
-              alt="The Coliseum in Rome" 
-              className="history-photo-img"
-            />
           </div>
         </div>
 

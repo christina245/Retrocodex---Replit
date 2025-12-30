@@ -17,7 +17,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import coverImage from "@assets/social_sciences_1764794020398.png";
 import "./SocialSciencesPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -163,7 +162,7 @@ export default function SocialSciencesPage() {
       <main className="social-sciences-main-content">
         <div className="social-sciences-intro-row">
           <div className="social-sciences-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about social sciences</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Social Sciences</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">The way humans work isn't as simple as we were taught growing up.</h2>
             <p>
               Daily human interaction made it too easy for assumptions about each other to ingrain such powerful mental biases that they shaped entire fields of study.
@@ -171,13 +170,6 @@ export default function SocialSciencesPage() {
             <p>
               Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the intuitive expectations that followed.
             </p>
-          </div>
-          <div className="social-sciences-photo">
-            <img 
-              src={coverImage} 
-              alt="Therapy session with person taking notes" 
-              className="social-sciences-photo-img"
-            />
           </div>
         </div>
 

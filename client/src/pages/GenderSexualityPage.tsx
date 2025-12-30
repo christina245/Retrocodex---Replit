@@ -17,7 +17,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import coverImage from "@assets/gender_and_sexuality_(1)_1764810626965.png";
 import "./GenderSexualityPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -162,13 +161,6 @@ export default function GenderSexualityPage() {
             <p>
               <b>Note:</b> To keep Retrocodex family-friendly, NSFW facts will be featured on a future page.
             </p>
-          </div>
-          <div className="gender-sexuality-photo">
-            <img 
-              src={coverImage} 
-              alt="Pink and blue balloons" 
-              className="gender-sexuality-photo-img"
-            />
           </div>
         </div>
 

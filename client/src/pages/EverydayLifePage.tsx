@@ -17,7 +17,6 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import coverImage from "@assets/everyday life_1764573292477.png";
 import "./EverydayLifePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -171,13 +170,6 @@ export default function EverydayLifePage() {
             <p>
               You might have learned many of these lessons growing up.</p> 
             
-          </div>
-          <div className="everyday-life-photo">
-            <img 
-              src={coverImage} 
-              alt="Everyday Life - Couple at holiday market" 
-              className="everyday-life-photo-img"
-            />
           </div>
         </div>
 

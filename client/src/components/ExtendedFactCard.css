@@ -55,7 +55,7 @@
 .label-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 500;
   color: #878787;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -80,7 +80,7 @@
 .fact-myth {
   font-family: 'Merriweather', serif;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 600;
   color: #2C2C2C;
   line-height: 1.5;
   margin: 0 0 10 0;
