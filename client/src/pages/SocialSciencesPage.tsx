@@ -163,7 +163,8 @@ export default function SocialSciencesPage() {
       <main className="social-sciences-main-content">
         <div className="social-sciences-intro-row">
           <div className="social-sciences-description">
-            <p><b>The way humans work isn't as simple as we were taught growing up.</b></p>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about social sciences</h1>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">The way humans work isn't as simple as we were taught growing up.</h2>
             <p>
               Daily human interaction made it too easy for assumptions about each other to ingrain such powerful mental biases that they shaped entire fields of study.
             </p>

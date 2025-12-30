@@ -155,7 +155,8 @@ export default function HealthFitnessPage() {
       <main className="health-fitness-main-content">
         <div className="health-fitness-intro-row">
           <div className="health-fitness-description">
-            <p><b>You might be more likely to reach your fitness goals when you stop carrying the weight of debunked quick-fix promises.</b></p>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about health & fitness</h1>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">You might be more likely to reach your fitness goals when you stop carrying the weight of debunked quick-fix promises.</h2>
             <p>
               Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science. Popular media purposely kept readers hooked by publishing clickbait-like content about fat loss, muscle growth, stretching, weightlifting, and more that weren't fully scientifically accurate. But as they kept promising results, the public held on.
             </p>

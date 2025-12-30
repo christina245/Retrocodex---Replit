@@ -158,7 +158,8 @@ export default function LifeSciencesPage() {
       <main className="life-sciences-main-content">
         <div className="life-sciences-intro-row">
           <div className="life-sciences-description">
-            <p><b>Let natural selection take its course on outdated life sciences facts.</b></p>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about life sciences</h1>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">Let natural selection take its course on outdated life sciences facts.</h2>
              <p>Throughout most of history, we just didn't have the resources to study living things to the microscopic extent we do now. As these advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match the new evidence.
             </p>
             <p>

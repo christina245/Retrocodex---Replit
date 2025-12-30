@@ -164,11 +164,11 @@ export default function EverydayLifePage() {
       <main className="everyday-life-main-content">
         <div className="everyday-life-intro-row">
           <div className="everyday-life-description">
-            <p><b>What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders?</b></p>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about everyday life</h1>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders?</h2>
             <p>
               These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.</p> 
-             <p>An old wives’ tale like “don’t go outside with wet hair or you’ll catch a cold” illustrates how these ideas take hold: it offered a simple, memorable rule for staying healthy in eras when the causes of illness were poorly understood. Over time, such claims become woven into family habits and cultural traditions.
-            </p>
+            
           </div>
           <div className="everyday-life-photo">
             <img 
