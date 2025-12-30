@@ -448,6 +448,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ==================== SITEMAP & ROBOTS ====================
+  const SITE_URL = "https://theretrocodex.com";
+
+  // GET /sitemap.xml - Dynamic sitemap for SEO
+  app.get("/sitemap.xml", async (req, res) => {
+    try {
+      const facts = await storage.getAllFacts();
+      const blogPosts = await storage.getPublishedBlogPosts();
+      const currentDate = new Date().toISOString().split('T')[0];
+
+      // Static pages with priorities
+      const staticPages = [
+        { url: "/", priority: "1.0", changefreq: "daily" },
+        { url: "/about", priority: "0.8", changefreq: "monthly" },
+        { url: "/articles", priority: "0.9", changefreq: "weekly" },
+        { url: "/category/history", priority: "0.8", changefreq: "weekly" },
+        { url: "/category/life-sciences", priority: "0.8", changefreq: "weekly" },
+        { url: "/category/everyday-life", priority: "0.8", changefreq: "weekly" },
+        { url: "/category/health-fitness", priority: "0.8", changefreq: "weekly" },
+        { url: "/category/social-sciences", priority: "0.8", changefreq: "weekly" },
+        { url: "/category/gender-sexuality", priority: "0.8", changefreq: "weekly" },
+        { url: "/category/other", priority: "0.7", changefreq: "weekly" },
+        { url: "/category/other/animals", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/astronomy", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/beauty", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/earth-science", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/food", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/linguistics", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/music", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/physics", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/technology", priority: "0.6", changefreq: "weekly" },
+        { url: "/category/other/holidays", priority: "0.6", changefreq: "weekly" },
+      ];
+
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`;
+
+      // Add static pages
+      for (const page of staticPages) {
+        xml += `  <url>
+    <loc>${SITE_URL}${page.url}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>
+`;
+      }
+
+      // Add fact pages
+      for (const fact of facts) {
+        const lastmod = fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : currentDate;
+        xml += `  <url>
+    <loc>${SITE_URL}/fact/${fact.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+      }
+
+      // Add blog post pages
+      for (const post of blogPosts) {
+        const lastmod = post.publishedAt ? new Date(post.publishedAt).toISOString().split('T')[0] : currentDate;
+        xml += `  <url>
+    <loc>${SITE_URL}/articles/${post.slug}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+      }
+
+      xml += `</urlset>`;
+
+      res.set('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error("Error generating sitemap:", error);
+      res.status(500).send("Error generating sitemap");
+    }
+  });
+
+  // GET /robots.txt - Search engine instructions
+  app.get("/robots.txt", (req, res) => {
+    const robotsTxt = `User-agent: *
+Allow: /
+
+Sitemap: ${SITE_URL}/sitemap.xml
+`;
+    res.set('Content-Type', 'text/plain');
+    res.send(robotsTxt);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

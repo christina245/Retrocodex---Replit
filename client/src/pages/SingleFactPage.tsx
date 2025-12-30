@@ -17,6 +17,7 @@ import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
+import { FAQSchema } from "@/components/FAQSchema";
 import CategoryChips from "@/components/CategoryChips";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
 import TimelineSection from "@/components/TimelineSection";
@@ -153,6 +154,10 @@ export default function SingleFactPage() {
         title={factData.title || factData.mythHeader}
         description={`Myth: ${factData.mythHeader}. Truth: ${factData.truthHeader}`}
         image={factData.coverPhoto || undefined}
+      />
+      <FAQSchema 
+        question={factData.mythHeader}
+        answer={factData.truthHeader}
       />
       <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
