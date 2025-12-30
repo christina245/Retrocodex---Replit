@@ -18,7 +18,7 @@ import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { FAQSchema } from "@/components/FAQSchema";
-import CategoryChips from "@/components/CategoryChips";
+import { CategoryLinks } from "@/components/CategoryLinks";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
 import TimelineSection from "@/components/TimelineSection";
 import type { Fact } from "@/components/FactCard";
@@ -156,15 +156,15 @@ export default function SingleFactPage() {
         image={factData.coverPhoto || undefined}
       />
       <FAQSchema 
-        question={factData.mythHeader}
+        question={factData.title || factData.mythHeader}
         answer={factData.truthHeader}
       />
       <SingleFactHeader onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       
       <div className="page-content">
-        <div className="category-row">
-          <CategoryChips categories={factData.categories} />
+        <div className="title-row">
+          <h1 className="fact-page-title" data-testid="text-fact-title">{factData.title}</h1>
           <div className="right-info">
             <div 
               className="subscribe-button-container"
@@ -242,6 +242,7 @@ export default function SingleFactPage() {
               <div className="sidebar-top-row">
                 <RelatedFacts />
                 <div className="tags-banner-column">
+                  <CategoryLinks categories={factData.categories} />
                   <FactTags tags={factData.searchTags || []} />
                   <div className="email-banner-wrapper">
                     <BeehiivBanner />
