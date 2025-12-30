@@ -168,6 +168,8 @@ export default function EverydayLifePage() {
             <h2 className="category-page-h2" data-testid="text-category-subtitle">What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders?</h2>
             <p>
               These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.</p> 
+            <p>
+              You might have learned many of these lessons growing up.</p> 
             
           </div>
           <div className="everyday-life-photo">
