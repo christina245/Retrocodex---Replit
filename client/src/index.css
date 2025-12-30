@@ -286,3 +286,22 @@
     inset: -1px;
   }
 }
+
+/* Category Page Headings - Shared styles for all category pages */
+.category-page-h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #2C2C2C;
+  margin: 0 0 0.75rem 0;
+  text-align: left;
+}
+
+.category-page-h2 {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #2C2C2C;
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
