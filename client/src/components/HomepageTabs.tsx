@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./HomepageTabs.css";
 
 export type HomepageTabType = "explore" | "new" | "popular" | "trending" | "debated" | "regionally-taught";
@@ -7,16 +8,18 @@ interface HomepageTabsProps {
   onTabChange: (tab: HomepageTabType) => void;
 }
 
-const TABS: { id: HomepageTabType; label: string }[] = [
+const TABS: { id: HomepageTabType; label: string; tooltip?: string }[] = [
   { id: "explore", label: "Featured" },
   { id: "new", label: "New" },
-  { id: "popular", label: "Popular" },
-  { id: "trending", label: "Trending" },
-  { id: "debated", label: "Debated" },
-  { id: "regionally-taught", label: "Regionally Taught" },
+  { id: "popular", label: "Popular", tooltip: "Topics frequently reported and upvoted by social media users." },
+  { id: "trending", label: "Trending", tooltip: "Topics relevant to current events and holidays." },
+  { id: "debated", label: "Debated", tooltip: "Topics with relatively weaker consensus." },
+  { id: "regionally-taught", label: "Regionally Taught", tooltip: "Topics mostly taught outside of the United States or within specific parts of it." },
 ];
 
 export function HomepageTabs({ activeTab, onTabChange }: HomepageTabsProps) {
+  const [hoveredTab, setHoveredTab] = useState<HomepageTabType | null>(null);
+
   return (
     <div className="homepage-tabs-wrapper">
       <nav className="homepage-tabs" data-testid="homepage-tabs">
@@ -25,10 +28,17 @@ export function HomepageTabs({ activeTab, onTabChange }: HomepageTabsProps) {
             key={tab.id}
             className={`homepage-tab ${activeTab === tab.id ? "homepage-tab-active" : ""}`}
             onClick={() => onTabChange(tab.id)}
+            onMouseEnter={() => tab.tooltip && setHoveredTab(tab.id)}
+            onMouseLeave={() => setHoveredTab(null)}
             data-testid={`button-tab-${tab.id}`}
           >
             <span className="homepage-tab-text">{tab.label}</span>
             {activeTab === tab.id && <div className="homepage-tab-indicator" />}
+            {tab.tooltip && hoveredTab === tab.id && (
+              <div className="homepage-tab-tooltip" data-testid={`tooltip-tab-${tab.id}`}>
+                {tab.tooltip}
+              </div>
+            )}
           </button>
         ))}
       </nav>
