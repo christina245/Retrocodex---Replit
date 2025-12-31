@@ -84,6 +84,7 @@ export default function AdminPage() {
   const [betaOnly, setBetaOnly] = useState(false);
   const [isTrending, setIsTrending] = useState(false);
   const [isDebated, setIsDebated] = useState(false);
+  const [isPopular, setIsPopular] = useState(false);
   const [mythHeader, setMythHeader] = useState("");
   const [mythDetails, setMythDetails] = useState("");
   const [truthHeader, setTruthHeader] = useState("");
@@ -176,6 +177,7 @@ export default function AdminPage() {
     setBetaOnly(false);
     setIsTrending(false);
     setIsDebated(false);
+    setIsPopular(false);
     setMythHeader("");
     setMythDetails("");
     setTruthHeader("");
@@ -386,6 +388,7 @@ export default function AdminPage() {
     setBetaOnly(fact.betaOnly || false);
     setIsTrending(fact.isTrending || false);
     setIsDebated(fact.isDebated || false);
+    setIsPopular(fact.isPopular || false);
     setMythHeader(fact.mythHeader);
     setMythDetails(fact.mythDetails);
     setTruthHeader(fact.truthHeader);
@@ -626,6 +629,7 @@ export default function AdminPage() {
       betaOnly,
       isTrending,
       isDebated,
+      isPopular,
       mythHeader,
       mythDetails,
       truthHeader,
@@ -886,6 +890,16 @@ export default function AdminPage() {
                         data-testid="checkbox-debated"
                       />
                       <span>Debated</span>
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={isPopular}
+                        onChange={(e) => setIsPopular(e.target.checked)}
+                        className="checkbox-input"
+                        data-testid="checkbox-popular"
+                      />
+                      <span>Popular</span>
                     </label>
                   </div>
                 </div>

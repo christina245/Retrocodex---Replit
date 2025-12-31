@@ -151,11 +151,16 @@ export default function HomePage() {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [recentPage, setRecentPage] = useState(1);
+  const [popularPage, setPopularPage] = useState(1);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: dbFacts = [] } = useQuery<DbFact[]>({
     queryKey: ["/api/facts"],
+  });
+
+  const { data: popularDbFacts = [] } = useQuery<DbFact[]>({
+    queryKey: ["/api/facts/popular"],
   });
 
   const recentDbFacts: Fact[] = useMemo(() => {
@@ -193,13 +198,46 @@ export default function HomePage() {
     clampedRecentPage * FACTS_PER_PAGE
   );
 
+  const popularFacts: Fact[] = useMemo(() => {
+    return popularDbFacts.map(fact => {
+      const primaryCategory = fact.categories[0] || "Other";
+      const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+        ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
+        : primaryCategory.toUpperCase();
+      return {
+        id: fact.id,
+        category: categoryDisplay,
+        categoryColor: CATEGORY_COLORS[primaryCategory] || "#2C2C2C",
+        myth: fact.mythHeader,
+        truth: fact.truthHeader,
+        dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+        link: `/fact/${fact.slug}`,
+        coverPhoto: fact.coverPhoto || undefined,
+        betaOnly: fact.betaOnly || false,
+        factFilters: fact.factFilters || undefined,
+      };
+    });
+  }, [popularDbFacts]);
+
+  const popularTotalPages = Math.max(1, Math.ceil(popularFacts.length / FACTS_PER_PAGE));
+  const clampedPopularPage = Math.min(popularPage, popularTotalPages);
+  const paginatedPopularFacts = popularFacts.slice(
+    (clampedPopularPage - 1) * FACTS_PER_PAGE,
+    clampedPopularPage * FACTS_PER_PAGE
+  );
+
   const handleTabChange = (tab: HomepageTabType) => {
     setActiveTab(tab);
     setRecentPage(1);
+    setPopularPage(1);
   };
 
   const handleRecentPageChange = (page: number) => {
     setRecentPage(Math.min(page, recentTotalPages));
+  };
+
+  const handlePopularPageChange = (page: number) => {
+    setPopularPage(Math.min(page, popularTotalPages));
   };
 
   useEffect(() => {
@@ -207,6 +245,12 @@ export default function HomePage() {
       setRecentPage(Math.max(1, recentTotalPages));
     }
   }, [recentTotalPages, recentPage]);
+
+  useEffect(() => {
+    if (popularPage > popularTotalPages) {
+      setPopularPage(Math.max(1, popularTotalPages));
+    }
+  }, [popularTotalPages, popularPage]);
 
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
@@ -332,6 +376,8 @@ export default function HomePage() {
         return allFacts;
       case "new":
         return paginatedRecentFacts;
+      case "popular":
+        return paginatedPopularFacts;
       case "regionally-taught":
         return regionallyTaughtFacts;
       case "trending":
@@ -345,13 +391,16 @@ export default function HomePage() {
 
   const displayedFacts = getDisplayedFacts();
 
-  const showPagination = activeTab === "new" && recentTotalPages > 1;
+  const showRecentPagination = activeTab === "new" && recentTotalPages > 1;
+  const showPopularPagination = activeTab === "popular" && popularTotalPages > 1;
   const showEmptyState = displayedFacts.length === 0;
   const emptyStateMessage = (activeTab === "trending" || activeTab === "debated") 
     ? "No facts have been added, check back later!"
     : (activeTab === "regionally-taught")
       ? "No regionally taught facts available yet. Check back soon!"
-      : "No facts available yet. Check back soon!";
+      : (activeTab === "popular")
+        ? "No popular facts have been added yet. Check back soon!"
+        : "No facts available yet. Check back soon!";
 
   return (
     <div className="page-wrapper">
@@ -374,6 +423,20 @@ export default function HomePage() {
           {activeTab === "regionally-taught" && (
             <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
               Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
+            </p>
+          )}
+          {activeTab === "popular" && (
+            <p className="tab-subheader" data-testid="text-popular-subheader">
+              Popular features misconceptions commonly reported by social media users on{" "}
+              <a 
+                href="https://www.reddit.com/r/AskReddit/comments/1789w9u/whats_a_fact_that_was_taught_in_school_thats_been/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="tab-subheader-link"
+              >
+                Reddit
+              </a>{" "}
+              and Instagram.
             </p>
           )}
           {activeTab === "trending" && (
@@ -405,11 +468,19 @@ export default function HomePage() {
                   </div>
                 )}
               </div>
-              {showPagination && (
+              {showRecentPagination && (
                 <Pagination
                   currentPage={clampedRecentPage}
                   totalPages={recentTotalPages}
                   onPageChange={handleRecentPageChange}
+                  scrollTargetId="content-area"
+                />
+              )}
+              {showPopularPagination && (
+                <Pagination
+                  currentPage={clampedPopularPage}
+                  totalPages={popularTotalPages}
+                  onPageChange={handlePopularPageChange}
                   scrollTargetId="content-area"
                 />
               )}

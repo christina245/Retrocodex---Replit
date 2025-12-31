@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, jsonb, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -102,6 +102,8 @@ export const facts = pgTable("facts", {
   betaOnly: boolean("beta_only").default(false),
   isTrending: boolean("is_trending").default(false),
   isDebated: boolean("is_debated").default(false),
+  isPopular: boolean("is_popular").default(false),
+  popularOrder: integer("popular_order"),
   mythHeader: varchar("myth_header", { length: 275 }).notNull(),
   mythDetails: text("myth_details").notNull(),
   truthHeader: varchar("truth_header", { length: 275 }).notNull(),
@@ -124,6 +126,8 @@ export const insertFactSchema = z.object({
   betaOnly: z.boolean().default(false),
   isTrending: z.boolean().default(false),
   isDebated: z.boolean().default(false),
+  isPopular: z.boolean().default(false),
+  popularOrder: z.number().optional(),
   mythHeader: z.string().min(1, "Myth header is required").max(275, "Myth header must be 275 characters or less"),
   mythDetails: z.string().min(1, "Myth details are required"),
   truthHeader: z.string().min(1, "Truth header is required").max(275, "Truth header must be 275 characters or less"),

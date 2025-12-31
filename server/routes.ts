@@ -159,6 +159,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/facts/popular - Get popular facts ordered by popularOrder (public)
+  app.get("/api/facts/popular", async (req, res) => {
+    try {
+      const allFacts = await storage.getAllFacts();
+      const popularFacts = allFacts
+        .filter(fact => fact.isPopular === true)
+        .sort((a, b) => {
+          // Sort by popularOrder if both have it, otherwise by createdAt
+          if (a.popularOrder != null && b.popularOrder != null) {
+            return a.popularOrder - b.popularOrder;
+          }
+          if (a.popularOrder != null) return -1;
+          if (b.popularOrder != null) return 1;
+          // Fallback to createdAt (newest first)
+          const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return bDate - aDate;
+        });
+      res.json(popularFacts);
+    } catch (error) {
+      console.error("Error fetching popular facts:", error);
+      res.status(500).json({ message: "Failed to fetch popular facts" });
+    }
+  });
+
   // GET /api/facts/by-tag/:tag - Get facts by searchTags (public)
   app.get("/api/facts/by-tag/:tag", async (req, res) => {
     try {

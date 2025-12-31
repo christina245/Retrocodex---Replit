@@ -1,6 +1,6 @@
 import "./HomepageTabs.css";
 
-export type HomepageTabType = "explore" | "new" | "trending" | "debated" | "regionally-taught";
+export type HomepageTabType = "explore" | "new" | "popular" | "trending" | "debated" | "regionally-taught";
 
 interface HomepageTabsProps {
   activeTab: HomepageTabType;
@@ -10,6 +10,7 @@ interface HomepageTabsProps {
 const TABS: { id: HomepageTabType; label: string }[] = [
   { id: "explore", label: "Explore" },
   { id: "new", label: "New" },
+  { id: "popular", label: "Popular" },
   { id: "trending", label: "Trending" },
   { id: "debated", label: "Debated" },
   { id: "regionally-taught", label: "Regionally Taught" },
