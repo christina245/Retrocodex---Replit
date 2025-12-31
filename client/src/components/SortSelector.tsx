@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { List, ChevronDown } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import "./SortSelector.css";
 
 export type SortOption = "recent" | "featured" | "commonly-taught" | "most-discussed" | "least-discussed";
@@ -21,7 +20,6 @@ interface SortSelectorProps {
 export function SortSelector({ selectedSort, onSortChange }: SortSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -36,10 +34,6 @@ export function SortSelector({ selectedSort, onSortChange }: SortSelectorProps) 
 
   const handleOptionClick = (option: typeof SORT_OPTIONS[0]) => {
     if (!option.enabled) {
-      toast({
-        title: "Unavailable in beta",
-        description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
-      });
       return;
     }
     onSortChange(option.value);
@@ -73,6 +67,7 @@ export function SortSelector({ selectedSort, onSortChange }: SortSelectorProps) 
                 className={`sort-selector-option ${option.value === selectedSort ? 'selected' : ''} ${!option.enabled ? 'disabled' : ''}`}
                 onClick={() => handleOptionClick(option)}
                 data-testid={`button-sort-${option.value}`}
+                {...(!option.enabled && { 'data-tooltip': 'Unavailable in beta' })}
               >
                 {option.label}
               </button>
