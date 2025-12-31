@@ -11,7 +11,7 @@
 
 .category-fact-card {
   width: 515px;
-  height: 285px;
+  height: 300px;
   background: rgba(217, 217, 217, 0.1);
   border: none;
   border-radius: 8px;
@@ -75,6 +75,7 @@
 .category-fact-content {
   padding: 1rem;
   padding-left: 15px;
+  padding-right: 25px;
   display: flex;
   flex-direction: column;
   gap: 0.2rem;

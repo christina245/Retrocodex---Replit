@@ -415,6 +415,9 @@ export default function HomePage() {
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
           What have you learned <br /> that's been disproven?
         </h1>
+        <p className="homepage-tagline" data-testid="text-homepage-tagline">
+          Explore sources and timelines tracing how each myth emerged from misunderstood evidence.
+        </p>
 
         <HomepageCategoryNav />
         <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
