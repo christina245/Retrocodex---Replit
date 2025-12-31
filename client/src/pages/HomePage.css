@@ -28,11 +28,11 @@
 
 .homepage-tagline {
   font-family: 'Public Sans', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   color: #2C2C2C;
   text-align: center;
-  margin: 10px 0;
+  margin: 30px 10px;
 }
 
 .content-area {
@@ -52,13 +52,14 @@
 }
 
 .tab-subheader-link {
-  color: #FF5353;
+  color: #2C2C2C;
   text-decoration: underline;
   transition: opacity 0.2s;
 }
 
 .tab-subheader-link:hover {
   opacity: 0.8;
+  color: #FF5353;
 }
 
 .key-container {

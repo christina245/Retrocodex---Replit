@@ -405,7 +405,7 @@ export default function HomePage() {
   return (
     <div className="page-wrapper">
       <SEO 
-        title="Retrocodex"
+        title="Retrocodex: Stuff You Might Have Learned Wrong"
         description="What have you been taught that's actually untrue? Explore a library of myths and misconceptions across history, life sciences, health and fitness, gender, and more."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
@@ -413,7 +413,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What have you learned <br /> that's been disproven?
+          What have you been taught <br /> that's been disproven?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
           Explore sources and timelines tracing how each myth emerged from misunderstood evidence.
@@ -445,6 +445,11 @@ export default function HomePage() {
           {activeTab === "trending" && (
             <p className="tab-subheader" data-testid="text-trending-subheader">
               Trending explores misinformation relevant to upcoming holidays or current events.
+            </p>
+          )}
+          {activeTab === "debated" && (
+            <p className="tab-subheader" data-testid="text-debated-subheader">
+              Debated topics feature competing evidence or visibly ongoing disagreement among experts and the public.
             </p>
           )}
           <div className="key-container">

@@ -1,7 +1,7 @@
 .homepage-category-nav {
   width: 100%;
   padding: 0 1rem;
-  margin-top: 24px;
+  margin-top: 5px;
 }
 
 .homepage-category-nav-sticky {
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 }
 
 .homepage-category-tile {

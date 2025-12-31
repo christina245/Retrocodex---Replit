@@ -8,7 +8,7 @@ interface HomepageTabsProps {
 }
 
 const TABS: { id: HomepageTabType; label: string }[] = [
-  { id: "explore", label: "Explore" },
+  { id: "explore", label: "Featured" },
   { id: "new", label: "New" },
   { id: "popular", label: "Popular" },
   { id: "trending", label: "Trending" },
