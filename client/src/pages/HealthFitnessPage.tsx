@@ -144,7 +144,7 @@ export default function HealthFitnessPage() {
   return (
     <div className="health-fitness-page">
       <SEO 
-        title="Health & Fitness" 
+        title="Misconceptions About Health & Fitness" 
         description="Get the facts about health, nutrition, and fitness. Discover what science says about popular health beliefs and workout myths." 
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
@@ -154,13 +154,13 @@ export default function HealthFitnessPage() {
       <main className="health-fitness-main-content">
         <div className="health-fitness-intro-row">
           <div className="health-fitness-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about health & fitness</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Health & Fitness</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">You might be more likely to reach your fitness goals when you stop carrying the weight of debunked quick-fix promises.</h2>
             <p>
-              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science. Popular media purposely kept readers hooked by publishing clickbait-like content about fat loss, muscle growth, stretching, weightlifting, and more that weren't fully scientifically accurate. But as they kept promising results, the public held on.
+              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science, leading to a variety of fitness myths spread through popular media and clickbait content. But as they kept promising results, the public held on.
             </p>
             <p>
-              Several failed fad diets later, many of us now understand that the journey towards your fittest, healthiest self is far more complex than a few generalizations.
+              Today, many of us are aware that our physical health journeys are more complex than these common myths about weight loss, muscle building, dieting, and more.
             </p>
           </div>
         </div>

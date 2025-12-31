@@ -141,8 +141,7 @@ export default function LinguisticsPage() {
         </Link>
 
         <div className="linguistics-header-section">
-          <p className="linguistics-intro-text">Misconceptions about</p>
-          <h1 className="linguistics-title">Linguistics</h1>
+          <h1 className="category-page-h1">Linguistics</h1>
         </div>
 
         <div className="linguistics-content-area">

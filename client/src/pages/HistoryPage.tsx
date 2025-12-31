@@ -21,12 +21,6 @@ import "./HistoryPage.css";
 
 const FACTS_PER_PAGE = 10;
 
-import photoColumbus from "@assets/stock_images/christopher columbus.png";
-import photoVikings from "@assets/stock_images/vikings.png";
-import photoPlymouth from "@assets/stock_images/pilgrims.png";
-import photoThanksgiving from "@assets/stock_images/the first thanksgiving.png";
-import photoMarie from "@assets/stock_images/marie antoinette.png";
-import photoPilgrim from "@assets/stock_images/pilgrims with buckles.png";
 
 const historyFacts: CategoryFact[] = [
 
@@ -165,13 +159,13 @@ export default function HistoryPage() {
       <main className="history-main-content">
         <div className="history-intro-row">
           <div className="history-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about history</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About History</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">Your school history lessons might have left out certain critical perspectives.</h2>
             <p>
               What we know about history is always evolving as new archaelogical records surface, modern analytical tools reinterpret old texts, and previously overlooked, marginalized voices finally become heard.
             </p>
             <p>
-             The media further exacerbated historical inaccuracies with its exaggerated or inaccurate portrayals of several societies. Throughout the world, the same events may be taught differently through culturally biased lenses serving regional interests rather than the full picture. When those perspectives collide with current scholarship, the story becomes more complex, yet more accurate.
+             The media further exacerbated historical myths with its exaggerated or inaccurate portrayals of several societies. And throughout the world, the same events may be taught differently through culturally biased lenses serving regional interests rather than the full picture. 
 
             </p>
           </div>

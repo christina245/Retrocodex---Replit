@@ -153,8 +153,7 @@ export default function FoodPage() {
         </Link>
 
         <div className="food-header-section">
-          <p className="food-intro-text">Misconceptions about</p>
-          <h1 className="food-title">Food</h1>
+          <h1 className="category-page-h1">Food</h1>
         </div>
 
         <div className="food-content-area">

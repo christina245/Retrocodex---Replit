@@ -131,8 +131,7 @@ export default function AstronomyPage() {
         </Link>
 
         <div className="astronomy-header-section">
-          <p className="astronomy-intro-text">Misconceptions about</p>
-          <h1 className="astronomy-title">Astronomy</h1>
+          <h1 className="category-page-h1">Astronomy</h1>
         </div>
 
         <div className="astronomy-content-area">

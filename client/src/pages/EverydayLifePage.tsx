@@ -163,12 +163,12 @@ export default function EverydayLifePage() {
       <main className="everyday-life-main-content">
         <div className="everyday-life-intro-row">
           <div className="everyday-life-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about everyday life</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Everyday Life</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders?</h2>
             <p>
               These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.</p> 
             <p>
-              You might have learned many of these lessons growing up.</p> 
+              This collection explores both contemporary misconceptions in popular culture and the classic old wives' tales we were taught at home growing up.</p> 
             
           </div>
         </div>

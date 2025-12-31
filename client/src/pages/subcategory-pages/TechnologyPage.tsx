@@ -131,8 +131,7 @@ export default function TechnologyPage() {
         </Link>
 
         <div className="technology-header-section">
-          <p className="technology-intro-text">Misconceptions about</p>
-          <h1 className="technology-title">Technology</h1>
+          <h1 className="category-page-h1">Technology</h1>
         </div>
 
         <div className="technology-content-area">

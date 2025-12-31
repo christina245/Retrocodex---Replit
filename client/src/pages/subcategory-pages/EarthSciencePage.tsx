@@ -131,8 +131,7 @@ export default function EarthSciencePage() {
         </Link>
 
         <div className="earth-science-header-section">
-          <p className="earth-science-intro-text">Misconceptions about</p>
-          <h1 className="earth-science-title">Earth Science</h1>
+          <h1 className="category-page-h1">Earth Science</h1>
         </div>
 
         <div className="earth-science-content-area">

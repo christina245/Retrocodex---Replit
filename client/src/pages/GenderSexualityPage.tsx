@@ -154,9 +154,9 @@ export default function GenderSexualityPage() {
       <main className="gender-sexuality-main-content">
         <div className="gender-sexuality-intro-row">
           <div className="gender-sexuality-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about gender & sexuality</h1>
-            <h2 className="category-page-h2" data-testid="text-category-subtitle">Gender and sexuality have never been as binary as what many of us would like to believe.</h2>
-              <p> Throughout history, views on gender and sexuality were often formed through prejudice, rigid social norms, superficial assumptions, or the attempt to reinforce power structures rather than factual data. The exclusion of women and sexual minorities from scientific and cultural authority further slowed progress towards understanding these complex topics.
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Gender & Sexuality</h1>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">They've never been as binary as what many of us would like to believe.</h2>
+              <p> Throughout history, myths in gender and sexuality were often formed through prejudice, rigid social norms, superficial assumptions, or the attempt to reinforce power structures rather than scientific or historical data. The exclusion of women and sexual minorities from scientific and cultural authority further slowed progress towards understanding these complex topics.
             </p>
             <p>
               <b>Note:</b> To keep Retrocodex family-friendly, NSFW facts will be featured on a future page.

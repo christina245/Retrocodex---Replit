@@ -143,8 +143,7 @@ export default function AnimalsPage() {
         </Link>
 
         <div className="animals-header-section">
-          <p className="animals-intro-text">Misconceptions about</p>
-          <h1 className="animals-title">Animals</h1>
+          <h1 className="category-page-h1">Animals</h1>
         </div>
 
         <div className="animals-content-area">

@@ -157,12 +157,12 @@ export default function LifeSciencesPage() {
       <main className="life-sciences-main-content">
         <div className="life-sciences-intro-row">
           <div className="life-sciences-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions about life sciences</h1>
-            <h2 className="category-page-h2" data-testid="text-category-subtitle">Let natural selection take its course on outdated life sciences facts.</h2>
-             <p>Throughout most of history, we just didn't have the resources to study living things to the microscopic extent we do now. As these advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match the new evidence.
+            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Life Sciences</h1>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">What were you taught in school that was oversimplified or is now outdated?</h2>
+             <p>Throughout most of history, we just didn't have the resources to study living things to the microscopic extent we do now. As these advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match contemporary evidence.
             </p>
             <p>
-              From misinterpreted fossils, oversimplified diagrams, to outdated models of how our bodies sense, adapt, and interact with the world, much of the inaccurate life science education we've received may be unintentional. Sometimes, it's merely the result of outdated textbooks or genuine misunderstandings.
+              Many outdated facts in the life sciences are rooted in misinterpreted fossils, oversimplified diagrams, or debunked models of how living beings sense, adapt, and interact with the world.
             </p>
           </div>
         </div>

@@ -131,8 +131,7 @@ export default function MusicPage() {
         </Link>
 
         <div className="music-header-section">
-          <p className="music-intro-text">Misconceptions about</p>
-          <h1 className="music-title">Music</h1>
+          <h1 className="category-page-h1">Music</h1>
         </div>
 
         <div className="music-content-area">

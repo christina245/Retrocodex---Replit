@@ -163,12 +163,12 @@ export default function SocialSciencesPage() {
         <div className="social-sciences-intro-row">
           <div className="social-sciences-description">
             <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Social Sciences</h1>
-            <h2 className="category-page-h2" data-testid="text-category-subtitle">The way humans work isn't as simple as we were taught growing up.</h2>
+            <h2 className="category-page-h2" data-testid="text-category-subtitle">The way humans work isn't as simple as what the media portrays.</h2>
             <p>
-              Daily human interaction made it too easy for assumptions about each other to ingrain such powerful mental biases that they shaped entire fields of study.
+              Throughout history, daily human interaction made it too easy for us to form assumptions about each other. This intuition ingrained such powerful mental biases that they shaped entire fields of study.
             </p>
             <p>
-              Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the intuitive expectations that followed.
+              Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the instinctual expectations that followed.
             </p>
           </div>
         </div>
