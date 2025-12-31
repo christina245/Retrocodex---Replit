@@ -131,7 +131,7 @@ export default function HolidaysPage() {
         </Link>
 
         <div className="holidays-header-section">
-          <h1 className="category-page-h1">Holidays</h1>
+          <h1 className="category-page-h1">Misconceptions About Holidays</h1>
         </div>
 
         <div className="holidays-content-area">

@@ -131,7 +131,7 @@ export default function BeautyPage() {
         </Link>
 
         <div className="beauty-header-section">
-          <h1 className="category-page-h1">Beauty</h1>
+          <h1 className="category-page-h1">Misconceptions About Beauty</h1>
         </div>
 
         <div className="beauty-content-area">
