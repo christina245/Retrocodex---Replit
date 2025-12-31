@@ -8,7 +8,7 @@ import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
-import { TabSelector } from "@/components/TabSelector";
+import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -41,7 +41,7 @@ const SUBCATEGORY_COLOR = "#2C2C2C";
 
 export default function FoodPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [sortOption, setSortOption] = useState<SortOption>("recent");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
@@ -119,12 +119,10 @@ export default function FoodPage() {
     });
   };
 
-  const sortedFacts = activeTab === "featured" 
-    ? allFoodFacts 
-    : [...allFoodFacts].sort((a, b) => {
-        if (!a.dateAdded || !b.dateAdded) return 0;
-        return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-      });
+  const sortedFacts = [...allFoodFacts].sort((a, b) => {
+    if (!a.dateAdded || !b.dateAdded) return 0;
+    return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+  });
 
   const filteredFacts = selectedFilters.length > 0
     ? sortedFacts.filter(fact => 
@@ -158,7 +156,7 @@ export default function FoodPage() {
 
         <div className="food-content-area">
           <div className="food-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="food-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 

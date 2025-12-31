@@ -8,7 +8,7 @@ import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
-import { TabSelector } from "@/components/TabSelector";
+import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
@@ -29,7 +29,7 @@ const SUBCATEGORY_COLOR = "#2C2C2C";
 
 export default function LinguisticsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [sortOption, setSortOption] = useState<SortOption>("recent");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
@@ -107,12 +107,10 @@ export default function LinguisticsPage() {
     });
   };
 
-  const sortedFacts = activeTab === "featured" 
-    ? allFacts 
-    : [...allFacts].sort((a, b) => {
-        if (!a.dateAdded || !b.dateAdded) return 0;
-        return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-      });
+  const sortedFacts = [...allFacts].sort((a, b) => {
+    if (!a.dateAdded || !b.dateAdded) return 0;
+    return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+  });
 
   const filteredFacts = selectedFilters.length > 0
     ? sortedFacts.filter(fact => 
@@ -146,7 +144,7 @@ export default function LinguisticsPage() {
 
         <div className="linguistics-content-area">
           <div className="linguistics-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={setActiveTab} />
+            <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="linguistics-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 

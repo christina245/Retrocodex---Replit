@@ -7,7 +7,7 @@ import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
-import { TabSelector } from "@/components/TabSelector";
+import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
@@ -31,7 +31,7 @@ const CATEGORY_COLOR = "#FF88AA";
 
 export default function GenderSexualityPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"featured" | "recent">("featured");
+  const [sortOption, setSortOption] = useState<SortOption>("recent");
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
@@ -110,13 +110,11 @@ export default function GenderSexualityPage() {
     });
   };
 
-  // Sort facts based on active tab
-  const sortedFacts = activeTab === "featured" 
-    ? allGenderFacts 
-    : [...allGenderFacts].sort((a, b) => {
-        if (!a.dateAdded || !b.dateAdded) return 0;
-        return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
-      });
+  // Sort facts by most recently added (only enabled sort option for now)
+  const sortedFacts = [...allGenderFacts].sort((a, b) => {
+    if (!a.dateAdded || !b.dateAdded) return 0;
+    return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
+  });
 
   // Apply filters
   const filteredFacts = selectedFilters.length > 0
@@ -136,8 +134,8 @@ export default function GenderSexualityPage() {
     setCurrentPage(1);
   };
 
-  const handleTabChange = (tab: "featured" | "recent") => {
-    setActiveTab(tab);
+  const handleSortChange = (sort: SortOption) => {
+    setSortOption(sort);
     setCurrentPage(1);
   };
 
@@ -166,7 +164,7 @@ export default function GenderSexualityPage() {
 
         <div className="gender-sexuality-content-area" id="gender-sexuality-content-area">
           <div className="gender-sexuality-tabs-row">
-            <TabSelector activeTab={activeTab} onTabChange={handleTabChange} />
+            <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="gender-sexuality-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
