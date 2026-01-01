@@ -430,7 +430,7 @@ export default function HomePage() {
           )}
           {activeTab === "popular" && (
             <p className="tab-subheader" data-testid="text-popular-subheader">
-              Popular features misconceptions commonly reported by social media users on{" "}
+              Popular features misconceptions frequently reported by social media users on{" "}
               <a 
                 href="https://www.reddit.com/r/AskReddit/comments/1789w9u/whats_a_fact_that_was_taught_in_school_thats_been/" 
                 target="_blank" 
