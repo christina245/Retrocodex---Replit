@@ -10,7 +10,7 @@ export function FactKey() {
       </div>
       <div className="fact-key-item">
         <Check className="fact-key-icon truth-icon" />
-        <span className="fact-key-text">Current understanding as of 2025. Facts are subject to change based on new discoveries.</span>
+        <span className="fact-key-text">Current understanding as of 2026. Facts are subject to change based on new discoveries.</span>
       </div>
     </div>
   );
