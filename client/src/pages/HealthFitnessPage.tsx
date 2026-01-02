@@ -155,11 +155,9 @@ export default function HealthFitnessPage() {
             <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Health & Fitness</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">You might be more likely to reach your fitness goals when you stop carrying the weight of debunked quick-fix promises.</h2>
             <p>
-              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science, leading to a variety of fitness myths spread through popular media and clickbait content. But as they kept promising results, the public held on.
+              Shortcuts to idealized bodies have always been alluring. Unfortunately, this demand was heavily capitalized on without consulting or understanding the science, leading to a variety of fitness myths spread through popular media and clickbait content. But as they kept promising results, the public held on to these common myths about weight loss, muscle building, dieting, and more.
             </p>
-            <p>
-              Today, many of us are aware that our physical health journeys are more complex than these common myths about weight loss, muscle building, dieting, and more.
-            </p>
+      
           </div>
         </div>
 

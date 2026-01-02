@@ -161,11 +161,12 @@ export default function HistoryPage() {
             <h2 className="category-page-h2" data-testid="text-category-subtitle">Your school history lessons might have left out certain critical perspectives.</h2>
             <p>
               What we know about history is always evolving as new archaelogical records surface, modern analytical tools reinterpret old texts, and previously overlooked, marginalized voices finally become heard.
-            </p>
-            <p>
-             The media further exacerbated historical myths with its exaggerated or inaccurate portrayals of several societies. And throughout the world, the same events may be taught differently through culturally biased lenses serving regional interests rather than the full picture. 
+            
+             The media further exacerbated historical myths with its exaggerated or inaccurate portrayals of several societies. </p>
+              
+              <p><b>Note:</b> Certain historical events may be taught differently depending on where you grew up.</p>
 
-            </p>
+            
           </div>
         </div>
 

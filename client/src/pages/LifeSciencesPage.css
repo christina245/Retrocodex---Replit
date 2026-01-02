@@ -38,6 +38,16 @@
   margin-bottom: 0;
 }
 
+.life-sciences-description a {
+  color: #2C2C2C;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.life-sciences-description a:hover {
+  color: #FF5353;
+}
+
 .life-sciences-photo {
   display: flex;
   justify-content: center;
