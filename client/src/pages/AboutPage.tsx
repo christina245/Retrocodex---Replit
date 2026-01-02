@@ -36,7 +36,7 @@ export default function AboutPage() {
   return (
     <div className="about-page">
       <SEO 
-        title="About Retrocodex: Stuff You Might Have Learned Wrong"
+        title="About Retrocodex: What You Might Have Learned Wrong"
         description="Learn about Retrocodex, a living archive dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
@@ -53,7 +53,7 @@ export default function AboutPage() {
             </h2>
 
             <p className="about-body">
-              Retrocodex: Stuff You Might Have Learned Wrong is a living archive dedicated to collectively exploring how each misconception emerged, evolved, and persisted while accounting for diverse and contradictory perspectives.
+              Retrocodex: What You Might Have Learned Wrong is a living archive dedicated to collectively exploring how each misconception emerged, evolved, and persisted while accounting for diverse and contradictory perspectives.
             </p>
 
             <p className="about-body">
