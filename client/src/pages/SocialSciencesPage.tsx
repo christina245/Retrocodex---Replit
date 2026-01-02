@@ -164,9 +164,7 @@ export default function SocialSciencesPage() {
             <h2 className="category-page-h2" data-testid="text-category-subtitle">The way humans work isn't as simple as what the media portrays.</h2>
             <p>
               Throughout history, daily human interaction made it too easy for us to form assumptions about each other. This intuition ingrained such powerful mental biases that they shaped entire fields of study.
-            </p>
-            <p>
-              Many of our outdated lessons were simply attempts to make human behavior feel predictable in a world where it rarely is. These explanations were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the instinctual expectations that followed.
+            These misconceptions in psychology, sociology, economics, and more were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the instinctual expectations that followed.
             </p>
           </div>
         </div>

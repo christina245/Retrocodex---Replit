@@ -157,7 +157,7 @@ export default function GenderSexualityPage() {
               <p> Throughout history, myths in gender and sexuality were often formed through prejudice, rigid social norms, superficial assumptions, or the attempt to reinforce power structures rather than scientific or historical data. The exclusion of women and sexual minorities from scientific and cultural authority further slowed progress towards understanding these complex topics.
             </p>
             <p>
-              <b>Note:</b> To keep Retrocodex family-friendly, NSFW facts will be featured on a future page.
+              <b>Note:</b> To keep Retrocodex family-friendly, sexually explicit facts will be featured on a future page.
             </p>
           </div>
         </div>

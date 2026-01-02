@@ -31,11 +31,11 @@
 }
 
 .health-fitness-description p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 3rem 0;
 }
 
 .health-fitness-description p:last-child {
-  margin-bottom: 0;
+  margin-bottom: 10;
 }
 
 .health-fitness-photo {

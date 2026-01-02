@@ -31,11 +31,11 @@
 }
 
 .social-sciences-description p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 3rem 0;
 }
 
 .social-sciences-description p:last-child {
-  margin-bottom: 0;
+  margin-bottom: 30;
 }
 
 .social-sciences-photo {

@@ -161,7 +161,7 @@ export default function LifeSciencesPage() {
           
               Many outdated facts in the life sciences are rooted in misinterpreted fossils, oversimplified diagrams, or debunked models of how living beings sense, adapt, and interact with the world.
             </p>
-            <p><b>Note:</b> This category focuses on facts you may have been taught in school or on social media. For related old wives' tales passed down through family members, see <a href="http://theretrocodex.com/category/everyday-life">Everyday Life. </a> </p>
+            <p><b>Note:</b> This category focuses on facts you may have been taught in school or on social media. For related old wives' tales typically passed down through family, see <a href="http://theretrocodex.com/category/everyday-life">Everyday Life. </a> </p>
           </div>
         </div>
 
