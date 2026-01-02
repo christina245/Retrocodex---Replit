@@ -173,8 +173,8 @@ export default function HomePage() {
       .slice(0, MAX_RECENT_FACTS)
       .map(fact => {
         const primaryCategory = fact.categories[0] || "Other";
-        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
-          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+          ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
           : primaryCategory.toUpperCase();
         return {
           id: fact.id,
@@ -306,8 +306,8 @@ export default function HomePage() {
       })
       .map(fact => {
         const primaryCategory = fact.categories[0] || "Other";
-        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
-          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+          ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
           : primaryCategory.toUpperCase();
         return {
           id: fact.id,
@@ -329,8 +329,8 @@ export default function HomePage() {
       .filter(fact => fact.isTrending)
       .map(fact => {
         const primaryCategory = fact.categories[0] || "Other";
-        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
-          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+          ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
           : primaryCategory.toUpperCase();
         return {
           id: fact.id,
@@ -352,8 +352,8 @@ export default function HomePage() {
       .filter(fact => fact.isDebated)
       .map(fact => {
         const primaryCategory = fact.categories[0] || "Other";
-        const categoryDisplay = (primaryCategory === "Other" && fact.subcategory)
-          ? `OTHER • ${fact.subcategory.toUpperCase()}`
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+          ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
           : primaryCategory.toUpperCase();
         return {
           id: fact.id,
@@ -413,7 +413,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What have you been taught <br /> that's been disproven?
+          What were you taught <br /> that's been <u>disproven</u>?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
           Explore sources and timelines tracing how each myth emerged from misunderstood evidence.
