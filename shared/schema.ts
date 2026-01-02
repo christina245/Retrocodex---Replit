@@ -111,6 +111,7 @@ export const facts = pgTable("facts", {
   sources: jsonb("sources").$type<Source[]>().default([]),
   timeline: jsonb("timeline").$type<TimelineEntry[]>().default([]),
   nuances: jsonb("nuances").$type<Nuance[]>().default([]),
+  relatedMythIds: text("related_myth_ids").array().default([]),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -135,6 +136,7 @@ export const insertFactSchema = z.object({
   sources: z.array(sourceSchema).default([]),
   timeline: z.array(timelineEntrySchema).default([]),
   nuances: z.array(nuanceSchema).default([]),
+  relatedMythIds: z.array(z.string()).default([]),
 });
 
 export type InsertFact = z.infer<typeof insertFactSchema>;

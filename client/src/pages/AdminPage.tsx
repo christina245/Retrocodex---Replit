@@ -92,6 +92,8 @@ export default function AdminPage() {
   const [sources, setSources] = useState<Source[]>([{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
   const [timeline, setTimeline] = useState<TimelineEntry[]>([]);
   const [nuances, setNuances] = useState<Nuance[]>([]);
+  const [relatedMythIds, setRelatedMythIds] = useState<string[]>([]);
+  const [relatedMythSearch, setRelatedMythSearch] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -185,6 +187,8 @@ export default function AdminPage() {
     setSources([{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
     setTimeline([]);
     setNuances([]);
+    setRelatedMythIds([]);
+    setRelatedMythSearch("");
     setSubmitMessage("");
   };
 
@@ -398,6 +402,7 @@ export default function AdminPage() {
       : [{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
     setTimeline(fact.timeline || []);
     setNuances(fact.nuances || []);
+    setRelatedMythIds(fact.relatedMythIds || []);
     setCurrentView("add-fact");
   };
 
@@ -636,7 +641,8 @@ export default function AdminPage() {
       truthDetails,
       sources: validSources,
       timeline: validTimeline,
-      nuances: validNuances
+      nuances: validNuances,
+      relatedMythIds: relatedMythIds.filter(id => id)
     };
 
     try {
@@ -1393,6 +1399,137 @@ export default function AdminPage() {
                   <Plus size={18} />
                   Add Nuance
                 </button>
+              </section>
+
+              {/* Section 6: Related Myths */}
+              <section className="form-section">
+                <h2 className="section-title">Section 6 — Related Myths (Optional)</h2>
+                <p className="section-description" style={{ color: '#878787', marginBottom: '1rem', fontSize: '14px' }}>
+                  Select up to 4 related myths to display on this fact's page. Leave empty to hide the section.
+                </p>
+                
+                <div className="form-group">
+                  <label className="form-label">Search Myths</label>
+                  <div className="search-input-wrapper">
+                    <Search size={18} className="search-icon" />
+                    <input
+                      type="text"
+                      value={relatedMythSearch}
+                      onChange={(e) => setRelatedMythSearch(e.target.value)}
+                      placeholder="Search by title or myth header..."
+                      className="form-input"
+                      style={{ paddingLeft: '40px' }}
+                      data-testid="input-related-myth-search"
+                    />
+                    {relatedMythSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setRelatedMythSearch("")}
+                        className="search-clear-button"
+                        style={{ right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                        data-testid="button-clear-related-search"
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Search Results */}
+                {relatedMythSearch && facts && (
+                  <div className="related-myth-results" style={{ marginBottom: '1rem', maxHeight: '200px', overflowY: 'auto', border: '1px solid #E5E5E5', borderRadius: '8px' }}>
+                    {facts
+                      .filter(f => 
+                        f.id !== editingFactId &&
+                        !relatedMythIds.includes(f.id) &&
+                        (f.title.toLowerCase().includes(relatedMythSearch.toLowerCase()) ||
+                         f.mythHeader.toLowerCase().includes(relatedMythSearch.toLowerCase()))
+                      )
+                      .slice(0, 10)
+                      .map(f => (
+                        <button
+                          key={f.id}
+                          type="button"
+                          onClick={() => {
+                            if (relatedMythIds.length < 4) {
+                              setRelatedMythIds([...relatedMythIds, f.id]);
+                              setRelatedMythSearch("");
+                            }
+                          }}
+                          disabled={relatedMythIds.length >= 4}
+                          className="related-myth-result-item"
+                          style={{
+                            display: 'block',
+                            width: '100%',
+                            padding: '10px 15px',
+                            textAlign: 'left',
+                            border: 'none',
+                            borderBottom: '1px solid #E5E5E5',
+                            background: 'white',
+                            cursor: relatedMythIds.length >= 4 ? 'not-allowed' : 'pointer',
+                            opacity: relatedMythIds.length >= 4 ? 0.5 : 1
+                          }}
+                          data-testid={`button-add-related-myth-${f.id}`}
+                        >
+                          <div style={{ fontWeight: 500, color: '#2C2C2C', fontSize: '14px' }}>{f.title}</div>
+                          <div style={{ fontSize: '12px', color: '#878787', marginTop: '2px' }}>{f.mythHeader.substring(0, 80)}...</div>
+                        </button>
+                      ))
+                    }
+                    {facts.filter(f => 
+                      f.id !== editingFactId &&
+                      !relatedMythIds.includes(f.id) &&
+                      (f.title.toLowerCase().includes(relatedMythSearch.toLowerCase()) ||
+                       f.mythHeader.toLowerCase().includes(relatedMythSearch.toLowerCase()))
+                    ).length === 0 && (
+                      <div style={{ padding: '15px', color: '#878787', textAlign: 'center' }}>
+                        No matching myths found
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Selected Myths */}
+                {relatedMythIds.length > 0 && (
+                  <div className="selected-related-myths" style={{ marginTop: '1rem' }}>
+                    <label className="form-label">Selected ({relatedMythIds.length}/4)</label>
+                    {relatedMythIds.map((mythId, index) => {
+                      const myth = facts?.find(f => f.id === mythId);
+                      return (
+                        <div 
+                          key={mythId} 
+                          className="selected-myth-item"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '10px 15px',
+                            background: '#F5F5F5',
+                            borderRadius: '8px',
+                            marginBottom: '8px'
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontWeight: 500, color: '#2C2C2C', fontSize: '14px' }}>
+                              {myth?.title || 'Unknown Myth'}
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#878787', marginTop: '2px' }}>
+                              {myth?.mythHeader?.substring(0, 60) || ''}...
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setRelatedMythIds(relatedMythIds.filter(id => id !== mythId))}
+                            className="remove-button"
+                            data-testid={`button-remove-related-myth-${index}`}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </section>
 
               {/* Submit */}

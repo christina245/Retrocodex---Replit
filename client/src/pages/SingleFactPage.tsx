@@ -51,6 +51,25 @@ export default function SingleFactPage() {
     enabled: !!id,
   });
 
+  const relatedMythIds = factData?.relatedMythIds || [];
+  
+  const { data: relatedFactsData } = useQuery<FactType[]>({
+    queryKey: ["/api/facts/by-ids", relatedMythIds],
+    queryFn: async () => {
+      if (relatedMythIds.length === 0) return [];
+      const response = await fetch(`/api/facts/by-ids?ids=${relatedMythIds.join(',')}`);
+      if (!response.ok) return [];
+      return response.json();
+    },
+    enabled: relatedMythIds.length > 0,
+  });
+
+  const relatedFacts = relatedFactsData?.map(f => ({
+    id: f.slug, // Use slug for linking since RelatedFacts links to /fact/${id}
+    myth: f.mythHeader,
+    image: f.coverPhoto || ""
+  })) || [];
+
   const emailMutation = useMutation({
     mutationFn: async ({ email, source }: { email: string; source: string }) => {
       return await apiRequest("POST", "/api/emails", { email, source });
@@ -240,7 +259,9 @@ export default function SingleFactPage() {
             />
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
-                <RelatedFacts />
+                {relatedFacts.length > 0 && (
+                  <RelatedFacts facts={relatedFacts} />
+                )}
                 <div className="tags-banner-column">
                   <CategoryLinks categories={factData.categories} />
                   <FactTags tags={factData.searchTags || []} />

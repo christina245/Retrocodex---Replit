@@ -26,6 +26,7 @@ export interface IStorage {
   getAllFacts(): Promise<Fact[]>;
   getFactBySlug(slug: string): Promise<Fact | undefined>;
   getFactById(id: string): Promise<Fact | undefined>;
+  getFactsByIds(ids: string[]): Promise<Fact[]>;
   updateFact(id: string, fact: Partial<InsertFact>): Promise<Fact | undefined>;
   deleteFact(id: string): Promise<boolean>;
   
@@ -99,6 +100,19 @@ export class DatabaseStorage implements IStorage {
       .from(facts)
       .where(eq(facts.id, id));
     return result || undefined;
+  }
+
+  async getFactsByIds(ids: string[]): Promise<Fact[]> {
+    if (ids.length === 0) return [];
+    // Fetch each fact individually to maintain order and avoid complex SQL
+    const results: Fact[] = [];
+    for (const id of ids) {
+      const fact = await this.getFactById(id);
+      if (fact) {
+        results.push(fact);
+      }
+    }
+    return results;
   }
 
   async updateFact(id: string, fact: Partial<InsertFact>): Promise<Fact | undefined> {

@@ -258,6 +258,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/facts/by-ids - Get facts by their IDs (public)
+  app.get("/api/facts/by-ids", async (req, res) => {
+    try {
+      const idsParam = req.query.ids as string;
+      if (!idsParam) {
+        return res.json([]);
+      }
+      const ids = idsParam.split(',').filter(id => id.trim());
+      if (ids.length === 0) {
+        return res.json([]);
+      }
+      const matchingFacts = await storage.getFactsByIds(ids);
+      res.json(matchingFacts);
+    } catch (error) {
+      console.error("Error fetching facts by IDs:", error);
+      res.status(500).json({ message: "Failed to fetch facts" });
+    }
+  });
+
   // GET /api/facts/:slug - Get a fact by slug (public)
   app.get("/api/facts/:slug", async (req, res) => {
     try {
