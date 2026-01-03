@@ -155,6 +155,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  align-items: center;
+}
+
+.user-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .info-separator {

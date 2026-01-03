@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Filter, Search, MessageSquare, Heart, Bookmark, Share2, CornerUpLeft } from "lucide-react";
+import { Filter, Search, MessageSquare, Heart, Bookmark, Share2, CornerUpLeft, House, MapPin } from "lucide-react";
 import { CommentModal } from "./CommentModal";
 import bunnyAvatar from "@assets/dall-e bunny_1764050469609.png";
 import alienAvatar from "@assets/space alien_1764050477567.png";
@@ -12,8 +12,8 @@ interface Comment {
   isAdmin: boolean;
   avatar: string;
   date: string;
-  highSchoolInfo?: string;
-  universityInfo?: string;
+  userHometowns?: string[];
+  userLocation?: string;
   body: string[];
   likes: number;
   replyTo?: string;
@@ -26,15 +26,15 @@ const sampleComments: Comment[] = [
     isAdmin: true,
     avatar: bunnyAvatar,
     date: "Nov 12",
-    highSchoolInfo: "High school class of 2011 in California, US",
-    universityInfo: "University class of 2015 in California, US",
+    userHometowns: ["Los Angeles, California, US", "Utrecht, Netherlands"],
+    userLocation: "San Francisco, California, US",
     body: [
       "Commenting is currently unavailable in the beta. When user accounts and comments are available, you'll be able to weigh in with your thoughts and learn what other users from other parts of the world have to say. Were they taught differently or similarly relative to your experiences? What consequences of this disinformation did they personally witness?",
       "You probably already know that formal and informal education varies all throughout the world due to several factors, such as disparity in the overall availability of resources, local history, and cultural superstitions.",
       "You'll be able to filter for comments by users from a specific location or a certain graduation date to learn about their unique experiences and compare them to yours!",
       "With enabled comments, you'll also be able to point out any updates, nuances, or inaccuracies within the factual information above. This helps keep all information presented on the website factually accurate, inclusive of diverse backgrounds, and mindful of the fact that knowledge is constantly evolving."
     ],
-    likes: 0
+    likes: 9
   },
   {
     id: "2",
@@ -42,14 +42,11 @@ const sampleComments: Comment[] = [
     isAdmin: false,
     avatar: alienAvatar,
     date: "Nov 14",
-    highSchoolInfo: "High school class of 2006 in California, US",
-    universityInfo: "University class of 2011 and 2015 in New York, US and Texas, US",
+    userHometowns: ["New York City, New York, US"],
     body: [
-      "Here's what a reply to this comment will look like from another user who graduated high school in Los Angeles County, then completed undergrad at Columbia University and a masters at University of Houston. When creating user profiles, users will be able to select the state and country where they attended school and school type (high school, university, trade school, etc).",
-      "This makes it possible for you to search for comments from users of a certain geographical region to learn how this particular fact was taught there.",
-      "Publicly displaying this information is completely optional for privacy reasons. You'll be able to keep this info private or just not report it at all."
+      "Here's what a reply to this comment will look like from another user who has either lived in New York City their entire lives or only selected a hometown of New York City. When creating user profiles, users will be able to select a city, state, and country for each location they've previously lived in and where they currently reside. This is entirely optional for privacy."
     ],
-    likes: 0
+    likes: 5
   },
   {
     id: "3",
@@ -57,14 +54,12 @@ const sampleComments: Comment[] = [
     isAdmin: false,
     avatar: unicornAvatar,
     date: "Nov 14",
-    highSchoolInfo: "High school class of 2010 in Brazil",
-    universityInfo: "University class of 2016 in Japan",
+    userLocation: "Rio de Janeiro, Brazil",
     replyTo: "randomusername",
     body: [
-      "@randomusername Here's what a reply to the above comment will look like from another user who grew up in Brazil and moved to Japan for university.",
-      "Even within countries, education and culture isn't monolithic. For privacy reasons, Retrocodex won't ask you to share or privately input where you grew up and went to school beyond the state level. Again, sharing any info on where you went to school is totally optional!"
+      "@randomusername Here's what a reply to the above comment will look like from another user who currently lives in Rio de Janeiro, Brazil."
     ],
-    likes: 0
+    likes: 2
   }
 ];
 
@@ -156,14 +151,27 @@ export function CommentsSection() {
                 <span className="comment-date">{comment.date}</span>
               </div>
               <div className="comment-user-info">
-                {comment.highSchoolInfo && (
-                  <span>{comment.highSchoolInfo}</span>
+                {comment.userHometowns && comment.userHometowns.length > 0 && (
+                  <span className="user-info-item">
+                    <House size={12} />
+                    {comment.userHometowns.map((hometown, index) => (
+                      <span key={index}>
+                        {hometown}
+                        {index < comment.userHometowns!.length - 1 && (
+                          <span className="info-separator">•</span>
+                        )}
+                      </span>
+                    ))}
+                  </span>
                 )}
-                {comment.highSchoolInfo && comment.universityInfo && (
+                {comment.userHometowns && comment.userHometowns.length > 0 && comment.userLocation && (
                   <span className="info-separator">•</span>
                 )}
-                {comment.universityInfo && (
-                  <span>{comment.universityInfo}</span>
+                {comment.userLocation && (
+                  <span className="user-info-item">
+                    <MapPin size={12} />
+                    {comment.userLocation}
+                  </span>
                 )}
               </div>
               <div className="comment-body">
