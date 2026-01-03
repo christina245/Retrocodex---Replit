@@ -82,7 +82,7 @@
 
 .life-sciences-filter-container {
   flex-shrink: 0;
-  margin-left: auto;
+  margin-left: 20px;
 }
 
 .life-sciences-key-container .fact-key-text {

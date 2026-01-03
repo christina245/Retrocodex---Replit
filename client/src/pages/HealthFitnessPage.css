@@ -72,7 +72,7 @@
 
 .health-fitness-filter-container {
   flex-shrink: 0;
-  margin-left: auto;
+  margin-left: 20px;
 }
 
 .health-fitness-key-container .fact-key-text {
