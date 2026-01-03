@@ -36,6 +36,7 @@
 
 .timeline-tab:hover:not(.active) {
   background: #F5F5F5;
+  color: #FF5353;
 }
 
 .timeline-content {
@@ -78,7 +79,7 @@
 
 .timeline-columns {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
 }
 
@@ -153,7 +154,7 @@
 }
 
 .timeline-photo.clickable:hover {
-  opacity: 0.9;
+  opacity: 0.7;
 }
 
 .timeline-photo-wrapper:nth-child(1) .timeline-photo,

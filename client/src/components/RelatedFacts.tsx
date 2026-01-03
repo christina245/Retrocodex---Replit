@@ -53,7 +53,7 @@ export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps)
 
   return (
     <div className="related-facts" data-testid="related-facts">
-      <h3 className="related-facts-header">Related myths</h3>
+      <h3 className="related-facts-header">Related topics</h3>
       <div className="related-facts-list">
         {facts.map((fact, index) => (
           <div key={fact.id} className="related-fact-wrapper">

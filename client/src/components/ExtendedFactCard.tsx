@@ -1,4 +1,6 @@
 import { X, Check, BookOpen, Bookmark, Share2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
 import "./ExtendedFactCard.css";
 
 interface Source {
@@ -36,7 +38,21 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
               <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
             </div>
             <h1 className="fact-myth">"{fact.myth}"</h1>
-            <p className="fact-details">{fact.details}</p>
+            <div className="fact-details">
+              <ReactMarkdown
+                rehypePlugins={[rehypeSanitize]}
+                components={{
+                  p: ({ children }) => <p>{children}</p>,
+                  a: ({ href, children }) => (
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {fact.details}
+              </ReactMarkdown>
+            </div>
           </div>
 
           <div className="fact-section">
@@ -46,7 +62,21 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
             </div>
             <p className="fact-truth">{fact.truth}</p>
             {fact.moreDetails && (
-              <p className="fact-more-details">{fact.moreDetails}</p>
+              <div className="fact-more-details">
+                <ReactMarkdown
+                  rehypePlugins={[rehypeSanitize]}
+                  components={{
+                    p: ({ children }) => <p>{children}</p>,
+                    a: ({ href, children }) => (
+                      <a href={href} target="_blank" rel="noopener noreferrer">
+                        {children}
+                      </a>
+                    ),
+                  }}
+                >
+                  {fact.moreDetails}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
 

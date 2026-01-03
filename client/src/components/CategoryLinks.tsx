@@ -40,7 +40,7 @@ export function CategoryLinks({ categories }: CategoryLinksProps) {
 
   return (
     <div className="category-links" data-testid="category-links">
-      <h3 className="category-links-header">VIEW ALL OTHER FACTS IN</h3>
+      <h3 className="category-links-header">VIEW ALL OTHER TOPICS IN</h3>
       <div className="category-links-list">
         {filteredCategories.map((category, index) => {
           const upperCategory = category.toUpperCase();
