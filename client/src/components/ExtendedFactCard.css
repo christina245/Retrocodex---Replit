@@ -105,6 +105,18 @@
   letter-spacing: normal;
 }
 
+.fact-details a,
+.fact-more-details a {
+  color: #2C2C2C;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.fact-details a:hover,
+.fact-more-details a:hover {
+  color: #FF5353;
+}
+
 /* Logo sources - 2 column grid */
 .sources-logo-grid {
   display: grid;
