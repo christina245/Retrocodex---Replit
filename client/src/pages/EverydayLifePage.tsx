@@ -172,15 +172,15 @@ export default function EverydayLifePage() {
 
         <div className="everyday-life-content-area" id="everyday-life-content-area">
           <div className="everyday-life-tabs-row">
+            <div className="everyday-life-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="everyday-life-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
-            </div>
-            <div className="everyday-life-key-container">
-              <FactKey />
             </div>
           </div>
 

@@ -62,17 +62,17 @@
   display: flex;
   align-items: center;
   margin-bottom: 1.25rem;
-  gap: 50px;
+  gap: 30px;
+}
+
+.gender-sexuality-key-container {
+  width: 515px;
+  flex-shrink: 0;
 }
 
 .gender-sexuality-filter-container {
   flex-shrink: 0;
-}
-
-.gender-sexuality-key-container {
-  margin-left: 4rem;
-  width: 515px;
-  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .gender-sexuality-key-container .fact-key-text {

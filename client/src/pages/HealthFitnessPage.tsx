@@ -163,15 +163,15 @@ export default function HealthFitnessPage() {
 
         <div className="health-fitness-content-area" id="health-fitness-content-area">
           <div className="health-fitness-tabs-row">
+            <div className="health-fitness-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="health-fitness-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
-            </div>
-            <div className="health-fitness-key-container">
-              <FactKey />
             </div>
           </div>
 

@@ -167,15 +167,15 @@ export default function LifeSciencesPage() {
 
         <div className="life-sciences-content-area" id="life-sciences-content-area">
           <div className="life-sciences-tabs-row">
+            <div className="life-sciences-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="life-sciences-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
-            </div>
-            <div className="life-sciences-key-container">
-              <FactKey />
             </div>
           </div>
 

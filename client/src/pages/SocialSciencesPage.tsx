@@ -171,15 +171,15 @@ export default function SocialSciencesPage() {
 
         <div className="social-sciences-content-area" id="social-sciences-content-area">
           <div className="social-sciences-tabs-row">
+            <div className="social-sciences-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="social-sciences-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
-            </div>
-            <div className="social-sciences-key-container">
-              <FactKey />
             </div>
           </div>
 

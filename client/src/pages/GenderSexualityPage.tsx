@@ -164,15 +164,15 @@ export default function GenderSexualityPage() {
 
         <div className="gender-sexuality-content-area" id="gender-sexuality-content-area">
           <div className="gender-sexuality-tabs-row">
+            <div className="gender-sexuality-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="gender-sexuality-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
-            </div>
-            <div className="gender-sexuality-key-container">
-              <FactKey />
             </div>
           </div>
 

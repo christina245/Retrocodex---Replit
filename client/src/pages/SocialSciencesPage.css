@@ -62,17 +62,17 @@
   display: flex;
   align-items: center;
   margin-bottom: 1.25rem;
-  gap: 50px;
+  gap: 30px;
+}
+
+.social-sciences-key-container {
+  width: 515px;
+  flex-shrink: 0;
 }
 
 .social-sciences-filter-container {
   flex-shrink: 0;
-}
-
-.social-sciences-key-container {
-  margin-left: 4rem;
-  width: 515px;
-  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .social-sciences-key-container .fact-key-text {

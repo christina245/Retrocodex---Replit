@@ -72,17 +72,17 @@
   display: flex;
   align-items: center;
   margin-bottom: 1.25rem;
-  gap: 50px;
+  gap: 30px;
+}
+
+.life-sciences-key-container {
+  width: 515px;
+  flex-shrink: 0;
 }
 
 .life-sciences-filter-container {
   flex-shrink: 0;
-}
-
-.life-sciences-key-container {
-  margin-left: 4rem;
-  width: 515px;
-  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .life-sciences-key-container .fact-key-text {

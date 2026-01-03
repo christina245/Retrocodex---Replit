@@ -172,15 +172,15 @@ export default function HistoryPage() {
 
         <div className="history-content-area" id="history-content-area">
           <div className="history-tabs-row">
+            <div className="history-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="history-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
-            </div>
-            <div className="history-key-container">
-              <FactKey />
             </div>
           </div>
 
