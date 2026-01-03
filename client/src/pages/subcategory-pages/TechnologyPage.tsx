@@ -134,15 +134,15 @@ export default function TechnologyPage() {
 
         <div className="technology-content-area">
           <div className="technology-tabs-row">
+            <div className="technology-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="technology-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="technology-key-container">
-              <FactKey />
             </div>
           </div>
 

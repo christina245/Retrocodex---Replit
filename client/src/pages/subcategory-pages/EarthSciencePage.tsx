@@ -134,15 +134,15 @@ export default function EarthSciencePage() {
 
         <div className="earth-science-content-area">
           <div className="earth-science-tabs-row">
+            <div className="earth-science-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="earth-science-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="earth-science-key-container">
-              <FactKey />
             </div>
           </div>
 

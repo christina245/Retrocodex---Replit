@@ -156,15 +156,15 @@ export default function FoodPage() {
 
         <div className="food-content-area">
           <div className="food-tabs-row">
+            <div className="food-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="food-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="food-key-container">
-              <FactKey />
             </div>
           </div>
 

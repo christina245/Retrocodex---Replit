@@ -144,15 +144,15 @@ export default function LinguisticsPage() {
 
         <div className="linguistics-content-area">
           <div className="linguistics-tabs-row">
+            <div className="linguistics-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="linguistics-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="linguistics-key-container">
-              <FactKey />
             </div>
           </div>
 

@@ -134,15 +134,15 @@ export default function BeautyPage() {
 
         <div className="beauty-content-area">
           <div className="beauty-tabs-row">
+            <div className="beauty-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="beauty-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="beauty-key-container">
-              <FactKey />
             </div>
           </div>
 

@@ -134,15 +134,15 @@ export default function MusicPage() {
 
         <div className="music-content-area">
           <div className="music-tabs-row">
+            <div className="music-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="music-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="music-key-container">
-              <FactKey />
             </div>
           </div>
 

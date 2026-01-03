@@ -134,15 +134,15 @@ export default function PhysicsPage() {
 
         <div className="physics-content-area">
           <div className="physics-tabs-row">
+            <div className="physics-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="physics-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="physics-key-container">
-              <FactKey />
             </div>
           </div>
 

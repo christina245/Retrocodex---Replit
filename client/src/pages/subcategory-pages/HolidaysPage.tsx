@@ -134,15 +134,15 @@ export default function HolidaysPage() {
 
         <div className="holidays-content-area">
           <div className="holidays-tabs-row">
+            <div className="holidays-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="holidays-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="holidays-key-container">
-              <FactKey />
             </div>
           </div>
 

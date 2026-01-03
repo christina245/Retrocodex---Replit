@@ -61,17 +61,17 @@
   display: flex;
   align-items: center;
   margin-bottom: 1.25rem;
-  gap: 50px;
+  gap: 30px;
+}
+
+.linguistics-key-container {
+  width: 515px;
+  flex-shrink: 0;
 }
 
 .linguistics-filter-container {
   flex-shrink: 0;
-}
-
-.linguistics-key-container {
-  margin-left: 4rem;
-  width: 515px;
-  flex-shrink: 0;
+  margin-left: 20px;
 }
 
 .linguistics-key-container .fact-key-text {

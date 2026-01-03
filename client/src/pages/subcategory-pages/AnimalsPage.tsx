@@ -146,15 +146,15 @@ export default function AnimalsPage() {
 
         <div className="animals-content-area">
           <div className="animals-tabs-row">
+            <div className="animals-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="animals-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="animals-key-container">
-              <FactKey />
             </div>
           </div>
 

@@ -134,15 +134,15 @@ export default function AstronomyPage() {
 
         <div className="astronomy-content-area">
           <div className="astronomy-tabs-row">
+            <div className="astronomy-key-container">
+              <FactKey />
+            </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="astronomy-filter-container">
               <CategoryFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
-            </div>
-            <div className="astronomy-key-container">
-              <FactKey />
             </div>
           </div>
 
