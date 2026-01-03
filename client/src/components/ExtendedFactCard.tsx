@@ -36,6 +36,7 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
               <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
             </div>
             <h1 className="fact-myth">"{fact.myth}"</h1>
+            <p className="fact-details">{fact.details}</p>
           </div>
 
           <div className="fact-section">
@@ -44,7 +45,6 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
               <span className="label-text">CURRENT UNDERSTANDING</span>
             </div>
             <p className="fact-truth">{fact.truth}</p>
-            <p className="fact-details">{fact.details}</p>
             {fact.moreDetails && (
               <p className="fact-more-details">{fact.moreDetails}</p>
             )}
