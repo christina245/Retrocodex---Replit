@@ -152,7 +152,7 @@ export function CommentsSection() {
               </div>
               <div className="comment-user-info">
                 {comment.userHometowns && comment.userHometowns.length > 0 && (
-                  <span className="user-info-item">
+                  <span className={`user-info-item ${comment.userLocation ? 'user-info-hometowns' : ''}`}>
                     <House size={12} />
                     {comment.userHometowns.map((hometown, index) => (
                       <span key={index}>
@@ -163,9 +163,6 @@ export function CommentsSection() {
                       </span>
                     ))}
                   </span>
-                )}
-                {comment.userHometowns && comment.userHometowns.length > 0 && comment.userLocation && (
-                  <span className="info-separator">•</span>
                 )}
                 {comment.userLocation && (
                   <span className="user-info-item">
