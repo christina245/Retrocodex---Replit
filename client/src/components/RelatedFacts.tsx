@@ -19,22 +19,22 @@ interface RelatedFactsProps {
 const defaultRelatedFacts: RelatedFact[] = [
   {
     id: "left-right-brain",
-    myth: '"People are either left-brained or right-brained."',
+    myth: 'People are either left-brained or right-brained.',
     image: leftRightBrainImg
   },
   {
     id: "learning-styles",
-    myth: '"We have distinct learning styles, such as visual or auditory."',
+    myth: 'We have distinct learning styles, such as visual or auditory.',
     image: learningStylesImg
   },
   {
     id: "intelligence-brain-size",
-    myth: '"Intelligence is positively correlated with brain size."',
+    myth: 'Intelligence is positively correlated with brain size.',
     image: intelligenceImg
   },
   {
     id: "five-senses",
-    myth: '"We only have 5 senses: touch, taste, smell, sight, and hearing."',
+    myth: 'We only have 5 senses: touch, taste, smell, sight, and hearing.',
     image: fiveSensesImg
   }
 ];
@@ -62,7 +62,7 @@ export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps)
                   <div className="related-fact-image-placeholder" />
                 )}
               </div>
-              <span className="related-fact-text">{fact.myth}</span>
+              <span className="related-fact-text">"{fact.myth}"</span>
             </Link>
             {index < facts.length - 1 && (
               <div className="related-fact-separator" />
