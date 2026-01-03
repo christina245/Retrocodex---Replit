@@ -249,13 +249,15 @@ export default function SingleFactPage() {
             <Poll 
               question="Were you taught this information?"
               options={[
-                "Yes",
+                "Yes, in school",
+                "Yes, outside of school",
                 "No",
                 "Not sure",
-                "Other",
-                "Yes, but after graduating high school",
-                "Yes, outside of school",
-                "I was taught the presently accurate version"
+                
+                
+                "I was taught a different version",
+                "I was taught the presently accurate version",
+                "Other"
               ]}
             />
             <div className="sidebar-bottom-section">
