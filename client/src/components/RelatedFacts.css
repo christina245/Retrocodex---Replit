@@ -52,6 +52,16 @@
   cursor: pointer;
 }
 
+.related-fact-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  text-align: left;
+  width: 100%;
+}
+
 .related-fact-item:hover .related-fact-text {
   text-decoration: underline;
   text-decoration-color: #FFFFFF;

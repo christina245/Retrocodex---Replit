@@ -67,7 +67,8 @@ export default function SingleFactPage() {
   const relatedFacts = relatedFactsData?.map(f => ({
     id: f.slug, // Use slug for linking since RelatedFacts links to /fact/${id}
     myth: f.mythHeader,
-    image: f.coverPhoto || ""
+    image: f.coverPhoto || "",
+    betaOnly: f.betaOnly || false
   })) || [];
 
   const emailMutation = useMutation({
