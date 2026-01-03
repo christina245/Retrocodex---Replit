@@ -42,7 +42,7 @@
 }
 
 .sort-selector-dropdown-trigger:hover {
-  opacity: 0.8;
+  color: #FF5353;
 }
 
 .sort-selector-chevron {

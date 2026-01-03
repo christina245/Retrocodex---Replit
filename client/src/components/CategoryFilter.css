@@ -44,7 +44,7 @@
 }
 
 .category-filter-dropdown-trigger:hover {
-  opacity: 0.8;
+  color: #FF5353;
 }
 
 .category-filter-chevron {
@@ -114,6 +114,10 @@
 
 .category-filter-option-text {
   font-weight: 400;
+}
+
+.category-filter-option:hover .category-filter-option-text {
+  color: #FF5353;
 }
 
 .category-filter-apply-button {
