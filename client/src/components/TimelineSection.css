@@ -148,6 +148,14 @@
   display: block;
 }
 
+.timeline-photo.clickable {
+  cursor: pointer;
+}
+
+.timeline-photo.clickable:hover {
+  opacity: 0.9;
+}
+
 .timeline-photo-wrapper:nth-child(1) .timeline-photo,
 .timeline-photo-wrapper:nth-child(2) .timeline-photo {
   max-width: 80%;

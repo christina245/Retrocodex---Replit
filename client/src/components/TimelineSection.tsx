@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
+import Lightbox from "./Lightbox";
 import "./TimelineSection.css";
 
 interface TimelineEvent {
@@ -32,6 +33,7 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
     return false;
   });
   const [openAccordions, setOpenAccordions] = useState<Set<string>>(new Set());
+  const [lightboxImage, setLightboxImage] = useState<{ src: string; alt: string; caption?: string } | null>(null);
   
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -116,8 +118,13 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                             <img
                               src={eventPhoto.src}
                               alt={eventPhoto.caption || `Timeline photo for ${event.year}`}
-                              className="timeline-photo rounded"
+                              className="timeline-photo rounded clickable"
                               data-testid={`timeline-entry-photo-${index}`}
+                              onClick={() => setLightboxImage({
+                                src: eventPhoto.src,
+                                alt: eventPhoto.caption || `Timeline photo for ${event.year}`,
+                                caption: eventPhoto.caption
+                              })}
                             />
                             {eventPhoto.caption && (
                               <div className="timeline-photo-caption" data-testid={`timeline-entry-caption-${index}`}>
@@ -200,6 +207,15 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
             )}
           </div>
         </div>
+
+        {lightboxImage && (
+          <Lightbox
+            src={lightboxImage.src}
+            alt={lightboxImage.alt}
+            caption={lightboxImage.caption}
+            onClose={() => setLightboxImage(null)}
+          />
+        )}
       </div>
     );
   }
@@ -268,8 +284,13 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                       <img
                         src={photo.src}
                         alt={photo.caption || `Timeline photo ${index + 1}`}
-                        className="timeline-photo rounded"
+                        className="timeline-photo rounded clickable"
                         data-testid={`timeline-photo-${index}`}
+                        onClick={() => setLightboxImage({
+                          src: photo.src,
+                          alt: photo.caption || `Timeline photo ${index + 1}`,
+                          caption: photo.caption
+                        })}
                       />
                       {photo.caption && (
                         <div className="timeline-photo-caption" data-testid={`timeline-caption-${index}`}>
@@ -334,6 +355,15 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
           </div>
         )}
       </div>
+
+      {lightboxImage && (
+        <Lightbox
+          src={lightboxImage.src}
+          alt={lightboxImage.alt}
+          caption={lightboxImage.caption}
+          onClose={() => setLightboxImage(null)}
+        />
+      )}
     </div>
   );
 }
