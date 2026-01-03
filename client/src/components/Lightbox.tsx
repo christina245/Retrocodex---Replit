@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
 import "./Lightbox.css";
 
 interface LightboxProps {
@@ -49,7 +51,20 @@ export default function Lightbox({ src, alt, caption, onClose }: LightboxProps) 
         />
         {caption && (
           <div className="lightbox-caption" data-testid="lightbox-caption">
-            {caption}
+            <ReactMarkdown
+              rehypePlugins={[rehypeSanitize]}
+              components={{
+                p: ({ children }) => <>{children}</>,
+                em: ({ children }) => <em>{children}</em>,
+                a: ({ href, children }) => (
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    {children}
+                  </a>
+                ),
+              }}
+            >
+              {caption}
+            </ReactMarkdown>
           </div>
         )}
       </div>
