@@ -10,7 +10,6 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
@@ -164,9 +163,6 @@ export default function FactsByTagPage() {
             )}
           </div>
 
-          <aside className="facts-by-tag-sidebar">
-            <BeehiivBanner />
-          </aside>
         </div>
       </main>
 
