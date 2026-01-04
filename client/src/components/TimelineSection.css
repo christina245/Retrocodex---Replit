@@ -220,13 +220,13 @@
 }
 
 .nuance-text a {
-  color: #FF5353;
+  color: #2C2C2C;
   text-decoration: underline;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .nuance-text a:hover {
-  opacity: 0.8;
+  color: #FF5353;
 }
 
 /* Mobile Section Styles */
