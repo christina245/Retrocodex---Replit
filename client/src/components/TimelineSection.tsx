@@ -244,7 +244,7 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
           aria-selected={activeTab === "nuances"}
           aria-controls="nuances-panel"
         >
-          Nuances/Controversy
+          Considerations
         </button>
       </div>
 
@@ -350,7 +350,7 @@ export default function TimelineSection({ timeline, nuances = [] }: TimelineSect
                 </div>
               ))
             ) : (
-              <p className="nuances-empty">No nuances or controversy noted for this fact.</p>
+              <p className="nuances-empty">No considerations noted for this fact.</p>
             )}
           </div>
         )}

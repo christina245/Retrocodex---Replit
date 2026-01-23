@@ -111,8 +111,8 @@ const allFacts: Fact[] = [
     myth: "Human blood is actually blue until it comes into contact with oxygen.",
     truth: "Deoxygenated blood is still red, just a darker shade. Veins appear blue because blue light penetrates skin more efficiently than the rest of the visible light spectrum and is more easily absorbed.",
     dateAdded: "2025-11-15",
-    coverPhoto: photo8Blood,
-    betaOnly: true
+    link: "fact/is-human-blood-blue",
+    coverPhoto: photo8Blood
   },
   {
     id: "9",
@@ -121,8 +121,8 @@ const allFacts: Fact[] = [
     myth: "Humans swallow an average of 8 spiders in their sleep every year.",
     truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away. This myth may have been purposely spread as a social experiment.",
     dateAdded: "2025-11-18",
-    coverPhoto: photo9Spiders,
-    betaOnly: true
+    link: "fact/do-you-swallow-spiders-in-your-sleep",
+    coverPhoto: photo9Spiders
   },
   {
     id: "10",
@@ -131,8 +131,9 @@ const allFacts: Fact[] = [
     myth: "Marie Antoinette said 'Let them eat cake' regarding the French working class.",
     truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess. It may have been misattributed to her as political propaganda.",
     dateAdded: "2025-11-20",
-    coverPhoto: photo10Marie,
-    betaOnly: true
+    link: "fact/marie-antoinette-let-them-eat-cake",
+    coverPhoto: photo10Marie
+  
   }
 ];
 
