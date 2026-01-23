@@ -47,7 +47,7 @@ export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps)
   const handleBetaClick = () => {
     toast({
       title: "Unavailable in Beta",
-      description: "This fact is still being researched and will be available soon.",
+      description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
     });
   };
 

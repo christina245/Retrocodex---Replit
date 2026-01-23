@@ -86,14 +86,14 @@ export default function AstronomyPage() {
   const handleCommentClick = () => {
     toast({
       title: "Unavailable in beta",
-      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
+      description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
     });
   };
 
   const handleBetaClick = () => {
     toast({
       title: "Unavailable in beta",
-      description: "Only a limited amount of fact entries are available in beta mode. Check back later to view this fact's sources and discussion!",
+      description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
     });
   };
 
