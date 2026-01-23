@@ -119,13 +119,13 @@ export function Footer() {
       {/* Bottom Links */}
       <div className="footer-bottom">
         <div className="footer-bottom-links">
-          <a href="#" data-testid="link-footer-privacy">Privacy Policy</a>
+          <span className="footer-disabled-link" data-testid="link-footer-privacy">Privacy Policy</span>
           <span>•</span>
-          <a href="#" data-testid="link-footer-terms">Terms of Use</a>
+          <span className="footer-disabled-link" data-testid="link-footer-terms">Terms of Use</span>
           <span>•</span>
-          <a href="#" data-testid="link-footer-disclaimer">Disclaimers</a>
+          <span className="footer-disabled-link" data-testid="link-footer-disclaimer">Disclaimers</span>
           <span>•</span>
-          <a href="#" data-testid="link-footer-cookie">Cookie Policy</a>
+          <span className="footer-disabled-link" data-testid="link-footer-cookie">Cookie Policy</span>
         </div>
       </div>
     </footer>

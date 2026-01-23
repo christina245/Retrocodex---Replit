@@ -149,6 +149,16 @@
   font-size: 0.8125rem;
 }
 
+.footer-disabled-link {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-disabled-link:hover {
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .footer-container {
     padding: 0 1rem;
