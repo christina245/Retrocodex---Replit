@@ -131,9 +131,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             </button>
           )}
           <a 
-            href="https://form.typeform.com/to/pal6ZbpG" 
-            target="_blank" 
-            rel="noopener noreferrer"
+            href="/submit"
             className="submit-fact-button"
             data-testid="button-submit-fact"
           >

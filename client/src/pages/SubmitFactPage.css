@@ -1,0 +1,230 @@
+.submit-fact-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.submit-fact-main {
+  flex: 1;
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.submit-fact-content-wrapper {
+  display: flex;
+  padding: 0 110px;
+  gap: 140px;
+}
+
+.submit-fact-text-column {
+  flex: 1;
+  max-width: 950px;
+}
+
+.submit-fact-sidebar {
+  flex-shrink: 0;
+  margin-top: 68px;
+  min-height: 280px;
+  align-self: flex-start;
+}
+
+.submit-fact-header {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900;
+  font-size: 40px;
+  color: #2C2C2C;
+  margin: 0 0 20px 0;
+}
+
+.submit-fact-body {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #2C2C2C;
+  line-height: 24px;
+  margin: 0 0 16px 0;
+}
+
+.submit-fact-rule {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.submit-fact-rule-number {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #2C2C2C;
+  flex-shrink: 0;
+}
+
+.submit-fact-rule-content {
+  flex: 1;
+}
+
+.submit-fact-rule-title {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #2C2C2C;
+  line-height: 24px;
+  margin: 0 0 12px 0;
+}
+
+.submit-fact-list {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #2C2C2C;
+  line-height: 24px;
+  margin: 0 0 16px 0;
+  padding-left: 25px;
+  list-style-type: disc;
+}
+
+.submit-fact-list li {
+  margin-bottom: 4px;
+}
+
+.submit-fact-link {
+  color: #2C2C2C;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.submit-fact-link:hover {
+  color: #FF5353;
+}
+
+.submit-fact-note {
+  font-style: italic;
+  color: #666666;
+}
+
+.submit-fact-agreement {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.submit-fact-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.submit-fact-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.submit-fact-checkbox-custom {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #878787;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-top: 2px;
+}
+
+.submit-fact-checkbox-custom.checked {
+  border-color: #2C2C2C;
+  background: #2C2C2C;
+}
+
+.submit-fact-checkbox-custom.checked::after {
+  content: '';
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.submit-fact-checkbox-text {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #2C2C2C;
+  line-height: 24px;
+}
+
+.submit-fact-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.submit-fact-button {
+  padding: 0.625rem 0.8rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.submit-fact-button.active {
+  background: #FF5353;
+  color: white;
+  cursor: pointer;
+}
+
+.submit-fact-button.active:hover {
+  background: #e64848;
+}
+
+.submit-fact-button.disabled {
+  background: #878787;
+  color: white;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .submit-fact-content-wrapper {
+    flex-direction: column;
+    padding: 0 50px;
+    gap: 40px;
+  }
+
+  .submit-fact-text-column {
+    max-width: 100%;
+  }
+
+  .submit-fact-sidebar {
+    align-self: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .submit-fact-content-wrapper {
+    padding: 0 20px;
+  }
+
+  .submit-fact-header {
+    font-size: 32px;
+  }
+
+  .submit-fact-body,
+  .submit-fact-list,
+  .submit-fact-rule-title,
+  .submit-fact-checkbox-text {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .submit-fact-rule-number {
+    font-size: 16px;
+  }
+}
