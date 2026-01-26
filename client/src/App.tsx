@@ -42,7 +42,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={HomePage} />
-      <Route path="/admin" component={AdminPage} />
+      <Route path="/backstage-admin-415" component={AdminPage} />
       <Route path="/fact/:id" component={SingleFactPage} />
       <Route path="/articles" component={ArticlesPage} />
       <Route path="/articles/:slug" component={SingleBlogPage} />

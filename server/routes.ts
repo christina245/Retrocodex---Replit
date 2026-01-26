@@ -26,12 +26,77 @@ const upload = multer({
 // Simple password middleware for admin routes
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
+// Rate limiting for failed login attempts
+const MAX_FAILED_ATTEMPTS = 5;
+const RATE_LIMIT_WINDOW_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+interface FailedAttempt {
+  count: number;
+  firstAttempt: number;
+}
+
+const failedLoginAttempts = new Map<string, FailedAttempt>();
+
+function getClientIP(req: any): string {
+  return req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 
+         req.connection?.remoteAddress || 
+         req.socket?.remoteAddress || 
+         'unknown';
+}
+
+function isRateLimited(ip: string): boolean {
+  const record = failedLoginAttempts.get(ip);
+  if (!record) return false;
+  
+  const now = Date.now();
+  // Reset if window has passed
+  if (now - record.firstAttempt > RATE_LIMIT_WINDOW_MS) {
+    failedLoginAttempts.delete(ip);
+    return false;
+  }
+  
+  return record.count >= MAX_FAILED_ATTEMPTS;
+}
+
+function recordFailedAttempt(ip: string): void {
+  const now = Date.now();
+  const record = failedLoginAttempts.get(ip);
+  
+  if (!record || now - record.firstAttempt > RATE_LIMIT_WINDOW_MS) {
+    failedLoginAttempts.set(ip, { count: 1, firstAttempt: now });
+  } else {
+    record.count++;
+  }
+}
+
+function clearFailedAttempts(ip: string): void {
+  failedLoginAttempts.delete(ip);
+}
+
 function requireAuth(req: any, res: any, next: any) {
+  const clientIP = getClientIP(req);
+  
+  // Check if IP is rate limited
+  if (isRateLimited(clientIP)) {
+    return res.status(429).json({ 
+      message: "Too many failed login attempts. Please try again later." 
+    });
+  }
+  
   const authHeader = req.headers.authorization;
   
   if (!authHeader || !authHeader.startsWith('Basic ')) {
+    // Count missing/invalid auth headers as failed attempts to prevent brute-force
+    recordFailedAttempt(clientIP);
+    const record = failedLoginAttempts.get(clientIP);
+    const remainingAttempts = MAX_FAILED_ATTEMPTS - (record?.count || 0);
+    
     res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
-    return res.status(401).json({ message: "Authentication required" });
+    return res.status(401).json({ 
+      message: remainingAttempts > 0 
+        ? `Authentication required. ${remainingAttempts} attempts remaining.`
+        : "Too many failed login attempts. Please try again later."
+    });
   }
 
   const base64Credentials = authHeader.split(' ')[1];
@@ -39,10 +104,19 @@ function requireAuth(req: any, res: any, next: any) {
   const [username, password] = credentials.split(':');
 
   if (password === ADMIN_PASSWORD) {
+    clearFailedAttempts(clientIP);
     next();
   } else {
+    recordFailedAttempt(clientIP);
+    const record = failedLoginAttempts.get(clientIP);
+    const remainingAttempts = MAX_FAILED_ATTEMPTS - (record?.count || 0);
+    
     res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res.status(401).json({ 
+      message: remainingAttempts > 0 
+        ? `Invalid credentials. ${remainingAttempts} attempts remaining.`
+        : "Too many failed login attempts. Please try again later."
+    });
   }
 }
 
