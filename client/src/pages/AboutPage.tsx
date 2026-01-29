@@ -37,7 +37,7 @@ export default function AboutPage() {
     <div className="about-page">
       <SEO 
         title="About Retrocodex: What You Might Have Learned Wrong"
-        description="Learn about Retrocodex, a living archive dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
+        description="Learn about Retrocodex, a community-driven encyclopedia dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
@@ -53,24 +53,23 @@ export default function AboutPage() {
             </h2>
 
             <p className="about-body">
-              Retrocodex: What You Might Have Learned Wrong is a living archive dedicated to collectively exploring how each misconception emerged, evolved, and persisted while accounting for diverse and contradictory perspectives.
+              Retrocodex: Stuff You Learned Wrong is a community-driven encyclopedia exploring how common misconceptions and outdated facts emerged, evolved, and persisted while accounting for diverse and contradictory perspectives.
             </p>
 
             <p className="about-body">
-              In a living archive, new misconceptions are continuously added. Each entry is updated when new relevant discoveries arise. When user accounts become available, you'll be able to learn how other users were affected by each misconception, contribute your own experiences, and receive email updates when new information is discovered that further verifies or refutes the myth. 
+              In a community-driven platform, new misconceptions are continuously added by users. Each entry is updated when new relevant discoveries arise. When user accounts become available, you'll be able to learn how other users were affected by each misconception, contribute your own experiences, and receive email updates when new information is discovered that further verifies or refutes the myth. 
+            </p>
+            
+
+            <p className="about-body">
+              At Retrocodex, facts are treated as something to be continually examined, not permanently settled. Even with the misconceptions debunked by the strongest evidence, new information can always emerge. Many of the topics on this site were once considered verified facts until they were disproven by time and new research. Some may still be taught as facts in certain places. 
             </p>
 
             <p className="about-body">
-              At Retrocodex, facts are treated as something to be continually examined, not permanently settled. Even with the misconceptions debunked by the strongest evidence, new information can always emerge.
+              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research and web development will require much more investment of resources than this beta, the rest of the pages and user accounts will only be added after reaching a certain amount of traffic and email signups.
             </p>
 
-            <p className="about-body">
-              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research is extremely labor-intensive, the rest of the pages will be added after a certain amount of people are on the waitlist to assure adequate demand.
-            </p>
-
-            <p className="about-body">
-              These features, along with the research and engineering behind them, require strong investment in software development, cybersecurity, fact-checking, copywriting, and human expertise.
-            </p>
+          
 
             <p className="about-body">
               <strong>Some new features currently in the works:</strong>
@@ -78,11 +77,15 @@ export default function AboutPage() {
 
             <ul className="about-list">
               <li>
-                <strong>"Regionally Taught" pages:</strong> Dedicated sections that highlight how certain misconceptions were taught differently across countries, states, or school districts — revealing how misinformation spreads geographically.
+                <strong>Pages by country:</strong> An interactive map that shows topics unique to that region, with a list of the most common topics taught in that region as determined by users.
               </li>
               <li>
-                <strong>User messaging & community tools:</strong> A private messaging and public profile creation system that lets users connect, compare experiences, show off where you grew up and your professional credentials, and even organize local advocacy or education campaigns together.
+                <strong>A personalized dashboard:</strong> See what other topics users in your county (and any other selected locations) report through their submissions and comments.
               </li>
+              <li>
+                <strong>User messaging & community tools:</strong> A private messaging and public profile creation system that'll let you connect, compare experiences, show off where you grew up and your professional credentials, and even organize local advocacy or education campaigns together.
+              </li>
+              
               <li>
                 <strong>Global heatmaps:</strong> Visual representations of where specific myths were most commonly taught, powered by user voting and regional submissions.
               </li>
