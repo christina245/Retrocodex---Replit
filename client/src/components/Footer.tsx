@@ -111,7 +111,7 @@ export function Footer() {
             className="footer-brand-logo"
           />
           <p className="footer-brand-description">
-            <b>Retrocodex: What You Might Have Learned Wrong</b> is an evolving library of commonly taught misconceptions from all over the world. It explores how each misconception originated, why it persisted, and what the evidence really says.
+            <b>Retrocodex: Stuff You Learned Wrong</b> is an evolving library of commonly taught misconceptions from all over the world. It explores how each misconception originated, why it persisted, and what the evidence says.
           </p>
         </div>
       </div>

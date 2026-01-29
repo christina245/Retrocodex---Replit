@@ -57,7 +57,7 @@ export default function AboutPage() {
             </p>
 
             <p className="about-body">
-              In a community-driven platform, new misconceptions are continuously added by users. Each entry is updated when new relevant discoveries arise. When user accounts become available, you'll be able to learn how other users were affected by each misconception, contribute your own experiences, and receive email updates when new information is discovered that further verifies or refutes the myth. 
+              In a community-driven platform, you and everyone else are welcome to submit new topics you believe are worth questioning and suggestions to existing topics you believe validate or even invalidate the facts. Each entry is updated when new relevant discoveries arise. When user accounts become available, you'll be able to learn how other users were affected by each misconception, contribute your own experiences, and receive email updates when new information is discovered that further verifies or refutes the myth. 
             </p>
             
 
@@ -104,7 +104,7 @@ export default function AboutPage() {
 
             <div className="about-buttons">
               <a 
-                href="https://form.typeform.com/to/pal6ZbpG" 
+                href="https://theretrocodex.com/submit" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="about-submit-button"
