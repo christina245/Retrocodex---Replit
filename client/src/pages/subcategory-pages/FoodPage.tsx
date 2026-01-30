@@ -63,7 +63,7 @@ export default function FoodPage() {
         dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,
-        betaOnly: true,
+        betaOnly: fact.betaOnly ?? false,
       }));
   }, [dbFacts]);
 
