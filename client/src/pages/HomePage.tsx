@@ -427,12 +427,12 @@ export default function HomePage() {
         <div className="content-area" id="content-area">
           {activeTab === "regionally-taught" && (
             <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
-              Regionally Taught explores beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
+              Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
             </p>
           )}
           {activeTab === "popular" && (
             <p className="tab-subheader" data-testid="text-popular-subheader">
-              Popular features misconceptions frequently reported by social media users on{" "}
+              Popular topics are frequently reported by social media users on{" "}
               <a 
                 href="https://www.reddit.com/r/AskReddit/comments/1789w9u/whats_a_fact_that_was_taught_in_school_thats_been/" 
                 target="_blank" 
@@ -446,7 +446,7 @@ export default function HomePage() {
           )}
           {activeTab === "trending" && (
             <p className="tab-subheader" data-testid="text-trending-subheader">
-              Trending explores misinformation relevant to upcoming holidays or current events.
+              Trending topics are relevant to upcoming holidays or current events.
             </p>
           )}
           {activeTab === "debated" && (
