@@ -101,8 +101,8 @@ const allFacts: Fact[] = [
     myth: "A general spelling rule is I before E except after C.",
     truth: "The English language has several words where this generalization does not apply: science, height, their, protein, caffeine, vein, beige, neighbor, weird, seize, and many others.",
     dateAdded: "2025-11-12",
-    coverPhoto: photo7Spelling,
-    betaOnly: true
+    link: "fact/i-before-e-except-after-c",
+    coverPhoto: photo7Spelling
   },
   {
     id: "8",
