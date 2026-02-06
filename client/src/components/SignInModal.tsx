@@ -13,9 +13,12 @@ interface SignInModalProps {
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [username, setUsername] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   if (!isOpen) return null;
 
@@ -25,8 +28,30 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     }
   };
 
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+    if (value && password && value !== password) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (confirmPassword && value !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSignUp && password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
   };
 
   return (
@@ -67,10 +92,12 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
             )}
 
             <div className="signin-field">
-              <label className="signin-label" htmlFor="signin-email">EMAIL</label>
+              <label className="signin-label" htmlFor="signin-email">
+                {isSignUp ? "EMAIL" : "EMAIL OR USERNAME"}
+              </label>
               <input
                 id="signin-email"
-                type="email"
+                type={isSignUp ? "email" : "text"}
                 className="signin-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -86,7 +113,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                   type={showPassword ? "text" : "password"}
                   className="signin-input signin-input-password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => handlePasswordChange(e.target.value)}
                   data-testid="input-signin-password"
                 />
                 <button
@@ -109,6 +136,36 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 </button>
               )}
             </div>
+
+            {isSignUp && (
+              <div className="signin-field">
+                <label className="signin-label" htmlFor="signin-confirm-password">CONFIRM PASSWORD</label>
+                <div className="signin-password-wrapper">
+                  <input
+                    id="signin-confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    className={`signin-input signin-input-password${confirmPasswordError ? " signin-input-error" : ""}`}
+                    value={confirmPassword}
+                    onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+                    data-testid="input-signin-confirm-password"
+                  />
+                  <button
+                    type="button"
+                    className="signin-password-toggle"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    data-testid="button-toggle-confirm-password"
+                    aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {confirmPasswordError && (
+                  <span className="signin-error-text" data-testid="text-confirm-password-error">
+                    {confirmPasswordError}
+                  </span>
+                )}
+              </div>
+            )}
 
             <button
               type="submit"

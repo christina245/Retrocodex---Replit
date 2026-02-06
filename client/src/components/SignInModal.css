@@ -139,6 +139,22 @@
   color: #2C2C2C;
 }
 
+.signin-input-error {
+  border-color: #FF5353;
+}
+
+.signin-input-error:focus {
+  border-color: #FF5353;
+}
+
+.signin-error-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #FF5353;
+  margin-top: 2px;
+}
+
 .signin-forgot {
   background: none;
   border: none;
