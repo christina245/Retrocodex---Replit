@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Search, HandHeart, X, LogIn } from "lucide-react";
+import { Search, HandHeart, X, UserRound } from "lucide-react";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
@@ -146,7 +146,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
               data-testid="button-signin"
               aria-label="Sign in"
             >
-              <LogIn size={16} className="header-signin-icon" />
+              <UserRound size={16} className="header-signin-icon" />
               Sign In
             </button>
             {onMenuClick && (

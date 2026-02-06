@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: rgba(44, 44, 44, 0.05);
+  background: white;
   color: #FF5353;
   border: none;
   padding: 6px 8px;
@@ -224,7 +224,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: rgba(44, 44, 44, 0.05);
+  background: #FFFFFF;
   color: #FF5353;
   border: none;
   padding: 6px 8px;
