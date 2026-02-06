@@ -220,6 +220,39 @@
   background: #e64848;
 }
 
+.header-signin-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(44, 44, 44, 0.05);
+  color: #FF5353;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.header-signin-button:hover {
+  background: #FF5353;
+  color: white;
+}
+
+.header-signin-icon {
+  width: 16px;
+  height: 16px;
+  color: #FF5353;
+  transition: color 0.2s;
+}
+
+.header-signin-button:hover .header-signin-icon {
+  color: white;
+}
+
 .hamburger-button {
   background: none;
   border: none;
@@ -302,6 +335,10 @@
   }
 
   .submit-fact-button {
+    display: none;
+  }
+
+  .header-signin-button {
     display: none;
   }
 
