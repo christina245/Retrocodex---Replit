@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, UserRound } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
+import { SignInModal } from "./SignInModal";
 import "./SingleFactHeader.css";
 
 interface SingleFactHeaderProps {
@@ -11,6 +12,7 @@ interface SingleFactHeaderProps {
 export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [, navigate] = useLocation();
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -79,14 +81,21 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
             </button>
           )}
           <a 
-            href="https://form.typeform.com/to/pal6ZbpG" 
-            target="_blank" 
-            rel="noopener noreferrer"
+            href="/submit"
             className="submit-fact-button"
             data-testid="button-submit-fact"
           >
             Submit a Fact
           </a>
+          <button
+            className="header-signin-button"
+            onClick={() => setIsSignInOpen(true)}
+            data-testid="button-signin"
+            aria-label="Sign in"
+          >
+            <UserRound size={16} className="header-signin-icon" />
+            Sign In
+          </button>
           {onMenuClick && (
             <button 
               className="hamburger-button" 
@@ -103,6 +112,8 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
           )}
         </div>
       </div>
+
+      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
     </header>
   );
 }
