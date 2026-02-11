@@ -108,8 +108,6 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
         </button>
 
         <div className="signin-modal-body">
-          <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
-
           {screen === "emailConfirmation" ? (
             <div className="signin-confirmation" data-testid="screen-email-confirmation">
               <h2 className="signin-confirmation-title" data-testid="text-confirmation-title">
@@ -172,6 +170,8 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
             </div>
           ) : (
             <>
+              <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
+
               <p className="signin-description" data-testid="text-signin-description">
                 {isSignUp
                   ? "Create an account to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."
