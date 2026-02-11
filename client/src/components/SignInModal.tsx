@@ -1,17 +1,204 @@
-import { X, Eye, EyeOff, Check, RefreshCw } from "lucide-react";
-import { useState } from "react";
+import { X, Eye, EyeOff, Check, RefreshCw, MapPin, Plus, Minus } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
 import "./SignInModal.css";
+
+const SAMPLE_COUNTRIES = [
+  "Australia",
+  "Brazil",
+  "Canada",
+  "France",
+  "Germany",
+  "India",
+  "Japan",
+  "Mexico",
+  "Nigeria",
+  "United Kingdom",
+  "United States",
+];
+
+const SAMPLE_US_STATES = [
+  "California",
+  "Florida",
+  "Georgia",
+  "Illinois",
+  "Massachusetts",
+  "New York",
+  "Ohio",
+  "Pennsylvania",
+  "Texas",
+  "Washington",
+];
+
+interface CountrySelectProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  testId: string;
+}
+
+function CountrySelect({ value, onChange, placeholder = "Search country...", testId }: CountrySelectProps) {
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filtered = SAMPLE_COUNTRIES.filter((c) =>
+    c.toLowerCase().includes(query.toLowerCase())
+  );
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const displayValue = isOpen ? query : value;
+
+  return (
+    <div className="signin-country-select-container" ref={containerRef}>
+      <div className="signin-country-input-wrapper">
+        <span className="signin-country-icon">
+          <MapPin size={18} />
+        </span>
+        <input
+          type="text"
+          className="signin-input"
+          value={displayValue}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (!isOpen) setIsOpen(true);
+          }}
+          onFocus={() => {
+            setIsOpen(true);
+            setQuery("");
+          }}
+          placeholder={placeholder}
+          data-testid={testId}
+        />
+      </div>
+      {isOpen && (
+        <div className="signin-country-dropdown" data-testid={`${testId}-dropdown`}>
+          {filtered.length > 0 ? (
+            filtered.map((country) => (
+              <div
+                key={country}
+                className={`signin-country-option${value === country ? " signin-country-option-selected" : ""}`}
+                onClick={() => {
+                  onChange(country);
+                  setQuery("");
+                  setIsOpen(false);
+                }}
+                data-testid={`${testId}-option-${country.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                {country}
+              </div>
+            ))
+          ) : (
+            <div className="signin-country-option" style={{ color: "#999", cursor: "default" }}>
+              No results
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface StateSelectProps {
+  value: string;
+  onChange: (value: string) => void;
+  testId: string;
+}
+
+function StateSelect({ value, onChange, testId }: StateSelectProps) {
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filtered = SAMPLE_US_STATES.filter((s) =>
+    s.toLowerCase().includes(query.toLowerCase())
+  );
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const displayValue = isOpen ? query : value;
+
+  return (
+    <div className="signin-country-select-container signin-state-field" ref={containerRef}>
+      <div className="signin-country-input-wrapper">
+        <span className="signin-country-icon">
+          <MapPin size={18} />
+        </span>
+        <input
+          type="text"
+          className="signin-input"
+          value={displayValue}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (!isOpen) setIsOpen(true);
+          }}
+          onFocus={() => {
+            setIsOpen(true);
+            setQuery("");
+          }}
+          placeholder="Search state..."
+          data-testid={testId}
+        />
+      </div>
+      {isOpen && (
+        <div className="signin-country-dropdown" data-testid={`${testId}-dropdown`}>
+          {filtered.length > 0 ? (
+            filtered.map((state) => (
+              <div
+                key={state}
+                className={`signin-country-option${value === state ? " signin-country-option-selected" : ""}`}
+                onClick={() => {
+                  onChange(state);
+                  setQuery("");
+                  setIsOpen(false);
+                }}
+                data-testid={`${testId}-option-${state.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                {state}
+              </div>
+            ))
+          ) : (
+            <div className="signin-country-option" style={{ color: "#999", cursor: "default" }}>
+              No results
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface SignInModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-type ModalScreen = "auth" | "emailConfirmation";
+type ModalScreen = "auth" | "emailConfirmation" | "locationSetup";
 type CodeStatus = "idle" | "success" | "error";
+
+interface OtherCountryEntry {
+  country: string;
+  usState: string;
+}
 
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [email, setEmail] = useState("");
@@ -26,6 +213,14 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [verificationCode, setVerificationCode] = useState("");
   const [codeStatus, setCodeStatus] = useState<CodeStatus>("idle");
   const [resendMessage, setResendMessage] = useState("");
+
+  const [residenceCountry, setResidenceCountry] = useState("");
+  const [residenceUsState, setResidenceUsState] = useState("");
+  const [featureResidence, setFeatureResidence] = useState(false);
+  const [otherCountries, setOtherCountries] = useState<OtherCountryEntry[]>([
+    { country: "", usState: "" },
+  ]);
+  const [featureOtherCountries, setFeatureOtherCountries] = useState(false);
 
   if (!isOpen) return null;
 
@@ -75,6 +270,9 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const handleVerifyCode = () => {
     if (verificationCode === "123456") {
       setCodeStatus("success");
+      setTimeout(() => {
+        setScreen("locationSetup");
+      }, 1000);
     } else {
       setCodeStatus("error");
     }
@@ -92,7 +290,34 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     setCodeStatus("idle");
     setVerificationCode("");
     setResendMessage("");
+    setResidenceCountry("");
+    setResidenceUsState("");
+    setFeatureResidence(false);
+    setOtherCountries([{ country: "", usState: "" }]);
+    setFeatureOtherCountries(false);
     onClose();
+  };
+
+  const handleAddOtherCountry = () => {
+    if (otherCountries.length < 5) {
+      setOtherCountries([...otherCountries, { country: "", usState: "" }]);
+    }
+  };
+
+  const handleRemoveOtherCountry = (index: number) => {
+    setOtherCountries(otherCountries.filter((_, i) => i !== index));
+  };
+
+  const handleOtherCountryChange = (index: number, country: string) => {
+    const updated = [...otherCountries];
+    updated[index] = { country, usState: country === "United States" ? updated[index].usState : "" };
+    setOtherCountries(updated);
+  };
+
+  const handleOtherStateChange = (index: number, usState: string) => {
+    const updated = [...otherCountries];
+    updated[index] = { ...updated[index], usState };
+    setOtherCountries(updated);
   };
 
   return (
@@ -108,7 +333,120 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
         </button>
 
         <div className="signin-modal-body">
-          {screen === "emailConfirmation" ? (
+          {screen === "locationSetup" ? (
+            <div className="signin-location-setup" data-testid="screen-location-setup">
+              <h2 className="signin-confirmation-title" data-testid="text-location-title">
+                Optional: What we learn wrong often depends on where we're from.
+              </h2>
+              <p className="signin-description" data-testid="text-location-subtitle">
+                Showing off where you're from gives users more insight into your shared stories and helps them identify wrongly taught topics specific to where they're from.
+              </p>
+
+              <div className="signin-location-section">
+                <label className="signin-location-label">COUNTRY OF RESIDENCE</label>
+                <CountrySelect
+                  value={residenceCountry}
+                  onChange={(val) => {
+                    setResidenceCountry(val);
+                    if (val !== "United States") setResidenceUsState("");
+                  }}
+                  testId="input-residence-country"
+                />
+                {residenceCountry === "United States" && (
+                  <div className="signin-state-field">
+                    <label className="signin-location-label">STATE</label>
+                    <StateSelect
+                      value={residenceUsState}
+                      onChange={setResidenceUsState}
+                      testId="input-residence-state"
+                    />
+                  </div>
+                )}
+                <div className="signin-checkbox-row">
+                  <input
+                    type="checkbox"
+                    id="feature-residence"
+                    checked={featureResidence}
+                    onChange={(e) => setFeatureResidence(e.target.checked)}
+                    data-testid="checkbox-feature-residence"
+                  />
+                  <label htmlFor="feature-residence">Feature this on my profile</label>
+                </div>
+              </div>
+
+              <div className="signin-location-section">
+                <label className="signin-location-label">OTHER COUNTRIES WHERE YOU'VE LIVED (MAX 5)</label>
+                {otherCountries.map((entry, index) => (
+                  <div key={index}>
+                    <div className="signin-add-country-row">
+                      <CountrySelect
+                        value={entry.country}
+                        onChange={(val) => handleOtherCountryChange(index, val)}
+                        testId={`input-other-country-${index}`}
+                      />
+                      {index === otherCountries.length - 1 && otherCountries.length < 5 && (
+                        <button
+                          type="button"
+                          className="signin-add-remove-btn"
+                          onClick={handleAddOtherCountry}
+                          data-testid="button-add-country"
+                          aria-label="Add another country"
+                        >
+                          <Plus size={18} />
+                        </button>
+                      )}
+                      {otherCountries.length > 1 && (
+                        <button
+                          type="button"
+                          className="signin-add-remove-btn"
+                          onClick={() => handleRemoveOtherCountry(index)}
+                          data-testid={`button-remove-country-${index}`}
+                          aria-label="Remove country"
+                        >
+                          <Minus size={18} />
+                        </button>
+                      )}
+                    </div>
+                    {entry.country === "United States" && (
+                      <div className="signin-state-field">
+                        <label className="signin-location-label">STATE</label>
+                        <StateSelect
+                          value={entry.usState}
+                          onChange={(val) => handleOtherStateChange(index, val)}
+                          testId={`input-other-state-${index}`}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <div className="signin-checkbox-row">
+                  <input
+                    type="checkbox"
+                    id="feature-other-countries"
+                    checked={featureOtherCountries}
+                    onChange={(e) => setFeatureOtherCountries(e.target.checked)}
+                    data-testid="checkbox-feature-other-countries"
+                  />
+                  <label htmlFor="feature-other-countries">Feature this on my profile</label>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="signin-submit-button"
+                data-testid="button-next-step"
+              >
+                Next step
+              </button>
+              <button
+                type="button"
+                className="signin-skip-button"
+                data-testid="button-skip-location"
+              >
+                Skip for now
+              </button>
+            </div>
+          ) : screen === "emailConfirmation" ? (
             <div className="signin-confirmation" data-testid="screen-email-confirmation">
               <h2 className="signin-confirmation-title" data-testid="text-confirmation-title">
                 Enter the 6-digit code sent to your email.
