@@ -335,8 +335,16 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
         <div className="signin-modal-body">
           {screen === "locationSetup" ? (
             <div className="signin-location-setup" data-testid="screen-location-setup">
+              <button
+                type="button"
+                className="signin-skip-button-top"
+                data-testid="button-skip-location"
+              >
+                Skip for now
+              </button>
               <h2 className="signin-confirmation-title" data-testid="text-location-title">
-                Optional: What we learn wrong often depends on where we're from.
+                <span className="signin-optional-tag">[Optional]</span>
+                What we learn wrong often depends on where we're from.
               </h2>
               <p className="signin-description" data-testid="text-location-subtitle">
                 Showing off where you're from gives users more insight into your shared stories and helps them identify wrongly taught topics specific to where they're from.
@@ -437,13 +445,6 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 data-testid="button-next-step"
               >
                 Next step
-              </button>
-              <button
-                type="button"
-                className="signin-skip-button"
-                data-testid="button-skip-location"
-              >
-                Skip for now
               </button>
             </div>
           ) : screen === "emailConfirmation" ? (

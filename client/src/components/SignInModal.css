@@ -527,27 +527,28 @@
   cursor: pointer;
 }
 
-.signin-skip-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.signin-skip-button-top {
+  align-self: flex-start;
   background: rgba(44, 44, 44, 0.05);
   color: #FF5353;
   border: none;
-  padding: 10px 15px;
+  padding: 6px 8px;
   border-radius: 5px;
   font-family: 'Public Sans', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  width: 100%;
 }
 
-.signin-skip-button:hover {
+.signin-skip-button-top:hover {
   background: #FF5353;
   color: white;
+}
+
+.signin-optional-tag {
+  display: block;
+  margin-bottom: 4px;
 }
 
 .signin-add-country-row {
