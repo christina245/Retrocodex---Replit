@@ -339,7 +339,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
   const toggleCategory = (catName: string) => {
     setSelectedCategories((prev) =>
-      prev.includes(catName) ? prev.filter((c) => c !== catName) : [...prev, catName]
+      prev.includes(catName) ? [] : [catName]
     );
   };
 
@@ -412,6 +412,9 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <h2 className="signin-confirmation-title" data-testid="text-topic-title">
                 What are your favorite subjects?
               </h2>
+              <p className="signin-topic-subtitle" data-testid="text-topic-subtitle">
+                Selecting topics helps us personalize your feed.
+              </p>
 
               <div className="signin-topic-section">
                 <label className="signin-location-label">SELECT CATEGORIES</label>

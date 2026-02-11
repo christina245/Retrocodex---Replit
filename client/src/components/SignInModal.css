@@ -549,6 +549,16 @@
 .signin-optional-tag {
   display: block;
   margin-bottom: 4px;
+  color: #878787;
+}
+
+.signin-topic-subtitle {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  margin: 0;
+  text-align: center;
 }
 
 .signin-add-country-row {
