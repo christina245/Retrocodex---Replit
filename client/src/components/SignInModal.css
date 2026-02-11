@@ -259,6 +259,151 @@
   color: #FF5353;
 }
 
+.signin-confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.signin-confirmation-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C2C2C;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.signin-code-field {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.signin-code-input {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  background: white;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  padding: 0.7rem 0.75rem;
+  width: 160px;
+  text-align: center;
+  letter-spacing: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.signin-code-input::placeholder {
+  color: #ccc;
+  letter-spacing: 4px;
+}
+
+.signin-code-input:focus {
+  outline: none;
+  border-color: #FF5353;
+}
+
+.signin-code-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.signin-code-success {
+  color: #6FCF97;
+}
+
+.signin-code-error {
+  color: #FF5353;
+}
+
+.signin-status-icon {
+  flex-shrink: 0;
+}
+
+.signin-status-icon.truth-icon {
+  color: #6FCF97;
+}
+
+.signin-status-icon.myth-icon {
+  color: #FF5353;
+}
+
+.signin-verify-button {
+  background: #FF5353;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.signin-verify-button:hover:not(:disabled) {
+  background: #e64848;
+}
+
+.signin-verify-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.signin-resend-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(44, 44, 44, 0.05);
+  color: #FF5353;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.signin-resend-button:hover:not(:disabled) {
+  background: #FF5353;
+  color: white;
+}
+
+.signin-resend-button:hover:not(:disabled) .signin-resend-icon {
+  color: white;
+}
+
+.signin-resend-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.signin-resend-icon {
+  color: #FF5353;
+  transition: color 0.2s;
+}
+
+.signin-resend-message {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6FCF97;
+}
+
 @keyframes signinFadeIn {
   from {
     opacity: 0;

@@ -1,4 +1,4 @@
-import { X, Eye, EyeOff } from "lucide-react";
+import { X, Eye, EyeOff, Check, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
@@ -10,6 +10,9 @@ interface SignInModalProps {
   onClose: () => void;
 }
 
+type ModalScreen = "auth" | "emailConfirmation";
+type CodeStatus = "idle" | "success" | "error";
+
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +22,10 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [username, setUsername] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [screen, setScreen] = useState<ModalScreen>("auth");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [codeStatus, setCodeStatus] = useState<CodeStatus>("idle");
+  const [resendMessage, setResendMessage] = useState("");
 
   if (!isOpen) return null;
 
@@ -52,6 +59,40 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       setConfirmPasswordError("Passwords do not match");
       return;
     }
+    if (isSignUp) {
+      setScreen("emailConfirmation");
+      setCodeStatus("idle");
+      setVerificationCode("");
+    }
+  };
+
+  const handleCodeChange = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 6);
+    setVerificationCode(digitsOnly);
+    setCodeStatus("idle");
+  };
+
+  const handleVerifyCode = () => {
+    if (verificationCode === "123456") {
+      setCodeStatus("success");
+    } else {
+      setCodeStatus("error");
+    }
+  };
+
+  const handleResendCode = () => {
+    setResendMessage("Code resent!");
+    setVerificationCode("");
+    setCodeStatus("idle");
+    setTimeout(() => setResendMessage(""), 3000);
+  };
+
+  const handleClose = () => {
+    setScreen("auth");
+    setCodeStatus("idle");
+    setVerificationCode("");
+    setResendMessage("");
+    onClose();
   };
 
   return (
@@ -59,7 +100,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       <div className="signin-modal" data-testid="signin-modal">
         <button
           className="signin-close"
-          onClick={onClose}
+          onClick={handleClose}
           data-testid="button-signin-close"
           aria-label="Close sign in"
         >
@@ -69,146 +110,210 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
         <div className="signin-modal-body">
           <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
 
-          <p className="signin-description" data-testid="text-signin-description">
-            {isSignUp
-              ? "Create an account to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."
-              : "Log in to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."}
-          </p>
+          {screen === "emailConfirmation" ? (
+            <div className="signin-confirmation" data-testid="screen-email-confirmation">
+              <h2 className="signin-confirmation-title" data-testid="text-confirmation-title">
+                Enter the 6-digit code sent to your email.
+              </h2>
 
-          <form className="signin-form" onSubmit={handleSubmit}>
-            {isSignUp && (
-              <div className="signin-field">
-                <label className="signin-label" htmlFor="signin-username">USERNAME</label>
+              <div className="signin-code-field">
                 <input
-                  id="signin-username"
                   type="text"
-                  className="signin-input"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Choose a username"
-                  data-testid="input-signin-username"
+                  inputMode="numeric"
+                  className={`signin-code-input${codeStatus === "error" ? " signin-input-error" : ""}`}
+                  value={verificationCode}
+                  onChange={(e) => handleCodeChange(e.target.value)}
+                  placeholder="000000"
+                  maxLength={6}
+                  data-testid="input-verification-code"
                 />
               </div>
-            )}
 
-            <div className="signin-field">
-              <label className="signin-label" htmlFor="signin-email">
-                {isSignUp ? "EMAIL" : "EMAIL OR USERNAME"}
-              </label>
-              <input
-                id="signin-email"
-                type={isSignUp ? "email" : "text"}
-                className="signin-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                data-testid="input-signin-email"
-              />
-            </div>
+              {codeStatus === "success" && (
+                <div className="signin-code-status signin-code-success" data-testid="text-code-success">
+                  <Check size={20} className="signin-status-icon truth-icon" />
+                  <span>Account created!</span>
+                </div>
+              )}
 
-            <div className="signin-field">
-              <label className="signin-label" htmlFor="signin-password">PASSWORD</label>
-              <div className="signin-password-wrapper">
-                <input
-                  id="signin-password"
-                  type={showPassword ? "text" : "password"}
-                  className="signin-input signin-input-password"
-                  value={password}
-                  onChange={(e) => handlePasswordChange(e.target.value)}
-                  data-testid="input-signin-password"
-                />
-                <button
-                  type="button"
-                  className="signin-password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                  data-testid="button-toggle-password"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              {!isSignUp && (
-                <button
-                  type="button"
-                  className="signin-forgot"
-                  data-testid="button-forgot-password"
-                >
-                  Reset password
-                </button>
+              {codeStatus === "error" && (
+                <div className="signin-code-status signin-code-error" data-testid="text-code-error">
+                  <X size={20} className="signin-status-icon myth-icon" />
+                  <span>Incorrect code.</span>
+                </div>
+              )}
+
+              <button
+                type="button"
+                className="signin-verify-button"
+                onClick={handleVerifyCode}
+                disabled={verificationCode.length !== 6 || codeStatus === "success"}
+                data-testid="button-verify-code"
+              >
+                Verify
+              </button>
+
+              <button
+                type="button"
+                className="signin-resend-button"
+                onClick={handleResendCode}
+                disabled={codeStatus === "success"}
+                data-testid="button-resend-code"
+              >
+                <RefreshCw size={14} className="signin-resend-icon" />
+                Resend code
+              </button>
+
+              {resendMessage && (
+                <span className="signin-resend-message" data-testid="text-resend-message">
+                  {resendMessage}
+                </span>
               )}
             </div>
+          ) : (
+            <>
+              <p className="signin-description" data-testid="text-signin-description">
+                {isSignUp
+                  ? "Create an account to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."
+                  : "Log in to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."}
+              </p>
 
-            {isSignUp && (
-              <div className="signin-field">
-                <label className="signin-label" htmlFor="signin-confirm-password">CONFIRM PASSWORD</label>
-                <div className="signin-password-wrapper">
-                  <input
-                    id="signin-confirm-password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    className={`signin-input signin-input-password${confirmPasswordError ? " signin-input-error" : ""}`}
-                    value={confirmPassword}
-                    onChange={(e) => handleConfirmPasswordChange(e.target.value)}
-                    data-testid="input-signin-confirm-password"
-                  />
-                  <button
-                    type="button"
-                    className="signin-password-toggle"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    data-testid="button-toggle-confirm-password"
-                    aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
-                  >
-                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
-                </div>
-                {confirmPasswordError && (
-                  <span className="signin-error-text" data-testid="text-confirm-password-error">
-                    {confirmPasswordError}
-                  </span>
+              <form className="signin-form" onSubmit={handleSubmit}>
+                {isSignUp && (
+                  <div className="signin-field">
+                    <label className="signin-label" htmlFor="signin-username">USERNAME</label>
+                    <input
+                      id="signin-username"
+                      type="text"
+                      className="signin-input"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Choose a username"
+                      data-testid="input-signin-username"
+                    />
+                  </div>
                 )}
+
+                <div className="signin-field">
+                  <label className="signin-label" htmlFor="signin-email">
+                    {isSignUp ? "EMAIL" : "EMAIL OR USERNAME"}
+                  </label>
+                  <input
+                    id="signin-email"
+                    type={isSignUp ? "email" : "text"}
+                    className="signin-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    data-testid="input-signin-email"
+                  />
+                </div>
+
+                <div className="signin-field">
+                  <label className="signin-label" htmlFor="signin-password">PASSWORD</label>
+                  <div className="signin-password-wrapper">
+                    <input
+                      id="signin-password"
+                      type={showPassword ? "text" : "password"}
+                      className="signin-input signin-input-password"
+                      value={password}
+                      onChange={(e) => handlePasswordChange(e.target.value)}
+                      data-testid="input-signin-password"
+                    />
+                    <button
+                      type="button"
+                      className="signin-password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      data-testid="button-toggle-password"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                  {!isSignUp && (
+                    <button
+                      type="button"
+                      className="signin-forgot"
+                      data-testid="button-forgot-password"
+                    >
+                      Reset password
+                    </button>
+                  )}
+                </div>
+
+                {isSignUp && (
+                  <div className="signin-field">
+                    <label className="signin-label" htmlFor="signin-confirm-password">CONFIRM PASSWORD</label>
+                    <div className="signin-password-wrapper">
+                      <input
+                        id="signin-confirm-password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        className={`signin-input signin-input-password${confirmPasswordError ? " signin-input-error" : ""}`}
+                        value={confirmPassword}
+                        onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+                        data-testid="input-signin-confirm-password"
+                      />
+                      <button
+                        type="button"
+                        className="signin-password-toggle"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        data-testid="button-toggle-confirm-password"
+                        aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                      >
+                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
+                    </div>
+                    {confirmPasswordError && (
+                      <span className="signin-error-text" data-testid="text-confirm-password-error">
+                        {confirmPasswordError}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="signin-submit-button"
+                  data-testid="button-signin-submit"
+                >
+                  {isSignUp ? "Sign up" : "Sign in"}
+                </button>
+              </form>
+
+              <div className="signin-divider">
+                <span className="signin-divider-line"></span>
+                <span className="signin-divider-text">OR LOG IN WITH</span>
+                <span className="signin-divider-line"></span>
               </div>
-            )}
 
-            <button
-              type="submit"
-              className="signin-submit-button"
-              data-testid="button-signin-submit"
-            >
-              {isSignUp ? "Sign up" : "Sign in"}
-            </button>
-          </form>
+              <div className="signin-social-buttons">
+                <button
+                  type="button"
+                  className="signin-social-button"
+                  data-testid="button-signin-google"
+                >
+                  <FcGoogle size={20} />
+                  <span>Google</span>
+                </button>
+                <button
+                  type="button"
+                  className="signin-social-button"
+                  data-testid="button-signin-apple"
+                >
+                  <FaApple size={20} />
+                  <span>Apple</span>
+                </button>
+              </div>
 
-          <div className="signin-divider">
-            <span className="signin-divider-line"></span>
-            <span className="signin-divider-text">OR LOG IN WITH</span>
-            <span className="signin-divider-line"></span>
-          </div>
-
-          <div className="signin-social-buttons">
-            <button
-              type="button"
-              className="signin-social-button"
-              data-testid="button-signin-google"
-            >
-              <FcGoogle size={20} />
-              <span>Google</span>
-            </button>
-            <button
-              type="button"
-              className="signin-social-button"
-              data-testid="button-signin-apple"
-            >
-              <FaApple size={20} />
-              <span>Apple</span>
-            </button>
-          </div>
-
-          <button
-            type="button"
-            className="signin-toggle-mode"
-            onClick={() => setIsSignUp(!isSignUp)}
-            data-testid="button-toggle-signup"
-          >
-            {isSignUp ? "Already have an account? Sign in" : "Sign up for an account"}
-          </button>
+              <button
+                type="button"
+                className="signin-toggle-mode"
+                onClick={() => setIsSignUp(!isSignUp)}
+                data-testid="button-toggle-signup"
+              >
+                {isSignUp ? "Already have an account? Sign in" : "Sign up for an account"}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
