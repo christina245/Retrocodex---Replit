@@ -425,7 +425,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                         type="button"
                         className={`signin-topic-tile${isSelected ? " signin-topic-tile-selected" : ""}`}
                         style={{
-                          backgroundColor: isSelected ? category.color : "#d5d5d5",
+                          backgroundColor: category.color,
                         }}
                         onClick={() => toggleCategory(category.name)}
                         data-testid={`button-category-${category.name.toLowerCase().replace(/\s+/g, "-")}`}
@@ -459,40 +459,47 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 </div>
               )}
 
-              {(selectedCategories.length > 0 || selectedSubcategories.length > 0) && (
-                <div className="signin-topic-section" data-testid="topic-tags-section">
-                  <div className="signin-topic-tags-header">
-                    <label className="signin-location-label">SELECT SUBTOPICS (MAX 20 TOTAL)</label>
-                    <span className="signin-tag-counter" data-testid="text-tag-counter">
-                      {selectedTags.length}/20
-                    </span>
-                  </div>
-                  <div className="signin-topic-tags" data-testid="topic-tags-list">
-                    {getVisibleTags().map((tag) => {
-                      const isSelected = selectedTags.includes(tag);
-                      return (
-                        <button
-                          key={tag}
-                          type="button"
-                          className={`signin-topic-tag-chip${isSelected ? " signin-topic-tag-chip-selected" : ""}`}
-                          onClick={() => toggleTag(tag)}
-                          data-testid={`button-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
-                        >
-                          <span>{tag.toLowerCase()}</span>
-                          {isSelected && (
-                            <XCircle size={16} className="signin-tag-deselect" />
-                          )}
-                        </button>
-                      );
-                    })}
-                    {getVisibleTags().length === 0 && (
+              <div className="signin-topic-section" data-testid="topic-tags-section">
+                <div className="signin-topic-tags-header">
+                  <label className="signin-location-label">SELECT SUBTOPICS (MAX 20 TOTAL)</label>
+                  <span className="signin-tag-counter" data-testid="text-tag-counter">
+                    {selectedTags.length}/20
+                  </span>
+                </div>
+                <div className="signin-topic-tags-container" data-testid="topic-tags-list">
+                  {(selectedCategories.length > 0 || selectedSubcategories.length > 0) ? (
+                    getVisibleTags().length > 0 ? (
+                      <div className="signin-topic-tags">
+                        {getVisibleTags().map((tag) => {
+                          const isTagSelected = selectedTags.includes(tag);
+                          return (
+                            <button
+                              key={tag}
+                              type="button"
+                              className={`signin-topic-tag-chip${isTagSelected ? " signin-topic-tag-chip-selected" : ""}`}
+                              onClick={() => toggleTag(tag)}
+                              data-testid={`button-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                            >
+                              <span>{tag.toLowerCase()}</span>
+                              {isTagSelected && (
+                                <XCircle size={16} className="signin-tag-deselect" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : (
                       <span className="signin-topic-tags-empty">
                         No tags found for the selected categories yet.
                       </span>
-                    )}
-                  </div>
+                    )
+                  ) : (
+                    <span className="signin-topic-tags-placeholder">
+                      Select categories to view topics
+                    </span>
+                  )}
                 </div>
-              )}
+              </div>
 
               <button
                 type="button"
