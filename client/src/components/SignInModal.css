@@ -427,6 +427,169 @@
   }
 }
 
+.signin-location-setup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.signin-location-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.signin-location-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2C2C2C;
+  letter-spacing: 0.5px;
+}
+
+.signin-country-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.signin-country-input-wrapper .signin-country-icon {
+  position: absolute;
+  left: 0.65rem;
+  color: #2C2C2C;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+.signin-country-input-wrapper .signin-input {
+  padding-left: 2.25rem;
+}
+
+.signin-country-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 20;
+  margin-top: 2px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.signin-country-option {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #2C2C2C;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.signin-country-option:hover {
+  background: #f5f5f5;
+}
+
+.signin-country-option-selected {
+  background: #f0f0f0;
+  font-weight: 600;
+}
+
+.signin-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.signin-checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #FF5353;
+  cursor: pointer;
+  margin: 0;
+}
+
+.signin-checkbox-row label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #555;
+  cursor: pointer;
+}
+
+.signin-skip-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(44, 44, 44, 0.05);
+  color: #FF5353;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.signin-skip-button:hover {
+  background: #FF5353;
+  color: white;
+}
+
+.signin-add-country-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.signin-add-country-row .signin-country-select-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.signin-add-remove-btn {
+  background: none;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  color: #2C2C2C;
+  cursor: pointer;
+  padding: 0.7rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.signin-add-remove-btn:hover {
+  border-color: #FF5353;
+  background: rgba(255, 83, 83, 0.05);
+}
+
+.signin-country-select-container {
+  position: relative;
+  width: 100%;
+}
+
+.signin-state-field {
+  margin-top: 6px;
+}
+
 @media (max-width: 768px) {
   .signin-modal {
     max-width: 100%;
