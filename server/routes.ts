@@ -332,6 +332,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/facts/tags-by-category", async (req, res) => {
+    try {
+      const allFacts = await storage.getAllFacts();
+      const result: Record<string, Record<string, string[]>> = {};
+
+      for (const fact of allFacts) {
+        const categories = fact.categories || [];
+        const subcategories = (fact as any).subcategories || [];
+        const tags = fact.searchTags || [];
+        if (tags.length === 0) continue;
+
+        for (const cat of categories) {
+          if (!result[cat]) result[cat] = { _all: [] };
+          for (const tag of tags) {
+            if (!result[cat]._all.includes(tag)) result[cat]._all.push(tag);
+          }
+          for (const sub of subcategories) {
+            if (!result[cat][sub]) result[cat][sub] = [];
+            for (const tag of tags) {
+              if (!result[cat][sub].includes(tag)) result[cat][sub].push(tag);
+            }
+          }
+        }
+      }
+
+      for (const cat of Object.keys(result)) {
+        for (const key of Object.keys(result[cat])) {
+          result[cat][key].sort();
+        }
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching tags by category:", error);
+      res.status(500).json({ message: "Failed to fetch tags" });
+    }
+  });
+
   // GET /api/facts/by-ids - Get facts by their IDs (public)
   app.get("/api/facts/by-ids", async (req, res) => {
     try {

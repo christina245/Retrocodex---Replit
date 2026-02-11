@@ -1,7 +1,10 @@
-import { X, Eye, EyeOff, Check, RefreshCw, MapPin, Plus, Minus } from "lucide-react";
+import { X, Eye, EyeOff, Check, RefreshCw, MapPin, Plus, Minus, XCircle } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { CATEGORIES } from "@shared/categories";
+import { OTHER_SUBCATEGORIES } from "@shared/schema";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
 import "./SignInModal.css";
 
@@ -192,13 +195,15 @@ interface SignInModalProps {
   onClose: () => void;
 }
 
-type ModalScreen = "auth" | "emailConfirmation" | "locationSetup";
+type ModalScreen = "auth" | "emailConfirmation" | "locationSetup" | "topicSelection";
 type CodeStatus = "idle" | "success" | "error";
 
 interface OtherCountryEntry {
   country: string;
   usState: string;
 }
+
+type TagsByCategory = Record<string, Record<string, string[]>>;
 
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [email, setEmail] = useState("");
@@ -221,6 +226,15 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     { country: "", usState: "" },
   ]);
   const [featureOtherCountries, setFeatureOtherCountries] = useState(false);
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const { data: tagsByCategory } = useQuery<TagsByCategory>({
+    queryKey: ["/api/facts/tags-by-category"],
+    enabled: screen === "topicSelection",
+  });
 
   if (!isOpen) return null;
 
@@ -295,6 +309,9 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     setFeatureResidence(false);
     setOtherCountries([{ country: "", usState: "" }]);
     setFeatureOtherCountries(false);
+    setSelectedCategories([]);
+    setSelectedSubcategories([]);
+    setSelectedTags([]);
     onClose();
   };
 
@@ -320,9 +337,58 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     setOtherCountries(updated);
   };
 
+  const toggleCategory = (catName: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(catName) ? prev.filter((c) => c !== catName) : [...prev, catName]
+    );
+  };
+
+  const toggleSubcategory = (sub: string) => {
+    setSelectedSubcategories((prev) =>
+      prev.includes(sub) ? prev.filter((s) => s !== sub) : [...prev, sub]
+    );
+  };
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) => {
+      if (prev.includes(tag)) return prev.filter((t) => t !== tag);
+      if (prev.length >= 20) return prev;
+      return [...prev, tag];
+    });
+  };
+
+  const getVisibleTags = (): string[] => {
+    if (!tagsByCategory) return [];
+    const tagsSet = new Set<string>();
+
+    for (const catName of selectedCategories) {
+      const catKey = Object.keys(tagsByCategory).find(
+        (k) => k.toLowerCase() === catName.toLowerCase()
+      );
+      if (catKey && tagsByCategory[catKey]) {
+        const allTags = tagsByCategory[catKey]._all || [];
+        allTags.forEach((t) => tagsSet.add(t));
+      }
+    }
+
+    for (const sub of selectedSubcategories) {
+      for (const catKey of Object.keys(tagsByCategory)) {
+        if (tagsByCategory[catKey][sub]) {
+          tagsByCategory[catKey][sub].forEach((t) => tagsSet.add(t));
+        }
+      }
+    }
+
+    return Array.from(tagsSet).sort();
+  };
+
+  const showOtherSubcategories = selectedCategories.some(
+    (c) => c.toLowerCase() === "other"
+  );
+
   return (
     <div className="signin-overlay" onClick={handleOverlayClick} data-testid="signin-modal-overlay">
-      <div className="signin-modal" data-testid="signin-modal">
+      <div className={`signin-modal${screen === "topicSelection" ? " signin-modal-wide" : ""}`} data-testid="signin-modal">
         <button
           className="signin-close"
           onClick={handleClose}
@@ -333,11 +399,115 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
         </button>
 
         <div className="signin-modal-body">
-          {screen === "locationSetup" ? (
+          {screen === "topicSelection" ? (
+            <div className="signin-topic-selection" data-testid="screen-topic-selection">
+              <button
+                type="button"
+                className="signin-skip-button-top"
+                data-testid="button-skip-topics"
+              >
+                Skip for now
+              </button>
+
+              <h2 className="signin-confirmation-title" data-testid="text-topic-title">
+                What are your favorite subjects?
+              </h2>
+
+              <div className="signin-topic-section">
+                <label className="signin-location-label">SELECT CATEGORIES</label>
+                <div className="signin-topic-tiles" data-testid="topic-category-tiles">
+                  {CATEGORIES.map((category) => {
+                    const Icon = category.icon;
+                    const isSelected = selectedCategories.includes(category.name);
+                    return (
+                      <button
+                        key={category.name}
+                        type="button"
+                        className={`signin-topic-tile${isSelected ? " signin-topic-tile-selected" : ""}`}
+                        style={{
+                          backgroundColor: isSelected ? category.color : "#d5d5d5",
+                        }}
+                        onClick={() => toggleCategory(category.name)}
+                        data-testid={`button-category-${category.name.toLowerCase().replace(/\s+/g, "-")}`}
+                      >
+                        <Icon size={16} strokeWidth={2.5} className="signin-topic-tile-icon" />
+                        <span className="signin-topic-tile-name">{category.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {showOtherSubcategories && (
+                <div className="signin-topic-section" data-testid="topic-subcategories">
+                  <div className="signin-subcategory-links">
+                    {OTHER_SUBCATEGORIES.map((sub) => {
+                      const isSelected = selectedSubcategories.includes(sub);
+                      return (
+                        <button
+                          key={sub}
+                          type="button"
+                          className={`signin-subcategory-link${isSelected ? " signin-subcategory-link-selected" : ""}`}
+                          onClick={() => toggleSubcategory(sub)}
+                          data-testid={`button-subcategory-${sub.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {sub}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {(selectedCategories.length > 0 || selectedSubcategories.length > 0) && (
+                <div className="signin-topic-section" data-testid="topic-tags-section">
+                  <div className="signin-topic-tags-header">
+                    <label className="signin-location-label">SELECT SUBTOPICS (MAX 20 TOTAL)</label>
+                    <span className="signin-tag-counter" data-testid="text-tag-counter">
+                      {selectedTags.length}/20
+                    </span>
+                  </div>
+                  <div className="signin-topic-tags" data-testid="topic-tags-list">
+                    {getVisibleTags().map((tag) => {
+                      const isSelected = selectedTags.includes(tag);
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          className={`signin-topic-tag-chip${isSelected ? " signin-topic-tag-chip-selected" : ""}`}
+                          onClick={() => toggleTag(tag)}
+                          data-testid={`button-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          <span>{tag.toLowerCase()}</span>
+                          {isSelected && (
+                            <XCircle size={16} className="signin-tag-deselect" />
+                          )}
+                        </button>
+                      );
+                    })}
+                    {getVisibleTags().length === 0 && (
+                      <span className="signin-topic-tags-empty">
+                        No tags found for the selected categories yet.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <button
+                type="button"
+                className="signin-submit-button"
+                data-testid="button-finish-onboarding"
+              >
+                Finish
+              </button>
+            </div>
+          ) : screen === "locationSetup" ? (
             <div className="signin-location-setup" data-testid="screen-location-setup">
               <button
                 type="button"
                 className="signin-skip-button-top"
+                onClick={() => setScreen("topicSelection")}
                 data-testid="button-skip-location"
               >
                 Skip for now
@@ -442,6 +612,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <button
                 type="button"
                 className="signin-submit-button"
+                onClick={() => setScreen("topicSelection")}
                 data-testid="button-next-step"
               >
                 Next step

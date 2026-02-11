@@ -591,10 +591,173 @@
   margin-top: 6px;
 }
 
+.signin-modal-wide {
+  max-width: 840px;
+}
+
+.signin-topic-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.signin-topic-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signin-topic-tiles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.signin-topic-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 3px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.signin-topic-tile:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.signin-topic-tile-selected {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.signin-topic-tile-icon {
+  flex-shrink: 0;
+  color: #FFFFFF;
+}
+
+.signin-topic-tile-name {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.025em;
+}
+
+.signin-subcategory-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: center;
+}
+
+.signin-subcategory-link {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #2C2C2C;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.signin-subcategory-link:hover {
+  color: #FF5353;
+}
+
+.signin-subcategory-link-selected {
+  color: #FF5353;
+  font-weight: 600;
+}
+
+.signin-topic-tags-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.signin-tag-counter {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+
+.signin-topic-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.signin-topic-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #2C2C2C;
+  color: #FFFFFF;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: lowercase;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.signin-topic-tag-chip:hover {
+  background: #3a3a3a;
+}
+
+.signin-topic-tag-chip-selected {
+  border: 5px solid #FF5353;
+}
+
+.signin-tag-deselect {
+  color: #FF5353;
+  fill: #FF5353;
+  flex-shrink: 0;
+}
+
+.signin-tag-deselect circle {
+  fill: #FF5353;
+}
+
+.signin-tag-deselect line,
+.signin-tag-deselect path {
+  stroke: white;
+}
+
+.signin-topic-tags-empty {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #999;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .signin-modal {
     max-width: 100%;
     margin: 0 0.5rem;
+  }
+
+  .signin-modal-wide {
+    max-width: 100%;
   }
 
   .signin-modal-body {
@@ -607,5 +770,9 @@
 
   .signin-description {
     font-size: 14px;
+  }
+
+  .signin-subcategory-link {
+    font-size: 15px;
   }
 }
