@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Pencil, X } from "lucide-react";
+import { MapPin, Pencil, X, Home } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -80,17 +80,17 @@ export default function UserDashboard() {
               ) : (
                 <span className="user-profile-empty" data-testid="text-location-empty">--</span>
               )}
-              {user.otherLocations.length > 0 && (
+              {user.placesLived.length > 0 && (
                 <>
-                  <span className="user-profile-location-separator">•</span>
-                  {user.otherLocations.map((loc, index) => (
+                  {user.placesLived.map((loc, index) => (
                     <span key={loc}>
-                      <span className="user-profile-location-item" data-testid={`text-other-location-${index}`}>
-                        {loc}
-                      </span>
-                      {index < user.otherLocations.length - 1 && (
+                      {index > 0 && (
                         <span className="user-profile-location-separator"> • </span>
                       )}
+                      <span className="user-profile-location-item" data-testid={`text-place-lived-${index}`}>
+                        <Home size={14} />
+                        {loc}
+                      </span>
                     </span>
                   ))}
                 </>

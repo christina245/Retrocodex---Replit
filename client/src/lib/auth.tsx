@@ -6,7 +6,7 @@ interface UserData {
   email: string;
   profilePhoto: string;
   currentLocation: string;
-  otherLocations: string[];
+  placesLived: string[];
   favoriteTags: string[];
   misinfoSource: string;
 }
@@ -23,7 +23,7 @@ const DUMMY_USER: UserData = {
   email: "test@test.com",
   profilePhoto: "",
   currentLocation: "New York, United States",
-  otherLocations: ["London, United Kingdom", "Toronto, Canada"],
+  placesLived: ["London, United Kingdom", "Toronto, Canada"],
   favoriteTags: [
     "ancient civilizations",
     "nutrition myths",

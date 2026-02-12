@@ -13,12 +13,12 @@
 }
 
 .user-profile-banner {
-  background: #f0f0f0;
+  background: #fafafa;
   border-radius: 10px;
-  padding: 2.5rem;
+  padding: 2.5rem 6.5rem;
   display: flex;
   align-items: flex-start;
-  gap: 2.5rem;
+  gap: 3.5rem;
   position: relative;
 }
 
