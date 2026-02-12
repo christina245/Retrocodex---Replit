@@ -1,0 +1,367 @@
+.user-dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-dashboard-content {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.user-profile-banner {
+  background: #f0f0f0;
+  border-radius: 10px;
+  padding: 2.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+  position: relative;
+}
+
+.user-profile-photo-wrapper {
+  flex-shrink: 0;
+}
+
+.user-profile-photo {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-profile-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.user-profile-username {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.user-profile-locations {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.user-profile-location-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #878787;
+}
+
+.user-profile-location-separator {
+  color: #878787;
+  font-size: 16px;
+}
+
+.user-profile-section-label {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2C2C2C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-profile-section-label::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: #2C2C2C;
+}
+
+.user-profile-tags-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.user-profile-tag-chip {
+  display: inline-block;
+  background: #2C2C2C;
+  color: #FFFFFF;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: lowercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.user-profile-tag-chip:hover {
+  background: #FF5353;
+}
+
+.user-profile-view-more {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #2C2C2C;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.user-profile-view-more:hover {
+  color: #FF5353;
+}
+
+.user-profile-misinfo-answer {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.user-profile-empty {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #878787;
+}
+
+.user-profile-edit-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2C2C2C;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.user-profile-edit-button:hover {
+  color: #FF5353;
+}
+
+.edit-profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.edit-profile-modal {
+  background: white;
+  border-radius: 10px;
+  width: 70vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 2.5rem;
+}
+
+.edit-profile-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #2C2C2C;
+  padding: 4px;
+}
+
+.edit-profile-close:hover {
+  color: #FF5353;
+}
+
+.edit-profile-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0 0 2rem 0;
+}
+
+.edit-profile-section {
+  margin-bottom: 1.5rem;
+}
+
+.edit-profile-label {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2C2C2C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit-profile-label::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: #2C2C2C;
+}
+
+.edit-profile-input {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  color: #2C2C2C;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-profile-input:focus {
+  outline: none;
+  border-color: #FF5353;
+}
+
+.edit-profile-textarea {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1rem;
+  color: #2C2C2C;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.edit-profile-textarea:focus {
+  outline: none;
+  border-color: #FF5353;
+}
+
+.edit-profile-char-count {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #878787;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.edit-profile-photo-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.edit-profile-photo-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.edit-profile-photo-upload {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #FF5353;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-profile-photo-upload:hover {
+  background: #e64848;
+}
+
+.edit-profile-save {
+  background: #FF5353;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 50%;
+  display: block;
+  margin: 2rem auto 0;
+}
+
+.edit-profile-save:hover {
+  background: #e64848;
+}
+
+@media (max-width: 768px) {
+  .user-profile-banner {
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .user-profile-photo {
+    width: 150px;
+    height: 150px;
+  }
+
+  .user-profile-username {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .user-profile-locations {
+    justify-content: center;
+  }
+
+  .user-profile-tags-row {
+    justify-content: center;
+  }
+
+  .user-profile-details {
+    align-items: center;
+    text-align: center;
+  }
+
+  .edit-profile-modal {
+    width: 95vw;
+    padding: 1.5rem;
+  }
+}

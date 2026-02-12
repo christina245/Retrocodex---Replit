@@ -193,6 +193,10 @@
   background: #e64848;
 }
 
+.signin-topic-selection .signin-submit-button {
+  width: 50%;
+}
+
 .signin-divider {
   display: flex;
   align-items: center;
