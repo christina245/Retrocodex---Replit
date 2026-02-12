@@ -55,6 +55,7 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  margin-top: -1rem;
 }
 
 .user-profile-location-item {
@@ -97,6 +98,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 7px;
+  margin-top: 0.5rem;
 }
 
 .user-profile-tag-chip {

@@ -24,7 +24,7 @@ export default function UserDashboard() {
     navigate("/");
     return null;
   }
-  const MAX_VISIBLE_TAGS = 7;
+  const MAX_VISIBLE_TAGS = 5;
   const visibleTags = showAllTags
     ? user.favoriteTags
     : user.favoriteTags.slice(0, MAX_VISIBLE_TAGS);
