@@ -23,7 +23,7 @@ const DUMMY_USER: UserData = {
   email: "test@test.com",
   profilePhoto: "",
   currentLocation: "New York, United States",
-  placesLived: ["London, United Kingdom", "Toronto, Canada"],
+  placesLived: ["London, United Kingdom", "Toronto, Canada", "Sydney, Australia"],
   favoriteTags: [
     "ancient civilizations",
     "nutrition myths",

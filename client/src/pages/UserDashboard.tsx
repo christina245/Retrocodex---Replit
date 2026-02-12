@@ -15,6 +15,7 @@ export default function UserDashboard() {
   const [, navigate] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
+  const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const [editUsername, setEditUsername] = useState(user?.username || "");
@@ -25,10 +26,15 @@ export default function UserDashboard() {
     return null;
   }
   const MAX_VISIBLE_TAGS = 5;
+  const MAX_VISIBLE_PLACES = 2;
   const visibleTags = showAllTags
     ? user.favoriteTags
     : user.favoriteTags.slice(0, MAX_VISIBLE_TAGS);
   const hasMoreTags = user.favoriteTags.length > MAX_VISIBLE_TAGS;
+  const visiblePlaces = showAllPlaces
+    ? user.placesLived
+    : user.placesLived.slice(0, MAX_VISIBLE_PLACES);
+  const hasMorePlaces = user.placesLived.length > MAX_VISIBLE_PLACES;
 
   const getTagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, "-");
 
@@ -71,29 +77,41 @@ export default function UserDashboard() {
               {user.username}
             </h1>
 
-            <div className="user-profile-locations" data-testid="user-profile-locations">
-              {user.currentLocation ? (
-                <span className="user-profile-location-item" data-testid="text-current-location">
-                  <MapPin size={14} />
-                  {user.currentLocation}
-                </span>
-              ) : (
-                <span className="user-profile-empty" data-testid="text-location-empty">--</span>
-              )}
+            <div className="user-profile-locations-wrapper" data-testid="user-profile-locations">
+              <div className="user-profile-current-location">
+                {user.currentLocation ? (
+                  <span className="user-profile-location-item" data-testid="text-current-location">
+                    <MapPin size={14} />
+                    {user.currentLocation}
+                  </span>
+                ) : (
+                  <span className="user-profile-empty" data-testid="text-location-empty">--</span>
+                )}
+              </div>
               {user.placesLived.length > 0 && (
-                <>
-                  {user.placesLived.map((loc, index) => (
+                <div className="user-profile-places-lived">
+                  <Home size={14} className="user-profile-places-icon" />
+                  {visiblePlaces.map((loc, index) => (
                     <span key={loc}>
                       {index > 0 && (
-                        <span className="user-profile-location-separator"> • </span>
+                        <span className="user-profile-location-separator">  •  </span>
                       )}
-                      <span className="user-profile-location-item" data-testid={`text-place-lived-${index}`}>
-                        <Home size={14} />
+                      <span className="user-profile-place-item" data-testid={`text-place-lived-${index}`}>
                         {loc}
                       </span>
                     </span>
                   ))}
-                </>
+                  {hasMorePlaces && (
+                    <button
+                      type="button"
+                      className="user-profile-view-more"
+                      onClick={() => setShowAllPlaces(!showAllPlaces)}
+                      data-testid="button-view-more-places"
+                    >
+                      {showAllPlaces ? "Show less" : "+View more"}
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
