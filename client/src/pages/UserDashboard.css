@@ -47,7 +47,7 @@
   font-weight: 700;
   color: #2C2C2C;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .user-profile-locations {
@@ -55,7 +55,7 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: -1rem;
+  margin-top: -0.5rem;
 }
 
 .user-profile-location-item {
