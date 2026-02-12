@@ -3,8 +3,10 @@ import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { CATEGORIES } from "@shared/categories";
 import { OTHER_SUBCATEGORIES } from "@shared/schema";
+import { useAuth } from "@/lib/auth";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
 import "./SignInModal.css";
 
@@ -206,8 +208,11 @@ interface OtherCountryEntry {
 type TagsByCategory = Record<string, Record<string, string[]>>;
 
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
+  const { login } = useAuth();
+  const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -264,6 +269,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setLoginError("");
     if (isSignUp && password !== confirmPassword) {
       setConfirmPasswordError("Passwords do not match");
       return;
@@ -272,6 +278,14 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       setScreen("emailConfirmation");
       setCodeStatus("idle");
       setVerificationCode("");
+    } else {
+      const success = login(email, password);
+      if (success) {
+        onClose();
+        navigate("/dashboard");
+      } else {
+        setLoginError("Invalid email or password.");
+      }
     }
   };
 
@@ -788,6 +802,10 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                       </span>
                     )}
                   </div>
+                )}
+
+                {loginError && (
+                  <p className="signin-error-text" data-testid="text-login-error">{loginError}</p>
                 )}
 
                 <button

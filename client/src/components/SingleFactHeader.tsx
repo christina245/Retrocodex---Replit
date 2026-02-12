@@ -3,6 +3,7 @@ import { Search, X, UserRound } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
 import { SignInModal } from "./SignInModal";
+import { useAuth } from "@/lib/auth";
 import "./SingleFactHeader.css";
 
 interface SingleFactHeaderProps {
@@ -10,6 +11,7 @@ interface SingleFactHeaderProps {
 }
 
 export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
+  const { isLoggedIn, user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -87,15 +89,27 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
           >
             Submit a Fact
           </a>
-          <button
-            className="header-signin-button"
-            onClick={() => setIsSignInOpen(true)}
-            data-testid="button-signin"
-            aria-label="Sign in"
-          >
-            <UserRound size={16} className="header-signin-icon" />
-            Sign In
-          </button>
+          {isLoggedIn ? (
+            <button
+              className="header-signin-button"
+              onClick={() => navigate("/dashboard")}
+              data-testid="button-profile"
+              aria-label="Go to profile"
+            >
+              <UserRound size={16} className="header-signin-icon" />
+              {user?.username || "Profile"}
+            </button>
+          ) : (
+            <button
+              className="header-signin-button"
+              onClick={() => setIsSignInOpen(true)}
+              data-testid="button-signin"
+              aria-label="Sign in"
+            >
+              <UserRound size={16} className="header-signin-icon" />
+              Sign In
+            </button>
+          )}
           {onMenuClick && (
             <button 
               className="hamburger-button" 

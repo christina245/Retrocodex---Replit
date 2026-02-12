@@ -1,43 +1,29 @@
 import { useState } from "react";
 import { MapPin, Pencil, X } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
+import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import "./UserDashboard.css";
 
-const DUMMY_USER = {
-  username: "UnlearnExplorer",
-  profilePhoto: "",
-  currentLocation: "New York, United States",
-  otherLocations: ["London, United Kingdom", "Toronto, Canada"],
-  favoriteTags: [
-    "ancient civilizations",
-    "nutrition myths",
-    "evolution",
-    "brain science",
-    "climate change",
-    "body language",
-    "sleep",
-    "vaccines",
-    "dinosaurs",
-    "space exploration",
-  ],
-  misinfoSource: "",
-};
-
 export default function UserDashboard() {
+  const { user, isLoggedIn } = useAuth();
+  const [, navigate] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
-  const [editUsername, setEditUsername] = useState(DUMMY_USER.username);
-  const [editMisinfo, setEditMisinfo] = useState(DUMMY_USER.misinfoSource);
+  const [editUsername, setEditUsername] = useState(user?.username || "");
+  const [editMisinfo, setEditMisinfo] = useState(user?.misinfoSource || "");
 
-  const user = DUMMY_USER;
+  if (!isLoggedIn || !user) {
+    navigate("/");
+    return null;
+  }
   const MAX_VISIBLE_TAGS = 7;
   const visibleTags = showAllTags
     ? user.favoriteTags

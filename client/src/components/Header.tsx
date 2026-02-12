@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Search, HandHeart, X, UserRound } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
@@ -17,6 +18,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick, variant = "default", hideTagline = false }: HeaderProps) {
+  const { isLoggedIn, user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -89,13 +91,13 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             </div>
           )}
 
-          <a href="/" className="header-branding" data-testid="link-home-logo">
+          <Link href="/" className="header-branding" data-testid="link-home-logo">
             <img 
               src={logoImage} 
               alt="Retrocodex" 
               className="logo-image"
             />
-          </a>
+          </Link>
 
           <div className="header-actions">
             {isSearchOpen ? (
@@ -140,15 +142,27 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             >
               Submit a Fact
             </a>
-            <button
-              className="header-signin-button"
-              onClick={() => setIsSignInOpen(true)}
-              data-testid="button-signin"
-              aria-label="Sign in"
-            >
-              <UserRound size={16} className="header-signin-icon" />
-              Sign In
-            </button>
+            {isLoggedIn ? (
+              <button
+                className="header-signin-button"
+                onClick={() => navigate("/dashboard")}
+                data-testid="button-profile"
+                aria-label="Go to profile"
+              >
+                <UserRound size={16} className="header-signin-icon" />
+                {user?.username || "Profile"}
+              </button>
+            ) : (
+              <button
+                className="header-signin-button"
+                onClick={() => setIsSignInOpen(true)}
+                data-testid="button-signin"
+                aria-label="Sign in"
+              >
+                <UserRound size={16} className="header-signin-icon" />
+                Sign In
+              </button>
+            )}
             {onMenuClick && (
               <button 
                 className="hamburger-button" 
