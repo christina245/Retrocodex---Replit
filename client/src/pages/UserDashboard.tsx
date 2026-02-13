@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { MapPin, Pencil, X, Home, Plus, Minus } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -200,6 +201,45 @@ export default function UserDashboard() {
     user?.placesLived.map((p) => parseLocation(p)) || [{ country: "", usState: "" }]
   );
   const [editShowPlacesLived, setEditShowPlacesLived] = useState(user?.showPlacesLived || false);
+  const [editTags, setEditTags] = useState<string[]>(user?.favoriteTags || []);
+  const [tagSearch, setTagSearch] = useState("");
+  const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
+  const tagSearchRef = useRef<HTMLDivElement>(null);
+
+  type TagsByCategory = Record<string, Record<string, string[]>>;
+  const { data: tagsByCategory } = useQuery<TagsByCategory>({
+    queryKey: ["/api/facts/tags-by-category"],
+  });
+
+  const allAvailableTags: string[] = tagsByCategory
+    ? Array.from(
+        new Set(
+          Object.values(tagsByCategory).flatMap((cat) =>
+            Object.values(cat).flat()
+          )
+        )
+      ).sort()
+    : [];
+
+  const filteredSearchTags = tagSearch.trim()
+    ? allAvailableTags.filter(
+        (t) =>
+          t.toLowerCase().includes(tagSearch.toLowerCase()) &&
+          !editTags.includes(t)
+      )
+    : [];
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (tagSearchRef.current && !tagSearchRef.current.contains(e.target as Node)) {
+        setTagDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const MAX_TAGS = 20;
 
   if (!isLoggedIn || !user) {
     navigate("/");
@@ -517,6 +557,76 @@ export default function UserDashboard() {
                     <label htmlFor="show-places-lived">Display on my public profile</label>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="edit-profile-section">
+              <div className="edit-profile-tags-header">
+                <label className="edit-profile-label">FAVORITE SUBJECTS</label>
+                <div className="edit-profile-tag-search-wrapper" ref={tagSearchRef}>
+                  <div className="edit-profile-tag-search-input-wrapper">
+                    <Search size={14} className="edit-profile-tag-search-icon" />
+                    <input
+                      type="text"
+                      className="edit-profile-tag-search-input"
+                      value={tagSearch}
+                      onChange={(e) => {
+                        setTagSearch(e.target.value);
+                        if (!tagDropdownOpen) setTagDropdownOpen(true);
+                      }}
+                      onFocus={() => setTagDropdownOpen(true)}
+                      placeholder="Search tags..."
+                      disabled={editTags.length >= MAX_TAGS}
+                      data-testid="input-search-tags"
+                    />
+                  </div>
+                  {tagDropdownOpen && tagSearch.trim() && (
+                    <div className="edit-profile-tag-dropdown" data-testid="dropdown-search-tags">
+                      {filteredSearchTags.length > 0 ? (
+                        filteredSearchTags.map((tag) => (
+                          <div
+                            key={tag}
+                            className="edit-profile-tag-dropdown-item"
+                            onClick={() => {
+                              if (editTags.length < MAX_TAGS) {
+                                setEditTags([...editTags, tag]);
+                              }
+                              setTagSearch("");
+                              setTagDropdownOpen(false);
+                            }}
+                            data-testid={`dropdown-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                          >
+                            {tag.toLowerCase()}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="edit-profile-tag-dropdown-empty">No matches</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="signin-topic-tags-container" data-testid="edit-tags-container">
+                <div className="signin-topic-tags">
+                  {editTags.length > 0 ? (
+                    editTags.map((tag) => (
+                      <button
+                        key={tag}
+                        className="signin-topic-tag-chip"
+                        onClick={() => setEditTags(editTags.filter((t) => t !== tag))}
+                        data-testid={`button-edit-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                      >
+                        <span>{tag.toLowerCase()}</span>
+                        <XCircle size={16} className="signin-tag-deselect" />
+                      </button>
+                    ))
+                  ) : (
+                    <span className="signin-topic-tags-placeholder">Click tags or search to add subjects</span>
+                  )}
+                </div>
+              </div>
+              <div className={`edit-profile-char-count${editTags.length >= MAX_TAGS ? " edit-profile-count-max" : ""}`} data-testid="text-tag-count">
+                {editTags.length}/{MAX_TAGS}
               </div>
             </div>
 
