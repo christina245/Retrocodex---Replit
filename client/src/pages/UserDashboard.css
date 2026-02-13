@@ -290,12 +290,16 @@
   border-color: #FF5353;
 }
 
+.edit-profile-textarea-wrapper {
+  max-width: 50%;
+}
+
 .edit-profile-char-count {
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   text-align: right;
-  margin-top: 4px;
+  margin-top: 0.5rem;
 }
 
 .edit-profile-photo-section {
@@ -461,6 +465,10 @@
   }
 
   .edit-profile-input-half {
+    max-width: 100%;
+  }
+
+  .edit-profile-textarea-wrapper {
     max-width: 100%;
   }
 }

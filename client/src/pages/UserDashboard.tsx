@@ -459,7 +459,7 @@ export default function UserDashboard() {
                       checked={editShowCurrentLocation}
                       onChange={(e) => setEditShowCurrentLocation(e.target.checked)}
                     />
-                    <label htmlFor="show-current-location">Display on my profile</label>
+                    <label htmlFor="show-current-location">Display on my public profile</label>
                   </div>
                 </div>
 
@@ -514,7 +514,7 @@ export default function UserDashboard() {
                       checked={editShowPlacesLived}
                       onChange={(e) => setEditShowPlacesLived(e.target.checked)}
                     />
-                    <label htmlFor="show-places-lived">Display on my profile</label>
+                    <label htmlFor="show-places-lived">Display on my public profile</label>
                   </div>
                 </div>
               </div>
@@ -524,18 +524,20 @@ export default function UserDashboard() {
               <label className="edit-profile-label">
                 THE #1 SOURCE OF MISINFORMATION IN MY LIFE IS
               </label>
-              <textarea
-                className="edit-profile-textarea edit-profile-input-half"
-                value={editMisinfo}
-                onChange={(e) => {
-                  if (e.target.value.length <= 200) setEditMisinfo(e.target.value);
-                }}
-                maxLength={200}
-                placeholder="Type your answer here..."
-                data-testid="input-edit-misinfo"
-              />
-              <div className="edit-profile-char-count" data-testid="text-char-count">
-                {editMisinfo.length}/200
+              <div className="edit-profile-textarea-wrapper">
+                <textarea
+                  className="edit-profile-textarea"
+                  value={editMisinfo}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 200) setEditMisinfo(e.target.value);
+                  }}
+                  maxLength={200}
+                  placeholder="E.g: magazines, family, friends, social media"
+                  data-testid="input-edit-misinfo"
+                />
+                <div className="edit-profile-char-count" data-testid="text-char-count">
+                  {editMisinfo.length}/200
+                </div>
               </div>
             </div>
 
