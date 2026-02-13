@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
-import { CategoryFactCard } from "@/components/CategoryFactCard";
-import type { CategoryFact } from "@/components/CategoryFactCard";
+import { FactCard } from "@/components/FactCard";
+import type { Fact as FactCardFact } from "@/components/FactCard";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
@@ -320,9 +320,11 @@ export default function UserDashboard() {
     }
   }, [feedPage, tagsParam, forYouLoadingMore, forYouHasMore]);
 
-  const forYouFacts: CategoryFact[] = useMemo(() => {
+  const forYouFacts: FactCardFact[] = useMemo(() => {
     return allForYouFacts.map((f) => ({
       id: f.id,
+      category: f.categories?.[0] || "Everyday Life",
+      categoryColor: getCategoryColor(f.categories),
       myth: f.mythHeader,
       truth: f.truthHeader,
       factFilters: f.factFilters || [],
@@ -331,14 +333,6 @@ export default function UserDashboard() {
       coverPhoto: f.coverPhoto || undefined,
       betaOnly: f.betaOnly || false,
     }));
-  }, [allForYouFacts]);
-
-  const forYouCategoryColors: Record<string, string> = useMemo(() => {
-    const map: Record<string, string> = {};
-    allForYouFacts.forEach((f) => {
-      map[f.id] = getCategoryColor(f.categories);
-    });
-    return map;
   }, [allForYouFacts]);
 
   const handleFeedTabChange = useCallback((tab: DashboardTab) => {
@@ -566,10 +560,12 @@ export default function UserDashboard() {
                   <>
                     <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
                       {forYouFacts.map((fact) => (
-                        <CategoryFactCard
+                        <FactCard
                           key={fact.id}
                           fact={fact}
-                          categoryColor={forYouCategoryColors[fact.id] || "#2C2C2C"}
+                          onSave={() => {}}
+                          onShare={() => {}}
+                          onComment={() => {}}
                         />
                       ))}
                     </div>
