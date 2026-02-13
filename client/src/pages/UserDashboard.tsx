@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -14,7 +14,7 @@ import "../components/HomepageTabs.css";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "fact-updates" | "local" | "saved";
-type SideTab = "feed" | "activity";
+type SideTab = "feed" | "edit-profile" | "activity";
 type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
@@ -450,23 +450,31 @@ export default function UserDashboard() {
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
       <div className="user-dashboard-content">
-        <div className="dashboard-tri-column" data-testid="dashboard-tri-column">
+        <div className="dashboard-two-column" data-testid="dashboard-two-column">
           <nav className="dashboard-side-tabs" data-testid="dashboard-side-tabs">
             <button
               className={`dashboard-side-tab${sideTab === "feed" ? " dashboard-side-tab-active" : ""}`}
               onClick={() => setSideTab("feed")}
               data-testid="button-side-tab-feed"
             >
-              Feed
-              {sideTab === "feed" && <div className="dashboard-side-tab-indicator" />}
+              <Newspaper size={20} className="dashboard-side-tab-icon" />
+              <span>Feed</span>
+            </button>
+            <button
+              className={`dashboard-side-tab${sideTab === "edit-profile" ? " dashboard-side-tab-active" : ""}`}
+              onClick={() => setSideTab("edit-profile")}
+              data-testid="button-side-tab-edit-profile"
+            >
+              <UserRoundPen size={20} className="dashboard-side-tab-icon" />
+              <span>Edit Profile</span>
             </button>
             <button
               className={`dashboard-side-tab${sideTab === "activity" ? " dashboard-side-tab-active" : ""}`}
               onClick={() => setSideTab("activity")}
               data-testid="button-side-tab-activity"
             >
-              My Activity
-              {sideTab === "activity" && <div className="dashboard-side-tab-indicator" />}
+              <PenLine size={20} className="dashboard-side-tab-icon" />
+              <span>My Activity</span>
             </button>
           </nav>
 
@@ -609,6 +617,117 @@ export default function UserDashboard() {
                 </>
               )}
 
+              {sideTab === "edit-profile" && (
+                <div className="dashboard-profile-banner" data-testid="dashboard-profile-banner">
+                  <div className="user-profile-banner">
+                    <div className="user-profile-photo-wrapper">
+                      <img
+                        src={user.profilePhoto || placeholderPhoto}
+                        alt={`${user.username}'s profile photo`}
+                        className="user-profile-photo"
+                        data-testid="img-profile-photo"
+                      />
+                    </div>
+                    <div className="user-profile-details">
+                      <div className="user-profile-name-row">
+                        <h2 className="user-profile-username" data-testid="text-username">
+                          {user.username}
+                        </h2>
+                        <button
+                          className="user-profile-edit-button"
+                          onClick={() => setEditModalOpen(true)}
+                          aria-label="Edit profile"
+                          data-testid="button-edit-profile"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                      </div>
+
+                      <div className="user-profile-locations-wrapper" data-testid="user-profile-locations">
+                        <div className="user-profile-current-location">
+                          {user.currentLocation ? (
+                            <span className="user-profile-location-item" data-testid="text-current-location">
+                              <MapPin size={14} />
+                              {user.currentLocation}
+                            </span>
+                          ) : (
+                            <span className="user-profile-empty-text" data-testid="text-location-empty">--</span>
+                          )}
+                        </div>
+                        {user.placesLived.length > 0 && (
+                          <div className="user-profile-places-lived">
+                            <Home size={14} className="user-profile-places-icon" />
+                            {visiblePlaces.map((loc, index) => (
+                              <span key={loc}>
+                                {index > 0 && (
+                                  <span className="user-profile-separator">  {"\u00B7"}  </span>
+                                )}
+                                <span className="user-profile-place-item" data-testid={`text-place-lived-${index}`}>
+                                  {loc}
+                                </span>
+                              </span>
+                            ))}
+                            {hasMorePlaces && (
+                              <button
+                                type="button"
+                                className="user-profile-view-more"
+                                onClick={() => setShowAllPlaces(!showAllPlaces)}
+                                data-testid="button-view-more-places"
+                              >
+                                {showAllPlaces ? "Show less" : "+View more"}
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="user-profile-section" data-testid="user-profile-tags-section">
+                        <h3 className="user-profile-section-label">FAVORITE SUBJECTS</h3>
+                        {user.favoriteTags.length > 0 ? (
+                          <div className="user-profile-tags-row" data-testid="user-profile-tags">
+                            {visibleTags.map((tag) => (
+                              <Link
+                                key={tag}
+                                href={`/tags/${getTagSlug(tag)}`}
+                                className="user-profile-tag-chip"
+                                data-testid={`profile-tag-${getTagSlug(tag)}`}
+                              >
+                                {tag.toLowerCase()}
+                              </Link>
+                            ))}
+                            {hasMoreTags && (
+                              <button
+                                type="button"
+                                className="user-profile-view-more"
+                                onClick={() => setShowAllTags(!showAllTags)}
+                                data-testid="button-view-more-tags"
+                              >
+                                {showAllTags ? "Show less" : "+View more"}
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="user-profile-empty-text" data-testid="text-tags-empty">--</span>
+                        )}
+                      </div>
+
+                      <div className="user-profile-section" data-testid="user-profile-misinfo-section">
+                        <h3 className="user-profile-section-label">
+                          THE #1 SOURCE OF MISINFORMATION IN MY LIFE IS
+                        </h3>
+                        {user.misinfoSource ? (
+                          <p className="user-profile-misinfo-answer" data-testid="text-misinfo-answer">
+                            {user.misinfoSource}
+                          </p>
+                        ) : (
+                          <span className="user-profile-empty-text" data-testid="text-misinfo-empty">--</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {sideTab === "activity" && (
                 <>
                   <div className="dashboard-feed-tabs-wrapper">
@@ -682,111 +801,6 @@ export default function UserDashboard() {
                 </>
               )}
           </div>
-
-          <aside className="dashboard-profile-card" data-testid="user-profile-card">
-            <button
-              className="profile-card-edit-button"
-              onClick={() => setEditModalOpen(true)}
-              aria-label="Edit profile"
-              data-testid="button-edit-profile"
-            >
-              <Pencil size={16} />
-            </button>
-
-            <div className="profile-card-photo-wrapper">
-              <img
-                src={user.profilePhoto || placeholderPhoto}
-                alt={`${user.username}'s profile photo`}
-                className="profile-card-photo"
-                data-testid="img-profile-photo"
-              />
-            </div>
-
-            <h2 className="profile-card-username" data-testid="text-username">
-              {user.username}
-            </h2>
-
-            <div className="profile-card-locations" data-testid="user-profile-locations">
-              <div className="profile-card-current-location">
-                {user.currentLocation ? (
-                  <span className="profile-card-location-item" data-testid="text-current-location">
-                    <MapPin size={12} />
-                    {user.currentLocation}
-                  </span>
-                ) : (
-                  <span className="profile-card-empty" data-testid="text-location-empty">--</span>
-                )}
-              </div>
-              {user.placesLived.length > 0 && (
-                <div className="profile-card-places-lived">
-                  <Home size={12} className="profile-card-places-icon" />
-                  {visiblePlaces.map((loc, index) => (
-                    <span key={loc}>
-                      {index > 0 && (
-                        <span className="profile-card-separator">  •  </span>
-                      )}
-                      <span className="profile-card-place-item" data-testid={`text-place-lived-${index}`}>
-                        {loc}
-                      </span>
-                    </span>
-                  ))}
-                  {hasMorePlaces && (
-                    <button
-                      type="button"
-                      className="profile-card-view-more"
-                      onClick={() => setShowAllPlaces(!showAllPlaces)}
-                      data-testid="button-view-more-places"
-                    >
-                      {showAllPlaces ? "Show less" : "+View more"}
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="profile-card-section" data-testid="user-profile-tags-section">
-              <h3 className="profile-card-section-label">FAVORITE SUBJECTS</h3>
-              {user.favoriteTags.length > 0 ? (
-                <div className="profile-card-tags-row" data-testid="user-profile-tags">
-                  {visibleTags.map((tag) => (
-                    <Link
-                      key={tag}
-                      href={`/tags/${getTagSlug(tag)}`}
-                      className="profile-card-tag-chip"
-                      data-testid={`profile-tag-${getTagSlug(tag)}`}
-                    >
-                      {tag.toLowerCase()}
-                    </Link>
-                  ))}
-                  {hasMoreTags && (
-                    <button
-                      type="button"
-                      className="profile-card-view-more"
-                      onClick={() => setShowAllTags(!showAllTags)}
-                      data-testid="button-view-more-tags"
-                    >
-                      {showAllTags ? "Show less" : "+View more"}
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <span className="profile-card-empty" data-testid="text-tags-empty">--</span>
-              )}
-            </div>
-
-            <div className="profile-card-section" data-testid="user-profile-misinfo-section">
-              <h3 className="profile-card-section-label">
-                THE #1 SOURCE OF MISINFORMATION IN MY LIFE IS
-              </h3>
-              {user.misinfoSource ? (
-                <p className="profile-card-misinfo-answer" data-testid="text-misinfo-answer">
-                  {user.misinfoSource}
-                </p>
-              ) : (
-                <span className="profile-card-empty" data-testid="text-misinfo-empty">--</span>
-              )}
-            </div>
-          </aside>
         </div>
       </div>
 
