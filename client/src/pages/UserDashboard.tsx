@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -55,7 +55,6 @@ function getCategoryColor(categories: string[]): string {
   return CATEGORY_COLORS[cat] || "#2C2C2C";
 }
 
-const FACTS_PER_PAGE = 10;
 
 const SAMPLE_COUNTRIES = [
   "Australia", "Brazil", "Canada", "France", "Germany",
@@ -227,7 +226,7 @@ export default function UserDashboard() {
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
   const [sideTab, setSideTab] = useState<SideTab>("feed");
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
-  const [feedPage, setFeedPage] = useState(1);
+
 
   const parseLocation = (loc: string) => {
     const parts = loc.split(", ");
@@ -291,108 +290,55 @@ export default function UserDashboard() {
 
   const MAX_TAGS = 20;
 
-  interface DbFact {
-    id: string;
-    slug: string;
-    categories: string[];
-    mythHeader: string;
-    truthHeader: string;
-    coverPhoto?: string | null;
-    factFilters?: string[] | null;
-    searchTags?: string[] | null;
-    betaOnly?: boolean | null;
-    createdAt?: string | null;
-  }
-
-  const tagsParam = user?.favoriteTags?.join(",") || "";
-  const [allForYouFacts, setAllForYouFacts] = useState<DbFact[]>([]);
-  const [forYouHasMore, setForYouHasMore] = useState(true);
-  const [forYouLoadingMore, setForYouLoadingMore] = useState(false);
-
-  const { isLoading: forYouLoading } = useQuery<{ facts: DbFact[]; total: number; totalPages: number }>({
-    queryKey: ["/api/facts/by-tags", tagsParam, 1],
-    queryFn: async () => {
-      if (!tagsParam) return { facts: [], total: 0, totalPages: 0 };
-      const res = await fetch(`/api/facts/by-tags?tags=${encodeURIComponent(tagsParam)}&page=1&limit=${FACTS_PER_PAGE}`);
-      const data = await res.json();
-      setAllForYouFacts(data.facts || []);
-      setForYouHasMore((data.totalPages || 0) > 1);
-      setFeedPage(1);
-      return data;
-    },
-    enabled: feedTab === "for-you" && !!tagsParam,
-  });
-
-  const handleLoadMore = useCallback(async () => {
-    if (forYouLoadingMore || !forYouHasMore) return;
-    setForYouLoadingMore(true);
-    const nextPage = feedPage + 1;
-    try {
-      const res = await fetch(`/api/facts/by-tags?tags=${encodeURIComponent(tagsParam)}&page=${nextPage}&limit=${FACTS_PER_PAGE}`);
-      const data = await res.json();
-      setAllForYouFacts((prev) => [...prev, ...(data.facts || [])]);
-      setForYouHasMore(nextPage < (data.totalPages || 0));
-      setFeedPage(nextPage);
-    } catch {
-      // silently fail
-    } finally {
-      setForYouLoadingMore(false);
-    }
-  }, [feedPage, tagsParam, forYouLoadingMore, forYouHasMore]);
-
-  const sampleFacts: FactCardFact[] = [
+  const demoFacts: FactCardFact[] = [
     {
-      id: "sample-1",
+      id: "aa5b0b21-1ee7-4996-88ef-ad0c4490adc7",
       category: "HISTORY",
       categoryColor: getCategoryColor(["History"]),
-      myth: "Dinosaurs and humans coexisted on Earth at the same time.",
-      truth: "Non-avian dinosaurs went extinct about 66 million years before modern humans evolved.",
+      myth: "When the Mexica first met Spanish explorer Hernán Cortés, they believed he was a god.",
+      truth: "They might have assumed that the Spanish were representatives of their own god, which was misinterpreted by the Spanish.",
       factFilters: [],
-      dateAdded: "2025-01-15",
-      link: "/",
+      link: "/fact/mesoamericans-and-europeans-gods",
+      coverPhoto: "/uploads/1764719426643-922952402.png",
       betaOnly: false,
     },
     {
-      id: "sample-2",
+      id: "b1b9f88b-3d4e-4eaa-ad36-0380266ec46c",
       category: "HEALTH & FITNESS",
       categoryColor: getCategoryColor(["Health & Fitness"]),
-      myth: "You need to drink exactly 8 glasses of water every day to stay healthy.",
-      truth: "Water needs vary by person. Food and other beverages contribute to hydration, and thirst is usually a reliable guide.",
+      myth: "You can burn belly fat by doing crunches and other ab workouts.",
+      truth: "Any exercise targeting a specific part of the body only builds muscle. These exercises cannot directly accelerate fat loss in the targeted area.",
       factFilters: [],
-      dateAdded: "2025-02-01",
-      link: "/",
+      link: "/fact/belly-fat-by-doing-ab-workouts",
+      coverPhoto: "/uploads/1764752045366-476242776.png",
+      betaOnly: false,
+    },
+    {
+      id: "a7aded15-3242-4c41-b644-a51048c90308",
+      category: "EVERYDAY LIFE",
+      categoryColor: getCategoryColor(["Everyday Life"]),
+      myth: "Cracking your knuckles will give you arthritis.",
+      truth: "No scientific evidence has yet to link cracking your knuckles and arthritis.",
+      factFilters: [],
+      link: "/fact/cracking-your-knuckles-arthritis",
+      coverPhoto: "/uploads/1764735935195-591724829.png",
+      betaOnly: false,
+    },
+    {
+      id: "e6bc520c-dd26-4376-be25-4862b9ee9e92",
+      category: "HEALTH & FITNESS",
+      categoryColor: getCategoryColor(["Health & Fitness", "Everyday Life"]),
+      myth: "Breakfast is the most important meal of the day.",
+      truth: "While eating breakfast can be beneficial for certain lifestyles, research shows that its importance varies widely based on individual metabolism, cultural norms, and overall diet.",
+      factFilters: [],
+      link: "/fact/breakfast-most-important-meal-of-the-day",
+      coverPhoto: "/uploads/1765021400264-394912154.png",
       betaOnly: false,
     },
   ];
 
-  const forYouFacts: FactCardFact[] = useMemo(() => {
-    const apiMapped = allForYouFacts.map((f) => {
-      const mainCat = getMainCategory(f.categories);
-      return {
-        id: f.id,
-        category: mainCat.toUpperCase(),
-        categoryColor: getCategoryColor(f.categories),
-        myth: f.mythHeader,
-        truth: f.truthHeader,
-        factFilters: f.factFilters || [],
-        dateAdded: f.createdAt ? new Date(f.createdAt).toISOString().split("T")[0] : undefined,
-        link: `/fact/${f.slug}`,
-        coverPhoto: f.coverPhoto || undefined,
-        betaOnly: f.betaOnly || false,
-      };
-    });
-    if (apiMapped.length === 0) return sampleFacts;
-    if (apiMapped.length === 1) return [...apiMapped, sampleFacts[1]];
-    return apiMapped;
-  }, [allForYouFacts]);
-
   const handleFeedTabChange = useCallback((tab: DashboardTab) => {
     setFeedTab(tab);
-    if (tab === "for-you") {
-      setAllForYouFacts([]);
-      setForYouHasMore(true);
-      setFeedPage(1);
-    }
   }, []);
 
   if (!isLoggedIn || !user) {
@@ -500,63 +446,17 @@ export default function UserDashboard() {
 
                   <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
                     {feedTab === "for-you" && (
-                      <>
-                        {!tagsParam ? (
-                          <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
-                            <Search size={40} className="dashboard-feed-empty-icon" />
-                            <p className="dashboard-feed-empty-title">No favorite subjects yet</p>
-                            <p className="dashboard-feed-empty-desc">
-                              Add subjects in your profile to see personalized facts here.
-                            </p>
-                            <button
-                              className="dashboard-feed-empty-action"
-                              onClick={() => setEditModalOpen(true)}
-                              data-testid="button-add-subjects"
-                            >
-                              Add Subjects
-                            </button>
-                          </div>
-                        ) : forYouLoading ? (
-                          <div className="dashboard-feed-loading" data-testid="feed-loading">
-                            <div className="dashboard-feed-spinner" />
-                            <p>Loading your feed...</p>
-                          </div>
-                        ) : forYouFacts.length === 0 ? (
-                          <div className="dashboard-feed-empty" data-testid="feed-empty-no-results">
-                            <Search size={40} className="dashboard-feed-empty-icon" />
-                            <p className="dashboard-feed-empty-title">No matching facts found</p>
-                            <p className="dashboard-feed-empty-desc">
-                              Try adding more subjects to your profile to discover new facts.
-                            </p>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
-                              {forYouFacts.map((fact) => (
-                                <FactCard
-                                  key={fact.id}
-                                  fact={fact}
-                                  onSave={() => {}}
-                                  onShare={() => {}}
-                                  onComment={() => {}}
-                                />
-                              ))}
-                            </div>
-                            {forYouHasMore && (
-                              <div className="dashboard-feed-load-more" data-testid="feed-load-more">
-                                <button
-                                  className="dashboard-feed-load-more-btn"
-                                  onClick={handleLoadMore}
-                                  disabled={forYouLoadingMore}
-                                  data-testid="button-load-more"
-                                >
-                                  {forYouLoadingMore ? "Loading..." : "Load More"}
-                                </button>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </>
+                      <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
+                        {demoFacts.map((fact) => (
+                          <FactCard
+                            key={fact.id}
+                            fact={fact}
+                            onSave={() => {}}
+                            onShare={() => {}}
+                            onComment={() => {}}
+                          />
+                        ))}
+                      </div>
                     )}
 
                     {feedTab === "following" && (
