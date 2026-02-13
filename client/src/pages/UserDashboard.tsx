@@ -340,8 +340,33 @@ export default function UserDashboard() {
     }
   }, [feedPage, tagsParam, forYouLoadingMore, forYouHasMore]);
 
+  const sampleFacts: FactCardFact[] = [
+    {
+      id: "sample-1",
+      category: "HISTORY",
+      categoryColor: getCategoryColor(["History"]),
+      myth: "Dinosaurs and humans coexisted on Earth at the same time.",
+      truth: "Non-avian dinosaurs went extinct about 66 million years before modern humans evolved.",
+      factFilters: [],
+      dateAdded: "2025-01-15",
+      link: "/",
+      betaOnly: false,
+    },
+    {
+      id: "sample-2",
+      category: "HEALTH & FITNESS",
+      categoryColor: getCategoryColor(["Health & Fitness"]),
+      myth: "You need to drink exactly 8 glasses of water every day to stay healthy.",
+      truth: "Water needs vary by person. Food and other beverages contribute to hydration, and thirst is usually a reliable guide.",
+      factFilters: [],
+      dateAdded: "2025-02-01",
+      link: "/",
+      betaOnly: false,
+    },
+  ];
+
   const forYouFacts: FactCardFact[] = useMemo(() => {
-    return allForYouFacts.map((f) => {
+    const apiMapped = allForYouFacts.map((f) => {
       const mainCat = getMainCategory(f.categories);
       return {
         id: f.id,
@@ -356,6 +381,9 @@ export default function UserDashboard() {
         betaOnly: f.betaOnly || false,
       };
     });
+    if (apiMapped.length === 0) return sampleFacts;
+    if (apiMapped.length === 1) return [...apiMapped, sampleFacts[1]];
+    return apiMapped;
   }, [allForYouFacts]);
 
   const handleFeedTabChange = useCallback((tab: DashboardTab) => {

@@ -23,6 +23,7 @@
   min-width: 260px;
   background: #fafafa;
   border-radius: 10px;
+  border: none;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -675,7 +676,7 @@
 
 .dashboard-feed-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
@@ -877,5 +878,9 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     padding: 0 4px;
+  }
+
+  .dashboard-feed-grid {
+    grid-template-columns: 1fr;
   }
 }
