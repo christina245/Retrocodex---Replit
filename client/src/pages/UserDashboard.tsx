@@ -1,15 +1,43 @@
-import { useState, useRef, useEffect } from "react";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search } from "lucide-react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
+import { CategoryFactCard } from "@/components/CategoryFactCard";
+import type { CategoryFact } from "@/components/CategoryFactCard";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
+import "../components/HomepageTabs.css";
 import "./UserDashboard.css";
+
+type DashboardTab = "for-you" | "following" | "local" | "saved";
+
+const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
+  { id: "for-you", label: "For You" },
+  { id: "following", label: "Following" },
+  { id: "local", label: "Local" },
+  { id: "saved", label: "Saved" },
+];
+
+const CATEGORY_COLORS: Record<string, string> = {
+  "History": "#D29E00",
+  "Life Sciences": "#419F36",
+  "Health & Fitness": "#EC7200",
+  "Social Sciences": "#9D0085",
+  "Gender & Sexuality": "#FF6F98",
+  "Everyday Life": "#0167A2",
+};
+
+function getCategoryColor(categories: string[]): string {
+  if (!categories || categories.length === 0) return "#2C2C2C";
+  return CATEGORY_COLORS[categories[0]] || "#2C2C2C";
+}
+
+const FACTS_PER_PAGE = 10;
 
 const SAMPLE_COUNTRIES = [
   "Australia", "Brazil", "Canada", "France", "Germany",
@@ -178,6 +206,8 @@ export default function UserDashboard() {
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
+  const [feedPage, setFeedPage] = useState(1);
 
   const parseLocation = (loc: string) => {
     const parts = loc.split(", ");
@@ -240,6 +270,85 @@ export default function UserDashboard() {
   }, []);
 
   const MAX_TAGS = 20;
+
+  interface DbFact {
+    id: string;
+    slug: string;
+    categories: string[];
+    mythHeader: string;
+    truthHeader: string;
+    coverPhoto?: string | null;
+    factFilters?: string[] | null;
+    searchTags?: string[] | null;
+    betaOnly?: boolean | null;
+    createdAt?: string | null;
+  }
+
+  const tagsParam = user?.favoriteTags?.join(",") || "";
+  const [allForYouFacts, setAllForYouFacts] = useState<DbFact[]>([]);
+  const [forYouHasMore, setForYouHasMore] = useState(true);
+  const [forYouLoadingMore, setForYouLoadingMore] = useState(false);
+
+  const { isLoading: forYouLoading } = useQuery<{ facts: DbFact[]; total: number; totalPages: number }>({
+    queryKey: ["/api/facts/by-tags", tagsParam, 1],
+    queryFn: async () => {
+      if (!tagsParam) return { facts: [], total: 0, totalPages: 0 };
+      const res = await fetch(`/api/facts/by-tags?tags=${encodeURIComponent(tagsParam)}&page=1&limit=${FACTS_PER_PAGE}`);
+      const data = await res.json();
+      setAllForYouFacts(data.facts || []);
+      setForYouHasMore((data.totalPages || 0) > 1);
+      setFeedPage(1);
+      return data;
+    },
+    enabled: feedTab === "for-you" && !!tagsParam,
+  });
+
+  const handleLoadMore = useCallback(async () => {
+    if (forYouLoadingMore || !forYouHasMore) return;
+    setForYouLoadingMore(true);
+    const nextPage = feedPage + 1;
+    try {
+      const res = await fetch(`/api/facts/by-tags?tags=${encodeURIComponent(tagsParam)}&page=${nextPage}&limit=${FACTS_PER_PAGE}`);
+      const data = await res.json();
+      setAllForYouFacts((prev) => [...prev, ...(data.facts || [])]);
+      setForYouHasMore(nextPage < (data.totalPages || 0));
+      setFeedPage(nextPage);
+    } catch {
+      // silently fail
+    } finally {
+      setForYouLoadingMore(false);
+    }
+  }, [feedPage, tagsParam, forYouLoadingMore, forYouHasMore]);
+
+  const forYouFacts: CategoryFact[] = useMemo(() => {
+    return allForYouFacts.map((f) => ({
+      id: f.id,
+      myth: f.mythHeader,
+      truth: f.truthHeader,
+      factFilters: f.factFilters || [],
+      dateAdded: f.createdAt ? new Date(f.createdAt).toISOString().split("T")[0] : undefined,
+      link: `/fact/${f.slug}`,
+      coverPhoto: f.coverPhoto || undefined,
+      betaOnly: f.betaOnly || false,
+    }));
+  }, [allForYouFacts]);
+
+  const forYouCategoryColors: Record<string, string> = useMemo(() => {
+    const map: Record<string, string> = {};
+    allForYouFacts.forEach((f) => {
+      map[f.id] = getCategoryColor(f.categories);
+    });
+    return map;
+  }, [allForYouFacts]);
+
+  const handleFeedTabChange = useCallback((tab: DashboardTab) => {
+    setFeedTab(tab);
+    if (tab === "for-you") {
+      setAllForYouFacts([]);
+      setForYouHasMore(true);
+      setFeedPage(1);
+    }
+  }, []);
 
   if (!isLoggedIn || !user) {
     navigate("/");
@@ -401,6 +510,130 @@ export default function UserDashboard() {
                 <span className="user-profile-empty" data-testid="text-misinfo-empty">--</span>
               )}
             </div>
+          </div>
+        </div>
+
+        <div className="dashboard-feed-section" data-testid="dashboard-feed-section">
+          <div className="dashboard-feed-tabs-wrapper">
+            <nav className="dashboard-feed-tabs" data-testid="dashboard-feed-tabs">
+              {DASHBOARD_TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`homepage-tab${feedTab === tab.id ? " homepage-tab-active" : ""}`}
+                  onClick={() => handleFeedTabChange(tab.id)}
+                  data-testid={`button-feed-tab-${tab.id}`}
+                >
+                  <span className="homepage-tab-text">{tab.label}</span>
+                  {feedTab === tab.id && <div className="homepage-tab-indicator" />}
+                </button>
+              ))}
+            </nav>
+            <div className="homepage-tabs-divider" />
+          </div>
+
+          <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
+            {feedTab === "for-you" && (
+              <>
+                {!tagsParam ? (
+                  <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
+                    <Search size={40} className="dashboard-feed-empty-icon" />
+                    <p className="dashboard-feed-empty-title">No favorite subjects yet</p>
+                    <p className="dashboard-feed-empty-desc">
+                      Add subjects in your profile to see personalized facts here.
+                    </p>
+                    <button
+                      className="dashboard-feed-empty-action"
+                      onClick={() => setEditModalOpen(true)}
+                      data-testid="button-add-subjects"
+                    >
+                      Add Subjects
+                    </button>
+                  </div>
+                ) : forYouLoading ? (
+                  <div className="dashboard-feed-loading" data-testid="feed-loading">
+                    <div className="dashboard-feed-spinner" />
+                    <p>Loading your feed...</p>
+                  </div>
+                ) : forYouFacts.length === 0 ? (
+                  <div className="dashboard-feed-empty" data-testid="feed-empty-no-results">
+                    <Search size={40} className="dashboard-feed-empty-icon" />
+                    <p className="dashboard-feed-empty-title">No matching facts found</p>
+                    <p className="dashboard-feed-empty-desc">
+                      Try adding more subjects to your profile to discover new facts.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
+                      {forYouFacts.map((fact) => (
+                        <CategoryFactCard
+                          key={fact.id}
+                          fact={fact}
+                          categoryColor={forYouCategoryColors[fact.id] || "#2C2C2C"}
+                        />
+                      ))}
+                    </div>
+                    {forYouHasMore && (
+                      <div className="dashboard-feed-load-more" data-testid="feed-load-more">
+                        <button
+                          className="dashboard-feed-load-more-btn"
+                          onClick={handleLoadMore}
+                          disabled={forYouLoadingMore}
+                          data-testid="button-load-more"
+                        >
+                          {forYouLoadingMore ? "Loading..." : "Load More"}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+
+            {feedTab === "following" && (
+              <div className="dashboard-feed-empty" data-testid="feed-empty-following">
+                <Users size={40} className="dashboard-feed-empty-icon" />
+                <p className="dashboard-feed-empty-title">You're not following anyone yet</p>
+                <p className="dashboard-feed-empty-desc">
+                  Follow other users to see their activity and shared facts here.
+                </p>
+              </div>
+            )}
+
+            {feedTab === "local" && (
+              <div className="dashboard-feed-empty" data-testid="feed-empty-local">
+                <MapPinned size={40} className="dashboard-feed-empty-icon" />
+                <p className="dashboard-feed-empty-title">
+                  {user.currentLocation
+                    ? "No local facts available yet"
+                    : "Set your location to see local facts"}
+                </p>
+                <p className="dashboard-feed-empty-desc">
+                  {user.currentLocation
+                    ? "Facts related to your region will appear here as they're added."
+                    : "Add your current location in your profile to discover regionally relevant facts."}
+                </p>
+                {!user.currentLocation && (
+                  <button
+                    className="dashboard-feed-empty-action"
+                    onClick={() => setEditModalOpen(true)}
+                    data-testid="button-add-location"
+                  >
+                    Add Location
+                  </button>
+                )}
+              </div>
+            )}
+
+            {feedTab === "saved" && (
+              <div className="dashboard-feed-empty" data-testid="feed-empty-saved">
+                <Bookmark size={40} className="dashboard-feed-empty-icon" />
+                <p className="dashboard-feed-empty-title">No saved facts yet</p>
+                <p className="dashboard-feed-empty-desc">
+                  Bookmark facts you want to revisit and they'll show up here.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

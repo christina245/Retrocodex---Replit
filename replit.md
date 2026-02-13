@@ -40,6 +40,15 @@ Preferred communication style: Simple, everyday language.
 - `HamburgerMenu`: Slide-out navigation menu
 - `SEO`: Reusable component for setting page titles, meta descriptions, Open Graph tags, and canonical URLs. Editable directly in each page's TSX file.
 
+**Dashboard Components**
+- `UserDashboard`: User profile page at `/dashboard` with profile banner (photo, username, locations, favorite subjects, misinformation source) and edit profile modal
+- Dashboard Feed Tabs: 4-tab feed section (For You, Following, Local, Saved) below the profile banner using homepage tab styling
+  - "For You" tab: Fetches facts matching user's favorite tags via `/api/facts/by-tags` with infinite "Load More" pagination (10 per page)
+  - "Following" tab: Empty state placeholder (pending user follow system)
+  - "Local" tab: Empty state with contextual messaging based on whether user has location set
+  - "Saved" tab: Empty state placeholder (pending bookmark system)
+- Edit Profile Modal: Full profile editing with photo upload, username, locations (current + places lived with US state support), favorite subjects (tag search with max 20), and misinformation source textarea
+
 **Blog System Components**
 - `ArticlesPage`: Lists published blog posts with category/tag filtering, fetches from `/api/blog-posts/published`
 - `SingleBlogPage`: Individual article view at `/articles/:slug` with sticky header, 60% width hero image (desktop), action buttons (comment/save/share), sidebar with Beehiiv newsletter embed, comments section, and related articles
@@ -67,6 +76,7 @@ Preferred communication style: Simple, everyday language.
 - Email subscription management (`POST /api/emails`, `GET /api/emails`)
 - Newsletter subscriptions (`POST /api/newsletter-subscriptions`)
 - Blog posts CRUD (`GET /api/blog-posts`, `GET /api/blog-posts/published`, `GET /api/blog-posts/featured`, `GET /api/blog-posts/:slug`, `POST /api/blog-posts`, `PUT /api/blog-posts/:id`, `DELETE /api/blog-posts/:id`)
+- Facts by tags with pagination (`GET /api/facts/by-tags?tags=tag1,tag2&page=1&limit=10`)
 - File upload for cover images (`POST /api/upload`)
 - Basic HTTP authentication for admin routes using environment variable
 - Zod schema validation for request payloads

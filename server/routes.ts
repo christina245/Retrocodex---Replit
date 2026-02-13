@@ -258,6 +258,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/facts/by-tags", async (req, res) => {
+    try {
+      const tagsParam = req.query.tags as string || "";
+      const page = parseInt(req.query.page as string || "1", 10);
+      const limit = parseInt(req.query.limit as string || "10", 10);
+      const tags = tagsParam.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
+      if (tags.length === 0) {
+        return res.json({ facts: [], total: 0, page, totalPages: 0 });
+      }
+      const allFacts = await storage.getAllFacts();
+      const matching = allFacts
+        .filter(fact =>
+          fact.searchTags && fact.searchTags.some(t => tags.includes(t.toLowerCase()))
+        )
+        .sort((a, b) => {
+          const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return bDate - aDate;
+        });
+      const total = matching.length;
+      const totalPages = Math.ceil(total / limit);
+      const start = (page - 1) * limit;
+      const facts = matching.slice(start, start + limit);
+      res.json({ facts, total, page, totalPages });
+    } catch (error) {
+      console.error("Error fetching facts by tags:", error);
+      res.status(500).json({ message: "Failed to fetch facts by tags" });
+    }
+  });
+
   // GET /api/facts/by-tag/:tag - Get facts by searchTags (public)
   app.get("/api/facts/by-tag/:tag", async (req, res) => {
     try {
