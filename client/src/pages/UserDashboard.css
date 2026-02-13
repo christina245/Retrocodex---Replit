@@ -539,6 +539,14 @@
   gap: 24px;
 }
 
+.dashboard-feed-grid .fact-card-wrapper {
+  width: 100%;
+}
+
+.dashboard-feed-grid .fact-card {
+  width: 100%;
+}
+
 .dashboard-feed-empty {
   display: flex;
   flex-direction: column;

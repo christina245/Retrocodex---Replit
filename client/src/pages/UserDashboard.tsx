@@ -23,6 +23,8 @@ const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
   { id: "saved", label: "Saved" },
 ];
 
+const MAIN_CATEGORIES = ["History", "Life Sciences", "Health & Fitness", "Social Sciences", "Gender & Sexuality", "Everyday Life"];
+
 const CATEGORY_COLORS: Record<string, string> = {
   "History": "#D29E00",
   "Life Sciences": "#419F36",
@@ -32,9 +34,15 @@ const CATEGORY_COLORS: Record<string, string> = {
   "Everyday Life": "#0167A2",
 };
 
+function getMainCategory(categories: string[]): string {
+  if (!categories || categories.length === 0) return "Everyday Life";
+  const main = categories.find((c) => MAIN_CATEGORIES.includes(c));
+  return main || categories[0];
+}
+
 function getCategoryColor(categories: string[]): string {
-  if (!categories || categories.length === 0) return "#2C2C2C";
-  return CATEGORY_COLORS[categories[0]] || "#2C2C2C";
+  const cat = getMainCategory(categories);
+  return CATEGORY_COLORS[cat] || "#2C2C2C";
 }
 
 const FACTS_PER_PAGE = 10;
@@ -321,18 +329,21 @@ export default function UserDashboard() {
   }, [feedPage, tagsParam, forYouLoadingMore, forYouHasMore]);
 
   const forYouFacts: FactCardFact[] = useMemo(() => {
-    return allForYouFacts.map((f) => ({
-      id: f.id,
-      category: f.categories?.[0] || "Everyday Life",
-      categoryColor: getCategoryColor(f.categories),
-      myth: f.mythHeader,
-      truth: f.truthHeader,
-      factFilters: f.factFilters || [],
-      dateAdded: f.createdAt ? new Date(f.createdAt).toISOString().split("T")[0] : undefined,
-      link: `/fact/${f.slug}`,
-      coverPhoto: f.coverPhoto || undefined,
-      betaOnly: f.betaOnly || false,
-    }));
+    return allForYouFacts.map((f) => {
+      const mainCat = getMainCategory(f.categories);
+      return {
+        id: f.id,
+        category: mainCat.toUpperCase(),
+        categoryColor: getCategoryColor(f.categories),
+        myth: f.mythHeader,
+        truth: f.truthHeader,
+        factFilters: f.factFilters || [],
+        dateAdded: f.createdAt ? new Date(f.createdAt).toISOString().split("T")[0] : undefined,
+        link: `/fact/${f.slug}`,
+        coverPhoto: f.coverPhoto || undefined,
+        betaOnly: f.betaOnly || false,
+      };
+    });
   }, [allForYouFacts]);
 
   const handleFeedTabChange = useCallback((tab: DashboardTab) => {
