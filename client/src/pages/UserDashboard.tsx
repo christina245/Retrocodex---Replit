@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { MapPin, Pencil, X, Home } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { MapPin, Pencil, X, Home, Plus, Minus } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -10,6 +10,166 @@ import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import "./UserDashboard.css";
 
+const SAMPLE_COUNTRIES = [
+  "Australia", "Brazil", "Canada", "France", "Germany",
+  "India", "Japan", "Mexico", "Nigeria", "United Kingdom", "United States",
+];
+
+const SAMPLE_US_STATES = [
+  "California", "Florida", "Georgia", "Illinois", "Massachusetts",
+  "New York", "Ohio", "Pennsylvania", "Texas", "Washington",
+];
+
+interface LocationSelectProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  testId: string;
+  icon: "pin" | "home";
+}
+
+function LocationSelect({ value, onChange, placeholder = "Search country...", testId, icon }: LocationSelectProps) {
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filtered = SAMPLE_COUNTRIES.filter((c) =>
+    c.toLowerCase().includes(query.toLowerCase())
+  );
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const displayValue = isOpen ? query : value;
+
+  return (
+    <div className="signin-country-select-container" ref={containerRef}>
+      <div className="signin-country-input-wrapper">
+        <span className="signin-country-icon">
+          {icon === "pin" ? <MapPin size={18} /> : <Home size={18} />}
+        </span>
+        <input
+          type="text"
+          className="signin-input"
+          value={displayValue}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (!isOpen) setIsOpen(true);
+          }}
+          onFocus={() => {
+            setIsOpen(true);
+            setQuery("");
+          }}
+          placeholder={placeholder}
+          data-testid={testId}
+        />
+      </div>
+      {isOpen && (
+        <div className="signin-country-dropdown" data-testid={`${testId}-dropdown`}>
+          {filtered.length > 0 ? (
+            filtered.map((country) => (
+              <div
+                key={country}
+                className={`signin-country-option${value === country ? " signin-country-option-selected" : ""}`}
+                onClick={() => {
+                  onChange(country);
+                  setQuery("");
+                  setIsOpen(false);
+                }}
+                data-testid={`${testId}-option-${country.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                {country}
+              </div>
+            ))
+          ) : (
+            <div className="signin-country-option" style={{ color: "#999", cursor: "default" }}>
+              No results
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StateSelect({ value, onChange, testId }: { value: string; onChange: (v: string) => void; testId: string }) {
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const filtered = SAMPLE_US_STATES.filter((s) =>
+    s.toLowerCase().includes(query.toLowerCase())
+  );
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const displayValue = isOpen ? query : value;
+
+  return (
+    <div className="signin-country-select-container signin-state-field" ref={containerRef}>
+      <div className="signin-country-input-wrapper">
+        <span className="signin-country-icon">
+          <MapPin size={18} />
+        </span>
+        <input
+          type="text"
+          className="signin-input"
+          value={displayValue}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (!isOpen) setIsOpen(true);
+          }}
+          onFocus={() => {
+            setIsOpen(true);
+            setQuery("");
+          }}
+          placeholder="Search state..."
+          data-testid={testId}
+        />
+      </div>
+      {isOpen && (
+        <div className="signin-country-dropdown" data-testid={`${testId}-dropdown`}>
+          {filtered.length > 0 ? (
+            filtered.map((state) => (
+              <div
+                key={state}
+                className={`signin-country-option${value === state ? " signin-country-option-selected" : ""}`}
+                onClick={() => {
+                  onChange(state);
+                  setQuery("");
+                  setIsOpen(false);
+                }}
+                data-testid={`${testId}-option-${state.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                {state}
+              </div>
+            ))
+          ) : (
+            <div className="signin-country-option" style={{ color: "#999", cursor: "default" }}>
+              No results
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function UserDashboard() {
   const { user, isLoggedIn } = useAuth();
   const [, navigate] = useLocation();
@@ -18,8 +178,28 @@ export default function UserDashboard() {
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
+  const parseLocation = (loc: string) => {
+    const parts = loc.split(", ");
+    if (parts.length === 2 && SAMPLE_COUNTRIES.includes(parts[1])) {
+      return { country: parts[1], usState: parts[1] === "United States" ? parts[0] : "" };
+    }
+    if (SAMPLE_COUNTRIES.includes(loc)) {
+      return { country: loc, usState: "" };
+    }
+    return { country: loc, usState: "" };
+  };
+
+  const parsedCurrent = user ? parseLocation(user.currentLocation) : { country: "", usState: "" };
+
   const [editUsername, setEditUsername] = useState(user?.username || "");
   const [editMisinfo, setEditMisinfo] = useState(user?.misinfoSource || "");
+  const [editCurrentCountry, setEditCurrentCountry] = useState(parsedCurrent.country);
+  const [editCurrentState, setEditCurrentState] = useState(parsedCurrent.usState);
+  const [editShowCurrentLocation, setEditShowCurrentLocation] = useState(user?.showCurrentLocation || false);
+  const [editPlacesLived, setEditPlacesLived] = useState<{ country: string; usState: string }[]>(
+    user?.placesLived.map((p) => parseLocation(p)) || [{ country: "", usState: "" }]
+  );
+  const [editShowPlacesLived, setEditShowPlacesLived] = useState(user?.showPlacesLived || false);
 
   if (!isLoggedIn || !user) {
     navigate("/");
@@ -40,6 +220,30 @@ export default function UserDashboard() {
 
   const handleEditOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) setEditModalOpen(false);
+  };
+
+  const handlePlaceLivedChange = (index: number, country: string) => {
+    const updated = [...editPlacesLived];
+    updated[index] = { country, usState: country !== "United States" ? "" : updated[index].usState };
+    setEditPlacesLived(updated);
+  };
+
+  const handlePlaceLivedStateChange = (index: number, usState: string) => {
+    const updated = [...editPlacesLived];
+    updated[index] = { ...updated[index], usState };
+    setEditPlacesLived(updated);
+  };
+
+  const handleAddPlaceLived = () => {
+    if (editPlacesLived.length < 5) {
+      setEditPlacesLived([...editPlacesLived, { country: "", usState: "" }]);
+    }
+  };
+
+  const handleRemovePlaceLived = (index: number) => {
+    if (editPlacesLived.length > 1) {
+      setEditPlacesLived(editPlacesLived.filter((_, i) => i !== index));
+    }
   };
 
   return (
@@ -204,7 +408,7 @@ export default function UserDashboard() {
               <label className="edit-profile-label">USERNAME</label>
               <input
                 type="text"
-                className="edit-profile-input"
+                className="edit-profile-input edit-profile-input-half"
                 value={editUsername}
                 onChange={(e) => setEditUsername(e.target.value)}
                 data-testid="input-edit-username"
@@ -212,11 +416,100 @@ export default function UserDashboard() {
             </div>
 
             <div className="edit-profile-section">
+              <label className="edit-profile-label">CURRENT AND PAST LOCATIONS</label>
+              <div className="edit-profile-locations-columns" data-testid="edit-locations-section">
+                <div className="edit-profile-location-column" data-testid="edit-current-location-column">
+                  <span className="edit-profile-location-column-label">CURRENT LOCATION</span>
+                  <LocationSelect
+                    value={editCurrentCountry}
+                    onChange={(val) => {
+                      setEditCurrentCountry(val);
+                      if (val !== "United States") setEditCurrentState("");
+                    }}
+                    testId="input-edit-current-country"
+                    icon="pin"
+                  />
+                  {editCurrentCountry === "United States" && (
+                    <StateSelect
+                      value={editCurrentState}
+                      onChange={setEditCurrentState}
+                      testId="input-edit-current-state"
+                    />
+                  )}
+                  <div className="edit-profile-checkbox-row" data-testid="checkbox-show-current-location">
+                    <input
+                      type="checkbox"
+                      id="show-current-location"
+                      checked={editShowCurrentLocation}
+                      onChange={(e) => setEditShowCurrentLocation(e.target.checked)}
+                    />
+                    <label htmlFor="show-current-location">Display on my profile</label>
+                  </div>
+                </div>
+
+                <div className="edit-profile-location-column" data-testid="edit-places-lived-column">
+                  <span className="edit-profile-location-column-label">PLACES I'VE LIVED</span>
+                  {editPlacesLived.map((entry, index) => (
+                    <div key={index}>
+                      <div className="edit-profile-place-row">
+                        <LocationSelect
+                          value={entry.country}
+                          onChange={(val) => handlePlaceLivedChange(index, val)}
+                          placeholder="Search country..."
+                          testId={`input-edit-place-lived-${index}`}
+                          icon="home"
+                        />
+                        {index === editPlacesLived.length - 1 && editPlacesLived.length < 5 && (
+                          <button
+                            type="button"
+                            className="signin-add-remove-btn"
+                            onClick={handleAddPlaceLived}
+                            data-testid="button-add-place-lived"
+                            aria-label="Add another place"
+                          >
+                            <Plus size={18} />
+                          </button>
+                        )}
+                        {editPlacesLived.length > 1 && (
+                          <button
+                            type="button"
+                            className="signin-add-remove-btn"
+                            onClick={() => handleRemovePlaceLived(index)}
+                            data-testid={`button-remove-place-lived-${index}`}
+                            aria-label="Remove place"
+                          >
+                            <Minus size={18} />
+                          </button>
+                        )}
+                      </div>
+                      {entry.country === "United States" && (
+                        <StateSelect
+                          value={entry.usState}
+                          onChange={(val) => handlePlaceLivedStateChange(index, val)}
+                          testId={`input-edit-place-lived-state-${index}`}
+                        />
+                      )}
+                    </div>
+                  ))}
+                  <div className="edit-profile-checkbox-row" data-testid="checkbox-show-places-lived">
+                    <input
+                      type="checkbox"
+                      id="show-places-lived"
+                      checked={editShowPlacesLived}
+                      onChange={(e) => setEditShowPlacesLived(e.target.checked)}
+                    />
+                    <label htmlFor="show-places-lived">Display on my profile</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="edit-profile-section">
               <label className="edit-profile-label">
                 THE #1 SOURCE OF MISINFORMATION IN MY LIFE IS
               </label>
               <textarea
-                className="edit-profile-textarea"
+                className="edit-profile-textarea edit-profile-input-half"
                 value={editMisinfo}
                 onChange={(e) => {
                   if (e.target.value.length <= 200) setEditMisinfo(e.target.value);

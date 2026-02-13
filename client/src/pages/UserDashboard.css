@@ -250,6 +250,10 @@
 }
 
 
+.edit-profile-input-half {
+  max-width: 50%;
+}
+
 .edit-profile-input {
   font-family: 'Public Sans', sans-serif;
   font-size: 15px;
@@ -344,6 +348,62 @@
   background: #e64848;
 }
 
+.edit-profile-locations-columns {
+  display: flex;
+  gap: 2rem;
+}
+
+.edit-profile-location-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.edit-profile-location-column-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #2C2C2C;
+  letter-spacing: 0.5px;
+}
+
+.edit-profile-place-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.edit-profile-place-row .signin-country-select-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.edit-profile-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.edit-profile-checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #FF5353;
+  cursor: pointer;
+  margin: 0;
+}
+
+.edit-profile-checkbox-row label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #555;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .user-profile-banner {
     flex-direction: column;
@@ -378,5 +438,14 @@
   .edit-profile-modal {
     width: 95vw;
     padding: 1.5rem;
+  }
+
+  .edit-profile-locations-columns {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .edit-profile-input-half {
+    max-width: 100%;
   }
 }
