@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Header } from "@/components/Header";
+import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { FactCard } from "@/components/FactCard";
@@ -14,13 +14,24 @@ import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.
 import "../components/HomepageTabs.css";
 import "./UserDashboard.css";
 
-type DashboardTab = "for-you" | "following" | "local" | "saved";
+type DashboardTab = "for-you" | "following" | "fact-updates" | "local" | "saved";
+type SideTab = "feed" | "activity";
+type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
   { id: "for-you", label: "For You" },
   { id: "following", label: "Following" },
+  { id: "fact-updates", label: "Fact Updates" },
   { id: "local", label: "Local" },
   { id: "saved", label: "Saved" },
+];
+
+const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
+  { id: "submitted", label: "Submitted Posts" },
+  { id: "approved", label: "Approved Posts" },
+  { id: "edit-requests", label: "Edit Requests" },
+  { id: "approved-edits", label: "Approved Edits" },
+  { id: "comments", label: "Comments" },
 ];
 
 const MAIN_CATEGORIES = ["History", "Life Sciences", "Health & Fitness", "Social Sciences", "Gender & Sexuality", "Everyday Life"];
@@ -215,6 +226,8 @@ export default function UserDashboard() {
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
+  const [sideTab, setSideTab] = useState<SideTab>("feed");
+  const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [feedPage, setFeedPage] = useState(1);
 
   const parseLocation = (loc: string) => {
@@ -406,7 +419,7 @@ export default function UserDashboard() {
         title={`${user.username} - Retrocodex`}
         description={`${user.username}'s profile on Retrocodex`}
       />
-      <Header onMenuClick={() => setIsMenuOpen(!isMenuOpen)} />
+      <SingleFactHeader onMenuClick={() => setIsMenuOpen(!isMenuOpen)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav />
 
@@ -519,128 +532,238 @@ export default function UserDashboard() {
         </div>
 
         <div className="dashboard-feed-section" data-testid="dashboard-feed-section">
-          <div className="dashboard-feed-tabs-wrapper">
-            <nav className="dashboard-feed-tabs" data-testid="dashboard-feed-tabs">
-              {DASHBOARD_TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  className={`homepage-tab${feedTab === tab.id ? " homepage-tab-active" : ""}`}
-                  onClick={() => handleFeedTabChange(tab.id)}
-                  data-testid={`button-feed-tab-${tab.id}`}
-                >
-                  <span className="homepage-tab-text">{tab.label}</span>
-                  {feedTab === tab.id && <div className="homepage-tab-indicator" />}
-                </button>
-              ))}
+          <div className="dashboard-side-and-main">
+            <nav className="dashboard-side-tabs" data-testid="dashboard-side-tabs">
+              <button
+                className={`dashboard-side-tab${sideTab === "feed" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("feed")}
+                data-testid="button-side-tab-feed"
+              >
+                Feed
+                {sideTab === "feed" && <div className="dashboard-side-tab-indicator" />}
+              </button>
+              <button
+                className={`dashboard-side-tab${sideTab === "activity" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("activity")}
+                data-testid="button-side-tab-activity"
+              >
+                My Activity
+                {sideTab === "activity" && <div className="dashboard-side-tab-indicator" />}
+              </button>
             </nav>
-            <div className="homepage-tabs-divider" />
-          </div>
 
-          <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
-            {feedTab === "for-you" && (
-              <>
-                {!tagsParam ? (
-                  <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
-                    <Search size={40} className="dashboard-feed-empty-icon" />
-                    <p className="dashboard-feed-empty-title">No favorite subjects yet</p>
-                    <p className="dashboard-feed-empty-desc">
-                      Add subjects in your profile to see personalized facts here.
-                    </p>
-                    <button
-                      className="dashboard-feed-empty-action"
-                      onClick={() => setEditModalOpen(true)}
-                      data-testid="button-add-subjects"
-                    >
-                      Add Subjects
-                    </button>
-                  </div>
-                ) : forYouLoading ? (
-                  <div className="dashboard-feed-loading" data-testid="feed-loading">
-                    <div className="dashboard-feed-spinner" />
-                    <p>Loading your feed...</p>
-                  </div>
-                ) : forYouFacts.length === 0 ? (
-                  <div className="dashboard-feed-empty" data-testid="feed-empty-no-results">
-                    <Search size={40} className="dashboard-feed-empty-icon" />
-                    <p className="dashboard-feed-empty-title">No matching facts found</p>
-                    <p className="dashboard-feed-empty-desc">
-                      Try adding more subjects to your profile to discover new facts.
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
-                      {forYouFacts.map((fact) => (
-                        <FactCard
-                          key={fact.id}
-                          fact={fact}
-                          onSave={() => {}}
-                          onShare={() => {}}
-                          onComment={() => {}}
-                        />
-                      ))}
-                    </div>
-                    {forYouHasMore && (
-                      <div className="dashboard-feed-load-more" data-testid="feed-load-more">
+            <div className="dashboard-main-content">
+              {sideTab === "feed" && (
+                <>
+                  <div className="dashboard-feed-tabs-wrapper">
+                    <nav className="dashboard-feed-tabs" data-testid="dashboard-feed-tabs">
+                      {DASHBOARD_TABS.map((tab) => (
                         <button
-                          className="dashboard-feed-load-more-btn"
-                          onClick={handleLoadMore}
-                          disabled={forYouLoadingMore}
-                          data-testid="button-load-more"
+                          key={tab.id}
+                          className={`homepage-tab${feedTab === tab.id ? " homepage-tab-active" : ""}`}
+                          onClick={() => handleFeedTabChange(tab.id)}
+                          data-testid={`button-feed-tab-${tab.id}`}
                         >
-                          {forYouLoadingMore ? "Loading..." : "Load More"}
+                          <span className="homepage-tab-text">{tab.label}</span>
+                          {feedTab === tab.id && <div className="homepage-tab-indicator" />}
                         </button>
+                      ))}
+                    </nav>
+                    <div className="homepage-tabs-divider" />
+                  </div>
+
+                  <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
+                    {feedTab === "for-you" && (
+                      <>
+                        {!tagsParam ? (
+                          <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
+                            <Search size={40} className="dashboard-feed-empty-icon" />
+                            <p className="dashboard-feed-empty-title">No favorite subjects yet</p>
+                            <p className="dashboard-feed-empty-desc">
+                              Add subjects in your profile to see personalized facts here.
+                            </p>
+                            <button
+                              className="dashboard-feed-empty-action"
+                              onClick={() => setEditModalOpen(true)}
+                              data-testid="button-add-subjects"
+                            >
+                              Add Subjects
+                            </button>
+                          </div>
+                        ) : forYouLoading ? (
+                          <div className="dashboard-feed-loading" data-testid="feed-loading">
+                            <div className="dashboard-feed-spinner" />
+                            <p>Loading your feed...</p>
+                          </div>
+                        ) : forYouFacts.length === 0 ? (
+                          <div className="dashboard-feed-empty" data-testid="feed-empty-no-results">
+                            <Search size={40} className="dashboard-feed-empty-icon" />
+                            <p className="dashboard-feed-empty-title">No matching facts found</p>
+                            <p className="dashboard-feed-empty-desc">
+                              Try adding more subjects to your profile to discover new facts.
+                            </p>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
+                              {forYouFacts.map((fact) => (
+                                <FactCard
+                                  key={fact.id}
+                                  fact={fact}
+                                  onSave={() => {}}
+                                  onShare={() => {}}
+                                  onComment={() => {}}
+                                />
+                              ))}
+                            </div>
+                            {forYouHasMore && (
+                              <div className="dashboard-feed-load-more" data-testid="feed-load-more">
+                                <button
+                                  className="dashboard-feed-load-more-btn"
+                                  onClick={handleLoadMore}
+                                  disabled={forYouLoadingMore}
+                                  data-testid="button-load-more"
+                                >
+                                  {forYouLoadingMore ? "Loading..." : "Load More"}
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </>
+                    )}
+
+                    {feedTab === "following" && (
+                      <div className="dashboard-feed-empty" data-testid="feed-empty-following">
+                        <Users size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You're not following anyone yet</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Follow other users to see their activity and shared facts here.
+                        </p>
                       </div>
                     )}
-                  </>
-                )}
-              </>
-            )}
 
-            {feedTab === "following" && (
-              <div className="dashboard-feed-empty" data-testid="feed-empty-following">
-                <Users size={40} className="dashboard-feed-empty-icon" />
-                <p className="dashboard-feed-empty-title">You're not following anyone yet</p>
-                <p className="dashboard-feed-empty-desc">
-                  Follow other users to see their activity and shared facts here.
-                </p>
-              </div>
-            )}
+                    {feedTab === "fact-updates" && (
+                      <div className="dashboard-feed-empty" data-testid="feed-empty-fact-updates">
+                        <BellRing size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You aren't following any facts yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Updates from facts you follow will be here.
+                        </p>
+                      </div>
+                    )}
 
-            {feedTab === "local" && (
-              <div className="dashboard-feed-empty" data-testid="feed-empty-local">
-                <MapPinned size={40} className="dashboard-feed-empty-icon" />
-                <p className="dashboard-feed-empty-title">
-                  {user.currentLocation
-                    ? "No local facts available yet"
-                    : "Set your location to see local facts"}
-                </p>
-                <p className="dashboard-feed-empty-desc">
-                  {user.currentLocation
-                    ? "Facts related to your region will appear here as they're added."
-                    : "Add your current location in your profile to discover regionally relevant facts."}
-                </p>
-                {!user.currentLocation && (
-                  <button
-                    className="dashboard-feed-empty-action"
-                    onClick={() => setEditModalOpen(true)}
-                    data-testid="button-add-location"
-                  >
-                    Add Location
-                  </button>
-                )}
-              </div>
-            )}
+                    {feedTab === "local" && (
+                      <div className="dashboard-feed-empty" data-testid="feed-empty-local">
+                        <MapPinned size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">
+                          {user.currentLocation
+                            ? "No local facts available yet"
+                            : "Set your location to see local facts"}
+                        </p>
+                        <p className="dashboard-feed-empty-desc">
+                          {user.currentLocation
+                            ? "Facts related to your region will appear here as they're added."
+                            : "Add your current location in your profile to discover regionally relevant facts."}
+                        </p>
+                        {!user.currentLocation && (
+                          <button
+                            className="dashboard-feed-empty-action"
+                            onClick={() => setEditModalOpen(true)}
+                            data-testid="button-add-location"
+                          >
+                            Add Location
+                          </button>
+                        )}
+                      </div>
+                    )}
 
-            {feedTab === "saved" && (
-              <div className="dashboard-feed-empty" data-testid="feed-empty-saved">
-                <Bookmark size={40} className="dashboard-feed-empty-icon" />
-                <p className="dashboard-feed-empty-title">No saved facts yet</p>
-                <p className="dashboard-feed-empty-desc">
-                  Bookmark facts you want to revisit and they'll show up here.
-                </p>
-              </div>
-            )}
+                    {feedTab === "saved" && (
+                      <div className="dashboard-feed-empty" data-testid="feed-empty-saved">
+                        <Bookmark size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">No saved facts yet</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Bookmark facts you want to revisit and they'll show up here.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {sideTab === "activity" && (
+                <>
+                  <div className="dashboard-feed-tabs-wrapper">
+                    <nav className="dashboard-feed-tabs" data-testid="dashboard-activity-tabs">
+                      {ACTIVITY_TABS.map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`homepage-tab${activityTab === tab.id ? " homepage-tab-active" : ""}`}
+                          onClick={() => setActivityTab(tab.id)}
+                          data-testid={`button-activity-tab-${tab.id}`}
+                        >
+                          <span className="homepage-tab-text">{tab.label}</span>
+                          {activityTab === tab.id && <div className="homepage-tab-indicator" />}
+                        </button>
+                      ))}
+                    </nav>
+                    <div className="homepage-tabs-divider" />
+                  </div>
+
+                  <div className="dashboard-feed-content" data-testid="dashboard-activity-content">
+                    {activityTab === "submitted" && (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty-submitted">
+                        <FileText size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You haven't submitted any facts yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Submit a fact to share your experiences.
+                        </p>
+                      </div>
+                    )}
+
+                    {activityTab === "approved" && (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty-approved">
+                        <CheckCircle size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You don't have any approved posts yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          You'll be notified by email when your submissions are approved.
+                        </p>
+                      </div>
+                    )}
+
+                    {activityTab === "edit-requests" && (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty-edit-requests">
+                        <FilePenLine size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You haven't requested an edit to any entry yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Submit a request if you feel like an entry's information is incorrect or could be improved.
+                        </p>
+                      </div>
+                    )}
+
+                    {activityTab === "approved-edits" && (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty-approved-edits">
+                        <CheckCircle size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You haven't requested an edit to any entry yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Submit a request if you feel like an entry's information is incorrect or could be improved.
+                        </p>
+                      </div>
+                    )}
+
+                    {activityTab === "comments" && (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty-comments">
+                        <MessageSquare size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You haven't commented on any topics yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Leave a comment on a misconception you care about to share your experiences.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
