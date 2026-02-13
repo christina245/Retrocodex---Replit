@@ -420,20 +420,36 @@ export default function UserDashboard() {
               <div className="edit-profile-locations-columns" data-testid="edit-locations-section">
                 <div className="edit-profile-location-column" data-testid="edit-current-location-column">
                   <span className="edit-profile-location-column-label">CURRENT LOCATION</span>
-                  <LocationSelect
-                    value={editCurrentCountry}
-                    onChange={(val) => {
-                      setEditCurrentCountry(val);
-                      if (val !== "United States") setEditCurrentState("");
-                    }}
-                    testId="input-edit-current-country"
-                    icon="pin"
-                  />
-                  {editCurrentCountry === "United States" && (
-                    <StateSelect
-                      value={editCurrentState}
-                      onChange={setEditCurrentState}
-                      testId="input-edit-current-state"
+                  {editCurrentCountry === "United States" ? (
+                    <div className="edit-profile-location-inline-row">
+                      <div className="edit-profile-location-inline-field">
+                        <StateSelect
+                          value={editCurrentState}
+                          onChange={setEditCurrentState}
+                          testId="input-edit-current-state"
+                        />
+                      </div>
+                      <div className="edit-profile-location-inline-field">
+                        <LocationSelect
+                          value={editCurrentCountry}
+                          onChange={(val) => {
+                            setEditCurrentCountry(val);
+                            if (val !== "United States") setEditCurrentState("");
+                          }}
+                          testId="input-edit-current-country"
+                          icon="pin"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <LocationSelect
+                      value={editCurrentCountry}
+                      onChange={(val) => {
+                        setEditCurrentCountry(val);
+                        if (val !== "United States") setEditCurrentState("");
+                      }}
+                      testId="input-edit-current-country"
+                      icon="pin"
                     />
                   )}
                   <div className="edit-profile-checkbox-row" data-testid="checkbox-show-current-location">
