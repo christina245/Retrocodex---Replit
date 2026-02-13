@@ -456,10 +456,9 @@ export default function UserDashboard() {
             </div>
 
             <div className="edit-profile-section">
-              <label className="edit-profile-label">CURRENT AND PAST LOCATIONS</label>
               <div className="edit-profile-locations-columns" data-testid="edit-locations-section">
                 <div className="edit-profile-location-column" data-testid="edit-current-location-column">
-                  <span className="edit-profile-location-column-label">CURRENT LOCATION</span>
+                  <label className="edit-profile-label">CURRENT LOCATION</label>
                   {editCurrentCountry === "United States" ? (
                     <div className="edit-profile-location-inline-row">
                       <div className="edit-profile-location-inline-field">
@@ -504,7 +503,7 @@ export default function UserDashboard() {
                 </div>
 
                 <div className="edit-profile-location-column" data-testid="edit-places-lived-column">
-                  <span className="edit-profile-location-column-label">PLACES I'VE LIVED</span>
+                  <label className="edit-profile-label">PLACES I'VE LIVED</label>
                   {editPlacesLived.map((entry, index) => (
                     <div key={index}>
                       <div className="edit-profile-place-row">
