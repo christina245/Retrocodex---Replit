@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import ReactMarkdown from "react-markdown";
 import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +17,7 @@ import "./UserDashboard.css";
 type DashboardTab = "for-you" | "following" | "fact-updates" | "local" | "saved";
 type SideTab = "feed" | "edit-profile" | "activity";
 type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
+type ProfileActivityTab = "submissions" | "edits" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
   { id: "for-you", label: "For You" },
@@ -23,6 +25,12 @@ const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
   { id: "fact-updates", label: "Fact Updates" },
   { id: "local", label: "Local" },
   { id: "saved", label: "Saved" },
+];
+
+const PROFILE_ACTIVITY_TABS: { id: ProfileActivityTab; label: string }[] = [
+  { id: "submissions", label: "Submissions" },
+  { id: "edits", label: "Edits" },
+  { id: "comments", label: "Comments" },
 ];
 
 const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
@@ -226,6 +234,9 @@ export default function UserDashboard() {
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
   const [sideTab, setSideTab] = useState<SideTab>("feed");
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
+  const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
+  const [bioEditOpen, setBioEditOpen] = useState(false);
+  const [editBio, setEditBio] = useState("");
 
 
   const parseLocation = (loc: string) => {
@@ -518,6 +529,7 @@ export default function UserDashboard() {
               )}
 
               {sideTab === "edit-profile" && (
+                <>
                 <div className="dashboard-profile-banner" data-testid="dashboard-profile-banner">
                   <div className="user-profile-banner">
                     <div className="user-profile-photo-wrapper">
@@ -626,6 +638,136 @@ export default function UserDashboard() {
                     </div>
                   </div>
                 </div>
+
+                <div className="profile-bio-section" data-testid="profile-bio-section">
+                  <div className="profile-bio-header">
+                    <h3 className="user-profile-section-label">BIO</h3>
+                    <button
+                      className="user-profile-edit-button"
+                      onClick={() => {
+                        setEditBio(user.bio || "");
+                        setBioEditOpen(true);
+                      }}
+                      aria-label="Edit bio"
+                      data-testid="button-edit-bio"
+                    >
+                      <Pencil size={18} />
+                    </button>
+                  </div>
+                  {user.bio ? (
+                    <div className="profile-bio-text" data-testid="text-bio">
+                      <ReactMarkdown>{user.bio}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <span className="user-profile-empty-text" data-testid="text-bio-empty">No bio yet.</span>
+                  )}
+                </div>
+
+                {bioEditOpen && (
+                  <div
+                    className="edit-profile-overlay"
+                    onClick={(e) => { if (e.target === e.currentTarget) setBioEditOpen(false); }}
+                    data-testid="bio-edit-overlay"
+                  >
+                    <div className="edit-profile-modal bio-edit-modal" data-testid="bio-edit-modal">
+                      <button
+                        className="edit-profile-close"
+                        onClick={() => setBioEditOpen(false)}
+                        aria-label="Close bio editor"
+                        data-testid="button-close-bio-edit"
+                      >
+                        <X size={20} />
+                      </button>
+                      <h2 className="edit-profile-title">Edit Bio</h2>
+                      <div className="edit-profile-section">
+                        <label className="edit-profile-label">BIO (MARKDOWN SUPPORTED)</label>
+                        <div className="edit-profile-textarea-wrapper">
+                          <textarea
+                            className="edit-profile-textarea bio-edit-textarea"
+                            value={editBio}
+                            onChange={(e) => {
+                              if (e.target.value.length <= 2000) setEditBio(e.target.value);
+                            }}
+                            maxLength={2000}
+                            placeholder="Tell the world about yourself..."
+                            data-testid="input-edit-bio"
+                          />
+                          <div className={`edit-profile-char-count${editBio.length >= 2000 ? " edit-profile-count-max" : ""}`} data-testid="text-bio-char-count">
+                            {editBio.length}/2000
+                          </div>
+                        </div>
+                      </div>
+                      {editBio.trim() && (
+                        <div className="bio-edit-preview" data-testid="bio-edit-preview">
+                          <label className="edit-profile-label">PREVIEW</label>
+                          <div className="profile-bio-text">
+                            <ReactMarkdown>{editBio}</ReactMarkdown>
+                          </div>
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        className="edit-profile-save"
+                        onClick={() => setBioEditOpen(false)}
+                        data-testid="button-save-bio"
+                      >
+                        Save Bio
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="profile-activity-section" data-testid="profile-activity-section">
+                  <div className="dashboard-feed-tabs-wrapper">
+                    <nav className="dashboard-feed-tabs" data-testid="profile-activity-tabs">
+                      {PROFILE_ACTIVITY_TABS.map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`homepage-tab${profileActivityTab === tab.id ? " homepage-tab-active" : ""}`}
+                          onClick={() => setProfileActivityTab(tab.id)}
+                          data-testid={`button-profile-activity-tab-${tab.id}`}
+                        >
+                          <span className="homepage-tab-text">{tab.label}</span>
+                          {profileActivityTab === tab.id && <div className="homepage-tab-indicator" />}
+                        </button>
+                      ))}
+                    </nav>
+                    <div className="homepage-tabs-divider" />
+                  </div>
+
+                  <div className="dashboard-feed-content" data-testid="profile-activity-content">
+                    {profileActivityTab === "submissions" && (
+                      <div className="profile-activity-empty" data-testid="profile-activity-empty-submissions">
+                        <FileText size={40} className="profile-activity-empty-icon" />
+                        <p className="profile-activity-empty-title">No approved submissions yet.</p>
+                        <p className="profile-activity-empty-desc">
+                          Got a misconception that bothers you? Share it with the world.
+                        </p>
+                      </div>
+                    )}
+
+                    {profileActivityTab === "edits" && (
+                      <div className="profile-activity-empty" data-testid="profile-activity-empty-edits">
+                        <FilePenLine size={40} className="profile-activity-empty-icon" />
+                        <p className="profile-activity-empty-title">No approved edits yet.</p>
+                        <p className="profile-activity-empty-desc">
+                          Have any information you'd like to add to an existing topic? Submit an edit request on the topic page.
+                        </p>
+                      </div>
+                    )}
+
+                    {profileActivityTab === "comments" && (
+                      <div className="profile-activity-empty" data-testid="profile-activity-empty-comments">
+                        <MessageSquare size={40} className="profile-activity-empty-icon" />
+                        <p className="profile-activity-empty-title">No comments yet.</p>
+                        <p className="profile-activity-empty-desc">
+                          Leave a comment on any single fact page to share your experiences with the topic.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                </>
               )}
 
               {sideTab === "activity" && (

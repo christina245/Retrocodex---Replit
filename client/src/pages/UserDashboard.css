@@ -135,6 +135,105 @@
   color: #878787;
 }
 
+.profile-bio-section {
+  margin-top: 2rem;
+}
+
+.profile-bio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.profile-bio-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+}
+
+.profile-bio-text p {
+  margin: 0 0 0.5rem 0;
+}
+
+.profile-bio-text p:last-child {
+  margin-bottom: 0;
+}
+
+.profile-bio-text a {
+  color: #FF5353;
+  text-decoration: underline;
+}
+
+.profile-bio-text strong {
+  font-weight: 700;
+}
+
+.profile-bio-text em {
+  font-style: italic;
+}
+
+.profile-bio-text ul,
+.profile-bio-text ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.bio-edit-textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.bio-edit-preview {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.bio-edit-preview .profile-bio-text {
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.profile-activity-section {
+  margin-top: 2.5rem;
+}
+
+.profile-activity-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.profile-activity-empty-icon {
+  color: #878787;
+  margin-bottom: 1rem;
+}
+
+.profile-activity-empty-title {
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #878787;
+  margin: 0 0 0.5rem 0;
+}
+
+.profile-activity-empty-desc {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #878787;
+  margin: 0;
+  max-width: 360px;
+}
+
 .user-profile-section-label {
   font-family: 'Public Sans', sans-serif;
   font-weight: 500;

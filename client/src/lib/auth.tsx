@@ -11,6 +11,7 @@ interface UserData {
   showPlacesLived: boolean;
   favoriteTags: string[];
   misinfoSource: string;
+  bio: string;
 }
 
 interface AuthContextType {
@@ -41,6 +42,7 @@ const DUMMY_USER: UserData = {
     "space exploration",
   ],
   misinfoSource: "",
+  bio: "Creator of Retrocodex. I created this site because of how in-demand I saw the concept was and was horrified that I might be acting on untrue beliefs at any given moment. You never know what facts could one day save your life!",
 };
 
 const AuthContext = createContext<AuthContextType>({
