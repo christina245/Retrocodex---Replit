@@ -380,6 +380,10 @@
   min-width: 0;
 }
 
+.edit-profile-location-inline-field .signin-state-field {
+  margin-top: 0;
+}
+
 .edit-profile-place-row {
   display: flex;
   align-items: flex-start;
