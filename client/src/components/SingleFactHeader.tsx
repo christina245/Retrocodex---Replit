@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search, X, UserRound } from "lucide-react";
+import { Search, X, UserRound, Bell } from "lucide-react";
+import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
 import { SignInModal } from "./SignInModal";
@@ -16,6 +17,7 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [, navigate] = useLocation();
+  const notificationCount = 3;
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,6 +111,15 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
               <UserRound size={16} className="header-signin-icon" />
               Sign In
             </button>
+          )}
+          {isLoggedIn && (
+            <NotificationBell
+              count={notificationCount}
+              size={18}
+              onClick={() => navigate("/dashboard?tab=notifications")}
+              className="notification-bell-header"
+              testId="header-notification-bell"
+            />
           )}
           {onMenuClick && (
             <button 

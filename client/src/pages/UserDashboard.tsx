@@ -12,17 +12,17 @@ import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import "../components/HomepageTabs.css";
+import { NotificationBell } from "@/components/NotificationBell";
 import "./UserDashboard.css";
 
-type DashboardTab = "for-you" | "following" | "fact-updates" | "local" | "saved";
-type SideTab = "feed" | "edit-profile" | "activity" | "settings";
+type DashboardTab = "for-you" | "following" | "local" | "saved";
+type SideTab = "feed" | "fact-updates" | "notifications" | "edit-profile" | "activity" | "settings";
 type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
   { id: "for-you", label: "For You" },
   { id: "following", label: "Following" },
-  { id: "fact-updates", label: "Fact Updates" },
   { id: "local", label: "Local" },
   { id: "saved", label: "Saved" },
 ];
@@ -227,12 +227,20 @@ function StateSelect({ value, onChange, testId }: { value: string; onChange: (v:
 export default function UserDashboard() {
   const { user, isLoggedIn, logout } = useAuth();
   const [, navigate] = useLocation();
+  const initialTab = (() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    if (tab && ["feed", "fact-updates", "notifications", "edit-profile", "activity", "settings"].includes(tab)) {
+      return tab as SideTab;
+    }
+    return "feed" as SideTab;
+  })();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
-  const [sideTab, setSideTab] = useState<SideTab>("feed");
+  const [sideTab, setSideTab] = useState<SideTab>(initialTab);
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
@@ -245,6 +253,7 @@ export default function UserDashboard() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
+  const [notificationCount] = useState(3);
 
 
   const parseLocation = (loc: string) => {
@@ -427,6 +436,22 @@ export default function UserDashboard() {
                 <span>Feed</span>
               </button>
               <button
+                className={`dashboard-side-tab${sideTab === "fact-updates" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("fact-updates")}
+                data-testid="button-side-tab-fact-updates"
+              >
+                <BellRing size={20} className="dashboard-side-tab-icon" />
+                <span>Fact Updates</span>
+              </button>
+              <button
+                className={`dashboard-side-tab dashboard-side-tab-notifications${sideTab === "notifications" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("notifications")}
+                data-testid="button-side-tab-notifications"
+              >
+                <NotificationBell count={notificationCount} size={20} className="dashboard-side-tab-bell" testId="sidebar-notification-bell" />
+                <span>Activity</span>
+              </button>
+              <button
                 className={`dashboard-side-tab${sideTab === "edit-profile" ? " dashboard-side-tab-active" : ""}`}
                 onClick={() => setSideTab("edit-profile")}
                 data-testid="button-side-tab-edit-profile"
@@ -511,16 +536,6 @@ export default function UserDashboard() {
                       </div>
                     )}
 
-                    {feedTab === "fact-updates" && (
-                      <div className="dashboard-feed-empty" data-testid="feed-empty-fact-updates">
-                        <BellRing size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You aren't following any facts yet</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Updates from facts you follow will be here.
-                        </p>
-                      </div>
-                    )}
-
                     {feedTab === "local" && (
                       <div className="dashboard-feed-empty" data-testid="feed-empty-local">
                         <MapPinned size={40} className="dashboard-feed-empty-icon" />
@@ -557,6 +572,28 @@ export default function UserDashboard() {
                     )}
                   </div>
                 </>
+              )}
+
+              {sideTab === "fact-updates" && (
+                <div className="dashboard-feed-empty" data-testid="feed-empty-fact-updates">
+                  <BellRing size={40} className="dashboard-feed-empty-icon" />
+                  <p className="dashboard-feed-empty-title">You aren't following any facts yet</p>
+                  <p className="dashboard-feed-empty-desc">
+                    Updates from facts you follow will be here.
+                  </p>
+                </div>
+              )}
+
+              {sideTab === "notifications" && (
+                <div className="notifications-page" data-testid="notifications-page">
+                  <div className="notifications-empty" data-testid="notifications-empty">
+                    <Bell size={40} className="dashboard-feed-empty-icon" />
+                    <p className="dashboard-feed-empty-title">No new activity</p>
+                    <p className="dashboard-feed-empty-desc">
+                      When someone follows you or replies to your comments, you'll see it here.
+                    </p>
+                  </div>
+                </div>
               )}
 
               {sideTab === "edit-profile" && (

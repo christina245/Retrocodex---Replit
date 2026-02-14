@@ -1142,6 +1142,36 @@
   background: #e64848;
 }
 
+.dashboard-side-tab-notifications {
+  position: relative;
+}
+
+.dashboard-side-tab-bell {
+  color: inherit;
+}
+
+.dashboard-side-tab-notifications .notification-bell-badge {
+  top: -4px;
+  right: -6px;
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+}
+
+.notifications-page {
+  padding: 0.5rem 0;
+}
+
+.notifications-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
 @media (max-width: 900px) {
   .user-dashboard-content {
     padding: 1rem;

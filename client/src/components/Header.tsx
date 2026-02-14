@@ -8,6 +8,7 @@ import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
 import logoImage from "@assets/retrocodex thicker logo beta.png";
 import taglineImage from "@assets/tagline only lessons 3.png";
 import taglineMobileImage from "@assets/tagline_mobile_1766215766436.png";
+import { NotificationBell } from "./NotificationBell";
 import { SignInModal } from "./SignInModal";
 import "./Header.css";
 
@@ -23,6 +24,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [, navigate] = useLocation();
+  const notificationCount = 3;
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,6 +164,15 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
                 <UserRound size={16} className="header-signin-icon" />
                 Sign In
               </button>
+            )}
+            {isLoggedIn && (
+              <NotificationBell
+                count={notificationCount}
+                size={18}
+                onClick={() => navigate("/dashboard?tab=notifications")}
+                className="notification-bell-header"
+                testId="header-notification-bell"
+              />
             )}
             {onMenuClick && (
               <button 
