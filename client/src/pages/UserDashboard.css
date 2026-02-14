@@ -686,17 +686,6 @@
   border-left: 1px solid #e0e0e0;
 }
 
-.dashboard-feed-tabs-wrapper {
-  width: 100%;
-}
-
-.dashboard-feed-tabs {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 40px;
-}
-
 .dashboard-feed-content {
   margin-top: 2rem;
 }
@@ -1272,13 +1261,6 @@
 
   .edit-profile-textarea-wrapper {
     max-width: 100%;
-  }
-
-  .dashboard-feed-tabs {
-    gap: 20px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 4px;
   }
 
   .dashboard-feed-grid {

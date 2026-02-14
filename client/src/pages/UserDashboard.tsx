@@ -11,7 +11,6 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
-import "../components/HomepageTabs.css";
 import { NotificationBell } from "@/components/NotificationBell";
 import "./UserDashboard.css";
 
@@ -488,21 +487,19 @@ export default function UserDashboard() {
           <div className="dashboard-center-column">
               {sideTab === "feed" && (
                 <>
-                  <div className="dashboard-feed-tabs-wrapper">
-                    <nav className="dashboard-feed-tabs" data-testid="dashboard-feed-tabs">
+                  <div className="notifications-tabs-wrapper">
+                    <nav className="notifications-tabs" data-testid="dashboard-feed-tabs">
                       {DASHBOARD_TABS.map((tab) => (
                         <button
                           key={tab.id}
-                          className={`homepage-tab${feedTab === tab.id ? " homepage-tab-active" : ""}`}
+                          className={`notifications-tab${feedTab === tab.id ? " notifications-tab-active" : ""}`}
                           onClick={() => handleFeedTabChange(tab.id)}
                           data-testid={`button-feed-tab-${tab.id}`}
                         >
-                          <span className="homepage-tab-text">{tab.label}</span>
-                          {feedTab === tab.id && <div className="homepage-tab-indicator" />}
+                          <span>{tab.label}</span>
                         </button>
                       ))}
                     </nav>
-                    <div className="homepage-tabs-divider" />
                   </div>
 
                   <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
@@ -822,21 +819,19 @@ export default function UserDashboard() {
                 )}
 
                 <div className="profile-activity-section" data-testid="profile-activity-section">
-                  <div className="dashboard-feed-tabs-wrapper">
-                    <nav className="dashboard-feed-tabs" data-testid="profile-activity-tabs">
+                  <div className="notifications-tabs-wrapper">
+                    <nav className="notifications-tabs" data-testid="profile-activity-tabs">
                       {PROFILE_ACTIVITY_TABS.map((tab) => (
                         <button
                           key={tab.id}
-                          className={`homepage-tab${profileActivityTab === tab.id ? " homepage-tab-active" : ""}`}
+                          className={`notifications-tab${profileActivityTab === tab.id ? " notifications-tab-active" : ""}`}
                           onClick={() => setProfileActivityTab(tab.id)}
                           data-testid={`button-profile-activity-tab-${tab.id}`}
                         >
-                          <span className="homepage-tab-text">{tab.label}</span>
-                          {profileActivityTab === tab.id && <div className="homepage-tab-indicator" />}
+                          <span>{tab.label}</span>
                         </button>
                       ))}
                     </nav>
-                    <div className="homepage-tabs-divider" />
                   </div>
 
                   <div className="dashboard-feed-content" data-testid="profile-activity-content">
@@ -876,21 +871,19 @@ export default function UserDashboard() {
 
               {sideTab === "activity" && (
                 <>
-                  <div className="dashboard-feed-tabs-wrapper">
-                    <nav className="dashboard-feed-tabs" data-testid="dashboard-activity-tabs">
+                  <div className="notifications-tabs-wrapper">
+                    <nav className="notifications-tabs" data-testid="dashboard-activity-tabs">
                       {ACTIVITY_TABS.map((tab) => (
                         <button
                           key={tab.id}
-                          className={`homepage-tab${activityTab === tab.id ? " homepage-tab-active" : ""}`}
+                          className={`notifications-tab${activityTab === tab.id ? " notifications-tab-active" : ""}`}
                           onClick={() => setActivityTab(tab.id)}
                           data-testid={`button-activity-tab-${tab.id}`}
                         >
-                          <span className="homepage-tab-text">{tab.label}</span>
-                          {activityTab === tab.id && <div className="homepage-tab-indicator" />}
+                          <span>{tab.label}</span>
                         </button>
                       ))}
                     </nav>
-                    <div className="homepage-tabs-divider" />
                   </div>
 
                   <div className="dashboard-feed-content" data-testid="dashboard-activity-content">
