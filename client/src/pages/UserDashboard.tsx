@@ -535,12 +535,12 @@ export default function UserDashboard() {
                           </div>
                           <div className="following-post-body following-post-submission">
                             <div className="following-post-submission-text">
-                              <Link href="/fact/sugar-makes-kids-hyper" className="following-post-link">
+                              <Link href="/fact/does-eating-sugar-make-kids-hyper" className="following-post-link">
                                 <p className="fact-myth">"Eating too much sugar makes kids hyper."</p>
                               </Link>
-                              <p className="fact-details">A common misconception debunked. While sugar provides energy, there is no scientific link between sucrose consumption and ADHD-like behavior in controlled studies. The 'hyperactivity' is often a result of the environment where sugary treats are consumed (parties, etc).</p>
+                              <p className="fact-details">Popular terms such as "sugar high" and "sugar rush" are based on this myth.</p>
                             </div>
-                            <img src="/uploads/1764719426643-922952402.png" alt="Sugar myth cover" className="following-post-cover-photo" />
+                            <img src="/objects/uploads/74054346-bf6b-4820-9ace-6c5b7127937b.png" alt="Sugar myth cover" className="following-post-cover-photo" />
                           </div>
                         </div>
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Search, X, UserRound, Bell } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
-import logoImage from "@assets/retrocodex thicker logo beta.png";
+import logoImage from "@assets/thicker_logo_only_1771065757126.png";
 import { SignInModal } from "./SignInModal";
 import { useAuth } from "@/lib/auth";
 import "./SingleFactHeader.css";

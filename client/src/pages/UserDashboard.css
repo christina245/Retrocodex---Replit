@@ -809,6 +809,8 @@ a.following-post-username:hover {
 .following-post-link {
   text-decoration: none;
   color: inherit;
+  margin-bottom: 1rem;
+  display: block;
 }
 
 .following-post-link:hover .fact-myth {
