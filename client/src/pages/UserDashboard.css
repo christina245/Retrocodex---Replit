@@ -775,12 +775,13 @@ a.following-post-username:hover {
   font-size: 16px;
   font-weight: 700;
   color: #2C2C2C;
-  text-decoration: underline;
+  text-decoration: none;
   transition: color 0.2s;
 }
 
 .following-post-fact-title:hover {
   color: #FF5353;
+  text-decoration: underline;
 }
 
 .following-post-timestamp {
@@ -828,12 +829,9 @@ a.following-post-username:hover {
   display: block;
 }
 
-.following-post-link .fact-myth {
-  text-decoration: underline;
-}
-
 .following-post-link:hover .fact-myth {
   color: #FF5353;
+  text-decoration: underline;
 }
 
 .following-post-cover-photo {
