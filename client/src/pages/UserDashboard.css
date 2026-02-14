@@ -731,8 +731,8 @@
 }
 
 .following-post-avatar {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -747,11 +747,17 @@
   gap: 4px;
 }
 
-.following-post-username {
+a.following-post-username {
   font-family: 'Public Sans', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #2C2C2C;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a.following-post-username:hover {
+  color: #FF5353;
 }
 
 .following-post-action {
@@ -778,15 +784,16 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
-  color: #d9d9d9;
+  color: #878787;
   white-space: nowrap;
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 4px;
+  margin-right: 60px;
 }
 
 .following-post-body {
-  padding-left: calc(4rem + 12px);
+  padding-left: calc(3rem + 12px);
 }
 
 .following-post-submission {
@@ -887,31 +894,18 @@
   font-style: normal;
 }
 
-/* Comment Actions */
-.following-comment-actions {
-  display: flex;
-  gap: 16px;
-  margin-top: 10px;
-  padding-left: 4px;
-}
-
-.following-comment-action-btn {
+/* Plain Comment (no quote block) */
+.following-plain-comment {
   font-family: 'Public Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #878787;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: color 0.2s;
+  font-size: 14px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 0 0 10px 0;
 }
 
-.following-comment-action-btn:hover {
-  color: #FF5353;
+.following-post-body .comment-actions {
+  justify-content: flex-start;
 }
 
 

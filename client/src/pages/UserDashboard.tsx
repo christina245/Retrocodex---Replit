@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
 import "../components/ExtendedFactCard.css";
+import "../components/CommentsSection.css";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "saved";
@@ -527,7 +528,7 @@ export default function UserDashboard() {
                           <div className="following-post-header">
                             <img src={placeholderPhoto} alt="LogicGamer_01" className="following-post-avatar" />
                             <div className="following-post-header-text">
-                              <span className="following-post-username">LogicGamer_01</span>
+                              <Link href="/user/LogicGamer_01" className="following-post-username" data-testid="link-user-LogicGamer_01">LogicGamer_01</Link>
                               <span className="following-post-action">submitted a new topic</span>
                             </div>
                             <span className="following-post-timestamp">2 mins ago</span>
@@ -547,7 +548,7 @@ export default function UserDashboard() {
                           <div className="following-post-header">
                             <img src={placeholderPhoto} alt="DungeonMaster_88" className="following-post-avatar" />
                             <div className="following-post-header-text">
-                              <span className="following-post-username">DungeonMaster_88</span>
+                              <Link href="/user/DungeonMaster_88" className="following-post-username" data-testid="link-user-DungeonMaster_88">DungeonMaster_88</Link>
                               <span className="following-post-action">voted on a poll</span>
                             </div>
                             <span className="following-post-timestamp">15 mins ago</span>
@@ -570,7 +571,7 @@ export default function UserDashboard() {
                           <div className="following-post-header">
                             <img src={placeholderPhoto} alt="NullPointerExcep" className="following-post-avatar" />
                             <div className="following-post-header-text">
-                              <span className="following-post-username">NullPointerExcep</span>
+                              <Link href="/user/NullPointerExcep" className="following-post-username" data-testid="link-user-NullPointerExcep">NullPointerExcep</Link>
                               <span className="following-post-action">liked a comment on</span>
                               <Link href="/fact/you-only-use-10-percent-of-your-brain" className="following-post-fact-title">"Do you only use 10% of your brain?"</Link>
                             </div>
@@ -587,22 +588,30 @@ export default function UserDashboard() {
                           <div className="following-post-header">
                             <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
                             <div className="following-post-header-text">
-                              <span className="following-post-username">Ackshually_42</span>
+                              <Link href="/user/Ackshually_42" className="following-post-username" data-testid="link-user-Ackshually_42">Ackshually_42</Link>
                               <span className="following-post-action">commented on</span>
                               <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-fact-title">"Christopher Columbus discovered the Americas in 1492"</Link>
                             </div>
                             <span className="following-post-timestamp">3 hours ago</span>
                           </div>
                           <div className="following-post-body">
-                            <div className="following-comment-quote" data-testid="following-comment-quote-2">
-                              <p className="following-comment-text">"Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean."</p>
-                            </div>
-                            <div className="following-comment-actions" data-testid="following-comment-actions">
-                              <button className="following-comment-action-btn" data-testid="button-upvote">
-                                Upvote (12)
+                            <p className="following-plain-comment" data-testid="following-plain-comment">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
+                            <div className="comment-actions" data-testid="following-comment-actions">
+                              <button className="comment-action disabled-action" data-testid="button-reply-following">
+                                <CornerUpLeft size={14} />
+                                <span>Reply</span>
                               </button>
-                              <button className="following-comment-action-btn" data-testid="button-reply">
-                                Reply
+                              <button className="comment-action disabled-action" data-testid="button-like-following">
+                                <Heart size={14} />
+                                <span>12 likes</span>
+                              </button>
+                              <button className="comment-action disabled-action" data-testid="button-save-following">
+                                <Bookmark size={14} />
+                                <span>Save</span>
+                              </button>
+                              <button className="comment-action disabled-action" data-testid="button-share-following">
+                                <Share2 size={14} />
+                                <span>Share</span>
                               </button>
                             </div>
                           </div>
