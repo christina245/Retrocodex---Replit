@@ -16,7 +16,8 @@ import { NotificationBell } from "@/components/NotificationBell";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "saved";
-type SideTab = "feed" | "fact-updates" | "notifications" | "edit-profile" | "activity" | "settings";
+type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "settings";
+type NotificationsTab = "all" | "replies" | "comments" | "fact-updates";
 type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
@@ -230,7 +231,7 @@ export default function UserDashboard() {
   const initialTab = (() => {
     const params = new URLSearchParams(window.location.search);
     const tab = params.get("tab");
-    if (tab && ["feed", "fact-updates", "notifications", "edit-profile", "activity", "settings"].includes(tab)) {
+    if (tab && ["feed", "notifications", "edit-profile", "activity", "settings"].includes(tab)) {
       return tab as SideTab;
     }
     return "feed" as SideTab;
@@ -241,6 +242,7 @@ export default function UserDashboard() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
+  const [notificationsTab, setNotificationsTab] = useState<NotificationsTab>("all");
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
@@ -436,14 +438,6 @@ export default function UserDashboard() {
                 <span>Feed</span>
               </button>
               <button
-                className={`dashboard-side-tab${sideTab === "fact-updates" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("fact-updates")}
-                data-testid="button-side-tab-fact-updates"
-              >
-                <BellRing size={20} className="dashboard-side-tab-icon" />
-                <span>Fact Updates</span>
-              </button>
-              <button
                 className={`dashboard-side-tab dashboard-side-tab-notifications${sideTab === "notifications" ? " dashboard-side-tab-active" : ""}`}
                 onClick={() => setSideTab("notifications")}
                 data-testid="button-side-tab-notifications"
@@ -574,25 +568,67 @@ export default function UserDashboard() {
                 </>
               )}
 
-              {sideTab === "fact-updates" && (
-                <div className="dashboard-feed-empty" data-testid="feed-empty-fact-updates">
-                  <BellRing size={40} className="dashboard-feed-empty-icon" />
-                  <p className="dashboard-feed-empty-title">You aren't following any facts yet</p>
-                  <p className="dashboard-feed-empty-desc">
-                    Updates from facts you follow will be here.
-                  </p>
-                </div>
-              )}
-
               {sideTab === "notifications" && (
                 <div className="notifications-page" data-testid="notifications-page">
-                  <div className="notifications-empty" data-testid="notifications-empty">
-                    <Bell size={40} className="dashboard-feed-empty-icon" />
-                    <p className="dashboard-feed-empty-title">No new activity</p>
-                    <p className="dashboard-feed-empty-desc">
-                      When someone follows you or replies to your comments, you'll see it here.
-                    </p>
+                  <div className="notifications-tabs-wrapper">
+                    <nav className="notifications-tabs" data-testid="notifications-tabs">
+                      {([
+                        { id: "all" as NotificationsTab, label: "All" },
+                        { id: "replies" as NotificationsTab, label: "Replies" },
+                        { id: "comments" as NotificationsTab, label: "Comments" },
+                        { id: "fact-updates" as NotificationsTab, label: "Fact Updates" },
+                      ]).map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`notifications-tab${notificationsTab === tab.id ? " notifications-tab-active" : ""}`}
+                          onClick={() => setNotificationsTab(tab.id)}
+                          data-testid={`button-notifications-tab-${tab.id}`}
+                        >
+                          <span>{tab.label}</span>
+                        </button>
+                      ))}
+                    </nav>
                   </div>
+
+                  {notificationsTab === "all" && (
+                    <div className="dashboard-feed-empty" data-testid="notifications-empty-all">
+                      <Bell size={40} className="dashboard-feed-empty-icon" />
+                      <p className="dashboard-feed-empty-title">No new activity</p>
+                      <p className="dashboard-feed-empty-desc">
+                        New followers, upvotes, replies, comments, and fact updates will appear here.
+                      </p>
+                    </div>
+                  )}
+
+                  {notificationsTab === "replies" && (
+                    <div className="dashboard-feed-empty" data-testid="notifications-empty-replies">
+                      <MessageSquare size={40} className="dashboard-feed-empty-icon" />
+                      <p className="dashboard-feed-empty-title">No replies yet</p>
+                      <p className="dashboard-feed-empty-desc">
+                        Replies to comments you've left on entries will show up here.
+                      </p>
+                    </div>
+                  )}
+
+                  {notificationsTab === "comments" && (
+                    <div className="dashboard-feed-empty" data-testid="notifications-empty-comments">
+                      <MessageSquare size={40} className="dashboard-feed-empty-icon" />
+                      <p className="dashboard-feed-empty-title">No comments yet</p>
+                      <p className="dashboard-feed-empty-desc">
+                        Comments on your approved submissions will show up here.
+                      </p>
+                    </div>
+                  )}
+
+                  {notificationsTab === "fact-updates" && (
+                    <div className="dashboard-feed-empty" data-testid="notifications-empty-fact-updates">
+                      <BellRing size={40} className="dashboard-feed-empty-icon" />
+                      <p className="dashboard-feed-empty-title">You aren't following any facts yet</p>
+                      <p className="dashboard-feed-empty-desc">
+                        Updates to facts you follow will be here.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
