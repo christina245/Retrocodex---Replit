@@ -639,7 +639,7 @@
   flex-direction: column;
   justify-content: space-between;
   min-width: 160px;
-  padding-right: 20px;
+  padding-right: 80px;
   padding-top: 4px;
   position: sticky;
   top: 80px;
@@ -703,8 +703,16 @@
 
 .dashboard-feed-grid {
   display: grid;
-  grid-template-columns: repeat(2, 515px);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+}
+
+.dashboard-feed-grid .fact-card-wrapper {
+  width: 100%;
+}
+
+.dashboard-feed-grid .fact-card {
+  width: 100%;
 }
 
 .dashboard-feed-empty {
