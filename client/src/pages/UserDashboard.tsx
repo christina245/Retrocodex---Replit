@@ -533,14 +533,21 @@ export default function UserDashboard() {
                             </div>
                             <span className="following-post-timestamp">2 mins ago</span>
                           </div>
-                          <div className="following-post-body following-post-submission">
-                            <div className="following-post-submission-text">
-                              <Link href="/fact/does-eating-sugar-make-kids-hyper" className="following-post-link">
-                                <p className="fact-myth">"Eating too much sugar makes kids hyper."</p>
-                              </Link>
-                              <p className="fact-details">Popular terms such as "sugar high" and "sugar rush" are based on this myth.</p>
-                            </div>
-                            <img src="/objects/uploads/74054346-bf6b-4820-9ace-6c5b7127937b.png" alt="Sugar myth cover" className="following-post-cover-photo" />
+                          <div className="following-post-body following-post-factcard">
+                            <FactCard
+                              fact={{
+                                id: "does-eating-sugar-make-kids-hyper",
+                                category: "EVERYDAY LIFE",
+                                categoryColor: "#0167A2",
+                                myth: "Eating too much sugar makes kids hyper.",
+                                truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
+                                link: "/fact/does-eating-sugar-make-kids-hyper",
+                                coverPhoto: "/objects/uploads/74054346-bf6b-4820-9ace-6c5b7127937b.png",
+                              }}
+                              onSave={() => {}}
+                              onShare={() => {}}
+                              onComment={() => {}}
+                            />
                           </div>
                         </div>
 
@@ -555,7 +562,7 @@ export default function UserDashboard() {
                           </div>
                           <div className="following-post-body">
                             <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
-                              <p className="fact-myth">The Food Pyramid is the model for a healthy, balanced diet.</p>
+                              <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
                             </Link>
                             <div className="following-poll-response" data-testid="following-poll-response">
                               <p className="following-poll-question">Were you taught this information?</p>

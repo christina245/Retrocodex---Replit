@@ -646,7 +646,7 @@
   top: 80px;
   align-self: flex-start;
   min-height: calc(100vh - 160px);
-  background-color: #fafafa;
+  background-color: #FFFFFF;
 }
 
 .dashboard-side-tab {
@@ -685,7 +685,7 @@
   flex: 1;
   min-width: 0;
   padding: 0 24px;
-  border-left: 1px solid #e0e0e0;
+  border-left: 1px solid #f0f0f0;
 }
 
 .dashboard-feed-content {
@@ -715,7 +715,7 @@
 
 .following-post {
   padding: 24px 0;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .following-post:first-child {
@@ -799,14 +799,20 @@ a.following-post-username:hover {
   padding-left: calc(3rem + 12px);
 }
 
-.following-post-submission {
-  display: flex;
-  gap: 20px;
+.following-post-factcard {
+  padding-left: 0;
 }
 
-.following-post-submission-text {
-  flex: 1;
-  min-width: 0;
+.following-post-factcard .fact-card-wrapper {
+  width: 100%;
+}
+
+.following-post-factcard .fact-footer {
+  justify-content: flex-start;
+}
+
+.following-post-factcard .learn-more-button {
+  margin-left: auto;
 }
 
 .following-post-link {
