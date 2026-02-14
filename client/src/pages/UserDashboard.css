@@ -703,16 +703,8 @@
 
 .dashboard-feed-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 515px);
   gap: 20px;
-}
-
-.dashboard-feed-grid .fact-card-wrapper {
-  width: 100%;
-}
-
-.dashboard-feed-grid .fact-card {
-  width: 100%;
 }
 
 .dashboard-feed-empty {
