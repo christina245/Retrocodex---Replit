@@ -800,19 +800,7 @@ a.following-post-username:hover {
 }
 
 .following-post-factcard {
-  padding-left: 0;
-}
-
-.following-post-factcard .fact-card-wrapper {
-  width: 100%;
-}
-
-.following-post-factcard .fact-footer {
-  justify-content: flex-start;
-}
-
-.following-post-factcard .learn-more-button {
-  margin-left: auto;
+  padding-left: calc(3rem + 12px);
 }
 
 .following-post-link {
@@ -1393,6 +1381,8 @@ a.following-post-username:hover {
 .notifications-tabs-wrapper {
   margin-bottom: 0;
   padding: 4px 0;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 12px;
 }
 
 .notifications-tabs {
