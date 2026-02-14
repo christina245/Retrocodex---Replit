@@ -721,7 +721,7 @@
 }
 
 .dashboard-feed-empty-icon {
-  color: #ccc;
+  color: #878787;
   margin-bottom: 1rem;
 }
 
@@ -729,7 +729,7 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: #2C2C2C;
+  color: #878787;
   margin: 0 0 0.5rem 0;
 }
 

@@ -483,7 +483,7 @@ export default function UserDashboard() {
                     {feedTab === "fact-updates" && (
                       <div className="dashboard-feed-empty" data-testid="feed-empty-fact-updates">
                         <BellRing size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You aren't following any facts yet.</p>
+                        <p className="dashboard-feed-empty-title">You aren't following any facts yet</p>
                         <p className="dashboard-feed-empty-desc">
                           Updates from facts you follow will be here.
                         </p>
