@@ -775,7 +775,7 @@ a.following-post-username:hover {
   font-size: 16px;
   font-weight: 700;
   color: #2C2C2C;
-  text-decoration: none;
+  text-decoration: underline;
   transition: color 0.2s;
 }
 
@@ -799,6 +799,24 @@ a.following-post-username:hover {
   padding-left: calc(3rem + 12px);
 }
 
+.local-feed-description {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #2C2C2C;
+  margin: 0;
+  padding: 16px 0 8px 0;
+}
+
+.following-post-location {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2C2C2C;
+  transition: color 0.2s;
+  cursor: default;
+}
+
 .following-post-factcard {
   padding-left: calc(3rem + 12px);
 }
@@ -808,6 +826,10 @@ a.following-post-username:hover {
   color: inherit;
   margin-bottom: 1rem;
   display: block;
+}
+
+.following-post-link .fact-myth {
+  text-decoration: underline;
 }
 
 .following-post-link:hover .fact-myth {

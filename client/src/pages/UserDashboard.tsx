@@ -627,27 +627,160 @@ export default function UserDashboard() {
                     )}
 
                     {feedTab === "local" && (
-                      <div className="dashboard-feed-empty" data-testid="feed-empty-local">
-                        <MapPinned size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">
-                          {user.currentLocation
-                            ? "No local facts available yet"
-                            : "Set your location to see local facts"}
-                        </p>
-                        <p className="dashboard-feed-empty-desc">
-                          {user.currentLocation
-                            ? "Facts related to your region will appear here as they're added."
-                            : "Add your current location in your profile to discover regionally relevant facts."}
-                        </p>
-                        {!user.currentLocation && (
-                          <button
-                            className="dashboard-feed-empty-action"
-                            onClick={() => setEditModalOpen(true)}
-                            data-testid="button-add-location"
-                          >
-                            Add Location
-                          </button>
-                        )}
+                      <div className="following-feed" data-testid="feed-local">
+                        <p className="local-feed-description" data-testid="local-feed-description">Activity from users currently located in your current or past locations.</p>
+
+                        <div className="following-post" data-testid="local-post-1">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="CtrlAltDefeat" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/CtrlAltDefeat" className="following-post-username" data-testid="link-user-CtrlAltDefeat">CtrlAltDefeat</Link>
+                              <span className="following-post-action">from</span>
+                              <span className="following-post-location" data-testid="local-location-1">New York, United States</span>
+                              <span className="following-post-action">submitted a new topic</span>
+                            </div>
+                            <span className="following-post-timestamp">5 mins ago</span>
+                          </div>
+                          <div className="following-post-body following-post-factcard">
+                            <FactCard
+                              fact={{
+                                id: "tongue-taste-map",
+                                category: "LIFE SCIENCES",
+                                categoryColor: "#419F36",
+                                myth: "The tongue has separate zones for different tastes: sweet at the tip, salty and sour on the sides, and bitter at the back.",
+                                truth: "All taste buds can detect all basic tastes. The tongue map myth originated from a misinterpretation of research by Edwin Boring in the 1940s.",
+                                link: "/fact/tongue-taste-map",
+                                coverPhoto: "/uploads/1764732977459-366971984.png",
+                              }}
+                              onSave={() => {}}
+                              onShare={() => {}}
+                              onComment={() => {}}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="local-post-2">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="SyntaxTerror_404" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/SyntaxTerror_404" className="following-post-username" data-testid="link-user-SyntaxTerror_404">SyntaxTerror_404</Link>
+                              <span className="following-post-action">from</span>
+                              <span className="following-post-location" data-testid="local-location-2">Toronto, Canada</span>
+                              <span className="following-post-action">voted on a poll</span>
+                            </div>
+                            <span className="following-post-timestamp">20 mins ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <Link href="/fact/is-msg-bad-for-you" className="following-post-link">
+                              <p className="fact-myth">"MSG is bad for you."</p>
+                            </Link>
+                            <div className="following-poll-response" data-testid="local-poll-response">
+                              <p className="following-poll-question">Were you taught this information?</p>
+                              <div className="following-poll-selection">
+                                <div className="following-poll-radio-filled" />
+                                <span className="following-poll-answer">Yes, by family</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="local-post-3">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="BugHunter_Prime" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/BugHunter_Prime" className="following-post-username" data-testid="link-user-BugHunter_Prime">BugHunter_Prime</Link>
+                              <span className="following-post-action">from</span>
+                              <span className="following-post-location" data-testid="local-location-3">London, United Kingdom</span>
+                              <span className="following-post-action">liked a comment on</span>
+                              <Link href="/fact/does-muscle-turn-into-fat" className="following-post-fact-title">"Does muscle turn into fat if you don't work out?"</Link>
+                            </div>
+                            <span className="following-post-timestamp">45 mins ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <div className="following-comment-quote" data-testid="local-comment-quote-1">
+                              <p className="following-comment-text">"Muscle and fat are completely different tissue types. It's biologically impossible for one to transform into the other — that's like saying bone can turn into skin..."</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="local-post-4">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/CaffeineOverflow" className="following-post-username" data-testid="link-user-CaffeineOverflow">CaffeineOverflow</Link>
+                              <span className="following-post-action">from</span>
+                              <span className="following-post-location" data-testid="local-location-4">Rio de Janeiro, Brazil</span>
+                              <span className="following-post-action">commented on</span>
+                              <Link href="/fact/sweating-burning-fat" className="following-post-fact-title">"Does sweating mean you're burning fat?"</Link>
+                            </div>
+                            <span className="following-post-timestamp">1 hour ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <p className="following-plain-comment" data-testid="local-plain-comment">Living in Rio, people at the gym constantly think sweating buckets equals a better workout. But sweat is just thermoregulation — your body cooling itself down. You can burn tons of calories in cold water swimming without sweating at all.</p>
+                            <div className="comment-actions" data-testid="local-comment-actions-1">
+                              <button className="comment-action disabled-action" data-testid="button-reply-local-1">
+                                <CornerUpLeft size={14} />
+                                <span>Reply</span>
+                              </button>
+                              <button className="comment-action disabled-action" data-testid="button-like-local-1">
+                                <Heart size={14} />
+                                <span>8 likes</span>
+                              </button>
+                              <button className="comment-action disabled-action" data-testid="button-save-local-1">
+                                <Bookmark size={14} />
+                                <span>Save</span>
+                              </button>
+                              <button className="comment-action disabled-action" data-testid="button-share-local-1">
+                                <Share2 size={14} />
+                                <span>Share</span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="local-post-5">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="PixelWitch_99" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/PixelWitch_99" className="following-post-username" data-testid="link-user-PixelWitch_99">PixelWitch_99</Link>
+                              <span className="following-post-action">from</span>
+                              <span className="following-post-location" data-testid="local-location-5">New York, United States</span>
+                              <span className="following-post-action">liked a comment on</span>
+                              <Link href="/fact/does-chewing-gum-stay-in-your-stomach" className="following-post-fact-title">"Does chewing gum stay in your stomach for seven years?"</Link>
+                            </div>
+                            <span className="following-post-timestamp">2 hours ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <div className="following-comment-quote" data-testid="local-comment-quote-2">
+                              <p className="following-comment-text">"Your digestive system isn't just going to give up on something because it's chewy. It passes through like everything else — just on the normal timeline, not seven years later..."</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="local-post-6">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="RespawnPending" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/RespawnPending" className="following-post-username" data-testid="link-user-RespawnPending">RespawnPending</Link>
+                              <span className="following-post-action">from</span>
+                              <span className="following-post-location" data-testid="local-location-6">Toronto, Canada</span>
+                              <span className="following-post-action">voted on a poll</span>
+                            </div>
+                            <span className="following-post-timestamp">3 hours ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <Link href="/fact/states-of-matter" className="following-post-link">
+                              <p className="fact-myth">"There are three states of matter: solid, liquid, and gas."</p>
+                            </Link>
+                            <div className="following-poll-response" data-testid="local-poll-response-2">
+                              <p className="following-poll-question">Were you taught this information?</p>
+                              <div className="following-poll-selection">
+                                <div className="following-poll-radio-filled" />
+                                <span className="following-poll-answer">Yes, in school</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
 
