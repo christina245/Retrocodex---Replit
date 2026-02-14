@@ -12,6 +12,7 @@ import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
+import "../components/ExtendedFactCard.css";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "saved";
@@ -521,12 +522,91 @@ export default function UserDashboard() {
                     )}
 
                     {feedTab === "following" && (
-                      <div className="dashboard-feed-empty" data-testid="feed-empty-following">
-                        <Users size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You're not following anyone yet</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Follow other users to see their activity and shared facts here.
-                        </p>
+                      <div className="following-feed" data-testid="feed-following">
+                        <div className="following-post" data-testid="following-post-1">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="LogicGamer_01" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <span className="following-post-username">LogicGamer_01</span>
+                              <span className="following-post-action">submitted a new topic</span>
+                            </div>
+                            <span className="following-post-timestamp">2 mins ago</span>
+                          </div>
+                          <div className="following-post-body following-post-submission">
+                            <div className="following-post-submission-text">
+                              <Link href="/fact/sugar-makes-kids-hyper" className="following-post-link">
+                                <p className="fact-myth">"Eating too much sugar makes kids hyper."</p>
+                              </Link>
+                              <p className="fact-details">A common misconception debunked. While sugar provides energy, there is no scientific link between sucrose consumption and ADHD-like behavior in controlled studies. The 'hyperactivity' is often a result of the environment where sugary treats are consumed (parties, etc).</p>
+                            </div>
+                            <img src="/uploads/1764719426643-922952402.png" alt="Sugar myth cover" className="following-post-cover-photo" />
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="following-post-2">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="DungeonMaster_88" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <span className="following-post-username">DungeonMaster_88</span>
+                              <span className="following-post-action">voted on a poll</span>
+                            </div>
+                            <span className="following-post-timestamp">15 mins ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
+                              <p className="fact-myth">The Food Pyramid is the model for a healthy, balanced diet.</p>
+                            </Link>
+                            <div className="following-poll-response" data-testid="following-poll-response">
+                              <p className="following-poll-question">Were you taught this information?</p>
+                              <div className="following-poll-selection">
+                                <div className="following-poll-radio-filled" />
+                                <span className="following-poll-answer">Yes, in school</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="following-post-3">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="NullPointerExcep" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <span className="following-post-username">NullPointerExcep</span>
+                              <span className="following-post-action">liked a comment on</span>
+                              <Link href="/fact/you-only-use-10-percent-of-your-brain" className="following-post-fact-title">"Do you only use 10% of your brain?"</Link>
+                            </div>
+                            <span className="following-post-timestamp">1 hour ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <div className="following-comment-quote" data-testid="following-comment-quote-1">
+                              <p className="following-comment-text">"Evolutionarily speaking, maintaining an organ that consumes 20% of your energy while only using 10% of its capacity would be impossible..."</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="following-post" data-testid="following-post-4">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <span className="following-post-username">Ackshually_42</span>
+                              <span className="following-post-action">commented on</span>
+                              <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-fact-title">"Christopher Columbus discovered the Americas in 1492"</Link>
+                            </div>
+                            <span className="following-post-timestamp">3 hours ago</span>
+                          </div>
+                          <div className="following-post-body">
+                            <div className="following-comment-quote" data-testid="following-comment-quote-2">
+                              <p className="following-comment-text">"Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean."</p>
+                            </div>
+                            <div className="following-comment-actions" data-testid="following-comment-actions">
+                              <button className="following-comment-action-btn" data-testid="button-upvote">
+                                Upvote (12)
+                              </button>
+                              <button className="following-comment-action-btn" data-testid="button-reply">
+                                Reply
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
 
