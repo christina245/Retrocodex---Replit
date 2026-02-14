@@ -637,10 +637,14 @@
 .dashboard-side-tabs {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  justify-content: space-between;
   min-width: 160px;
   padding-right: 20px;
   padding-top: 4px;
+  position: sticky;
+  top: 80px;
+  align-self: flex-start;
+  min-height: calc(100vh - 160px);
 }
 
 .dashboard-side-tab {
@@ -817,6 +821,324 @@
 .dashboard-feed-load-more-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Sidebar layout for logout at bottom */
+.dashboard-side-tabs-top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard-side-tabs-bottom {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.dashboard-side-tab-logout {
+  color: #878787 !important;
+}
+
+.dashboard-side-tab-logout:hover {
+  color: #FF5353 !important;
+  background: #fff0f0 !important;
+}
+
+/* Settings Page */
+.settings-page {
+  padding: 0.5rem 0;
+}
+
+.settings-section {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+}
+
+.settings-section-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-section-icon {
+  flex-shrink: 0;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 0;
+}
+
+.settings-row + .settings-row {
+  border-top: 1px solid #f0f0f0;
+}
+
+.settings-row-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-row-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.settings-row-desc {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #878787;
+  margin: 4px 0 0 0;
+}
+
+/* Toggle Switch */
+.settings-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.settings-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.settings-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #d1d1d1;
+  transition: background-color 0.25s;
+  border-radius: 24px;
+}
+
+.settings-toggle-slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: transform 0.25s;
+  border-radius: 50%;
+}
+
+.settings-toggle input:checked + .settings-toggle-slider {
+  background-color: #FF5353;
+}
+
+.settings-toggle input:checked + .settings-toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* Account info rows */
+.settings-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+.settings-info-row + .settings-info-row {
+  border-top: 1px solid #f0f0f0;
+}
+
+.settings-info-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #878787;
+}
+
+.settings-info-value {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2C2C2C;
+}
+
+/* Danger zone */
+.settings-danger-section {
+  border-bottom: none;
+}
+
+.settings-danger-title {
+  color: #FF5353 !important;
+}
+
+.settings-danger-desc {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #878787;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.settings-delete-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FF5353;
+  background: none;
+  border: 1px solid #FF5353;
+  border-radius: 6px;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.settings-delete-button:hover {
+  background: #FF5353;
+  color: white;
+}
+
+/* Delete Account Modal */
+.delete-account-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 440px;
+  width: 90%;
+  position: relative;
+  text-align: center;
+}
+
+.delete-modal-icon {
+  color: #FF5353;
+  margin-bottom: 1rem;
+}
+
+.delete-modal-title {
+  font-family: 'Merriweather', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0 0 0.75rem 0;
+}
+
+.delete-modal-desc {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #878787;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+}
+
+.delete-modal-field {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.delete-modal-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2C2C2C;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.delete-modal-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.delete-modal-input-icon {
+  position: absolute;
+  left: 12px;
+  color: #878787;
+  pointer-events: none;
+}
+
+.delete-modal-input {
+  width: 100%;
+  padding: 0.7rem 0.75rem 0.7rem 2.5rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.delete-modal-input:focus {
+  border-color: #FF5353;
+}
+
+.delete-modal-error {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: #FF5353;
+  margin: 0.5rem 0 0 0;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.delete-modal-cancel {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2C2C;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-modal-cancel:hover {
+  background: #e0e0e0;
+}
+
+.delete-modal-confirm {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #FF5353;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-modal-confirm:hover {
+  background: #e64848;
 }
 
 @media (max-width: 900px) {

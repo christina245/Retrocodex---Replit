@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -15,7 +15,7 @@ import "../components/HomepageTabs.css";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "fact-updates" | "local" | "saved";
-type SideTab = "feed" | "edit-profile" | "activity";
+type SideTab = "feed" | "edit-profile" | "activity" | "settings";
 type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
@@ -225,7 +225,7 @@ function StateSelect({ value, onChange, testId }: { value: string; onChange: (v:
 }
 
 export default function UserDashboard() {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth();
   const [, navigate] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
@@ -237,6 +237,14 @@ export default function UserDashboard() {
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
+  const [allowFollows, setAllowFollows] = useState(true);
+  const [publicProfile, setPublicProfile] = useState(true);
+  const [notifyFollows, setNotifyFollows] = useState(true);
+  const [notifyComments, setNotifyComments] = useState(true);
+  const [notifyFactUpdates, setNotifyFactUpdates] = useState(true);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteError, setDeleteError] = useState("");
 
 
   const parseLocation = (loc: string) => {
@@ -409,30 +417,53 @@ export default function UserDashboard() {
       <div className="user-dashboard-content">
         <div className="dashboard-two-column" data-testid="dashboard-two-column">
           <nav className="dashboard-side-tabs" data-testid="dashboard-side-tabs">
-            <button
-              className={`dashboard-side-tab${sideTab === "feed" ? " dashboard-side-tab-active" : ""}`}
-              onClick={() => setSideTab("feed")}
-              data-testid="button-side-tab-feed"
-            >
-              <Newspaper size={20} className="dashboard-side-tab-icon" />
-              <span>Feed</span>
-            </button>
-            <button
-              className={`dashboard-side-tab${sideTab === "edit-profile" ? " dashboard-side-tab-active" : ""}`}
-              onClick={() => setSideTab("edit-profile")}
-              data-testid="button-side-tab-edit-profile"
-            >
-              <UserRoundPen size={20} className="dashboard-side-tab-icon" />
-              <span>Edit Profile</span>
-            </button>
-            <button
-              className={`dashboard-side-tab${sideTab === "activity" ? " dashboard-side-tab-active" : ""}`}
-              onClick={() => setSideTab("activity")}
-              data-testid="button-side-tab-activity"
-            >
-              <PenLine size={20} className="dashboard-side-tab-icon" />
-              <span>Submissions</span>
-            </button>
+            <div className="dashboard-side-tabs-top">
+              <button
+                className={`dashboard-side-tab${sideTab === "feed" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("feed")}
+                data-testid="button-side-tab-feed"
+              >
+                <Newspaper size={20} className="dashboard-side-tab-icon" />
+                <span>Feed</span>
+              </button>
+              <button
+                className={`dashboard-side-tab${sideTab === "edit-profile" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("edit-profile")}
+                data-testid="button-side-tab-edit-profile"
+              >
+                <UserRoundPen size={20} className="dashboard-side-tab-icon" />
+                <span>Edit Profile</span>
+              </button>
+              <button
+                className={`dashboard-side-tab${sideTab === "activity" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("activity")}
+                data-testid="button-side-tab-activity"
+              >
+                <PenLine size={20} className="dashboard-side-tab-icon" />
+                <span>Submissions</span>
+              </button>
+              <button
+                className={`dashboard-side-tab${sideTab === "settings" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("settings")}
+                data-testid="button-side-tab-settings"
+              >
+                <Settings size={20} className="dashboard-side-tab-icon" />
+                <span>Settings</span>
+              </button>
+            </div>
+            <div className="dashboard-side-tabs-bottom">
+              <button
+                className="dashboard-side-tab dashboard-side-tab-logout"
+                onClick={() => {
+                  logout();
+                  navigate("/");
+                }}
+                data-testid="button-logout"
+              >
+                <LogOut size={20} className="dashboard-side-tab-icon" />
+                <span>Log Out</span>
+              </button>
+            </div>
           </nav>
 
           <div className="dashboard-center-column">
@@ -842,6 +873,130 @@ export default function UserDashboard() {
                   </div>
                 </>
               )}
+
+              {sideTab === "settings" && (
+                <div className="settings-page" data-testid="settings-page">
+                  <div className="settings-section" data-testid="settings-privacy">
+                    <h3 className="settings-section-title">
+                      <Shield size={18} className="settings-section-icon" />
+                      Privacy
+                    </h3>
+                    <div className="settings-row" data-testid="settings-row-follows">
+                      <div className="settings-row-text">
+                        <p className="settings-row-label">Allow others to follow you</p>
+                        <p className="settings-row-desc">When turned off, no one can follow your profile</p>
+                      </div>
+                      <label className="settings-toggle" data-testid="toggle-allow-follows">
+                        <input
+                          type="checkbox"
+                          checked={allowFollows}
+                          onChange={() => setAllowFollows(!allowFollows)}
+                        />
+                        <span className="settings-toggle-slider" />
+                      </label>
+                    </div>
+                    <div className="settings-row" data-testid="settings-row-public-profile">
+                      <div className="settings-row-text">
+                        <p className="settings-row-label">Public profile</p>
+                        <p className="settings-row-desc">When turned off, only you can see your profile page</p>
+                      </div>
+                      <label className="settings-toggle" data-testid="toggle-public-profile">
+                        <input
+                          type="checkbox"
+                          checked={publicProfile}
+                          onChange={() => setPublicProfile(!publicProfile)}
+                        />
+                        <span className="settings-toggle-slider" />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="settings-section" data-testid="settings-notifications">
+                    <h3 className="settings-section-title">
+                      <Bell size={18} className="settings-section-icon" />
+                      Notifications
+                    </h3>
+                    <div className="settings-row" data-testid="settings-row-notify-follows">
+                      <div className="settings-row-text">
+                        <p className="settings-row-label">New followers</p>
+                        <p className="settings-row-desc">Get notified when someone follows you</p>
+                      </div>
+                      <label className="settings-toggle" data-testid="toggle-notify-follows">
+                        <input
+                          type="checkbox"
+                          checked={notifyFollows}
+                          onChange={() => setNotifyFollows(!notifyFollows)}
+                        />
+                        <span className="settings-toggle-slider" />
+                      </label>
+                    </div>
+                    <div className="settings-row" data-testid="settings-row-notify-comments">
+                      <div className="settings-row-text">
+                        <p className="settings-row-label">Comments</p>
+                        <p className="settings-row-desc">Get notified when someone replies to your comments</p>
+                      </div>
+                      <label className="settings-toggle" data-testid="toggle-notify-comments">
+                        <input
+                          type="checkbox"
+                          checked={notifyComments}
+                          onChange={() => setNotifyComments(!notifyComments)}
+                        />
+                        <span className="settings-toggle-slider" />
+                      </label>
+                    </div>
+                    <div className="settings-row" data-testid="settings-row-notify-fact-updates">
+                      <div className="settings-row-text">
+                        <p className="settings-row-label">Fact updates</p>
+                        <p className="settings-row-desc">Get notified when facts you follow are updated</p>
+                      </div>
+                      <label className="settings-toggle" data-testid="toggle-notify-fact-updates">
+                        <input
+                          type="checkbox"
+                          checked={notifyFactUpdates}
+                          onChange={() => setNotifyFactUpdates(!notifyFactUpdates)}
+                        />
+                        <span className="settings-toggle-slider" />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="settings-section" data-testid="settings-account">
+                    <h3 className="settings-section-title">
+                      <User size={18} className="settings-section-icon" />
+                      Account
+                    </h3>
+                    <div className="settings-info-row" data-testid="settings-info-username">
+                      <span className="settings-info-label">Username</span>
+                      <span className="settings-info-value" data-testid="text-settings-username">{user.username}</span>
+                    </div>
+                    <div className="settings-info-row" data-testid="settings-info-email">
+                      <span className="settings-info-label">Email</span>
+                      <span className="settings-info-value" data-testid="text-settings-email">{user.email}</span>
+                    </div>
+                  </div>
+
+                  <div className="settings-section settings-danger-section" data-testid="settings-danger">
+                    <h3 className="settings-section-title settings-danger-title">
+                      <Trash2 size={18} className="settings-section-icon" />
+                      Delete Account
+                    </h3>
+                    <p className="settings-danger-desc">
+                      Once you delete your account, there is no going back. All your data will be permanently removed.
+                    </p>
+                    <button
+                      className="settings-delete-button"
+                      onClick={() => {
+                        setDeletePassword("");
+                        setDeleteError("");
+                        setDeleteModalOpen(true);
+                      }}
+                      data-testid="button-delete-account"
+                    >
+                      Delete my account
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
       </div>
@@ -1098,6 +1253,74 @@ export default function UserDashboard() {
             >
               Save Changes
             </button>
+          </div>
+        </div>
+      )}
+
+      {deleteModalOpen && (
+        <div
+          className="edit-profile-overlay"
+          onClick={(e) => { if (e.target === e.currentTarget) setDeleteModalOpen(false); }}
+          data-testid="delete-account-overlay"
+        >
+          <div className="delete-account-modal" data-testid="delete-account-modal">
+            <button
+              className="edit-profile-close"
+              onClick={() => setDeleteModalOpen(false)}
+              aria-label="Close delete account dialog"
+              data-testid="button-close-delete-modal"
+            >
+              <X size={20} />
+            </button>
+            <div className="delete-modal-icon">
+              <Trash2 size={32} />
+            </div>
+            <h2 className="delete-modal-title">Delete your account?</h2>
+            <p className="delete-modal-desc">
+              This action is permanent and cannot be undone. All your data, including your profile, saved facts, and comments will be permanently deleted.
+            </p>
+            <div className="delete-modal-field">
+              <label className="delete-modal-label">Enter your password to confirm</label>
+              <div className="delete-modal-input-wrapper">
+                <Lock size={18} className="delete-modal-input-icon" />
+                <input
+                  type="password"
+                  className="delete-modal-input"
+                  value={deletePassword}
+                  onChange={(e) => {
+                    setDeletePassword(e.target.value);
+                    setDeleteError("");
+                  }}
+                  placeholder="Password"
+                  data-testid="input-delete-password"
+                />
+              </div>
+              {deleteError && (
+                <p className="delete-modal-error" data-testid="text-delete-error">{deleteError}</p>
+              )}
+            </div>
+            <div className="delete-modal-actions">
+              <button
+                className="delete-modal-cancel"
+                onClick={() => setDeleteModalOpen(false)}
+                data-testid="button-cancel-delete"
+              >
+                Cancel
+              </button>
+              <button
+                className="delete-modal-confirm"
+                onClick={() => {
+                  if (!deletePassword.trim()) {
+                    setDeleteError("Please enter your password");
+                    return;
+                  }
+                  setDeleteError("Account deletion is not yet available");
+                }}
+                data-testid="button-confirm-delete"
+              >
+                Delete Account
+              </button>
+            </div>
           </div>
         </div>
       )}
