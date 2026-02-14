@@ -431,7 +431,7 @@ export default function UserDashboard() {
               data-testid="button-side-tab-activity"
             >
               <PenLine size={20} className="dashboard-side-tab-icon" />
-              <span>My Activity</span>
+              <span>Submissions</span>
             </button>
           </nav>
 
