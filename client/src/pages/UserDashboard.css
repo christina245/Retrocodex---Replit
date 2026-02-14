@@ -896,6 +896,27 @@
   margin: 4px 0 0 0;
 }
 
+.settings-toggles-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.settings-toggle-labeled {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.settings-toggle-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #878787;
+  white-space: nowrap;
+}
+
 /* Toggle Switch */
 .settings-toggle {
   position: relative;

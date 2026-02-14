@@ -251,6 +251,9 @@ export default function UserDashboard() {
   const [notifyFollows, setNotifyFollows] = useState(true);
   const [notifyComments, setNotifyComments] = useState(true);
   const [notifyFactUpdates, setNotifyFactUpdates] = useState(true);
+  const [emailNotifyFollows, setEmailNotifyFollows] = useState(true);
+  const [emailNotifyComments, setEmailNotifyComments] = useState(true);
+  const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
@@ -987,42 +990,90 @@ export default function UserDashboard() {
                         <p className="settings-row-label">New followers</p>
                         <p className="settings-row-desc">Get notified when someone follows you</p>
                       </div>
-                      <label className="settings-toggle" data-testid="toggle-notify-follows">
-                        <input
-                          type="checkbox"
-                          checked={notifyFollows}
-                          onChange={() => setNotifyFollows(!notifyFollows)}
-                        />
-                        <span className="settings-toggle-slider" />
-                      </label>
+                      <div className="settings-toggles-group">
+                        <div className="settings-toggle-labeled">
+                          <span className="settings-toggle-label">On website</span>
+                          <label className="settings-toggle" data-testid="toggle-web-notify-follows">
+                            <input
+                              type="checkbox"
+                              checked={notifyFollows}
+                              onChange={() => setNotifyFollows(!notifyFollows)}
+                            />
+                            <span className="settings-toggle-slider" />
+                          </label>
+                        </div>
+                        <div className="settings-toggle-labeled">
+                          <span className="settings-toggle-label">Email</span>
+                          <label className="settings-toggle" data-testid="toggle-email-notify-follows">
+                            <input
+                              type="checkbox"
+                              checked={emailNotifyFollows}
+                              onChange={() => setEmailNotifyFollows(!emailNotifyFollows)}
+                            />
+                            <span className="settings-toggle-slider" />
+                          </label>
+                        </div>
+                      </div>
                     </div>
                     <div className="settings-row" data-testid="settings-row-notify-comments">
                       <div className="settings-row-text">
                         <p className="settings-row-label">Comments</p>
                         <p className="settings-row-desc">Get notified when someone replies to your comments</p>
                       </div>
-                      <label className="settings-toggle" data-testid="toggle-notify-comments">
-                        <input
-                          type="checkbox"
-                          checked={notifyComments}
-                          onChange={() => setNotifyComments(!notifyComments)}
-                        />
-                        <span className="settings-toggle-slider" />
-                      </label>
+                      <div className="settings-toggles-group">
+                        <div className="settings-toggle-labeled">
+                          <span className="settings-toggle-label">On website</span>
+                          <label className="settings-toggle" data-testid="toggle-web-notify-comments">
+                            <input
+                              type="checkbox"
+                              checked={notifyComments}
+                              onChange={() => setNotifyComments(!notifyComments)}
+                            />
+                            <span className="settings-toggle-slider" />
+                          </label>
+                        </div>
+                        <div className="settings-toggle-labeled">
+                          <span className="settings-toggle-label">Email</span>
+                          <label className="settings-toggle" data-testid="toggle-email-notify-comments">
+                            <input
+                              type="checkbox"
+                              checked={emailNotifyComments}
+                              onChange={() => setEmailNotifyComments(!emailNotifyComments)}
+                            />
+                            <span className="settings-toggle-slider" />
+                          </label>
+                        </div>
+                      </div>
                     </div>
                     <div className="settings-row" data-testid="settings-row-notify-fact-updates">
                       <div className="settings-row-text">
                         <p className="settings-row-label">Fact updates</p>
                         <p className="settings-row-desc">Get notified when facts you follow are updated</p>
                       </div>
-                      <label className="settings-toggle" data-testid="toggle-notify-fact-updates">
-                        <input
-                          type="checkbox"
-                          checked={notifyFactUpdates}
-                          onChange={() => setNotifyFactUpdates(!notifyFactUpdates)}
-                        />
-                        <span className="settings-toggle-slider" />
-                      </label>
+                      <div className="settings-toggles-group">
+                        <div className="settings-toggle-labeled">
+                          <span className="settings-toggle-label">On website</span>
+                          <label className="settings-toggle" data-testid="toggle-web-notify-fact-updates">
+                            <input
+                              type="checkbox"
+                              checked={notifyFactUpdates}
+                              onChange={() => setNotifyFactUpdates(!notifyFactUpdates)}
+                            />
+                            <span className="settings-toggle-slider" />
+                          </label>
+                        </div>
+                        <div className="settings-toggle-labeled">
+                          <span className="settings-toggle-label">Email</span>
+                          <label className="settings-toggle" data-testid="toggle-email-notify-fact-updates">
+                            <input
+                              type="checkbox"
+                              checked={emailNotifyFactUpdates}
+                              onChange={() => setEmailNotifyFactUpdates(!emailNotifyFactUpdates)}
+                            />
+                            <span className="settings-toggle-slider" />
+                          </label>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
