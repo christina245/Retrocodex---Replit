@@ -988,7 +988,7 @@
 }
 
 .settings-danger-title {
-  color: #FF5353 !important;
+  color: #FF9639 !important;
 }
 
 .settings-danger-desc {
@@ -1030,15 +1030,16 @@
 }
 
 .delete-modal-icon {
-  color: #FF5353;
+  color: #878787;
   margin-bottom: 1rem;
+  align-items: center;
 }
 
 .delete-modal-title {
   font-family: 'Merriweather', serif;
   font-size: 20px;
   font-weight: 700;
-  color: #2C2C2C;
+  color: #2c2c2c;
   margin: 0 0 0.75rem 0;
 }
 
