@@ -639,8 +639,8 @@
   flex-direction: column;
   justify-content: space-between;
   min-width: 160px;
-  padding-right: 80px;
-  padding-left: 20px;
+  padding-right: 60px;
+  padding-left: 0px;
   padding-top: 4px;
   position: sticky;
   top: 80px;
