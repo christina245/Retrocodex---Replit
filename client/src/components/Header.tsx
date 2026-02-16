@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/auth";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
-import logoImage from "@assets/thicker_logo_only_1771065757126.png";
+import logoImage from "@assets/thinner logo only black.png";
 import taglineImage from "@assets/tagline only lessons 3.png";
 import taglineMobileImage from "@assets/tagline_mobile_1766215766436.png";
 import { NotificationBell } from "./NotificationBell";
