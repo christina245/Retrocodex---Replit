@@ -1,0 +1,108 @@
+.feed-article-card {
+  border-radius: 8px;
+  border: 1px solid #E5E5E5;
+  overflow: hidden;
+}
+
+.feed-article-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.feed-article-main {
+  display: flex;
+  gap: 24px;
+  padding: 24px 24px 16px 24px;
+}
+
+.feed-article-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-article-title {
+  font-family: 'Merriweather', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2C2C2C;
+  line-height: 1.4;
+  margin: 0 0 12px 0;
+}
+
+.feed-article-summary {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.feed-article-cover-container {
+  flex-shrink: 0;
+  width: 400px;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.feed-article-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feed-article-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 16px 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.feed-article-category {
+  display: flex;
+  align-items: center;
+}
+
+.feed-article-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 900px) {
+  .feed-article-main {
+    flex-direction: column-reverse;
+    gap: 16px;
+  }
+
+  .feed-article-cover-container {
+    width: 100%;
+    height: 200px;
+  }
+
+  .feed-article-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .feed-article-main {
+    padding: 16px 16px 12px 16px;
+  }
+
+  .feed-article-footer {
+    padding: 0 16px 12px 16px;
+  }
+
+  .feed-article-cover-container {
+    height: 160px;
+  }
+}
