@@ -253,6 +253,9 @@ export default function UserDashboard() {
   const [submissionsPage, setSubmissionsPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
+  const [expandedDenials, setExpandedDenials] = useState<Record<string, boolean>>({});
+  const [overflowingDenials, setOverflowingDenials] = useState<Record<string, boolean>>({});
+  const denialTextRefs = useRef<Record<string, HTMLParagraphElement | null>>({});
   const [editRequestsTab, setEditRequestsTab] = useState<EditRequestsTab>("pending-edits");
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
@@ -541,7 +544,7 @@ export default function UserDashboard() {
       details: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
       sources: [{ id: "r1", citation: "Lorem Ipsum Source", link: "https://example.com" }],
       submittedAt: "Feb 10, 2026",
-      denialReason: "This submission lacks sufficient empirical evidence to support the claim. We were unable to find peer-reviewed sources that substantiate the assertion made. Please consider resubmitting with additional citations from credible academic or scientific publications that directly address the claim being made.",
+      denialReason: "This submission lacks sufficient empirical evidence to support the claim. We were unable to find peer-reviewed sources that substantiate the assertion made. Please consider resubmitting with additional citations from credible academic or scientific publications that directly address the claim being made. Our editorial team reviewed multiple databases including PubMed, Google Scholar, and JSTOR but could not locate any studies that corroborate the central claim. We also consulted with subject-matter experts who noted that the premise of the submission may be based on a common misinterpretation of preliminary findings. We strongly encourage you to review the latest meta-analyses on this topic before resubmitting.",
     },
     {
       id: "rej-2",
@@ -571,7 +574,7 @@ export default function UserDashboard() {
       details: "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores.",
       sources: [{ id: "r4", citation: "Autem Vel Reference", link: "https://example.com" }],
       submittedAt: "Feb 3, 2026",
-      denialReason: "This submission excessively promotes a political agenda. Retrocodex aims to present scientifically verifiable misconceptions without political bias. Submissions that primarily serve to advance a political viewpoint rather than correct a factual misunderstanding are not accepted.",
+      denialReason: "This submission excessively promotes a political agenda. Retrocodex aims to present scientifically verifiable misconceptions without political bias. Submissions that primarily serve to advance a political viewpoint rather than correct a factual misunderstanding are not accepted. Additionally, we found that the framing of the claim relies heavily on partisan sources and opinion editorials rather than objective, peer-reviewed research. We recognize that many topics exist at the intersection of science and policy, but our guidelines require that submissions focus on the factual correction rather than the political implications. If you can reframe the submission to center the scientific evidence and remove the advocacy language, we would be happy to reconsider it for publication.",
     },
   ];
 
@@ -591,6 +594,27 @@ export default function UserDashboard() {
     (rejectedPage - 1) * SUBMISSIONS_PER_PAGE,
     rejectedPage * SUBMISSIONS_PER_PAGE
   );
+
+  useEffect(() => {
+    if (activityTab !== "not-approved") return;
+    const measure = () => {
+      const newOverflows: Record<string, boolean> = {};
+      paginatedRejected.forEach((sub) => {
+        const el = denialTextRefs.current[sub.id];
+        if (el && !expandedDenials[sub.id]) {
+          newOverflows[sub.id] = el.scrollHeight > el.clientHeight + 1;
+        } else if (el && expandedDenials[sub.id]) {
+          newOverflows[sub.id] = overflowingDenials[sub.id] ?? false;
+        }
+      });
+      setOverflowingDenials(newOverflows);
+    };
+    requestAnimationFrame(measure);
+  }, [activityTab, rejectedPage]);
+
+  const toggleDenialExpand = useCallback((id: string) => {
+    setExpandedDenials((prev) => ({ ...prev, [id]: !prev[id] }));
+  }, []);
 
   return (
     <div className="user-dashboard" data-testid="user-dashboard">
@@ -1478,13 +1502,24 @@ export default function UserDashboard() {
                         <div className="submissions-grid" data-testid="rejected-grid">
                           {paginatedRejected.map((sub) => (
                             <div key={sub.id} className="submission-card-wrapper" data-testid={`rejected-card-${sub.id}`}>
-                              <div className="denial-reason-card" data-testid={`denial-reason-${sub.id}`}>
-                                <p className="denial-reason-text">
+                              <div className={`denial-reason-card${expandedDenials[sub.id] ? " denial-reason-expanded" : ""}`} data-testid={`denial-reason-${sub.id}`}>
+                                <p
+                                  className={`denial-reason-text${expandedDenials[sub.id] ? "" : " denial-reason-clamped"}`}
+                                  ref={(el) => { denialTextRefs.current[sub.id] = el; }}
+                                >
                                   {sub.denialReason}
                                 </p>
-                                <div className="denial-reason-fade">
-                                  <span className="denial-reason-view-more">... <strong>View More</strong></span>
-                                </div>
+                                {overflowingDenials[sub.id] && !expandedDenials[sub.id] && (
+                                  <div className="denial-reason-fade">
+                                    <span
+                                      className="denial-reason-view-more"
+                                      onClick={() => toggleDenialExpand(sub.id)}
+                                      data-testid={`button-view-more-${sub.id}`}
+                                    >
+                                      View More
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                               <div className="extended-fact-card">
                                 <div className="extended-fact-content">

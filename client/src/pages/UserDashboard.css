@@ -1602,8 +1602,6 @@ a.following-post-username:hover {
   background-color: rgba(255, 83, 83, 0.1);
   border-radius: 10px;
   padding: 16px;
-  height: 140px;
-  overflow: hidden;
   position: relative;
   margin-bottom: 8px;
 }
@@ -1618,31 +1616,27 @@ a.following-post-username:hover {
   margin: 0;
 }
 
+.denial-reason-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .denial-reason-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 48px;
-  background: linear-gradient(transparent, #fff0f0 70%);
   display: flex;
-  align-items: flex-end;
   justify-content: flex-end;
-  padding: 0 16px 14px 16px;
+  margin-top: 4px;
 }
 
 .denial-reason-view-more {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
-  font-weight: 400;
-  font-style: normal;
-  color: #878787;
-  cursor: pointer;
-}
-
-.denial-reason-view-more strong {
   font-weight: 700;
+  font-style: normal;
   color: #FF5353;
+  cursor: pointer;
 }
 
 .submission-footer-row-no-button {
