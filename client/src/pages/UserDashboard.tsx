@@ -19,7 +19,7 @@ import "./UserDashboard.css";
 type DashboardTab = "for-you" | "following" | "local" | "saved";
 type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "settings";
 type NotificationsTab = "all" | "replies" | "comments" | "fact-updates";
-type ActivityTab = "submitted" | "approved" | "comments";
+type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
 type EditRequestsTab = "pending-edits" | "approved-edits";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
@@ -37,8 +37,9 @@ const PROFILE_ACTIVITY_TABS: { id: ProfileActivityTab; label: string }[] = [
 ];
 
 const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
-  { id: "submitted", label: "Pending Submissions" },
-  { id: "approved", label: "Approved Posts" },
+  { id: "submitted", label: "Pending" },
+  { id: "approved", label: "Approved" },
+  { id: "not-approved", label: "Not Approved" },
   { id: "comments", label: "Comments" },
 ];
 
@@ -251,6 +252,7 @@ export default function UserDashboard() {
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [submissionsPage, setSubmissionsPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
+  const [rejectedPage, setRejectedPage] = useState(1);
   const [editRequestsTab, setEditRequestsTab] = useState<EditRequestsTab>("pending-edits");
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
@@ -530,6 +532,49 @@ export default function UserDashboard() {
     },
   ];
 
+  const rejectedSubmissions = [
+    {
+      id: "rej-1",
+      myth: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.",
+      truth: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      category: ["Everyday Life"],
+      details: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      sources: [{ id: "r1", citation: "Lorem Ipsum Source", link: "https://example.com" }],
+      submittedAt: "Feb 10, 2026",
+      denialReason: "This submission lacks sufficient empirical evidence to support the claim. We were unable to find peer-reviewed sources that substantiate the assertion made. Please consider resubmitting with additional citations from credible academic or scientific publications that directly address the claim being made.",
+    },
+    {
+      id: "rej-2",
+      myth: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.",
+      truth: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur.",
+      category: ["Social Sciences"],
+      details: "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
+      sources: [{ id: "r2", citation: "Perspiciatis Reference", link: "https://example.com" }],
+      submittedAt: "Feb 8, 2026",
+      denialReason: "This submission reads more like a personal opinion than a verifiable fact. The claims made are subjective in nature and cannot be objectively measured or tested. We encourage submissions that present commonly held beliefs alongside evidence-based corrections.",
+    },
+    {
+      id: "rej-3",
+      myth: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis.",
+      truth: "Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.",
+      category: ["History"],
+      details: "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.",
+      sources: [{ id: "r3", citation: "Vero Eos Source", link: "https://example.com" }],
+      submittedAt: "Feb 5, 2026",
+      denialReason: "This misconception has already been submitted and is currently under review by our editorial team. Duplicate submissions are declined to keep our review queue manageable. You can check the status of the original submission in your dashboard.",
+    },
+    {
+      id: "rej-4",
+      myth: "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse.",
+      truth: "Et harum quidem rerum facilis est et expedita distinctio nam libero tempore.",
+      category: ["Health & Fitness"],
+      details: "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores.",
+      sources: [{ id: "r4", citation: "Autem Vel Reference", link: "https://example.com" }],
+      submittedAt: "Feb 3, 2026",
+      denialReason: "This submission excessively promotes a political agenda. Retrocodex aims to present scientifically verifiable misconceptions without political bias. Submissions that primarily serve to advance a political viewpoint rather than correct a factual misunderstanding are not accepted.",
+    },
+  ];
+
   const SUBMISSIONS_PER_PAGE = 10;
   const totalSubmissionsPages = Math.ceil(pendingSubmissions.length / SUBMISSIONS_PER_PAGE);
   const paginatedSubmissions = pendingSubmissions.slice(
@@ -540,6 +585,11 @@ export default function UserDashboard() {
   const paginatedApproved = approvedSubmissions.slice(
     (approvedPage - 1) * SUBMISSIONS_PER_PAGE,
     approvedPage * SUBMISSIONS_PER_PAGE
+  );
+  const totalRejectedPages = Math.ceil(rejectedSubmissions.length / SUBMISSIONS_PER_PAGE);
+  const paginatedRejected = rejectedSubmissions.slice(
+    (rejectedPage - 1) * SUBMISSIONS_PER_PAGE,
+    rejectedPage * SUBMISSIONS_PER_PAGE
   );
 
   return (
@@ -1239,7 +1289,7 @@ export default function UserDashboard() {
                         <button
                           key={tab.id}
                           className={`notifications-tab${activityTab === tab.id ? " notifications-tab-active" : ""}`}
-                          onClick={() => { setActivityTab(tab.id); setSubmissionsPage(1); setApprovedPage(1); }}
+                          onClick={() => { setActivityTab(tab.id); setSubmissionsPage(1); setApprovedPage(1); setRejectedPage(1); }}
                           data-testid={`button-activity-tab-${tab.id}`}
                         >
                           <span>{tab.label}</span>
@@ -1415,6 +1465,92 @@ export default function UserDashboard() {
                               disabled={approvedPage === totalApprovedPages}
                               onClick={() => setApprovedPage(approvedPage + 1)}
                               data-testid="button-approved-next"
+                            >
+                              Next
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {activityTab === "not-approved" && (
+                      <div className="submissions-section" data-testid="activity-not-approved">
+                        <div className="submissions-grid" data-testid="rejected-grid">
+                          {paginatedRejected.map((sub) => (
+                            <div key={sub.id} className="submission-card-wrapper" data-testid={`rejected-card-${sub.id}`}>
+                              <div className="denial-reason-card" data-testid={`denial-reason-${sub.id}`}>
+                                <p className="denial-reason-text">
+                                  {sub.denialReason}
+                                </p>
+                                <div className="denial-reason-fade">
+                                  <span className="denial-reason-view-more">... <strong>View More</strong></span>
+                                </div>
+                              </div>
+                              <div className="extended-fact-card">
+                                <div className="extended-fact-content">
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <X className="fact-icon fact-icon-myth" size={16} />
+                                      <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
+                                    </div>
+                                    <p className="fact-myth">"{sub.myth}"</p>
+                                    <div className="fact-details">
+                                      <p>{sub.details}</p>
+                                    </div>
+                                  </div>
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <Check className="fact-icon fact-icon-truth" size={16} />
+                                      <span className="label-text">CURRENT UNDERSTANDING</span>
+                                    </div>
+                                    <p className="fact-truth">{sub.truth}</p>
+                                  </div>
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <BookOpen className="fact-icon fact-icon-sources" size={16} />
+                                      <span className="label-text">SOURCES</span>
+                                    </div>
+                                    <div className="sources-text-list">
+                                      {sub.sources.map((source) => (
+                                        <a
+                                          key={source.id}
+                                          href={source.link}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="source-text-item"
+                                          data-testid={`source-${source.id}`}
+                                        >
+                                          {source.citation}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="submission-footer-row submission-footer-row-no-button" data-testid={`rejected-footer-${sub.id}`}>
+                                <span className="submission-timestamp" data-testid={`rejected-timestamp-${sub.id}`}>Submitted on {sub.submittedAt}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        {totalRejectedPages > 1 && (
+                          <div className="submissions-pagination" data-testid="rejected-pagination">
+                            <button
+                              className="submissions-page-button"
+                              disabled={rejectedPage === 1}
+                              onClick={() => setRejectedPage(rejectedPage - 1)}
+                              data-testid="button-rejected-prev"
+                            >
+                              Previous
+                            </button>
+                            <span className="submissions-page-info" data-testid="rejected-page-info">
+                              Page {rejectedPage} of {totalRejectedPages}
+                            </span>
+                            <button
+                              className="submissions-page-button"
+                              disabled={rejectedPage === totalRejectedPages}
+                              onClick={() => setRejectedPage(rejectedPage + 1)}
+                              data-testid="button-rejected-next"
                             >
                               Next
                             </button>

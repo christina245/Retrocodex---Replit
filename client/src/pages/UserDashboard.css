@@ -1598,6 +1598,57 @@ a.following-post-username:hover {
   color: white;
 }
 
+.denial-reason-card {
+  background: #fafafa;
+  border-radius: 5px;
+  padding: 16px;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.denial-reason-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.denial-reason-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(transparent, #fafafa 60%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 16px 14px 16px;
+}
+
+.denial-reason-view-more {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  color: #878787;
+  cursor: pointer;
+}
+
+.denial-reason-view-more strong {
+  font-weight: 700;
+  color: #FF5353;
+}
+
+.submission-footer-row-no-button {
+  justify-content: flex-start;
+}
+
 .submissions-pagination {
   display: flex;
   align-items: center;
