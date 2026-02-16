@@ -23,7 +23,7 @@
 
 .feed-article-title-link:hover .feed-article-title {
   text-decoration: underline;
-  text-decoration-color: #FF5353;
+  text-decoration-color: #2C2C2C;
   text-underline-offset: 3px;
   text-decoration-thickness: 2px;
 }

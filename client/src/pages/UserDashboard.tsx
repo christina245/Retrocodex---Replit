@@ -14,21 +14,21 @@ import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.
 import { NotificationBell } from "@/components/NotificationBell";
 import FeedArticleCard from "@/components/FeedArticleCard";
 import "../components/ExtendedFactCard.css";
+import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
 import "./UserDashboard.css";
 
-type DashboardTab = "for-you" | "following" | "local" | "saved";
-type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "settings";
+type DashboardTab = "for-you" | "following" | "local";
+type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "saved" | "settings";
 type NotificationsTab = "all" | "replies" | "comments" | "fact-updates";
 type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
 type EditRequestsTab = "pending-edits" | "approved-edits";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
-const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
-  { id: "for-you", label: "For You" },
-  { id: "following", label: "Following" },
-  { id: "local", label: "Local" },
-  { id: "saved", label: "Saved" },
+const DASHBOARD_TABS: { id: DashboardTab; label: string; tooltip?: string }[] = [
+  { id: "for-you", label: "For You", tooltip: "New topics and articles based on your interests." },
+  { id: "following", label: "Following", tooltip: "Activity from users you follow." },
+  { id: "local", label: "Local", tooltip: "Activity from users currently based in your current or past locations." },
 ];
 
 const PROFILE_ACTIVITY_TABS: { id: ProfileActivityTab; label: string }[] = [
@@ -239,7 +239,7 @@ export default function UserDashboard() {
   const initialTab = (() => {
     const params = new URLSearchParams(window.location.search);
     const tab = params.get("tab");
-    if (tab && ["feed", "notifications", "edit-profile", "activity", "settings"].includes(tab)) {
+    if (tab && ["feed", "notifications", "edit-profile", "activity", "edit-requests", "saved", "settings"].includes(tab)) {
       return tab as SideTab;
     }
     return "feed" as SideTab;
@@ -249,6 +249,7 @@ export default function UserDashboard() {
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
+  const [hoveredFeedTab, setHoveredFeedTab] = useState<DashboardTab | null>(null);
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
   const [notificationsTab, setNotificationsTab] = useState<NotificationsTab>("all");
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
@@ -672,6 +673,14 @@ export default function UserDashboard() {
                 <span>Edit Requests</span>
               </button>
               <button
+                className={`dashboard-side-tab${sideTab === "saved" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("saved")}
+                data-testid="button-side-tab-saved"
+              >
+                <Bookmark size={20} className="dashboard-side-tab-icon" />
+                <span>Saved</span>
+              </button>
+              <button
                 className={`dashboard-side-tab${sideTab === "settings" ? " dashboard-side-tab-active" : ""}`}
                 onClick={() => setSideTab("settings")}
                 data-testid="button-side-tab-settings"
@@ -705,9 +714,16 @@ export default function UserDashboard() {
                           key={tab.id}
                           className={`notifications-tab${feedTab === tab.id ? " notifications-tab-active" : ""}`}
                           onClick={() => handleFeedTabChange(tab.id)}
+                          onMouseEnter={() => tab.tooltip ? setHoveredFeedTab(tab.id) : undefined}
+                          onMouseLeave={() => setHoveredFeedTab(null)}
                           data-testid={`button-feed-tab-${tab.id}`}
                         >
                           <span>{tab.label}</span>
+                          {tab.tooltip && hoveredFeedTab === tab.id && (
+                            <div className="homepage-tab-tooltip" data-testid={`tooltip-feed-tab-${tab.id}`}>
+                              {tab.tooltip}
+                            </div>
+                          )}
                         </button>
                       ))}
                     </nav>
@@ -715,17 +731,98 @@ export default function UserDashboard() {
 
                   <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
                     {feedTab === "for-you" && (
-                      <div className="dashboard-feed-grid" data-testid="feed-grid-for-you">
-                        {demoFacts.map((fact) => (
-                          <FactCard
-                            key={fact.id}
-                            fact={fact}
-                            onSave={() => {}}
-                            onShare={() => {}}
-                            onComment={() => {}}
-                          />
-                        ))}
-                      </div>
+                      user.favoriteTags.length > 0 ? (
+                        <div className="following-feed" data-testid="feed-for-you">
+                          <div className="following-post" data-testid="for-you-post-1">
+                            <div className="following-post-header">
+                              <img src={placeholderPhoto} alt="MythBuster_77" className="following-post-avatar" />
+                              <div className="following-post-header-text">
+                                <Link href="/user/MythBuster_77" className="following-post-username" data-testid="link-user-MythBuster_77">MythBuster_77</Link>
+                                <span className="following-post-action">submitted a new topic</span>
+                              </div>
+                              <span className="following-post-timestamp">5 mins ago</span>
+                            </div>
+                            <div className="following-post-body following-post-factcard">
+                              <FactCard
+                                fact={{
+                                  id: "cracking-your-knuckles-arthritis",
+                                  category: "EVERYDAY LIFE",
+                                  categoryColor: "#0167A2",
+                                  myth: "Cracking your knuckles will give you arthritis.",
+                                  truth: "No scientific evidence has yet to link cracking your knuckles and arthritis.",
+                                  link: "/fact/cracking-your-knuckles-arthritis",
+                                  coverPhoto: "/uploads/1764735935195-591724829.png",
+                                }}
+                                onSave={() => {}}
+                                onShare={() => {}}
+                                onComment={() => {}}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="following-post" data-testid="for-you-post-article">
+                            <div className="following-post-header">
+                              <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
+                              <div className="following-post-header-text">
+                                <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99-foryou">FactChecker_99</Link>
+                                <span className="following-post-action">submitted an article</span>
+                              </div>
+                              <span className="following-post-timestamp">20 mins ago</span>
+                            </div>
+                            <div className="following-post-body">
+                              <FeedArticleCard
+                                title="5 Myths You Might Hear Going Home For the Holidays"
+                                summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
+                                coverImage="/uploads/1764995940108-220172306.jpg"
+                                category="Everyday Life"
+                                slug="going-home-for-the-holidays-myths-2025"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="following-post" data-testid="for-you-post-2">
+                            <div className="following-post-header">
+                              <img src={placeholderPhoto} alt="SkepticalSam" className="following-post-avatar" />
+                              <div className="following-post-header-text">
+                                <Link href="/user/SkepticalSam" className="following-post-username" data-testid="link-user-SkepticalSam">SkepticalSam</Link>
+                                <span className="following-post-action">submitted a new topic</span>
+                              </div>
+                              <span className="following-post-timestamp">1 hour ago</span>
+                            </div>
+                            <div className="following-post-body following-post-factcard">
+                              <FactCard
+                                fact={{
+                                  id: "breakfast-most-important-meal-of-the-day",
+                                  category: "HEALTH & FITNESS",
+                                  categoryColor: "#EC7200",
+                                  myth: "Breakfast is the most important meal of the day.",
+                                  truth: "While eating breakfast can be beneficial for certain lifestyles, research shows that its importance varies widely based on individual metabolism, cultural norms, and overall diet.",
+                                  link: "/fact/breakfast-most-important-meal-of-the-day",
+                                  coverPhoto: "/uploads/1765021400264-394912154.png",
+                                }}
+                                onSave={() => {}}
+                                onShare={() => {}}
+                                onComment={() => {}}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
+                          <Search size={40} className="dashboard-feed-empty-icon" />
+                          <p className="dashboard-feed-empty-title">Select your interests</p>
+                          <p className="dashboard-feed-empty-desc">
+                            Choose topics you're interested in to see relevant submissions in your feed.
+                          </p>
+                          <button
+                            className="for-you-select-tags-button"
+                            onClick={() => setEditModalOpen(true)}
+                            data-testid="button-select-interests"
+                          >
+                            Select Interests
+                          </button>
+                        </div>
+                      )
                     )}
 
                     {feedTab === "following" && (
@@ -1010,15 +1107,6 @@ export default function UserDashboard() {
                       </div>
                     )}
 
-                    {feedTab === "saved" && (
-                      <div className="dashboard-feed-empty" data-testid="feed-empty-saved">
-                        <Bookmark size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">No saved facts yet</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Bookmark facts you want to revisit and they'll show up here.
-                        </p>
-                      </div>
-                    )}
                   </div>
                 </>
               )}
@@ -1666,6 +1754,16 @@ export default function UserDashboard() {
                     )}
                   </div>
                 </>
+              )}
+
+              {sideTab === "saved" && (
+                <div className="dashboard-feed-empty" data-testid="saved-page">
+                  <Bookmark size={40} className="dashboard-feed-empty-icon" />
+                  <p className="dashboard-feed-empty-title">No saved items yet</p>
+                  <p className="dashboard-feed-empty-desc">
+                    Bookmark facts, articles, and comments you want to revisit and they'll show up here.
+                  </p>
+                </div>
               )}
 
               {sideTab === "settings" && (

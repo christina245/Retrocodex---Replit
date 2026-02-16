@@ -822,6 +822,10 @@ a.following-post-username:hover {
   padding-left: calc(3rem + 12px);
 }
 
+.following-post-factcard .fact-card-wrapper {
+  max-width: 515px;
+}
+
 .following-post-link {
   text-decoration: none;
   color: inherit;
@@ -975,6 +979,23 @@ a.following-post-username:hover {
 }
 
 .dashboard-feed-empty-action:hover {
+  background: #e64848;
+}
+
+.for-you-select-tags-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #FF5353;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.for-you-select-tags-button:hover {
   background: #e64848;
 }
 
@@ -1422,6 +1443,7 @@ a.following-post-username:hover {
   cursor: pointer;
   transition: color 0.2s, background-color 0.2s;
   white-space: nowrap;
+  position: relative;
 }
 
 .notifications-tab:hover {
