@@ -1191,7 +1191,6 @@ export default function UserDashboard() {
                         <div className="submissions-grid" data-testid="submissions-grid">
                           {paginatedSubmissions.map((sub) => (
                             <div key={sub.id} className="submission-card-wrapper" data-testid={`submission-card-${sub.id}`}>
-                              <span className="submission-timestamp" data-testid={`submission-timestamp-${sub.id}`}>{sub.submittedAt}</span>
                               <div className="extended-fact-card">
                                 <div className="extended-fact-content">
                                   <div className="fact-section">
@@ -1238,10 +1237,13 @@ export default function UserDashboard() {
                                   </div>
                                 </div>
                               </div>
-                              <button className="edit-submission-button" data-testid={`button-edit-submission-${sub.id}`}>
-                                <Pencil size={14} />
-                                <span>Edit Submission</span>
-                              </button>
+                              <div className="submission-footer-row" data-testid={`submission-footer-${sub.id}`}>
+                                <span className="submission-timestamp" data-testid={`submission-timestamp-${sub.id}`}>Submitted on {sub.submittedAt}</span>
+                                <button className="edit-submission-button" data-testid={`button-edit-submission-${sub.id}`}>
+                                  <Pencil size={14} />
+                                  <span>Edit Submission</span>
+                                </button>
+                              </div>
                             </div>
                           ))}
                         </div>

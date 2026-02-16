@@ -1541,25 +1541,26 @@ a.following-post-username:hover {
   height: 515px;
 }
 
+.submission-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
 .submission-timestamp {
-  position: absolute;
-  top: 12px;
-  right: 16px;
   font-family: 'Public Sans', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   color: #878787;
-  z-index: 2;
 }
 
 .edit-submission-button {
   display: flex;
   align-items: center;
   gap: 6px;
-  align-self: flex-end;
-  margin-top: 10px;
   background: #f0f0f0;
-  color: #2C2C2C;
+  color: #FF5353;
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
