@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -36,7 +36,7 @@ const PROFILE_ACTIVITY_TABS: { id: ProfileActivityTab; label: string }[] = [
 ];
 
 const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
-  { id: "submitted", label: "Submitted Posts" },
+  { id: "submitted", label: "Pending Submissions" },
   { id: "approved", label: "Approved Posts" },
   { id: "edit-requests", label: "Edit Requests" },
   { id: "approved-edits", label: "Approved Edits" },
@@ -245,6 +245,7 @@ export default function UserDashboard() {
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
   const [notificationsTab, setNotificationsTab] = useState<NotificationsTab>("all");
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
+  const [submissionsPage, setSubmissionsPage] = useState(1);
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
@@ -419,6 +420,72 @@ export default function UserDashboard() {
       setEditPlacesLived(editPlacesLived.filter((_, i) => i !== index));
     }
   };
+
+  const pendingSubmissions = [
+    {
+      id: "sub-1",
+      myth: "The tongue has separate zones for different tastes: sweet at the tip, salty and sour on the sides, and bitter at the back.",
+      truth: "All taste sensations can be detected across the tongue. While some areas are slightly more sensitive than others, there are no distinct taste zones.",
+      category: ["Life Sciences"],
+      details: "This may have originated as a misconception of a 1901 map that mentioned some parts of the tongue are more sensitive to taste than others, but this was independent of taste type.",
+      moreDetails: "These differences, however, are negligible.",
+      sources: [{ id: "s1", citation: "Nature - Taste Receptors", link: "https://nature.com" }],
+      submittedAt: "Feb 14, 2026",
+    },
+    {
+      id: "sub-2",
+      myth: "MSG is bad for you.",
+      truth: "Most foods containing MSG do not contain enough to cause adverse effects. Experiments proving its dangers used abnormally large amounts of it that would not be present in everyday foods.",
+      category: ["Health & Fitness"],
+      details: "Because of this stigma, it was common for Chinese restaurants to advertise that they did not use MSG. However, MSG is present in canned soups, tomatoes, mushrooms, and Parmesan cheese.",
+      moreDetails: "The stigma around MSG (monosodium glutamate) may have originated from a mix of xenophobia and sensationalist media.",
+      sources: [{ id: "s2", citation: "FDA - Questions and Answers on MSG", link: "https://fda.gov" }],
+      submittedAt: "Feb 12, 2026",
+    },
+    {
+      id: "sub-3",
+      myth: "If you stop working out, muscle turns into fat.",
+      truth: "Muscle and fat are completely different tissue types. It is biologically impossible for one to convert into the other.",
+      category: ["Health & Fitness"],
+      details: "When you stop exercising, muscle mass decreases (atrophy) and fat may accumulate if caloric intake stays the same, creating the illusion of conversion.",
+      sources: [{ id: "s3", citation: "Mayo Clinic - Exercise and Muscle", link: "https://mayoclinic.org" }],
+      submittedAt: "Feb 10, 2026",
+    },
+    {
+      id: "sub-4",
+      myth: "Sweating more means you're burning more fat.",
+      truth: "Sweat is your body's cooling mechanism, not an indicator of fat loss. You can burn significant calories without sweating at all.",
+      category: ["Health & Fitness"],
+      details: "Sweating is a thermoregulatory response. The amount you sweat depends on environmental temperature, humidity, genetics, and fitness level — not fat metabolism.",
+      sources: [{ id: "s4", citation: "Harvard Health - Sweat and Exercise", link: "https://health.harvard.edu" }],
+      submittedAt: "Feb 8, 2026",
+    },
+    {
+      id: "sub-5",
+      myth: "If you swallow gum, it'll stay in your stomach for seven years.",
+      truth: "While gum isn't fully digestible, it passes through the digestive system within a few days, just like other indigestible materials.",
+      category: ["Everyday Life"],
+      details: "The base of chewing gum is indigestible, but the digestive tract moves it along through normal peristalsis. It does not stick to your stomach lining.",
+      sources: [{ id: "s5", citation: "Mayo Clinic - Swallowing Gum", link: "https://mayoclinic.org" }],
+      submittedAt: "Feb 5, 2026",
+    },
+    {
+      id: "sub-6",
+      myth: "There are three states of matter: solid, liquid, and gas.",
+      truth: "There are at least four well-known states of matter, including plasma. Scientists have also identified exotic states like Bose-Einstein condensates.",
+      category: ["Other"],
+      details: "Plasma is by far the most common state of matter in the observable universe, making up over 99% of visible matter including stars and lightning.",
+      sources: [{ id: "s6", citation: "Physics Today - States of Matter", link: "https://physicstoday.org" }],
+      submittedAt: "Feb 3, 2026",
+    },
+  ];
+
+  const SUBMISSIONS_PER_PAGE = 10;
+  const totalSubmissionsPages = Math.ceil(pendingSubmissions.length / SUBMISSIONS_PER_PAGE);
+  const paginatedSubmissions = pendingSubmissions.slice(
+    (submissionsPage - 1) * SUBMISSIONS_PER_PAGE,
+    submissionsPage * SUBMISSIONS_PER_PAGE
+  );
 
   return (
     <div className="user-dashboard" data-testid="user-dashboard">
@@ -1120,12 +1187,87 @@ export default function UserDashboard() {
 
                   <div className="dashboard-feed-content" data-testid="dashboard-activity-content">
                     {activityTab === "submitted" && (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty-submitted">
-                        <FileText size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You haven't submitted any facts yet.</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Submit a fact to share your experiences.
-                        </p>
+                      <div className="submissions-section" data-testid="activity-submissions">
+                        <div className="submissions-grid" data-testid="submissions-grid">
+                          {paginatedSubmissions.map((sub) => (
+                            <div key={sub.id} className="submission-card-wrapper" data-testid={`submission-card-${sub.id}`}>
+                              <span className="submission-timestamp" data-testid={`submission-timestamp-${sub.id}`}>{sub.submittedAt}</span>
+                              <div className="extended-fact-card">
+                                <div className="extended-fact-content">
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <X className="fact-icon fact-icon-myth" size={16} />
+                                      <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
+                                    </div>
+                                    <p className="fact-myth">"{sub.myth}"</p>
+                                    <div className="fact-details">
+                                      <p>{sub.details}</p>
+                                    </div>
+                                  </div>
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <Check className="fact-icon fact-icon-truth" size={16} />
+                                      <span className="label-text">CURRENT UNDERSTANDING</span>
+                                    </div>
+                                    <p className="fact-truth">{sub.truth}</p>
+                                    {sub.moreDetails && (
+                                      <div className="fact-more-details">
+                                        <p>{sub.moreDetails}</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <BookOpen className="fact-icon fact-icon-sources" size={16} />
+                                      <span className="label-text">SOURCES</span>
+                                    </div>
+                                    <div className="sources-text-list">
+                                      {sub.sources.map((source) => (
+                                        <a
+                                          key={source.id}
+                                          href={source.link}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="source-text-item"
+                                          data-testid={`source-${source.id}`}
+                                        >
+                                          {source.citation}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <button className="edit-submission-button" data-testid={`button-edit-submission-${sub.id}`}>
+                                <Pencil size={14} />
+                                <span>Edit Submission</span>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        {totalSubmissionsPages > 1 && (
+                          <div className="submissions-pagination" data-testid="submissions-pagination">
+                            <button
+                              className="submissions-page-button"
+                              disabled={submissionsPage === 1}
+                              onClick={() => setSubmissionsPage(submissionsPage - 1)}
+                              data-testid="button-submissions-prev"
+                            >
+                              Previous
+                            </button>
+                            <span className="submissions-page-info" data-testid="submissions-page-info">
+                              Page {submissionsPage} of {totalSubmissionsPages}
+                            </span>
+                            <button
+                              className="submissions-page-button"
+                              disabled={submissionsPage === totalSubmissionsPages}
+                              onClick={() => setSubmissionsPage(submissionsPage + 1)}
+                              data-testid="button-submissions-next"
+                            >
+                              Next
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
 

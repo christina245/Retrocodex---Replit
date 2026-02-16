@@ -1514,4 +1514,101 @@ a.following-post-username:hover {
   .dashboard-feed-grid {
     grid-template-columns: 1fr;
   }
+
+  .submissions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.submissions-section {
+  padding-top: 16px;
+}
+
+.submissions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.submission-card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.submission-card-wrapper .extended-fact-card {
+  width: 100%;
+  height: 515px;
+}
+
+.submission-timestamp {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #878787;
+  z-index: 2;
+}
+
+.edit-submission-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-end;
+  margin-top: 10px;
+  background: #f0f0f0;
+  color: #2C2C2C;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-submission-button:hover {
+  background: #FF5353;
+  color: white;
+}
+
+.submissions-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.submissions-page-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2C2C;
+  background: #f0f0f0;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submissions-page-button:hover:not(:disabled) {
+  background: #FF5353;
+  color: white;
+}
+
+.submissions-page-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.submissions-page-info {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #878787;
 }
