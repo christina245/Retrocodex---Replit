@@ -1630,6 +1630,10 @@ a.following-post-username:hover {
   margin-top: 4px;
 }
 
+.denial-reason-fade-hidden {
+  visibility: hidden;
+}
+
 .denial-reason-view-more {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;

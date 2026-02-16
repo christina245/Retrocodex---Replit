@@ -1509,17 +1509,15 @@ export default function UserDashboard() {
                                 >
                                   {sub.denialReason}
                                 </p>
-                                {overflowingDenials[sub.id] && !expandedDenials[sub.id] && (
-                                  <div className="denial-reason-fade">
-                                    <span
-                                      className="denial-reason-view-more"
-                                      onClick={() => toggleDenialExpand(sub.id)}
-                                      data-testid={`button-view-more-${sub.id}`}
-                                    >
-                                      View More
-                                    </span>
-                                  </div>
-                                )}
+                                <div className={`denial-reason-fade${overflowingDenials[sub.id] ? "" : " denial-reason-fade-hidden"}`}>
+                                  <span
+                                    className="denial-reason-view-more"
+                                    onClick={() => toggleDenialExpand(sub.id)}
+                                    data-testid={expandedDenials[sub.id] ? `button-view-less-${sub.id}` : `button-view-more-${sub.id}`}
+                                  >
+                                    {expandedDenials[sub.id] ? "View Less" : "View More"}
+                                  </span>
+                                </div>
                               </div>
                               <div className="extended-fact-card">
                                 <div className="extended-fact-content">
