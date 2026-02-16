@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -246,6 +246,7 @@ export default function UserDashboard() {
   const [notificationsTab, setNotificationsTab] = useState<NotificationsTab>("all");
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [submissionsPage, setSubmissionsPage] = useState(1);
+  const [approvedPage, setApprovedPage] = useState(1);
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
@@ -480,11 +481,60 @@ export default function UserDashboard() {
     },
   ];
 
+  const approvedSubmissions = [
+    {
+      id: "apr-1",
+      myth: "Humans only use 10% of their brains.",
+      truth: "Brain imaging has shown that virtually all areas of the brain are active during various tasks. No area is completely inactive.",
+      category: ["Life Sciences"],
+      details: "This myth has been perpetuated by self-help authors and motivational speakers. Brain scans reveal that much of the brain is active even during simple tasks.",
+      moreDetails: "Different areas of the brain are responsible for different functions, and damage to even small areas can have profound effects.",
+      sources: [{ id: "a1", citation: "Scientific American - Do We Only Use 10% of Our Brains?", link: "https://scientificamerican.com" }],
+      publishedAt: "Feb 15, 2026",
+      slug: "humans-only-use-10-percent-of-brains",
+    },
+    {
+      id: "apr-2",
+      myth: "Lightning never strikes the same place twice.",
+      truth: "Lightning frequently strikes the same place repeatedly, especially tall or isolated structures. The Empire State Building is struck about 20–25 times per year.",
+      category: ["Everyday Life"],
+      details: "The idea that lightning avoids previous strike points is a folk belief with no basis in physics. Lightning follows the path of least resistance.",
+      sources: [{ id: "a2", citation: "NOAA - Lightning Safety", link: "https://noaa.gov" }],
+      publishedAt: "Feb 13, 2026",
+      slug: "lightning-never-strikes-same-place-twice",
+    },
+    {
+      id: "apr-3",
+      myth: "Shaving makes hair grow back thicker and darker.",
+      truth: "Shaving has no effect on the thickness, color, or rate of hair growth. The blunt tip of regrown hair may feel coarser, but it's the same hair.",
+      category: ["Health & Fitness"],
+      details: "This is one of the most common grooming myths. Dermatological studies have repeatedly debunked this claim.",
+      sources: [{ id: "a3", citation: "Mayo Clinic - Hair Removal", link: "https://mayoclinic.org" }],
+      publishedAt: "Feb 11, 2026",
+      slug: "shaving-makes-hair-grow-back-thicker",
+    },
+    {
+      id: "apr-4",
+      myth: "Goldfish have a three-second memory.",
+      truth: "Goldfish can remember things for months. Studies have shown they can be trained to navigate mazes and remember feeding schedules.",
+      category: ["Life Sciences"],
+      details: "Research from the University of Plymouth demonstrated that goldfish can remember learned tasks for up to five months.",
+      sources: [{ id: "a4", citation: "Animal Cognition Journal", link: "https://springer.com" }],
+      publishedAt: "Feb 9, 2026",
+      slug: "goldfish-three-second-memory",
+    },
+  ];
+
   const SUBMISSIONS_PER_PAGE = 10;
   const totalSubmissionsPages = Math.ceil(pendingSubmissions.length / SUBMISSIONS_PER_PAGE);
   const paginatedSubmissions = pendingSubmissions.slice(
     (submissionsPage - 1) * SUBMISSIONS_PER_PAGE,
     submissionsPage * SUBMISSIONS_PER_PAGE
+  );
+  const totalApprovedPages = Math.ceil(approvedSubmissions.length / SUBMISSIONS_PER_PAGE);
+  const paginatedApproved = approvedSubmissions.slice(
+    (approvedPage - 1) * SUBMISSIONS_PER_PAGE,
+    approvedPage * SUBMISSIONS_PER_PAGE
   );
 
   return (
@@ -1176,7 +1226,7 @@ export default function UserDashboard() {
                         <button
                           key={tab.id}
                           className={`notifications-tab${activityTab === tab.id ? " notifications-tab-active" : ""}`}
-                          onClick={() => setActivityTab(tab.id)}
+                          onClick={() => { setActivityTab(tab.id); setSubmissionsPage(1); setApprovedPage(1); }}
                           data-testid={`button-activity-tab-${tab.id}`}
                         >
                           <span>{tab.label}</span>
@@ -1274,12 +1324,89 @@ export default function UserDashboard() {
                     )}
 
                     {activityTab === "approved" && (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty-approved">
-                        <CheckCircle size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You don't have any approved posts yet.</p>
-                        <p className="dashboard-feed-empty-desc">
-                          You'll be notified by email when your submissions are approved.
-                        </p>
+                      <div className="submissions-section" data-testid="activity-approved">
+                        <div className="submissions-grid" data-testid="approved-grid">
+                          {paginatedApproved.map((sub) => (
+                            <div key={sub.id} className="submission-card-wrapper" data-testid={`approved-card-${sub.id}`}>
+                              <div className="extended-fact-card">
+                                <div className="extended-fact-content">
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <X className="fact-icon fact-icon-myth" size={16} />
+                                      <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
+                                    </div>
+                                    <p className="fact-myth">"{sub.myth}"</p>
+                                    <div className="fact-details">
+                                      <p>{sub.details}</p>
+                                    </div>
+                                  </div>
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <Check className="fact-icon fact-icon-truth" size={16} />
+                                      <span className="label-text">CURRENT UNDERSTANDING</span>
+                                    </div>
+                                    <p className="fact-truth">{sub.truth}</p>
+                                    {sub.moreDetails && (
+                                      <div className="fact-more-details">
+                                        <p>{sub.moreDetails}</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="fact-section">
+                                    <div className="fact-label">
+                                      <BookOpen className="fact-icon fact-icon-sources" size={16} />
+                                      <span className="label-text">SOURCES</span>
+                                    </div>
+                                    <div className="sources-text-list">
+                                      {sub.sources.map((source) => (
+                                        <a
+                                          key={source.id}
+                                          href={source.link}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="source-text-item"
+                                          data-testid={`source-${source.id}`}
+                                        >
+                                          {source.citation}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="submission-footer-row" data-testid={`approved-footer-${sub.id}`}>
+                                <span className="submission-timestamp" data-testid={`approved-timestamp-${sub.id}`}>Published on {sub.publishedAt}</span>
+                                <Link href={`/fact/${sub.slug}`} className="view-submission-button" data-testid={`button-view-submission-${sub.id}`}>
+                                  <span>View Submission</span>
+                                  <ChevronRight size={14} />
+                                </Link>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        {totalApprovedPages > 1 && (
+                          <div className="submissions-pagination" data-testid="approved-pagination">
+                            <button
+                              className="submissions-page-button"
+                              disabled={approvedPage === 1}
+                              onClick={() => setApprovedPage(approvedPage - 1)}
+                              data-testid="button-approved-prev"
+                            >
+                              Previous
+                            </button>
+                            <span className="submissions-page-info" data-testid="approved-page-info">
+                              Page {approvedPage} of {totalApprovedPages}
+                            </span>
+                            <button
+                              className="submissions-page-button"
+                              disabled={approvedPage === totalApprovedPages}
+                              onClick={() => setApprovedPage(approvedPage + 1)}
+                              data-testid="button-approved-next"
+                            >
+                              Next
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
 
