@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -17,9 +17,10 @@ import "../components/CommentsSection.css";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "saved";
-type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "settings";
+type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "settings";
 type NotificationsTab = "all" | "replies" | "comments" | "fact-updates";
-type ActivityTab = "submitted" | "approved" | "edit-requests" | "approved-edits" | "comments";
+type ActivityTab = "submitted" | "approved" | "comments";
+type EditRequestsTab = "pending-edits" | "approved-edits";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
@@ -38,9 +39,12 @@ const PROFILE_ACTIVITY_TABS: { id: ProfileActivityTab; label: string }[] = [
 const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
   { id: "submitted", label: "Pending Submissions" },
   { id: "approved", label: "Approved Posts" },
-  { id: "edit-requests", label: "Edit Requests" },
-  { id: "approved-edits", label: "Approved Edits" },
   { id: "comments", label: "Comments" },
+];
+
+const EDIT_REQUESTS_TABS: { id: EditRequestsTab; label: string }[] = [
+  { id: "pending-edits", label: "Pending Edits" },
+  { id: "approved-edits", label: "Approved Edits" },
 ];
 
 const MAIN_CATEGORIES = ["History", "Life Sciences", "Health & Fitness", "Social Sciences", "Gender & Sexuality", "Everyday Life"];
@@ -247,6 +251,7 @@ export default function UserDashboard() {
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [submissionsPage, setSubmissionsPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
+  const [editRequestsTab, setEditRequestsTab] = useState<EditRequestsTab>("pending-edits");
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
@@ -572,15 +577,23 @@ export default function UserDashboard() {
                 data-testid="button-side-tab-edit-profile"
               >
                 <UserRoundPen size={20} className="dashboard-side-tab-icon" />
-                <span>Edit Profile</span>
+                <span>My Profile</span>
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "activity" ? " dashboard-side-tab-active" : ""}`}
                 onClick={() => setSideTab("activity")}
                 data-testid="button-side-tab-activity"
               >
-                <PenLine size={20} className="dashboard-side-tab-icon" />
+                <Send size={20} className="dashboard-side-tab-icon" />
                 <span>Submissions</span>
+              </button>
+              <button
+                className={`dashboard-side-tab${sideTab === "edit-requests" ? " dashboard-side-tab-active" : ""}`}
+                onClick={() => setSideTab("edit-requests")}
+                data-testid="button-side-tab-edit-requests"
+              >
+                <PenLine size={20} className="dashboard-side-tab-icon" />
+                <span>Edit Requests</span>
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "settings" ? " dashboard-side-tab-active" : ""}`}
@@ -1410,8 +1423,39 @@ export default function UserDashboard() {
                       </div>
                     )}
 
-                    {activityTab === "edit-requests" && (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty-edit-requests">
+                    {activityTab === "comments" && (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty-comments">
+                        <MessageSquare size={40} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">You haven't commented on any topics yet.</p>
+                        <p className="dashboard-feed-empty-desc">
+                          Leave a comment on a misconception you care about to share your experiences.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {sideTab === "edit-requests" && (
+                <>
+                  <div className="notifications-tabs-wrapper">
+                    <nav className="notifications-tabs" data-testid="edit-requests-tabs">
+                      {EDIT_REQUESTS_TABS.map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`notifications-tab${editRequestsTab === tab.id ? " notifications-tab-active" : ""}`}
+                          onClick={() => setEditRequestsTab(tab.id)}
+                          data-testid={`button-edit-requests-tab-${tab.id}`}
+                        >
+                          <span>{tab.label}</span>
+                        </button>
+                      ))}
+                    </nav>
+                  </div>
+
+                  <div className="dashboard-feed-content" data-testid="dashboard-edit-requests-content">
+                    {editRequestsTab === "pending-edits" && (
+                      <div className="dashboard-feed-empty" data-testid="edit-requests-empty-pending">
                         <FilePenLine size={40} className="dashboard-feed-empty-icon" />
                         <p className="dashboard-feed-empty-title">You haven't requested an edit to any entry yet.</p>
                         <p className="dashboard-feed-empty-desc">
@@ -1420,22 +1464,12 @@ export default function UserDashboard() {
                       </div>
                     )}
 
-                    {activityTab === "approved-edits" && (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty-approved-edits">
+                    {editRequestsTab === "approved-edits" && (
+                      <div className="dashboard-feed-empty" data-testid="edit-requests-empty-approved">
                         <CheckCircle size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You haven't requested an edit to any entry yet.</p>
+                        <p className="dashboard-feed-empty-title">You don't have any approved edits yet.</p>
                         <p className="dashboard-feed-empty-desc">
-                          Submit a request if you feel like an entry's information is incorrect or could be improved.
-                        </p>
-                      </div>
-                    )}
-
-                    {activityTab === "comments" && (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty-comments">
-                        <MessageSquare size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You haven't commented on any topics yet.</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Leave a comment on a misconception you care about to share your experiences.
+                          You'll be notified when your edit requests are reviewed and approved.
                         </p>
                       </div>
                     )}
