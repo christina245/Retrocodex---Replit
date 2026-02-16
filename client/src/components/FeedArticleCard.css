@@ -4,12 +4,6 @@
   overflow: hidden;
 }
 
-.feed-article-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
 .feed-article-main {
   display: flex;
   gap: 24px;
@@ -19,6 +13,19 @@
 .feed-article-text {
   flex: 1;
   min-width: 0;
+}
+
+.feed-article-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline;
+}
+
+.feed-article-title-link:hover .feed-article-title {
+  text-decoration: underline;
+  text-decoration-color: #FF5353;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
 }
 
 .feed-article-title {
@@ -31,16 +38,12 @@
 }
 
 .feed-article-summary {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'Merriweather', serif;
   font-size: 14px;
   font-weight: 400;
   color: #666;
   line-height: 1.6;
   margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .feed-article-cover-container {
@@ -69,6 +72,23 @@
 .feed-article-category {
   display: flex;
   align-items: center;
+}
+
+.feed-article-category-chip {
+  display: inline-block;
+  color: #FFFFFF;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.feed-article-category-chip:hover {
+  opacity: 0.85;
 }
 
 .feed-article-actions {

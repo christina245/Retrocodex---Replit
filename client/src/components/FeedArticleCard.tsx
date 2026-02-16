@@ -1,6 +1,5 @@
 import { Link } from "wouter";
 import { MessageSquare, Bookmark, Share2 } from "lucide-react";
-import CategoryChips from "@/components/CategoryChips";
 import "./FeedArticleCard.css";
 
 interface FeedArticleCardProps {
@@ -11,6 +10,24 @@ interface FeedArticleCardProps {
   slug: string;
 }
 
+const categoryColors: Record<string, string> = {
+  "HISTORY": "#D29E00",
+  "LIFE SCIENCES": "#419F36",
+  "HEALTH & FITNESS": "#EC7200",
+  "SOCIAL SCIENCES": "#9D0085",
+  "GENDER & SEXUALITY": "#FF6F98",
+  "EVERYDAY LIFE": "#0167A2",
+};
+
+const categoryRoutes: Record<string, string> = {
+  "HISTORY": "/category/history",
+  "LIFE SCIENCES": "/category/life-sciences",
+  "HEALTH & FITNESS": "/category/health-fitness",
+  "SOCIAL SCIENCES": "/category/social-sciences",
+  "GENDER & SEXUALITY": "/category/gender-sexuality",
+  "EVERYDAY LIFE": "/category/everyday-life",
+};
+
 export default function FeedArticleCard({
   title,
   summary,
@@ -18,27 +35,38 @@ export default function FeedArticleCard({
   category,
   slug,
 }: FeedArticleCardProps) {
+  const upperCategory = category.toUpperCase();
+  const chipColor = categoryColors[upperCategory] || "#2C2C2C";
+  const chipRoute = categoryRoutes[upperCategory] || "/";
+
   return (
     <div className="feed-article-card" data-testid="feed-article-card">
-      <Link href={`/articles/${slug}`} className="feed-article-link" data-testid={`link-article-${slug}`}>
-        <div className="feed-article-main">
-          <div className="feed-article-text">
+      <div className="feed-article-main">
+        <div className="feed-article-text">
+          <Link href={`/articles/${slug}`} className="feed-article-title-link" data-testid={`link-article-${slug}`}>
             <h3 className="feed-article-title" data-testid="feed-article-title">{title}</h3>
-            <p className="feed-article-summary" data-testid="feed-article-summary">{summary}</p>
-          </div>
-          <div className="feed-article-cover-container">
-            <img
-              src={coverImage}
-              alt={title}
-              className="feed-article-cover"
-              data-testid="feed-article-cover"
-            />
-          </div>
+          </Link>
+          <p className="feed-article-summary" data-testid="feed-article-summary">{summary}</p>
         </div>
-      </Link>
+        <div className="feed-article-cover-container">
+          <img
+            src={coverImage}
+            alt={title}
+            className="feed-article-cover"
+            data-testid="feed-article-cover"
+          />
+        </div>
+      </div>
       <div className="feed-article-footer" data-testid="feed-article-footer">
         <div className="feed-article-category" onClick={(e) => e.stopPropagation()}>
-          <CategoryChips categories={[category]} />
+          <Link
+            href={chipRoute}
+            className="feed-article-category-chip"
+            style={{ backgroundColor: chipColor }}
+            data-testid={`link-category-${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, '')}`}
+          >
+            {upperCategory}
+          </Link>
         </div>
         <div className="feed-article-actions" data-testid="feed-article-actions">
           <button className="comment-action disabled-action" data-testid="button-article-comment">

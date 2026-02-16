@@ -10,7 +10,6 @@ import type { Fact as FactCardFact } from "@/components/FactCard";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
-import type { BlogPost } from "@shared/schema";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
 import FeedArticleCard from "@/components/FeedArticleCard";
@@ -237,10 +236,6 @@ export default function UserDashboard() {
   const { user, isLoggedIn, logout } = useAuth();
   const [, navigate] = useLocation();
 
-  const { data: publishedArticles, isLoading: articlesLoading } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog-posts/published"],
-  });
-  const feedArticle = publishedArticles?.[0];
   const initialTab = (() => {
     const params = new URLSearchParams(window.location.search);
     const tab = params.get("tab");
@@ -762,40 +757,25 @@ export default function UserDashboard() {
                           </div>
                         </div>
 
-                        {articlesLoading ? (
-                          <div className="following-post" data-testid="following-post-article-skeleton">
-                            <div className="following-post-header">
-                              <div className="following-post-avatar" style={{ background: '#e5e5e5' }} />
-                              <div className="following-post-header-text">
-                                <span style={{ display: 'inline-block', width: 100, height: 14, background: '#e5e5e5', borderRadius: 4 }} />
-                                <span style={{ display: 'inline-block', width: 120, height: 12, background: '#e5e5e5', borderRadius: 4, marginLeft: 8 }} />
-                              </div>
+                        <div className="following-post" data-testid="following-post-article">
+                          <div className="following-post-header">
+                            <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
+                            <div className="following-post-header-text">
+                              <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99">FactChecker_99</Link>
+                              <span className="following-post-action">submitted an article</span>
                             </div>
-                            <div className="following-post-body">
-                              <div style={{ background: '#f0f0f0', borderRadius: 10, height: 160, width: '100%' }} />
-                            </div>
+                            <span className="following-post-timestamp">8 mins ago</span>
                           </div>
-                        ) : feedArticle ? (
-                          <div className="following-post" data-testid="following-post-article">
-                            <div className="following-post-header">
-                              <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
-                              <div className="following-post-header-text">
-                                <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99">FactChecker_99</Link>
-                                <span className="following-post-action">submitted an article</span>
-                              </div>
-                              <span className="following-post-timestamp">8 mins ago</span>
-                            </div>
-                            <div className="following-post-body">
-                              <FeedArticleCard
-                                title={feedArticle.title}
-                                summary={feedArticle.summary}
-                                coverImage={feedArticle.coverImage || ""}
-                                category={feedArticle.category}
-                                slug={feedArticle.slug}
-                              />
-                            </div>
+                          <div className="following-post-body">
+                            <FeedArticleCard
+                              title="5 Myths You Might Hear Going Home For the Holidays"
+                              summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
+                              coverImage="/uploads/1764995940108-220172306.jpg"
+                              category="Everyday Life"
+                              slug="going-home-for-the-holidays-myths-2025"
+                            />
                           </div>
-                        ) : null}
+                        </div>
 
                         <div className="following-post" data-testid="following-post-2">
                           <div className="following-post-header">
