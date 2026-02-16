@@ -830,8 +830,17 @@ a.following-post-username:hover {
 .following-post-link {
   text-decoration: none;
   color: inherit;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   display: block;
+}
+
+.following-post-link .fact-myth {
+  font-family: 'Merriweather', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2C2C2C;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .following-post-link:hover .fact-myth {
@@ -839,12 +848,29 @@ a.following-post-username:hover {
   text-decoration: underline;
 }
 
+.following-post-body-content {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.following-post-body-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.following-post-cover-link {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
 .following-post-cover-photo {
   width: 200px;
   height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   flex-shrink: 0;
+  display: block;
 }
 
 /* Compact Poll Response */
@@ -1074,6 +1100,7 @@ a.following-post-username:hover {
 
 .dashboard-side-tab-logout {
   color: #FF5353 !important;
+  font-size: 12px !important;
 }
 
 .dashboard-side-tab-logout:hover {

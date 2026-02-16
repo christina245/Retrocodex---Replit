@@ -884,65 +884,64 @@ export default function UserDashboard() {
                             <span className="following-post-timestamp">15 mins ago</span>
                           </div>
                           <div className="following-post-body">
-                            <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
-                              <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
-                            </Link>
-                            <div className="following-poll-response" data-testid="following-poll-response">
-                              <p className="following-poll-question">Were you taught this information?</p>
-                              <div className="following-poll-selection">
-                                <div className="following-poll-radio-filled" />
-                                <span className="following-poll-answer">Yes, in school</span>
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
+                                  <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
+                                </Link>
+                                <div className="following-poll-response" data-testid="following-poll-response">
+                                  <p className="following-poll-question">Were you taught this information?</p>
+                                  <div className="following-poll-selection">
+                                    <div className="following-poll-radio-filled" />
+                                    <span className="following-poll-answer">Yes, in school</span>
+                                  </div>
+                                </div>
                               </div>
+                              <Link href="/fact/food-pyramid-healthy-diet" className="following-post-cover-link" data-testid="cover-link-following-2">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
                             </div>
                           </div>
                         </div>
 
                         <div className="following-post" data-testid="following-post-3">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="NullPointerExcep" className="following-post-avatar" />
-                            <div className="following-post-header-text">
-                              <Link href="/user/NullPointerExcep" className="following-post-username" data-testid="link-user-NullPointerExcep">NullPointerExcep</Link>
-                              <span className="following-post-action">liked a comment on</span>
-                              <Link href="/fact/you-only-use-10-percent-of-your-brain" className="following-post-fact-title">"Do you only use 10% of your brain?"</Link>
-                            </div>
-                            <span className="following-post-timestamp">1 hour ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-comment-quote" data-testid="following-comment-quote-1">
-                              <p className="following-comment-text">"Evolutionarily speaking, maintaining an organ that consumes 20% of your energy while only using 10% of its capacity would be impossible..."</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="following-post" data-testid="following-post-4">
-                          <div className="following-post-header">
                             <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/Ackshually_42" className="following-post-username" data-testid="link-user-Ackshually_42">Ackshually_42</Link>
                               <span className="following-post-action">commented on</span>
-                              <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-fact-title">"Christopher Columbus discovered the Americas in 1492"</Link>
                             </div>
                             <span className="following-post-timestamp">3 hours ago</span>
                           </div>
                           <div className="following-post-body">
-                            <p className="following-plain-comment" data-testid="following-plain-comment">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
-                            <div className="comment-actions" data-testid="following-comment-actions">
-                              <button className="comment-action disabled-action" data-testid="button-reply-following">
-                                <CornerUpLeft size={14} />
-                                <span>Reply</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid="button-like-following">
-                                <Heart size={14} />
-                                <span>12 likes</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid="button-save-following">
-                                <Bookmark size={14} />
-                                <span>Save</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid="button-share-following">
-                                <Share2 size={14} />
-                                <span>Share</span>
-                              </button>
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
+                                  <p className="fact-myth">"Christopher Columbus discovered the Americas in 1492"</p>
+                                </Link>
+                                <p className="following-plain-comment" data-testid="following-plain-comment">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
+                                <div className="comment-actions" data-testid="following-comment-actions">
+                                  <button className="comment-action disabled-action" data-testid="button-reply-following">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-following">
+                                    <Heart size={14} />
+                                    <span>12 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-following">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-share-following">
+                                    <Share2 size={14} />
+                                    <span>Share</span>
+                                  </button>
+                                </div>
+                              </div>
+                              <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-following-3">
+                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -994,113 +993,98 @@ export default function UserDashboard() {
                             <span className="following-post-timestamp">20 mins ago</span>
                           </div>
                           <div className="following-post-body">
-                            <Link href="/fact/is-msg-bad-for-you" className="following-post-link">
-                              <p className="fact-myth">"MSG is bad for you."</p>
-                            </Link>
-                            <div className="following-poll-response" data-testid="local-poll-response">
-                              <p className="following-poll-question">Were you taught this information?</p>
-                              <div className="following-poll-selection">
-                                <div className="following-poll-radio-filled" />
-                                <span className="following-poll-answer">Yes, by family</span>
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/is-msg-bad-for-you" className="following-post-link">
+                                  <p className="fact-myth">"MSG is bad for you."</p>
+                                </Link>
+                                <div className="following-poll-response" data-testid="local-poll-response">
+                                  <p className="following-poll-question">Were you taught this information?</p>
+                                  <div className="following-poll-selection">
+                                    <div className="following-poll-radio-filled" />
+                                    <span className="following-poll-answer">Yes, by family</span>
+                                  </div>
+                                </div>
                               </div>
+                              <Link href="/fact/is-msg-bad-for-you" className="following-post-cover-link" data-testid="cover-link-local-2">
+                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                              </Link>
                             </div>
                           </div>
                         </div>
 
                         <div className="following-post" data-testid="local-post-3">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="BugHunter_Prime" className="following-post-avatar" />
+                            <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
                             <div className="following-post-header-text">
-                              <Link href="/user/BugHunter_Prime" className="following-post-username" data-testid="link-user-BugHunter_Prime">BugHunter_Prime</Link>
+                              <Link href="/user/CaffeineOverflow" className="following-post-username" data-testid="link-user-CaffeineOverflow">CaffeineOverflow</Link>
                               <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-3">London, United Kingdom</span>
-                              <span className="following-post-action">liked a comment on</span>
-                              <Link href="/fact/does-muscle-turn-into-fat" className="following-post-fact-title">"Does muscle turn into fat if you don't work out?"</Link>
+                              <span className="following-post-location" data-testid="local-location-3">Rio de Janeiro, Brazil</span>
+                              <span className="following-post-action">commented on</span>
                             </div>
-                            <span className="following-post-timestamp">45 mins ago</span>
+                            <span className="following-post-timestamp">1 hour ago</span>
                           </div>
                           <div className="following-post-body">
-                            <div className="following-comment-quote" data-testid="local-comment-quote-1">
-                              <p className="following-comment-text">"Muscle and fat are completely different tissue types. It's biologically impossible for one to transform into the other — that's like saying bone can turn into skin..."</p>
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/sweating-burning-fat" className="following-post-link">
+                                  <p className="fact-myth">"Does sweating mean you're burning fat?"</p>
+                                </Link>
+                                <p className="following-plain-comment" data-testid="local-plain-comment">Living in Rio, people at the gym constantly think sweating buckets equals a better workout. But sweat is just thermoregulation — your body cooling itself down. You can burn tons of calories in cold water swimming without sweating at all.</p>
+                                <div className="comment-actions" data-testid="local-comment-actions-1">
+                                  <button className="comment-action disabled-action" data-testid="button-reply-local-1">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-local-1">
+                                    <Heart size={14} />
+                                    <span>8 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-local-1">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-share-local-1">
+                                    <Share2 size={14} />
+                                    <span>Share</span>
+                                  </button>
+                                </div>
+                              </div>
+                              <Link href="/fact/sweating-burning-fat" className="following-post-cover-link" data-testid="cover-link-local-3">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
                             </div>
                           </div>
                         </div>
 
                         <div className="following-post" data-testid="local-post-4">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
-                            <div className="following-post-header-text">
-                              <Link href="/user/CaffeineOverflow" className="following-post-username" data-testid="link-user-CaffeineOverflow">CaffeineOverflow</Link>
-                              <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-4">Rio de Janeiro, Brazil</span>
-                              <span className="following-post-action">commented on</span>
-                              <Link href="/fact/sweating-burning-fat" className="following-post-fact-title">"Does sweating mean you're burning fat?"</Link>
-                            </div>
-                            <span className="following-post-timestamp">1 hour ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <p className="following-plain-comment" data-testid="local-plain-comment">Living in Rio, people at the gym constantly think sweating buckets equals a better workout. But sweat is just thermoregulation — your body cooling itself down. You can burn tons of calories in cold water swimming without sweating at all.</p>
-                            <div className="comment-actions" data-testid="local-comment-actions-1">
-                              <button className="comment-action disabled-action" data-testid="button-reply-local-1">
-                                <CornerUpLeft size={14} />
-                                <span>Reply</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid="button-like-local-1">
-                                <Heart size={14} />
-                                <span>8 likes</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid="button-save-local-1">
-                                <Bookmark size={14} />
-                                <span>Save</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid="button-share-local-1">
-                                <Share2 size={14} />
-                                <span>Share</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="following-post" data-testid="local-post-5">
-                          <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="PixelWitch_99" className="following-post-avatar" />
-                            <div className="following-post-header-text">
-                              <Link href="/user/PixelWitch_99" className="following-post-username" data-testid="link-user-PixelWitch_99">PixelWitch_99</Link>
-                              <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-5">New York, United States</span>
-                              <span className="following-post-action">liked a comment on</span>
-                              <Link href="/fact/does-chewing-gum-stay-in-your-stomach" className="following-post-fact-title">"Does chewing gum stay in your stomach for seven years?"</Link>
-                            </div>
-                            <span className="following-post-timestamp">2 hours ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-comment-quote" data-testid="local-comment-quote-2">
-                              <p className="following-comment-text">"Your digestive system isn't just going to give up on something because it's chewy. It passes through like everything else — just on the normal timeline, not seven years later..."</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="following-post" data-testid="local-post-6">
-                          <div className="following-post-header">
                             <img src={placeholderPhoto} alt="RespawnPending" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/RespawnPending" className="following-post-username" data-testid="link-user-RespawnPending">RespawnPending</Link>
                               <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-6">Toronto, Canada</span>
+                              <span className="following-post-location" data-testid="local-location-4">Toronto, Canada</span>
                               <span className="following-post-action">voted on a poll</span>
                             </div>
                             <span className="following-post-timestamp">3 hours ago</span>
                           </div>
                           <div className="following-post-body">
-                            <Link href="/fact/states-of-matter" className="following-post-link">
-                              <p className="fact-myth">"There are three states of matter: solid, liquid, and gas."</p>
-                            </Link>
-                            <div className="following-poll-response" data-testid="local-poll-response-2">
-                              <p className="following-poll-question">Were you taught this information?</p>
-                              <div className="following-poll-selection">
-                                <div className="following-poll-radio-filled" />
-                                <span className="following-poll-answer">Yes, in school</span>
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/states-of-matter" className="following-post-link">
+                                  <p className="fact-myth">"There are three states of matter: solid, liquid, and gas."</p>
+                                </Link>
+                                <div className="following-poll-response" data-testid="local-poll-response-2">
+                                  <p className="following-poll-question">Were you taught this information?</p>
+                                  <div className="following-poll-selection">
+                                    <div className="following-poll-radio-filled" />
+                                    <span className="following-poll-answer">Yes, in school</span>
+                                  </div>
+                                </div>
                               </div>
+                              <Link href="/fact/states-of-matter" className="following-post-cover-link" data-testid="cover-link-local-4">
+                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                              </Link>
                             </div>
                           </div>
                         </div>
