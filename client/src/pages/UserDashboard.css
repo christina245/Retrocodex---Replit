@@ -1050,6 +1050,14 @@ a.following-post-username:hover {
   /* body container */
 }
 
+.activity-post-body .fact-myth {
+  margin-top: 0.25rem;
+}
+
+.activity-post-body .following-post-cover-photo {
+  margin-top: 0.25rem;
+}
+
 .activity-status-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 16px;
@@ -1110,23 +1118,36 @@ a.following-post-username:hover {
   margin-top: 12px;
 }
 
-.activity-secondary-button {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: #2C2C2C;
-  background: #e0e0e0;
+.activity-learn-more-button {
+  background: rgba(44, 44, 44, 0.05);
+  color: #FF5353;
   border: none;
-  border-radius: 6px;
+  padding: 12px 15px 12px 10px;
+  border-radius: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  padding: 6px 16px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  transition: background 0.2s;
-  margin-right: 2rem;
 }
 
-.activity-secondary-button:hover {
-  background: #d0d0d0;
+.activity-learn-more-button:hover {
+  background: #FF5353;
+  color: white;
+}
+
+.activity-learn-more-button:hover .activity-learn-more-arrow {
+  filter: brightness(0) saturate(100%) invert(1);
+}
+
+.activity-learn-more-arrow {
+  width: 20px;
+  height: 10px;
+  object-fit: contain;
+  transition: filter 0.2s;
 }
 
 .activity-follow-button {

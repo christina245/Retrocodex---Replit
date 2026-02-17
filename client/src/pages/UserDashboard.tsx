@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, OctagonX, PlusCircle } from "lucide-react";
+import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -1125,7 +1126,7 @@ export default function UserDashboard() {
                       <div className="activity-post" data-testid="activity-post-1">
                         <div className="activity-post-icon-col">
                           <img src={placeholderPhoto} alt="Username1" className="activity-post-avatar" />
-                          <Heart size={16} className="activity-type-icon activity-type-heart" />
+                          <Heart size={20} className="activity-type-icon activity-type-heart" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1155,7 +1156,7 @@ export default function UserDashboard() {
                       <div className="activity-post" data-testid="activity-post-2">
                         <div className="activity-post-icon-col">
                           <img src={placeholderPhoto} alt="Username2" className="activity-post-avatar" />
-                          <MessageSquareMore size={16} className="activity-type-icon activity-type-comment" />
+                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1185,7 +1186,7 @@ export default function UserDashboard() {
                       <div className="activity-post" data-testid="activity-post-3">
                         <div className="activity-post-icon-col">
                           <img src={placeholderPhoto} alt="Username3" className="activity-post-avatar" />
-                          <UserRoundPlus size={16} className="activity-type-icon activity-type-follow" />
+                          <UserRoundPlus size={20} className="activity-type-icon activity-type-follow" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1210,7 +1211,7 @@ export default function UserDashboard() {
                       {/* 4. Your fact submission was approved! */}
                       <div className="activity-post" data-testid="activity-post-4">
                         <div className="activity-post-icon-col">
-                          <CircleCheckBig size={40} className="activity-status-icon activity-status-approved" />
+                          <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1241,7 +1242,7 @@ export default function UserDashboard() {
                       {/* 5. Your edit request was approved! */}
                       <div className="activity-post" data-testid="activity-post-5">
                         <div className="activity-post-icon-col">
-                          <CircleCheckBig size={40} className="activity-status-icon activity-status-approved" />
+                          <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1259,7 +1260,8 @@ export default function UserDashboard() {
                                 <p className="activity-submitted-label">You submitted:</p>
                                 <p className="activity-submitted-text" data-testid="activity-submitted-5">Don't forget this: cite this 2020 study that further disproved it! Here's the study: https://pubmed.ncbi.nlm.nih.gov/30668956.</p>
                                 <div className="activity-action-row">
-                                  <Link href="/fact/autism-broken-mirror-neurons" className="activity-secondary-button" data-testid="button-view-updated-entry-5">
+                                  <Link href="/fact/autism-broken-mirror-neurons" className="activity-learn-more-button" data-testid="button-view-updated-entry-5">
+                                    <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
                                     View updated entry
                                   </Link>
                                 </div>
@@ -1275,7 +1277,7 @@ export default function UserDashboard() {
                       {/* 6. Your edit request was not approved. */}
                       <div className="activity-post" data-testid="activity-post-6">
                         <div className="activity-post-icon-col">
-                          <OctagonX size={40} className="activity-status-icon activity-status-denied" />
+                          <OctagonX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1293,7 +1295,8 @@ export default function UserDashboard() {
                                 <p className="activity-submitted-label">You submitted:</p>
                                 <p className="activity-submitted-text" data-testid="activity-submitted-6">There's actually plenty of evidence that people do repress traumatic memories! I know it's a popular trope in the media. If it's that popular, it must be true, right?</p>
                                 <div className="activity-action-row">
-                                  <button className="activity-secondary-button" data-testid="button-view-submission-6">
+                                  <button className="activity-learn-more-button" data-testid="button-view-submission-6">
+                                    <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
                                     View submission
                                   </button>
                                 </div>
@@ -1309,7 +1312,7 @@ export default function UserDashboard() {
                       {/* 7. Your post submission was not approved (no cover photo) */}
                       <div className="activity-post" data-testid="activity-post-7">
                         <div className="activity-post-icon-col">
-                          <OctagonX size={40} className="activity-status-icon activity-status-denied" />
+                          <OctagonX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1331,7 +1334,8 @@ export default function UserDashboard() {
                               <p className="activity-admin-feedback-text">This submission reads more like a personal opinion than a verifiable fact. The claims made are subjective in nature and cannot be objectively measured or tested. We encourage submissions that present commonly held beliefs alongside evidence-based corrections.</p>
                             </div>
                             <div className="activity-action-row">
-                              <button className="activity-secondary-button" data-testid="button-view-submission-7">
+                              <button className="activity-learn-more-button" data-testid="button-view-submission-7">
+                                <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
                                 View submission
                               </button>
                             </div>
@@ -1343,7 +1347,7 @@ export default function UserDashboard() {
                       <div className="activity-post" data-testid="activity-post-8">
                         <div className="activity-post-icon-col">
                           <img src={placeholderPhoto} alt="username5" className="activity-post-avatar" />
-                          <MessageSquareMore size={16} className="activity-type-icon activity-type-comment" />
+                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1387,7 +1391,7 @@ export default function UserDashboard() {
                       {/* 9. An update was posted to a fact you follow */}
                       <div className="activity-post" data-testid="activity-post-9">
                         <div className="activity-post-icon-col">
-                          <PlusCircle size={40} className="activity-status-icon activity-status-update" />
+                          <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1405,7 +1409,7 @@ export default function UserDashboard() {
                                 <p className="activity-submitted-label">Revision:</p>
                                 <div className="activity-submitted-revision">
                                   <Check size={16} className="activity-revision-check" />
-                                  <p className="activity-submitted-text">In 2026, the US government introduced a new food pyramid that prioritized vegetables and protein while relegating grains to the bottom.</p>
+                                  <p className="activity-truth-text">In 2026, the US government introduced a new food pyramid that prioritized vegetables and protein while relegating grains to the bottom.</p>
                                 </div>
                               </div>
                               <Link href="/fact/food-pyramid-healthy-diet" className="following-post-cover-link" data-testid="cover-link-activity-9">
