@@ -959,6 +959,230 @@ a.following-post-username:hover {
   justify-content: flex-start;
 }
 
+/* ========== Activity Feed ========== */
+.activity-post {
+  display: flex;
+  gap: 12px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.activity-post:last-child {
+  border-bottom: none;
+}
+
+.activity-post-icon-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  width: 40px;
+}
+
+.activity-post-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.activity-type-icon {
+  color: #878787;
+}
+
+.activity-type-heart {
+  color: #FF5353;
+}
+
+.activity-type-comment {
+  color: #878787;
+}
+
+.activity-type-follow {
+  color: #878787;
+}
+
+.activity-status-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.activity-status-approved {
+  color: #419F36;
+}
+
+.activity-status-denied {
+  color: #FF5353;
+}
+
+.activity-status-update {
+  color: #878787;
+}
+
+.activity-post-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.activity-post-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.activity-post-header-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.activity-post-body {
+  /* body container */
+}
+
+.activity-status-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #878787;
+}
+
+.activity-status-text-approved {
+  color: #878787;
+}
+
+.activity-status-text-denied {
+  color: #878787;
+}
+
+.activity-submitted-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #878787;
+  margin: 8px 0 4px 0;
+}
+
+.activity-submitted-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.activity-submitted-revision {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 4px;
+}
+
+.activity-revision-check {
+  color: #419F36;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.activity-action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.activity-secondary-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FF5353;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.activity-secondary-button:hover {
+  opacity: 0.7;
+}
+
+.activity-follow-button {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: #FF5353;
+  border: 1px solid #FF5353;
+  border-radius: 6px;
+  padding: 6px 20px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.activity-follow-button:hover {
+  background: #e64848;
+}
+
+.activity-follow-button-following {
+  background: #e0e0e0;
+  color: #2C2C2C;
+  border-color: #e0e0e0;
+}
+
+.activity-follow-button-following:hover {
+  background: #d0d0d0;
+  border-color: #d0d0d0;
+}
+
+.activity-admin-feedback {
+  background: #fff8e1;
+  border: 1px solid #e0d6a8;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+}
+
+.activity-admin-feedback-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.activity-comment-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.activity-thread-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-thread-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activity-thread-username {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2C2C2C;
+}
+
 
 .dashboard-feed-empty {
   display: flex;

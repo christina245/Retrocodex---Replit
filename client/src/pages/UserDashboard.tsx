@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2 } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, OctagonX, PlusCircle } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -264,6 +264,7 @@ export default function UserDashboard() {
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
   const [allowFollows, setAllowFollows] = useState(true);
+  const [followedBack, setFollowedBack] = useState<Record<string, boolean>>({});
   const [publicProfile, setPublicProfile] = useState(true);
   const [notifyFollows, setNotifyFollows] = useState(true);
   const [notifyComments, setNotifyComments] = useState(true);
@@ -1118,12 +1119,303 @@ export default function UserDashboard() {
                   </div>
 
                   {notificationsTab === "all" && (
-                    <div className="dashboard-feed-empty" data-testid="notifications-empty-all">
-                      <Bell size={40} className="dashboard-feed-empty-icon" />
-                      <p className="dashboard-feed-empty-title">No new activity</p>
-                      <p className="dashboard-feed-empty-desc">
-                        New followers, upvotes, replies, comments, and fact updates will appear here.
-                      </p>
+                    <div className="following-feed" data-testid="activity-feed-all">
+
+                      {/* 1. Username1 liked your comment on */}
+                      <div className="activity-post" data-testid="activity-post-1">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="Username1" className="activity-post-avatar" />
+                          <Heart size={16} className="activity-type-icon activity-type-heart" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/Username1" className="following-post-username" data-testid="link-user-Username1">Username1</Link>
+                              <span className="following-post-action">liked your comment on</span>
+                            </div>
+                            <span className="following-post-timestamp">2 mins ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/men-women-different-brains" className="following-post-link">
+                                  <p className="fact-myth">"Men and women have very different brains."</p>
+                                </Link>
+                                <p className="following-plain-comment" data-testid="activity-comment-1">I was told this so many times by everybody growing up! I just thought it made sense because I saw so many differences in how men and women behaved. But the evidence is actually very clear that a lot of these distinctions come from socialization and not innate differences.</p>
+                              </div>
+                              <Link href="/fact/men-women-different-brains" className="following-post-cover-link" data-testid="cover-link-activity-1">
+                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 2. Username2 commented on your submission */}
+                      <div className="activity-post" data-testid="activity-post-2">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="Username2" className="activity-post-avatar" />
+                          <MessageSquareMore size={16} className="activity-type-icon activity-type-comment" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/Username2" className="following-post-username" data-testid="link-user-Username2">Username2</Link>
+                              <span className="following-post-action">commented on your submission</span>
+                            </div>
+                            <span className="following-post-timestamp">10 mins ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
+                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
+                                </Link>
+                                <p className="following-plain-comment" data-testid="activity-comment-2">Given how many spiders have crawled on me, I always believed this was true. I'm so happy to see it's been debunked. Although I have to admit, as someone who once woke up through an earthquake, I probably wouldn't wake up if a spider crawled on my face.</p>
+                              </div>
+                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-activity-2">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 3. Username3 started following you */}
+                      <div className="activity-post" data-testid="activity-post-3">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="Username3" className="activity-post-avatar" />
+                          <UserRoundPlus size={16} className="activity-type-icon activity-type-follow" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/Username3" className="following-post-username" data-testid="link-user-Username3">Username3</Link>
+                              <span className="following-post-action">started following you</span>
+                            </div>
+                            <span className="following-post-timestamp">30 mins ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <button
+                              className={`activity-follow-button${followedBack["Username3"] ? " activity-follow-button-following" : ""}`}
+                              onClick={() => setFollowedBack(prev => ({ ...prev, Username3: !prev.Username3 }))}
+                              data-testid="button-follow-back-Username3"
+                            >
+                              {followedBack["Username3"] ? "Following" : "Follow back"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 4. Your fact submission was approved! */}
+                      <div className="activity-post" data-testid="activity-post-4">
+                        <div className="activity-post-icon-col">
+                          <CircleCheckBig size={40} className="activity-status-icon activity-status-approved" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <span className="activity-status-text activity-status-text-approved">Your fact submission was approved!</span>
+                            </div>
+                            <span className="following-post-timestamp">1 hour ago</span>
+                          </div>
+                          <div className="activity-post-body following-post-factcard">
+                            <FactCard
+                              fact={{
+                                id: "columbus-americas",
+                                category: "HISTORY",
+                                categoryColor: "#D29E00",
+                                myth: "Christopher Columbus discovered the Americas in 1492.",
+                                truth: "Columbus only reached Central and South America where vast Indigenous civilizations had already established themselves over thousands of years.",
+                                link: "/fact/christopher-columbus-discovered-americas",
+                                coverPhoto: "/uploads/1764732977459-366971984.png",
+                              }}
+                              onSave={() => {}}
+                              onShare={() => {}}
+                              onComment={() => {}}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 5. Your edit request was approved! */}
+                      <div className="activity-post" data-testid="activity-post-5">
+                        <div className="activity-post-icon-col">
+                          <CircleCheckBig size={40} className="activity-status-icon activity-status-approved" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <span className="activity-status-text activity-status-text-approved">Your edit request was approved!</span>
+                            </div>
+                            <span className="following-post-timestamp">2 hours ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/autism-broken-mirror-neurons" className="following-post-link">
+                                  <p className="fact-myth">"Autism is caused by broken mirror neurons."</p>
+                                </Link>
+                                <p className="activity-submitted-label">You submitted:</p>
+                                <p className="activity-submitted-text" data-testid="activity-submitted-5">Don't forget this: cite this 2020 study that further disproved it! Here's the study: https://pubmed.ncbi.nlm.nih.gov/30668956.</p>
+                                <div className="activity-action-row">
+                                  <Link href="/fact/autism-broken-mirror-neurons" className="activity-secondary-button" data-testid="button-view-updated-entry-5">
+                                    View updated entry
+                                  </Link>
+                                </div>
+                              </div>
+                              <Link href="/fact/autism-broken-mirror-neurons" className="following-post-cover-link" data-testid="cover-link-activity-5">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 6. Your edit request was not approved. */}
+                      <div className="activity-post" data-testid="activity-post-6">
+                        <div className="activity-post-icon-col">
+                          <OctagonX size={40} className="activity-status-icon activity-status-denied" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <span className="activity-status-text activity-status-text-denied">Your edit request was not approved.</span>
+                            </div>
+                            <span className="following-post-timestamp">3 hours ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/people-repress-traumatic-memories" className="following-post-link">
+                                  <p className="fact-myth">"People often repress traumatic memories."</p>
+                                </Link>
+                                <p className="activity-submitted-label">You submitted:</p>
+                                <p className="activity-submitted-text" data-testid="activity-submitted-6">There's actually plenty of evidence that people do repress traumatic memories! I know it's a popular trope in the media. If it's that popular, it must be true, right?</p>
+                                <div className="activity-action-row">
+                                  <button className="activity-secondary-button" data-testid="button-view-submission-6">
+                                    View submission
+                                  </button>
+                                </div>
+                              </div>
+                              <Link href="/fact/people-repress-traumatic-memories" className="following-post-cover-link" data-testid="cover-link-activity-6">
+                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 7. Your post submission was not approved (no cover photo) */}
+                      <div className="activity-post" data-testid="activity-post-7">
+                        <div className="activity-post-icon-col">
+                          <OctagonX size={40} className="activity-status-icon activity-status-denied" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <span className="activity-status-text activity-status-text-denied">Your post submission was not approved.</span>
+                            </div>
+                            <span className="following-post-timestamp">5 hours ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <p className="activity-submitted-label">You submitted:</p>
+                            <Link href="/fact/hard-work-always-success" className="following-post-link">
+                              <p className="fact-myth">"Hard work will always result in success."</p>
+                            </Link>
+                            <div className="activity-submitted-revision">
+                              <Check size={16} className="activity-revision-check" />
+                              <p className="activity-submitted-text">Success is so much more complicated than hard work. It's a mix of luck, family background, and education.</p>
+                            </div>
+                            <div className="activity-admin-feedback" data-testid="activity-admin-feedback-7">
+                              <p className="activity-admin-feedback-text">This submission reads more like a personal opinion than a verifiable fact. The claims made are subjective in nature and cannot be objectively measured or tested. We encourage submissions that present commonly held beliefs alongside evidence-based corrections.</p>
+                            </div>
+                            <div className="activity-action-row">
+                              <button className="activity-secondary-button" data-testid="button-view-submission-7">
+                                View submission
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 8. Username5 replied to your comment on */}
+                      <div className="activity-post" data-testid="activity-post-8">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="username5" className="activity-post-avatar" />
+                          <MessageSquareMore size={16} className="activity-type-icon activity-type-comment" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/username5" className="following-post-username" data-testid="link-user-username5">username5</Link>
+                              <span className="following-post-action">replied to your comment on</span>
+                            </div>
+                            <span className="following-post-timestamp">6 hours ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
+                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
+                                </Link>
+                                <div className="activity-comment-thread">
+                                  <div className="activity-thread-comment">
+                                    <div className="activity-thread-author">
+                                      <span className="activity-thread-username">retrocodexadmin</span>
+                                    </div>
+                                    <div className="following-comment-quote">
+                                      <p className="following-comment-text">I wonder where this myth originated if it was never Snopes this entire time. Growing up in California, I heard it around when I was 10, but haven't talked to anyone else from other states and countries about it.</p>
+                                    </div>
+                                  </div>
+                                  <div className="activity-thread-comment">
+                                    <div className="activity-thread-author">
+                                      <span className="activity-thread-username">username5</span>
+                                    </div>
+                                    <p className="following-plain-comment">This myth had to have come from the US or one of the colder countries. Where I'm from, spiders are often massive. You would definitely feel them even if they're just a foot away, lol</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-activity-8">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 9. An update was posted to a fact you follow */}
+                      <div className="activity-post" data-testid="activity-post-9">
+                        <div className="activity-post-icon-col">
+                          <PlusCircle size={40} className="activity-status-icon activity-status-update" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <span className="activity-status-text">An update was posted to a fact you follow</span>
+                            </div>
+                            <span className="following-post-timestamp">1 day ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
+                                  <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
+                                </Link>
+                                <p className="activity-submitted-label">Revision:</p>
+                                <div className="activity-submitted-revision">
+                                  <Check size={16} className="activity-revision-check" />
+                                  <p className="activity-submitted-text">In 2026, the US government introduced a new food pyramid that prioritized vegetables and protein while relegating grains to the bottom.</p>
+                                </div>
+                              </div>
+                              <Link href="/fact/food-pyramid-healthy-diet" className="following-post-cover-link" data-testid="cover-link-activity-9">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                   )}
 
