@@ -1325,7 +1325,7 @@ export default function UserDashboard() {
                             </Link>
                             <div className="activity-submitted-revision">
                               <Check size={16} className="activity-revision-check" />
-                              <p className="activity-submitted-text">Success is so much more complicated than hard work. It's a mix of luck, family background, and education.</p>
+                              <p className="activity-truth-text">Success is so much more complicated than hard work. It's a mix of luck, family background, and education.</p>
                             </div>
                             <div className="activity-admin-feedback" data-testid="activity-admin-feedback-7">
                               <p className="activity-admin-feedback-text">This submission reads more like a personal opinion than a verifiable fact. The claims made are subjective in nature and cannot be objectively measured or tested. We encourage submissions that present commonly held beliefs alongside evidence-based corrections.</p>

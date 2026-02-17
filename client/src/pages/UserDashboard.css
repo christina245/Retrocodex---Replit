@@ -1033,6 +1033,12 @@ a.following-post-username:hover {
   margin-bottom: 8px;
 }
 
+.activity-post-header .following-post-timestamp {
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .activity-post-header-text {
   display: flex;
   flex-wrap: wrap;
@@ -1083,6 +1089,15 @@ a.following-post-username:hover {
   margin-top: 4px;
 }
 
+.activity-truth-text {
+  font-family: 'Merriweather', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 0;
+}
+
 .activity-revision-check {
   color: #419F36;
   flex-shrink: 0;
@@ -1099,17 +1114,19 @@ a.following-post-username:hover {
   font-family: 'Public Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
-  color: #FF5353;
-  background: none;
+  color: #2C2C2C;
+  background: #e0e0e0;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 0;
+  padding: 6px 16px;
   text-decoration: none;
-  transition: opacity 0.2s;
+  transition: background 0.2s;
+  margin-right: 2rem;
 }
 
 .activity-secondary-button:hover {
-  opacity: 0.7;
+  background: #d0d0d0;
 }
 
 .activity-follow-button {
