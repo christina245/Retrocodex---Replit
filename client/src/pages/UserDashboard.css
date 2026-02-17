@@ -794,7 +794,7 @@ a.following-post-username:hover {
   flex-shrink: 0;
   align-self: flex-start;
   margin-top: 4px;
-  margin-right: 60px;
+  margin-right: 20px;
 }
 
 .following-post-body {
@@ -820,7 +820,8 @@ a.following-post-username:hover {
 }
 
 .following-post-factcard {
-  padding-left: calc(3rem + 12px);
+  padding-left: 1rem;
+  padding-top: 1rem;
 }
 
 .following-post-factcard .fact-card-wrapper {
@@ -963,7 +964,7 @@ a.following-post-username:hover {
 .activity-post {
   display: flex;
   gap: 12px;
-  padding: 20px 0;
+  padding: 25px 0;
   border-bottom: 1px solid #e0e0e0;
 }
 
@@ -992,7 +993,7 @@ a.following-post-username:hover {
 }
 
 .activity-type-heart {
-  color: #FF5353;
+  color: #fe9fcd;
 }
 
 .activity-type-comment {
@@ -1865,6 +1866,7 @@ a.following-post-username:hover {
   font-size: 13px;
   font-weight: 400;
   color: #878787;
+  justify-content: right;
 }
 
 .edit-submission-button {
@@ -1881,6 +1883,7 @@ a.following-post-username:hover {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  margin-right: 1rem;
 }
 
 .edit-submission-button:hover {
@@ -1890,8 +1893,9 @@ a.following-post-username:hover {
 
 .view-submission-button {
   display: flex;
+  margin-right: 80px;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   background: #f0f0f0;
   color: #FF5353;
   border: none;

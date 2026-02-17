@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, OctagonX, PlusCircle } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -1277,7 +1277,7 @@ export default function UserDashboard() {
                       {/* 6. Your edit request was not approved. */}
                       <div className="activity-post" data-testid="activity-post-6">
                         <div className="activity-post-icon-col">
-                          <OctagonX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
+                          <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">
@@ -1312,7 +1312,7 @@ export default function UserDashboard() {
                       {/* 7. Your post submission was not approved (no cover photo) */}
                       <div className="activity-post" data-testid="activity-post-7">
                         <div className="activity-post-icon-col">
-                          <OctagonX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
+                          <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
                         </div>
                         <div className="activity-post-main">
                           <div className="activity-post-header">

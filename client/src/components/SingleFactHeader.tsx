@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Search, X, UserRound, Bell } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
-import logoImage from "@assets/thinner logo only black.png";
+import logoImage from "@assets/red black gray logo.png";
 import { SignInModal } from "./SignInModal";
 import { useAuth } from "@/lib/auth";
 import "./SingleFactHeader.css";
