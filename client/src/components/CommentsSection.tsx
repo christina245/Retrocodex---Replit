@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Filter, Search, MessageSquare, Heart, Bookmark, Share2, CornerUpLeft, House, MapPin } from "lucide-react";
+import { Filter, Search, MessageSquare, Heart, Bookmark, CornerUpLeft, House, MapPin } from "lucide-react";
 import { CommentModal } from "./CommentModal";
 import bunnyAvatar from "@assets/dall-e bunny_1764050469609.png";
 import alienAvatar from "@assets/space alien_1764050477567.png";
@@ -188,10 +188,6 @@ export function CommentsSection() {
                 <button className="comment-action disabled-action" onClick={handleActionClick} data-testid={`button-save-comment-${comment.id}`}>
                   <Bookmark size={14} />
                   <span>Save</span>
-                </button>
-                <button className="comment-action disabled-action" onClick={handleActionClick} data-testid={`button-share-comment-${comment.id}`}>
-                  <Share2 size={14} />
-                  <span>Share</span>
                 </button>
               </div>
             </div>

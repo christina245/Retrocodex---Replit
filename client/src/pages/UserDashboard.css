@@ -958,8 +958,82 @@ a.following-post-username:hover {
   margin: 0 0 10px 0;
 }
 
-.following-post-body .comment-actions {
+.following-post-body .comment-actions,
+.following-post-body-left .comment-actions,
+.saved-comment .comment-actions {
   justify-content: flex-start;
+}
+
+.comment-action-unsave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #FF5353;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.comment-action-unsave .unsave-icon {
+  fill: #FF5353;
+  stroke: #FF5353;
+}
+
+.comment-action-unsave:hover {
+  opacity: 0.7;
+}
+
+.inline-reply-box {
+  margin-top: 10px;
+  padding: 0;
+}
+
+.inline-reply-box textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #2C2C2C;
+  resize: vertical;
+  outline: none;
+  background: #fff;
+}
+
+.inline-reply-box textarea:focus {
+  border-color: #FF5353;
+}
+
+.inline-reply-box textarea::placeholder {
+  color: #999;
+}
+
+.inline-reply-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.inline-reply-btn {
+  background: #FF5353;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+
+.inline-reply-btn:hover {
+  opacity: 0.85;
 }
 
 /* ========== Activity Feed ========== */

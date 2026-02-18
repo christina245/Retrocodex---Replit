@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -274,6 +274,8 @@ export default function UserDashboard() {
   const [notifyFactUpdates, setNotifyFactUpdates] = useState(true);
   const [emailNotifyFollows, setEmailNotifyFollows] = useState(true);
   const [emailNotifyComments, setEmailNotifyComments] = useState(true);
+  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
+  const [hiddenSavedComments, setHiddenSavedComments] = useState<Record<string, boolean>>({});
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -925,7 +927,7 @@ export default function UserDashboard() {
                                 </Link>
                                 <p className="following-plain-comment" data-testid="following-plain-comment">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
                                 <div className="comment-actions" data-testid="following-comment-actions">
-                                  <button className="comment-action disabled-action" data-testid="button-reply-following">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'following' ? null : 'following')} data-testid="button-reply-following">
                                     <CornerUpLeft size={14} />
                                     <span>Reply</span>
                                   </button>
@@ -937,11 +939,15 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
-                                  <button className="comment-action disabled-action" data-testid="button-share-following">
-                                    <Share2 size={14} />
-                                    <span>Share</span>
-                                  </button>
                                 </div>
+                                {activeReplyId === 'following' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-following">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-following" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-following">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-following-3">
                                 <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
@@ -1036,7 +1042,7 @@ export default function UserDashboard() {
                                 </Link>
                                 <p className="following-plain-comment" data-testid="local-plain-comment">Living in Rio, people at the gym constantly think sweating buckets equals a better workout. But sweat is just thermoregulation — your body cooling itself down. You can burn tons of calories in cold water swimming without sweating at all.</p>
                                 <div className="comment-actions" data-testid="local-comment-actions-1">
-                                  <button className="comment-action disabled-action" data-testid="button-reply-local-1">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'local-1' ? null : 'local-1')} data-testid="button-reply-local-1">
                                     <CornerUpLeft size={14} />
                                     <span>Reply</span>
                                   </button>
@@ -1048,11 +1054,15 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
-                                  <button className="comment-action disabled-action" data-testid="button-share-local-1">
-                                    <Share2 size={14} />
-                                    <span>Share</span>
-                                  </button>
                                 </div>
+                                {activeReplyId === 'local-1' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-local-1">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-local-1" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-local-1">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/sweating-burning-fat" className="following-post-cover-link" data-testid="cover-link-local-3">
                                 <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
@@ -1246,6 +1256,28 @@ export default function UserDashboard() {
                                   <p className="fact-myth">"Men and women have very different brains."</p>
                                 </Link>
                                 <p className="following-plain-comment" data-testid="activity-comment-1">I was told this so many times by everybody growing up! I just thought it made sense because I saw so many differences in how men and women behaved. But the evidence is actually very clear that a lot of these distinctions come from socialization and not innate differences.</p>
+                                <div className="comment-actions" data-testid="activity-comment-actions-1">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'activity-1' ? null : 'activity-1')} data-testid="button-reply-activity-1">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-activity-1">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-activity-1">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'activity-1' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-activity-1">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-activity-1" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-activity-1">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/men-women-different-brains" className="following-post-cover-link" data-testid="cover-link-activity-1">
                                 <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
@@ -1276,6 +1308,28 @@ export default function UserDashboard() {
                                   <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
                                 </Link>
                                 <p className="following-plain-comment" data-testid="activity-comment-2">Given how many spiders have crawled on me, I always believed this was true. I'm so happy to see it's been debunked. Although I have to admit, as someone who once woke up through an earthquake, I probably wouldn't wake up if a spider crawled on my face.</p>
+                                <div className="comment-actions" data-testid="activity-comment-actions-2">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'activity-2' ? null : 'activity-2')} data-testid="button-reply-activity-2">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-activity-2">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-activity-2">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'activity-2' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-activity-2">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-activity-2" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-activity-2">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-activity-2">
                                 <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
@@ -1482,6 +1536,28 @@ export default function UserDashboard() {
                                     <p className="following-plain-comment">This myth had to have come from the US or one of the colder countries. Where I'm from, spiders are often massive. You would definitely feel them even if they're just a foot away, lol</p>
                                   </div>
                                 </div>
+                                <div className="comment-actions" data-testid="activity-comment-actions-8">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'activity-8' ? null : 'activity-8')} data-testid="button-reply-activity-8">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-activity-8">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-activity-8">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'activity-8' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-activity-8">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-activity-8" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-activity-8">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-activity-8">
                                 <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
@@ -1565,6 +1641,28 @@ export default function UserDashboard() {
                                     <p className="following-plain-comment">This myth had to have come from the US or one of the colder countries. Where I'm from, spiders are often massive. You would definitely feel them even if they're just a foot away, lol</p>
                                   </div>
                                 </div>
+                                <div className="comment-actions" data-testid="reply-comment-actions-1">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'reply-1' ? null : 'reply-1')} data-testid="button-reply-reply-1">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-reply-1">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-reply-1">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'reply-1' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-reply-1">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-reply-1" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-reply-1">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-reply-1">
                                 <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
@@ -1610,6 +1708,28 @@ export default function UserDashboard() {
                                     <p className="following-plain-comment">That's wild. My mom used to force me to eat carrots as a kid specifically for my eyesight. Decades of propaganda working perfectly, I guess. Though I still love carrots, just not for that reason anymore.</p>
                                   </div>
                                 </div>
+                                <div className="comment-actions" data-testid="reply-comment-actions-2">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'reply-2' ? null : 'reply-2')} data-testid="button-reply-reply-2">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-reply-2">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-reply-2">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'reply-2' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-reply-2">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-reply-2" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-reply-2">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/does-eating-carrots-make-you-see-better" className="following-post-cover-link" data-testid="cover-link-reply-2">
                                 <img src="/objects/uploads/80ca466a-5bc8-4420-bcac-2ed39def2b3c.png" alt="" className="following-post-cover-photo" />
@@ -1646,6 +1766,28 @@ export default function UserDashboard() {
                                   <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
                                 </Link>
                                 <p className="following-plain-comment" data-testid="comment-text-1">Given how many spiders have crawled on me, I always believed this was true. I'm so happy to see it's been debunked. Although I have to admit, as someone who once woke up through an earthquake, I probably wouldn't wake up if a spider crawled on my face.</p>
+                                <div className="comment-actions" data-testid="comment-tab-actions-1">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'comment-tab-1' ? null : 'comment-tab-1')} data-testid="button-reply-comment-tab-1">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-comment-tab-1">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-comment-tab-1">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'comment-tab-1' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-comment-tab-1">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-comment-tab-1" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-comment-tab-1">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-comment-1">
                                 <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
@@ -1676,6 +1818,28 @@ export default function UserDashboard() {
                                   <p className="fact-myth">"Vikings wore horned helmets into battle."</p>
                                 </Link>
                                 <p className="following-plain-comment" data-testid="comment-text-2">I blame every movie and TV show I've ever watched for this one. They always show Vikings with those massive horns on their helmets. Turns out the horned helmet thing was invented by costume designers in the 1800s for operas. The actual helmets were pretty plain.</p>
+                                <div className="comment-actions" data-testid="comment-tab-actions-2">
+                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'comment-tab-2' ? null : 'comment-tab-2')} data-testid="button-reply-comment-tab-2">
+                                    <CornerUpLeft size={14} />
+                                    <span>Reply</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-like-comment-tab-2">
+                                    <Heart size={14} />
+                                    <span>0 likes</span>
+                                  </button>
+                                  <button className="comment-action disabled-action" data-testid="button-save-comment-tab-2">
+                                    <Bookmark size={14} />
+                                    <span>Save</span>
+                                  </button>
+                                </div>
+                                {activeReplyId === 'comment-tab-2' && (
+                                  <div className="inline-reply-box" data-testid="inline-reply-comment-tab-2">
+                                    <textarea placeholder="Write a reply..." data-testid="input-reply-comment-tab-2" />
+                                    <div className="inline-reply-actions">
+                                      <button className="inline-reply-btn" data-testid="button-submit-reply-comment-tab-2">Reply</button>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <Link href="/fact/did-vikings-wear-horned-helmets" className="following-post-cover-link" data-testid="cover-link-comment-2">
                                 <img src="/objects/uploads/155b09a1-773c-4e60-a73d-5eab03cc71b9.jpg" alt="" className="following-post-cover-photo" />
@@ -2406,7 +2570,7 @@ export default function UserDashboard() {
                   </div>
 
                   {/* Row 3: Saved comment (Reddit-style) */}
-                  <div className="saved-comment" data-testid="saved-comment-1">
+                  {!hiddenSavedComments['saved-1'] && <div className="saved-comment" data-testid="saved-comment-1">
                     <div className="following-post-body-content">
                       <div className="following-post-body-left">
                         <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
@@ -2419,12 +2583,34 @@ export default function UserDashboard() {
                           <span className="saved-comment-time">3 hours ago</span>
                         </div>
                         <p className="following-plain-comment" data-testid="saved-comment-text-1">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
+                        <div className="comment-actions" data-testid="saved-comment-actions-1">
+                          <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'saved-1' ? null : 'saved-1')} data-testid="button-reply-saved-1">
+                            <CornerUpLeft size={14} />
+                            <span>Reply</span>
+                          </button>
+                          <button className="comment-action disabled-action" data-testid="button-like-saved-1">
+                            <Heart size={14} />
+                            <span>0 likes</span>
+                          </button>
+                          <button className="comment-action comment-action-unsave" onClick={() => setHiddenSavedComments(prev => ({...prev, 'saved-1': true}))} data-testid="button-unsave-saved-1">
+                            <Bookmark size={14} className="unsave-icon" />
+                            <span>Unsave</span>
+                          </button>
+                        </div>
+                        {activeReplyId === 'saved-1' && (
+                          <div className="inline-reply-box" data-testid="inline-reply-saved-1">
+                            <textarea placeholder="Write a reply..." data-testid="input-reply-saved-1" />
+                            <div className="inline-reply-actions">
+                              <button className="inline-reply-btn" data-testid="button-submit-reply-saved-1">Reply</button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-saved-comment-1">
                         <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
                       </Link>
                     </div>
-                  </div>
+                  </div>}
 
                 </div>
               )}
