@@ -25,6 +25,7 @@ type NotificationsTab = "all" | "replies" | "comments";
 type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
 type EditRequestsTab = "pending" | "approved" | "not-approved";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
+type SavedTab = "all" | "facts" | "articles" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string; tooltip?: string }[] = [
   { id: "for-you", label: "For You", tooltip: "New topics and articles based on your interests." },
@@ -43,6 +44,13 @@ const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
   { id: "submitted", label: "Pending" },
   { id: "approved", label: "Approved" },
   { id: "not-approved", label: "Not Approved" },
+  { id: "comments", label: "Comments" },
+];
+
+const SAVED_TABS: { id: SavedTab; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "facts", label: "Facts" },
+  { id: "articles", label: "Articles" },
   { id: "comments", label: "Comments" },
 ];
 
@@ -275,7 +283,7 @@ export default function UserDashboard() {
   const [emailNotifyFollows, setEmailNotifyFollows] = useState(true);
   const [emailNotifyComments, setEmailNotifyComments] = useState(true);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
-  const [hiddenSavedComments, setHiddenSavedComments] = useState<Record<string, boolean>>({});
+  const [savedTab, setSavedTab] = useState<SavedTab>("all");
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -2542,75 +2550,109 @@ export default function UserDashboard() {
               {sideTab === "saved" && (
                 <div className="saved-page" data-testid="saved-page">
 
-                  {/* Row 1: Saved fact cards */}
-                  <div className="saved-facts-row" data-testid="saved-facts-row">
-                    <FactCard
-                      fact={demoFacts[0]}
-                      onSave={() => {}}
-                      onShare={() => {}}
-                      onComment={() => {}}
-                    />
-                    <FactCard
-                      fact={demoFacts[1]}
-                      onSave={() => {}}
-                      onShare={() => {}}
-                      onComment={() => {}}
-                    />
-                  </div>
-
-                  {/* Row 2: Saved article */}
-                  <div className="saved-article-row" data-testid="saved-article-row">
-                    <FeedArticleCard
-                      title="5 Myths You Might Hear Going Home For the Holidays"
-                      summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
-                      coverImage="/uploads/1764995940108-220172306.jpg"
-                      category="Everyday Life"
-                      slug="going-home-for-the-holidays-myths-2025"
-                    />
-                  </div>
-
-                  {/* Row 3: Saved comment (Reddit-style) */}
-                  {!hiddenSavedComments['saved-1'] && <div className="saved-comment" data-testid="saved-comment-1">
-                    <div className="following-post-body-content">
-                      <div className="following-post-body-left">
-                        <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
-                          <p className="fact-myth">"Christopher Columbus discovered the Americas in 1492"</p>
-                        </Link>
-                        <div className="saved-comment-meta" data-testid="saved-comment-meta-1">
-                          <Link href="/user/Ackshually_42" className="saved-comment-username" data-testid="link-saved-user-Ackshually_42">Ackshually_42</Link>
-                          <span className="saved-comment-action">commented</span>
-                          <span className="saved-comment-dot">·</span>
-                          <span className="saved-comment-time">3 hours ago</span>
-                        </div>
-                        <p className="following-plain-comment" data-testid="saved-comment-text-1">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
-                        <div className="comment-actions" data-testid="saved-comment-actions-1">
-                          <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'saved-1' ? null : 'saved-1')} data-testid="button-reply-saved-1">
-                            <CornerUpLeft size={14} />
-                            <span>Reply</span>
-                          </button>
-                          <button className="comment-action disabled-action" data-testid="button-like-saved-1">
-                            <Heart size={14} />
-                            <span>0 likes</span>
-                          </button>
-                          <button className="comment-action comment-action-unsave" onClick={() => setHiddenSavedComments(prev => ({...prev, 'saved-1': true}))} data-testid="button-unsave-saved-1">
-                            <Bookmark size={14} className="unsave-icon" />
-                            <span>Unsave</span>
-                          </button>
-                        </div>
-                        {activeReplyId === 'saved-1' && (
-                          <div className="inline-reply-box" data-testid="inline-reply-saved-1">
-                            <textarea placeholder="Write a reply..." data-testid="input-reply-saved-1" />
-                            <div className="inline-reply-actions">
-                              <button className="inline-reply-btn" data-testid="button-submit-reply-saved-1">Reply</button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-saved-comment-1">
-                        <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                      </Link>
+                  <div className="notifications-tabs-wrapper" data-testid="saved-tabs-wrapper">
+                    <div className="notifications-tabs" data-testid="saved-tabs">
+                      {SAVED_TABS.map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`notifications-tab${savedTab === tab.id ? " notifications-tab-active" : ""}`}
+                          onClick={() => setSavedTab(tab.id)}
+                          data-testid={`button-saved-tab-${tab.id}`}
+                        >
+                          {tab.label}
+                        </button>
+                      ))}
                     </div>
-                  </div>}
+                  </div>
+
+                  {(savedTab === "all" || savedTab === "facts") && (
+                    <div className="saved-facts-row" data-testid="saved-facts-row">
+                      <div className="saved-fact-wrapper" data-testid="saved-fact-wrapper-1">
+                        <FactCard
+                          fact={demoFacts[0]}
+                          onSave={() => {}}
+                          onShare={() => {}}
+                          onComment={() => {}}
+                        />
+                        <button className="saved-unsave-btn" data-testid="button-unsave-fact-1">
+                          <Bookmark size={14} className="unsave-icon" />
+                          <span>Unsave</span>
+                        </button>
+                      </div>
+                      <div className="saved-fact-wrapper" data-testid="saved-fact-wrapper-2">
+                        <FactCard
+                          fact={demoFacts[1]}
+                          onSave={() => {}}
+                          onShare={() => {}}
+                          onComment={() => {}}
+                        />
+                        <button className="saved-unsave-btn" data-testid="button-unsave-fact-2">
+                          <Bookmark size={14} className="unsave-icon" />
+                          <span>Unsave</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {(savedTab === "all" || savedTab === "articles") && (
+                    <div className="saved-article-row" data-testid="saved-article-row">
+                      <FeedArticleCard
+                        title="5 Myths You Might Hear Going Home For the Holidays"
+                        summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
+                        coverImage="/uploads/1764995940108-220172306.jpg"
+                        category="Everyday Life"
+                        slug="going-home-for-the-holidays-myths-2025"
+                      />
+                      <button className="saved-unsave-btn saved-unsave-article" data-testid="button-unsave-article-1">
+                        <Bookmark size={14} className="unsave-icon" />
+                        <span>Unsave</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {(savedTab === "all" || savedTab === "comments") && (
+                    <div className="saved-comment" data-testid="saved-comment-1">
+                      <div className="following-post-body-content">
+                        <div className="following-post-body-left">
+                          <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
+                            <p className="fact-myth">"Christopher Columbus discovered the Americas in 1492"</p>
+                          </Link>
+                          <div className="saved-comment-meta" data-testid="saved-comment-meta-1">
+                            <Link href="/user/Ackshually_42" className="saved-comment-username" data-testid="link-saved-user-Ackshually_42">Ackshually_42</Link>
+                            <span className="saved-comment-action">commented</span>
+                            <span className="saved-comment-dot">·</span>
+                            <span className="saved-comment-time">3 hours ago</span>
+                          </div>
+                          <p className="following-plain-comment" data-testid="saved-comment-text-1">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
+                          <div className="comment-actions" data-testid="saved-comment-actions-1">
+                            <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'saved-1' ? null : 'saved-1')} data-testid="button-reply-saved-1">
+                              <CornerUpLeft size={14} />
+                              <span>Reply</span>
+                            </button>
+                            <button className="comment-action disabled-action" data-testid="button-like-saved-1">
+                              <Heart size={14} />
+                              <span>0 likes</span>
+                            </button>
+                            <button className="comment-action comment-action-unsave" data-testid="button-unsave-saved-1">
+                              <Bookmark size={14} className="unsave-icon" />
+                              <span>Unsave</span>
+                            </button>
+                          </div>
+                          {activeReplyId === 'saved-1' && (
+                            <div className="inline-reply-box" data-testid="inline-reply-saved-1">
+                              <textarea placeholder="Write a reply..." data-testid="input-reply-saved-1" />
+                              <div className="inline-reply-actions">
+                                <button className="inline-reply-btn" data-testid="button-submit-reply-saved-1">Reply</button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-saved-comment-1">
+                          <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                        </Link>
+                      </div>
+                    </div>
+                  )}
 
                 </div>
               )}

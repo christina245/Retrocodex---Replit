@@ -1386,6 +1386,29 @@ a.following-post-username:hover {
   flex-wrap: wrap;
 }
 
+.saved-fact-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.saved-unsave-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #FF5353;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 0 0 0;
+}
+
+.saved-unsave-article {
+  margin-top: 8px;
+}
+
 .saved-article-row {
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 24px;
