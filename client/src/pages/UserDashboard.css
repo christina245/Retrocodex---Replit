@@ -1019,6 +1019,10 @@ a.following-post-username:hover {
   color: #FF5353;
 }
 
+.activity-status-pending {
+  color: #878787;
+}
+
 .activity-status-update {
   color: #878787;
 }
@@ -1083,9 +1087,21 @@ a.following-post-username:hover {
 .activity-submitted-label {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   color: #878787;
   margin: 8px 0 4px 0;
+}
+
+.edit-section-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  margin: 4px 0 0 0;
+  line-height: 1.5;
+}
+
+.edit-section-label strong {
+  font-weight: 600;
 }
 
 .activity-submitted-text {

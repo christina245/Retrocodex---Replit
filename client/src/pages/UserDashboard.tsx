@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, Share2, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ type DashboardTab = "for-you" | "following" | "local" | "fact-updates";
 type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "saved" | "settings";
 type NotificationsTab = "all" | "replies" | "comments";
 type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
-type EditRequestsTab = "pending-edits" | "approved-edits";
+type EditRequestsTab = "pending" | "approved" | "not-approved";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string; tooltip?: string }[] = [
@@ -47,8 +47,9 @@ const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
 ];
 
 const EDIT_REQUESTS_TABS: { id: EditRequestsTab; label: string }[] = [
-  { id: "pending-edits", label: "Pending Edits" },
-  { id: "approved-edits", label: "Approved Edits" },
+  { id: "pending", label: "Pending" },
+  { id: "approved", label: "Approved" },
+  { id: "not-approved", label: "Not Approved" },
 ];
 
 const MAIN_CATEGORIES = ["History", "Life Sciences", "Health & Fitness", "Social Sciences", "Gender & Sexuality", "Everyday Life"];
@@ -261,7 +262,7 @@ export default function UserDashboard() {
   const [expandedDenials, setExpandedDenials] = useState<Record<string, boolean>>({});
   const [overflowingDenials, setOverflowingDenials] = useState<Record<string, boolean>>({});
   const denialTextRefs = useRef<Record<string, HTMLParagraphElement | null>>({});
-  const [editRequestsTab, setEditRequestsTab] = useState<EditRequestsTab>("pending-edits");
+  const [editRequestsTab, setEditRequestsTab] = useState<EditRequestsTab>("pending");
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
@@ -2248,23 +2249,126 @@ export default function UserDashboard() {
                   </div>
 
                   <div className="dashboard-feed-content" data-testid="dashboard-edit-requests-content">
-                    {editRequestsTab === "pending-edits" && (
-                      <div className="dashboard-feed-empty" data-testid="edit-requests-empty-pending">
-                        <FilePenLine size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You haven't requested an edit to any entry yet.</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Submit a request if you feel like an entry's information is incorrect or could be improved.
-                        </p>
+                    {editRequestsTab === "pending" && (
+                      <div className="following-feed" data-testid="edit-requests-pending">
+
+                        {/* Pending edit request 1 */}
+                        <div className="activity-post" data-testid="edit-request-pending-1">
+                          <div className="activity-post-icon-col">
+                            <Clock size={40} strokeWidth={1.5} className="activity-status-icon activity-status-pending" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-link">
+                                  <p className="fact-myth">"Breakfast is the most important meal of the day."</p>
+                                </Link>
+                              </div>
+                              <span className="following-post-timestamp">5 hours ago</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <p className="edit-section-label"><strong>Section editing:</strong> Sources</p>
+                                  <p className="activity-submitted-label">You submitted:</p>
+                                  <p className="activity-submitted-text" data-testid="edit-request-text-pending-1">You should add this 2024 meta-analysis that found no significant health benefits to eating breakfast vs. skipping it for healthy adults: https://pubmed.ncbi.nlm.nih.gov/example123/</p>
+                                  <div className="activity-action-row">
+                                    <button className="activity-learn-more-button" data-testid="button-view-submission-pending-1">
+                                      <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
+                                      View submission
+                                    </button>
+                                  </div>
+                                </div>
+                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-cover-link" data-testid="cover-link-edit-pending-1">
+                                  <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     )}
 
-                    {editRequestsTab === "approved-edits" && (
-                      <div className="dashboard-feed-empty" data-testid="edit-requests-empty-approved">
-                        <CheckCircle size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You don't have any approved edits yet.</p>
-                        <p className="dashboard-feed-empty-desc">
-                          You'll be notified when your edit requests are reviewed and approved.
-                        </p>
+                    {editRequestsTab === "approved" && (
+                      <div className="following-feed" data-testid="edit-requests-approved">
+
+                        {/* Approved edit request 1: Autism - Timeline */}
+                        <div className="activity-post" data-testid="edit-request-approved-1">
+                          <div className="activity-post-icon-col">
+                            <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <Link href="/fact/autism-broken-mirror-neurons" className="following-post-link">
+                                  <p className="fact-myth">"Autism is caused by broken mirror neurons."</p>
+                                </Link>
+                              </div>
+                              <span className="following-post-timestamp">2 hours ago</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <p className="edit-section-label"><strong>Section editing:</strong> Timeline</p>
+                                  <p className="activity-submitted-label">You submitted:</p>
+                                  <p className="activity-submitted-text" data-testid="edit-request-text-approved-1">Don't forget to cite this 2020 study that further disproved it! Here's the study: https://pubmed.ncbi.nlm.nih.gov/32668956/</p>
+                                  <div className="activity-action-row">
+                                    <Link href="/fact/autism-broken-mirror-neurons" className="activity-learn-more-button" data-testid="button-view-updated-entry-approved-1">
+                                      <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
+                                      View updated entry
+                                    </Link>
+                                  </div>
+                                </div>
+                                <Link href="/fact/autism-broken-mirror-neurons" className="following-post-cover-link" data-testid="cover-link-edit-approved-1">
+                                  <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    )}
+
+                    {editRequestsTab === "not-approved" && (
+                      <div className="following-feed" data-testid="edit-requests-not-approved">
+
+                        {/* Not approved edit request 1: Repressed memories - Current Understanding */}
+                        <div className="activity-post" data-testid="edit-request-not-approved-1">
+                          <div className="activity-post-icon-col">
+                            <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <Link href="/fact/people-repress-traumatic-memories" className="following-post-link">
+                                  <p className="fact-myth">"People often repress traumatic memories."</p>
+                                </Link>
+                              </div>
+                              <span className="following-post-timestamp">3 hours ago</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <p className="edit-section-label"><strong>Section editing:</strong> Current Understanding</p>
+                                  <p className="activity-submitted-label">You submitted:</p>
+                                  <p className="activity-submitted-text" data-testid="edit-request-text-not-approved-1">There's actually plenty of evidence that people do repress traumatic memories! I know it's a popular trope in the media. If it's that popular, it must be true, right?</p>
+                                  <div className="activity-action-row">
+                                    <button className="activity-learn-more-button" data-testid="button-view-submission-not-approved-1">
+                                      <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
+                                      View submission
+                                    </button>
+                                  </div>
+                                </div>
+                                <Link href="/fact/people-repress-traumatic-memories" className="following-post-cover-link" data-testid="cover-link-edit-not-approved-1">
+                                  <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     )}
                   </div>
