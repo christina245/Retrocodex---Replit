@@ -208,6 +208,15 @@
   background: #f5f5f5;
 }
 
+.action-button-unsave {
+  color: #FF5353;
+}
+
+.action-button-unsave .unsave-icon {
+  fill: #FF5353;
+  stroke: #FF5353;
+}
+
 .action-button svg {
   flex-shrink: 0;
 }

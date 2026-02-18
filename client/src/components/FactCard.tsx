@@ -44,9 +44,10 @@ interface FactCardProps {
   onShare: () => void;
   onComment: () => void;
   onBetaClick?: () => void;
+  isSaved?: boolean;
 }
 
-export function FactCard({ fact, onSave, onShare, onComment, onBetaClick }: FactCardProps) {
+export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSaved }: FactCardProps) {
   const CategoryIcon = getCategoryIcon(fact.category);
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
@@ -126,12 +127,12 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick }: Fact
             <span>0 comments</span>
           </button>
           <button 
-            className="action-button"
+            className={`action-button${isSaved ? ' action-button-unsave' : ''}`}
             onClick={onSave}
             data-testid={`button-save-${fact.id}`}
           >
-            <Bookmark size={16} />
-            <span>Save</span>
+            <Bookmark size={16} className={isSaved ? 'unsave-icon' : ''} />
+            <span>{isSaved ? 'Unsave' : 'Save'}</span>
           </button>
           <button 
             className="action-button"

@@ -2567,30 +2567,20 @@ export default function UserDashboard() {
 
                   {(savedTab === "all" || savedTab === "facts") && (
                     <div className="saved-facts-row" data-testid="saved-facts-row">
-                      <div className="saved-fact-wrapper" data-testid="saved-fact-wrapper-1">
-                        <FactCard
-                          fact={demoFacts[0]}
-                          onSave={() => {}}
-                          onShare={() => {}}
-                          onComment={() => {}}
-                        />
-                        <button className="saved-unsave-btn" data-testid="button-unsave-fact-1">
-                          <Bookmark size={14} className="unsave-icon" />
-                          <span>Unsave</span>
-                        </button>
-                      </div>
-                      <div className="saved-fact-wrapper" data-testid="saved-fact-wrapper-2">
-                        <FactCard
-                          fact={demoFacts[1]}
-                          onSave={() => {}}
-                          onShare={() => {}}
-                          onComment={() => {}}
-                        />
-                        <button className="saved-unsave-btn" data-testid="button-unsave-fact-2">
-                          <Bookmark size={14} className="unsave-icon" />
-                          <span>Unsave</span>
-                        </button>
-                      </div>
+                      <FactCard
+                        fact={demoFacts[0]}
+                        onSave={() => {}}
+                        onShare={() => {}}
+                        onComment={() => {}}
+                        isSaved={true}
+                      />
+                      <FactCard
+                        fact={demoFacts[1]}
+                        onSave={() => {}}
+                        onShare={() => {}}
+                        onComment={() => {}}
+                        isSaved={true}
+                      />
                     </div>
                   )}
 
@@ -2602,11 +2592,8 @@ export default function UserDashboard() {
                         coverImage="/uploads/1764995940108-220172306.jpg"
                         category="Everyday Life"
                         slug="going-home-for-the-holidays-myths-2025"
+                        isSaved={true}
                       />
-                      <button className="saved-unsave-btn saved-unsave-article" data-testid="button-unsave-article-1">
-                        <Bookmark size={14} className="unsave-icon" />
-                        <span>Unsave</span>
-                      </button>
                     </div>
                   )}
 

@@ -8,6 +8,7 @@ interface FeedArticleCardProps {
   coverImage: string;
   category: string;
   slug: string;
+  isSaved?: boolean;
 }
 
 const categoryColors: Record<string, string> = {
@@ -34,6 +35,7 @@ export default function FeedArticleCard({
   coverImage,
   category,
   slug,
+  isSaved,
 }: FeedArticleCardProps) {
   const upperCategory = category.toUpperCase();
   const chipColor = categoryColors[upperCategory] || "#2C2C2C";
@@ -73,9 +75,9 @@ export default function FeedArticleCard({
             <MessageSquare size={14} />
             <span>Comment</span>
           </button>
-          <button className="comment-action disabled-action" data-testid="button-article-save">
-            <Bookmark size={14} />
-            <span>Save</span>
+          <button className={`comment-action disabled-action${isSaved ? ' comment-action-unsave' : ''}`} data-testid="button-article-save">
+            <Bookmark size={14} className={isSaved ? 'unsave-icon' : ''} />
+            <span>{isSaved ? 'Unsave' : 'Save'}</span>
           </button>
           <button className="comment-action disabled-action" data-testid="button-article-share">
             <Share2 size={14} />
