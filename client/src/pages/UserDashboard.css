@@ -2236,9 +2236,10 @@ a.following-post-username:hover {
 .comment-ellipsis-item.disabled-action::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 8px;
   background: #2C2C2C;
   color: white;
   padding: 0.5rem 0.75rem;
