@@ -1159,6 +1159,7 @@ a.following-post-username:hover {
   display: flex;
   justify-content: flex-end;
   margin-top: 12px;
+  margin-right: 20px;
 }
 
 .activity-learn-more-button {
