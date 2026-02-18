@@ -979,11 +979,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'following' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-following">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-following">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-following">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-following">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-following">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -1117,11 +1117,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'local-1' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-local-1">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-local-1">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-local-1">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-local-1">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-local-1">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -1404,11 +1404,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'activity-2' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-activity-2">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-activity-2">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-activity-2">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-activity-2">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-activity-2">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -1754,11 +1754,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'reply-1' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-reply-1">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-reply-1">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-reply-1">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-reply-1">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-reply-1">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -1838,11 +1838,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'reply-2' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-reply-2">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-reply-2">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-reply-2">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-reply-2">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-reply-2">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -1913,11 +1913,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'comment-tab-1' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-comment-tab-1">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-comment-tab-1">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-comment-tab-1">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-comment-tab-1">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-comment-tab-1">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -1982,11 +1982,11 @@ export default function UserDashboard() {
                                     </button>
                                     {activeEllipsisId === 'comment-tab-2' && (
                                       <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-comment-tab-2">
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-comment-tab-2">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-comment-tab-2">
                                           <BellPlus size={14} />
                                           <span>Follow comment</span>
                                         </button>
-                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-comment-tab-2">
+                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-comment-tab-2">
                                           <FlagTriangleRight size={14} />
                                           <span>Report</span>
                                         </button>
@@ -2784,11 +2784,11 @@ export default function UserDashboard() {
                               </button>
                               {activeEllipsisId === 'saved-1' && (
                                 <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-saved-1">
-                                  <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-saved-1">
+                                  <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-saved-1">
                                     <BellPlus size={14} />
                                     <span>Follow comment</span>
                                   </button>
-                                  <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-saved-1">
+                                  <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-saved-1">
                                     <FlagTriangleRight size={14} />
                                     <span>Report</span>
                                   </button>
