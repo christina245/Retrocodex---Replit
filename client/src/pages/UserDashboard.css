@@ -2186,3 +2186,46 @@ a.following-post-username:hover {
   font-weight: 400;
   color: #878787;
 }
+
+.comment-ellipsis-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.comment-ellipsis-btn {
+  padding: 0 4px !important;
+  margin-left: 4px;
+}
+
+.comment-ellipsis-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  z-index: 100;
+  min-width: 180px;
+  padding: 6px 0;
+  margin-top: 4px;
+}
+
+.comment-ellipsis-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  cursor: not-allowed;
+  text-align: left;
+}
+
+.comment-ellipsis-item:hover {
+  background: #f5f5f5;
+}

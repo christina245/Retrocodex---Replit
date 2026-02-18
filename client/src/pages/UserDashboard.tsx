@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -283,7 +283,20 @@ export default function UserDashboard() {
   const [emailNotifyFollows, setEmailNotifyFollows] = useState(true);
   const [emailNotifyComments, setEmailNotifyComments] = useState(true);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
+  const [activeEllipsisId, setActiveEllipsisId] = useState<string | null>(null);
   const [savedTab, setSavedTab] = useState<SavedTab>("all");
+
+  useEffect(() => {
+    if (!activeEllipsisId) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.comment-ellipsis-wrapper')) {
+        setActiveEllipsisId(null);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [activeEllipsisId]);
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -960,6 +973,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'following' ? null : 'following')} data-testid="button-ellipsis-following">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'following' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-following">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-following">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-following">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'following' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-following">
@@ -1081,6 +1111,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'local-1' ? null : 'local-1')} data-testid="button-ellipsis-local-1">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'local-1' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-local-1">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-local-1">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-local-1">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'local-1' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-local-1">
@@ -1295,9 +1342,9 @@ export default function UserDashboard() {
                                     <Heart size={14} />
                                     <span>0 likes</span>
                                   </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-activity-1">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
+                                  <button className="comment-action disabled-action" data-testid="button-edit-activity-1">
+                                    <Pencil size={14} />
+                                    <span>Edit</span>
                                   </button>
                                 </div>
                                 {activeReplyId === 'activity-1' && (
@@ -1351,6 +1398,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'activity-2' ? null : 'activity-2')} data-testid="button-ellipsis-activity-2">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'activity-2' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-activity-2">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-activity-2">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-activity-2">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'activity-2' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-activity-2">
@@ -1684,6 +1748,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'reply-1' ? null : 'reply-1')} data-testid="button-ellipsis-reply-1">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'reply-1' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-reply-1">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-reply-1">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-reply-1">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'reply-1' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-reply-1">
@@ -1751,6 +1832,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'reply-2' ? null : 'reply-2')} data-testid="button-ellipsis-reply-2">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'reply-2' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-reply-2">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-reply-2">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-reply-2">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'reply-2' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-reply-2">
@@ -1809,6 +1907,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'comment-tab-1' ? null : 'comment-tab-1')} data-testid="button-ellipsis-comment-tab-1">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'comment-tab-1' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-comment-tab-1">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-comment-tab-1">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-comment-tab-1">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'comment-tab-1' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-comment-tab-1">
@@ -1861,6 +1976,23 @@ export default function UserDashboard() {
                                     <Bookmark size={14} />
                                     <span>Save</span>
                                   </button>
+                                  <div className="comment-ellipsis-wrapper">
+                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'comment-tab-2' ? null : 'comment-tab-2')} data-testid="button-ellipsis-comment-tab-2">
+                                      <MoreHorizontal size={14} />
+                                    </button>
+                                    {activeEllipsisId === 'comment-tab-2' && (
+                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-comment-tab-2">
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-comment-tab-2">
+                                          <BellPlus size={14} />
+                                          <span>Follow comment</span>
+                                        </button>
+                                        <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-comment-tab-2">
+                                          <FlagTriangleRight size={14} />
+                                          <span>Report</span>
+                                        </button>
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                                 {activeReplyId === 'comment-tab-2' && (
                                   <div className="inline-reply-box" data-testid="inline-reply-comment-tab-2">
@@ -2646,6 +2778,23 @@ export default function UserDashboard() {
                               <Bookmark size={14} className="unsave-icon" />
                               <span>Unsave</span>
                             </button>
+                            <div className="comment-ellipsis-wrapper">
+                              <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'saved-1' ? null : 'saved-1')} data-testid="button-ellipsis-saved-1">
+                                <MoreHorizontal size={14} />
+                              </button>
+                              {activeEllipsisId === 'saved-1' && (
+                                <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-saved-1">
+                                  <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-follow-comment-saved-1">
+                                    <BellPlus size={14} />
+                                    <span>Follow comment</span>
+                                  </button>
+                                  <button className="comment-ellipsis-item disabled-action" title="Unavailable in beta" data-testid="button-report-saved-1">
+                                    <FlagTriangleRight size={14} />
+                                    <span>Report</span>
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                           {activeReplyId === 'saved-1' && (
                             <div className="inline-reply-box" data-testid="inline-reply-saved-1">
