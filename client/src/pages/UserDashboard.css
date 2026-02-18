@@ -1315,11 +1315,13 @@ a.following-post-username:hover {
 .saved-article-row {
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 24px;
+  padding-right: 13rem;
 }
 
 .saved-comment {
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 24px;
+  padding-right: 13rem;
 }
 
 .saved-comment:last-child {
