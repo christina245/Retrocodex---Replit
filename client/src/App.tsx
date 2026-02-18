@@ -36,6 +36,7 @@ import PhysicsPage from "@/pages/subcategory-pages/PhysicsPage";
 import TechnologyPage from "@/pages/subcategory-pages/TechnologyPage";
 import HolidaysPage from "@/pages/subcategory-pages/HolidaysPage";
 import UserDashboard from "@/pages/UserDashboard";
+import PublicProfile from "@/pages/PublicProfile";
 
 function Router() {
   // Track page views when routes change
@@ -70,6 +71,7 @@ function Router() {
       <Route path="/tags/:tagSlug" component={FactsByTagPage} />
       <Route path="/search/:query" component={SearchResultsPage} />
       <Route path="/dashboard" component={UserDashboard} />
+      <Route path="/user/:username" component={PublicProfile} />
       <Route component={NotFound} />
     </Switch>
   );

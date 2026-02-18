@@ -20,6 +20,30 @@
   padding-top: 0.5rem;
 }
 
+.profile-banner-top-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.view-public-profile-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #e0e0e0;
+  color: #2C2C2C;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.view-public-profile-btn:hover {
+  background: #d0d0d0;
+}
+
 .user-profile-banner {
   display: flex;
   align-items: flex-start;
@@ -1215,6 +1239,23 @@ a.following-post-username:hover {
   color: #419F36;
   flex-shrink: 0;
   margin-top: 3px;
+}
+
+.activity-revision-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.activity-revision-timeline {
+  color: #878787;
+}
+
+.activity-revision-sources {
+  color: #878787;
+}
+
+.activity-revision-considerations {
+  color: #878787;
 }
 
 .activity-timeline-revision {

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -1235,7 +1235,7 @@ export default function UserDashboard() {
                                 <div className="following-post-body-left">
                                   <p className="activity-submitted-label">Revision:</p>
                                   <div className="activity-submitted-revision">
-                                    <Check size={16} className="activity-revision-check" />
+                                    <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />
                                     <div className="activity-timeline-revision">
                                       <p className="activity-timeline-year">2026</p>
                                       <p className="activity-truth-text">New Horizons data continued to reveal Pluto's geological complexity, including evidence of a subsurface ocean beneath its icy crust. Despite renewed public petitions, the IAU reaffirmed its 2006 classification, noting that the criteria for planetary status remain unchanged.</p>
@@ -2020,6 +2020,11 @@ export default function UserDashboard() {
               {sideTab === "edit-profile" && (
                 <>
                 <div className="dashboard-profile-banner" data-testid="dashboard-profile-banner">
+                  <div className="profile-banner-top-row">
+                    <Link href={`/user/${user.username}`} className="view-public-profile-btn" data-testid="link-view-public-profile">
+                      View public profile
+                    </Link>
+                  </div>
                   <div className="user-profile-banner">
                     <div className="user-profile-photo-wrapper">
                       <img
@@ -2206,54 +2211,6 @@ export default function UserDashboard() {
                   </div>
                 )}
 
-                <div className="profile-activity-section" data-testid="profile-activity-section">
-                  <div className="notifications-tabs-wrapper">
-                    <nav className="notifications-tabs" data-testid="profile-activity-tabs">
-                      {PROFILE_ACTIVITY_TABS.map((tab) => (
-                        <button
-                          key={tab.id}
-                          className={`notifications-tab${profileActivityTab === tab.id ? " notifications-tab-active" : ""}`}
-                          onClick={() => setProfileActivityTab(tab.id)}
-                          data-testid={`button-profile-activity-tab-${tab.id}`}
-                        >
-                          <span>{tab.label}</span>
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-
-                  <div className="dashboard-feed-content" data-testid="profile-activity-content">
-                    {profileActivityTab === "submissions" && (
-                      <div className="profile-activity-empty" data-testid="profile-activity-empty-submissions">
-                        <FileText size={40} className="profile-activity-empty-icon" />
-                        <p className="profile-activity-empty-title">No approved submissions yet.</p>
-                        <p className="profile-activity-empty-desc">
-                          Got a misconception that bothers you? Share it with the world.
-                        </p>
-                      </div>
-                    )}
-
-                    {profileActivityTab === "edits" && (
-                      <div className="profile-activity-empty" data-testid="profile-activity-empty-edits">
-                        <FilePenLine size={40} className="profile-activity-empty-icon" />
-                        <p className="profile-activity-empty-title">No approved edits yet.</p>
-                        <p className="profile-activity-empty-desc">
-                          Have any information you'd like to add to an existing topic? Submit an edit request on the topic page.
-                        </p>
-                      </div>
-                    )}
-
-                    {profileActivityTab === "comments" && (
-                      <div className="profile-activity-empty" data-testid="profile-activity-empty-comments">
-                        <MessageSquare size={40} className="profile-activity-empty-icon" />
-                        <p className="profile-activity-empty-title">No comments yet.</p>
-                        <p className="profile-activity-empty-desc">
-                          Leave a comment on any single fact page to share your experiences with the topic.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
                 </>
               )}
 

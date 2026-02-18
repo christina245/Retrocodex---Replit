@@ -1,0 +1,72 @@
+.public-profile-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.public-profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  width: 100%;
+}
+
+.public-profile-banner {
+  margin-bottom: 1.5rem;
+}
+
+.public-profile-bio {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #555;
+  margin: 6px 0 12px 0;
+  line-height: 1.5;
+}
+
+.public-profile-tabs-section {
+  margin-top: 0.5rem;
+}
+
+.public-profile-tab-content {
+  padding-top: 1rem;
+}
+
+.public-comment-entry {
+  padding: 25px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.public-comment-entry:last-child {
+  border-bottom: none;
+}
+
+.public-comment-timestamp {
+  display: block;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #878787;
+  margin-top: 10px;
+}
+
+.activity-revision-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.activity-revision-timeline {
+  color: #878787;
+}
+
+.activity-revision-sources {
+  color: #878787;
+}
+
+.activity-revision-considerations {
+  color: #878787;
+}
+
+@media (max-width: 768px) {
+  .public-profile-container {
+    padding: 1rem;
+  }
+}
