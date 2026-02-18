@@ -2020,11 +2020,6 @@ export default function UserDashboard() {
               {sideTab === "edit-profile" && (
                 <>
                 <div className="dashboard-profile-banner" data-testid="dashboard-profile-banner">
-                  <div className="profile-banner-top-row">
-                    <Link href={`/user/${user.username}`} className="view-public-profile-btn" data-testid="link-view-public-profile">
-                      View public profile
-                    </Link>
-                  </div>
                   <div className="user-profile-banner">
                     <div className="user-profile-photo-wrapper">
                       <img
@@ -2128,6 +2123,12 @@ export default function UserDashboard() {
                         ) : (
                           <span className="user-profile-empty-text" data-testid="text-misinfo-empty">--</span>
                         )}
+                      </div>
+
+                      <div className="profile-banner-action-row">
+                        <Link href={`/user/${user.username}`} className="profile-banner-primary-btn" data-testid="link-view-public-profile">
+                          View public profile
+                        </Link>
                       </div>
                     </div>
                   </div>

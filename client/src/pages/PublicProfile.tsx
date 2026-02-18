@@ -281,6 +281,14 @@ export default function PublicProfile() {
                   </p>
                 </div>
               )}
+
+              {!isOwnProfile && (
+                <div className="profile-banner-action-row">
+                  <button className="profile-banner-primary-btn" data-testid="button-follow-user">
+                    Follow
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

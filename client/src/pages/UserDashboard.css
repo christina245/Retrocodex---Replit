@@ -20,38 +20,37 @@
   padding-top: 0.5rem;
 }
 
-.profile-banner-top-row {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 0.5rem;
-}
-
-.view-public-profile-btn {
-  display: inline-block;
-  padding: 8px 16px;
-  background: #e0e0e0;
-  color: #2C2C2C;
-  font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 6px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.view-public-profile-btn:hover {
-  background: #d0d0d0;
-}
-
 .user-profile-banner {
   display: flex;
   align-items: flex-start;
   gap: 2rem;
   padding: 2rem;
-  background: #fafafa;
-  border-radius: 10px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #e0e0e0;
   position: relative;
+}
+
+.profile-banner-action-row {
+  margin-top: 1rem;
+}
+
+.profile-banner-primary-btn {
+  display: inline-block;
+  padding: 8px 20px;
+  background: #FF5353;
+  color: #FFFFFF;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.profile-banner-primary-btn:hover {
+  background: #e04848;
 }
 
 .user-profile-photo-wrapper {
