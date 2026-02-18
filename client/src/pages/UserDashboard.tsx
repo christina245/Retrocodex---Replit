@@ -748,8 +748,9 @@ export default function UserDashboard() {
                       user.favoriteTags.length > 0 ? (
                         <div className="following-feed" data-testid="feed-for-you">
                           <div className="following-post" data-testid="for-you-post-1">
+                            <img src={placeholderPhoto} alt="MythBuster_77" className="following-post-avatar" />
+                            <div className="following-post-main">
                             <div className="following-post-header">
-                              <img src={placeholderPhoto} alt="MythBuster_77" className="following-post-avatar" />
                               <div className="following-post-header-text">
                                 <Link href="/user/MythBuster_77" className="following-post-username" data-testid="link-user-MythBuster_77">MythBuster_77</Link>
                                 <span className="following-post-action">submitted a new topic</span>
@@ -772,11 +773,13 @@ export default function UserDashboard() {
                                 onComment={() => {}}
                               />
                             </div>
+                            </div>
                           </div>
 
                           <div className="following-post" data-testid="for-you-post-article">
+                            <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
+                            <div className="following-post-main">
                             <div className="following-post-header">
-                              <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
                               <div className="following-post-header-text">
                                 <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99-foryou">FactChecker_99</Link>
                                 <span className="following-post-action">submitted an article</span>
@@ -792,11 +795,13 @@ export default function UserDashboard() {
                                 slug="going-home-for-the-holidays-myths-2025"
                               />
                             </div>
+                            </div>
                           </div>
 
                           <div className="following-post" data-testid="for-you-post-2">
+                            <img src={placeholderPhoto} alt="SkepticalSam" className="following-post-avatar" />
+                            <div className="following-post-main">
                             <div className="following-post-header">
-                              <img src={placeholderPhoto} alt="SkepticalSam" className="following-post-avatar" />
                               <div className="following-post-header-text">
                                 <Link href="/user/SkepticalSam" className="following-post-username" data-testid="link-user-SkepticalSam">SkepticalSam</Link>
                                 <span className="following-post-action">submitted a new topic</span>
@@ -818,6 +823,7 @@ export default function UserDashboard() {
                                 onShare={() => {}}
                                 onComment={() => {}}
                               />
+                            </div>
                             </div>
                           </div>
                         </div>
@@ -842,8 +848,9 @@ export default function UserDashboard() {
                     {feedTab === "following" && (
                       <div className="following-feed" data-testid="feed-following">
                         <div className="following-post" data-testid="following-post-1">
+                          <img src={placeholderPhoto} alt="LogicGamer_01" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="LogicGamer_01" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/LogicGamer_01" className="following-post-username" data-testid="link-user-LogicGamer_01">LogicGamer_01</Link>
                               <span className="following-post-action">submitted a new topic</span>
@@ -866,11 +873,13 @@ export default function UserDashboard() {
                               onComment={() => {}}
                             />
                           </div>
+                          </div>
                         </div>
 
                         <div className="following-post" data-testid="following-post-article">
+                          <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99">FactChecker_99</Link>
                               <span className="following-post-action">submitted an article</span>
@@ -886,11 +895,13 @@ export default function UserDashboard() {
                               slug="going-home-for-the-holidays-myths-2025"
                             />
                           </div>
+                          </div>
                         </div>
 
                         <div className="following-post" data-testid="following-post-2">
+                          <img src={placeholderPhoto} alt="DungeonMaster_88" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="DungeonMaster_88" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/DungeonMaster_88" className="following-post-username" data-testid="link-user-DungeonMaster_88">DungeonMaster_88</Link>
                               <span className="following-post-action">voted on a poll</span>
@@ -916,11 +927,13 @@ export default function UserDashboard() {
                               </Link>
                             </div>
                           </div>
+                          </div>
                         </div>
 
                         <div className="following-post" data-testid="following-post-3">
+                          <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/Ackshually_42" className="following-post-username" data-testid="link-user-Ackshually_42">Ackshually_42</Link>
                               <span className="following-post-action">commented on</span>
@@ -962,6 +975,7 @@ export default function UserDashboard() {
                               </Link>
                             </div>
                           </div>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -971,8 +985,9 @@ export default function UserDashboard() {
                         <p className="local-feed-description" data-testid="local-feed-description">Activity from users currently located in your current or past locations.</p>
 
                         <div className="following-post" data-testid="local-post-1">
+                          <img src={placeholderPhoto} alt="CtrlAltDefeat" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="CtrlAltDefeat" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/CtrlAltDefeat" className="following-post-username" data-testid="link-user-CtrlAltDefeat">CtrlAltDefeat</Link>
                               <span className="following-post-action">from</span>
@@ -997,11 +1012,13 @@ export default function UserDashboard() {
                               onComment={() => {}}
                             />
                           </div>
+                          </div>
                         </div>
 
                         <div className="following-post" data-testid="local-post-2">
+                          <img src={placeholderPhoto} alt="SyntaxTerror_404" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="SyntaxTerror_404" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/SyntaxTerror_404" className="following-post-username" data-testid="link-user-SyntaxTerror_404">SyntaxTerror_404</Link>
                               <span className="following-post-action">from</span>
@@ -1029,11 +1046,13 @@ export default function UserDashboard() {
                               </Link>
                             </div>
                           </div>
+                          </div>
                         </div>
 
                         <div className="following-post" data-testid="local-post-3">
+                          <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/CaffeineOverflow" className="following-post-username" data-testid="link-user-CaffeineOverflow">CaffeineOverflow</Link>
                               <span className="following-post-action">from</span>
@@ -1077,11 +1096,13 @@ export default function UserDashboard() {
                               </Link>
                             </div>
                           </div>
+                          </div>
                         </div>
 
                         <div className="following-post" data-testid="local-post-4">
+                          <img src={placeholderPhoto} alt="RespawnPending" className="following-post-avatar" />
+                          <div className="following-post-main">
                           <div className="following-post-header">
-                            <img src={placeholderPhoto} alt="RespawnPending" className="following-post-avatar" />
                             <div className="following-post-header-text">
                               <Link href="/user/RespawnPending" className="following-post-username" data-testid="link-user-RespawnPending">RespawnPending</Link>
                               <span className="following-post-action">from</span>
@@ -1108,6 +1129,7 @@ export default function UserDashboard() {
                                 <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
                               </Link>
                             </div>
+                          </div>
                           </div>
                         </div>
                       </div>

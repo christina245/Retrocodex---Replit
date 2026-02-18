@@ -662,7 +662,7 @@
   background: none;
   border: none;
   text-align: left;
-  padding: 10px 14px;
+  padding: 10px 5px;
   border-radius: 5px;
   cursor: pointer;
   transition: color 0.2s, background-color 0.2s;
@@ -717,6 +717,8 @@
 }
 
 .following-post {
+  display: flex;
+  gap: 12px;
   padding: 24px 0;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -729,16 +731,22 @@
   border-bottom: none;
 }
 
+.following-post-main {
+  flex: 1;
+  min-width: 0;
+}
+
 .following-post-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .following-post-avatar {
-  width: 3rem;
-  height: 3rem;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -800,7 +808,6 @@ a.following-post-username:hover {
 }
 
 .following-post-body {
-  padding-left: calc(3rem + 12px);
 }
 
 .local-feed-description {
