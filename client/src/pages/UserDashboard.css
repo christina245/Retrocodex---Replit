@@ -808,6 +808,7 @@ a.following-post-username:hover {
 }
 
 .following-post-body {
+  margin-top: 15px;
 }
 
 .local-feed-description {
