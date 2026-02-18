@@ -1298,6 +1298,66 @@ a.following-post-username:hover {
   line-height: 1.5;
 }
 
+/* Saved tab */
+.saved-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 0;
+}
+
+.saved-facts-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.saved-article-row {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 24px;
+}
+
+.saved-comment {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 24px;
+}
+
+.saved-comment:last-child {
+  border-bottom: none;
+}
+
+.saved-comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  margin: 4px 0 8px 0;
+}
+
+.saved-comment-username {
+  font-weight: 600;
+  color: #2C2C2C;
+  text-decoration: none;
+}
+
+.saved-comment-username:hover {
+  text-decoration: underline;
+}
+
+.saved-comment-action {
+  color: #878787;
+}
+
+.saved-comment-dot {
+  color: #878787;
+}
+
+.saved-comment-time {
+  color: #878787;
+}
+
 .dashboard-feed-empty-action {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;

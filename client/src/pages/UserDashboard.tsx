@@ -2376,12 +2376,56 @@ export default function UserDashboard() {
               )}
 
               {sideTab === "saved" && (
-                <div className="dashboard-feed-empty" data-testid="saved-page">
-                  <Bookmark size={40} className="dashboard-feed-empty-icon" />
-                  <p className="dashboard-feed-empty-title">No saved items yet</p>
-                  <p className="dashboard-feed-empty-desc">
-                    Bookmark facts, articles, and comments you want to revisit and they'll show up here.
-                  </p>
+                <div className="saved-page" data-testid="saved-page">
+
+                  {/* Row 1: Saved fact cards */}
+                  <div className="saved-facts-row" data-testid="saved-facts-row">
+                    <FactCard
+                      fact={demoFacts[0]}
+                      onSave={() => {}}
+                      onShare={() => {}}
+                      onComment={() => {}}
+                    />
+                    <FactCard
+                      fact={demoFacts[1]}
+                      onSave={() => {}}
+                      onShare={() => {}}
+                      onComment={() => {}}
+                    />
+                  </div>
+
+                  {/* Row 2: Saved article */}
+                  <div className="saved-article-row" data-testid="saved-article-row">
+                    <FeedArticleCard
+                      title="5 Myths You Might Hear Going Home For the Holidays"
+                      summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
+                      coverImage="/uploads/1764995940108-220172306.jpg"
+                      category="Everyday Life"
+                      slug="going-home-for-the-holidays-myths-2025"
+                    />
+                  </div>
+
+                  {/* Row 3: Saved comment (Reddit-style) */}
+                  <div className="saved-comment" data-testid="saved-comment-1">
+                    <div className="following-post-body-content">
+                      <div className="following-post-body-left">
+                        <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
+                          <p className="fact-myth">"Christopher Columbus discovered the Americas in 1492"</p>
+                        </Link>
+                        <div className="saved-comment-meta" data-testid="saved-comment-meta-1">
+                          <Link href="/user/Ackshually_42" className="saved-comment-username" data-testid="link-saved-user-Ackshually_42">Ackshually_42</Link>
+                          <span className="saved-comment-action">commented</span>
+                          <span className="saved-comment-dot">·</span>
+                          <span className="saved-comment-time">3 hours ago</span>
+                        </div>
+                        <p className="following-plain-comment" data-testid="saved-comment-text-1">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
+                      </div>
+                      <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-saved-comment-1">
+                        <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                      </Link>
+                    </div>
+                  </div>
+
                 </div>
               )}
 
