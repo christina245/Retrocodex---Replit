@@ -1059,6 +1059,10 @@ a.following-post-username:hover {
   margin-top: 0.25rem;
 }
 
+.activity-post .following-post-body-content {
+  align-items: center;
+}
+
 .activity-status-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 16px;
@@ -1111,6 +1115,26 @@ a.following-post-username:hover {
   color: #419F36;
   flex-shrink: 0;
   margin-top: 3px;
+}
+
+.activity-timeline-revision {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-timeline-year {
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin: 0;
+}
+
+.notifications-tabs .homepage-tab-tooltip {
+  width: auto;
+  white-space: nowrap;
+  max-width: none;
 }
 
 .activity-action-row {

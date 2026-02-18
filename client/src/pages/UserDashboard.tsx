@@ -19,9 +19,9 @@ import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
 import "./UserDashboard.css";
 
-type DashboardTab = "for-you" | "following" | "local";
+type DashboardTab = "for-you" | "following" | "local" | "fact-updates";
 type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "saved" | "settings";
-type NotificationsTab = "all" | "replies" | "comments" | "fact-updates";
+type NotificationsTab = "all" | "replies" | "comments";
 type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
 type EditRequestsTab = "pending-edits" | "approved-edits";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
@@ -30,6 +30,7 @@ const DASHBOARD_TABS: { id: DashboardTab; label: string; tooltip?: string }[] = 
   { id: "for-you", label: "For You", tooltip: "New topics and articles based on your interests." },
   { id: "following", label: "Following", tooltip: "Activity from users you follow." },
   { id: "local", label: "Local", tooltip: "Activity from users currently based in your current or past locations." },
+  { id: "fact-updates", label: "Fact Updates", tooltip: "Updates from facts you follow." },
 ];
 
 const PROFILE_ACTIVITY_TABS: { id: ProfileActivityTab; label: string }[] = [
@@ -1093,6 +1094,108 @@ export default function UserDashboard() {
                       </div>
                     )}
 
+                    {feedTab === "fact-updates" && (
+                      <div className="following-feed" data-testid="feed-fact-updates">
+
+                        {/* Fact Update 1: Food Pyramid revision */}
+                        <div className="activity-post" data-testid="fact-update-post-1">
+                          <div className="activity-post-icon-col">
+                            <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-link">
+                                  <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
+                                </Link>
+                              </div>
+                              <span className="following-post-timestamp">1 day ago</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <p className="activity-submitted-label">Revision:</p>
+                                  <div className="activity-submitted-revision">
+                                    <Check size={16} className="activity-revision-check" />
+                                    <p className="activity-truth-text">In 2026, the US government introduced a new food pyramid that prioritized vegetables and protein while relegating grains to the bottom.</p>
+                                  </div>
+                                </div>
+                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-cover-link" data-testid="cover-link-fact-update-1">
+                                  <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Fact Update 2: Pluto - timeline entry revision */}
+                        <div className="activity-post" data-testid="fact-update-post-2">
+                          <div className="activity-post-icon-col">
+                            <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <Link href="/fact/is-pluto-a-planet" className="following-post-link">
+                                  <p className="fact-myth">"Pluto is a planet."</p>
+                                </Link>
+                              </div>
+                              <span className="following-post-timestamp">3 days ago</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <p className="activity-submitted-label">Revision:</p>
+                                  <div className="activity-submitted-revision">
+                                    <Check size={16} className="activity-revision-check" />
+                                    <div className="activity-timeline-revision">
+                                      <p className="activity-timeline-year">2026</p>
+                                      <p className="activity-truth-text">New Horizons data continued to reveal Pluto's geological complexity, including evidence of a subsurface ocean beneath its icy crust. Despite renewed public petitions, the IAU reaffirmed its 2006 classification, noting that the criteria for planetary status remain unchanged.</p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <Link href="/fact/is-pluto-a-planet" className="following-post-cover-link" data-testid="cover-link-fact-update-2">
+                                  <img src="/objects/uploads/0c6481cd-9156-4d02-a7c1-db51995f9432.png" alt="" className="following-post-cover-photo" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Fact Update 3: Five senses - truth details revision */}
+                        <div className="activity-post" data-testid="fact-update-post-3">
+                          <div className="activity-post-icon-col">
+                            <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <Link href="/fact/do-humans-only-have-five-senses" className="following-post-link">
+                                  <p className="fact-myth">"Humans only have five senses."</p>
+                                </Link>
+                              </div>
+                              <span className="following-post-timestamp">1 week ago</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <p className="activity-submitted-label">Revision:</p>
+                                  <div className="activity-submitted-revision">
+                                    <Check size={16} className="activity-revision-check" />
+                                    <p className="activity-truth-text">Researchers have since identified at least 21 distinct senses, including proprioception (body position), nociception (pain), thermoception (temperature), equilibrioception (balance), and interoception (internal body states like hunger and thirst). The original five-sense model attributed to Aristotle was a simplification that persisted for centuries.</p>
+                                  </div>
+                                </div>
+                                <Link href="/fact/do-humans-only-have-five-senses" className="following-post-cover-link" data-testid="cover-link-fact-update-3">
+                                  <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    )}
+
                   </div>
                 </>
               )}
@@ -1105,7 +1208,6 @@ export default function UserDashboard() {
                         { id: "all" as NotificationsTab, label: "All" },
                         { id: "replies" as NotificationsTab, label: "Replies" },
                         { id: "comments" as NotificationsTab, label: "Comments" },
-                        { id: "fact-updates" as NotificationsTab, label: "Fact Updates" },
                       ]).map((tab) => (
                         <button
                           key={tab.id}
@@ -1424,34 +1526,167 @@ export default function UserDashboard() {
                   )}
 
                   {notificationsTab === "replies" && (
-                    <div className="dashboard-feed-empty" data-testid="notifications-empty-replies">
-                      <MessageSquare size={40} className="dashboard-feed-empty-icon" />
-                      <p className="dashboard-feed-empty-title">No replies yet</p>
-                      <p className="dashboard-feed-empty-desc">
-                        Replies to comments you've left on entries will show up here.
-                      </p>
+                    <div className="following-feed" data-testid="activity-feed-replies">
+
+                      {/* Reply 1: username5 replied on spiders */}
+                      <div className="activity-post" data-testid="reply-post-1">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="username5" className="activity-post-avatar" />
+                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/username5" className="following-post-username" data-testid="link-user-reply-username5">username5</Link>
+                              <span className="following-post-action">replied to your comment on</span>
+                            </div>
+                            <span className="following-post-timestamp">6 hours ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
+                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
+                                </Link>
+                                <div className="activity-comment-thread">
+                                  <div className="activity-thread-comment">
+                                    <div className="activity-thread-author">
+                                      <span className="activity-thread-username">retrocodexadmin</span>
+                                    </div>
+                                    <div className="following-comment-quote">
+                                      <p className="following-comment-text">I wonder where this myth originated if it was never Snopes this entire time. Growing up in California, I heard it around when I was 10, but haven't talked to anyone else from other states and countries about it.</p>
+                                    </div>
+                                  </div>
+                                  <div className="activity-thread-comment">
+                                    <div className="activity-thread-author">
+                                      <span className="activity-thread-username">username5</span>
+                                    </div>
+                                    <p className="following-plain-comment">This myth had to have come from the US or one of the colder countries. Where I'm from, spiders are often massive. You would definitely feel them even if they're just a foot away, lol</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-reply-1">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Reply 2: NightOwlNerd replied on carrots */}
+                      <div className="activity-post" data-testid="reply-post-2">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="NightOwlNerd" className="activity-post-avatar" />
+                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/NightOwlNerd" className="following-post-username" data-testid="link-user-reply-NightOwlNerd">NightOwlNerd</Link>
+                              <span className="following-post-action">replied to your comment on</span>
+                            </div>
+                            <span className="following-post-timestamp">2 days ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/does-eating-carrots-make-you-see-better" className="following-post-link">
+                                  <p className="fact-myth">"Eating carrots will give you better eyesight."</p>
+                                </Link>
+                                <div className="activity-comment-thread">
+                                  <div className="activity-thread-comment">
+                                    <div className="activity-thread-author">
+                                      <span className="activity-thread-username">retrocodexadmin</span>
+                                    </div>
+                                    <div className="following-comment-quote">
+                                      <p className="following-comment-text">The British literally invented this myth during WWII to hide their radar technology. They told everyone their pilots could see in the dark because they ate carrots. It was wartime propaganda!</p>
+                                    </div>
+                                  </div>
+                                  <div className="activity-thread-comment">
+                                    <div className="activity-thread-author">
+                                      <span className="activity-thread-username">NightOwlNerd</span>
+                                    </div>
+                                    <p className="following-plain-comment">That's wild. My mom used to force me to eat carrots as a kid specifically for my eyesight. Decades of propaganda working perfectly, I guess. Though I still love carrots, just not for that reason anymore.</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <Link href="/fact/does-eating-carrots-make-you-see-better" className="following-post-cover-link" data-testid="cover-link-reply-2">
+                                <img src="/objects/uploads/80ca466a-5bc8-4420-bcac-2ed39def2b3c.png" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                   )}
 
                   {notificationsTab === "comments" && (
-                    <div className="dashboard-feed-empty" data-testid="notifications-empty-comments">
-                      <MessageSquare size={40} className="dashboard-feed-empty-icon" />
-                      <p className="dashboard-feed-empty-title">No comments yet</p>
-                      <p className="dashboard-feed-empty-desc">
-                        Comments on your approved submissions will show up here.
-                      </p>
+                    <div className="following-feed" data-testid="activity-feed-comments">
+
+                      {/* Comment 1: Username2 commented on spiders submission */}
+                      <div className="activity-post" data-testid="comment-post-1">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="Username2" className="activity-post-avatar" />
+                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/Username2" className="following-post-username" data-testid="link-user-comment-Username2">Username2</Link>
+                              <span className="following-post-action">commented on your submission</span>
+                            </div>
+                            <span className="following-post-timestamp">10 mins ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
+                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
+                                </Link>
+                                <p className="following-plain-comment" data-testid="comment-text-1">Given how many spiders have crawled on me, I always believed this was true. I'm so happy to see it's been debunked. Although I have to admit, as someone who once woke up through an earthquake, I probably wouldn't wake up if a spider crawled on my face.</p>
+                              </div>
+                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-comment-1">
+                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Comment 2: PixelPusher99 commented on vikings submission */}
+                      <div className="activity-post" data-testid="comment-post-2">
+                        <div className="activity-post-icon-col">
+                          <img src={placeholderPhoto} alt="PixelPusher99" className="activity-post-avatar" />
+                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <Link href="/user/PixelPusher99" className="following-post-username" data-testid="link-user-comment-PixelPusher99">PixelPusher99</Link>
+                              <span className="following-post-action">commented on your submission</span>
+                            </div>
+                            <span className="following-post-timestamp">3 days ago</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <div className="following-post-body-content">
+                              <div className="following-post-body-left">
+                                <Link href="/fact/did-vikings-wear-horned-helmets" className="following-post-link">
+                                  <p className="fact-myth">"Vikings wore horned helmets into battle."</p>
+                                </Link>
+                                <p className="following-plain-comment" data-testid="comment-text-2">I blame every movie and TV show I've ever watched for this one. They always show Vikings with those massive horns on their helmets. Turns out the horned helmet thing was invented by costume designers in the 1800s for operas. The actual helmets were pretty plain.</p>
+                              </div>
+                              <Link href="/fact/did-vikings-wear-horned-helmets" className="following-post-cover-link" data-testid="cover-link-comment-2">
+                                <img src="/objects/uploads/155b09a1-773c-4e60-a73d-5eab03cc71b9.jpg" alt="" className="following-post-cover-photo" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                   )}
 
-                  {notificationsTab === "fact-updates" && (
-                    <div className="dashboard-feed-empty" data-testid="notifications-empty-fact-updates">
-                      <BellRing size={40} className="dashboard-feed-empty-icon" />
-                      <p className="dashboard-feed-empty-title">You aren't following any facts yet</p>
-                      <p className="dashboard-feed-empty-desc">
-                        Updates to facts you follow will be here.
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
 
