@@ -662,7 +662,7 @@
   background: none;
   border: none;
   text-align: left;
-  padding: 10px 5px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
   transition: color 0.2s, background-color 0.2s;
@@ -1953,7 +1953,7 @@ a.following-post-username:hover {
   }
 
   .dashboard-side-tab {
-    padding: 10px 14px;
+    padding: 10px 25px;
     border-radius: 0;
   }
 
