@@ -2021,6 +2021,9 @@ export default function UserDashboard() {
                 <>
                 <div className="dashboard-profile-banner" data-testid="dashboard-profile-banner">
                   <div className="user-profile-banner">
+                    <a href={`/user/${user.username}`} target="_blank" rel="noopener noreferrer" className="profile-banner-primary-btn profile-banner-corner-btn" data-testid="link-view-public-profile">
+                      View public profile
+                    </a>
                     <div className="user-profile-photo-wrapper">
                       <img
                         src={user.profilePhoto || placeholderPhoto}
@@ -2125,11 +2128,6 @@ export default function UserDashboard() {
                         )}
                       </div>
 
-                      <div className="profile-banner-action-row">
-                        <Link href={`/user/${user.username}`} className="profile-banner-primary-btn" data-testid="link-view-public-profile">
-                          View public profile
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </div>

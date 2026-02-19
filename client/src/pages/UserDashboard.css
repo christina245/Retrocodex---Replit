@@ -30,10 +30,6 @@
   position: relative;
 }
 
-.profile-banner-action-row {
-  margin-top: 1rem;
-}
-
 .profile-banner-primary-btn {
   display: inline-block;
   padding: 8px 20px;
@@ -44,13 +40,31 @@
   font-weight: 600;
   border-radius: 6px;
   text-decoration: none;
-  border: none;
+  border: 1px solid #FF5353;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .profile-banner-primary-btn:hover {
   background: #e04848;
+  border-color: #e04848;
+}
+
+.profile-banner-corner-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.profile-banner-following-btn {
+  background: #e0e0e0;
+  color: #2C2C2C;
+  border-color: #e0e0e0;
+}
+
+.profile-banner-following-btn:hover {
+  background: #d0d0d0;
+  border-color: #d0d0d0;
 }
 
 .user-profile-photo-wrapper {

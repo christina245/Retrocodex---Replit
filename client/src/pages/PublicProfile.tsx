@@ -43,6 +43,7 @@ export default function PublicProfile() {
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const isOwnProfile = user?.username === username;
 
@@ -186,6 +187,15 @@ export default function PublicProfile() {
       <div className="public-profile-container">
         <div className="public-profile-banner" data-testid="public-profile-banner">
           <div className="user-profile-banner">
+            {!isOwnProfile && (
+              <button
+                className={`profile-banner-primary-btn profile-banner-corner-btn${isFollowing ? " profile-banner-following-btn" : ""}`}
+                onClick={() => setIsFollowing(!isFollowing)}
+                data-testid="button-follow-user"
+              >
+                {isFollowing ? "Following" : "Follow"}
+              </button>
+            )}
             <div className="user-profile-photo-wrapper">
               <img
                 src={profileData.profilePhoto || placeholderPhoto}
@@ -282,13 +292,6 @@ export default function PublicProfile() {
                 </div>
               )}
 
-              {!isOwnProfile && (
-                <div className="profile-banner-action-row">
-                  <button className="profile-banner-primary-btn" data-testid="button-follow-user">
-                    Follow
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
