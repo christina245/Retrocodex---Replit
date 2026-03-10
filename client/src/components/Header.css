@@ -339,6 +339,10 @@
   }
 
   .header-signin-button {
+    display: flex;
+  }
+
+  .header-signin-button--desktop-only {
     display: none;
   }
 
