@@ -462,6 +462,25 @@ export default function UserDashboard() {
     }
   };
 
+  const dummyActivityComments = [
+    {
+      id: "act-comment-1",
+      factTitle: "Christopher Columbus discovered the Americas in 1492",
+      factLink: "/fact/christopher-columbus-discovered-americas",
+      coverPhoto: "/uploads/1764719426643-922952402.png",
+      comment: "This is one of the most persistent myths I grew up with. It wasn't until college that I learned about the Norse expeditions and the millions of Indigenous peoples who had been living there for thousands of years. History education really needs an overhaul.",
+      timestamp: "3 hours ago",
+    },
+    {
+      id: "act-comment-2",
+      factTitle: "Men and women have very different brains.",
+      factLink: "/fact/men-women-different-brains",
+      coverPhoto: "/uploads/1764752045366-476242776.png",
+      comment: "I was told this so many times by everybody growing up! I just thought it made sense because I saw so many differences in how men and women behaved. But the evidence is actually very clear that a lot of these distinctions come from socialization and not innate differences.",
+      timestamp: "1 day ago",
+    },
+  ];
+
   const pendingSubmissions = [
     {
       id: "sub-1",
@@ -2501,12 +2520,74 @@ export default function UserDashboard() {
                     )}
 
                     {activityTab === "comments" && (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty-comments">
-                        <MessageSquare size={40} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">You haven't commented on any topics yet.</p>
-                        <p className="dashboard-feed-empty-desc">
-                          Leave a comment on a misconception you care about to share your experiences.
-                        </p>
+                      <div data-testid="activity-comments-content">
+                        {dummyActivityComments.length > 0 ? (
+                          <div className="following-feed">
+                            {dummyActivityComments.map((c) => (
+                              <div className="public-comment-entry" key={c.id} data-testid={`activity-comment-${c.id}`}>
+                                <div className="following-post-body-content">
+                                  <div className="following-post-body-left">
+                                    <Link href={c.factLink} className="following-post-link">
+                                      <p className="fact-myth">"{c.factTitle}"</p>
+                                    </Link>
+                                    <p className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}>{c.comment}</p>
+                                    <div className="comment-actions" data-testid={`activity-comment-actions-${c.id}`}>
+                                      <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === c.id ? null : c.id)} data-testid={`button-reply-activity-comment-${c.id}`}>
+                                        <CornerUpLeft size={14} />
+                                        <span>Reply</span>
+                                      </button>
+                                      <button className="comment-action disabled-action" data-testid={`button-like-activity-comment-${c.id}`}>
+                                        <Heart size={14} />
+                                        <span>0 likes</span>
+                                      </button>
+                                      <button className="comment-action disabled-action" data-testid={`button-save-activity-comment-${c.id}`}>
+                                        <Bookmark size={14} />
+                                        <span>Save</span>
+                                      </button>
+                                      <div className="comment-ellipsis-wrapper">
+                                        <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === c.id ? null : c.id)} data-testid={`button-ellipsis-activity-comment-${c.id}`}>
+                                          <MoreHorizontal size={14} />
+                                        </button>
+                                        {activeEllipsisId === c.id && (
+                                          <div className="comment-ellipsis-dropdown" data-testid={`dropdown-ellipsis-activity-comment-${c.id}`}>
+                                            <button className="comment-ellipsis-item" data-testid={`button-edit-activity-comment-${c.id}`}>
+                                              <Pencil size={14} />
+                                              <span>Edit</span>
+                                            </button>
+                                            <button className="comment-ellipsis-item" data-testid={`button-delete-activity-comment-${c.id}`}>
+                                              <Trash2 size={14} />
+                                              <span>Delete</span>
+                                            </button>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {activeReplyId === c.id && (
+                                      <div className="inline-reply-box" data-testid={`inline-reply-activity-comment-${c.id}`}>
+                                        <textarea placeholder="Write a reply..." data-testid={`input-reply-activity-comment-${c.id}`} />
+                                        <div className="inline-reply-actions">
+                                          <button className="inline-reply-btn" data-testid={`button-submit-reply-activity-comment-${c.id}`}>Reply</button>
+                                        </div>
+                                      </div>
+                                    )}
+                                    <span className="public-comment-timestamp" data-testid={`activity-comment-time-${c.id}`}>{c.timestamp}</span>
+                                  </div>
+                                  <Link href={c.factLink} className="following-post-cover-link" data-testid={`cover-link-activity-comment-${c.id}`}>
+                                    <img src={c.coverPhoto} alt="" className="following-post-cover-photo" />
+                                  </Link>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="dashboard-feed-empty" data-testid="activity-empty-comments">
+                            <MessageSquare size={40} className="dashboard-feed-empty-icon" />
+                            <p className="dashboard-feed-empty-title">You haven't commented on any topics yet.</p>
+                            <p className="dashboard-feed-empty-desc">
+                              Leave a comment on a misconception you care about to share your experiences.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
