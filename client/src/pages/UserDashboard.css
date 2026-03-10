@@ -190,7 +190,7 @@
   font-weight: 400;
   color: #2C2C2C;
   line-height: 1.6;
-  padding-right: 5rem;
+  padding-right: 6rem;
 }
 
 .profile-bio-text p {
@@ -800,7 +800,7 @@
 
 a.following-post-username {
   font-family: 'Public Sans', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #2C2C2C;
   text-decoration: none;
@@ -813,7 +813,7 @@ a.following-post-username:hover {
 
 .following-post-action {
   font-family: 'Public Sans', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: #878787;
 }
@@ -859,7 +859,7 @@ a.following-post-username:hover {
 
 .following-post-location {
   font-family: 'Public Sans', sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #2C2C2C;
   transition: color 0.2s;
