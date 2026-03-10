@@ -146,7 +146,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             </a>
             {isLoggedIn ? (
               <button
-                className="header-signin-button header-signin-button--desktop-only"
+                className="header-signin-button header-main-signin header-signin-button--desktop-only"
                 onClick={() => navigate("/dashboard")}
                 data-testid="button-profile"
                 aria-label="Go to profile"
@@ -156,7 +156,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
               </button>
             ) : (
               <button
-                className="header-signin-button"
+                className="header-signin-button header-main-signin"
                 onClick={() => setIsSignInOpen(true)}
                 data-testid="button-signin"
                 aria-label="Sign in"

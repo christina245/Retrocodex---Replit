@@ -338,12 +338,12 @@
     display: none;
   }
 
-  .header-signin-button {
-    display: flex;
+  .header-main-signin {
+    display: flex !important;
   }
 
-  .header-signin-button--desktop-only {
-    display: none;
+  .header-main-signin.header-signin-button--desktop-only {
+    display: none !important;
   }
 
   .search-button {
