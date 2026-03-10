@@ -139,7 +139,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             )}
             <a 
               href="/submit"
-              className="submit-fact-button"
+              className="submit-fact-button header-only-submit"
               data-testid="button-submit-fact"
             >
               Submit a Fact
