@@ -1,4 +1,4 @@
-import { X, Eye, EyeOff, Check, RefreshCw, MapPin, Plus, Minus, XCircle } from "lucide-react";
+import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { useLocation } from "wouter";
 import { CATEGORIES } from "@shared/categories";
 import { OTHER_SUBCATEGORIES } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
+import { validateUsername } from "@/lib/usernameValidation";
 import logoImage from "@assets/thicker_logo_only_1771065757126.png";
 import "./SignInModal.css";
 
@@ -197,8 +198,7 @@ interface SignInModalProps {
   onClose: () => void;
 }
 
-type ModalScreen = "auth" | "emailConfirmation" | "locationSetup" | "topicSelection";
-type CodeStatus = "idle" | "success" | "error";
+type ModalScreen = "auth" | "locationSetup" | "topicSelection";
 
 interface OtherCountryEntry {
   country: string;
@@ -220,9 +220,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [username, setUsername] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [screen, setScreen] = useState<ModalScreen>("auth");
-  const [verificationCode, setVerificationCode] = useState("");
-  const [codeStatus, setCodeStatus] = useState<CodeStatus>("idle");
-  const [resendMessage, setResendMessage] = useState("");
+  const [usernameError, setUsernameError] = useState<string | null>(null);
 
   const [residenceCountry, setResidenceCountry] = useState("");
   const [residenceUsState, setResidenceUsState] = useState("");
@@ -267,6 +265,15 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     }
   };
 
+  const handleUsernameChange = (value: string) => {
+    setUsername(value);
+    if (value.length > 0) {
+      setUsernameError(validateUsername(value));
+    } else {
+      setUsernameError(null);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
@@ -275,9 +282,8 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       return;
     }
     if (isSignUp) {
-      setScreen("emailConfirmation");
-      setCodeStatus("idle");
-      setVerificationCode("");
+      if (usernameError !== null || username.trim() === "") return;
+      setScreen("locationSetup");
     } else {
       const success = login(email, password);
       if (success) {
@@ -289,35 +295,9 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     }
   };
 
-  const handleCodeChange = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, "").slice(0, 6);
-    setVerificationCode(digitsOnly);
-    setCodeStatus("idle");
-  };
-
-  const handleVerifyCode = () => {
-    if (verificationCode === "123456") {
-      setCodeStatus("success");
-      setTimeout(() => {
-        setScreen("locationSetup");
-      }, 1000);
-    } else {
-      setCodeStatus("error");
-    }
-  };
-
-  const handleResendCode = () => {
-    setResendMessage("Code resent!");
-    setVerificationCode("");
-    setCodeStatus("idle");
-    setTimeout(() => setResendMessage(""), 3000);
-  };
-
   const handleClose = () => {
     setScreen("auth");
-    setCodeStatus("idle");
-    setVerificationCode("");
-    setResendMessage("");
+    setUsernameError(null);
     setResidenceCountry("");
     setResidenceUsState("");
     setFeatureResidence(false);
@@ -642,66 +622,6 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 Next step
               </button>
             </div>
-          ) : screen === "emailConfirmation" ? (
-            <div className="signin-confirmation" data-testid="screen-email-confirmation">
-              <h2 className="signin-confirmation-title" data-testid="text-confirmation-title">
-                Enter the 6-digit code sent to your email.
-              </h2>
-
-              <div className="signin-code-field">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  className={`signin-code-input${codeStatus === "error" ? " signin-input-error" : ""}`}
-                  value={verificationCode}
-                  onChange={(e) => handleCodeChange(e.target.value)}
-                  placeholder="000000"
-                  maxLength={6}
-                  data-testid="input-verification-code"
-                />
-              </div>
-
-              {codeStatus === "success" && (
-                <div className="signin-code-status signin-code-success" data-testid="text-code-success">
-                  <Check size={20} className="signin-status-icon truth-icon" />
-                  <span>Account created!</span>
-                </div>
-              )}
-
-              {codeStatus === "error" && (
-                <div className="signin-code-status signin-code-error" data-testid="text-code-error">
-                  <X size={20} className="signin-status-icon myth-icon" />
-                  <span>Incorrect code.</span>
-                </div>
-              )}
-
-              <button
-                type="button"
-                className="signin-verify-button"
-                onClick={handleVerifyCode}
-                disabled={verificationCode.length !== 6 || codeStatus === "success"}
-                data-testid="button-verify-code"
-              >
-                Verify
-              </button>
-
-              <button
-                type="button"
-                className="signin-resend-button"
-                onClick={handleResendCode}
-                disabled={codeStatus === "success"}
-                data-testid="button-resend-code"
-              >
-                <RefreshCw size={14} className="signin-resend-icon" />
-                Resend code
-              </button>
-
-              {resendMessage && (
-                <span className="signin-resend-message" data-testid="text-resend-message">
-                  {resendMessage}
-                </span>
-              )}
-            </div>
           ) : (
             <>
               <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
@@ -721,10 +641,15 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                       type="text"
                       className="signin-input"
                       value={username}
-                      onChange={(e) => setUsername(e.target.value)}
+                      onChange={(e) => handleUsernameChange(e.target.value)}
                       placeholder="Choose a username"
                       data-testid="input-signin-username"
                     />
+                    {usernameError && (
+                      <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-username-error">
+                        {usernameError}
+                      </p>
+                    )}
                   </div>
                 )}
 

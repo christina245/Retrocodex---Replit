@@ -11,6 +11,7 @@ import type { Fact as FactCardFact } from "@/components/FactCard";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
+import { validateUsername } from "@/lib/usernameValidation";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
 import FeedArticleCard from "@/components/FeedArticleCard";
@@ -318,6 +319,7 @@ export default function UserDashboard() {
   const parsedCurrent = user ? parseLocation(user.currentLocation) : { country: "", usState: "" };
 
   const [editUsername, setEditUsername] = useState(user?.username || "");
+  const [editUsernameError, setEditUsernameError] = useState<string | null>(null);
   const [editMisinfo, setEditMisinfo] = useState(user?.misinfoSource || "");
   const [editCurrentCountry, setEditCurrentCountry] = useState(parsedCurrent.country);
   const [editCurrentState, setEditCurrentState] = useState(parsedCurrent.usState);
@@ -3072,9 +3074,18 @@ export default function UserDashboard() {
                 type="text"
                 className="edit-profile-input edit-profile-input-half"
                 value={editUsername}
-                onChange={(e) => setEditUsername(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setEditUsername(val);
+                  setEditUsernameError(val.length > 0 ? validateUsername(val) : null);
+                }}
                 data-testid="input-edit-username"
               />
+              {editUsernameError && (
+                <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-edit-username-error">
+                  {editUsernameError}
+                </p>
+              )}
             </div>
 
             <div className="edit-profile-section">
@@ -3276,6 +3287,8 @@ export default function UserDashboard() {
               type="button"
               className="edit-profile-save"
               data-testid="button-save-profile"
+              disabled={editUsernameError !== null}
+              style={editUsernameError !== null ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
             >
               Save Changes
             </button>
