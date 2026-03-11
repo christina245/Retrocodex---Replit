@@ -216,6 +216,10 @@
   display: inline-block;
 }
 
+.header-only-submit {
+  display: none !important;
+}
+
 .submit-fact-button:hover {
   background: #e64848;
 }
@@ -334,10 +338,6 @@
     padding-right: 4px;
   }
 
-  .header-only-submit {
-    display: none;
-  }
-
   .header-main-signin {
     display: flex !important;
   }
@@ -361,5 +361,11 @@
   .header-search-input {
     width: 120px;
     font-size: 13px;
+  }
+}
+
+@media (min-width: 900px) {
+  .header-only-submit {
+    display: inline-block !important;
   }
 }
