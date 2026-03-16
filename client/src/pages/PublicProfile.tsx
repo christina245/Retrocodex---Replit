@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useRoute, Link } from "wouter";
 import { MapPin, Home, CornerUpLeft, Heart, Bookmark, Check, BookOpen, MessageCircleMore, GitCommitHorizontal, MessageSquare, FileText, FilePenLine } from "lucide-react";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
@@ -209,12 +210,6 @@ export default function PublicProfile() {
                 {profileData.username}
               </h2>
 
-              {profileData.bio && (
-                <p className="public-profile-bio" data-testid="text-public-bio">
-                  {profileData.bio}
-                </p>
-              )}
-
               <div className="user-profile-locations-wrapper" data-testid="public-profile-locations">
                 {profileData.showCurrentLocation && profileData.currentLocation ? (
                   <div className="user-profile-current-location">
@@ -295,6 +290,15 @@ export default function PublicProfile() {
             </div>
           </div>
         </div>
+
+      {profileData.bio && (
+        <div className="public-profile-about-section" data-testid="public-profile-about-section">
+          <h3 className="user-profile-section-label">ABOUT</h3>
+          <div className="profile-bio-text" data-testid="text-public-about">
+            <ReactMarkdown>{profileData.bio}</ReactMarkdown>
+          </div>
+        </div>
+      )}
 
         <div className="public-profile-tabs-section">
           <div className="notifications-tabs-wrapper">
