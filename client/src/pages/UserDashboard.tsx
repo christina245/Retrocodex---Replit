@@ -328,7 +328,9 @@ export default function UserDashboard() {
   const [editCurrentState, setEditCurrentState] = useState(parsedCurrent.usState);
   const [editShowCurrentLocation, setEditShowCurrentLocation] = useState(user?.showCurrentLocation || false);
   const [editPlacesLived, setEditPlacesLived] = useState<{ country: string; usState: string }[]>(
-    user?.placesLived.map((p) => parseLocation(p)) || [{ country: "", usState: "" }]
+    (user?.placesLived && user.placesLived.length > 0)
+      ? user.placesLived.map((p) => parseLocation(p))
+      : [{ country: "", usState: "" }, { country: "", usState: "" }]
   );
   const [editShowPlacesLived, setEditShowPlacesLived] = useState(user?.showPlacesLived || false);
   const [editTags, setEditTags] = useState<string[]>(user?.favoriteTags || []);
@@ -873,7 +875,11 @@ export default function UserDashboard() {
                           </p>
                           <button
                             className="for-you-select-tags-button"
-                            onClick={() => { setEditProfilePhoto(user?.profilePhoto || ""); setEditModalOpen(true); }}
+                            onClick={() => {
+                              setEditProfilePhoto(user?.profilePhoto || "");
+                              setEditPlacesLived((user?.placesLived && user.placesLived.length > 0) ? user.placesLived.map((p) => parseLocation(p)) : [{ country: "", usState: "" }, { country: "", usState: "" }]);
+                              setEditModalOpen(true);
+                            }}
                             data-testid="button-select-interests"
                           >
                             Select Interests
@@ -2063,7 +2069,11 @@ export default function UserDashboard() {
                         </h2>
                         <button
                           className="user-profile-edit-button"
-                          onClick={() => { setEditProfilePhoto(user?.profilePhoto || ""); setEditModalOpen(true); }}
+                          onClick={() => {
+                            setEditProfilePhoto(user?.profilePhoto || "");
+                            setEditPlacesLived((user?.placesLived && user.placesLived.length > 0) ? user.placesLived.map((p) => parseLocation(p)) : [{ country: "", usState: "" }, { country: "", usState: "" }]);
+                            setEditModalOpen(true);
+                          }}
                           aria-label="Edit profile"
                           data-testid="button-edit-profile"
                         >
@@ -3142,8 +3152,27 @@ export default function UserDashboard() {
                 <div className="edit-profile-location-column" data-testid="edit-places-lived-column">
                   <label className="edit-profile-label">PLACES I'VE LIVED</label>
                   {editPlacesLived.map((entry, index) => (
-                    <div key={index}>
-                      <div className="edit-profile-place-row">
+                    <div key={index} className="edit-profile-place-row">
+                      {entry.country === "United States" ? (
+                        <div className="edit-profile-location-inline-row" style={{ flex: 1 }}>
+                          <div className="edit-profile-location-inline-field">
+                            <StateSelect
+                              value={entry.usState}
+                              onChange={(val) => handlePlaceLivedStateChange(index, val)}
+                              testId={`input-edit-place-lived-state-${index}`}
+                            />
+                          </div>
+                          <div className="edit-profile-location-inline-field">
+                            <LocationSelect
+                              value={entry.country}
+                              onChange={(val) => handlePlaceLivedChange(index, val)}
+                              placeholder="Search country..."
+                              testId={`input-edit-place-lived-${index}`}
+                              icon="home"
+                            />
+                          </div>
+                        </div>
+                      ) : (
                         <LocationSelect
                           value={entry.country}
                           onChange={(val) => handlePlaceLivedChange(index, val)}
@@ -3151,35 +3180,28 @@ export default function UserDashboard() {
                           testId={`input-edit-place-lived-${index}`}
                           icon="home"
                         />
-                        {index === editPlacesLived.length - 1 && editPlacesLived.length < 5 && (
-                          <button
-                            type="button"
-                            className="signin-add-remove-btn"
-                            onClick={handleAddPlaceLived}
-                            data-testid="button-add-place-lived"
-                            aria-label="Add another place"
-                          >
-                            <Plus size={18} />
-                          </button>
-                        )}
-                        {editPlacesLived.length > 1 && (
-                          <button
-                            type="button"
-                            className="signin-add-remove-btn"
-                            onClick={() => handleRemovePlaceLived(index)}
-                            data-testid={`button-remove-place-lived-${index}`}
-                            aria-label="Remove place"
-                          >
-                            <Minus size={18} />
-                          </button>
-                        )}
-                      </div>
-                      {entry.country === "United States" && (
-                        <StateSelect
-                          value={entry.usState}
-                          onChange={(val) => handlePlaceLivedStateChange(index, val)}
-                          testId={`input-edit-place-lived-state-${index}`}
-                        />
+                      )}
+                      {index === editPlacesLived.length - 1 && editPlacesLived.length < 5 && (
+                        <button
+                          type="button"
+                          className="signin-add-remove-btn"
+                          onClick={handleAddPlaceLived}
+                          data-testid="button-add-place-lived"
+                          aria-label="Add another place"
+                        >
+                          <Plus size={18} />
+                        </button>
+                      )}
+                      {editPlacesLived.length > 1 && (
+                        <button
+                          type="button"
+                          className="signin-add-remove-btn"
+                          onClick={() => handleRemovePlaceLived(index)}
+                          data-testid={`button-remove-place-lived-${index}`}
+                          aria-label="Remove place"
+                        >
+                          <Minus size={18} />
+                        </button>
                       )}
                     </div>
                   ))}
