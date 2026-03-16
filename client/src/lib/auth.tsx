@@ -29,7 +29,7 @@ const DUMMY_USER: UserData = {
   profilePhoto: "",
   currentLocation: "New York, United States",
   showCurrentLocation: false,
-  placesLived: ["London, United Kingdom", "Toronto, Canada", "Sydney, Australia"],
+  placesLived: ["United Kingdom", "Canada", "Australia"],
   showPlacesLived: false,
   favoriteTags: [
     "ancient civilizations",

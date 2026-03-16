@@ -1082,7 +1082,7 @@ export default function UserDashboard() {
                             <div className="following-post-header-text">
                               <Link href="/user/SyntaxTerror_404" className="following-post-username" data-testid="link-user-SyntaxTerror_404">SyntaxTerror_404</Link>
                               <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-2">Toronto, Canada</span>
+                              <span className="following-post-location" data-testid="local-location-2">Canada</span>
                               <span className="following-post-action">voted on a poll</span>
                             </div>
                             <span className="following-post-timestamp">20 mins ago</span>
@@ -1116,7 +1116,7 @@ export default function UserDashboard() {
                             <div className="following-post-header-text">
                               <Link href="/user/CaffeineOverflow" className="following-post-username" data-testid="link-user-CaffeineOverflow">CaffeineOverflow</Link>
                               <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-3">Rio de Janeiro, Brazil</span>
+                              <span className="following-post-location" data-testid="local-location-3">Brazil</span>
                               <span className="following-post-action">commented on</span>
                             </div>
                             <span className="following-post-timestamp">1 hour ago</span>
@@ -1183,7 +1183,7 @@ export default function UserDashboard() {
                             <div className="following-post-header-text">
                               <Link href="/user/RespawnPending" className="following-post-username" data-testid="link-user-RespawnPending">RespawnPending</Link>
                               <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-4">Toronto, Canada</span>
+                              <span className="following-post-location" data-testid="local-location-4">Canada</span>
                               <span className="following-post-action">voted on a poll</span>
                             </div>
                             <span className="following-post-timestamp">3 hours ago</span>

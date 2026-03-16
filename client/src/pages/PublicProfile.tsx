@@ -51,9 +51,9 @@ export default function PublicProfile() {
   const profileData = {
     username: username,
     profilePhoto: isOwnProfile ? (user?.profilePhoto || "") : "",
-    currentLocation: isOwnProfile ? (user?.currentLocation || "") : "San Francisco, United States",
+    currentLocation: isOwnProfile ? (user?.currentLocation || "") : "California, United States",
     showCurrentLocation: isOwnProfile ? (user?.showCurrentLocation || false) : true,
-    placesLived: isOwnProfile ? (user?.placesLived || []) : ["Portland, United States", "Austin, United States"],
+    placesLived: isOwnProfile ? (user?.placesLived || []) : ["Oregon, United States", "Texas, United States"],
     showPlacesLived: isOwnProfile ? (user?.showPlacesLived || false) : true,
     favoriteTags: isOwnProfile
       ? (user?.favoriteTags || [])

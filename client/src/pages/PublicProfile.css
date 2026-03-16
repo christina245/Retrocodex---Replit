@@ -71,8 +71,7 @@
 
 .public-profile-about-section {
   max-width: 900px;
-  margin: 0 auto;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -80,10 +79,6 @@
 
 @media (max-width: 768px) {
   .public-profile-container {
-    padding: 1rem;
-  }
-
-  .public-profile-about-section {
     padding: 1rem;
   }
 }

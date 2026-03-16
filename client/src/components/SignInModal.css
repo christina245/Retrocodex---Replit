@@ -605,6 +605,23 @@
   margin-top: 6px;
 }
 
+.signin-add-country-outer {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.edit-profile-location-inline-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.edit-profile-location-inline-field {
+  flex: 1;
+  min-width: 0;
+}
+
 .signin-modal-wide {
   max-width: 840px;
 }

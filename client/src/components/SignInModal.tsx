@@ -393,7 +393,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
   return (
     <div className="signin-overlay" onClick={handleOverlayClick} data-testid="signin-modal-overlay">
-      <div className={`signin-modal${screen === "topicSelection" ? " signin-modal-wide" : ""}`} data-testid="signin-modal">
+      <div className={`signin-modal${(screen === "topicSelection" || screen === "locationSetup") ? " signin-modal-wide" : ""}`} data-testid="signin-modal">
         <button
           className="signin-close"
           onClick={handleClose}
@@ -562,23 +562,35 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
               <div className="signin-location-section">
                 <label className="signin-location-label">COUNTRY OF RESIDENCE</label>
-                <CountrySelect
-                  value={residenceCountry}
-                  onChange={(val) => {
-                    setResidenceCountry(val);
-                    if (val !== "United States") setResidenceUsState("");
-                  }}
-                  testId="input-residence-country"
-                />
-                {residenceCountry === "United States" && (
-                  <div className="signin-state-field">
-                    <label className="signin-location-label">STATE</label>
-                    <StateSelect
-                      value={residenceUsState}
-                      onChange={setResidenceUsState}
-                      testId="input-residence-state"
-                    />
+                {residenceCountry === "United States" ? (
+                  <div className="edit-profile-location-inline-row">
+                    <div className="edit-profile-location-inline-field">
+                      <StateSelect
+                        value={residenceUsState}
+                        onChange={setResidenceUsState}
+                        testId="input-residence-state"
+                      />
+                    </div>
+                    <div className="edit-profile-location-inline-field">
+                      <CountrySelect
+                        value={residenceCountry}
+                        onChange={(val) => {
+                          setResidenceCountry(val);
+                          if (val !== "United States") setResidenceUsState("");
+                        }}
+                        testId="input-residence-country"
+                      />
+                    </div>
                   </div>
+                ) : (
+                  <CountrySelect
+                    value={residenceCountry}
+                    onChange={(val) => {
+                      setResidenceCountry(val);
+                      if (val !== "United States") setResidenceUsState("");
+                    }}
+                    testId="input-residence-country"
+                  />
                 )}
                 <div className="signin-checkbox-row">
                   <input
@@ -595,13 +607,32 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <div className="signin-location-section">
                 <label className="signin-location-label">OTHER COUNTRIES WHERE YOU'VE LIVED (MAX 5)</label>
                 {otherCountries.map((entry, index) => (
-                  <div key={index}>
+                  <div key={index} className="signin-add-country-outer">
                     <div className="signin-add-country-row">
-                      <CountrySelect
-                        value={entry.country}
-                        onChange={(val) => handleOtherCountryChange(index, val)}
-                        testId={`input-other-country-${index}`}
-                      />
+                      {entry.country === "United States" ? (
+                        <div className="edit-profile-location-inline-row" style={{ flex: 1 }}>
+                          <div className="edit-profile-location-inline-field">
+                            <StateSelect
+                              value={entry.usState}
+                              onChange={(val) => handleOtherStateChange(index, val)}
+                              testId={`input-other-state-${index}`}
+                            />
+                          </div>
+                          <div className="edit-profile-location-inline-field">
+                            <CountrySelect
+                              value={entry.country}
+                              onChange={(val) => handleOtherCountryChange(index, val)}
+                              testId={`input-other-country-${index}`}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <CountrySelect
+                          value={entry.country}
+                          onChange={(val) => handleOtherCountryChange(index, val)}
+                          testId={`input-other-country-${index}`}
+                        />
+                      )}
                       {index === otherCountries.length - 1 && otherCountries.length < 5 && (
                         <button
                           type="button"
@@ -625,16 +656,6 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                         </button>
                       )}
                     </div>
-                    {entry.country === "United States" && (
-                      <div className="signin-state-field">
-                        <label className="signin-location-label">STATE</label>
-                        <StateSelect
-                          value={entry.usState}
-                          onChange={(val) => handleOtherStateChange(index, val)}
-                          testId={`input-other-state-${index}`}
-                        />
-                      </div>
-                    )}
                   </div>
                 ))}
                 <div className="signin-checkbox-row">
