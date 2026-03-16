@@ -12,6 +12,7 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import { validateUsername } from "@/lib/usernameValidation";
+import { AvatarPickerModal } from "@/components/AvatarPickerModal";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
 import FeedArticleCard from "@/components/FeedArticleCard";
@@ -245,7 +246,7 @@ function StateSelect({ value, onChange, testId }: { value: string; onChange: (v:
 }
 
 export default function UserDashboard() {
-  const { user, isLoggedIn, logout } = useAuth();
+  const { user, isLoggedIn, logout, updateUser } = useAuth();
   const [, navigate] = useLocation();
 
   const initialTab = (() => {
@@ -260,6 +261,8 @@ export default function UserDashboard() {
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
+  const [editProfilePhoto, setEditProfilePhoto] = useState(user?.profilePhoto || "");
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
   const [hoveredFeedTab, setHoveredFeedTab] = useState<DashboardTab | null>(null);
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
@@ -870,7 +873,7 @@ export default function UserDashboard() {
                           </p>
                           <button
                             className="for-you-select-tags-button"
-                            onClick={() => setEditModalOpen(true)}
+                            onClick={() => { setEditProfilePhoto(user?.profilePhoto || ""); setEditModalOpen(true); }}
                             data-testid="button-select-interests"
                           >
                             Select Interests
@@ -2060,7 +2063,7 @@ export default function UserDashboard() {
                         </h2>
                         <button
                           className="user-profile-edit-button"
-                          onClick={() => setEditModalOpen(true)}
+                          onClick={() => { setEditProfilePhoto(user?.profilePhoto || ""); setEditModalOpen(true); }}
                           aria-label="Edit profile"
                           data-testid="button-edit-profile"
                         >
@@ -2155,7 +2158,7 @@ export default function UserDashboard() {
 
                 <div className="profile-bio-section" data-testid="profile-bio-section">
                   <div className="profile-bio-header">
-                    <h3 className="user-profile-section-label">BIO</h3>
+                    <h3 className="user-profile-section-label">ABOUT</h3>
                     <button
                       className="user-profile-edit-button"
                       onClick={() => {
@@ -3053,7 +3056,7 @@ export default function UserDashboard() {
               <label className="edit-profile-label">PROFILE PHOTO</label>
               <div className="edit-profile-photo-section">
                 <img
-                  src={user.profilePhoto || placeholderPhoto}
+                  src={editProfilePhoto || placeholderPhoto}
                   alt="Profile preview"
                   className="edit-profile-photo-preview"
                   data-testid="img-edit-photo-preview"
@@ -3061,9 +3064,10 @@ export default function UserDashboard() {
                 <button
                   type="button"
                   className="edit-profile-photo-upload"
-                  data-testid="button-upload-photo"
+                  onClick={() => setIsAvatarPickerOpen(true)}
+                  data-testid="button-change-avatar"
                 >
-                  Upload Photo
+                  Change avatar
                 </button>
               </div>
             </div>
@@ -3289,6 +3293,27 @@ export default function UserDashboard() {
               data-testid="button-save-profile"
               disabled={editUsernameError !== null}
               style={editUsernameError !== null ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+              onClick={() => {
+                const currentLocation = editCurrentCountry
+                  ? editCurrentState
+                    ? `${editCurrentState}, ${editCurrentCountry}`
+                    : editCurrentCountry
+                  : "";
+                const placesLived = editPlacesLived
+                  .filter((p) => p.country)
+                  .map((p) => p.usState ? `${p.usState}, ${p.country}` : p.country);
+                updateUser({
+                  profilePhoto: editProfilePhoto,
+                  username: editUsername,
+                  misinfoSource: editMisinfo,
+                  currentLocation,
+                  showCurrentLocation: editShowCurrentLocation,
+                  placesLived,
+                  showPlacesLived: editShowPlacesLived,
+                  favoriteTags: editTags,
+                });
+                setEditModalOpen(false);
+              }}
             >
               Save Changes
             </button>
@@ -3363,6 +3388,13 @@ export default function UserDashboard() {
           </div>
         </div>
       )}
+
+      <AvatarPickerModal
+        isOpen={isAvatarPickerOpen}
+        onClose={() => setIsAvatarPickerOpen(false)}
+        currentAvatar={editProfilePhoto}
+        onSave={(uri) => setEditProfilePhoto(uri)}
+      />
     </div>
   );
 }

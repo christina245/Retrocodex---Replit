@@ -74,7 +74,7 @@
 .user-profile-photo {
   width: 180px;
   height: 180px;
-  border-radius: 50%;
+  border-radius: 20px;
   object-fit: cover;
   background: #e0e0e0;
 }
@@ -276,7 +276,7 @@
 .user-profile-section-label {
   font-family: 'Public Sans', sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #2C2C2C;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -561,7 +561,7 @@
 .edit-profile-photo-preview {
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: 12px;
   object-fit: cover;
 }
 
@@ -784,7 +784,7 @@
 .following-post-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 8px;
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -1105,7 +1105,7 @@ a.following-post-username:hover {
 .activity-post-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 8px;
   object-fit: cover;
 }
 

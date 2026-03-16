@@ -47,7 +47,8 @@ Preferred communication style: Simple, everyday language.
   - "Following" tab: Empty state placeholder (pending user follow system)
   - "Local" tab: Empty state with contextual messaging based on whether user has location set
   - "Saved" tab: Empty state placeholder (pending bookmark system)
-- Edit Profile Modal: Full profile editing with photo upload, username, locations (current + places lived with US state support), favorite subjects (tag search with max 20), and misinformation source textarea
+- Edit Profile Modal: Full profile editing with avatar picker, username, locations (current + places lived with US state support), favorite subjects (tag search with max 20), and misinformation source textarea
+- `AvatarPickerModal`: DiceBear-powered avatar picker (5 styles: fun-emoji, glass, icons, identicon, shapes) with 12-avatar grid, style selector, large preview, "Select random" randomizer, and "Use this avatar" confirmation. All avatars use rounded-square shape (border-radius: 12–20px, not circular)
 
 **Blog System Components**
 - `ArticlesPage`: Lists published blog posts with category/tag filtering, fetches from `/api/blog-posts/published`
@@ -146,6 +147,7 @@ Preferred communication style: Simple, everyday language.
 - Shadcn/ui - Pre-styled component patterns built on Radix
 - Lucide React - Icon library
 - React Icons - Additional icons (Instagram, Bluesky, X/Twitter, etc.)
+- DiceBear (`@dicebear/core` + `@dicebear/collection` v9.4.0) - Avatar generation library used in AvatarPickerModal; styles: fun-emoji, glass, icons, identicon, shapes
 
 **Styling & Forms**
 - Tailwind CSS with autoprefixer - Utility-first CSS framework

@@ -9,7 +9,18 @@ import { OTHER_SUBCATEGORIES } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 import { validateUsername } from "@/lib/usernameValidation";
 import logoImage from "@assets/thicker_logo_only_1771065757126.png";
+import { createAvatar } from "@dicebear/core";
+import { funEmoji, glass, icons, identicon, shapes } from "@dicebear/collection";
 import "./SignInModal.css";
+
+const AVATAR_STYLES = [funEmoji, glass, icons, identicon, shapes];
+
+function generateRandomAvatar(): string {
+  const style = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
+  const seed = Math.random().toString(36).slice(2, 10);
+  const svg = createAvatar(style, { seed }).toString();
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
 
 const SAMPLE_COUNTRIES = [
   "Australia",
@@ -208,7 +219,7 @@ interface OtherCountryEntry {
 type TagsByCategory = Record<string, Record<string, string[]>>;
 
 export function SignInModal({ isOpen, onClose }: SignInModalProps) {
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -502,6 +513,31 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 type="button"
                 className="signin-submit-button"
                 data-testid="button-finish-onboarding"
+                onClick={() => {
+                  const profilePhoto = generateRandomAvatar();
+                  const currentLocation = residenceCountry
+                    ? residenceUsState
+                      ? `${residenceUsState}, ${residenceCountry}`
+                      : residenceCountry
+                    : "";
+                  const placesLived = otherCountries
+                    .filter((c) => c.country)
+                    .map((c) => c.usState ? `${c.usState}, ${c.country}` : c.country);
+                  register({
+                    username: username || "UnlearnExplorer",
+                    email,
+                    profilePhoto,
+                    currentLocation,
+                    showCurrentLocation: featureResidence,
+                    placesLived,
+                    showPlacesLived: featureOtherCountries,
+                    favoriteTags: selectedTags,
+                    misinfoSource: "",
+                    bio: "",
+                  });
+                  handleClose();
+                  navigate("/dashboard");
+                }}
               >
                 Finish
               </button>
