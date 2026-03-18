@@ -1,7 +1,6 @@
 import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { FaApple } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { CATEGORIES } from "@shared/categories";
@@ -18,8 +17,7 @@ const AVATAR_STYLES = [funEmoji, glass, icons, identicon, shapes];
 function generateRandomAvatar(): string {
   const style = AVATAR_STYLES[Math.floor(Math.random() * AVATAR_STYLES.length)];
   const seed = Math.random().toString(36).slice(2, 10);
-  const svg = createAvatar(style, { seed }).toString();
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return createAvatar(style, { seed }).toDataUri();
 }
 
 const SAMPLE_COUNTRIES = [
@@ -232,6 +230,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [screen, setScreen] = useState<ModalScreen>("auth");
   const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [residenceCountry, setResidenceCountry] = useState("");
   const [residenceUsState, setResidenceUsState] = useState("");
@@ -285,7 +284,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
     if (isSignUp && password !== confirmPassword) {
@@ -296,12 +295,14 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       if (usernameError !== null || username.trim() === "") return;
       setScreen("locationSetup");
     } else {
-      const success = login(email, password);
-      if (success) {
-        onClose();
+      setIsSubmitting(true);
+      const result = await login(email, password);
+      setIsSubmitting(false);
+      if (result.success) {
+        handleClose();
         navigate("/dashboard");
       } else {
-        setLoginError("Invalid email or password.");
+        setLoginError(result.error || "Invalid email or password.");
       }
     }
   };
@@ -509,11 +510,17 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 </div>
               </div>
 
+              {loginError && (
+                <p className="signin-error-text" style={{ textAlign: "center" }} data-testid="text-register-error">{loginError}</p>
+              )}
               <button
                 type="button"
                 className="signin-submit-button"
                 data-testid="button-finish-onboarding"
-                onClick={() => {
+                disabled={isSubmitting}
+                onClick={async () => {
+                  setIsSubmitting(true);
+                  setLoginError("");
                   const profilePhoto = generateRandomAvatar();
                   const currentLocation = residenceCountry
                     ? residenceUsState
@@ -523,10 +530,11 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                   const placesLived = otherCountries
                     .filter((c) => c.country)
                     .map((c) => c.usState ? `${c.usState}, ${c.country}` : c.country);
-                  register({
+                  const result = await register({
                     username: username || "UnlearnExplorer",
                     email,
-                    profilePhoto,
+                    password,
+                    avatarUrl: profilePhoto,
                     currentLocation,
                     showCurrentLocation: featureResidence,
                     placesLived,
@@ -535,11 +543,17 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                     misinfoSource: "",
                     bio: "",
                   });
-                  handleClose();
-                  navigate("/dashboard");
+                  setIsSubmitting(false);
+                  if (result.success) {
+                    handleClose();
+                    navigate("/dashboard");
+                  } else {
+                    setLoginError(result.error || "Registration failed. Please try again.");
+                    setScreen("auth");
+                  }
                 }}
               >
-                Finish
+                {isSubmitting ? "Creating account…" : "Finish"}
               </button>
             </div>
           ) : screen === "locationSetup" ? (
@@ -794,14 +808,15 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                   type="submit"
                   className="signin-submit-button"
                   data-testid="button-signin-submit"
+                  disabled={isSubmitting}
                 >
-                  {isSignUp ? "Sign up" : "Sign in"}
+                  {isSubmitting ? (isSignUp ? "Creating account…" : "Signing in…") : (isSignUp ? "Sign up" : "Sign in")}
                 </button>
               </form>
 
               <div className="signin-divider">
                 <span className="signin-divider-line"></span>
-                <span className="signin-divider-text">OR LOG IN WITH</span>
+                <span className="signin-divider-text">OR CONTINUE WITH</span>
                 <span className="signin-divider-line"></span>
               </div>
 
@@ -813,14 +828,6 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                 >
                   <FcGoogle size={20} />
                   <span>Google</span>
-                </button>
-                <button
-                  type="button"
-                  className="signin-social-button"
-                  data-testid="button-signin-apple"
-                >
-                  <FaApple size={20} />
-                  <span>Apple</span>
                 </button>
               </div>
 

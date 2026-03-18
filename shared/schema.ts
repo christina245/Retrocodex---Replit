@@ -73,7 +73,7 @@ export const insertEmailSubscriptionSchema = createInsertSchema(emailSubscriptio
 export type InsertEmailSubscription = z.infer<typeof insertEmailSubscriptionSchema>;
 export type EmailSubscription = typeof emailSubscriptions.$inferSelect;
 
-// Users table for admin authentication
+// Users table for admin authentication (legacy — kept for compatibility)
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
@@ -87,6 +87,59 @@ export const insertUserSchema = createInsertSchema(users).pick({
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+
+// Real user auth — credentials only, never returned by public API
+export const userAccounts = pgTable("user_accounts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Public profile data tied to a user account
+export const userProfiles = pgTable("user_profiles", {
+  id: varchar("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  bio: text("bio").default(""),
+  avatarUrl: text("avatar_url").default(""),
+  currentLocation: text("current_location").default(""),
+  showCurrentLocation: boolean("show_current_location").default(false),
+  placesLived: text("places_lived").array().default([]),
+  showPlacesLived: boolean("show_places_lived").default(false),
+  favoriteTags: text("favorite_tags").array().default([]),
+  misinfoSource: text("misinfo_source").default(""),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const registerSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores, and hyphens"),
+  avatarUrl: z.string().optional(),
+  currentLocation: z.string().optional(),
+  showCurrentLocation: z.boolean().optional(),
+  placesLived: z.array(z.string()).optional(),
+  showPlacesLived: z.boolean().optional(),
+  favoriteTags: z.array(z.string()).optional(),
+  misinfoSource: z.string().optional(),
+  bio: z.string().optional(),
+});
+
+export const updateProfileSchema = z.object({
+  username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_-]+$/).optional(),
+  bio: z.string().max(2000).optional(),
+  avatarUrl: z.string().optional(),
+  currentLocation: z.string().optional(),
+  showCurrentLocation: z.boolean().optional(),
+  placesLived: z.array(z.string()).optional(),
+  showPlacesLived: z.boolean().optional(),
+  favoriteTags: z.array(z.string()).optional(),
+  misinfoSource: z.string().max(200).optional(),
+});
+
+export type UserAccount = typeof userAccounts.$inferSelect;
+export type UserProfile = typeof userProfiles.$inferSelect;
 
 // Facts table for storing all fact entries
 export const facts = pgTable("facts", {

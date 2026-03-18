@@ -246,7 +246,7 @@ function StateSelect({ value, onChange, testId }: { value: string; onChange: (v:
 }
 
 export default function UserDashboard() {
-  const { user, isLoggedIn, logout, updateUser } = useAuth();
+  const { user, isLoggedIn, isLoading: authLoading, logout, updateUser } = useAuth();
   const [, navigate] = useLocation();
 
   const initialTab = (() => {
@@ -261,6 +261,8 @@ export default function UserDashboard() {
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isSavingBio, setIsSavingBio] = useState(false);
   const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
   const [editProfilePhoto, setEditProfilePhoto] = useState(user?.profilePhoto || "");
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
@@ -424,20 +426,16 @@ export default function UserDashboard() {
     setFeedTab(tab);
   }, []);
 
-  if (!isLoggedIn || !user) {
-    navigate("/");
-    return null;
-  }
   const MAX_VISIBLE_TAGS = 5;
   const MAX_VISIBLE_PLACES = 2;
   const visibleTags = showAllTags
-    ? user.favoriteTags
-    : user.favoriteTags.slice(0, MAX_VISIBLE_TAGS);
-  const hasMoreTags = user.favoriteTags.length > MAX_VISIBLE_TAGS;
+    ? (user?.favoriteTags ?? [])
+    : (user?.favoriteTags ?? []).slice(0, MAX_VISIBLE_TAGS);
+  const hasMoreTags = (user?.favoriteTags ?? []).length > MAX_VISIBLE_TAGS;
   const visiblePlaces = showAllPlaces
-    ? user.placesLived
-    : user.placesLived.slice(0, MAX_VISIBLE_PLACES);
-  const hasMorePlaces = user.placesLived.length > MAX_VISIBLE_PLACES;
+    ? (user?.placesLived ?? [])
+    : (user?.placesLived ?? []).slice(0, MAX_VISIBLE_PLACES);
+  const hasMorePlaces = (user?.placesLived ?? []).length > MAX_VISIBLE_PLACES;
 
   const getTagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, "-");
 
@@ -671,6 +669,12 @@ export default function UserDashboard() {
   const toggleDenialExpand = useCallback((id: string) => {
     setExpandedDenials((prev) => ({ ...prev, [id]: !prev[id] }));
   }, []);
+
+  if (authLoading) return null;
+  if (!isLoggedIn || !user) {
+    navigate("/");
+    return null;
+  }
 
   return (
     <div className="user-dashboard" data-testid="user-dashboard">
@@ -2235,10 +2239,16 @@ export default function UserDashboard() {
                       <button
                         type="button"
                         className="edit-profile-save"
-                        onClick={() => setBioEditOpen(false)}
+                        disabled={isSavingBio}
+                        onClick={async () => {
+                          setIsSavingBio(true);
+                          await updateUser({ bio: editBio });
+                          setIsSavingBio(false);
+                          setBioEditOpen(false);
+                        }}
                         data-testid="button-save-bio"
                       >
-                        Save Bio
+                        {isSavingBio ? "Saving…" : "Save Bio"}
                       </button>
                     </div>
                   </div>
@@ -3313,9 +3323,10 @@ export default function UserDashboard() {
               type="button"
               className="edit-profile-save"
               data-testid="button-save-profile"
-              disabled={editUsernameError !== null}
-              style={editUsernameError !== null ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
-              onClick={() => {
+              disabled={editUsernameError !== null || isSavingProfile}
+              style={(editUsernameError !== null || isSavingProfile) ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+              onClick={async () => {
+                setIsSavingProfile(true);
                 const currentLocation = editCurrentCountry
                   ? editCurrentState
                     ? `${editCurrentState}, ${editCurrentCountry}`
@@ -3324,7 +3335,7 @@ export default function UserDashboard() {
                 const placesLived = editPlacesLived
                   .filter((p) => p.country)
                   .map((p) => p.usState ? `${p.usState}, ${p.country}` : p.country);
-                updateUser({
+                await updateUser({
                   profilePhoto: editProfilePhoto,
                   username: editUsername,
                   misinfoSource: editMisinfo,
@@ -3334,10 +3345,11 @@ export default function UserDashboard() {
                   showPlacesLived: editShowPlacesLived,
                   favoriteTags: editTags,
                 });
+                setIsSavingProfile(false);
                 setEditModalOpen(false);
               }}
             >
-              Save Changes
+              {isSavingProfile ? "Saving…" : "Save Changes"}
             </button>
           </div>
         </div>

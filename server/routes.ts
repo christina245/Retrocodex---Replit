@@ -1,12 +1,21 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import bcrypt from "bcrypt";
+import { eq } from "drizzle-orm";
+import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+
+declare module "express-session" {
+  interface SessionData {
+    userId: string;
+  }
+}
 
 // Configure multer for memory storage (for Object Storage uploads)
 const upload = multer({
@@ -120,7 +129,275 @@ function requireAuth(req: any, res: any, next: any) {
   }
 }
 
+// Per-IP rate limiting for user auth endpoints
+const authAttempts = new Map<string, { count: number; firstAttempt: number }>();
+const AUTH_MAX_ATTEMPTS = 10;
+const AUTH_WINDOW_MS = 15 * 60 * 1000;
+
+function isAuthRateLimited(ip: string): boolean {
+  const record = authAttempts.get(ip);
+  if (!record) return false;
+  if (Date.now() - record.firstAttempt > AUTH_WINDOW_MS) {
+    authAttempts.delete(ip);
+    return false;
+  }
+  return record.count >= AUTH_MAX_ATTEMPTS;
+}
+
+function recordAuthAttempt(ip: string): void {
+  const record = authAttempts.get(ip);
+  if (!record || Date.now() - record.firstAttempt > AUTH_WINDOW_MS) {
+    authAttempts.set(ip, { count: 1, firstAttempt: Date.now() });
+  } else {
+    record.count++;
+  }
+}
+
+function clearAuthAttempts(ip: string): void {
+  authAttempts.delete(ip);
+}
+
+function requireUser(req: any, res: any, next: any) {
+  if (!req.session?.userId) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
+  next();
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // POST /api/auth/register — create new user account + profile
+  app.post("/api/auth/register", async (req, res) => {
+    const ip = getClientIP(req);
+    if (isAuthRateLimited(ip)) {
+      return res.status(429).json({ message: "Too many attempts. Please try again later." });
+    }
+    try {
+      const data = registerSchema.parse(req.body);
+
+      const existingAccount = await db.select({ id: userAccounts.id })
+        .from(userAccounts)
+        .where(eq(userAccounts.email, data.email.toLowerCase()))
+        .limit(1);
+      if (existingAccount.length > 0) {
+        recordAuthAttempt(ip);
+        return res.status(409).json({ message: "An account with this email already exists." });
+      }
+
+      const existingProfile = await db.select({ id: userProfiles.id })
+        .from(userProfiles)
+        .where(eq(userProfiles.username, data.username))
+        .limit(1);
+      if (existingProfile.length > 0) {
+        return res.status(409).json({ message: "This username is already taken." });
+      }
+
+      const passwordHash = await bcrypt.hash(data.password, 12);
+      const [account] = await db.insert(userAccounts)
+        .values({ email: data.email.toLowerCase(), passwordHash })
+        .returning({ id: userAccounts.id });
+
+      const [profile] = await db.insert(userProfiles)
+        .values({
+          id: account.id,
+          username: data.username,
+          avatarUrl: data.avatarUrl || "",
+          currentLocation: data.currentLocation || "",
+          showCurrentLocation: data.showCurrentLocation ?? false,
+          placesLived: data.placesLived || [],
+          showPlacesLived: data.showPlacesLived ?? false,
+          favoriteTags: data.favoriteTags || [],
+          misinfoSource: data.misinfoSource || "",
+          bio: data.bio || "",
+        })
+        .returning();
+
+      req.session.userId = account.id;
+      clearAuthAttempts(ip);
+      return res.status(201).json({
+        id: profile.id,
+        username: profile.username,
+        email: data.email.toLowerCase(),
+        bio: profile.bio,
+        profilePhoto: profile.avatarUrl,
+        currentLocation: profile.currentLocation,
+        showCurrentLocation: profile.showCurrentLocation,
+        placesLived: profile.placesLived,
+        showPlacesLived: profile.showPlacesLived,
+        favoriteTags: profile.favoriteTags,
+        misinfoSource: profile.misinfoSource,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("Register error:", error);
+      res.status(500).json({ message: "Registration failed. Please try again." });
+    }
+  });
+
+  // POST /api/auth/login
+  app.post("/api/auth/login", async (req, res) => {
+    const ip = getClientIP(req);
+    if (isAuthRateLimited(ip)) {
+      return res.status(429).json({ message: "Too many failed attempts. Please try again in 15 minutes." });
+    }
+    try {
+      const { email, password } = z.object({
+        email: z.string().min(1),
+        password: z.string().min(1),
+      }).parse(req.body);
+
+      const [account] = await db.select()
+        .from(userAccounts)
+        .where(eq(userAccounts.email, email.toLowerCase()))
+        .limit(1);
+
+      if (!account) {
+        recordAuthAttempt(ip);
+        return res.status(401).json({ message: "Invalid email or password." });
+      }
+
+      const passwordMatch = await bcrypt.compare(password, account.passwordHash);
+      if (!passwordMatch) {
+        recordAuthAttempt(ip);
+        return res.status(401).json({ message: "Invalid email or password." });
+      }
+
+      const [profile] = await db.select()
+        .from(userProfiles)
+        .where(eq(userProfiles.id, account.id))
+        .limit(1);
+
+      req.session.userId = account.id;
+      clearAuthAttempts(ip);
+      return res.json({
+        id: profile.id,
+        username: profile.username,
+        email: account.email,
+        bio: profile.bio,
+        profilePhoto: profile.avatarUrl,
+        currentLocation: profile.currentLocation,
+        showCurrentLocation: profile.showCurrentLocation,
+        placesLived: profile.placesLived,
+        showPlacesLived: profile.showPlacesLived,
+        favoriteTags: profile.favoriteTags,
+        misinfoSource: profile.misinfoSource,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Email and password are required." });
+      }
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Login failed. Please try again." });
+    }
+  });
+
+  // POST /api/auth/logout
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) console.error("Session destroy error:", err);
+      res.clearCookie("connect.sid");
+      res.json({ message: "Logged out" });
+    });
+  });
+
+  // GET /api/me — returns current session user or 401
+  app.get("/api/me", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const [account] = await db.select({ email: userAccounts.email })
+        .from(userAccounts)
+        .where(eq(userAccounts.id, req.session.userId))
+        .limit(1);
+      const [profile] = await db.select()
+        .from(userProfiles)
+        .where(eq(userProfiles.id, req.session.userId))
+        .limit(1);
+
+      if (!account || !profile) {
+        req.session.destroy(() => {});
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      return res.json({
+        id: profile.id,
+        username: profile.username,
+        email: account.email,
+        bio: profile.bio,
+        profilePhoto: profile.avatarUrl,
+        currentLocation: profile.currentLocation,
+        showCurrentLocation: profile.showCurrentLocation,
+        placesLived: profile.placesLived,
+        showPlacesLived: profile.showPlacesLived,
+        favoriteTags: profile.favoriteTags,
+        misinfoSource: profile.misinfoSource,
+      });
+    } catch (error) {
+      console.error("GET /api/me error:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // PUT /api/me — update current user's profile
+  app.put("/api/me", requireUser, async (req, res) => {
+    try {
+      const data = updateProfileSchema.parse(req.body);
+
+      if (data.username) {
+        const [existing] = await db.select({ id: userProfiles.id })
+          .from(userProfiles)
+          .where(eq(userProfiles.username, data.username))
+          .limit(1);
+        if (existing && existing.id !== req.session.userId) {
+          return res.status(409).json({ message: "This username is already taken." });
+        }
+      }
+
+      const [updated] = await db.update(userProfiles)
+        .set({
+          ...(data.username !== undefined && { username: data.username }),
+          ...(data.bio !== undefined && { bio: data.bio }),
+          ...(data.avatarUrl !== undefined && { avatarUrl: data.avatarUrl }),
+          ...(data.currentLocation !== undefined && { currentLocation: data.currentLocation }),
+          ...(data.showCurrentLocation !== undefined && { showCurrentLocation: data.showCurrentLocation }),
+          ...(data.placesLived !== undefined && { placesLived: data.placesLived }),
+          ...(data.showPlacesLived !== undefined && { showPlacesLived: data.showPlacesLived }),
+          ...(data.favoriteTags !== undefined && { favoriteTags: data.favoriteTags }),
+          ...(data.misinfoSource !== undefined && { misinfoSource: data.misinfoSource }),
+          updatedAt: new Date(),
+        })
+        .where(eq(userProfiles.id, req.session.userId!))
+        .returning();
+
+      const [account] = await db.select({ email: userAccounts.email })
+        .from(userAccounts)
+        .where(eq(userAccounts.id, req.session.userId!))
+        .limit(1);
+
+      return res.json({
+        id: updated.id,
+        username: updated.username,
+        email: account.email,
+        bio: updated.bio,
+        profilePhoto: updated.avatarUrl,
+        currentLocation: updated.currentLocation,
+        showCurrentLocation: updated.showCurrentLocation,
+        placesLived: updated.placesLived,
+        showPlacesLived: updated.showPlacesLived,
+        favoriteTags: updated.favoriteTags,
+        misinfoSource: updated.misinfoSource,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("PUT /api/me error:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
   // POST /api/emails - Create email subscription
   app.post("/api/emails", async (req, res) => {
     try {

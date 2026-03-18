@@ -23,8 +23,7 @@ function randomSeeds(count: number): string[] {
 }
 
 function avatarDataUri(styleObj: typeof funEmoji, seed: string): string {
-  const svg = createAvatar(styleObj, { seed }).toString();
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return createAvatar(styleObj, { seed }).toDataUri();
 }
 
 function getStyleObj(key: StyleKey) {

@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { ReactNode } from "react";
 
-interface UserData {
+export interface UserData {
+  id: string;
   username: string;
   email: string;
   profilePhoto: string;
@@ -17,70 +18,139 @@ interface UserData {
 interface AuthContextType {
   user: UserData | null;
   isLoggedIn: boolean;
-  login: (email: string, password: string) => boolean;
-  register: (userData: Partial<UserData>) => void;
-  updateUser: (partial: Partial<UserData>) => void;
-  logout: () => void;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
+  updateUser: (partial: Partial<Omit<UserData, "id" | "email">>) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-const DUMMY_USER: UserData = {
-  username: "UnlearnExplorer",
-  email: "test@test.com",
-  profilePhoto: "",
-  currentLocation: "New York, United States",
-  showCurrentLocation: false,
-  placesLived: ["United Kingdom", "Canada", "Australia"],
-  showPlacesLived: false,
-  favoriteTags: [
-    "ancient civilizations",
-    "nutrition myths",
-    "evolution",
-    "brain science",
-    "climate change",
-    "body language",
-    "sleep",
-    "vaccines",
-    "dinosaurs",
-    "space exploration",
-  ],
-  misinfoSource: "",
-  bio: "Creator of Retrocodex. I created this site because of how in-demand I saw the concept was and was horrified that I might be acting on untrue beliefs at any given moment. You never know what facts could one day save your life!",
-};
+export interface RegisterData {
+  email: string;
+  password: string;
+  username: string;
+  avatarUrl?: string;
+  currentLocation?: string;
+  showCurrentLocation?: boolean;
+  placesLived?: string[];
+  showPlacesLived?: boolean;
+  favoriteTags?: string[];
+  misinfoSource?: string;
+  bio?: string;
+}
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isLoggedIn: false,
-  login: () => false,
-  register: () => {},
-  updateUser: () => {},
-  logout: () => {},
+  isLoading: true,
+  login: async () => ({ success: false }),
+  register: async () => ({ success: false }),
+  updateUser: async () => {},
+  logout: async () => {},
 });
+
+function mapApiResponse(data: any): UserData {
+  return {
+    id: data.id,
+    username: data.username,
+    email: data.email,
+    profilePhoto: data.profilePhoto || "",
+    currentLocation: data.currentLocation || "",
+    showCurrentLocation: data.showCurrentLocation ?? false,
+    placesLived: data.placesLived || [],
+    showPlacesLived: data.showPlacesLived ?? false,
+    favoriteTags: data.favoriteTags || [],
+    misinfoSource: data.misinfoSource || "",
+    bio: data.bio || "",
+  };
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = useCallback((email: string, password: string): boolean => {
-    if (email === "test@test.com" && password === "password") {
-      setUser(DUMMY_USER);
-      return true;
+  useEffect(() => {
+    fetch("/api/me", { credentials: "include" })
+      .then((res) => {
+        if (res.ok) return res.json();
+        return null;
+      })
+      .then((data) => {
+        if (data) setUser(mapApiResponse(data));
+      })
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const login = useCallback(async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser(mapApiResponse(data));
+        return { success: true };
+      }
+      return { success: false, error: data.message || "Invalid email or password." };
+    } catch {
+      return { success: false, error: "Something went wrong. Please try again." };
     }
-    return false;
   }, []);
 
-  const register = useCallback((userData: Partial<UserData>) => {
-    setUser({ ...DUMMY_USER, ...userData });
+  const register = useCallback(async (registerData: RegisterData): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(registerData),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser(mapApiResponse(data));
+        return { success: true };
+      }
+      return { success: false, error: data.message || "Registration failed." };
+    } catch {
+      return { success: false, error: "Something went wrong. Please try again." };
+    }
   }, []);
 
-  const updateUser = useCallback((partial: Partial<UserData>) => {
-    setUser((prev) => (prev ? { ...prev, ...partial } : prev));
+  const updateUser = useCallback(async (partial: Partial<Omit<UserData, "id" | "email">>) => {
+    const payload: Record<string, any> = {};
+    if (partial.username !== undefined) payload.username = partial.username;
+    if (partial.bio !== undefined) payload.bio = partial.bio;
+    if (partial.profilePhoto !== undefined) payload.avatarUrl = partial.profilePhoto;
+    if (partial.currentLocation !== undefined) payload.currentLocation = partial.currentLocation;
+    if (partial.showCurrentLocation !== undefined) payload.showCurrentLocation = partial.showCurrentLocation;
+    if (partial.placesLived !== undefined) payload.placesLived = partial.placesLived;
+    if (partial.showPlacesLived !== undefined) payload.showPlacesLived = partial.showPlacesLived;
+    if (partial.favoriteTags !== undefined) payload.favoriteTags = partial.favoriteTags;
+    if (partial.misinfoSource !== undefined) payload.misinfoSource = partial.misinfoSource;
+
+    const res = await fetch("/api/me", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setUser(mapApiResponse(data));
+    }
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     setUser(null);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn: !!user, login, register, updateUser, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, login, register, updateUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -48,7 +48,7 @@ Preferred communication style: Simple, everyday language.
   - "Local" tab: Empty state with contextual messaging based on whether user has location set
   - "Saved" tab: Empty state placeholder (pending bookmark system)
 - Edit Profile Modal: Full profile editing with avatar picker, username, locations (current + places lived with US state support), favorite subjects (tag search with max 20), and misinformation source textarea
-- `AvatarPickerModal`: DiceBear-powered avatar picker (5 styles: fun-emoji, glass, icons, identicon, shapes) with 12-avatar grid, style selector, large preview, "Select random" randomizer, and "Use this avatar" confirmation. All avatars use rounded-square shape (border-radius: 12–20px, not circular)
+- `AvatarPickerModal`: DiceBear-powered avatar picker (5 styles: fun-emoji, glass, icons, identicon, shapes) with 12-avatar 4-column grid (4×3), style selector, large preview, "Select random" randomizer, and "Use this avatar" confirmation (30% width, red). All avatars use rounded-square shape (border-radius: 8–20px, not circular). Uses `createAvatar(...).toDataUri()` API. Wired into Edit Profile modal via `isAvatarPickerOpen` state and `editProfilePhoto`.
 
 **Blog System Components**
 - `ArticlesPage`: Lists published blog posts with category/tag filtering, fetches from `/api/blog-posts/published`
