@@ -13,7 +13,7 @@ import {
   type InsertNewsletterSubscription
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, arrayContains } from "drizzle-orm";
+import { eq, desc, and, arrayContains, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // Email subscriptions
@@ -104,15 +104,10 @@ export class DatabaseStorage implements IStorage {
 
   async getFactsByIds(ids: string[]): Promise<Fact[]> {
     if (ids.length === 0) return [];
-    // Fetch each fact individually to maintain order and avoid complex SQL
-    const results: Fact[] = [];
-    for (const id of ids) {
-      const fact = await this.getFactById(id);
-      if (fact) {
-        results.push(fact);
-      }
-    }
-    return results;
+    const rows = await db.select().from(facts).where(inArray(facts.id, ids));
+    // Preserve the requested order
+    const map = new Map(rows.map(f => [f.id, f]));
+    return ids.map(id => map.get(id)).filter((f): f is Fact => f !== undefined);
   }
 
   async updateFact(id: string, fact: Partial<InsertFact>): Promise<Fact | undefined> {

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -596,12 +596,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const allFacts = await storage.getAllFacts();
       
       // Check for matching subcategories
-      const OTHER_SUBCATEGORIES = [
-        "Animals", "Astronomy", "Beauty", "Earth Science", "Technology",
-        "Food", "Linguistics", "Music", "Physics", "Uncategorized"
-      ];
-      
-      const matchingSubcategories = OTHER_SUBCATEGORIES.filter(sub => 
+      const matchingSubcategories = [...OTHER_SUBCATEGORIES].filter(sub => 
         sub.toLowerCase().includes(query)
       );
 
@@ -646,7 +641,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       for (const fact of allFacts) {
         const categories = fact.categories || [];
-        const subcategories = (fact as any).subcategories || [];
+        const subcategories = fact.subcategories || [];
         const tags = fact.searchTags || [];
         if (tags.length === 0) continue;
 
