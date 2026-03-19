@@ -86,6 +86,13 @@ Preferred communication style: Simple, everyday language.
 - Simple HTTP Basic Auth for admin panel access
 - Password stored in `ADMIN_PASSWORD` environment variable (default: "admin123")
 - Auth middleware (`requireAuth`) protects admin-only routes
+- `isAdmin` boolean field on `user_profiles` table marks admin users
+- Admin badge shown next to usernames in dashboard banner, public profile header, and comment threads
+- `GET /api/users/:username` — public profile lookup (returns `isAdmin` for badge display)
+- `GET /api/admin/admins` — list all admin users (protected)
+- `POST /api/admin/grant-admin` — grant admin status by username (protected)
+- `POST /api/admin/revoke-admin` — revoke admin status by username (protected)
+- "Manage Admins" section in the admin panel sidebar for granting/revoking admin access
 
 ### Data Storage Solutions
 

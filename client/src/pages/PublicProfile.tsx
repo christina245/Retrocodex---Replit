@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useRoute, Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { MapPin, Home, CornerUpLeft, Heart, Bookmark, Check, BookOpen, MessageCircleMore, GitCommitHorizontal, MessageSquare, FileText, FilePenLine } from "lucide-react";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -9,6 +10,7 @@ import type { Fact as FactCardFact } from "@/components/FactCard";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
+import { AdminBadge } from "@/components/AdminBadge";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
@@ -48,20 +50,51 @@ export default function PublicProfile() {
 
   const isOwnProfile = user?.username === username;
 
+  const { data: apiProfile } = useQuery<{
+    username: string;
+    bio: string | null;
+    avatarUrl: string | null;
+    currentLocation: string | null;
+    showCurrentLocation: boolean | null;
+    placesLived: string[] | null;
+    showPlacesLived: boolean | null;
+    favoriteTags: string[] | null;
+    misinfoSource: string | null;
+    isAdmin: boolean | null;
+  }>({
+    queryKey: ["/api/users", username],
+    enabled: !!username,
+  });
+
   const profileData = {
     username: username,
-    profilePhoto: isOwnProfile ? (user?.profilePhoto || "") : "",
-    currentLocation: isOwnProfile ? (user?.currentLocation || "") : "California, United States",
-    showCurrentLocation: isOwnProfile ? (user?.showCurrentLocation || false) : true,
-    placesLived: isOwnProfile ? (user?.placesLived || []) : ["Oregon, United States", "Texas, United States"],
-    showPlacesLived: isOwnProfile ? (user?.showPlacesLived || false) : true,
+    profilePhoto: isOwnProfile
+      ? (user?.profilePhoto || "")
+      : (apiProfile?.avatarUrl || ""),
+    currentLocation: isOwnProfile
+      ? (user?.currentLocation || "")
+      : (apiProfile?.currentLocation || ""),
+    showCurrentLocation: isOwnProfile
+      ? (user?.showCurrentLocation || false)
+      : (apiProfile?.showCurrentLocation ?? false),
+    placesLived: isOwnProfile
+      ? (user?.placesLived || [])
+      : (apiProfile?.placesLived || []),
+    showPlacesLived: isOwnProfile
+      ? (user?.showPlacesLived || false)
+      : (apiProfile?.showPlacesLived ?? false),
     favoriteTags: isOwnProfile
       ? (user?.favoriteTags || [])
-      : ["nutrition myths", "brain science", "ancient civilizations", "evolution", "sleep"],
-    misinfoSource: isOwnProfile ? (user?.misinfoSource || "") : "Social media echo chambers",
+      : (apiProfile?.favoriteTags || []),
+    misinfoSource: isOwnProfile
+      ? (user?.misinfoSource || "")
+      : (apiProfile?.misinfoSource || ""),
     bio: isOwnProfile
       ? (user?.bio || "")
-      : "Fact-checking enthusiast. Always questioning what I was taught.",
+      : (apiProfile?.bio || ""),
+    isAdmin: isOwnProfile
+      ? (user?.isAdmin ?? false)
+      : (apiProfile?.isAdmin ?? false),
   };
 
   const MAX_VISIBLE_TAGS = 5;
@@ -208,6 +241,7 @@ export default function PublicProfile() {
             <div className="user-profile-details">
               <h2 className="user-profile-username" data-testid="text-public-username">
                 {profileData.username}
+                {profileData.isAdmin && <AdminBadge className="ml-2" />}
               </h2>
 
               <div className="user-profile-locations-wrapper" data-testid="public-profile-locations">

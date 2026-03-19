@@ -108,6 +108,7 @@ export const userProfiles = pgTable("user_profiles", {
   showPlacesLived: boolean("show_places_lived").default(false),
   favoriteTags: text("favorite_tags").array().default([]),
   misinfoSource: text("misinfo_source").default(""),
+  isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

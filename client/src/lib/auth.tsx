@@ -13,6 +13,7 @@ export interface UserData {
   favoriteTags: string[];
   misinfoSource: string;
   bio: string;
+  isAdmin: boolean;
 }
 
 interface AuthContextType {
@@ -62,6 +63,7 @@ function mapApiResponse(data: any): UserData {
     favoriteTags: data.favoriteTags || [],
     misinfoSource: data.misinfoSource || "",
     bio: data.bio || "",
+    isAdmin: data.isAdmin ?? false,
   };
 }
 

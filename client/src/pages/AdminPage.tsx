@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search } from "lucide-react";
+import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
@@ -15,7 +15,7 @@ interface EmailSubscription {
   createdAt: string;
 }
 
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins";
 
 const AVAILABLE_FACT_FILTERS = [
   "Context Matters",
@@ -37,6 +37,10 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState("");
   const [currentView, setCurrentView] = useState<AdminView>("add-fact");
   
+  // Admin management state
+  const [adminUsername, setAdminUsername] = useState("");
+  const [adminActionMessage, setAdminActionMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
   // Edit mode state
   const [editingFactId, setEditingFactId] = useState<string | null>(null);
   
@@ -162,6 +166,69 @@ export default function AdminPage() {
       return response.json();
     },
     enabled: isAuthenticated && (currentView === "view-blog" || currentView === "add-blog"),
+  });
+
+  const { data: adminsList, isLoading: adminsLoading, refetch: refetchAdmins } = useQuery<{ username: string; createdAt: string }[]>({
+    queryKey: ["/api/admin/admins"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/admins", {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to fetch admins");
+      return response.json();
+    },
+    enabled: isAuthenticated && currentView === "manage-admins",
+  });
+
+  const grantAdminMutation = useMutation({
+    mutationFn: async (username: string) => {
+      const response = await fetch("/api/admin/grant-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('admin:' + password),
+        },
+        body: JSON.stringify({ username }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to grant admin");
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAdminActionMessage({ type: "success", text: data.message });
+      setAdminUsername("");
+      refetchAdmins();
+    },
+    onError: (err: Error) => {
+      setAdminActionMessage({ type: "error", text: err.message });
+    },
+  });
+
+  const revokeAdminMutation = useMutation({
+    mutationFn: async (username: string) => {
+      const response = await fetch("/api/admin/revoke-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('admin:' + password),
+        },
+        body: JSON.stringify({ username }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to revoke admin");
+      }
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAdminActionMessage({ type: "success", text: data.message });
+      refetchAdmins();
+    },
+    onError: (err: Error) => {
+      setAdminActionMessage({ type: "error", text: err.message });
+    },
   });
 
   // Reset form when switching to add mode
@@ -828,6 +895,15 @@ export default function AdminPage() {
           >
             <Mail size={18} />
             <span>View Email Signups</span>
+          </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'manage-admins' ? 'active' : ''}`}
+            onClick={() => { setAdminActionMessage(null); setCurrentView('manage-admins'); }}
+            data-testid="nav-manage-admins"
+          >
+            <Shield size={18} />
+            <span>Manage Admins</span>
           </button>
         </nav>
       </aside>
@@ -2185,6 +2261,96 @@ export default function AdminPage() {
                 )}
               </div>
             )}
+          </div>
+        )}
+        {currentView === 'manage-admins' && (
+          <div className="admin-content">
+            <header className="content-header">
+              <div>
+                <h1 className="content-title">Manage Admins</h1>
+                <p className="content-subtitle">
+                  {adminsLoading ? "Loading..." : `${adminsList?.length ?? 0} admin${adminsList?.length === 1 ? "" : "s"}`}
+                </p>
+              </div>
+            </header>
+
+            <div style={{ maxWidth: 520 }}>
+              <h2 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "0.75rem" }}>Grant Admin Access</h2>
+              {adminActionMessage && (
+                <div
+                  className={adminActionMessage.type === "success" ? "success-message" : "error-message"}
+                  style={{ marginBottom: "0.75rem" }}
+                  data-testid="text-admin-action-message"
+                >
+                  {adminActionMessage.text}
+                </div>
+              )}
+              <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem" }}>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="Enter username"
+                  value={adminUsername}
+                  onChange={(e) => { setAdminUsername(e.target.value); setAdminActionMessage(null); }}
+                  data-testid="input-admin-username"
+                  style={{ flex: 1 }}
+                />
+                <button
+                  className="export-button"
+                  disabled={!adminUsername.trim() || grantAdminMutation.isPending}
+                  onClick={() => grantAdminMutation.mutate(adminUsername.trim())}
+                  data-testid="button-grant-admin"
+                >
+                  <Shield size={16} />
+                  {grantAdminMutation.isPending ? "Granting..." : "Grant Admin"}
+                </button>
+              </div>
+
+              <h2 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "0.75rem" }}>Current Admins</h2>
+              {adminsLoading ? (
+                <div className="loading-message" data-testid="text-admins-loading">Loading...</div>
+              ) : adminsList && adminsList.length > 0 ? (
+                <table className="emails-table">
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Admin Since</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {adminsList.map((admin) => (
+                      <tr key={admin.username} data-testid={`row-admin-${admin.username}`}>
+                        <td className="email-cell" data-testid={`text-admin-username-${admin.username}`}>
+                          {admin.username}
+                        </td>
+                        <td className="date-cell" data-testid={`text-admin-since-${admin.username}`}>
+                          {new Date(admin.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </td>
+                        <td>
+                          <button
+                            className="delete-button"
+                            onClick={() => revokeAdminMutation.mutate(admin.username)}
+                            disabled={revokeAdminMutation.isPending}
+                            data-testid={`button-revoke-admin-${admin.username}`}
+                          >
+                            Revoke
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="empty-state">
+                  <p data-testid="text-admins-empty">No admins found.</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </main>

@@ -333,6 +333,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showPlacesLived: profile.showPlacesLived,
         favoriteTags: profile.favoriteTags,
         misinfoSource: profile.misinfoSource,
+        isAdmin: profile.isAdmin ?? false,
       });
     } catch (error) {
       console.error("GET /api/me error:", error);
@@ -388,6 +389,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showPlacesLived: updated.showPlacesLived,
         favoriteTags: updated.favoriteTags,
         misinfoSource: updated.misinfoSource,
+        isAdmin: updated.isAdmin ?? false,
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -395,6 +397,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("PUT /api/me error:", error);
       res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  // GET /api/users/:username — public profile lookup (used for badges + profile pages)
+  app.get("/api/users/:username", async (req, res) => {
+    try {
+      const { username } = req.params;
+      const [profile] = await db.select({
+        id: userProfiles.id,
+        username: userProfiles.username,
+        bio: userProfiles.bio,
+        avatarUrl: userProfiles.avatarUrl,
+        currentLocation: userProfiles.currentLocation,
+        showCurrentLocation: userProfiles.showCurrentLocation,
+        placesLived: userProfiles.placesLived,
+        showPlacesLived: userProfiles.showPlacesLived,
+        favoriteTags: userProfiles.favoriteTags,
+        misinfoSource: userProfiles.misinfoSource,
+        isAdmin: userProfiles.isAdmin,
+        createdAt: userProfiles.createdAt,
+      })
+        .from(userProfiles)
+        .where(eq(userProfiles.username, username))
+        .limit(1);
+
+      if (!profile) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.json(profile);
+    } catch (error) {
+      console.error("GET /api/users/:username error:", error);
+      res.status(500).json({ message: "Failed to fetch user profile" });
+    }
+  });
+
+  // POST /api/admin/grant-admin — grant admin status to a user by username
+  app.post("/api/admin/grant-admin", requireAuth, async (req, res) => {
+    try {
+      const { username } = req.body;
+      if (!username) return res.status(400).json({ message: "Username is required" });
+
+      const [profile] = await db
+        .update(userProfiles)
+        .set({ isAdmin: true, updatedAt: new Date() })
+        .where(eq(userProfiles.username, username))
+        .returning({ username: userProfiles.username, isAdmin: userProfiles.isAdmin });
+
+      if (!profile) return res.status(404).json({ message: "User not found" });
+      return res.json({ message: `${username} is now an admin`, profile });
+    } catch (error) {
+      console.error("POST /api/admin/grant-admin error:", error);
+      res.status(500).json({ message: "Failed to grant admin" });
+    }
+  });
+
+  // POST /api/admin/revoke-admin — revoke admin status from a user by username
+  app.post("/api/admin/revoke-admin", requireAuth, async (req, res) => {
+    try {
+      const { username } = req.body;
+      if (!username) return res.status(400).json({ message: "Username is required" });
+
+      const [profile] = await db
+        .update(userProfiles)
+        .set({ isAdmin: false, updatedAt: new Date() })
+        .where(eq(userProfiles.username, username))
+        .returning({ username: userProfiles.username, isAdmin: userProfiles.isAdmin });
+
+      if (!profile) return res.status(404).json({ message: "User not found" });
+      return res.json({ message: `${username} is no longer an admin`, profile });
+    } catch (error) {
+      console.error("POST /api/admin/revoke-admin error:", error);
+      res.status(500).json({ message: "Failed to revoke admin" });
+    }
+  });
+
+  // GET /api/admin/admins — list all admin users
+  app.get("/api/admin/admins", requireAuth, async (req, res) => {
+    try {
+      const admins = await db
+        .select({ username: userProfiles.username, createdAt: userProfiles.createdAt })
+        .from(userProfiles)
+        .where(eq(userProfiles.isAdmin, true));
+      return res.json(admins);
+    } catch (error) {
+      console.error("GET /api/admin/admins error:", error);
+      res.status(500).json({ message: "Failed to fetch admins" });
     }
   });
 

@@ -19,6 +19,7 @@ import FeedArticleCard from "@/components/FeedArticleCard";
 import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
+import { AdminBadge } from "@/components/AdminBadge";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "fact-updates";
@@ -2326,6 +2327,7 @@ export default function UserDashboard() {
                       <div className="user-profile-name-row">
                         <h2 className="user-profile-username" data-testid="text-username">
                           {user.username}
+                          {user.isAdmin && <AdminBadge className="ml-2" />}
                         </h2>
                         <button
                           className="user-profile-edit-button"
