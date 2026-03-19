@@ -91,8 +91,19 @@ const SAMPLE_COUNTRIES = [
 ];
 
 const SAMPLE_US_STATES = [
-  "California", "Florida", "Georgia", "Illinois", "Massachusetts",
-  "New York", "Ohio", "Pennsylvania", "Texas", "Washington",
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
 ];
 
 interface LocationSelectProps {

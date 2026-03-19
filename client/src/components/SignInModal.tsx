@@ -35,16 +35,19 @@ const SAMPLE_COUNTRIES = [
 ];
 
 const SAMPLE_US_STATES = [
+  "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
   "California",
+  "Colorado",
+  "Connecticut",
+  "Delaware",
   "Florida",
   "Georgia",
+  "Hawaii",
+  "Idaho",
   "Illinois",
-  "Massachusetts",
-  "New York",
-  "Ohio",
-  "Pennsylvania",
-  "Texas",
-  "Washington",
 ];
 
 interface CountrySelectProps {
