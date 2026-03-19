@@ -85,9 +85,65 @@ function getCategoryColor(categories: string[]): string {
 }
 
 
-const SAMPLE_COUNTRIES = [
-  "Australia", "Brazil", "Canada", "France", "Germany",
-  "India", "Japan", "Mexico", "Nigeria", "United Kingdom", "United States",
+const PINNED_COUNTRIES = ["United States", "Canada"];
+
+const ALL_COUNTRIES = [
+  "Afghanistan",
+  "Albania",
+  "Algeria",
+  "Andorra",
+  "Angola",
+  "Antigua & Deps",
+  "Argentina",
+  "Armenia",
+  "Australia",
+  "Austria",
+  "Azerbaijan",
+  "Bahamas",
+  "Bahrain",
+  "Bangladesh",
+  "Barbados",
+  "Belarus",
+  "Belgium",
+  "Belize",
+  "Benin",
+  "Bhutan",
+  "Bolivia",
+  "Bosnia Herzegovina",
+  "Botswana",
+  "Brazil",
+  "Brunei",
+  "Bulgaria",
+  "Burkina",
+  "Burundi",
+  "Cambodia",
+  "Cameroon",
+  "Cape Verde",
+  "Central African Rep",
+  "Chad",
+  "Chile",
+  "China",
+  "Colombia",
+  "Comoros",
+  "Congo",
+  "Congo {Democratic Rep}",
+  "Costa Rica",
+  "Croatia",
+  "Cuba",
+  "Cyprus",
+  "Czech Republic",
+  "Denmark",
+  "Djibouti",
+  "Dominica",
+  "Dominican Republic",
+  "East Timor",
+  "Ecuador",
+  "Egypt",
+  "El Salvador",
+  "Equatorial Guinea",
+  "Eritrea",
+  "Estonia",
+  "Ethiopia",
 ];
 
 const SAMPLE_US_STATES = [
@@ -156,9 +212,11 @@ function LocationSelect({ value, onChange, placeholder = "Search country...", te
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const filtered = SAMPLE_COUNTRIES.filter((c) =>
-    c.toLowerCase().includes(query.toLowerCase())
-  );
+  const q = query.toLowerCase();
+  const filteredPinned = PINNED_COUNTRIES.filter(c => c.toLowerCase().includes(q));
+  const filteredMain = ALL_COUNTRIES.filter(c => c.toLowerCase().includes(q));
+  const showDivider = filteredPinned.length > 0 && filteredMain.length > 0;
+  const hasResults = filteredPinned.length > 0 || filteredMain.length > 0;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -196,21 +254,32 @@ function LocationSelect({ value, onChange, placeholder = "Search country...", te
       </div>
       {isOpen && (
         <div className="signin-country-dropdown" data-testid={`${testId}-dropdown`}>
-          {filtered.length > 0 ? (
-            filtered.map((country) => (
-              <div
-                key={country}
-                className={`signin-country-option${value === country ? " signin-country-option-selected" : ""}`}
-                onClick={() => {
-                  onChange(country);
-                  setQuery("");
-                  setIsOpen(false);
-                }}
-                data-testid={`${testId}-option-${country.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                {country}
-              </div>
-            ))
+          {hasResults ? (
+            <>
+              {filteredPinned.map((country) => (
+                <div
+                  key={country}
+                  className={`signin-country-option${value === country ? " signin-country-option-selected" : ""}`}
+                  onClick={() => { onChange(country); setQuery(""); setIsOpen(false); }}
+                  data-testid={`${testId}-option-${country.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {country}
+                </div>
+              ))}
+              {showDivider && (
+                <div style={{ height: 1, background: "#d1d5db", margin: "4px 8px" }} />
+              )}
+              {filteredMain.map((country) => (
+                <div
+                  key={country}
+                  className={`signin-country-option${value === country ? " signin-country-option-selected" : ""}`}
+                  onClick={() => { onChange(country); setQuery(""); setIsOpen(false); }}
+                  data-testid={`${testId}-option-${country.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {country}
+                </div>
+              ))}
+            </>
           ) : (
             <div className="signin-country-option" style={{ color: "#999", cursor: "default" }}>
               No results
@@ -358,12 +427,13 @@ export default function UserDashboard() {
   const [notificationCount] = useState(3);
 
 
+  const allCountries = [...PINNED_COUNTRIES, ...ALL_COUNTRIES];
   const parseLocation = (loc: string) => {
     const parts = loc.split(", ");
-    if (parts.length === 2 && SAMPLE_COUNTRIES.includes(parts[1])) {
+    if (parts.length === 2 && allCountries.includes(parts[1])) {
       return { country: parts[1], usState: parts[1] === "United States" ? parts[0] : "" };
     }
-    if (SAMPLE_COUNTRIES.includes(loc)) {
+    if (allCountries.includes(loc)) {
       return { country: loc, usState: "" };
     }
     return { country: loc, usState: "" };
