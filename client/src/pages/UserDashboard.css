@@ -137,6 +137,11 @@
   color: #878787;
 }
 
+.location-flag {
+  font-style: normal;
+  line-height: 1;
+}
+
 .user-profile-places-lived {
   display: flex;
   align-items: center;

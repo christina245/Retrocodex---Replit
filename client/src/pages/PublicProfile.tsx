@@ -11,6 +11,7 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import { AdminBadge } from "@/components/AdminBadge";
+import { getCountryFlag } from "@/lib/countryFlags";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
@@ -249,6 +250,9 @@ export default function PublicProfile() {
                   <div className="user-profile-current-location">
                     <span className="user-profile-location-item" data-testid="text-public-current-location">
                       <MapPin size={14} />
+                      {getCountryFlag(profileData.currentLocation) && (
+                        <span className="location-flag" aria-hidden="true">{getCountryFlag(profileData.currentLocation)}</span>
+                      )}
                       {profileData.currentLocation}
                     </span>
                   </div>
@@ -262,6 +266,9 @@ export default function PublicProfile() {
                           <span className="user-profile-separator">  {"\u00B7"}  </span>
                         )}
                         <span className="user-profile-place-item" data-testid={`text-public-place-lived-${index}`}>
+                          {getCountryFlag(loc) && (
+                            <span className="location-flag" aria-hidden="true">{getCountryFlag(loc)}</span>
+                          )}
                           {loc}
                         </span>
                       </span>

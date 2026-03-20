@@ -20,6 +20,7 @@ import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
 import { AdminBadge } from "@/components/AdminBadge";
+import { getCountryFlag } from "@/lib/countryFlags";
 import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "fact-updates";
@@ -2348,6 +2349,9 @@ export default function UserDashboard() {
                           {user.currentLocation ? (
                             <span className="user-profile-location-item" data-testid="text-current-location">
                               <MapPin size={14} />
+                              {getCountryFlag(user.currentLocation) && (
+                                <span className="location-flag" aria-hidden="true">{getCountryFlag(user.currentLocation)}</span>
+                              )}
                               {user.currentLocation}
                             </span>
                           ) : (
@@ -2363,6 +2367,9 @@ export default function UserDashboard() {
                                   <span className="user-profile-separator">  {"\u00B7"}  </span>
                                 )}
                                 <span className="user-profile-place-item" data-testid={`text-place-lived-${index}`}>
+                                  {getCountryFlag(loc) && (
+                                    <span className="location-flag" aria-hidden="true">{getCountryFlag(loc)}</span>
+                                  )}
                                   {loc}
                                 </span>
                               </span>
