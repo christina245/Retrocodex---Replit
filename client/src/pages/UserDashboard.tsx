@@ -1138,8 +1138,16 @@ export default function UserDashboard() {
                           <button
                             className="for-you-select-tags-button"
                             onClick={() => {
+                              const parsed = parseLocation(user?.currentLocation || "");
+                              setEditUsername(user?.username || "");
+                              setEditMisinfo(user?.misinfoSource || "");
                               setEditProfilePhoto(user?.profilePhoto || "");
+                              setEditCurrentCountry(parsed.country);
+                              setEditCurrentState(parsed.usState);
+                              setEditShowCurrentLocation(user?.showCurrentLocation || false);
                               setEditPlacesLived((user?.placesLived && user.placesLived.length > 0) ? user.placesLived.map((p) => parseLocation(p)) : [{ country: "", usState: "" }, { country: "", usState: "" }]);
+                              setEditShowPlacesLived(user?.showPlacesLived || false);
+                              setEditTags(user?.favoriteTags || []);
                               setEditModalOpen(true);
                             }}
                             data-testid="button-select-interests"
@@ -2333,8 +2341,16 @@ export default function UserDashboard() {
                         <button
                           className="user-profile-edit-button"
                           onClick={() => {
+                            const parsed = parseLocation(user?.currentLocation || "");
+                            setEditUsername(user?.username || "");
+                            setEditMisinfo(user?.misinfoSource || "");
                             setEditProfilePhoto(user?.profilePhoto || "");
+                            setEditCurrentCountry(parsed.country);
+                            setEditCurrentState(parsed.usState);
+                            setEditShowCurrentLocation(user?.showCurrentLocation || false);
                             setEditPlacesLived((user?.placesLived && user.placesLived.length > 0) ? user.placesLived.map((p) => parseLocation(p)) : [{ country: "", usState: "" }, { country: "", usState: "" }]);
+                            setEditShowPlacesLived(user?.showPlacesLived || false);
+                            setEditTags(user?.favoriteTags || []);
                             setEditModalOpen(true);
                           }}
                           aria-label="Edit profile"
