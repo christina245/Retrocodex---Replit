@@ -100,6 +100,7 @@
   color: #2C2C2C;
   margin: 0;
   line-height: 1.2;
+  
 }
 
 .user-profile-edit-button {
@@ -140,6 +141,7 @@
 .location-flag {
   font-style: normal;
   line-height: 1;
+  margin-right: 5px;
 }
 
 .user-profile-places-lived {
