@@ -2346,15 +2346,16 @@ export default function UserDashboard() {
 
                       <div className="user-profile-locations-wrapper" data-testid="user-profile-locations">
                         <div className="user-profile-current-location">
-                          {user.currentLocation ? (
-                            <span className="user-profile-location-item" data-testid="text-current-location">
-                              <MapPin size={14} />
-                              {getCountryFlag(user.currentLocation) && (
-                                <span className="location-flag" aria-hidden="true">{getCountryFlag(user.currentLocation)}</span>
-                              )}
-                              {user.currentLocation}
-                            </span>
-                          ) : (
+                          {user.currentLocation ? (() => {
+                            const flag = getCountryFlag(user.currentLocation);
+                            return (
+                              <span className="user-profile-location-item" data-testid="text-current-location">
+                                <MapPin size={14} />
+                                {flag && <span className="location-flag" aria-hidden="true">{flag}</span>}
+                                {user.currentLocation}
+                              </span>
+                            );
+                          })() : (
                             <span className="user-profile-empty-text" data-testid="text-location-empty">--</span>
                           )}
                         </div>
@@ -2367,9 +2368,7 @@ export default function UserDashboard() {
                                   <span className="user-profile-separator">  {"\u00B7"}  </span>
                                 )}
                                 <span className="user-profile-place-item" data-testid={`text-place-lived-${index}`}>
-                                  {getCountryFlag(loc) && (
-                                    <span className="location-flag" aria-hidden="true">{getCountryFlag(loc)}</span>
-                                  )}
+                                  {(() => { const f = getCountryFlag(loc); return f ? <span className="location-flag" aria-hidden="true">{f}</span> : null; })()}
                                   {loc}
                                 </span>
                               </span>

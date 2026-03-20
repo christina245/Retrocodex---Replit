@@ -251,7 +251,9 @@ const COUNTRY_FLAGS: Record<string, string> = {
 
 export function getCountryFlag(location: string): string {
   if (!location) return "";
-  const parts = location.split(", ");
+  const trimmed = location.trim();
+  if (COUNTRY_FLAGS[trimmed]) return COUNTRY_FLAGS[trimmed];
+  const parts = trimmed.split(", ");
   const country = parts[parts.length - 1].trim();
   return COUNTRY_FLAGS[country] ?? "";
 }

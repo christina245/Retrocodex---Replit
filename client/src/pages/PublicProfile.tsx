@@ -250,9 +250,7 @@ export default function PublicProfile() {
                   <div className="user-profile-current-location">
                     <span className="user-profile-location-item" data-testid="text-public-current-location">
                       <MapPin size={14} />
-                      {getCountryFlag(profileData.currentLocation) && (
-                        <span className="location-flag" aria-hidden="true">{getCountryFlag(profileData.currentLocation)}</span>
-                      )}
+                      {(() => { const f = getCountryFlag(profileData.currentLocation); return f ? <span className="location-flag" aria-hidden="true">{f}</span> : null; })()}
                       {profileData.currentLocation}
                     </span>
                   </div>
@@ -266,9 +264,7 @@ export default function PublicProfile() {
                           <span className="user-profile-separator">  {"\u00B7"}  </span>
                         )}
                         <span className="user-profile-place-item" data-testid={`text-public-place-lived-${index}`}>
-                          {getCountryFlag(loc) && (
-                            <span className="location-flag" aria-hidden="true">{getCountryFlag(loc)}</span>
-                          )}
+                          {(() => { const f = getCountryFlag(loc); return f ? <span className="location-flag" aria-hidden="true">{f}</span> : null; })()}
                           {loc}
                         </span>
                       </span>
