@@ -13,8 +13,6 @@ interface SourceEntry {
   value: string;
 }
 
-const RATE_LIMIT_MESSAGE = "You've reached the 5 submission limit for today. Try again tomorrow.";
-
 export default function FactSubmissionFormPage() {
   const { isLoggedIn, isLoading } = useAuth();
   const [, navigate] = useLocation();
@@ -30,6 +28,7 @@ export default function FactSubmissionFormPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [rateLimited, setRateLimited] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   if (!isLoading && !isLoggedIn) {
@@ -39,6 +38,7 @@ export default function FactSubmissionFormPage() {
 
   const hasValidSource = sources.some(s => s.value.trim().length >= 10);
   const canSubmit =
+    !rateLimited &&
     mythHeader.trim().length >= 10 &&
     truthHeader.trim().length >= 10 &&
     hasValidSource &&
@@ -99,7 +99,9 @@ export default function FactSubmissionFormPage() {
       });
 
       if (res.status === 429) {
-        setSubmitError(RATE_LIMIT_MESSAGE);
+        const data = await res.json();
+        setSubmitError(data.message || "You've reached the 5 submission limit for today. Try again tomorrow.");
+        setRateLimited(true);
         setIsSubmitting(false);
         return;
       }
@@ -169,18 +171,17 @@ export default function FactSubmissionFormPage() {
 
                 <form className="fact-form" onSubmit={handleSubmit} data-testid="fact-submission-form">
 
-                  {/* Section 1: Myth Header */}
+                  {/* Section 1: What You Learned (myth header) */}
                   <div className="fact-form-section">
                     <div className="fact-form-section-label">
                       <X className="fact-form-section-icon myth-icon" size={14} strokeWidth={2.5} />
-                      <span className="fact-form-label-text">MYTH HEADER <span className="fact-form-required-star">*</span></span>
+                      <span className="fact-form-label-text">WHAT YOU LEARNED <span className="fact-form-required-star">*</span></span>
                     </div>
                     <p className="fact-form-field-hint">
                       The commonly believed claim — written as if it were true. (e.g. "We only use 10% of our brains.")
                     </p>
-                    <input
-                      type="text"
-                      className="fact-form-input"
+                    <textarea
+                      className="fact-form-textarea fact-form-textarea-header"
                       value={mythHeader}
                       onChange={e => setMythHeader(e.target.value)}
                       placeholder="The widely believed claim..."
@@ -194,13 +195,13 @@ export default function FactSubmissionFormPage() {
                   <div className="fact-form-section">
                     <div className="fact-form-section-label">
                       <X className="fact-form-section-icon myth-icon" size={14} strokeWidth={2.5} />
-                      <span className="fact-form-label-text">MYTH DETAILS</span>
+                      <span className="fact-form-label-text">DETAILS</span>
                     </div>
                     <p className="fact-form-field-hint">
                       Explain where this myth comes from or how it spread. Markdown is supported.
                     </p>
                     <textarea
-                      className="fact-form-textarea fact-form-textarea-md"
+                      className="fact-form-textarea fact-form-textarea-details"
                       value={mythDetails}
                       onChange={e => setMythDetails(e.target.value)}
                       placeholder="Background on the myth..."
@@ -210,18 +211,17 @@ export default function FactSubmissionFormPage() {
                     <span className="fact-form-char-count">{mythDetails.length}/2000</span>
                   </div>
 
-                  {/* Section 3: Truth Header */}
+                  {/* Section 3: Current Understanding (truth header) */}
                   <div className="fact-form-section">
                     <div className="fact-form-section-label">
                       <Check className="fact-form-section-icon truth-icon" size={14} strokeWidth={2.5} />
-                      <span className="fact-form-label-text">TRUTH HEADER <span className="fact-form-required-star">*</span></span>
+                      <span className="fact-form-label-text">CURRENT UNDERSTANDING AS OF 2026 <span className="fact-form-required-star">*</span></span>
                     </div>
                     <p className="fact-form-field-hint">
                       The corrected claim — the actual truth. (e.g. "We use virtually all of our brain's regions.")
                     </p>
-                    <input
-                      type="text"
-                      className="fact-form-input"
+                    <textarea
+                      className="fact-form-textarea fact-form-textarea-header"
                       value={truthHeader}
                       onChange={e => setTruthHeader(e.target.value)}
                       placeholder="The actual truth..."
@@ -235,13 +235,13 @@ export default function FactSubmissionFormPage() {
                   <div className="fact-form-section">
                     <div className="fact-form-section-label">
                       <Check className="fact-form-section-icon truth-icon" size={14} strokeWidth={2.5} />
-                      <span className="fact-form-label-text">TRUTH DETAILS</span>
+                      <span className="fact-form-label-text">DETAILS</span>
                     </div>
                     <p className="fact-form-field-hint">
                       Explain the evidence behind the truth. Markdown is supported.
                     </p>
                     <textarea
-                      className="fact-form-textarea fact-form-textarea-md"
+                      className="fact-form-textarea fact-form-textarea-details"
                       value={truthDetails}
                       onChange={e => setTruthDetails(e.target.value)}
                       placeholder="Explain the evidence..."
@@ -307,7 +307,7 @@ export default function FactSubmissionFormPage() {
                       Any nuances, caveats, or counterpoints worth noting. (Optional)
                     </p>
                     <textarea
-                      className="fact-form-textarea fact-form-textarea-lg"
+                      className="fact-form-textarea fact-form-textarea-details"
                       value={considerations}
                       onChange={e => setConsiderations(e.target.value)}
                       placeholder="Edge cases or nuances..."
@@ -326,7 +326,7 @@ export default function FactSubmissionFormPage() {
                       Anything else you'd like us to know. (Optional)
                     </p>
                     <textarea
-                      className="fact-form-textarea fact-form-textarea-lg"
+                      className="fact-form-textarea fact-form-textarea-details"
                       value={otherDetails}
                       onChange={e => setOtherDetails(e.target.value)}
                       placeholder="Any additional context..."
@@ -334,6 +334,9 @@ export default function FactSubmissionFormPage() {
                       data-testid="input-other-details"
                     />
                     <span className="fact-form-char-count">{otherDetails.length}/4000</span>
+                    <p className="fact-form-other-note">
+                      If you have additional media, screenshots, or files relevant to this submission, you can email them to <span className="fact-form-email">submissions@retrocodex.com</span> with the subject line matching your myth header.
+                    </p>
                   </div>
 
                   {submitError && (
@@ -347,7 +350,7 @@ export default function FactSubmissionFormPage() {
                       disabled={!canSubmit}
                       data-testid="button-submit-form"
                     >
-                      {isSubmitting ? "Submitting…" : "Submit fact"}
+                      {isSubmitting ? "Submitting…" : "Submit fact for review"}
                     </button>
                     <p className="fact-form-submit-note">
                       You can submit up to 5 facts every 24 hours.

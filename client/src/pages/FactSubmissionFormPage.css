@@ -157,12 +157,14 @@
   border-color: #2C2C2C;
 }
 
-.fact-form-textarea-md {
-  min-height: 100px;
+.fact-form-textarea-header {
+  min-height: 150px;
+  height: 150px;
 }
 
-.fact-form-textarea-lg {
-  min-height: 80px;
+.fact-form-textarea-details {
+  min-height: 250px;
+  height: 250px;
 }
 
 .fact-form-source-row {
@@ -213,6 +215,19 @@
 .fact-form-add-source:hover {
   border-color: #2C2C2C;
   color: #2C2C2C;
+}
+
+.fact-form-other-note {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: #666666;
+  margin: 12px 0 0 0;
+  line-height: 19px;
+}
+
+.fact-form-email {
+  color: #2C2C2C;
+  font-weight: 500;
 }
 
 .fact-form-error {
