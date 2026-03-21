@@ -21,6 +21,7 @@ import GenderSexualityPage from "@/pages/GenderSexualityPage";
 import OtherCategoriesPage from "@/pages/OtherCategoriesPage";
 import AboutPage from "@/pages/AboutPage";
 import SubmitFactPage from "@/pages/SubmitFactPage";
+import FactSubmissionFormPage from "@/pages/FactSubmissionFormPage";
 import NotFound from "@/pages/not-found";
 
 import FactsByTagPage from "@/pages/FactsByTagPage";
@@ -68,6 +69,7 @@ function Router() {
       <Route path="/category/other/holidays" component={HolidaysPage} />
       <Route path="/about" component={AboutPage} />
       <Route path="/submit" component={SubmitFactPage} />
+      <Route path="/submit/form" component={FactSubmissionFormPage} />
       <Route path="/tags/:tagSlug" component={FactsByTagPage} />
       <Route path="/search/:query" component={SearchResultsPage} />
       <Route path="/dashboard" component={UserDashboard} />

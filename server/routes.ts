@@ -1,13 +1,13 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import { eq } from "drizzle-orm";
+import { eq, gte, count } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
@@ -991,6 +991,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching newsletter subscriptions:", error);
       res.status(500).json({ message: "Failed to fetch newsletter subscriptions" });
+    }
+  });
+
+  // ==================== FACT SUBMISSIONS ====================
+
+  // POST /api/submissions — authenticated users submit a fact (max 5 per 24h)
+  app.post("/api/submissions", requireUser, async (req, res) => {
+    try {
+      const userId = req.session.userId!;
+
+      // Rate limit: max 5 submissions per 24 hours
+      const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const recentRows = await db
+        .select({ createdAt: factSubmissions.createdAt })
+        .from(factSubmissions)
+        .where(eq(factSubmissions.userId, userId));
+      const last24h = recentRows.filter(r => r.createdAt && r.createdAt >= since).length;
+
+      if (last24h >= 5) {
+        return res.status(429).json({ message: "You have reached the limit of 5 submissions per 24 hours. Please try again later." });
+      }
+
+      const data = insertFactSubmissionSchema.parse(req.body);
+
+      // Fetch the username from the profile
+      const [profile] = await db.select({ username: userProfiles.username })
+        .from(userProfiles)
+        .where(eq(userProfiles.id, userId))
+        .limit(1);
+
+      if (!profile) {
+        return res.status(401).json({ message: "User profile not found." });
+      }
+
+      const [submission] = await db.insert(factSubmissions)
+        .values({
+          userId,
+          username: profile.username,
+          mythHeader: data.mythHeader,
+          mythDetails: data.mythDetails || "",
+          truthHeader: data.truthHeader,
+          truthDetails: data.truthDetails || "",
+          sources: data.sources,
+          considerations: data.considerations || "",
+          otherDetails: data.otherDetails || "",
+          status: "pending",
+        })
+        .returning();
+
+      return res.status(201).json(submission);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid submission data" });
+      }
+      console.error("POST /api/submissions error:", error);
+      res.status(500).json({ message: "Failed to submit fact. Please try again." });
+    }
+  });
+
+  // GET /api/submissions — admin: list all submissions (password protected)
+  app.get("/api/submissions", requireAuth, async (req, res) => {
+    try {
+      const submissions = await db.select()
+        .from(factSubmissions)
+        .orderBy(factSubmissions.createdAt);
+      return res.json(submissions);
+    } catch (error) {
+      console.error("GET /api/submissions error:", error);
+      res.status(500).json({ message: "Failed to fetch submissions" });
     }
   });
 

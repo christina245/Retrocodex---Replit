@@ -1,0 +1,348 @@
+.fact-form-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.fact-form-main {
+  flex: 1;
+  padding-top: 40px;
+  padding-bottom: 60px;
+}
+
+.fact-form-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.fact-form-title {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900;
+  font-size: 36px;
+  color: #2C2C2C;
+  margin: 0 0 12px 0;
+}
+
+.fact-form-subtitle {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #555555;
+  margin: 0 0 36px 0;
+  line-height: 22px;
+}
+
+.fact-form-required-star {
+  color: #FF5353;
+  font-weight: 700;
+}
+
+.fact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.fact-form-section {
+  border-top: 1px solid #E5E5E5;
+  padding: 28px 0 8px 0;
+}
+
+.fact-form-section:last-of-type {
+  border-bottom: 1px solid #E5E5E5;
+  padding-bottom: 28px;
+}
+
+.fact-form-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.fact-form-label-text {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2C2C2C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fact-form-section-icon {
+  flex-shrink: 0;
+}
+
+.myth-icon {
+  color: #FF5353;
+}
+
+.truth-icon {
+  color: #31A66B;
+}
+
+.sources-icon {
+  color: #2C2C2C;
+}
+
+.fact-form-field {
+  margin-bottom: 20px;
+}
+
+.fact-form-field-label {
+  display: block;
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #2C2C2C;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.fact-form-field-hint {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #666666;
+  margin: 0 0 8px 0;
+  line-height: 19px;
+}
+
+.fact-form-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #D0D0D0;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  color: #2C2C2C;
+  background: #FFFFFF;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.fact-form-input::placeholder {
+  color: #AAAAAA;
+}
+
+.fact-form-input:focus {
+  border-color: #2C2C2C;
+}
+
+.fact-form-input-url {
+  margin-top: 8px;
+}
+
+.fact-form-char-count {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #AAAAAA;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.fact-form-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #D0D0D0;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 15px;
+  color: #2C2C2C;
+  background: #FFFFFF;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.15s;
+  line-height: 22px;
+}
+
+.fact-form-textarea::placeholder {
+  color: #AAAAAA;
+}
+
+.fact-form-textarea:focus {
+  border-color: #2C2C2C;
+}
+
+.fact-form-source-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.fact-form-source-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.fact-form-remove-source {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 6px;
+  color: #AAAAAA;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.fact-form-remove-source:hover {
+  color: #FF5353;
+}
+
+.fact-form-add-source {
+  background: none;
+  border: 1px dashed #CCCCCC;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #666666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: border-color 0.15s, color 0.15s;
+  margin-top: 4px;
+}
+
+.fact-form-add-source:hover {
+  border-color: #2C2C2C;
+  color: #2C2C2C;
+}
+
+.fact-form-error {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #FF5353;
+  margin: 16px 0 0 0;
+}
+
+.fact-form-actions {
+  padding-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.fact-form-submit-btn {
+  padding: 11px 28px;
+  background: #2C2C2C;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.fact-form-submit-btn:hover:not(.disabled) {
+  background: #111111;
+}
+
+.fact-form-submit-btn.disabled {
+  background: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.fact-form-submit-note {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: #AAAAAA;
+  margin: 0;
+}
+
+.fact-form-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 0;
+}
+
+.fact-form-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #31A66B;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.fact-form-success-title {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900;
+  font-size: 32px;
+  color: #2C2C2C;
+  margin: 0 0 16px 0;
+}
+
+.fact-form-success-body {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #555555;
+  line-height: 24px;
+  max-width: 480px;
+  margin: 0 0 32px 0;
+}
+
+.fact-form-success-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fact-form-secondary-btn {
+  padding: 11px 28px;
+  background: none;
+  border: 1px solid #D0D0D0;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #2C2C2C;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.fact-form-secondary-btn:hover {
+  border-color: #2C2C2C;
+}
+
+@media (max-width: 600px) {
+  .fact-form-title {
+    font-size: 28px;
+  }
+
+  .fact-form-wrapper {
+    padding: 0 16px;
+  }
+
+  .fact-form-submit-btn,
+  .fact-form-secondary-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .fact-form-actions {
+    align-items: stretch;
+  }
+}

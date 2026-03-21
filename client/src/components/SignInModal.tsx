@@ -443,6 +443,8 @@ function StateSelect({ value, onChange, testId }: StateSelectProps) {
 interface SignInModalProps {
   isOpen: boolean;
   onClose: () => void;
+  customTitle?: string;
+  onSuccessRedirect?: string;
 }
 
 type ModalScreen = "auth" | "locationSetup" | "topicSelection";
@@ -454,7 +456,7 @@ interface OtherCountryEntry {
 
 type TagsByCategory = Record<string, Record<string, string[]>>;
 
-export function SignInModal({ isOpen, onClose }: SignInModalProps) {
+export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect }: SignInModalProps) {
   const { login, register } = useAuth();
   const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
@@ -538,7 +540,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
       setIsSubmitting(false);
       if (result.success) {
         handleClose();
-        navigate("/dashboard");
+        navigate(onSuccessRedirect || "/dashboard");
       } else {
         setLoginError(result.error || "Invalid email or password.");
       }
@@ -784,7 +786,7 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
                   setIsSubmitting(false);
                   if (result.success) {
                     handleClose();
-                    navigate("/dashboard");
+                    navigate(onSuccessRedirect || "/dashboard");
                   } else {
                     setLoginError(result.error || "Registration failed. Please try again.");
                     setScreen("auth");
@@ -936,9 +938,11 @@ export function SignInModal({ isOpen, onClose }: SignInModalProps) {
               <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
 
               <p className="signin-description" data-testid="text-signin-description">
-                {isSignUp
-                  ? "Create an account to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."
-                  : "Log in to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."}
+                {customTitle
+                  ? customTitle
+                  : isSignUp
+                    ? "Create an account to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."
+                    : "Log in to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."}
               </p>
 
               <form className="signin-form" onSubmit={handleSubmit}>

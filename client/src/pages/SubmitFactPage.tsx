@@ -1,16 +1,29 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
+import { SignInModal } from "@/components/SignInModal";
+import { useAuth } from "@/lib/auth";
 import "./SubmitFactPage.css";
 
 export default function SubmitFactPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasAgreed, setHasAgreed] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const [, navigate] = useLocation();
+
+  const handleSubmitClick = () => {
+    if (isLoggedIn) {
+      navigate("/submit/form");
+    } else {
+      setShowSignIn(true);
+    }
+  };
 
   return (
     <div className="submit-fact-page">
@@ -122,15 +135,13 @@ export default function SubmitFactPage() {
 
             <div className="submit-fact-button-wrapper">
               {hasAgreed ? (
-                <a 
-                  href="https://form.typeform.com/to/pal6ZbpG" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                <button
                   className="submit-fact-button active"
+                  onClick={handleSubmitClick}
                   data-testid="button-submit-fact-active"
                 >
                   Submit a Fact
-                </a>
+                </button>
               ) : (
                 <span 
                   className="submit-fact-button disabled"
@@ -149,6 +160,13 @@ export default function SubmitFactPage() {
       </main>
 
       <Footer />
+
+      <SignInModal
+        isOpen={showSignIn}
+        onClose={() => setShowSignIn(false)}
+        customTitle="Create an account or log in to submit a fact."
+        onSuccessRedirect="/submit/form"
+      />
     </div>
   );
 }

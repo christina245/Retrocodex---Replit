@@ -256,6 +256,35 @@ export const insertBlogPostSchema = z.object({
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
 export type BlogPost = typeof blogPosts.$inferSelect;
 
+// Fact submissions table — user-submitted entries awaiting admin review
+export const factSubmissions = pgTable("fact_submissions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  username: text("username").notNull(),
+  mythHeader: text("myth_header").notNull(),
+  mythDetails: text("myth_details").default(""),
+  truthHeader: text("truth_header").notNull(),
+  truthDetails: text("truth_details").default(""),
+  sources: text("sources").array().default([]),
+  considerations: text("considerations").default(""),
+  otherDetails: text("other_details").default(""),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertFactSubmissionSchema = z.object({
+  mythHeader: z.string().min(10, "Myth header must be at least 10 characters"),
+  mythDetails: z.string().optional().default(""),
+  truthHeader: z.string().min(10, "Truth header must be at least 10 characters"),
+  truthDetails: z.string().optional().default(""),
+  sources: z.array(z.string().min(1)).min(1, "At least one source is required"),
+  considerations: z.string().optional().default(""),
+  otherDetails: z.string().optional().default(""),
+});
+
+export type InsertFactSubmission = z.infer<typeof insertFactSubmissionSchema>;
+export type FactSubmission = typeof factSubmissions.$inferSelect;
+
 // Newsletter subscriptions table (separate from account signups)
 export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
