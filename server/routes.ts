@@ -7,7 +7,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import { eq, gte, count } from "drizzle-orm";
+import { eq, gte, count, and, sql } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
@@ -1003,11 +1003,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Rate limit: max 5 submissions per 24 hours
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
-      const recentRows = await db
-        .select({ createdAt: factSubmissions.createdAt })
+      const [countResult] = await db
+        .select({ count: sql<number>`count(*)::int` })
         .from(factSubmissions)
-        .where(eq(factSubmissions.userId, userId));
-      const last24h = recentRows.filter(r => r.createdAt && r.createdAt >= since).length;
+        .where(and(eq(factSubmissions.userId, userId), gte(factSubmissions.createdAt, since)));
+      const last24h = countResult?.count ?? 0;
 
       if (last24h >= 5) {
         return res.status(429).json({ message: "You've reached the 5 submission limit for today. Try again tomorrow." });

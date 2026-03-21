@@ -7,6 +7,7 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
+import { apiRequest } from "@/lib/queryClient";
 import "./FactSubmissionFormPage.css";
 
 interface SourceEntry {
@@ -83,40 +84,32 @@ export default function FactSubmissionFormPage() {
       .filter(s => s.length >= 1);
 
     try {
-      const res = await fetch("/api/submissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          mythHeader: mythHeader.trim(),
-          mythDetails: mythDetails.trim(),
-          truthHeader: truthHeader.trim(),
-          truthDetails: truthDetails.trim(),
-          sources: validSources,
-          considerations: considerations.trim(),
-          otherDetails: otherDetails.trim(),
-        }),
+      await apiRequest("POST", "/api/submissions", {
+        mythHeader: mythHeader.trim(),
+        mythDetails: mythDetails.trim(),
+        truthHeader: truthHeader.trim(),
+        truthDetails: truthDetails.trim(),
+        sources: validSources,
+        considerations: considerations.trim(),
+        otherDetails: otherDetails.trim(),
       });
-
-      if (res.status === 429) {
-        const data = await res.json();
-        setSubmitError(data.message || "You've reached the 5 submission limit for today. Try again tomorrow.");
-        setRateLimited(true);
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!res.ok) {
-        const data = await res.json();
-        setSubmitError(data.message || "Submission failed. Please try again.");
-        setIsSubmitting(false);
-        return;
-      }
 
       resetForm();
       setSubmitted(true);
-    } catch {
-      setSubmitError("Something went wrong. Please try again.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "";
+      if (message.startsWith("429:")) {
+        try {
+          const jsonStr = message.slice(4).trim();
+          const data = JSON.parse(jsonStr);
+          setSubmitError(data.message || "You've reached the 5 submission limit for today. Try again tomorrow.");
+        } catch {
+          setSubmitError("You've reached the 5 submission limit for today. Try again tomorrow.");
+        }
+        setRateLimited(true);
+      } else {
+        setSubmitError("Submission failed. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
