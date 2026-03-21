@@ -273,13 +273,13 @@ export const factSubmissions = pgTable("fact_submissions", {
 });
 
 export const insertFactSubmissionSchema = z.object({
-  mythHeader: z.string().min(10, "Myth header must be at least 10 characters"),
-  mythDetails: z.string().optional().default(""),
-  truthHeader: z.string().min(10, "Truth header must be at least 10 characters"),
-  truthDetails: z.string().optional().default(""),
+  mythHeader: z.string().min(10, "Myth header must be at least 10 characters").max(400, "Myth header must be 400 characters or less"),
+  mythDetails: z.string().max(2000, "Myth details must be 2000 characters or less").optional().default(""),
+  truthHeader: z.string().min(10, "Truth header must be at least 10 characters").max(400, "Truth header must be 400 characters or less"),
+  truthDetails: z.string().max(2000, "Truth details must be 2000 characters or less").optional().default(""),
   sources: z.array(z.string().min(1)).min(1, "At least one source is required"),
-  considerations: z.string().optional().default(""),
-  otherDetails: z.string().optional().default(""),
+  considerations: z.string().max(4000, "Considerations must be 4000 characters or less").optional().default(""),
+  otherDetails: z.string().max(4000, "Other details must be 4000 characters or less").optional().default(""),
 });
 
 export type InsertFactSubmission = z.infer<typeof insertFactSubmissionSchema>;

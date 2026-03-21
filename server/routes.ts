@@ -1010,7 +1010,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const last24h = recentRows.filter(r => r.createdAt && r.createdAt >= since).length;
 
       if (last24h >= 5) {
-        return res.status(429).json({ message: "You have reached the limit of 5 submissions per 24 hours. Please try again later." });
+        return res.status(429).json({ message: "You've reached the 5 submission limit for today. Try again tomorrow." });
       }
 
       const data = insertFactSubmissionSchema.parse(req.body);

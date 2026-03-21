@@ -10,9 +10,10 @@ import { useAuth } from "@/lib/auth";
 import "./FactSubmissionFormPage.css";
 
 interface SourceEntry {
-  citation: string;
-  link: string;
+  value: string;
 }
+
+const RATE_LIMIT_MESSAGE = "You've reached the 5 submission limit for today. Try again tomorrow.";
 
 export default function FactSubmissionFormPage() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -23,7 +24,7 @@ export default function FactSubmissionFormPage() {
   const [mythDetails, setMythDetails] = useState("");
   const [truthHeader, setTruthHeader] = useState("");
   const [truthDetails, setTruthDetails] = useState("");
-  const [sources, setSources] = useState<SourceEntry[]>([{ citation: "", link: "" }]);
+  const [sources, setSources] = useState<SourceEntry[]>([{ value: "" }, { value: "" }]);
   const [considerations, setConsiderations] = useState("");
   const [otherDetails, setOtherDetails] = useState("");
 
@@ -36,7 +37,7 @@ export default function FactSubmissionFormPage() {
     return null;
   }
 
-  const hasValidSource = sources.some(s => s.citation.trim().length >= 10);
+  const hasValidSource = sources.some(s => s.value.trim().length >= 10);
   const canSubmit =
     mythHeader.trim().length >= 10 &&
     truthHeader.trim().length >= 10 &&
@@ -45,7 +46,7 @@ export default function FactSubmissionFormPage() {
 
   const addSource = () => {
     if (sources.length < 10) {
-      setSources([...sources, { citation: "", link: "" }]);
+      setSources([...sources, { value: "" }]);
     }
   };
 
@@ -55,10 +56,21 @@ export default function FactSubmissionFormPage() {
     }
   };
 
-  const updateSource = (index: number, field: keyof SourceEntry, value: string) => {
+  const updateSource = (index: number, value: string) => {
     const updated = [...sources];
-    updated[index] = { ...updated[index], [field]: value };
+    updated[index] = { value };
     setSources(updated);
+  };
+
+  const resetForm = () => {
+    setMythHeader("");
+    setMythDetails("");
+    setTruthHeader("");
+    setTruthDetails("");
+    setSources([{ value: "" }, { value: "" }]);
+    setConsiderations("");
+    setOtherDetails("");
+    setSubmitError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,8 +79,8 @@ export default function FactSubmissionFormPage() {
     setIsSubmitting(true);
 
     const validSources = sources
-      .filter(s => s.citation.trim().length >= 1)
-      .map(s => s.link.trim() ? `${s.citation.trim()} — ${s.link.trim()}` : s.citation.trim());
+      .map(s => s.value.trim())
+      .filter(s => s.length >= 1);
 
     try {
       const res = await fetch("/api/submissions", {
@@ -87,8 +99,7 @@ export default function FactSubmissionFormPage() {
       });
 
       if (res.status === 429) {
-        const data = await res.json();
-        setSubmitError(data.message || "You have reached the submission limit for today. Please try again later.");
+        setSubmitError(RATE_LIMIT_MESSAGE);
         setIsSubmitting(false);
         return;
       }
@@ -100,6 +111,7 @@ export default function FactSubmissionFormPage() {
         return;
       }
 
+      resetForm();
       setSubmitted(true);
     } catch {
       setSubmitError("Something went wrong. Please try again.");
@@ -111,7 +123,7 @@ export default function FactSubmissionFormPage() {
   return (
     <div className="fact-form-page">
       <SEO
-        title="Submit a Fact | Retrocodex"
+        title="Submit a New Fact | Retrocodex"
         description="Submit a widely believed myth or misconception to Retrocodex for review."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
@@ -119,257 +131,234 @@ export default function FactSubmissionFormPage() {
       <HomepageCategoryNav sticky />
 
       <main className="fact-form-main">
-        <div className="fact-form-wrapper">
-          {submitted ? (
-            <div className="fact-form-success" data-testid="submission-success">
-              <div className="fact-form-success-icon">
-                <Check size={36} strokeWidth={2.5} />
+        <div className="fact-form-outer">
+          <div className="fact-form-wrapper">
+
+            {submitted ? (
+              <div className="fact-form-success" data-testid="submission-success">
+                <div className="fact-form-success-icon">
+                  <Check size={36} strokeWidth={2.5} />
+                </div>
+                <h1 className="fact-form-success-title">Submission received!</h1>
+                <p className="fact-form-success-body">
+                  Thank you for your submission. Our team will review it and may reach out if we need more information. We appreciate your contribution to making Retrocodex more comprehensive.
+                </p>
+                <div className="fact-form-success-actions">
+                  <button
+                    className="fact-form-submit-btn"
+                    onClick={() => setSubmitted(false)}
+                    data-testid="button-submit-another"
+                  >
+                    Submit another fact
+                  </button>
+                  <button
+                    className="fact-form-secondary-btn"
+                    onClick={() => navigate("/")}
+                    data-testid="button-go-home"
+                  >
+                    Go to homepage
+                  </button>
+                </div>
               </div>
-              <h1 className="fact-form-success-title">Submission received!</h1>
-              <p className="fact-form-success-body">
-                Thank you for your submission. Our team will review it and may reach out if we need more information. We appreciate your contribution to making Retrocodex more comprehensive.
-              </p>
-              <div className="fact-form-success-actions">
-                <button
-                  className="fact-form-submit-btn"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setMythHeader("");
-                    setMythDetails("");
-                    setTruthHeader("");
-                    setTruthDetails("");
-                    setSources([{ citation: "", link: "" }]);
-                    setConsiderations("");
-                    setOtherDetails("");
-                  }}
-                  data-testid="button-submit-another"
-                >
-                  Submit another fact
-                </button>
-                <button
-                  className="fact-form-secondary-btn"
-                  onClick={() => navigate("/")}
-                  data-testid="button-go-home"
-                >
-                  Go to homepage
-                </button>
-              </div>
-            </div>
-          ) : (
-            <>
-              <h1 className="fact-form-title" data-testid="text-form-title">Submit a fact</h1>
-              <p className="fact-form-subtitle">
-                Fields marked with <span className="fact-form-required-star">*</span> are required. Your submission will be reviewed by our team before being published.
-              </p>
+            ) : (
+              <>
+                <h1 className="fact-form-title" data-testid="text-form-title">Submit a new fact</h1>
+                <p className="fact-form-subtitle">
+                  Fields marked with <span className="fact-form-required-star">*</span> are required. Your submission will be reviewed before being published.
+                </p>
 
-              <form className="fact-form" onSubmit={handleSubmit} data-testid="fact-submission-form">
+                <form className="fact-form" onSubmit={handleSubmit} data-testid="fact-submission-form">
 
-                <div className="fact-form-section">
-                  <div className="fact-form-section-label">
-                    <X className="fact-form-section-icon myth-icon" size={16} strokeWidth={2.5} />
-                    <span className="fact-form-label-text">THE MYTH</span>
-                  </div>
-
-                  <div className="fact-form-field">
-                    <label className="fact-form-field-label" htmlFor="myth-header">
-                      MYTH HEADER <span className="fact-form-required-star">*</span>
-                    </label>
+                  {/* Section 1: Myth Header */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <X className="fact-form-section-icon myth-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">MYTH HEADER <span className="fact-form-required-star">*</span></span>
+                    </div>
                     <p className="fact-form-field-hint">
                       The commonly believed claim — written as if it were true. (e.g. "We only use 10% of our brains.")
                     </p>
                     <input
-                      id="myth-header"
                       type="text"
                       className="fact-form-input"
                       value={mythHeader}
                       onChange={e => setMythHeader(e.target.value)}
                       placeholder="The widely believed claim..."
-                      maxLength={275}
+                      maxLength={400}
                       data-testid="input-myth-header"
                     />
-                    <span className="fact-form-char-count">{mythHeader.length}/275</span>
+                    <span className="fact-form-char-count">{mythHeader.length}/400</span>
                   </div>
 
-                  <div className="fact-form-field">
-                    <label className="fact-form-field-label" htmlFor="myth-details">
-                      MYTH DETAILS
-                    </label>
+                  {/* Section 2: Myth Details */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <X className="fact-form-section-icon myth-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">MYTH DETAILS</span>
+                    </div>
                     <p className="fact-form-field-hint">
                       Explain where this myth comes from or how it spread. Markdown is supported.
                     </p>
                     <textarea
-                      id="myth-details"
-                      className="fact-form-textarea"
+                      className="fact-form-textarea fact-form-textarea-md"
                       value={mythDetails}
                       onChange={e => setMythDetails(e.target.value)}
                       placeholder="Background on the myth..."
-                      rows={4}
+                      maxLength={2000}
                       data-testid="input-myth-details"
                     />
-                  </div>
-                </div>
-
-                <div className="fact-form-section">
-                  <div className="fact-form-section-label">
-                    <Check className="fact-form-section-icon truth-icon" size={16} strokeWidth={2.5} />
-                    <span className="fact-form-label-text">THE TRUTH</span>
+                    <span className="fact-form-char-count">{mythDetails.length}/2000</span>
                   </div>
 
-                  <div className="fact-form-field">
-                    <label className="fact-form-field-label" htmlFor="truth-header">
-                      TRUTH HEADER <span className="fact-form-required-star">*</span>
-                    </label>
+                  {/* Section 3: Truth Header */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <Check className="fact-form-section-icon truth-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">TRUTH HEADER <span className="fact-form-required-star">*</span></span>
+                    </div>
                     <p className="fact-form-field-hint">
                       The corrected claim — the actual truth. (e.g. "We use virtually all of our brain's regions.")
                     </p>
                     <input
-                      id="truth-header"
                       type="text"
                       className="fact-form-input"
                       value={truthHeader}
                       onChange={e => setTruthHeader(e.target.value)}
                       placeholder="The actual truth..."
-                      maxLength={275}
+                      maxLength={400}
                       data-testid="input-truth-header"
                     />
-                    <span className="fact-form-char-count">{truthHeader.length}/275</span>
+                    <span className="fact-form-char-count">{truthHeader.length}/400</span>
                   </div>
 
-                  <div className="fact-form-field">
-                    <label className="fact-form-field-label" htmlFor="truth-details">
-                      TRUTH DETAILS
-                    </label>
+                  {/* Section 4: Truth Details */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <Check className="fact-form-section-icon truth-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">TRUTH DETAILS</span>
+                    </div>
                     <p className="fact-form-field-hint">
                       Explain the evidence behind the truth. Markdown is supported.
                     </p>
                     <textarea
-                      id="truth-details"
-                      className="fact-form-textarea"
+                      className="fact-form-textarea fact-form-textarea-md"
                       value={truthDetails}
                       onChange={e => setTruthDetails(e.target.value)}
                       placeholder="Explain the evidence..."
-                      rows={4}
+                      maxLength={2000}
                       data-testid="input-truth-details"
                     />
-                  </div>
-                </div>
-
-                <div className="fact-form-section">
-                  <div className="fact-form-section-label">
-                    <BookOpen className="fact-form-section-icon sources-icon" size={16} strokeWidth={2.5} />
-                    <span className="fact-form-label-text">SOURCES</span>
+                    <span className="fact-form-char-count">{truthDetails.length}/2000</span>
                   </div>
 
-                  <p className="fact-form-field-hint" style={{ marginBottom: "12px" }}>
-                    Provide at least one source supporting the truth. Include the citation and optionally a link. <span className="fact-form-required-star">*</span>
-                  </p>
+                  {/* Section 5: Sources */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <BookOpen className="fact-form-section-icon sources-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">SOURCES <span className="fact-form-required-star">*</span></span>
+                    </div>
+                    <p className="fact-form-field-hint">
+                      Provide at least one source supporting the truth. Include a citation and/or a link.
+                    </p>
 
-                  {sources.map((source, index) => (
-                    <div className="fact-form-source-row" key={index} data-testid={`source-row-${index}`}>
-                      <div className="fact-form-source-fields">
+                    {sources.map((source, index) => (
+                      <div className="fact-form-source-row" key={index} data-testid={`source-row-${index}`}>
                         <input
                           type="text"
-                          className="fact-form-input"
-                          value={source.citation}
-                          onChange={e => updateSource(index, "citation", e.target.value)}
-                          placeholder={`Source ${index + 1} citation (author, publication, year…)`}
+                          className="fact-form-input fact-form-source-input"
+                          value={source.value}
+                          onChange={e => updateSource(index, e.target.value)}
+                          placeholder="Link to scientific study or article."
                           data-testid={`input-source-citation-${index}`}
                         />
-                        <input
-                          type="url"
-                          className="fact-form-input fact-form-input-url"
-                          value={source.link}
-                          onChange={e => updateSource(index, "link", e.target.value)}
-                          placeholder="https://... (optional)"
-                          data-testid={`input-source-link-${index}`}
-                        />
+                        {sources.length > 1 && (
+                          <button
+                            type="button"
+                            className="fact-form-remove-source"
+                            onClick={() => removeSource(index)}
+                            aria-label="Remove source"
+                            data-testid={`button-remove-source-${index}`}
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        )}
                       </div>
-                      {sources.length > 1 && (
-                        <button
-                          type="button"
-                          className="fact-form-remove-source"
-                          onClick={() => removeSource(index)}
-                          aria-label="Remove source"
-                          data-testid={`button-remove-source-${index}`}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      )}
+                    ))}
+
+                    {sources.length < 10 && (
+                      <button
+                        type="button"
+                        className="fact-form-add-source"
+                        onClick={addSource}
+                        data-testid="button-add-source"
+                      >
+                        <Plus size={13} />
+                        Add another source
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Section 6: Considerations */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <span className="fact-form-label-text">CONSIDERATIONS</span>
                     </div>
-                  ))}
-
-                  {sources.length < 10 && (
-                    <button
-                      type="button"
-                      className="fact-form-add-source"
-                      onClick={addSource}
-                      data-testid="button-add-source"
-                    >
-                      <Plus size={14} />
-                      Add another source
-                    </button>
-                  )}
-                </div>
-
-                <div className="fact-form-section">
-                  <div className="fact-form-field">
-                    <label className="fact-form-field-label" htmlFor="considerations">
-                      CONSIDERATIONS
-                    </label>
                     <p className="fact-form-field-hint">
                       Any nuances, caveats, or counterpoints worth noting. (Optional)
                     </p>
                     <textarea
-                      id="considerations"
-                      className="fact-form-textarea"
+                      className="fact-form-textarea fact-form-textarea-lg"
                       value={considerations}
                       onChange={e => setConsiderations(e.target.value)}
                       placeholder="Edge cases or nuances..."
-                      rows={3}
+                      maxLength={4000}
                       data-testid="input-considerations"
                     />
+                    <span className="fact-form-char-count">{considerations.length}/4000</span>
                   </div>
 
-                  <div className="fact-form-field">
-                    <label className="fact-form-field-label" htmlFor="other-details">
-                      OTHER DETAILS
-                    </label>
+                  {/* Section 7: Other Details */}
+                  <div className="fact-form-section fact-form-section-last">
+                    <div className="fact-form-section-label">
+                      <span className="fact-form-label-text">OTHER DETAILS</span>
+                    </div>
                     <p className="fact-form-field-hint">
                       Anything else you'd like us to know. (Optional)
                     </p>
                     <textarea
-                      id="other-details"
-                      className="fact-form-textarea"
+                      className="fact-form-textarea fact-form-textarea-lg"
                       value={otherDetails}
                       onChange={e => setOtherDetails(e.target.value)}
                       placeholder="Any additional context..."
-                      rows={3}
+                      maxLength={4000}
                       data-testid="input-other-details"
                     />
+                    <span className="fact-form-char-count">{otherDetails.length}/4000</span>
                   </div>
-                </div>
 
-                {submitError && (
-                  <p className="fact-form-error" data-testid="text-submit-error">{submitError}</p>
-                )}
+                  {submitError && (
+                    <p className="fact-form-error" data-testid="text-submit-error">{submitError}</p>
+                  )}
 
-                <div className="fact-form-actions">
-                  <button
-                    type="submit"
-                    className={`fact-form-submit-btn${canSubmit ? "" : " disabled"}`}
-                    disabled={!canSubmit}
-                    data-testid="button-submit-form"
-                  >
-                    {isSubmitting ? "Submitting…" : "Submit fact"}
-                  </button>
-                  <p className="fact-form-submit-note">
-                    You can submit up to 5 facts every 24 hours.
-                  </p>
-                </div>
+                  <div className="fact-form-actions">
+                    <button
+                      type="submit"
+                      className={`fact-form-submit-btn${canSubmit ? "" : " disabled"}`}
+                      disabled={!canSubmit}
+                      data-testid="button-submit-form"
+                    >
+                      {isSubmitting ? "Submitting…" : "Submit fact"}
+                    </button>
+                    <p className="fact-form-submit-note">
+                      You can submit up to 5 facts every 24 hours.
+                    </p>
+                  </div>
 
-              </form>
-            </>
-          )}
+                </form>
+              </>
+            )}
+
+          </div>
         </div>
       </main>
 
