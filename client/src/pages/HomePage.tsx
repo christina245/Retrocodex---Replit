@@ -8,6 +8,9 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HomepageTabs, type HomepageTabType } from "@/components/HomepageTabs";
 import { FactCard, type Fact } from "@/components/FactCard";
 import { FactKey } from "@/components/FactKey";
+import { CategoryFilter } from "@/components/CategoryFilter";
+import { SortSelector, type SortOption } from "@/components/SortSelector";
+import { CATEGORIES } from "@shared/categories";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
@@ -19,6 +22,7 @@ import { DECADES } from "@shared/schema";
 import "./HomePage.css";
 
 const FACTS_PER_PAGE = 10;
+const DECADE_FACTS_PER_PAGE = 20;
 const MAX_RECENT_FACTS = 30;
 
 import photo1Columbus from "@assets/stock_images/christopher columbus.png";
@@ -156,6 +160,11 @@ export default function HomePage() {
   const [recentPage, setRecentPage] = useState(1);
   const [popularPage, setPopularPage] = useState(1);
   const [selectedDecade, setSelectedDecade] = useState<string>("all");
+  const [isDecadeLoading, setIsDecadeLoading] = useState(false);
+  const [decadeFilters, setDecadeFilters] = useState<string[]>([]);
+  const [decadeSort, setDecadeSort] = useState<SortOption>("recent");
+  const [decadePage, setDecadePage] = useState(1);
+  const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -304,6 +313,68 @@ export default function HomePage() {
     });
   };
 
+  useEffect(() => {
+    if (selectedDecade !== "all") {
+      setIsDecadeLoading(true);
+      setDecadePage(1);
+      const timer = setTimeout(() => setIsDecadeLoading(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedDecade]);
+
+  const decadeFacts: Fact[] = useMemo(() => {
+    if (selectedDecade === "all") return [];
+    return dbFacts
+      .filter(fact => {
+        if (fact.originDecade && fact.originDecade > selectedDecade) return false;
+        if (fact.taughtUntilYear && fact.taughtUntilYear < selectedDecade) return false;
+        if (decadeFilters.length > 0) {
+          const filters = fact.factFilters || [];
+          const matches = decadeFilters.some(df =>
+            filters.some(f => f.toLowerCase() === df.toLowerCase())
+          );
+          if (!matches) return false;
+        }
+        if (decadeCategoryFilter) {
+          const cats = (fact.categories || []).map(c => c.toLowerCase());
+          if (!cats.includes(decadeCategoryFilter.toLowerCase())) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return bDate - aDate;
+      })
+      .map(fact => {
+        const primaryCategory = fact.categories[0] || "Other";
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+          ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
+          : primaryCategory.toUpperCase();
+        const catConfig = CATEGORIES.find(c => c.name.toLowerCase() === primaryCategory.toLowerCase());
+        return {
+          id: fact.id,
+          category: categoryDisplay,
+          categoryColor: catConfig?.color || "#2C2C2C",
+          myth: fact.mythHeader,
+          truth: fact.truthHeader,
+          dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+          link: `/fact/${fact.slug}`,
+          coverPhoto: fact.coverPhoto || undefined,
+          betaOnly: fact.betaOnly || false,
+          factFilters: fact.factFilters || undefined,
+          revisionYear: fact.revisionYear ?? undefined,
+        };
+      });
+  }, [dbFacts, selectedDecade, decadeFilters, decadeCategoryFilter]);
+
+  const decadeTotalPages = Math.max(1, Math.ceil(decadeFacts.length / DECADE_FACTS_PER_PAGE));
+  const clampedDecadePage = Math.min(decadePage, decadeTotalPages);
+  const paginatedDecadeFacts = decadeFacts.slice(
+    (clampedDecadePage - 1) * DECADE_FACTS_PER_PAGE,
+    clampedDecadePage * DECADE_FACTS_PER_PAGE
+  );
+
   const regionallyTaughtFacts: Fact[] = useMemo(() => {
     return dbFacts
       .filter(fact => {
@@ -422,7 +493,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What were you taught that isn't true?
+          What were you taught that <u>isn't true</u>?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
           Pick the decade you graduated high school. Then discover what you may have been taught that was later disproven.
@@ -450,90 +521,184 @@ export default function HomePage() {
           </div>
         </nav>
 
-        <p className="homepage-category-subtitle" data-testid="text-category-subtitle">
-          Or browse all topics by category:
-        </p>
+        {selectedDecade === "all" ? (
+          <>
+            <p className="homepage-category-subtitle" data-testid="text-category-subtitle">
+              Or browse all topics by category:
+            </p>
 
-        <HomepageCategoryNav />
-        <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
+            <HomepageCategoryNav />
+            <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-        <div className="content-area" id="content-area">
-          {activeTab === "regionally-taught" && (
-            <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
-              Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
-            </p>
-          )}
-          {activeTab === "popular" && (
-            <p className="tab-subheader" data-testid="text-popular-subheader">
-              Popular topics are frequently reported by social media users on{" "}
-              <a 
-                href="https://www.reddit.com/r/AskReddit/comments/1789w9u/whats_a_fact_that_was_taught_in_school_thats_been/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="tab-subheader-link"
-              >
-                Reddit
-              </a>{" "}
-              and Instagram.
-            </p>
-          )}
-          {activeTab === "trending" && (
-            <p className="tab-subheader" data-testid="text-trending-subheader">
-              Trending topics are relevant to upcoming holidays or current events.
-            </p>
-          )}
-          {activeTab === "debated" && (
-            <p className="tab-subheader" data-testid="text-debated-subheader">
-              Debated topics feature competing evidence or visibly ongoing disagreement among experts and the public.
-            </p>
-          )}
-          <div className="key-container">
-            <FactKey />
-          </div>
+            <div className="content-area" id="content-area">
+              {activeTab === "regionally-taught" && (
+                <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
+                  Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
+                </p>
+              )}
+              {activeTab === "popular" && (
+                <p className="tab-subheader" data-testid="text-popular-subheader">
+                  Popular topics are frequently reported by social media users on{" "}
+                  <a
+                    href="https://www.reddit.com/r/AskReddit/comments/1789w9u/whats_a_fact_that_was_taught_in_school_thats_been/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="tab-subheader-link"
+                  >
+                    Reddit
+                  </a>{" "}
+                  and Instagram.
+                </p>
+              )}
+              {activeTab === "trending" && (
+                <p className="tab-subheader" data-testid="text-trending-subheader">
+                  Trending topics are relevant to upcoming holidays or current events.
+                </p>
+              )}
+              {activeTab === "debated" && (
+                <p className="tab-subheader" data-testid="text-debated-subheader">
+                  Debated topics feature competing evidence or visibly ongoing disagreement among experts and the public.
+                </p>
+              )}
+              <div className="key-container">
+                <FactKey />
+              </div>
 
-          <div className="content-container">
-            <div className="facts-column">
-              <div className="facts-grid">
-                {!showEmptyState ? (
-                  displayedFacts.map((fact) => (
-                    <FactCard
-                      key={fact.id}
-                      fact={fact}
-                      onSave={handleSaveClick}
-                      onShare={() => handleShareClick(fact)}
-                      onComment={handleCommentClick}
-                      onBetaClick={handleBetaClick}
-                    />
-                  ))
-                ) : (
-                  <div className="empty-state" data-testid="empty-facts">
-                    <p>{emptyStateMessage}</p>
+              <div className="content-container">
+                <div className="facts-column">
+                  <div className="facts-grid">
+                    {!showEmptyState ? (
+                      displayedFacts.map((fact) => (
+                        <FactCard
+                          key={fact.id}
+                          fact={fact}
+                          onSave={handleSaveClick}
+                          onShare={() => handleShareClick(fact)}
+                          onComment={handleCommentClick}
+                          onBetaClick={handleBetaClick}
+                        />
+                      ))
+                    ) : (
+                      <div className="empty-state" data-testid="empty-facts">
+                        <p>{emptyStateMessage}</p>
+                      </div>
+                    )}
                   </div>
+                  {showRecentPagination && (
+                    <Pagination
+                      currentPage={clampedRecentPage}
+                      totalPages={recentTotalPages}
+                      onPageChange={handleRecentPageChange}
+                      scrollTargetId="content-area"
+                    />
+                  )}
+                  {showPopularPagination && (
+                    <Pagination
+                      currentPage={clampedPopularPage}
+                      totalPages={popularTotalPages}
+                      onPageChange={handlePopularPageChange}
+                      scrollTargetId="content-area"
+                    />
+                  )}
+                </div>
+
+                <aside className="sidebar">
+                  <BeehiivBanner />
+                </aside>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {isDecadeLoading ? (
+              <div className="decade-loading-state" data-testid="decade-loading">
+                <div className="decade-loading-spinner" />
+                <p className="decade-loading-text">Generating your {selectedDecade} results…</p>
+              </div>
+            ) : (
+              <div className="decade-content-area" id="decade-content-area">
+                <div className="decade-disclaimers">
+                  <p className="decade-disclaimer-item">
+                    <span className="decade-disclaimer-icon">⚠️</span>
+                    This list includes facts that were factually disproven before then, but continued to persist in popular culture or academia. Click "Learn more" to view sources and a timeline of the research disproving each misconception.
+                  </p>
+                  <p className="decade-disclaimer-item">
+                    <span className="decade-disclaimer-icon">🌐</span>
+                    Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. All topics are continuously revised through user submissions and commentary to improve accuracy.
+                  </p>
+                </div>
+
+                <div className="decade-controls-bar">
+                  <FactKey />
+                  <div className="decade-sort-filter">
+                    <SortSelector selectedSort={decadeSort} onSortChange={setDecadeSort} />
+                    <CategoryFilter selectedFilters={decadeFilters} onFilterChange={(f) => { setDecadeFilters(f); setDecadePage(1); }} />
+                  </div>
+                </div>
+
+                <div className="decade-facts-grid">
+                  {paginatedDecadeFacts.length > 0 ? (
+                    paginatedDecadeFacts.map((fact, index) => (
+                      <div
+                        key={fact.id}
+                        className="decade-fact-row-item"
+                        style={{ animationDelay: `${Math.floor(index / 2) * 80}ms` }}
+                      >
+                        <FactCard
+                          fact={fact}
+                          onSave={handleSaveClick}
+                          onShare={() => handleShareClick(fact)}
+                          onComment={handleCommentClick}
+                          onBetaClick={handleBetaClick}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="decade-empty-state" data-testid="decade-empty">
+                      <p>No facts found for the {selectedDecade}. Check back as we add more entries!</p>
+                    </div>
+                  )}
+                </div>
+
+                {decadeTotalPages > 1 && (
+                  <Pagination
+                    currentPage={clampedDecadePage}
+                    totalPages={decadeTotalPages}
+                    onPageChange={(p) => { setDecadePage(p); document.getElementById("decade-content-area")?.scrollIntoView({ behavior: "smooth" }); }}
+                    scrollTargetId="decade-content-area"
+                  />
                 )}
               </div>
-              {showRecentPagination && (
-                <Pagination
-                  currentPage={clampedRecentPage}
-                  totalPages={recentTotalPages}
-                  onPageChange={handleRecentPageChange}
-                  scrollTargetId="content-area"
-                />
-              )}
-              {showPopularPagination && (
-                <Pagination
-                  currentPage={clampedPopularPage}
-                  totalPages={popularTotalPages}
-                  onPageChange={handlePopularPageChange}
-                  scrollTargetId="content-area"
-                />
-              )}
-            </div>
+            )}
 
-            <aside className="sidebar">
-              <BeehiivBanner />
-            </aside>
-          </div>
-        </div>
+            <div className="decade-sticky-category-nav" data-testid="decade-sticky-category-nav">
+              <span className="decade-sticky-category-label">Filter by category:</span>
+              <div className="decade-sticky-category-chips">
+                {CATEGORIES.map((cat) => {
+                  const Icon = cat.icon;
+                  const isActive = decadeCategoryFilter?.toLowerCase() === cat.name.toLowerCase();
+                  return (
+                    <button
+                      key={cat.name}
+                      className={`decade-sticky-chip${isActive ? " decade-sticky-chip-active" : ""}`}
+                      style={{
+                        '--chip-color': cat.color,
+                        borderColor: cat.color,
+                        color: isActive ? "#fff" : cat.color,
+                        backgroundColor: isActive ? cat.color : "transparent",
+                      } as React.CSSProperties}
+                      onClick={() => setDecadeCategoryFilter(isActive ? null : cat.name)}
+                      data-testid={`button-decade-category-${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      <Icon size={14} strokeWidth={2.5} style={{ color: isActive ? "#fff" : cat.color }} />
+                      <span>{cat.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
       </main>
 
       <Footer />
