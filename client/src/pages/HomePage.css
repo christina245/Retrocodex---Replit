@@ -421,8 +421,13 @@
   filter: brightness(1.05);
 }
 
+.decade-divider {
+  width: 60%;
+  margin: 8px auto 0;
+  border-top: 1px solid #e0e0e0;
+}
+
 .decade-sticky-chip-active {
-  pointer-events: none;
 }
 
 @media (max-width: 1200px) {

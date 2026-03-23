@@ -628,6 +628,8 @@ export default function HomePage() {
                   </p>
                 </div>
 
+                <div className="decade-divider" />
+
                 <div className="decade-controls-bar">
                   <FactKey />
                   <div className="decade-sort-filter">
