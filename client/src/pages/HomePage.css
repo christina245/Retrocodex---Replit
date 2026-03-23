@@ -15,15 +15,15 @@
 
 .homepage-headline {
   font-family: 'Merriweather', serif;
-  font-size: 64px;
+  font-size: 40px;
   font-weight: 1000;
   color: #2C2C2C;
   text-align: center;
   letter-spacing: 0.010em;
   line-height: 1.1;
-  margin-top: 50px;
+  margin-top: 30px;
   margin-bottom: 0;
-  padding: 40 20px;
+  padding: 0 20px;
 }
 
 .homepage-tagline {
@@ -32,7 +32,66 @@
   font-weight: 400;
   color: #2C2C2C;
   text-align: center;
-  margin: 30px 10px;
+  margin: 16px 10px 20px;
+}
+
+.homepage-decade-nav {
+  width: 100%;
+  padding: 0 1rem;
+  margin-bottom: 16px;
+}
+
+.homepage-decade-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.homepage-decade-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  background-color: rgba(255, 83, 83, 0.6);
+  color: #FFFFFF;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  transition: all 0.2s;
+}
+
+.homepage-decade-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05);
+  background-color: #ff5353;
+}
+
+.homepage-decade-chip-selected {
+  background-color: #ff5353;
+  pointer-events: none;
+}
+
+.homepage-decade-chip-selected:hover {
+  transform: none;
+  box-shadow: none;
+  filter: none;
+}
+
+.homepage-category-subtitle {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2C;
+  text-align: center;
+  margin: 0 0 6px;
 }
 
 .content-area {
@@ -135,9 +194,22 @@
   }
 
   .homepage-headline {
-    font-size: 36px;
+    font-size: 28px;
     margin: 20px 0 0 0;
     padding: 0 16px;
+  }
+
+  .homepage-decade-nav {
+    padding: 0 8px;
+  }
+
+  .homepage-decade-chip {
+    padding: 6px 8px;
+    font-size: 0.625rem;
+  }
+
+  .homepage-category-subtitle {
+    font-size: 13px;
   }
 
   .content-area {

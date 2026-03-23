@@ -15,6 +15,7 @@ import { Footer } from "@/components/Footer";
 import { Pagination } from "@/components/Pagination";
 import { SEO } from "@/components/SEO";
 import type { Fact as DbFact } from "@shared/schema";
+import { DECADES } from "@shared/schema";
 import "./HomePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -154,6 +155,7 @@ export default function HomePage() {
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [recentPage, setRecentPage] = useState(1);
   const [popularPage, setPopularPage] = useState(1);
+  const [selectedDecade, setSelectedDecade] = useState<string>("all");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -420,10 +422,36 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What were you taught <br /> that's been <u>disproven</u>?
+          What were you taught that isn't true?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
-          Explore sources and timelines tracing how each myth emerged from misunderstood evidence.
+          Pick the decade you graduated high school. Then discover what you may have been taught that was later disproven.
+        </p>
+
+        <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">
+          <div className="homepage-decade-nav-container">
+            <button
+              className={`homepage-decade-chip${selectedDecade === "all" ? " homepage-decade-chip-selected" : ""}`}
+              onClick={() => setSelectedDecade("all")}
+              data-testid="button-decade-all"
+            >
+              View all topics
+            </button>
+            {DECADES.filter(d => d >= "1950s").map((decade) => (
+              <button
+                key={decade}
+                className={`homepage-decade-chip${selectedDecade === decade ? " homepage-decade-chip-selected" : ""}`}
+                onClick={() => setSelectedDecade(decade)}
+                data-testid={`button-decade-${decade}`}
+              >
+                {decade}
+              </button>
+            ))}
+          </div>
+        </nav>
+
+        <p className="homepage-category-subtitle" data-testid="text-category-subtitle">
+          Or browse all topics by category:
         </p>
 
         <HomepageCategoryNav />
