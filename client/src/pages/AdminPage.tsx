@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield } from "lucide-react";
-import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
+import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
 import "./AdminPage.css";
@@ -82,6 +82,9 @@ export default function AdminPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [revisionYear, setRevisionYear] = useState<number | null>(null);
+  const [originDecade, setOriginDecade] = useState<string | null>(null);
+  const [taughtUntilYear, setTaughtUntilYear] = useState<string | null>(null);
   const [searchTags, setSearchTags] = useState<string[]>([]);
   const [searchTagInput, setSearchTagInput] = useState("");
   const [featured, setFeatured] = useState(false);
@@ -240,6 +243,9 @@ export default function AdminPage() {
     setSelectedCategories([]);
     setSelectedSubcategories([]);
     setSelectedTags([]);
+    setRevisionYear(null);
+    setOriginDecade(null);
+    setTaughtUntilYear(null);
     setSearchTags([]);
     setSearchTagInput("");
     setFeatured(false);
@@ -453,6 +459,9 @@ export default function AdminPage() {
     setSelectedCategories(fact.categories);
     setSelectedSubcategories(fact.subcategories || []);
     setSelectedTags(fact.factFilters || []);
+    setRevisionYear(fact.revisionYear ?? null);
+    setOriginDecade(fact.originDecade ?? null);
+    setTaughtUntilYear(fact.taughtUntilYear ?? null);
     setSearchTags(fact.searchTags || []);
     setSearchTagInput("");
     setFeatured(fact.featured || false);
@@ -709,7 +718,10 @@ export default function AdminPage() {
       sources: validSources,
       timeline: validTimeline,
       nuances: validNuances,
-      relatedMythIds: relatedMythIds.filter(id => id)
+      relatedMythIds: relatedMythIds.filter(id => id),
+      revisionYear: selectedTags.includes("Official Revision") ? revisionYear : null,
+      originDecade: originDecade || null,
+      taughtUntilYear: taughtUntilYear || null,
     };
 
     try {
@@ -1090,6 +1102,55 @@ export default function AdminPage() {
                       </label>
                     ))}
                   </div>
+                </div>
+
+                {selectedTags.includes("Official Revision") && (
+                  <div className="form-group">
+                    <label className="form-label">Revision Year</label>
+                    <p className="form-hint">The year this fact was officially revised or corrected.</p>
+                    <input
+                      type="number"
+                      className="form-input"
+                      placeholder="e.g. 1985"
+                      min={1800}
+                      max={2100}
+                      value={revisionYear ?? ""}
+                      onChange={(e) => setRevisionYear(e.target.value ? parseInt(e.target.value, 10) : null)}
+                      data-testid="input-revision-year"
+                    />
+                  </div>
+                )}
+
+                <div className="form-group">
+                  <label className="form-label">Origin Decade</label>
+                  <p className="form-hint">The decade when this belief/myth originated or became widely taught.</p>
+                  <select
+                    className="form-input"
+                    value={originDecade ?? ""}
+                    onChange={(e) => setOriginDecade(e.target.value || null)}
+                    data-testid="select-origin-decade"
+                  >
+                    <option value="">— None —</option>
+                    {DECADES.map((decade) => (
+                      <option key={decade} value={decade}>{decade}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Taught Until Decade</label>
+                  <p className="form-hint">The last decade when this was still widely taught or believed.</p>
+                  <select
+                    className="form-input"
+                    value={taughtUntilYear ?? ""}
+                    onChange={(e) => setTaughtUntilYear(e.target.value || null)}
+                    data-testid="select-taught-until-decade"
+                  >
+                    <option value="">— None —</option>
+                    {DECADES.map((decade) => (
+                      <option key={decade} value={decade}>{decade}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="form-group">

@@ -27,6 +27,12 @@ export const OTHER_SUBCATEGORIES = [
   "Technology"
 ] as const;
 
+export const DECADES = [
+  "1900s", "1910s", "1920s", "1930s", "1940s",
+  "1950s", "1960s", "1970s", "1980s", "1990s",
+  "2000s", "2010s", "2020s"
+] as const;
+
 // Type definitions for JSON fields
 export const sourceSchema = z.object({
   id: z.string(),
@@ -166,6 +172,9 @@ export const facts = pgTable("facts", {
   timeline: jsonb("timeline").$type<TimelineEntry[]>().default([]),
   nuances: jsonb("nuances").$type<Nuance[]>().default([]),
   relatedMythIds: text("related_myth_ids").array().default([]),
+  revisionYear: integer("revision_year"),
+  taughtUntilYear: text("taught_until_year"),
+  originDecade: text("origin_decade"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -191,6 +200,9 @@ export const insertFactSchema = z.object({
   timeline: z.array(timelineEntrySchema).default([]),
   nuances: z.array(nuanceSchema).default([]),
   relatedMythIds: z.array(z.string()).default([]),
+  revisionYear: z.number().int().min(1800).max(2100).nullable().optional(),
+  taughtUntilYear: z.string().nullable().optional(),
+  originDecade: z.string().nullable().optional(),
 });
 
 export type InsertFact = z.infer<typeof insertFactSchema>;

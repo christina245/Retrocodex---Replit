@@ -32,6 +32,7 @@ export interface Fact {
   coverPhoto?: string;
   betaOnly?: boolean;
   factFilters?: string[];
+  revisionYear?: number;
 }
 
 function toTitleCase(str: string): string {
@@ -78,11 +79,17 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
             </div>
             {fact.factFilters && fact.factFilters.length > 0 && (
               <div className="fact-filter-tags">
-                {fact.factFilters.map((filter, index) => (
-                  <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {toTitleCase(filter)}
-                  </span>
-                ))}
+                {fact.factFilters.map((filter, index) => {
+                  const isOfficialRevision = filter.toLowerCase() === "official revision";
+                  const label = isOfficialRevision && fact.revisionYear
+                    ? `Official Revision · ${fact.revisionYear}`
+                    : toTitleCase(filter);
+                  return (
+                    <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {label}
+                    </span>
+                  );
+                })}
               </div>
             )}
           </div>

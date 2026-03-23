@@ -189,6 +189,7 @@ export default function HomePage() {
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
+          revisionYear: fact.revisionYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -217,6 +218,7 @@ export default function HomePage() {
         coverPhoto: fact.coverPhoto || undefined,
         betaOnly: fact.betaOnly || false,
         factFilters: fact.factFilters || undefined,
+        revisionYear: fact.revisionYear ?? undefined,
       };
     });
   }, [popularDbFacts]);
@@ -322,6 +324,7 @@ export default function HomePage() {
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
+          revisionYear: fact.revisionYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -345,6 +348,7 @@ export default function HomePage() {
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
+          revisionYear: fact.revisionYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -368,6 +372,7 @@ export default function HomePage() {
           coverPhoto: fact.coverPhoto || undefined,
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
+          revisionYear: fact.revisionYear ?? undefined,
         };
       });
   }, [dbFacts]);

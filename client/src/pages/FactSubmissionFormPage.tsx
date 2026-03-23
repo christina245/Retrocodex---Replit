@@ -136,7 +136,7 @@ export default function FactSubmissionFormPage() {
                 </div>
                 <h1 className="fact-form-success-title">Submission received!</h1>
                 <p className="fact-form-success-body">
-                  Thank you for your submission. Our team will review it and may reach out if we need more information. We appreciate your contribution to making Retrocodex more comprehensive.
+                  Thank you for your submission. If your topic is approved, we'll reach out to you if we need any additional information or for you to confirm our editorial changes.
                 </p>
                 <div className="fact-form-success-actions">
                   <button
@@ -159,8 +159,14 @@ export default function FactSubmissionFormPage() {
               <>
                 <h1 className="fact-form-title" data-testid="text-form-title">Submit a new fact</h1>
                 <p className="fact-form-subtitle">
-                  Fields marked with <span className="fact-form-required-star">*</span> are required. Your submission will be reviewed before being published.
-                </p>
+                  Fields marked with <span className="fact-form-required-star">*</span> are required. <a href="https://www.markdownguide.org/basic-syntax/">Markdown </a> is supported.</p>
+                
+                <p>At this time, timeline and photo submissions are not required. Retrocodex will add these details after your submission is approved. The edited draft will be sent to you for review.
+                  </p>
+                <br></br>
+                <p>All submissions will be reviewed before publishing.
+                  </p>
+                <br></br>
 
                 <form className="fact-form" onSubmit={handleSubmit} data-testid="fact-submission-form">
 
@@ -171,13 +177,13 @@ export default function FactSubmissionFormPage() {
                       <span className="fact-form-label-text">WHAT YOU LEARNED <span className="fact-form-required-star">*</span></span>
                     </div>
                     <p className="fact-form-field-hint">
-                      The commonly believed claim — written as if it were true. (e.g. "We only use 10% of our brains.")
+                      The commonly believed claim, written the way you were taught. (e.g. "We only use 10% of our brains.")
                     </p>
                     <textarea
                       className="fact-form-textarea fact-form-textarea-header"
                       value={mythHeader}
                       onChange={e => setMythHeader(e.target.value)}
-                      placeholder="The widely believed claim..."
+                      placeholder="The widely believed and taught claim is..."
                       maxLength={400}
                       data-testid="input-myth-header"
                     />
@@ -191,13 +197,13 @@ export default function FactSubmissionFormPage() {
                       <span className="fact-form-label-text">DETAILS</span>
                     </div>
                     <p className="fact-form-field-hint">
-                      Explain where this myth comes from or how it spread. Markdown is supported.
+                      Where this myth comes from and how it spread. 
                     </p>
                     <textarea
                       className="fact-form-textarea fact-form-textarea-details"
                       value={mythDetails}
                       onChange={e => setMythDetails(e.target.value)}
-                      placeholder="Background on the myth..."
+                      placeholder="e.g. This myth comes from a 1920s study that was later debunked."
                       maxLength={2000}
                       data-testid="input-myth-details"
                     />
@@ -211,13 +217,13 @@ export default function FactSubmissionFormPage() {
                       <span className="fact-form-label-text">CURRENT UNDERSTANDING AS OF 2026 <span className="fact-form-required-star">*</span></span>
                     </div>
                     <p className="fact-form-field-hint">
-                      The corrected claim — the actual truth. (e.g. "We use virtually all of our brain's regions.")
+                      What data has proven thus far. (e.g. "We use nearly all of our brain's regions.")
                     </p>
                     <textarea
                       className="fact-form-textarea fact-form-textarea-header"
                       value={truthHeader}
                       onChange={e => setTruthHeader(e.target.value)}
-                      placeholder="The actual truth..."
+                      
                       maxLength={400}
                       data-testid="input-truth-header"
                     />
@@ -231,13 +237,13 @@ export default function FactSubmissionFormPage() {
                       <span className="fact-form-label-text">DETAILS</span>
                     </div>
                     <p className="fact-form-field-hint">
-                      Explain the evidence behind the truth. Markdown is supported.
+                      How does today's understanding differ from the myth? 
                     </p>
                     <textarea
                       className="fact-form-textarea fact-form-textarea-details"
                       value={truthDetails}
                       onChange={e => setTruthDetails(e.target.value)}
-                      placeholder="Explain the evidence..."
+                      
                       maxLength={2000}
                       data-testid="input-truth-details"
                     />
@@ -261,7 +267,7 @@ export default function FactSubmissionFormPage() {
                           className="fact-form-input fact-form-source-input"
                           value={source.value}
                           onChange={e => updateSource(index, e.target.value)}
-                          placeholder="Link to scientific study or article."
+                          placeholder="Link to scientific study or article"
                           data-testid={`input-source-citation-${index}`}
                         />
                         {sources.length > 1 && (
@@ -297,13 +303,13 @@ export default function FactSubmissionFormPage() {
                       <span className="fact-form-label-text">CONSIDERATIONS</span>
                     </div>
                     <p className="fact-form-field-hint">
-                      Any nuances, caveats, or counterpoints worth noting. (Optional)
+                      Any nuances, caveats, public controversies, or counterpoints worth noting. 
                     </p>
                     <textarea
                       className="fact-form-textarea fact-form-textarea-details"
                       value={considerations}
                       onChange={e => setConsiderations(e.target.value)}
-                      placeholder="Edge cases or nuances..."
+                      placeholder="Situations where the facts may not apply or where the misconception may be true"
                       maxLength={4000}
                       data-testid="input-considerations"
                     />
@@ -316,20 +322,18 @@ export default function FactSubmissionFormPage() {
                       <span className="fact-form-label-text">OTHER DETAILS</span>
                     </div>
                     <p className="fact-form-field-hint">
-                      Anything else you'd like us to know. (Optional)
+                      Anything else you'd like us to know. 
                     </p>
                     <textarea
                       className="fact-form-textarea fact-form-textarea-details"
                       value={otherDetails}
                       onChange={e => setOtherDetails(e.target.value)}
-                      placeholder="Any additional context..."
+                      placeholder="Additional details, context, or miscellaneous relevant information"
                       maxLength={4000}
                       data-testid="input-other-details"
                     />
                     <span className="fact-form-char-count">{otherDetails.length}/4000</span>
-                    <p className="fact-form-other-note">
-                      If you have additional media, screenshots, or files relevant to this submission, you can email them to <span className="fact-form-email">submissions@retrocodex.com</span> with the subject line matching your myth header.
-                    </p>
+                    <br></br>
                   </div>
 
                   {submitError && (

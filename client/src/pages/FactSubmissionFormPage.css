@@ -8,7 +8,7 @@
 .fact-form-main {
   flex: 1;
   padding-top: 40px;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
 }
 
 .fact-form-outer {
@@ -51,20 +51,20 @@
 }
 
 .fact-form-section {
-  border-top: 1px solid #E5E5E5;
-  padding: 24px 0 8px 0;
+  border-top: 1px solid #FFFFFF;
+  padding: 15px 0 2px 0;
 }
 
 .fact-form-section-last {
   border-bottom: 1px solid #E5E5E5;
-  padding-bottom: 24px;
+  padding-bottom: 10px;
 }
 
 .fact-form-section-label {
   display: flex;
   align-items: center;
   gap: 7px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 
 .fact-form-label-text {
@@ -95,7 +95,7 @@
 .fact-form-field-hint {
   font-family: 'Public Sans', sans-serif;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 12px;
   color: #666666;
   margin: 0 0 10px 0;
   line-height: 19px;
@@ -108,7 +108,7 @@
   border: 1px solid #D0D0D0;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: #2C2C2C;
   background: #FFFFFF;
   outline: none;
@@ -130,7 +130,7 @@
   display: block;
   text-align: right;
   margin-top: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 3px;
 }
 
 .fact-form-textarea {
@@ -140,7 +140,7 @@
   border: 1px solid #D0D0D0;
   border-radius: 6px;
   font-family: 'Public Sans', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: #2C2C2C;
   background: #FFFFFF;
   outline: none;
@@ -158,13 +158,13 @@
 }
 
 .fact-form-textarea-header {
-  min-height: 150px;
-  height: 150px;
+  min-height: 100px;
+  height: 100px;
 }
 
 .fact-form-textarea-details {
-  min-height: 250px;
-  height: 250px;
+  min-height: 100px;
+  height: 100px;
 }
 
 .fact-form-source-row {
