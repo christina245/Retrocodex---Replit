@@ -129,7 +129,7 @@ export default function PhysicsPage() {
         </Link>
 
         <div className="physics-header-section">
-          <h1 className="category-page-h1">Misconceptions About Physics</h1>
+          <h1 className="category-page-h1">All Misconceptions In Physics</h1>
         </div>
 
         <div className="physics-content-area">

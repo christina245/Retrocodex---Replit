@@ -139,7 +139,7 @@ export default function LinguisticsPage() {
         </Link>
 
         <div className="linguistics-header-section">
-          <h1 className="category-page-h1">Misconceptions About Linguistics</h1>
+          <h1 className="category-page-h1">All Misconceptions In Linguistics</h1>
         </div>
 
         <div className="linguistics-content-area">

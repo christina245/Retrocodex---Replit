@@ -129,7 +129,7 @@ export default function MusicPage() {
         </Link>
 
         <div className="music-header-section">
-          <h1 className="category-page-h1">Misconceptions About Music</h1>
+          <h1 className="category-page-h1">All Misconceptions In Music</h1>
         </div>
 
         <div className="music-content-area">

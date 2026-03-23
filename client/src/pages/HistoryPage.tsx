@@ -157,7 +157,7 @@ export default function HistoryPage() {
       <main className="history-main-content">
         <div className="history-intro-row">
           <div className="history-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About History</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In History</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">Your school history lessons might have left out certain critical perspectives.</h2>
             <p>
               What we know about history is always evolving as new archaelogical records surface, modern analytical tools reinterpret old texts, and previously overlooked, marginalized voices finally become heard.

@@ -164,7 +164,7 @@ export default function HomePage() {
   const [decadeFilters, setDecadeFilters] = useState<string[]>([]);
   const [decadeSort, setDecadeSort] = useState<SortOption>("recent");
   const [decadePage, setDecadePage] = useState(1);
-  const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string | null>(null);
+  const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string[]>([]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -335,9 +335,9 @@ export default function HomePage() {
           );
           if (!matches) return false;
         }
-        if (decadeCategoryFilter) {
+        if (decadeCategoryFilter.length > 0) {
           const cats = (fact.categories || []).map(c => c.toLowerCase());
-          if (!cats.includes(decadeCategoryFilter.toLowerCase())) return false;
+          if (!decadeCategoryFilter.some(f => cats.includes(f.toLowerCase()))) return false;
         }
         return true;
       })
@@ -676,7 +676,7 @@ export default function HomePage() {
               <div className="decade-sticky-category-chips">
                 {CATEGORIES.map((cat) => {
                   const Icon = cat.icon;
-                  const isActive = decadeCategoryFilter?.toLowerCase() === cat.name.toLowerCase();
+                  const isActive = decadeCategoryFilter.some(f => f.toLowerCase() === cat.name.toLowerCase());
                   return (
                     <button
                       key={cat.name}
@@ -685,9 +685,11 @@ export default function HomePage() {
                         '--chip-color': cat.color,
                         borderColor: cat.color,
                         color: isActive ? "#fff" : cat.color,
-                        backgroundColor: isActive ? cat.color : "transparent",
+                        backgroundColor: isActive ? cat.color : "#fff",
                       } as React.CSSProperties}
-                      onClick={() => setDecadeCategoryFilter(isActive ? null : cat.name)}
+                      onClick={() => setDecadeCategoryFilter(prev =>
+                        isActive ? prev.filter(f => f.toLowerCase() !== cat.name.toLowerCase()) : [...prev, cat.name]
+                      )}
                       data-testid={`button-decade-category-${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
                     >
                       <Icon size={14} strokeWidth={2.5} style={{ color: isActive ? "#fff" : cat.color }} />

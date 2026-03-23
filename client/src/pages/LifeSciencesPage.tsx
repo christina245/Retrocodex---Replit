@@ -155,7 +155,7 @@ export default function LifeSciencesPage() {
       <main className="life-sciences-main-content">
         <div className="life-sciences-intro-row">
           <div className="life-sciences-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">Misconceptions About Life Sciences</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In Life Sciences</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">What were you taught in school that was oversimplified or is now outdated?</h2>
              <p>As technological advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match contemporary evidence.
           
