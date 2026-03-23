@@ -25,122 +25,6 @@ const FACTS_PER_PAGE = 10;
 const DECADE_FACTS_PER_PAGE = 20;
 const MAX_RECENT_FACTS = 30;
 
-import photo1Columbus from "@assets/stock_images/christopher columbus.png";
-import photo2Brain from "@assets/stock_images/neon brain.png";
-import photo3FoodPyramid from "@assets/stock_images/food pyramid.png";
-import photo4HyperKids from "@assets/stock_images/hyper kids.png";
-import photo5Learning from "@assets/stock_images/people studying.png";
-import photo6Gender from "@assets/stock_images/men vs women.png";
-import photo7Spelling from "@assets/stock_images/spelling bee.png";
-import photo8Blood from "@assets/stock_images/blood cells.png";
-import photo9Spiders from "@assets/stock_images/plastic spiders.png";
-import photo10Marie from "@assets/stock_images/marie antoinette.png";
-
-const allFacts: Fact[] = [
-  {
-    id: "1",
-    category: "HISTORY",
-    categoryColor: "#D29E00",
-    myth: "Christopher Columbus discovered the Americas.",
-    truth: "Columbus only reached Central and South America. He never actually reached North America. At the time, Indigenous peoples had already been living in throughout the Americas for thousands of years.",
-    dateAdded: "2025-10-15",
-    coverPhoto: photo1Columbus,
-    betaOnly: true
-  },
-  {
-    id: "2",
-    category: "LIFE SCIENCES",
-    categoryColor: "#419F36",
-    myth: "You only use 10% of your brain.",
-    truth: "Your entire brain is used. Brain scans show activity throughout, even when sleeping or at rest. The myth likely came from early misunderstandings of neuroscience, boosted by self-help culture.",
-    dateAdded: "2025-10-22",
-    link: "/fact/brain-10-percent",
-    coverPhoto: photo2Brain
-  },
-  {
-    id: "3",
-    category: "HEALTH & FITNESS",
-    categoryColor: "#EC7200",
-    myth: "The Food Pyramid is the model for a healthy, balanced diet.",
-    truth: "The Food Pyramid's hierarchy reflected the food industry's political and economic interests rather than scientific accuracy. In 2011, the USDA replaced it with MyPlate, which suggested more balanced portions.",
-    dateAdded: "2025-11-01",
-    coverPhoto: photo3FoodPyramid,
-    link: "fact/what-was-wrong-with-the-food-pyramid",
-    factFilters: ["Official Revision"]
-  },
-  {
-    id: "4",
-    category: "EVERYDAY LIFE",
-    categoryColor: "#0167A2",
-    myth: "Eating too much sugar makes kids hyper.",
-    truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
-    dateAdded: "2025-11-05",
-    link: "fact/does-eating-sugar-make-kids-hyper",
-    coverPhoto: photo4HyperKids
-    
-  },
-  {
-    id: "5",
-    category: "SOCIAL SCIENCES",
-    categoryColor: "#9D0085",
-    myth: "People have different learning styles, such as being a visual or auditory learner.",
-    truth: "Learning styles are typically based on self-reported preferences rather than scientific evidence. They generally do not influence overall learning outcomes.",
-    dateAdded: "2025-11-08",
-    coverPhoto: photo5Learning,
-    betaOnly: true
-  },
-  {
-    id: "6",
-    category: "GENDER & SEXUALITY",
-    categoryColor: "#FF6F98",
-    myth: "Men and women have very different brains.",
-    truth: "While there are some differences on average, there is more functional overlap than not, and more variation within each sex than between the two sexes.",
-    dateAdded: "2025-11-21",
-    coverPhoto: photo6Gender,
-    betaOnly: true
-  },
-  {
-    id: "7",
-    category: "OTHER • LINGUISTICS",
-    categoryColor: "#2C2C2C",
-    myth: "A general spelling rule is I before E except after C.",
-    truth: "The English language has several words where this generalization does not apply: science, height, their, protein, caffeine, vein, beige, neighbor, weird, seize, and many others.",
-    dateAdded: "2025-11-12",
-    link: "fact/i-before-e-except-after-c",
-    coverPhoto: photo7Spelling
-  },
-  {
-    id: "8",
-    category: "LIFE SCIENCES",
-    categoryColor: "#419F36",
-    myth: "Human blood is actually blue until it comes into contact with oxygen.",
-    truth: "Deoxygenated blood is still red, just a darker shade. Veins appear blue because blue light penetrates skin more efficiently than the rest of the visible light spectrum and is more easily absorbed.",
-    dateAdded: "2025-11-15",
-    link: "fact/is-human-blood-blue",
-    coverPhoto: photo8Blood
-  },
-  {
-    id: "9",
-    category: "EVERYDAY LIFE",
-    categoryColor: "#0167A2",
-    myth: "Humans swallow an average of 8 spiders in their sleep every year.",
-    truth: "You're unlikely to swallow even one. Your breathing while asleep tends to scare spiders away. This myth may have been purposely spread as a social experiment.",
-    dateAdded: "2025-11-18",
-    link: "fact/do-you-swallow-spiders-in-your-sleep",
-    coverPhoto: photo9Spiders
-  },
-  {
-    id: "10",
-    category: "HISTORY",
-    categoryColor: "#D29E00",
-    myth: "Marie Antoinette said 'Let them eat cake' regarding the French working class.",
-    truth: "This line was actually written by author Jean-Jacques Rousseau and attributed to an unnamed princess. It may have been misattributed to her as political propaganda.",
-    dateAdded: "2025-11-20",
-    link: "fact/marie-antoinette-let-them-eat-cake",
-    coverPhoto: photo10Marie
-  
-  }
-];
 
 const CATEGORY_COLORS: Record<string, string> = {
   "History": "#D29E00",
@@ -240,6 +124,30 @@ export default function HomePage() {
     (clampedPopularPage - 1) * FACTS_PER_PAGE,
     clampedPopularPage * FACTS_PER_PAGE
   );
+
+  const featuredFacts: Fact[] = useMemo(() => {
+    return dbFacts
+      .filter(fact => fact.featured)
+      .map(fact => {
+        const primaryCategory = fact.categories[0] || "Other";
+        const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+          ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
+          : primaryCategory.toUpperCase();
+        return {
+          id: fact.id,
+          category: categoryDisplay,
+          categoryColor: CATEGORY_COLORS[primaryCategory] || "#2C2C2C",
+          myth: fact.mythHeader,
+          truth: fact.truthHeader,
+          dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
+          link: `/fact/${fact.slug}`,
+          coverPhoto: fact.coverPhoto || undefined,
+          betaOnly: fact.betaOnly || false,
+          factFilters: fact.factFilters || undefined,
+          revisionYear: fact.revisionYear ?? undefined,
+        };
+      });
+  }, [dbFacts]);
 
   const handleTabChange = (tab: HomepageTabType) => {
     setActiveTab(tab);
@@ -453,7 +361,7 @@ export default function HomePage() {
   const getDisplayedFacts = (): Fact[] => {
     switch (activeTab) {
       case "explore":
-        return allFacts;
+        return featuredFacts;
       case "new":
         return paginatedRecentFacts;
       case "popular":
@@ -620,10 +528,10 @@ export default function HomePage() {
                 <div className="decade-disclaimers">
                   <p className="decade-disclaimer-item">
                     <span className="decade-disclaimer-icon">⚠️</span>
-                    This list includes facts that were factually disproven before then, but continued to persist in popular culture or academia. Click "Learn more" to view sources and a timeline of the research disproving each misconception.
+                    This list includes facts that were factually disproven before you graduated, but continued to persist in popular culture or academia. Click "Learn more" to view sources and a timeline of the research disproving each misconception.
                   </p>
                   <p className="decade-disclaimer-item">
-                    <span className="decade-disclaimer-icon">🌐</span>
+                    <span className="decade-disclaimer-icon">🌎</span>
                     Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. All topics are continuously revised through user submissions and commentary to improve accuracy.
                   </p>
                 </div>
