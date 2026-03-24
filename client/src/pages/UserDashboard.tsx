@@ -1526,6 +1526,70 @@ export default function UserDashboard() {
                   {notificationsTab === "all" && (
                     <div className="following-feed" data-testid="activity-feed-all">
 
+                      {/* Live submission notifications */}
+                      {mySubmissions.filter(s => s.status === "saved").map(s => (
+                        <div key={`notif-saved-${s.id}`} className="activity-post" data-testid={`notif-under-review-${s.id}`}>
+                          <div className="activity-post-icon-col">
+                            <SearchCheck size={40} strokeWidth={1.5} className="activity-status-icon" style={{ color: "#878787" }} />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <span className="activity-status-text" style={{ color: "#555" }}>Your submission is currently under review!</span>
+                              </div>
+                              <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
+                              <p style={{ margin: "0.4rem 0 0", fontSize: "0.9rem", fontStyle: "italic" }}>"{s.mythHeader}"</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {mySubmissions.filter(s => s.status === "published").map(s => (
+                        <div key={`notif-pub-${s.id}`} className="activity-post" data-testid={`notif-published-${s.id}`}>
+                          <div className="activity-post-icon-col">
+                            <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <span className="activity-status-text activity-status-text-approved">Your submission has been published!</span>
+                              </div>
+                              <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <p style={{ margin: 0, fontSize: "0.9rem", fontStyle: "italic" }}>"{s.mythHeader}"</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {mySubmissions.filter(s => s.status === "rejected").map(s => (
+                        <div key={`notif-rej-${s.id}`} className="activity-post" data-testid={`notif-rejected-${s.id}`}>
+                          <div className="activity-post-icon-col">
+                            <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
+                          </div>
+                          <div className="activity-post-main">
+                            <div className="activity-post-header">
+                              <div className="activity-post-header-text">
+                                <span className="activity-status-text activity-status-text-denied">Your post submission was not approved.</span>
+                              </div>
+                              <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                            </div>
+                            <div className="activity-post-body">
+                              <p style={{ margin: 0, fontSize: "0.9rem", fontStyle: "italic" }}>"{s.mythHeader}"</p>
+                              {s.adminNote && (
+                                <div className="activity-admin-feedback" data-testid={`notif-admin-note-${s.id}`}>
+                                  <p className="activity-admin-feedback-text">{s.adminNote}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
                       {/* 1. Username1 liked your comment on */}
                       <div className="activity-post" data-testid="activity-post-1">
                         <div className="activity-post-icon-col">

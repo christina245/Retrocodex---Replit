@@ -1941,17 +1941,23 @@ export default function AdminPage() {
 
               {/* Publish confirmation modal */}
               {showPublishModal && (
-                <div className="modal-overlay" onClick={() => setShowPublishModal(false)}>
+                <div className="modal-overlay" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }}>
                   <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
                     <div className="modal-header">
-                      <h3 className="modal-title">Publish this fact?</h3>
-                      <button className="modal-close" onClick={() => setShowPublishModal(false)} data-testid="button-close-publish-modal"><X size={18} /></button>
+                      <h3 className="modal-title">Ready to publish?</h3>
+                      <button className="modal-close" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-close-publish-modal"><X size={18} /></button>
                     </div>
                     <p style={{ margin: "1rem 0", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
                       This will create a live published fact from the current form data and mark the submission as published.
                     </p>
+                    <div style={{ marginBottom: "1rem", padding: "0.75rem", background: "var(--muted)", borderRadius: "6px", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <Mail size={16} style={{ color: "var(--muted-foreground)", flexShrink: 0 }} />
+                      <span style={{ fontSize: "0.85rem", color: "var(--muted-foreground)" }}>
+                        Submitter will be notified by email when this fact goes live.
+                      </span>
+                    </div>
                     <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
-                      <button className="cancel-edit-button" onClick={() => setShowPublishModal(false)} data-testid="button-cancel-publish">Cancel</button>
+                      <button className="cancel-edit-button" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-cancel-publish">Cancel (Save Draft)</button>
                       <button
                         className="submit-button"
                         onClick={handlePublishSubmission}
@@ -2795,6 +2801,30 @@ export default function AdminPage() {
                             </div>
                           </div>
                         </div>
+
+                        {/* Sources */}
+                        {sub.sources && sub.sources.length > 0 && (
+                          <div style={{ marginBottom: "0.75rem" }}>
+                            <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>Sources</span>
+                            <div style={{ marginTop: "4px", display: "flex", flexDirection: "column", gap: "2px" }}>
+                              {sub.sources.map((src: any, idx: number) => {
+                                const url = typeof src === "string" ? src : src.link || src.citation || "";
+                                return url ? (
+                                  <a
+                                    key={idx}
+                                    href={url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ fontSize: "0.8rem", color: "var(--primary)", wordBreak: "break-all" }}
+                                    data-testid={`source-admin-${sub.id}-${idx}`}
+                                  >
+                                    {url}
+                                  </a>
+                                ) : null;
+                              })}
+                            </div>
+                          </div>
+                        )}
 
                         {/* Admin note (for rejected) */}
                         {sub.status === "rejected" && sub.adminNote && (
