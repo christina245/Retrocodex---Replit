@@ -625,6 +625,30 @@
   cursor: not-allowed;
 }
 
+.export-button.submission-btn-save {
+  background: #2e7d32;
+}
+
+.export-button.submission-btn-save:hover:not(:disabled) {
+  background: #1b5e20;
+}
+
+.export-button.submission-btn-reject {
+  background: #c62828;
+}
+
+.export-button.submission-btn-reject:hover:not(:disabled) {
+  background: #b71c1c;
+}
+
+.export-button.submission-btn-shadowban {
+  background: #000000;
+}
+
+.export-button.submission-btn-shadowban:hover:not(:disabled) {
+  background: #1a1a1a;
+}
+
 .emails-table-container {
   background: white;
   border: 1px solid #e5e5e5;

@@ -1898,25 +1898,27 @@ export default function AdminPage() {
                         {submissionActionMsg.text}
                       </div>
                     )}
-                    <button
-                      type="button"
-                      className="submit-button"
-                      style={{ background: '#555', marginRight: '0.5rem' }}
-                      onClick={handleSaveDraft}
-                      disabled={isDraftSaving || isPublishing}
-                      data-testid="button-save-draft"
-                    >
-                      {isDraftSaving ? "Saving..." : "Save Draft"}
-                    </button>
-                    <button
-                      type="button"
-                      className="submit-button"
-                      onClick={() => setShowPublishModal(true)}
-                      disabled={isDraftSaving || isPublishing}
-                      data-testid="button-save-and-publish"
-                    >
-                      Save and Publish
-                    </button>
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <button
+                        type="button"
+                        className="submit-button"
+                        style={{ background: '#555' }}
+                        onClick={handleSaveDraft}
+                        disabled={isDraftSaving || isPublishing}
+                        data-testid="button-save-draft"
+                      >
+                        {isDraftSaving ? "Saving..." : "Save Draft"}
+                      </button>
+                      <button
+                        type="button"
+                        className="submit-button"
+                        onClick={() => setShowPublishModal(true)}
+                        disabled={isDraftSaving || isPublishing}
+                        data-testid="button-save-and-publish"
+                      >
+                        Save and Publish
+                      </button>
+                    </div>
                   </>
                 ) : (
                   <>
@@ -2780,13 +2782,17 @@ export default function AdminPage() {
 
                         {/* Content */}
                         <div style={{ marginBottom: "0.75rem" }}>
-                          <div style={{ marginBottom: "0.4rem" }}>
-                            <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Myth</span>
-                            <p style={{ margin: "0.1rem 0 0", fontWeight: 500 }} data-testid={`text-sub-myth-${sub.id}`}>{sub.mythHeader}</p>
+                          <div style={{ background: "#ffffff", borderRadius: "10px", margin: "10px 0", padding: "10px" }}>
+                            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                              <X size={15} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
+                              <p style={{ margin: 0, fontWeight: 500, fontSize: "0.9rem" }} data-testid={`text-sub-myth-${sub.id}`}>{sub.mythHeader}</p>
+                            </div>
                           </div>
-                          <div>
-                            <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Truth</span>
-                            <p style={{ margin: "0.1rem 0 0", fontWeight: 500 }} data-testid={`text-sub-truth-${sub.id}`}>{sub.truthHeader}</p>
+                          <div style={{ background: "#ffffff", borderRadius: "10px", margin: "10px 0", padding: "10px" }}>
+                            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                              <Check size={15} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
+                              <p style={{ margin: 0, fontWeight: 500, fontSize: "0.9rem" }} data-testid={`text-sub-truth-${sub.id}`}>{sub.truthHeader}</p>
+                            </div>
                           </div>
                         </div>
 
@@ -2802,7 +2808,7 @@ export default function AdminPage() {
                         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                           {sub.status === "pending" && (
                             <button
-                              className="export-button"
+                              className="export-button submission-btn-save"
                               onClick={() => patchSubmissionMutation.mutate({ id: sub.id, status: "saved" })}
                               disabled={patchSubmissionMutation.isPending}
                               data-testid={`button-save-review-${sub.id}`}
@@ -2814,7 +2820,7 @@ export default function AdminPage() {
 
                           {sub.status === "saved" && (
                             <button
-                              className="export-button"
+                              className="export-button submission-btn-save"
                               onClick={() => loadSubmissionForEdit(sub)}
                               data-testid={`button-edit-submission-${sub.id}`}
                             >
@@ -2825,7 +2831,7 @@ export default function AdminPage() {
 
                           {sub.status === "rejected" && (
                             <button
-                              className="export-button"
+                              className="export-button submission-btn-save"
                               onClick={() => patchSubmissionMutation.mutate({ id: sub.id, status: "pending", adminNote: "" })}
                               disabled={patchSubmissionMutation.isPending}
                               data-testid={`button-restore-submission-${sub.id}`}
@@ -2837,7 +2843,7 @@ export default function AdminPage() {
 
                           {sub.status !== "rejected" && (
                             <button
-                              className="delete-button"
+                              className="export-button submission-btn-reject"
                               onClick={() => { setRejectingSubmissionId(sub.id); setRejectNote(""); setShowRejectModal(true); }}
                               data-testid={`button-reject-submission-${sub.id}`}
                             >
@@ -2847,7 +2853,7 @@ export default function AdminPage() {
                           )}
 
                           <button
-                            className={sub.submissionBanned ? "export-button" : "delete-button"}
+                            className={sub.submissionBanned ? "export-button submission-btn-save" : "export-button submission-btn-shadowban"}
                             onClick={() => toggleBanMutation.mutate(sub.userId)}
                             disabled={toggleBanMutation.isPending}
                             data-testid={`button-toggle-ban-${sub.id}`}
