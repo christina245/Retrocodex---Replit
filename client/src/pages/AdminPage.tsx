@@ -1903,11 +1903,10 @@ export default function AdminPage() {
                         {submissionActionMsg.text}
                       </div>
                     )}
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <div className="submission-action-row">
                       <button
                         type="button"
-                        className="submit-button"
-                        style={{ background: '#555' }}
+                        className="submit-button submission-draft-btn"
                         onClick={handleSaveDraft}
                         disabled={isDraftSaving || isPublishing}
                         data-testid="button-save-draft"

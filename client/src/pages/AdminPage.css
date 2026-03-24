@@ -649,6 +649,21 @@
   background: #1a1a1a;
 }
 
+/* Save Draft / Publish side-by-side row in Edit User Submission form */
+.submission-action-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.submission-draft-btn {
+  background: #555555;
+}
+
+.submission-draft-btn:hover:not(:disabled) {
+  background: #3d3d3d;
+}
+
 .emails-table-container {
   background: white;
   border: 1px solid #e5e5e5;
