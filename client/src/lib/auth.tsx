@@ -84,13 +84,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const login = useCallback(async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = useCallback(async (identifier: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
       });
       const data = await res.json();
       if (res.ok) {

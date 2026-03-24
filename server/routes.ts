@@ -242,15 +242,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(429).json({ message: "Too many failed attempts. Please try again in 15 minutes." });
     }
     try {
-      const { email, password } = z.object({
-        email: z.string().min(1),
+      const { identifier, password } = z.object({
+        identifier: z.string().min(1),
         password: z.string().min(1),
       }).parse(req.body);
 
-      const [account] = await db.select()
-        .from(userAccounts)
-        .where(eq(userAccounts.email, email.toLowerCase()))
-        .limit(1);
+      let account: typeof userAccounts.$inferSelect | undefined;
+
+      if (identifier.includes("@")) {
+        const [row] = await db.select()
+          .from(userAccounts)
+          .where(eq(userAccounts.email, identifier.toLowerCase()))
+          .limit(1);
+        account = row;
+      } else {
+        const [row] = await db
+          .select({ account: userAccounts })
+          .from(userProfiles)
+          .innerJoin(userAccounts, eq(userAccounts.id, userProfiles.id))
+          .where(eq(userProfiles.username, identifier))
+          .limit(1);
+        account = row?.account;
+      }
 
       if (!account) {
         recordAuthAttempt(ip);
