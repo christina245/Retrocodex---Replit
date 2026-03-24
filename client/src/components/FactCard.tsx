@@ -103,7 +103,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
                   return tooltipText ? (
                     <Tooltip key={index}>
                       <TooltipTrigger asChild>{chip}</TooltipTrigger>
-                      <TooltipContent side="bottom" className="fact-filter-tooltip bg-[#2C2C2C] text-white border-0">
+                      <TooltipContent side="bottom" className="fact-filter-tooltip bg-[#2C2C2C] text-white border-0 z-[9999]">
                         <p>{tooltipText}</p>
                       </TooltipContent>
                     </Tooltip>
