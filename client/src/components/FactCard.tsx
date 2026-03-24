@@ -11,7 +11,7 @@ const FILTER_TOOLTIPS: Record<string, string> = {
   "context matters": "The validity of this fact differs depending on how key terms are defined or interpreted.",
   "regionally taught": "This fact is mostly taught or believed in certain regions or cultures.",
   "controversial": "This topic is subject to ongoing debate and differing interpretations among experts or the public.",
-  "uncertain": "The evidence on this topic is limited, mixed, or still being studied.",
+  "uncertain": "Consensus on this fact's validity varies among experts.",
 };
 
 const categoryIcons: Record<string, typeof Scroll> = {
@@ -103,7 +103,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
                   return tooltipText ? (
                     <Tooltip key={index}>
                       <TooltipTrigger asChild>{chip}</TooltipTrigger>
-                      <TooltipContent side="top" className="fact-filter-tooltip">
+                      <TooltipContent side="bottom" className="fact-filter-tooltip bg-[#2C2C2C] text-white border-0">
                         <p>{tooltipText}</p>
                       </TooltipContent>
                     </Tooltip>
