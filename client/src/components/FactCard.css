@@ -282,3 +282,10 @@
     height: 8px;
   }
 }
+
+.fact-filter-tooltip {
+  max-width: 240px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-align: center;
+}

@@ -1,8 +1,18 @@
 import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap, Activity, HeartHandshake, DiamondPlus } from "lucide-react";
 import { Link } from "wouter";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import forwardArrow from "@assets/forward triangle red.png";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
 import "./FactCard.css";
+
+const FILTER_TOOLTIPS: Record<string, string> = {
+  "official revision": "This fact was formally revised or replaced by an official authority in a specific year.",
+  "partially true": "This fact contains an element of truth, but may be incomplete, oversimplified, misunderstood, or missing important context that affects its accuracy.",
+  "context matters": "The validity of this fact differs depending on how key terms are defined or interpreted.",
+  "regionally taught": "This fact is mostly taught or believed in certain regions or cultures.",
+  "controversial": "This topic is subject to ongoing debate and differing interpretations among experts or the public.",
+  "uncertain": "The evidence on this topic is limited, mixed, or still being studied.",
+};
 
 const categoryIcons: Record<string, typeof Scroll> = {
   "HISTORY": Scroll,
@@ -82,13 +92,22 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
                 {fact.factFilters.map((filter, index) => {
                   const isOfficialRevision = filter.toLowerCase() === "official revision";
                   const label = isOfficialRevision && fact.revisionYear
-                    ? `Official Revision · ${fact.revisionYear}`
+                    ? `Official Revision  -  ${fact.revisionYear}`
                     : toTitleCase(filter);
-                  return (
+                  const tooltipText = FILTER_TOOLTIPS[filter.toLowerCase()];
+                  const chip = (
                     <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
                       {label}
                     </span>
                   );
+                  return tooltipText ? (
+                    <Tooltip key={index}>
+                      <TooltipTrigger asChild>{chip}</TooltipTrigger>
+                      <TooltipContent side="top" className="fact-filter-tooltip">
+                        <p>{tooltipText}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : chip;
                 })}
               </div>
             )}
