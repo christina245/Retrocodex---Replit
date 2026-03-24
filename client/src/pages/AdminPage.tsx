@@ -126,6 +126,7 @@ export default function AdminPage() {
 
   // Submissions state
   const [submissionsTab, setSubmissionsTab] = useState<"pending" | "saved" | "rejected">("pending");
+  const [expandedSubmissionId, setExpandedSubmissionId] = useState<string | null>(null);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectingSubmissionId, setRejectingSubmissionId] = useState<string | null>(null);
   const [rejectNote, setRejectNote] = useState("");
@@ -1950,11 +1951,18 @@ export default function AdminPage() {
                     <p style={{ margin: "1rem 0", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
                       This will create a live published fact from the current form data and mark the submission as published.
                     </p>
-                    <div style={{ marginBottom: "1rem", padding: "0.75rem", background: "var(--muted)", borderRadius: "6px", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <Mail size={16} style={{ color: "var(--muted-foreground)", flexShrink: 0 }} />
-                      <span style={{ fontSize: "0.85rem", color: "var(--muted-foreground)" }}>
-                        Submitter will be notified by email when this fact goes live.
-                      </span>
+                    <div style={{ marginBottom: "1rem" }}>
+                      <p style={{ fontSize: "0.8rem", color: "var(--muted-foreground)", marginBottom: "0.5rem" }}>Notify the submitter:</p>
+                      <button
+                        type="button"
+                        className="export-button"
+                        style={{ background: "#1565c0", fontSize: "0.85rem" }}
+                        onClick={() => {}}
+                        data-testid="button-notify-submitter"
+                      >
+                        <Mail size={14} />
+                        Send notification email to submitter
+                      </button>
                     </div>
                     <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
                       <button className="cancel-edit-button" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-cancel-publish">Cancel (Save Draft)</button>
@@ -2851,14 +2859,13 @@ export default function AdminPage() {
                           {sub.status === "saved" && (
                             <button
                               className="export-button submission-btn-save"
-                              onClick={() => loadSubmissionForEdit(sub)}
+                              onClick={() => setExpandedSubmissionId(expandedSubmissionId === sub.id ? null : sub.id)}
                               data-testid={`button-edit-submission-${sub.id}`}
                             >
                               <Edit2 size={15} />
-                              Edit &amp; Publish
+                              {expandedSubmissionId === sub.id ? "Collapse" : "Review & Publish"}
                             </button>
                           )}
-
                           {sub.status === "rejected" && (
                             <button
                               className="export-button submission-btn-save"
@@ -2893,6 +2900,52 @@ export default function AdminPage() {
                             {sub.submissionBanned ? "Remove Ban" : "Shadowban"}
                           </button>
                         </div>
+
+                        {/* Inline expanded review panel for saved submissions */}
+                        {sub.status === "saved" && expandedSubmissionId === sub.id && (
+                          <div
+                            data-testid={`panel-review-${sub.id}`}
+                            style={{ marginTop: "1rem", borderTop: "1px solid var(--border)", paddingTop: "1rem" }}
+                          >
+                            <p style={{ fontWeight: 600, fontSize: "0.85rem", marginBottom: "0.75rem" }}>Full Submission Review</p>
+                            <div style={{ background: "#ffffff", borderRadius: "10px", margin: "10px 0", padding: "10px" }}>
+                              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                                <X size={15} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
+                                <div>
+                                  <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Myth</p>
+                                  <p style={{ margin: "4px 0 0", fontWeight: 500 }}>{sub.mythHeader}</p>
+                                  {sub.mythDetails && <p style={{ margin: "4px 0 0", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>{sub.mythDetails}</p>}
+                                </div>
+                              </div>
+                            </div>
+                            <div style={{ background: "#ffffff", borderRadius: "10px", margin: "10px 0", padding: "10px" }}>
+                              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                                <Check size={15} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
+                                <div>
+                                  <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Truth</p>
+                                  <p style={{ margin: "4px 0 0", fontWeight: 500 }}>{sub.truthHeader}</p>
+                                  {sub.truthDetails && <p style={{ margin: "4px 0 0", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>{sub.truthDetails}</p>}
+                                </div>
+                              </div>
+                            </div>
+                            {sub.considerations && (
+                              <div style={{ padding: "0.6rem 0.75rem", background: "var(--muted)", borderRadius: "6px", marginBottom: "0.75rem" }}>
+                                <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>Notes from submitter: </span>
+                                <span style={{ fontSize: "0.85rem" }}>{sub.considerations}</span>
+                              </div>
+                            )}
+                            <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.75rem" }}>
+                              <button
+                                className="export-button submission-btn-save"
+                                onClick={() => { loadSubmissionForEdit(sub); setExpandedSubmissionId(null); }}
+                                data-testid={`button-full-edit-from-panel-${sub.id}`}
+                              >
+                                <Edit2 size={15} />
+                                Open Full Editor
+                              </button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))
                 )}

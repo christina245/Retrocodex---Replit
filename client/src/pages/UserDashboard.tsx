@@ -1540,8 +1540,16 @@ export default function UserDashboard() {
                               <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
                             </div>
                             <div className="activity-post-body">
-                              <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
-                              <p style={{ margin: "0.4rem 0 0", fontSize: "0.9rem", fontStyle: "italic" }}>"{s.mythHeader}"</p>
+                              <p style={{ margin: "0 0 0.5rem", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
+                              <p className="activity-submitted-label">You submitted:</p>
+                              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", marginBottom: "0.3rem" }}>
+                                <X size={13} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
+                                <p style={{ margin: 0, fontSize: "0.9rem", fontStyle: "italic" }} data-testid={`notif-myth-${s.id}`}>"{s.mythHeader}"</p>
+                              </div>
+                              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem" }}>
+                                <Check size={13} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
+                                <p style={{ margin: 0, fontSize: "0.9rem" }} data-testid={`notif-truth-${s.id}`}>{s.truthHeader}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
