@@ -1134,7 +1134,7 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <main className="admin-main">
-        {currentView === 'add-fact' && (
+        {(currentView === 'add-fact' || (currentView === 'submissions' && !!editingSubmissionId)) && (
           <div className="admin-content">
             <div className="content-header">
               <div>
@@ -2711,7 +2711,7 @@ export default function AdminPage() {
             </div>
           </div>
         )}
-        {currentView === 'submissions' && (
+        {currentView === 'submissions' && !editingSubmissionId && (
           <div className="admin-content admin-content-wide">
             <div className="content-header">
               <div>
@@ -2863,18 +2863,11 @@ export default function AdminPage() {
                           {sub.status === "saved" && (
                             <button
                               className="export-button submission-btn-save"
-                              onClick={() => {
-                                if (expandedSubmissionId === sub.id) {
-                                  setExpandedSubmissionId(null);
-                                } else {
-                                  loadSubmissionForEdit(sub);
-                                  setExpandedSubmissionId(sub.id);
-                                }
-                              }}
+                              onClick={() => loadSubmissionForEdit(sub)}
                               data-testid={`button-edit-submission-${sub.id}`}
                             >
                               <Edit2 size={15} />
-                              {expandedSubmissionId === sub.id ? "Collapse" : "Review & Publish"}
+                              Review &amp; Publish
                             </button>
                           )}
                           {sub.status === "rejected" && (
@@ -2912,134 +2905,6 @@ export default function AdminPage() {
                           </button>
                         </div>
 
-                        {/* Inline edit form for saved submissions */}
-                        {sub.status === "saved" && expandedSubmissionId === sub.id && (
-                          <div
-                            data-testid={`panel-review-${sub.id}`}
-                            style={{ marginTop: "1rem", borderTop: "1px solid var(--border)", paddingTop: "1rem" }}
-                          >
-                            <h4 style={{ fontWeight: 600, fontSize: "0.9rem", marginBottom: "1rem", color: "var(--foreground)" }}>
-                              Edit User Fact Submission — <span style={{ fontWeight: 400, color: "var(--muted-foreground)" }}>{sub.username}</span>
-                            </h4>
-
-                            {sub.considerations && (
-                              <div style={{ padding: "0.6rem 0.75rem", background: "var(--muted)", borderRadius: "6px", marginBottom: "1rem", fontSize: "0.85rem" }}>
-                                <strong>Submitter notes:</strong> {sub.considerations}
-                              </div>
-                            )}
-
-                            {/* Myth fields */}
-                            <div style={{ marginBottom: "1rem" }}>
-                              <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 600, marginBottom: "0.4rem" }}>
-                                <X size={13} style={{ color: "#e53e3e" }} /> Myth Header
-                              </label>
-                              <textarea
-                                value={mythHeader}
-                                onChange={e => setMythHeader(e.target.value)}
-                                rows={2}
-                                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid var(--border)", fontSize: "0.9rem", resize: "vertical", background: "#ffffff", color: "#000" }}
-                                data-testid={`inline-myth-header-${sub.id}`}
-                              />
-                            </div>
-                            <div style={{ marginBottom: "1rem" }}>
-                              <label style={{ fontSize: "0.8rem", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>Myth Details</label>
-                              <textarea
-                                value={mythDetails}
-                                onChange={e => setMythDetails(e.target.value)}
-                                rows={3}
-                                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid var(--border)", fontSize: "0.9rem", resize: "vertical", background: "#ffffff", color: "#000" }}
-                                data-testid={`inline-myth-details-${sub.id}`}
-                              />
-                            </div>
-
-                            {/* Truth fields */}
-                            <div style={{ marginBottom: "1rem" }}>
-                              <label style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", fontWeight: 600, marginBottom: "0.4rem" }}>
-                                <Check size={13} style={{ color: "#38a169" }} /> Truth Header
-                              </label>
-                              <textarea
-                                value={truthHeader}
-                                onChange={e => setTruthHeader(e.target.value)}
-                                rows={2}
-                                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid var(--border)", fontSize: "0.9rem", resize: "vertical", background: "#ffffff", color: "#000" }}
-                                data-testid={`inline-truth-header-${sub.id}`}
-                              />
-                            </div>
-                            <div style={{ marginBottom: "1rem" }}>
-                              <label style={{ fontSize: "0.8rem", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>Truth Details</label>
-                              <textarea
-                                value={truthDetails}
-                                onChange={e => setTruthDetails(e.target.value)}
-                                rows={3}
-                                style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid var(--border)", fontSize: "0.9rem", resize: "vertical", background: "#ffffff", color: "#000" }}
-                                data-testid={`inline-truth-details-${sub.id}`}
-                              />
-                            </div>
-
-                            {/* Sources */}
-                            <div style={{ marginBottom: "1rem" }}>
-                              <label style={{ fontSize: "0.8rem", fontWeight: 600, display: "block", marginBottom: "0.4rem" }}>Sources</label>
-                              {sources.map((src, idx) => (
-                                <div key={src.id} style={{ display: "flex", gap: "0.4rem", marginBottom: "0.4rem", alignItems: "center" }}>
-                                  <input
-                                    type="text"
-                                    placeholder="URL"
-                                    value={src.link}
-                                    onChange={e => setSources(sources.map((s, i) => i === idx ? { ...s, link: e.target.value, citation: e.target.value } : s))}
-                                    style={{ flex: 1, padding: "0.4rem 0.5rem", borderRadius: "6px", border: "1px solid var(--border)", fontSize: "0.85rem", background: "#ffffff", color: "#000" }}
-                                    data-testid={`inline-source-${sub.id}-${idx}`}
-                                  />
-                                  <button
-                                    type="button"
-                                    onClick={() => setSources(sources.filter((_, i) => i !== idx))}
-                                    style={{ background: "none", border: "none", cursor: "pointer", color: "#e53e3e", padding: "0.2rem" }}
-                                    data-testid={`inline-remove-source-${sub.id}-${idx}`}
-                                  >
-                                    <X size={14} />
-                                  </button>
-                                </div>
-                              ))}
-                              <button
-                                type="button"
-                                onClick={() => setSources([...sources, { id: generateId(), citation: "", link: "", logoUrl: undefined }])}
-                                style={{ background: "none", border: "1px dashed var(--border)", borderRadius: "6px", padding: "0.3rem 0.75rem", fontSize: "0.8rem", cursor: "pointer", color: "var(--muted-foreground)" }}
-                                data-testid={`inline-add-source-${sub.id}`}
-                              >
-                                + Add source
-                              </button>
-                            </div>
-
-                            {/* Status messages */}
-                            {submissionActionMsg && (
-                              <div className={`submit-message ${submissionActionMsg.type === "success" ? "success" : "error"}`} style={{ marginBottom: "0.75rem" }}>
-                                {submissionActionMsg.text}
-                              </div>
-                            )}
-
-                            {/* Actions */}
-                            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                              <button
-                                type="button"
-                                className="submit-button"
-                                style={{ background: "#555" }}
-                                onClick={handleSaveDraft}
-                                disabled={isDraftSaving || isPublishing}
-                                data-testid={`inline-save-draft-${sub.id}`}
-                              >
-                                {isDraftSaving ? "Saving..." : "Save Draft"}
-                              </button>
-                              <button
-                                type="button"
-                                className="submit-button"
-                                onClick={() => setShowPublishModal(true)}
-                                disabled={isDraftSaving || isPublishing}
-                                data-testid={`inline-publish-${sub.id}`}
-                              >
-                                Save and Publish
-                              </button>
-                            </div>
-                          </div>
-                        )}
                       </div>
                     ))
                 )}
