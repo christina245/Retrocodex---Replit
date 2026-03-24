@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield } from "lucide-react";
+import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
@@ -15,7 +15,26 @@ interface EmailSubscription {
   createdAt: string;
 }
 
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins" | "submissions";
+
+interface FactSubmission {
+  id: string;
+  userId: string;
+  username: string;
+  mythHeader: string;
+  mythDetails: string;
+  truthHeader: string;
+  truthDetails: string;
+  sources: Source[];
+  considerations: string;
+  otherDetails: string;
+  status: "pending" | "saved" | "rejected" | "published";
+  adminNote: string | null;
+  draftData: Record<string, any> | null;
+  createdAt: string;
+  email: string | null;
+  submissionBanned: boolean | null;
+}
 
 const AVAILABLE_FACT_FILTERS = [
   "Context Matters",
@@ -105,6 +124,18 @@ export default function AdminPage() {
   const [submitMessage, setSubmitMessage] = useState("");
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
+  // Submissions state
+  const [submissionsTab, setSubmissionsTab] = useState<"pending" | "saved" | "rejected">("pending");
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectingSubmissionId, setRejectingSubmissionId] = useState<string | null>(null);
+  const [rejectNote, setRejectNote] = useState("");
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const [editingSubmissionId, setEditingSubmissionId] = useState<string | null>(null);
+  const [submissionUsername, setSubmissionUsername] = useState("");
+  const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const { data: emails, isLoading: emailsLoading, error: emailsError } = useQuery<EmailSubscription[]>({
     queryKey: ["/api/emails"],
     queryFn: async () => {
@@ -181,6 +212,60 @@ export default function AdminPage() {
       return response.json();
     },
     enabled: isAuthenticated && currentView === "manage-admins",
+  });
+
+  const { data: submissions, isLoading: submissionsLoading, refetch: refetchSubmissions } = useQuery<FactSubmission[]>({
+    queryKey: ["/api/submissions"],
+    queryFn: async () => {
+      const response = await fetch("/api/submissions", {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to fetch submissions");
+      return response.json();
+    },
+    enabled: isAuthenticated && currentView === "submissions",
+  });
+
+  const patchSubmissionMutation = useMutation({
+    mutationFn: async ({ id, ...data }: { id: string; status?: string; adminNote?: string; draftData?: any }) => {
+      const response = await fetch(`/api/submissions/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('admin:' + password),
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to update submission");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/submissions"] });
+    },
+  });
+
+  const toggleBanMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const response = await fetch("/api/admin/toggle-submission-ban", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('admin:' + password),
+        },
+        body: JSON.stringify({ userId }),
+      });
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to toggle ban");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/submissions"] });
+    },
   });
 
   const grantAdminMutation = useMutation({
@@ -263,6 +348,9 @@ export default function AdminPage() {
     setRelatedMythIds([]);
     setRelatedMythSearch("");
     setSubmitMessage("");
+    setEditingSubmissionId(null);
+    setSubmissionUsername("");
+    setSubmissionActionMsg(null);
   };
 
   // Reset blog form
@@ -469,10 +557,10 @@ export default function AdminPage() {
     setIsTrending(fact.isTrending || false);
     setIsDebated(fact.isDebated || false);
     setIsPopular(fact.isPopular || false);
-    setMythHeader(fact.mythHeader);
-    setMythDetails(fact.mythDetails);
-    setTruthHeader(fact.truthHeader);
-    setTruthDetails(fact.truthDetails);
+    setMythHeader(fact.mythHeader ?? "");
+    setMythDetails(fact.mythDetails ?? "");
+    setTruthHeader(fact.truthHeader ?? "");
+    setTruthDetails(fact.truthDetails ?? "");
     setSources(fact.sources && fact.sources.length > 0 
       ? fact.sources 
       : [{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
@@ -480,6 +568,116 @@ export default function AdminPage() {
     setNuances(fact.nuances || []);
     setRelatedMythIds(fact.relatedMythIds || []);
     setCurrentView("add-fact");
+  };
+
+  const loadSubmissionForEdit = (sub: FactSubmission) => {
+    const d = sub.draftData || {};
+    resetForm();
+    setEditingSubmissionId(sub.id);
+    setSubmissionUsername(sub.username);
+    setMythHeader(d.mythHeader ?? sub.mythHeader ?? "");
+    setMythDetails(d.mythDetails ?? sub.mythDetails ?? "");
+    setTruthHeader(d.truthHeader ?? sub.truthHeader ?? "");
+    setTruthDetails(d.truthDetails ?? sub.truthDetails ?? "");
+    setTitle(d.title ?? "");
+    setSlug(d.slug ?? "");
+    setCoverPhoto(d.coverPhoto ?? "");
+    setSelectedCategories(d.categories ?? []);
+    setSelectedSubcategories(d.subcategories ?? []);
+    setSelectedTags(d.tags ?? []);
+    setSearchTags(d.searchTags ?? []);
+    setFeatured(d.featured ?? false);
+    setBetaOnly(d.betaOnly ?? false);
+    setIsTrending(d.isTrending ?? false);
+    setIsDebated(d.isDebated ?? false);
+    setIsPopular(d.isPopular ?? false);
+    setRevisionYear(d.revisionYear ?? null);
+    setOriginDecade(d.originDecade ?? null);
+    setTaughtUntilYear(d.taughtUntilYear ?? null);
+    const rawSources = d.sources ?? sub.sources;
+    setSources(rawSources && rawSources.length > 0
+      ? rawSources.map((s: any) => ({ id: s.id || generateId(), citation: s.citation || "", link: s.link || "", logoUrl: s.logoUrl }))
+      : [{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
+    setTimeline(d.timeline ?? []);
+    setNuances(d.nuances ?? []);
+    setRelatedMythIds(d.relatedMythIds ?? []);
+    setCurrentView("add-fact");
+    window.scrollTo(0, 0);
+  };
+
+  const handleSaveDraft = async () => {
+    if (!editingSubmissionId) return;
+    setIsDraftSaving(true);
+    setSubmissionActionMsg(null);
+    try {
+      const draftData = {
+        title, slug, coverPhoto,
+        categories: selectedCategories, subcategories: selectedSubcategories,
+        tags: selectedTags, searchTags, featured, betaOnly,
+        isTrending, isDebated, isPopular,
+        revisionYear, originDecade, taughtUntilYear,
+        mythHeader, mythDetails, truthHeader, truthDetails,
+        sources, timeline, nuances, relatedMythIds,
+      };
+      await patchSubmissionMutation.mutateAsync({ id: editingSubmissionId, draftData });
+      setSubmissionActionMsg({ type: "success", text: "Draft saved." });
+    } catch (err) {
+      setSubmissionActionMsg({ type: "error", text: err instanceof Error ? err.message : "Failed to save draft." });
+    } finally {
+      setIsDraftSaving(false);
+    }
+  };
+
+  const handlePublishSubmission = async () => {
+    if (!editingSubmissionId) return;
+    setIsPublishing(true);
+    setSubmissionActionMsg(null);
+    try {
+      const validSources = sources.filter(s => s.citation && s.link).map(s => ({ id: s.id, citation: s.citation, link: s.link, logoUrl: s.logoUrl || undefined }));
+      const factData = {
+        title, slug, coverPhoto: coverPhoto || undefined,
+        categories: selectedCategories,
+        subcategories: selectedCategories.includes("Other") ? selectedSubcategories : [],
+        factFilters: selectedTags, searchTags, featured, betaOnly,
+        isTrending, isDebated, isPopular,
+        revisionYear: selectedTags.includes("Official Revision") ? revisionYear : null,
+        originDecade: originDecade || null, taughtUntilYear: taughtUntilYear || null,
+        mythHeader, mythDetails, truthHeader, truthDetails,
+        sources: validSources, timeline: timeline.filter(t => t.year && t.description),
+        nuances: nuances.filter(n => n.type && n.body), relatedMythIds: relatedMythIds.filter(id => id),
+      };
+      const factRes = await fetch("/api/facts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'Authorization': 'Basic ' + btoa('admin:' + password) },
+        body: JSON.stringify(factData),
+      });
+      if (!factRes.ok) {
+        const err = await factRes.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to create fact");
+      }
+      await patchSubmissionMutation.mutateAsync({ id: editingSubmissionId, status: "published" });
+      queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
+      setShowPublishModal(false);
+      resetForm();
+      setCurrentView("submissions");
+    } catch (err) {
+      setSubmissionActionMsg({ type: "error", text: err instanceof Error ? err.message : "Failed to publish." });
+      setShowPublishModal(false);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const handleRejectSubmission = async () => {
+    if (!rejectingSubmissionId || !rejectNote.trim()) return;
+    try {
+      await patchSubmissionMutation.mutateAsync({ id: rejectingSubmissionId, status: "rejected", adminNote: rejectNote.trim() });
+      setShowRejectModal(false);
+      setRejectingSubmissionId(null);
+      setRejectNote("");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to reject submission.");
+    }
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -917,6 +1115,15 @@ export default function AdminPage() {
             <Shield size={18} />
             <span>Manage Admins</span>
           </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'submissions' ? 'active' : ''}`}
+            onClick={() => setCurrentView('submissions')}
+            data-testid="nav-submissions"
+          >
+            <Inbox size={18} />
+            <span>Submissions</span>
+          </button>
         </nav>
       </aside>
 
@@ -926,12 +1133,25 @@ export default function AdminPage() {
           <div className="admin-content">
             <div className="content-header">
               <div>
-                <h1 className="content-title">{editingFactId ? 'Edit Fact' : 'Add New Fact'}</h1>
-                {editingFactId && (
+                <h1 className="content-title">
+                  {editingSubmissionId ? 'Edit User Fact Submission' : editingFactId ? 'Edit Fact' : 'Add New Fact'}
+                </h1>
+                {editingSubmissionId && (
+                  <p className="content-subtitle">Submitted by <strong>{submissionUsername}</strong></p>
+                )}
+                {!editingSubmissionId && editingFactId && (
                   <p className="content-subtitle">Editing: {title || 'Untitled'}</p>
                 )}
               </div>
-              {editingFactId && (
+              {editingSubmissionId ? (
+                <button
+                  onClick={() => { resetForm(); setCurrentView('submissions'); }}
+                  className="cancel-edit-button"
+                  data-testid="button-back-to-submissions"
+                >
+                  Back to Submissions
+                </button>
+              ) : editingFactId ? (
                 <button 
                   onClick={resetForm}
                   className="cancel-edit-button"
@@ -939,7 +1159,7 @@ export default function AdminPage() {
                 >
                   Cancel Edit
                 </button>
-              )}
+              ) : null}
             </div>
             
             <form onSubmit={handleSubmit} className="fact-form">
@@ -1671,20 +1891,77 @@ export default function AdminPage() {
 
               {/* Submit */}
               <div className="form-actions">
-                {submitMessage && (
-                  <div className={`submit-message ${submitMessage.includes('success') ? 'success' : 'error'}`}>
-                    {submitMessage}
-                  </div>
+                {editingSubmissionId ? (
+                  <>
+                    {submissionActionMsg && (
+                      <div className={`submit-message ${submissionActionMsg.type === 'success' ? 'success' : 'error'}`}>
+                        {submissionActionMsg.text}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className="submit-button"
+                      style={{ background: '#555', marginRight: '0.5rem' }}
+                      onClick={handleSaveDraft}
+                      disabled={isDraftSaving || isPublishing}
+                      data-testid="button-save-draft"
+                    >
+                      {isDraftSaving ? "Saving..." : "Save Draft"}
+                    </button>
+                    <button
+                      type="button"
+                      className="submit-button"
+                      onClick={() => setShowPublishModal(true)}
+                      disabled={isDraftSaving || isPublishing}
+                      data-testid="button-save-and-publish"
+                    >
+                      Save and Publish
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {submitMessage && (
+                      <div className={`submit-message ${submitMessage.includes('success') ? 'success' : 'error'}`}>
+                        {submitMessage}
+                      </div>
+                    )}
+                    <button
+                      type="submit"
+                      className="submit-button"
+                      disabled={isSubmitting}
+                      data-testid="button-submit-fact"
+                    >
+                      {isSubmitting ? (editingFactId ? "Saving..." : "Creating...") : (editingFactId ? "Save Changes" : "Create Fact")}
+                    </button>
+                  </>
                 )}
-                <button
-                  type="submit"
-                  className="submit-button"
-                  disabled={isSubmitting}
-                  data-testid="button-submit-fact"
-                >
-                  {isSubmitting ? (editingFactId ? "Saving..." : "Creating...") : (editingFactId ? "Save Changes" : "Create Fact")}
-                </button>
               </div>
+
+              {/* Publish confirmation modal */}
+              {showPublishModal && (
+                <div className="modal-overlay" onClick={() => setShowPublishModal(false)}>
+                  <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+                    <div className="modal-header">
+                      <h3 className="modal-title">Publish this fact?</h3>
+                      <button className="modal-close" onClick={() => setShowPublishModal(false)} data-testid="button-close-publish-modal"><X size={18} /></button>
+                    </div>
+                    <p style={{ margin: "1rem 0", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
+                      This will create a live published fact from the current form data and mark the submission as published.
+                    </p>
+                    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+                      <button className="cancel-edit-button" onClick={() => setShowPublishModal(false)} data-testid="button-cancel-publish">Cancel</button>
+                      <button
+                        className="submit-button"
+                        onClick={handlePublishSubmission}
+                        disabled={isPublishing}
+                        data-testid="button-confirm-publish"
+                      >
+                        {isPublishing ? "Publishing..." : "Yes, Publish"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </form>
           </div>
         )}
@@ -2412,6 +2689,213 @@ export default function AdminPage() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+        {currentView === 'submissions' && (
+          <div className="admin-content admin-content-wide">
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">Fact Submissions</h1>
+                <p className="content-subtitle">Review and moderate user-submitted facts</p>
+              </div>
+              <button
+                className="cancel-edit-button"
+                onClick={() => refetchSubmissions()}
+                data-testid="button-refresh-submissions"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {/* Tabs */}
+            <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.5rem", borderBottom: "1px solid var(--border)" }}>
+              {(["pending", "saved", "rejected"] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setSubmissionsTab(tab)}
+                  data-testid={`tab-submissions-${tab}`}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    fontWeight: submissionsTab === tab ? 700 : 400,
+                    background: "none",
+                    border: "none",
+                    borderBottom: submissionsTab === tab ? "2px solid var(--primary)" : "2px solid transparent",
+                    cursor: "pointer",
+                    textTransform: "capitalize",
+                    color: submissionsTab === tab ? "var(--primary)" : "var(--muted-foreground)",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  {tab}{" "}
+                  <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+                    ({(submissions || []).filter(s => s.status === tab).length})
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {submissionsLoading ? (
+              <div className="loading-message" data-testid="text-submissions-loading">Loading submissions...</div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {(submissions || []).filter(s => s.status === submissionsTab).length === 0 ? (
+                  <div className="empty-state" data-testid="text-submissions-empty">
+                    <p>No {submissionsTab} submissions.</p>
+                  </div>
+                ) : (
+                  (submissions || [])
+                    .filter(s => s.status === submissionsTab)
+                    .map(sub => (
+                      <div
+                        key={sub.id}
+                        data-testid={`card-submission-${sub.id}`}
+                        style={{
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                          padding: "1.25rem",
+                          background: "var(--card)",
+                        }}
+                      >
+                        {/* Header row */}
+                        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", marginBottom: "0.75rem" }}>
+                          <div>
+                            <span style={{ fontWeight: 600, fontSize: "0.95rem" }} data-testid={`text-sub-username-${sub.id}`}>
+                              {sub.username}
+                            </span>
+                            {sub.email && (
+                              <span style={{ color: "var(--muted-foreground)", fontSize: "0.8rem", marginLeft: "0.5rem" }}>
+                                ({sub.email})
+                              </span>
+                            )}
+                            {sub.submissionBanned && (
+                              <span style={{ marginLeft: "0.5rem", color: "#e55", fontSize: "0.75rem", fontWeight: 700 }}>
+                                SHADOWBANNED
+                              </span>
+                            )}
+                          </div>
+                          <span style={{ color: "var(--muted-foreground)", fontSize: "0.8rem" }}>
+                            {new Date(sub.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                          </span>
+                        </div>
+
+                        {/* Content */}
+                        <div style={{ marginBottom: "0.75rem" }}>
+                          <div style={{ marginBottom: "0.4rem" }}>
+                            <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Myth</span>
+                            <p style={{ margin: "0.1rem 0 0", fontWeight: 500 }} data-testid={`text-sub-myth-${sub.id}`}>{sub.mythHeader}</p>
+                          </div>
+                          <div>
+                            <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Truth</span>
+                            <p style={{ margin: "0.1rem 0 0", fontWeight: 500 }} data-testid={`text-sub-truth-${sub.id}`}>{sub.truthHeader}</p>
+                          </div>
+                        </div>
+
+                        {/* Admin note (for rejected) */}
+                        {sub.status === "rejected" && sub.adminNote && (
+                          <div style={{ marginBottom: "0.75rem", padding: "0.6rem 0.75rem", background: "rgba(200,50,50,0.08)", borderRadius: "6px", border: "1px solid rgba(200,50,50,0.2)" }}>
+                            <span style={{ fontSize: "0.75rem", color: "#b44", fontWeight: 600 }}>Admin Note: </span>
+                            <span style={{ fontSize: "0.85rem" }}>{sub.adminNote}</span>
+                          </div>
+                        )}
+
+                        {/* Actions */}
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                          {sub.status === "pending" && (
+                            <button
+                              className="export-button"
+                              onClick={() => patchSubmissionMutation.mutate({ id: sub.id, status: "saved" })}
+                              disabled={patchSubmissionMutation.isPending}
+                              data-testid={`button-save-review-${sub.id}`}
+                            >
+                              <ClipboardCheck size={15} />
+                              Save for Review
+                            </button>
+                          )}
+
+                          {sub.status === "saved" && (
+                            <button
+                              className="export-button"
+                              onClick={() => loadSubmissionForEdit(sub)}
+                              data-testid={`button-edit-submission-${sub.id}`}
+                            >
+                              <Edit2 size={15} />
+                              Edit &amp; Publish
+                            </button>
+                          )}
+
+                          {sub.status === "rejected" && (
+                            <button
+                              className="export-button"
+                              onClick={() => patchSubmissionMutation.mutate({ id: sub.id, status: "pending", adminNote: "" })}
+                              disabled={patchSubmissionMutation.isPending}
+                              data-testid={`button-restore-submission-${sub.id}`}
+                            >
+                              <SearchCheck size={15} />
+                              Restore to Pending
+                            </button>
+                          )}
+
+                          {sub.status !== "rejected" && (
+                            <button
+                              className="delete-button"
+                              onClick={() => { setRejectingSubmissionId(sub.id); setRejectNote(""); setShowRejectModal(true); }}
+                              data-testid={`button-reject-submission-${sub.id}`}
+                            >
+                              <X size={15} />
+                              Reject
+                            </button>
+                          )}
+
+                          <button
+                            className={sub.submissionBanned ? "export-button" : "delete-button"}
+                            onClick={() => toggleBanMutation.mutate(sub.userId)}
+                            disabled={toggleBanMutation.isPending}
+                            data-testid={`button-toggle-ban-${sub.id}`}
+                            title={sub.submissionBanned ? "Remove shadowban" : "Shadowban user"}
+                          >
+                            <Ban size={15} />
+                            {sub.submissionBanned ? "Remove Ban" : "Shadowban"}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </div>
+            )}
+
+            {/* Reject modal */}
+            {showRejectModal && (
+              <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
+                <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+                  <div className="modal-header">
+                    <h3 className="modal-title">Reject Submission</h3>
+                    <button className="modal-close" onClick={() => setShowRejectModal(false)} data-testid="button-close-reject-modal"><X size={18} /></button>
+                  </div>
+                  <p style={{ margin: "0.75rem 0 0.5rem", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
+                    Provide a note explaining why this submission is being rejected. This note will be visible to the user.
+                  </p>
+                  <textarea
+                    rows={4}
+                    placeholder="Rejection reason..."
+                    value={rejectNote}
+                    onChange={e => setRejectNote(e.target.value)}
+                    data-testid="input-reject-note"
+                    style={{ width: "100%", padding: "0.6rem 0.75rem", borderRadius: "6px", border: "1px solid var(--border)", background: "var(--background)", color: "var(--foreground)", fontSize: "0.9rem", resize: "vertical", boxSizing: "border-box", marginBottom: "1rem" }}
+                  />
+                  <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+                    <button className="cancel-edit-button" onClick={() => setShowRejectModal(false)} data-testid="button-cancel-reject">Cancel</button>
+                    <button
+                      className="delete-button"
+                      onClick={handleRejectSubmission}
+                      disabled={!rejectNote.trim() || patchSubmissionMutation.isPending}
+                      data-testid="button-confirm-reject"
+                    >
+                      {patchSubmissionMutation.isPending ? "Rejecting..." : "Reject Submission"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </main>

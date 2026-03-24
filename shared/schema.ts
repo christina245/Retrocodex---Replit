@@ -115,6 +115,7 @@ export const userProfiles = pgTable("user_profiles", {
   favoriteTags: text("favorite_tags").array().default([]),
   misinfoSource: text("misinfo_source").default(""),
   isAdmin: boolean("is_admin").default(false),
+  submissionBanned: boolean("submission_banned").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -280,7 +281,10 @@ export const factSubmissions = pgTable("fact_submissions", {
   sources: text("sources").array().default([]),
   considerations: text("considerations").default(""),
   otherDetails: text("other_details").default(""),
+  // status: pending | saved | rejected | published
   status: text("status").notNull().default("pending"),
+  adminNote: text("admin_note"),
+  draftData: jsonb("draft_data"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -603,6 +603,24 @@ export default function UserDashboard() {
     queryKey: ["/api/facts/tags-by-category"],
   });
 
+  interface MySubmission {
+    id: string;
+    mythHeader: string;
+    mythDetails: string;
+    truthHeader: string;
+    truthDetails: string;
+    sources: string[];
+    considerations: string;
+    status: "pending" | "saved" | "rejected" | "published";
+    adminNote: string | null;
+    createdAt: string;
+  }
+
+  const { data: mySubmissions = [], isLoading: mySubmissionsLoading } = useQuery<MySubmission[]>({
+    queryKey: ["/api/submissions/mine"],
+    enabled: isLoggedIn,
+  });
+
   const allAvailableTags: string[] = tagsByCategory
     ? Array.from(
         new Set(
@@ -744,151 +762,47 @@ export default function UserDashboard() {
     },
   ];
 
-  const pendingSubmissions = [
-    {
-      id: "sub-1",
-      myth: "The tongue has separate zones for different tastes: sweet at the tip, salty and sour on the sides, and bitter at the back.",
-      truth: "All taste sensations can be detected across the tongue. While some areas are slightly more sensitive than others, there are no distinct taste zones.",
-      category: ["Life Sciences"],
-      details: "This may have originated as a misconception of a 1901 map that mentioned some parts of the tongue are more sensitive to taste than others, but this was independent of taste type.",
-      moreDetails: "These differences, however, are negligible.",
-      sources: [{ id: "s1", citation: "Nature - Taste Receptors", link: "https://nature.com" }],
-      submittedAt: "Feb 14, 2026",
-    },
-    {
-      id: "sub-2",
-      myth: "MSG is bad for you.",
-      truth: "Most foods containing MSG do not contain enough to cause adverse effects. Experiments proving its dangers used abnormally large amounts of it that would not be present in everyday foods.",
-      category: ["Health & Fitness"],
-      details: "Because of this stigma, it was common for Chinese restaurants to advertise that they did not use MSG. However, MSG is present in canned soups, tomatoes, mushrooms, and Parmesan cheese.",
-      moreDetails: "The stigma around MSG (monosodium glutamate) may have originated from a mix of xenophobia and sensationalist media.",
-      sources: [{ id: "s2", citation: "FDA - Questions and Answers on MSG", link: "https://fda.gov" }],
-      submittedAt: "Feb 12, 2026",
-    },
-    {
-      id: "sub-3",
-      myth: "If you stop working out, muscle turns into fat.",
-      truth: "Muscle and fat are completely different tissue types. It is biologically impossible for one to convert into the other.",
-      category: ["Health & Fitness"],
-      details: "When you stop exercising, muscle mass decreases (atrophy) and fat may accumulate if caloric intake stays the same, creating the illusion of conversion.",
-      sources: [{ id: "s3", citation: "Mayo Clinic - Exercise and Muscle", link: "https://mayoclinic.org" }],
-      submittedAt: "Feb 10, 2026",
-    },
-    {
-      id: "sub-4",
-      myth: "Sweating more means you're burning more fat.",
-      truth: "Sweat is your body's cooling mechanism, not an indicator of fat loss. You can burn significant calories without sweating at all.",
-      category: ["Health & Fitness"],
-      details: "Sweating is a thermoregulatory response. The amount you sweat depends on environmental temperature, humidity, genetics, and fitness level — not fat metabolism.",
-      sources: [{ id: "s4", citation: "Harvard Health - Sweat and Exercise", link: "https://health.harvard.edu" }],
-      submittedAt: "Feb 8, 2026",
-    },
-    {
-      id: "sub-5",
-      myth: "If you swallow gum, it'll stay in your stomach for seven years.",
-      truth: "While gum isn't fully digestible, it passes through the digestive system within a few days, just like other indigestible materials.",
-      category: ["Everyday Life"],
-      details: "The base of chewing gum is indigestible, but the digestive tract moves it along through normal peristalsis. It does not stick to your stomach lining.",
-      sources: [{ id: "s5", citation: "Mayo Clinic - Swallowing Gum", link: "https://mayoclinic.org" }],
-      submittedAt: "Feb 5, 2026",
-    },
-    {
-      id: "sub-6",
-      myth: "There are three states of matter: solid, liquid, and gas.",
-      truth: "There are at least four well-known states of matter, including plasma. Scientists have also identified exotic states like Bose-Einstein condensates.",
-      category: ["Other"],
-      details: "Plasma is by far the most common state of matter in the observable universe, making up over 99% of visible matter including stars and lightning.",
-      sources: [{ id: "s6", citation: "Physics Today - States of Matter", link: "https://physicstoday.org" }],
-      submittedAt: "Feb 3, 2026",
-    },
-  ];
+  const pendingSubmissions = mySubmissions
+    .filter(s => s.status === "pending" || s.status === "saved")
+    .map(s => ({
+      id: s.id,
+      myth: s.mythHeader,
+      truth: s.truthHeader,
+      category: [] as string[],
+      details: s.mythDetails,
+      moreDetails: s.truthDetails,
+      sources: s.sources as string[],
+      submittedAt: new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      status: s.status,
+    }));
 
-  const approvedSubmissions = [
-    {
-      id: "apr-1",
-      myth: "Humans only use 10% of their brains.",
-      truth: "Brain imaging has shown that virtually all areas of the brain are active during various tasks. No area is completely inactive.",
-      category: ["Life Sciences"],
-      details: "This myth has been perpetuated by self-help authors and motivational speakers. Brain scans reveal that much of the brain is active even during simple tasks.",
-      moreDetails: "Different areas of the brain are responsible for different functions, and damage to even small areas can have profound effects.",
-      sources: [{ id: "a1", citation: "Scientific American - Do We Only Use 10% of Our Brains?", link: "https://scientificamerican.com" }],
-      publishedAt: "Feb 15, 2026",
-      slug: "humans-only-use-10-percent-of-brains",
-    },
-    {
-      id: "apr-2",
-      myth: "Lightning never strikes the same place twice.",
-      truth: "Lightning frequently strikes the same place repeatedly, especially tall or isolated structures. The Empire State Building is struck about 20–25 times per year.",
-      category: ["Everyday Life"],
-      details: "The idea that lightning avoids previous strike points is a folk belief with no basis in physics. Lightning follows the path of least resistance.",
-      sources: [{ id: "a2", citation: "NOAA - Lightning Safety", link: "https://noaa.gov" }],
-      publishedAt: "Feb 13, 2026",
-      slug: "lightning-never-strikes-same-place-twice",
-    },
-    {
-      id: "apr-3",
-      myth: "Shaving makes hair grow back thicker and darker.",
-      truth: "Shaving has no effect on the thickness, color, or rate of hair growth. The blunt tip of regrown hair may feel coarser, but it's the same hair.",
-      category: ["Health & Fitness"],
-      details: "This is one of the most common grooming myths. Dermatological studies have repeatedly debunked this claim.",
-      sources: [{ id: "a3", citation: "Mayo Clinic - Hair Removal", link: "https://mayoclinic.org" }],
-      publishedAt: "Feb 11, 2026",
-      slug: "shaving-makes-hair-grow-back-thicker",
-    },
-    {
-      id: "apr-4",
-      myth: "Goldfish have a three-second memory.",
-      truth: "Goldfish can remember things for months. Studies have shown they can be trained to navigate mazes and remember feeding schedules.",
-      category: ["Life Sciences"],
-      details: "Research from the University of Plymouth demonstrated that goldfish can remember learned tasks for up to five months.",
-      sources: [{ id: "a4", citation: "Animal Cognition Journal", link: "https://springer.com" }],
-      publishedAt: "Feb 9, 2026",
-      slug: "goldfish-three-second-memory",
-    },
-  ];
+  const approvedSubmissions = mySubmissions
+    .filter(s => s.status === "published")
+    .map(s => ({
+      id: s.id,
+      myth: s.mythHeader,
+      truth: s.truthHeader,
+      category: [] as string[],
+      details: s.mythDetails,
+      moreDetails: s.truthDetails,
+      sources: s.sources,
+      publishedAt: new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      slug: "",
+    }));
 
-  const rejectedSubmissions = [
-    {
-      id: "rej-1",
-      myth: "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor.",
-      truth: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      category: ["Everyday Life"],
-      details: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-      sources: [{ id: "r1", citation: "Lorem Ipsum Source", link: "https://example.com" }],
-      submittedAt: "Feb 10, 2026",
-      denialReason: "This submission lacks sufficient empirical evidence to support the claim. We were unable to find peer-reviewed sources that substantiate the assertion made. Please consider resubmitting with additional citations from credible academic or scientific publications that directly address the claim being made. Our editorial team reviewed multiple databases including PubMed, Google Scholar, and JSTOR but could not locate any studies that corroborate the central claim. We also consulted with subject-matter experts who noted that the premise of the submission may be based on a common misinterpretation of preliminary findings. We strongly encourage you to review the latest meta-analyses on this topic before resubmitting.",
-    },
-    {
-      id: "rej-2",
-      myth: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.",
-      truth: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur.",
-      category: ["Social Sciences"],
-      details: "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
-      sources: [{ id: "r2", citation: "Perspiciatis Reference", link: "https://example.com" }],
-      submittedAt: "Feb 8, 2026",
-      denialReason: "This submission reads more like a personal opinion than a verifiable fact. The claims made are subjective in nature and cannot be objectively measured or tested. We encourage submissions that present commonly held beliefs alongside evidence-based corrections.",
-    },
-    {
-      id: "rej-3",
-      myth: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis.",
-      truth: "Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.",
-      category: ["History"],
-      details: "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet.",
-      sources: [{ id: "r3", citation: "Vero Eos Source", link: "https://example.com" }],
-      submittedAt: "Feb 5, 2026",
-      denialReason: "This misconception has already been submitted and is currently under review by our editorial team. Duplicate submissions are declined to keep our review queue manageable. You can check the status of the original submission in your dashboard.",
-    },
-    {
-      id: "rej-4",
-      myth: "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse.",
-      truth: "Et harum quidem rerum facilis est et expedita distinctio nam libero tempore.",
-      category: ["Health & Fitness"],
-      details: "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores.",
-      sources: [{ id: "r4", citation: "Autem Vel Reference", link: "https://example.com" }],
-      submittedAt: "Feb 3, 2026",
-      denialReason: "This submission excessively promotes a political agenda. Retrocodex aims to present scientifically verifiable misconceptions without political bias. Submissions that primarily serve to advance a political viewpoint rather than correct a factual misunderstanding are not accepted. Additionally, we found that the framing of the claim relies heavily on partisan sources and opinion editorials rather than objective, peer-reviewed research. We recognize that many topics exist at the intersection of science and policy, but our guidelines require that submissions focus on the factual correction rather than the political implications. If you can reframe the submission to center the scientific evidence and remove the advocacy language, we would be happy to reconsider it for publication.",
-    },
-  ];
+  const rejectedSubmissions = mySubmissions
+    .filter(s => s.status === "rejected")
+    .map(s => ({
+      id: s.id,
+      myth: s.mythHeader,
+      truth: s.truthHeader,
+      category: [] as string[],
+      details: s.mythDetails,
+      sources: s.sources,
+      submittedAt: new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      denialReason: s.adminNote || "",
+    }));
+
 
   const SUBMISSIONS_PER_PAGE = 10;
   const totalSubmissionsPages = Math.ceil(pendingSubmissions.length / SUBMISSIONS_PER_PAGE);
@@ -1767,7 +1681,7 @@ export default function UserDashboard() {
                         <div className="activity-post-main">
                           <div className="activity-post-header">
                             <div className="activity-post-header-text">
-                              <span className="activity-status-text activity-status-text-approved">Your fact submission was approved!</span>
+                              <span className="activity-status-text activity-status-text-approved">Your submission has been published!</span>
                             </div>
                             <span className="following-post-timestamp">1 hour ago</span>
                           </div>
@@ -2558,54 +2472,87 @@ export default function UserDashboard() {
                     {activityTab === "submitted" && (
                       <div className="submissions-section" data-testid="activity-submissions">
                         <div className="submissions-grid" data-testid="submissions-grid">
-                          {paginatedSubmissions.map((sub) => (
+                          {mySubmissionsLoading ? (
+                            <div className="submissions-loading" data-testid="submissions-loading">Loading submissions...</div>
+                          ) : paginatedSubmissions.length === 0 ? (
+                            <div className="submissions-empty" data-testid="submissions-empty">You haven't submitted any facts yet.</div>
+                          ) : paginatedSubmissions.map((sub) => (
                             <div key={sub.id} className="submission-card-wrapper" data-testid={`submission-card-${sub.id}`}>
-                              <div className="extended-fact-card">
-                                <div className="extended-fact-content">
-                                  <div className="fact-section">
-                                    <div className="fact-label">
-                                      <X className="fact-icon fact-icon-myth" size={16} />
-                                      <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
-                                    </div>
-                                    <p className="fact-myth">"{sub.myth}"</p>
-                                    <div className="fact-details">
-                                      <p>{sub.details}</p>
-                                    </div>
-                                  </div>
-                                  <div className="fact-section">
-                                    <div className="fact-label">
-                                      <Check className="fact-icon fact-icon-truth" size={16} />
-                                      <span className="label-text">CURRENT UNDERSTANDING</span>
-                                    </div>
-                                    <p className="fact-truth">{sub.truth}</p>
-                                    {sub.moreDetails && (
-                                      <div className="fact-more-details">
-                                        <p>{sub.moreDetails}</p>
+                              {sub.status === "saved" ? (
+                                <div className="extended-fact-card under-review-card">
+                                  <div className="extended-fact-content">
+                                    <div className="under-review-header">
+                                      <SearchCheck size={24} style={{ color: "#878787", flexShrink: 0 }} />
+                                      <div>
+                                        <p className="under-review-heading">Your submission is currently under review!</p>
+                                        <p className="under-review-body">We'll email you when we've made our edits and additions.</p>
                                       </div>
-                                    )}
-                                  </div>
-                                  <div className="fact-section">
-                                    <div className="fact-label">
-                                      <BookOpen className="fact-icon fact-icon-sources" size={16} />
-                                      <span className="label-text">SOURCES</span>
                                     </div>
-                                    <div className="sources-text-list">
-                                      {sub.sources.map((source) => (
-                                        <a
-                                          key={source.id}
-                                          href={source.link}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="source-text-item"
-                                          data-testid={`source-${source.id}`}
-                                        >
-                                          {source.citation}
-                                        </a>
-                                      ))}
+                                    <div className="under-review-submitted-label">You submitted:</div>
+                                    <div className="fact-section">
+                                      <div className="fact-label">
+                                        <X className="fact-icon fact-icon-myth" size={16} />
+                                        <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
+                                      </div>
+                                      <p className="fact-myth">"{sub.myth}"</p>
+                                    </div>
+                                    <div className="fact-section">
+                                      <div className="fact-label">
+                                        <Check className="fact-icon fact-icon-truth" size={16} />
+                                        <span className="label-text">CURRENT UNDERSTANDING</span>
+                                      </div>
+                                      <p className="fact-truth">{sub.truth}</p>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              ) : (
+                                <div className="extended-fact-card">
+                                  <div className="extended-fact-content">
+                                    <div className="fact-section">
+                                      <div className="fact-label">
+                                        <X className="fact-icon fact-icon-myth" size={16} />
+                                        <span className="label-text">YOU MIGHT HAVE BEEN TAUGHT</span>
+                                      </div>
+                                      <p className="fact-myth">"{sub.myth}"</p>
+                                      <div className="fact-details">
+                                        <p>{sub.details}</p>
+                                      </div>
+                                    </div>
+                                    <div className="fact-section">
+                                      <div className="fact-label">
+                                        <Check className="fact-icon fact-icon-truth" size={16} />
+                                        <span className="label-text">CURRENT UNDERSTANDING</span>
+                                      </div>
+                                      <p className="fact-truth">{sub.truth}</p>
+                                      {sub.moreDetails && (
+                                        <div className="fact-more-details">
+                                          <p>{sub.moreDetails}</p>
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div className="fact-section">
+                                      <div className="fact-label">
+                                        <BookOpen className="fact-icon fact-icon-sources" size={16} />
+                                        <span className="label-text">SOURCES</span>
+                                      </div>
+                                      <div className="sources-text-list">
+                                        {sub.sources.map((source, idx) => (
+                                          <a
+                                            key={idx}
+                                            href={source}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="source-text-item"
+                                            data-testid={`source-${sub.id}-${idx}`}
+                                          >
+                                            {source}
+                                          </a>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
                               <div className="submission-footer-row" data-testid={`submission-footer-${sub.id}`}>
                                 <span className="submission-timestamp" data-testid={`submission-timestamp-${sub.id}`}>Submitted on {sub.submittedAt}</span>
                                 <button className="edit-submission-button" data-testid={`button-edit-submission-${sub.id}`}>
@@ -2645,7 +2592,11 @@ export default function UserDashboard() {
                     {activityTab === "approved" && (
                       <div className="submissions-section" data-testid="activity-approved">
                         <div className="submissions-grid" data-testid="approved-grid">
-                          {paginatedApproved.map((sub) => (
+                          {mySubmissionsLoading ? (
+                            <div className="submissions-loading" data-testid="approved-loading">Loading submissions...</div>
+                          ) : paginatedApproved.length === 0 ? (
+                            <div className="submissions-empty" data-testid="approved-empty">No published submissions yet.</div>
+                          ) : paginatedApproved.map((sub) => (
                             <div key={sub.id} className="submission-card-wrapper" data-testid={`approved-card-${sub.id}`}>
                               <div className="extended-fact-card">
                                 <div className="extended-fact-content">
@@ -2677,16 +2628,16 @@ export default function UserDashboard() {
                                       <span className="label-text">SOURCES</span>
                                     </div>
                                     <div className="sources-text-list">
-                                      {sub.sources.map((source) => (
+                                      {sub.sources.map((source, idx) => (
                                         <a
-                                          key={source.id}
-                                          href={source.link}
+                                          key={idx}
+                                          href={source}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="source-text-item"
-                                          data-testid={`source-${source.id}`}
+                                          data-testid={`source-approved-${sub.id}-${idx}`}
                                         >
-                                          {source.citation}
+                                          {source}
                                         </a>
                                       ))}
                                     </div>
@@ -2732,7 +2683,11 @@ export default function UserDashboard() {
                     {activityTab === "not-approved" && (
                       <div className="submissions-section" data-testid="activity-not-approved">
                         <div className="submissions-grid" data-testid="rejected-grid">
-                          {paginatedRejected.map((sub) => (
+                          {mySubmissionsLoading ? (
+                            <div className="submissions-loading" data-testid="rejected-loading">Loading submissions...</div>
+                          ) : paginatedRejected.length === 0 ? (
+                            <div className="submissions-empty" data-testid="rejected-empty">No rejected submissions.</div>
+                          ) : paginatedRejected.map((sub) => (
                             <div key={sub.id} className="submission-card-wrapper" data-testid={`rejected-card-${sub.id}`}>
                               <div className={`denial-reason-card${expandedDenials[sub.id] ? " denial-reason-expanded" : ""}`} data-testid={`denial-reason-${sub.id}`}>
                                 <p
@@ -2776,16 +2731,16 @@ export default function UserDashboard() {
                                       <span className="label-text">SOURCES</span>
                                     </div>
                                     <div className="sources-text-list">
-                                      {sub.sources.map((source) => (
+                                      {sub.sources.map((source, idx) => (
                                         <a
-                                          key={source.id}
-                                          href={source.link}
+                                          key={idx}
+                                          href={source}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="source-text-item"
-                                          data-testid={`source-${source.id}`}
+                                          data-testid={`source-rejected-${sub.id}-${idx}`}
                                         >
-                                          {source.citation}
+                                          {source}
                                         </a>
                                       ))}
                                     </div>

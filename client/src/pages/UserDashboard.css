@@ -2317,3 +2317,56 @@ a.following-post-username:hover {
 .comment-ellipsis-item.disabled-action:hover::after {
   opacity: 1;
 }
+
+.submissions-loading,
+.submissions-empty {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  padding: 32px 0;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.under-review-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.dark .under-review-header {
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.under-review-heading {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 0 0 4px 0;
+}
+
+.dark .under-review-heading {
+  color: #e8e8e8;
+}
+
+.under-review-body {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #878787;
+  margin: 0;
+}
+
+.under-review-submitted-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #878787;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}

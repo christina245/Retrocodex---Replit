@@ -7,7 +7,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import { eq, gte, count, and, sql } from "drizzle-orm";
+import { eq, gte, count, and, sql, desc } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
@@ -155,6 +155,30 @@ function recordAuthAttempt(ip: string): void {
 
 function clearAuthAttempts(ip: string): void {
   authAttempts.delete(ip);
+}
+
+// Per-IP rate limiting for submission endpoint (20 per hour)
+const submissionIpAttempts = new Map<string, { count: number; firstAttempt: number }>();
+const SUBMISSION_IP_MAX = 20;
+const SUBMISSION_IP_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function isSubmissionIpRateLimited(ip: string): boolean {
+  const record = submissionIpAttempts.get(ip);
+  if (!record) return false;
+  if (Date.now() - record.firstAttempt > SUBMISSION_IP_WINDOW_MS) {
+    submissionIpAttempts.delete(ip);
+    return false;
+  }
+  return record.count >= SUBMISSION_IP_MAX;
+}
+
+function recordSubmissionIpAttempt(ip: string): void {
+  const record = submissionIpAttempts.get(ip);
+  if (!record || Date.now() - record.firstAttempt > SUBMISSION_IP_WINDOW_MS) {
+    submissionIpAttempts.set(ip, { count: 1, firstAttempt: Date.now() });
+  } else {
+    record.count++;
+  }
 }
 
 function requireUser(req: any, res: any, next: any) {
@@ -1009,10 +1033,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ==================== FACT SUBMISSIONS ====================
 
-  // POST /api/submissions — authenticated users submit a fact (max 5 per 24h)
+  // POST /api/submissions — authenticated users submit a fact (max 5 per 24h, 20/hr per IP)
   app.post("/api/submissions", requireUser, async (req, res) => {
     try {
       const userId = req.session.userId!;
+      const ip = getClientIP(req);
+
+      // IP-based rate limit (20 per hour)
+      if (isSubmissionIpRateLimited(ip)) {
+        return res.status(429).json({ message: "Too many submissions from this IP. Please try again later." });
+      }
+      recordSubmissionIpAttempt(ip);
+
+      // Check shadowban — silently succeed without writing to DB
+      const [profile] = await db
+        .select({ username: userProfiles.username, submissionBanned: userProfiles.submissionBanned })
+        .from(userProfiles)
+        .where(eq(userProfiles.id, userId))
+        .limit(1);
+
+      if (!profile) {
+        return res.status(401).json({ message: "User profile not found." });
+      }
+
+      if (profile.submissionBanned) {
+        // Shadowban: return 201 as if successful, but don't write to DB
+        return res.status(201).json({ id: "shadow", status: "pending" });
+      }
 
       // Rate limit: max 5 submissions per 24 hours
       const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
@@ -1027,16 +1074,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const data = insertFactSubmissionSchema.parse(req.body);
-
-      // Fetch the username from the profile
-      const [profile] = await db.select({ username: userProfiles.username })
-        .from(userProfiles)
-        .where(eq(userProfiles.id, userId))
-        .limit(1);
-
-      if (!profile) {
-        return res.status(401).json({ message: "User profile not found." });
-      }
 
       const [submission] = await db.insert(factSubmissions)
         .values({
@@ -1063,16 +1100,123 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/submissions — admin: list all submissions (password protected)
+  // GET /api/submissions — admin: list submissions with submitter email, supports ?status= filter
   app.get("/api/submissions", requireAuth, async (req, res) => {
     try {
-      const submissions = await db.select()
+      const { status } = req.query;
+      let query = db
+        .select({
+          id: factSubmissions.id,
+          userId: factSubmissions.userId,
+          username: factSubmissions.username,
+          mythHeader: factSubmissions.mythHeader,
+          mythDetails: factSubmissions.mythDetails,
+          truthHeader: factSubmissions.truthHeader,
+          truthDetails: factSubmissions.truthDetails,
+          sources: factSubmissions.sources,
+          considerations: factSubmissions.considerations,
+          otherDetails: factSubmissions.otherDetails,
+          status: factSubmissions.status,
+          adminNote: factSubmissions.adminNote,
+          draftData: factSubmissions.draftData,
+          createdAt: factSubmissions.createdAt,
+          email: userAccounts.email,
+          submissionBanned: userProfiles.submissionBanned,
+        })
         .from(factSubmissions)
-        .orderBy(factSubmissions.createdAt);
-      return res.json(submissions);
+        .leftJoin(userAccounts, eq(userAccounts.id, factSubmissions.userId))
+        .leftJoin(userProfiles, eq(userProfiles.id, factSubmissions.userId))
+        .orderBy(desc(factSubmissions.createdAt));
+
+      const results = status
+        ? await query.where(eq(factSubmissions.status, status as string))
+        : await query;
+
+      return res.json(results);
     } catch (error) {
       console.error("GET /api/submissions error:", error);
       res.status(500).json({ message: "Failed to fetch submissions" });
+    }
+  });
+
+  // GET /api/submissions/mine — user: fetch own submissions ordered by date desc
+  app.get("/api/submissions/mine", requireUser, async (req, res) => {
+    try {
+      const userId = req.session.userId!;
+      const submissions = await db
+        .select()
+        .from(factSubmissions)
+        .where(eq(factSubmissions.userId, userId))
+        .orderBy(desc(factSubmissions.createdAt));
+      return res.json(submissions);
+    } catch (error) {
+      console.error("GET /api/submissions/mine error:", error);
+      res.status(500).json({ message: "Failed to fetch your submissions" });
+    }
+  });
+
+  // PATCH /api/submissions/:id — admin: update status, adminNote, or draftData
+  app.patch("/api/submissions/:id", requireAuth, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status, adminNote, draftData } = z.object({
+        status: z.enum(["pending", "saved", "rejected", "published"]).optional(),
+        adminNote: z.string().optional(),
+        draftData: z.record(z.any()).optional(),
+      }).parse(req.body);
+
+      if (status === "rejected" && !adminNote) {
+        return res.status(400).json({ message: "An admin note is required when rejecting a submission." });
+      }
+
+      const updates: Record<string, any> = {};
+      if (status !== undefined) updates.status = status;
+      if (adminNote !== undefined) updates.adminNote = adminNote;
+      if (draftData !== undefined) updates.draftData = draftData;
+
+      const [updated] = await db
+        .update(factSubmissions)
+        .set(updates)
+        .where(eq(factSubmissions.id, id))
+        .returning();
+
+      if (!updated) {
+        return res.status(404).json({ message: "Submission not found." });
+      }
+      return res.json(updated);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid data" });
+      }
+      console.error("PATCH /api/submissions/:id error:", error);
+      res.status(500).json({ message: "Failed to update submission" });
+    }
+  });
+
+  // POST /api/admin/toggle-submission-ban — admin: toggle submissionBanned on a user
+  app.post("/api/admin/toggle-submission-ban", requireAuth, async (req, res) => {
+    try {
+      const { userId } = z.object({ userId: z.string().min(1) }).parse(req.body);
+      const [profile] = await db
+        .select({ submissionBanned: userProfiles.submissionBanned })
+        .from(userProfiles)
+        .where(eq(userProfiles.id, userId))
+        .limit(1);
+      if (!profile) {
+        return res.status(404).json({ message: "User not found." });
+      }
+      const [updated] = await db
+        .update(userProfiles)
+        .set({ submissionBanned: !profile.submissionBanned })
+        .where(eq(userProfiles.id, userId))
+        .returning({ submissionBanned: userProfiles.submissionBanned });
+      return res.json({ submissionBanned: updated.submissionBanned });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "userId is required" });
+      }
+      console.error("POST /api/admin/toggle-submission-ban error:", error);
+      res.status(500).json({ message: "Failed to toggle submission ban" });
     }
   });
 
