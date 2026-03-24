@@ -1526,6 +1526,34 @@ export default function UserDashboard() {
                   {notificationsTab === "all" && (
                     <div className="following-feed" data-testid="activity-feed-all">
 
+                      {/* SAMPLE CARD — static placeholder for CSS styling, remove when live data is ready */}
+                      <div className="activity-post" data-testid="notif-sample-under-review">
+                        <div className="activity-post-icon-col">
+                          <SearchCheck size={40} strokeWidth={1.5} className="activity-status-icon" style={{ color: "#878787" }} />
+                        </div>
+                        <div className="activity-post-main">
+                          <div className="activity-post-header">
+                            <div className="activity-post-header-text">
+                              <span className="activity-status-text" style={{ color: "#555" }}>Your submission is currently under review!</span>
+                            </div>
+                            <span className="following-post-timestamp">Mar 24</span>
+                          </div>
+                          <div className="activity-post-body">
+                            <p style={{ margin: "0 0 0.5rem", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
+                            <p className="activity-submitted-label">You submitted:</p>
+                            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", marginBottom: "0.3rem" }}>
+                              <X size={13} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
+                              <p style={{ margin: 0, fontSize: "0.9rem", fontStyle: "italic" }} data-testid="notif-myth-sample">"Humans only use 10% of their brain"</p>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem" }}>
+                              <Check size={13} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
+                              <p style={{ margin: 0, fontSize: "0.9rem" }} data-testid="notif-truth-sample">Brain scans show activity across virtually all brain regions, even during sleep.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* END SAMPLE CARD */}
+
                       {/* Live submission notifications */}
                       {mySubmissions.filter(s => s.status === "saved").map(s => (
                         <div key={`notif-saved-${s.id}`} className="activity-post" data-testid={`notif-under-review-${s.id}`}>
