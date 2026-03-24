@@ -597,12 +597,16 @@ export default function AdminPage() {
     setTaughtUntilYear(d.taughtUntilYear ?? null);
     const rawSources = d.sources ?? sub.sources;
     setSources(rawSources && rawSources.length > 0
-      ? rawSources.map((s: any) => ({ id: s.id || generateId(), citation: s.citation || "", link: s.link || "", logoUrl: s.logoUrl }))
+      ? rawSources.map((s: any) => {
+          if (typeof s === "string") {
+            return { id: generateId(), citation: s, link: s, logoUrl: undefined };
+          }
+          return { id: s.id || generateId(), citation: s.citation || "", link: s.link || "", logoUrl: s.logoUrl };
+        })
       : [{ id: generateId(), citation: "", link: "", logoUrl: undefined }]);
     setTimeline(d.timeline ?? []);
     setNuances(d.nuances ?? []);
     setRelatedMythIds(d.relatedMythIds ?? []);
-    setCurrentView("add-fact");
     window.scrollTo(0, 0);
   };
 
@@ -1130,7 +1134,7 @@ export default function AdminPage() {
 
       {/* Main Content */}
       <main className="admin-main">
-        {currentView === 'add-fact' && (
+        {(currentView === 'add-fact' || (currentView === 'submissions' && !!editingSubmissionId)) && (
           <div className="admin-content">
             <div className="content-header">
               <div>
@@ -2707,7 +2711,7 @@ export default function AdminPage() {
             </div>
           </div>
         )}
-        {currentView === 'submissions' && (
+        {currentView === 'submissions' && !editingSubmissionId && (
           <div className="admin-content admin-content-wide">
             <div className="content-header">
               <div>
