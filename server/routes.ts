@@ -1128,7 +1128,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           id: a.id,
           slug: a.id,
           title: a.title,
-          summary: "",
+          summary: a.summary || "",
           coverImage: a.coverImage || "",
           category: a.category,
           tags: a.tags || [],
