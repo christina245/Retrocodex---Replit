@@ -243,10 +243,10 @@ export default function AdminPage() {
     }
   };
 
-  const handleExtSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleExtSubmit = async (publishOverride?: boolean) => {
     setExtSubmitting(true);
     setExtSubmitMsg("");
+    const published = publishOverride !== undefined ? publishOverride : extPublished;
     const payload = {
       title: extTitle,
       externalUrl: extUrl,
@@ -257,7 +257,7 @@ export default function AdminPage() {
       category: extCategory,
       tags: extTags,
       isPaywalled: extIsPaywalled,
-      published: extPublished,
+      published,
     };
     try {
       const url = editingExtId ? `/api/external-articles/${editingExtId}` : "/api/external-articles";
@@ -272,7 +272,10 @@ export default function AdminPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to save");
-      setExtSubmitMsg(editingExtId ? "External article updated!" : "External article added!");
+      setExtPublished(published);
+      setExtSubmitMsg(published
+        ? (editingExtId ? "Article updated and published!" : "Article saved and published!")
+        : (editingExtId ? "Draft updated!" : "Article saved as draft!"));
       queryClient.invalidateQueries({ queryKey: ["/api/external-articles"] });
       queryClient.invalidateQueries({ queryKey: ["/api/articles"] });
       if (!editingExtId) resetExtForm();
@@ -3140,7 +3143,7 @@ export default function AdminPage() {
               )}
             </div>
 
-            <form className="fact-form" onSubmit={handleExtSubmit}>
+            <form className="fact-form" onSubmit={e => { e.preventDefault(); handleExtSubmit(extPublished); }}>
               {/* URL + Auto-parse */}
               <div className="form-section">
                 <h2 className="section-title">Article URL</h2>
@@ -3293,36 +3296,36 @@ export default function AdminPage() {
                       />
                       Paywalled article
                     </label>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        className="checkbox-input"
-                        checked={extPublished}
-                        onChange={e => setExtPublished(e.target.checked)}
-                        data-testid="checkbox-ext-published"
-                      />
-                      Publish immediately
-                    </label>
                   </div>
                 </div>
               </div>
 
               {/* Submit */}
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                <button
-                  type="submit"
-                  className="login-button"
-                  disabled={extSubmitting}
-                  data-testid="button-ext-submit"
-                  style={{ minWidth: 180 }}
-                >
-                  {extSubmitting ? "Saving..." : editingExtId ? "Update Article" : "Add External Article"}
-                </button>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {extSubmitMsg && (
-                  <span style={{ color: extSubmitMsg.includes("!") ? "#2d7a3e" : "#FF5353", fontSize: "0.9rem", fontFamily: "'Public Sans', sans-serif" }}>
+                  <span style={{ color: extSubmitMsg.includes("draft") || extSubmitMsg.includes("saved") || extSubmitMsg.includes("updated") || extSubmitMsg.includes("published") ? "#2d7a3e" : "#FF5353", fontSize: "0.9rem", fontFamily: "'Public Sans', sans-serif" }}>
                     {extSubmitMsg}
                   </span>
                 )}
+                <div className="submission-action-row">
+                  <button
+                    type="button"
+                    className="submit-button submission-draft-btn"
+                    disabled={extSubmitting}
+                    data-testid="button-ext-save-draft"
+                    onClick={() => handleExtSubmit(false)}
+                  >
+                    {extSubmitting ? "Saving..." : "Save Draft"}
+                  </button>
+                  <button
+                    type="submit"
+                    className="submit-button"
+                    disabled={extSubmitting}
+                    data-testid="button-ext-save-publish"
+                  >
+                    {extSubmitting ? "Saving..." : "Save & Publish"}
+                  </button>
+                </div>
               </div>
             </form>
           </div>

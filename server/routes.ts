@@ -1036,6 +1036,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/external-articles/published — public: list published external articles
+  app.get("/api/external-articles/published", async (req, res) => {
+    try {
+      const articles = await storage.getPublishedExternalArticles();
+      res.json(articles);
+    } catch (error) {
+      console.error("GET /api/external-articles/published error:", error);
+      res.status(500).json({ message: "Failed to fetch published external articles" });
+    }
+  });
+
   // POST /api/external-articles — admin: create external article
   app.post("/api/external-articles", requireAuth, async (req, res) => {
     try {

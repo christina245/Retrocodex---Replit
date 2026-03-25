@@ -168,7 +168,7 @@ export default function ArticlesPage() {
           <button
             className="submit-article-btn"
             disabled
-            title="Article submission coming soon"
+            title="Unavailable in beta"
             data-testid="button-submit-article"
           >
             Submit an Article

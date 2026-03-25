@@ -132,9 +132,9 @@
   top: 8px;
   right: 8px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .blog-card-badge {
@@ -153,7 +153,7 @@
 }
 
 .blog-card-badge--paywall {
-  background: #c4890a;
+  background: #2c2c2c;
 }
 
 .blog-card-badge-text {
