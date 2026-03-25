@@ -107,7 +107,7 @@
 
 .articles-grid {
   display: grid;
-  grid-template-columns: repeat(3, 330px);
+  grid-template-columns: repeat(3, 360px);
   gap: 30px;
   padding: 50px 110px;
 }

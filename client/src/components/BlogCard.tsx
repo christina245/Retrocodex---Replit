@@ -1,4 +1,4 @@
-import { LucideIcon, ExternalLink, CircleDollarSign } from 'lucide-react';
+import { ExternalLink, CircleDollarSign } from 'lucide-react';
 import { Link } from 'wouter';
 import './BlogCard.css';
 
@@ -7,8 +7,6 @@ interface BlogCardProps {
   image: string;
   date: string;
   category: string;
-  categoryIcon: LucideIcon;
-  categoryColor: string;
   title: string;
   summary: string;
   tags: string[];
@@ -16,6 +14,7 @@ interface BlogCardProps {
   externalUrl?: string | null;
   publicationName?: string | null;
   isPaywalled?: boolean;
+  originalPublishedAt?: string | null;
 }
 
 export default function BlogCard({
@@ -23,8 +22,6 @@ export default function BlogCard({
   image,
   date,
   category,
-  categoryIcon: CategoryIcon,
-  categoryColor,
   title,
   summary,
   tags,
@@ -32,6 +29,7 @@ export default function BlogCard({
   externalUrl,
   publicationName,
   isPaywalled = false,
+  originalPublishedAt,
 }: BlogCardProps) {
   const cardContent = (
     <article className="blog-card" data-testid={`blog-card-${id}`}>
@@ -78,8 +76,7 @@ export default function BlogCard({
             className="blog-card-category"
             data-testid={`blog-card-category-${id}`}
           >
-            <CategoryIcon size={14} style={{ color: categoryColor }} />
-            <span className="blog-card-category-text">{category}</span>
+            {category}
           </span>
         </div>
 
@@ -94,15 +91,22 @@ export default function BlogCard({
         )}
 
         <div className="blog-card-tags">
-          {tags.map((tag, index) => (
-            <span
-              key={index}
-              className="blog-card-tag"
-              data-testid={`blog-card-tag-${id}-${index}`}
-            >
-              {tag}
+          {isExternal && originalPublishedAt && (
+            <span className="blog-card-original-date" data-testid={`text-original-date-${id}`}>
+              Originally published on {originalPublishedAt}
             </span>
-          ))}
+          )}
+          <div className="blog-card-tags-list">
+            {tags.map((tag, index) => (
+              <span
+                key={index}
+                className="blog-card-tag"
+                data-testid={`blog-card-tag-${id}-${index}`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </article>

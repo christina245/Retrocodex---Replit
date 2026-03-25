@@ -1118,7 +1118,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           coverImage: p.coverImage || "",
           category: p.category,
           tags: p.tags || [],
+          createdAt: p.createdAt ? p.createdAt.toISOString() : null,
           publishedAt: p.publishedAt ? p.publishedAt.toISOString() : null,
+          originalPublishedAt: null as string | null,
           isExternal: false,
           externalUrl: null as string | null,
           publicationName: null as string | null,
@@ -1132,15 +1134,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           coverImage: a.coverImage || "",
           category: a.category,
           tags: a.tags || [],
-          publishedAt: a.publishedAt || null,
+          createdAt: a.createdAt ? a.createdAt.toISOString() : null,
+          publishedAt: a.createdAt ? a.createdAt.toISOString() : null,
+          originalPublishedAt: a.publishedAt || null,
           isExternal: true,
           externalUrl: a.externalUrl,
           publicationName: a.publicationName,
           isPaywalled: a.isPaywalled ?? false,
         })),
       ].sort((a, b) => {
-        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
         return dateB - dateA;
       });
 

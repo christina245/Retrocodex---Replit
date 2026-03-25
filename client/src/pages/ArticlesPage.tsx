@@ -1,15 +1,5 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { 
-  Scroll, 
-  Home, 
-  HeartPulse, 
-  Users, 
-  Dna, 
-  User,
-  HelpCircle,
-  LucideIcon
-} from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -29,7 +19,9 @@ interface UnifiedArticle {
   coverImage: string;
   category: string;
   tags: string[];
+  createdAt: string | null;
   publishedAt: string | null;
+  originalPublishedAt: string | null;
   isExternal: boolean;
   externalUrl: string | null;
   publicationName: string | null;
@@ -49,38 +41,14 @@ const CATEGORY_OPTIONS = [
 
 const TAG_OPTIONS = [
   "All",
-  "Facts",
+  "Fact Collection",
+  "Questioning the Facts",
   "Seasonal",
   "Regional Lessons",
   "Personal Stories",
   "Website Announcements",
   "Other"
 ];
-
-const getCategoryIcon = (category: string): LucideIcon => {
-  switch (category) {
-    case "History": return Scroll;
-    case "Life Sciences": return Dna;
-    case "Everyday Life": return Home;
-    case "Health & Fitness": return HeartPulse;
-    case "Social Sciences": return Users;
-    case "Gender & Sexuality": return User;
-    default: return HelpCircle;
-  }
-};
-
-const getCategoryColor = (category: string): string => {
-  switch (category?.toUpperCase()) {
-    case "HISTORY": return "#F5D547";
-    case "LIFE SCIENCES": return "#6FCF97";
-    case "EVERYDAY LIFE": return "#2A9BEC";
-    case "HEALTH & FITNESS": return "#F2994A";
-    case "SOCIAL SCIENCES": return "#9B51E0";
-    case "GENDER & SEXUALITY": return "#FC5AA8";
-    case "OTHER": return "#2C2C2C";
-    default: return "#878787";
-  }
-};
 
 const formatDate = (date: string | Date | null | undefined): string => {
   if (!date) return "";
@@ -225,10 +193,8 @@ export default function ArticlesPage() {
                 key={article.id}
                 id={article.slug}
                 image={article.coverImage}
-                date={formatDate(article.publishedAt)}
+                date={formatDate(article.isExternal ? article.createdAt : article.publishedAt)}
                 category={article.category}
-                categoryIcon={getCategoryIcon(article.category)}
-                categoryColor={getCategoryColor(article.category)}
                 title={article.title}
                 summary={article.summary}
                 tags={article.tags || []}
@@ -236,6 +202,7 @@ export default function ArticlesPage() {
                 externalUrl={article.externalUrl}
                 publicationName={article.publicationName}
                 isPaywalled={article.isPaywalled}
+                originalPublishedAt={article.isExternal ? formatDate(article.originalPublishedAt) : null}
               />
             ))}
           </div>

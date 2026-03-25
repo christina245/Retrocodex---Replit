@@ -3303,7 +3303,7 @@ export default function AdminPage() {
                 <div className="form-group">
                   <label className="form-label">Cover Image</label>
                   <input
-                    type="url"
+                    type="text"
                     className="form-input"
                     placeholder="https://... (auto-filled from OG image)"
                     value={extCoverImage}

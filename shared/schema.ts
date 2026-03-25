@@ -214,7 +214,8 @@ export const AUTHOR_TYPES = ["Staff", "Guest"] as const;
 
 // Blog post tag options
 export const BLOG_TAGS = [
-  "Facts",
+  "Fact Collection",
+  "Questioning the Facts",
   "Seasonal", 
   "Regional Lessons",
   "Personal Stories",
