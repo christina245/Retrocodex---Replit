@@ -6,6 +6,9 @@ import loadingLogoDark from "@assets/inverted_logo_1765095605820.png";
 import "./HeroSection.css";
 
 export function HeroSection() {
+  // Temporarily hidden — remove this line to restore the hero section
+  return null;
+
   const { data: featuredPosts, isLoading } = useQuery<BlogPost[]>({
     queryKey: ["/api/blog-posts/featured"],
   });

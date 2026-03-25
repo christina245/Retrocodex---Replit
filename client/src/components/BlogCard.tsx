@@ -44,6 +44,19 @@ export default function BlogCard({
         ) : (
           <div className="blog-card-image-placeholder" data-testid={`blog-card-image-${id}`} />
         )}
+        {tags.length > 0 && (
+          <div className="blog-card-image-tags">
+            {tags.map((tag, index) => (
+              <span
+                key={index}
+                className="blog-card-tag"
+                data-testid={`blog-card-tag-${id}-${index}`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         {isExternal && (
           <div className="blog-card-badges">
             <span
@@ -90,24 +103,11 @@ export default function BlogCard({
           </p>
         )}
 
-        <div className="blog-card-tags">
-          {isExternal && originalPublishedAt && (
-            <span className="blog-card-original-date" data-testid={`text-original-date-${id}`}>
-              Originally published on {originalPublishedAt}
-            </span>
-          )}
-          <div className="blog-card-tags-list">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="blog-card-tag"
-                data-testid={`blog-card-tag-${id}-${index}`}
-              >
-                {tag}
-              </span>
-            ))}
+        {isExternal && originalPublishedAt && (
+          <div className="blog-card-tags" data-testid={`text-original-date-${id}`}>
+            Originally published on {originalPublishedAt}
           </div>
-        </div>
+        )}
       </div>
     </article>
   );

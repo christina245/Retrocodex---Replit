@@ -100,30 +100,25 @@
   max-height: 72px;
 }
 
-.blog-card-tags {
+.blog-card-image-tags {
+  position: absolute;
+  top: 8px;
+  left: 8px;
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: auto;
-  flex-shrink: 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: calc(100% - 16px);
 }
 
-.blog-card-original-date {
+.blog-card-tags {
   font-family: 'Public Sans', sans-serif;
   font-weight: 400;
   font-size: 12px;
   color: #878787;
+  margin-top: auto;
   flex-shrink: 0;
   line-height: 1.4;
-}
-
-.blog-card-tags-list {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  flex-shrink: 0;
 }
 
 .blog-card-tag {
