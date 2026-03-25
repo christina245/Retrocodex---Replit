@@ -292,6 +292,12 @@ export default function AdminPage() {
     }
   };
 
+  useEffect(() => {
+    if (!extSubmitMsg) return;
+    const timer = setTimeout(() => setExtSubmitMsg(""), 4000);
+    return () => clearTimeout(timer);
+  }, [extSubmitMsg]);
+
   const deleteExternalArticle = async (id: string) => {
     if (!confirm("Delete this external article?")) return;
     try {
@@ -3367,13 +3373,7 @@ export default function AdminPage() {
               </div>
 
               {/* Submit */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                {extSubmitMsg && (
-                  <span style={{ color: extSubmitMsg.includes("draft") || extSubmitMsg.includes("saved") || extSubmitMsg.includes("updated") || extSubmitMsg.includes("published") ? "#2d7a3e" : "#FF5353", fontSize: "0.9rem", fontFamily: "'Public Sans', sans-serif" }}>
-                    {extSubmitMsg}
-                  </span>
-                )}
-                <div className="submission-action-row">
+              <div className="submission-action-row">
                   <button
                     type="button"
                     className="submit-button submission-draft-btn"
@@ -3391,7 +3391,19 @@ export default function AdminPage() {
                   >
                     {extSubmitting ? "Saving..." : "Save & Publish"}
                   </button>
-                </div>
+                  {extSubmitMsg && (
+                    <span
+                      data-testid="text-ext-submit-msg"
+                      style={{
+                        color: extSubmitMsg.toLowerCase().includes("published") ? "#22863a" : "#cc3333",
+                        fontSize: "0.85rem",
+                        fontFamily: "'Public Sans', sans-serif",
+                        alignSelf: "center",
+                      }}
+                    >
+                      {extSubmitMsg}
+                    </span>
+                  )}
               </div>
             </form>
           </div>
