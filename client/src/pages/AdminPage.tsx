@@ -3143,7 +3143,7 @@ export default function AdminPage() {
               )}
             </div>
 
-            <form className="fact-form" onSubmit={e => { e.preventDefault(); handleExtSubmit(extPublished); }}>
+            <form className="fact-form" onSubmit={e => { e.preventDefault(); handleExtSubmit(true); }}>
               {/* URL + Auto-parse */}
               <div className="form-section">
                 <h2 className="section-title">Article URL</h2>
