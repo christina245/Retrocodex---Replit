@@ -301,6 +301,39 @@ export const insertFactSubmissionSchema = z.object({
 export type InsertFactSubmission = z.infer<typeof insertFactSubmissionSchema>;
 export type FactSubmission = typeof factSubmissions.$inferSelect;
 
+// External articles table — curated third-party articles (NYT, Vox, Substack, etc.)
+export const externalArticles = pgTable("external_articles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  externalUrl: text("external_url").notNull(),
+  publicationName: text("publication_name").notNull(),
+  authorName: text("author_name").default(""),
+  publishedAt: text("published_at"), // date string e.g. "2024-01-15"
+  coverImage: text("cover_image"),
+  category: text("category").notNull(),
+  tags: text("tags").array().default([]),
+  isPaywalled: boolean("is_paywalled").default(false),
+  published: boolean("published").default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const insertExternalArticleSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  externalUrl: z.string().url("Must be a valid URL"),
+  publicationName: z.string().min(1, "Publication name is required"),
+  authorName: z.string().optional().default(""),
+  publishedAt: z.string().optional(),
+  coverImage: z.string().optional(),
+  category: z.enum(CATEGORIES),
+  tags: z.array(z.enum(BLOG_TAGS)).default([]),
+  isPaywalled: z.boolean().default(false),
+  published: z.boolean().default(false),
+});
+
+export type InsertExternalArticle = z.infer<typeof insertExternalArticleSchema>;
+export type ExternalArticle = typeof externalArticles.$inferSelect;
+
 // Newsletter subscriptions table (separate from account signups)
 export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -989,6 +989,154 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting blog post:", error);
       res.status(500).json({ message: "Failed to delete blog post" });
+    }
+  });
+
+  // ==================== EXTERNAL ARTICLES ====================
+
+  // POST /api/parse-url — admin: fetch OG metadata from a URL
+  app.post("/api/parse-url", requireAuth, async (req, res) => {
+    try {
+      const { url } = z.object({ url: z.string().url() }).parse(req.body);
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (compatible; Retrocodex/1.0; +https://theretrocodex.com)",
+        },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!response.ok) {
+        return res.status(400).json({ message: "Failed to fetch URL" });
+      }
+      const html = await response.text();
+      const getMeta = (name: string): string => {
+        const patterns = [
+          new RegExp(`<meta[^>]+property=["']${name}["'][^>]+content=["']([^"']+)["']`, "i"),
+          new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+property=["']${name}["']`, "i"),
+          new RegExp(`<meta[^>]+name=["']${name}["'][^>]+content=["']([^"']+)["']`, "i"),
+          new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+name=["']${name}["']`, "i"),
+        ];
+        for (const pattern of patterns) {
+          const match = html.match(pattern);
+          if (match?.[1]) return match[1].trim();
+        }
+        return "";
+      };
+      const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+      const title = getMeta("og:title") || (titleMatch?.[1]?.trim() ?? "");
+      const image = getMeta("og:image");
+      const publication = getMeta("og:site_name");
+      const author = getMeta("article:author") || getMeta("og:author") || getMeta("author");
+      return res.json({ title, image, publication, author });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "A valid URL is required" });
+      }
+      console.error("POST /api/parse-url error:", error);
+      res.status(500).json({ message: "Failed to parse URL metadata" });
+    }
+  });
+
+  // POST /api/external-articles — admin: create external article
+  app.post("/api/external-articles", requireAuth, async (req, res) => {
+    try {
+      const data = insertExternalArticleSchema.parse(req.body);
+      const article = await storage.createExternalArticle(data);
+      res.status(201).json(article);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid data", errors: error.errors });
+      }
+      console.error("POST /api/external-articles error:", error);
+      res.status(500).json({ message: "Failed to create external article" });
+    }
+  });
+
+  // GET /api/external-articles — admin: list all
+  app.get("/api/external-articles", requireAuth, async (req, res) => {
+    try {
+      const articles = await storage.getAllExternalArticles();
+      res.json(articles);
+    } catch (error) {
+      console.error("GET /api/external-articles error:", error);
+      res.status(500).json({ message: "Failed to fetch external articles" });
+    }
+  });
+
+  // PUT /api/external-articles/:id — admin: update
+  app.put("/api/external-articles/:id", requireAuth, async (req, res) => {
+    try {
+      const data = insertExternalArticleSchema.partial().parse(req.body);
+      const article = await storage.updateExternalArticle(req.params.id, data);
+      if (!article) return res.status(404).json({ message: "External article not found" });
+      res.json(article);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid data" });
+      }
+      console.error("PUT /api/external-articles/:id error:", error);
+      res.status(500).json({ message: "Failed to update external article" });
+    }
+  });
+
+  // DELETE /api/external-articles/:id — admin: delete
+  app.delete("/api/external-articles/:id", requireAuth, async (req, res) => {
+    try {
+      const deleted = await storage.deleteExternalArticle(req.params.id);
+      if (!deleted) return res.status(404).json({ message: "External article not found" });
+      res.json({ message: "External article deleted successfully" });
+    } catch (error) {
+      console.error("DELETE /api/external-articles/:id error:", error);
+      res.status(500).json({ message: "Failed to delete external article" });
+    }
+  });
+
+  // GET /api/articles — public: unified list of published blog posts + external articles
+  app.get("/api/articles", async (req, res) => {
+    try {
+      const [blogPostsData, externalData] = await Promise.all([
+        storage.getPublishedBlogPosts(),
+        storage.getPublishedExternalArticles(),
+      ]);
+
+      const normalized = [
+        ...blogPostsData.map(p => ({
+          id: p.id,
+          slug: p.slug,
+          title: p.title,
+          summary: p.summary,
+          coverImage: p.coverImage || "",
+          category: p.category,
+          tags: p.tags || [],
+          publishedAt: p.publishedAt ? p.publishedAt.toISOString() : null,
+          isExternal: false,
+          externalUrl: null as string | null,
+          publicationName: null as string | null,
+          isPaywalled: false,
+        })),
+        ...externalData.map(a => ({
+          id: a.id,
+          slug: a.id,
+          title: a.title,
+          summary: "",
+          coverImage: a.coverImage || "",
+          category: a.category,
+          tags: a.tags || [],
+          publishedAt: a.publishedAt || null,
+          isExternal: true,
+          externalUrl: a.externalUrl,
+          publicationName: a.publicationName,
+          isPaywalled: a.isPaywalled ?? false,
+        })),
+      ].sort((a, b) => {
+        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return dateB - dateA;
+      });
+
+      res.json(normalized);
+    } catch (error) {
+      console.error("GET /api/articles error:", error);
+      res.status(500).json({ message: "Failed to fetch articles" });
     }
   });
 

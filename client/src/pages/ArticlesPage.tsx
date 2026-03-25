@@ -17,10 +17,24 @@ import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import BlogCard from "@/components/BlogCard";
-import { BlogPost } from "@shared/schema";
 import workInProgressImage from "@assets/No articles found (yet)._1764112278730.png";
 import loadingLogoLight from "@assets/white_flat_logo_1765095431508.png";
 import "./ArticlesPage.css";
+
+interface UnifiedArticle {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  coverImage: string;
+  category: string;
+  tags: string[];
+  publishedAt: string | null;
+  isExternal: boolean;
+  externalUrl: string | null;
+  publicationName: string | null;
+  isPaywalled: boolean;
+}
 
 const CATEGORY_OPTIONS = [
   "All",
@@ -83,8 +97,8 @@ export default function ArticlesPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>(["All"]);
   const [selectedTags, setSelectedTags] = useState<string[]>(["All"]);
 
-  const { data: blogPosts, isLoading } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog-posts/published"],
+  const { data: articles, isLoading } = useQuery<UnifiedArticle[]>({
+    queryKey: ["/api/articles"],
   });
 
   const handleCategoryClick = (category: string) => {
@@ -123,21 +137,16 @@ export default function ArticlesPage() {
     }
   };
 
-  const filteredPosts = (blogPosts || [])
-    .filter(post => {
+  const filteredArticles = (articles || [])
+    .filter(article => {
       const categoryMatch = selectedCategories.includes("All") || 
-        selectedCategories.includes(post.category);
+        selectedCategories.includes(article.category);
       const tagMatch = selectedTags.includes("All") || 
-        (post.tags || []).some(tag => selectedTags.includes(tag));
+        (article.tags || []).some(tag => selectedTags.includes(tag));
       return categoryMatch && tagMatch;
-    })
-    .sort((a, b) => {
-      const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-      const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-      return dateB - dateA;
     });
 
-  const hasArticles = filteredPosts.length > 0;
+  const hasArticles = filteredArticles.length > 0;
 
   return (
     <div className="articles-page">
@@ -154,7 +163,17 @@ export default function ArticlesPage() {
       </div>
 
       <main className="articles-main">
-        <h1 className="articles-header" data-testid="text-articles-header">Recent articles</h1>
+        <div className="articles-header-row">
+          <h1 className="articles-header" data-testid="text-articles-header">Recent articles</h1>
+          <button
+            className="submit-article-btn"
+            disabled
+            title="Article submission coming soon"
+            data-testid="button-submit-article"
+          >
+            Submit an Article
+          </button>
+        </div>
 
         <div className="filter-section">
           <div className="filter-row">
@@ -201,18 +220,22 @@ export default function ArticlesPage() {
           </div>
         ) : hasArticles ? (
           <div className="articles-grid" data-testid="articles-grid">
-            {filteredPosts.map(post => (
+            {filteredArticles.map(article => (
               <BlogCard
-                key={post.id}
-                id={post.slug}
-                image={post.coverImage || ""}
-                date={formatDate(post.publishedAt)}
-                category={post.category}
-                categoryIcon={getCategoryIcon(post.category)}
-                categoryColor={getCategoryColor(post.category)}
-                title={post.title}
-                summary={post.summary}
-                tags={post.tags || []}
+                key={article.id}
+                id={article.slug}
+                image={article.coverImage}
+                date={formatDate(article.publishedAt)}
+                category={article.category}
+                categoryIcon={getCategoryIcon(article.category)}
+                categoryColor={getCategoryColor(article.category)}
+                title={article.title}
+                summary={article.summary}
+                tags={article.tags || []}
+                isExternal={article.isExternal}
+                externalUrl={article.externalUrl}
+                publicationName={article.publicationName}
+                isPaywalled={article.isPaywalled}
               />
             ))}
           </div>

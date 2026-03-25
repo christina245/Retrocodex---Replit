@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck } from "lucide-react";
+import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2 } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
@@ -15,7 +15,7 @@ interface EmailSubscription {
   createdAt: string;
 }
 
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins" | "submissions";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins" | "submissions" | "add-external" | "view-external";
 
 interface FactSubmission {
   id: string;
@@ -136,6 +136,167 @@ export default function AdminPage() {
   const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+
+  // External article form state
+  const [extUrl, setExtUrl] = useState("");
+  const [extTitle, setExtTitle] = useState("");
+  const [extPublication, setExtPublication] = useState("");
+  const [extAuthor, setExtAuthor] = useState("");
+  const [extPublishedAt, setExtPublishedAt] = useState("");
+  const [extCoverImage, setExtCoverImage] = useState("");
+  const [extCategory, setExtCategory] = useState("");
+  const [extTags, setExtTags] = useState<string[]>([]);
+  const [extIsPaywalled, setExtIsPaywalled] = useState(false);
+  const [extPublished, setExtPublished] = useState(false);
+  const [extIsParsing, setExtIsParsing] = useState(false);
+  const [extParseError, setExtParseError] = useState("");
+  const [extSubmitting, setExtSubmitting] = useState(false);
+  const [extSubmitMsg, setExtSubmitMsg] = useState("");
+  const [editingExtId, setEditingExtId] = useState<string | null>(null);
+
+  interface ExternalArticle {
+    id: string;
+    title: string;
+    externalUrl: string;
+    publicationName: string;
+    authorName: string;
+    publishedAt: string | null;
+    coverImage: string | null;
+    category: string;
+    tags: string[];
+    isPaywalled: boolean;
+    published: boolean;
+    createdAt: string;
+  }
+
+  const { data: externalArticles, isLoading: extLoading, refetch: refetchExternal } = useQuery<ExternalArticle[]>({
+    queryKey: ["/api/external-articles"],
+    queryFn: async () => {
+      const response = await fetch("/api/external-articles", {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to fetch external articles");
+      return response.json();
+    },
+    enabled: isAuthenticated && (currentView === "view-external" || currentView === "add-external"),
+  });
+
+  const resetExtForm = () => {
+    setEditingExtId(null);
+    setExtUrl("");
+    setExtTitle("");
+    setExtPublication("");
+    setExtAuthor("");
+    setExtPublishedAt("");
+    setExtCoverImage("");
+    setExtCategory("");
+    setExtTags([]);
+    setExtIsPaywalled(false);
+    setExtPublished(false);
+    setExtParseError("");
+    setExtSubmitMsg("");
+  };
+
+  const loadExtForEdit = (article: ExternalArticle) => {
+    setEditingExtId(article.id);
+    setExtUrl(article.externalUrl);
+    setExtTitle(article.title);
+    setExtPublication(article.publicationName);
+    setExtAuthor(article.authorName || "");
+    setExtPublishedAt(article.publishedAt || "");
+    setExtCoverImage(article.coverImage || "");
+    setExtCategory(article.category);
+    setExtTags(article.tags || []);
+    setExtIsPaywalled(article.isPaywalled || false);
+    setExtPublished(article.published || false);
+    setExtParseError("");
+    setExtSubmitMsg("");
+    setCurrentView("add-external");
+  };
+
+  const handleParseUrl = async () => {
+    if (!extUrl) return;
+    setExtIsParsing(true);
+    setExtParseError("");
+    try {
+      const response = await fetch("/api/parse-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('admin:' + password),
+        },
+        body: JSON.stringify({ url: extUrl }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setExtParseError(data.message || "Failed to parse URL");
+        return;
+      }
+      if (data.title && !extTitle) setExtTitle(data.title);
+      if (data.image && !extCoverImage) setExtCoverImage(data.image);
+      if (data.publication && !extPublication) setExtPublication(data.publication);
+      if (data.author && !extAuthor) setExtAuthor(data.author);
+    } catch (err) {
+      setExtParseError("Failed to fetch URL metadata");
+    } finally {
+      setExtIsParsing(false);
+    }
+  };
+
+  const handleExtSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setExtSubmitting(true);
+    setExtSubmitMsg("");
+    const payload = {
+      title: extTitle,
+      externalUrl: extUrl,
+      publicationName: extPublication,
+      authorName: extAuthor || undefined,
+      publishedAt: extPublishedAt || undefined,
+      coverImage: extCoverImage || undefined,
+      category: extCategory,
+      tags: extTags,
+      isPaywalled: extIsPaywalled,
+      published: extPublished,
+    };
+    try {
+      const url = editingExtId ? `/api/external-articles/${editingExtId}` : "/api/external-articles";
+      const method = editingExtId ? "PUT" : "POST";
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('admin:' + password),
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to save");
+      setExtSubmitMsg(editingExtId ? "External article updated!" : "External article added!");
+      queryClient.invalidateQueries({ queryKey: ["/api/external-articles"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/articles"] });
+      if (!editingExtId) resetExtForm();
+    } catch (err) {
+      setExtSubmitMsg(err instanceof Error ? err.message : "Failed to save external article");
+    } finally {
+      setExtSubmitting(false);
+    }
+  };
+
+  const deleteExternalArticle = async (id: string) => {
+    if (!confirm("Delete this external article?")) return;
+    try {
+      const response = await fetch(`/api/external-articles/${id}`, {
+        method: "DELETE",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to delete");
+      queryClient.invalidateQueries({ queryKey: ["/api/external-articles"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/articles"] });
+    } catch (err) {
+      alert("Failed to delete external article");
+    }
+  };
 
   const { data: emails, isLoading: emailsLoading, error: emailsError } = useQuery<EmailSubscription[]>({
     queryKey: ["/api/emails"],
@@ -1128,6 +1289,24 @@ export default function AdminPage() {
           >
             <Inbox size={18} />
             <span>Submissions</span>
+          </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'add-external' ? 'active' : ''}`}
+            onClick={() => { resetExtForm(); setCurrentView('add-external'); }}
+            data-testid="nav-add-external"
+          >
+            <Link size={18} />
+            <span>Add External Article</span>
+          </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'view-external' ? 'active' : ''}`}
+            onClick={() => setCurrentView('view-external')}
+            data-testid="nav-view-external"
+          >
+            <Newspaper size={18} />
+            <span>External Articles</span>
           </button>
         </nav>
       </aside>
@@ -2941,6 +3120,280 @@ export default function AdminPage() {
                     </button>
                   </div>
                 </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================== ADD EXTERNAL ARTICLE ==================== */}
+        {currentView === 'add-external' && (
+          <div className="admin-content">
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">{editingExtId ? "Edit External Article" : "Add External Article"}</h1>
+                <p className="content-subtitle">Curate third-party articles from NYT, Vox, Substack, and more.</p>
+              </div>
+              {editingExtId && (
+                <button className="cancel-edit-button" onClick={resetExtForm} data-testid="button-cancel-ext-edit">
+                  Cancel Edit
+                </button>
+              )}
+            </div>
+
+            <form className="fact-form" onSubmit={handleExtSubmit}>
+              {/* URL + Auto-parse */}
+              <div className="form-section">
+                <h2 className="section-title">Article URL</h2>
+                <div className="form-group">
+                  <label className="form-label">External URL</label>
+                  <div style={{ display: "flex", gap: "0.75rem" }}>
+                    <input
+                      type="url"
+                      className="form-input"
+                      placeholder="https://www.nytimes.com/..."
+                      value={extUrl}
+                      onChange={e => setExtUrl(e.target.value)}
+                      required
+                      data-testid="input-ext-url"
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      className="login-button"
+                      style={{ padding: "0.6rem 1.25rem", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 130 }}
+                      onClick={handleParseUrl}
+                      disabled={extIsParsing || !extUrl}
+                      data-testid="button-parse-url"
+                    >
+                      {extIsParsing ? <Loader2 size={14} className="spinning" /> : <Search size={14} />}
+                      {extIsParsing ? "Fetching..." : "Auto-fill"}
+                    </button>
+                  </div>
+                  {extParseError && <p className="login-error" style={{ marginTop: "0.5rem" }}>{extParseError}</p>}
+                  <p className="form-hint">Paste the article URL, then click Auto-fill to populate metadata from the page.</p>
+                </div>
+              </div>
+
+              {/* Metadata */}
+              <div className="form-section">
+                <h2 className="section-title">Article Metadata</h2>
+
+                <div className="form-group">
+                  <label className="form-label">Title</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Article title"
+                    value={extTitle}
+                    onChange={e => setExtTitle(e.target.value)}
+                    required
+                    data-testid="input-ext-title"
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group form-group-large">
+                    <label className="form-label">Publication Name</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. The New York Times"
+                      value={extPublication}
+                      onChange={e => setExtPublication(e.target.value)}
+                      required
+                      data-testid="input-ext-publication"
+                    />
+                  </div>
+                  <div className="form-group form-group-large">
+                    <label className="form-label">Author Name</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Jane Smith"
+                      value={extAuthor}
+                      onChange={e => setExtAuthor(e.target.value)}
+                      data-testid="input-ext-author"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group form-group-large">
+                    <label className="form-label">Published Date</label>
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={extPublishedAt}
+                      onChange={e => setExtPublishedAt(e.target.value)}
+                      data-testid="input-ext-published-at"
+                    />
+                  </div>
+                  <div className="form-group form-group-large">
+                    <label className="form-label">Category</label>
+                    <select
+                      className="form-select"
+                      value={extCategory}
+                      onChange={e => setExtCategory(e.target.value)}
+                      required
+                      data-testid="select-ext-category"
+                    >
+                      <option value="">— Select category —</option>
+                      {CATEGORIES.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Cover Image URL</label>
+                  <input
+                    type="url"
+                    className="form-input"
+                    placeholder="https://... (auto-filled from OG image)"
+                    value={extCoverImage}
+                    onChange={e => setExtCoverImage(e.target.value)}
+                    data-testid="input-ext-cover-image"
+                  />
+                  {extCoverImage && (
+                    <img src={extCoverImage} alt="Preview" style={{ marginTop: "0.75rem", maxHeight: 120, maxWidth: 220, borderRadius: 6, objectFit: "cover", border: "1px solid #e5e5e5" }} />
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Tags</label>
+                  <div className="checkbox-group">
+                    {BLOG_TAGS.map(tag => (
+                      <label key={tag} className="checkbox-label">
+                        <input
+                          type="checkbox"
+                          className="checkbox-input"
+                          checked={extTags.includes(tag)}
+                          onChange={e => {
+                            if (e.target.checked) setExtTags([...extTags, tag]);
+                            else setExtTags(extTags.filter(t => t !== tag));
+                          }}
+                          data-testid={`checkbox-ext-tag-${tag}`}
+                        />
+                        {tag}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <div className="checkbox-group" style={{ gap: "1.5rem" }}>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        className="checkbox-input"
+                        checked={extIsPaywalled}
+                        onChange={e => setExtIsPaywalled(e.target.checked)}
+                        data-testid="checkbox-ext-paywalled"
+                      />
+                      Paywalled article
+                    </label>
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        className="checkbox-input"
+                        checked={extPublished}
+                        onChange={e => setExtPublished(e.target.checked)}
+                        data-testid="checkbox-ext-published"
+                      />
+                      Publish immediately
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <button
+                  type="submit"
+                  className="login-button"
+                  disabled={extSubmitting}
+                  data-testid="button-ext-submit"
+                  style={{ minWidth: 180 }}
+                >
+                  {extSubmitting ? "Saving..." : editingExtId ? "Update Article" : "Add External Article"}
+                </button>
+                {extSubmitMsg && (
+                  <span style={{ color: extSubmitMsg.includes("!") ? "#2d7a3e" : "#FF5353", fontSize: "0.9rem", fontFamily: "'Public Sans', sans-serif" }}>
+                    {extSubmitMsg}
+                  </span>
+                )}
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* ==================== VIEW EXTERNAL ARTICLES ==================== */}
+        {currentView === 'view-external' && (
+          <div className="admin-content" style={{ maxWidth: 960 }}>
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">External Articles</h1>
+                <p className="content-subtitle">{externalArticles?.length || 0} articles curated</p>
+              </div>
+              <button
+                className="cancel-edit-button"
+                onClick={() => refetchExternal()}
+                data-testid="button-refresh-external"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {extLoading ? (
+              <div className="loading-message">Loading...</div>
+            ) : !externalArticles?.length ? (
+              <div className="empty-state"><p>No external articles yet. Add one using the sidebar.</p></div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {externalArticles.map(article => (
+                  <div
+                    key={article.id}
+                    data-testid={`card-ext-article-${article.id}`}
+                    style={{ border: "1px solid #e5e5e5", borderRadius: 8, padding: "1.25rem", background: "white", display: "flex", gap: "1rem", alignItems: "flex-start" }}
+                  >
+                    {article.coverImage && (
+                      <img src={article.coverImage} alt="" style={{ width: 80, height: 60, objectFit: "cover", borderRadius: 6, flexShrink: 0 }} />
+                    )}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem", flexWrap: "wrap" }}>
+                        <span style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#2C2C2C" }}>{article.title}</span>
+                        {article.isPaywalled && <span style={{ fontSize: "0.75rem", background: "#f4e4b5", color: "#92680a", borderRadius: 4, padding: "2px 8px", fontFamily: "'Public Sans', sans-serif" }}>Paywalled</span>}
+                        {!article.published && <span style={{ fontSize: "0.75rem", background: "#f0f0f0", color: "#878787", borderRadius: 4, padding: "2px 8px", fontFamily: "'Public Sans', sans-serif" }}>Draft</span>}
+                        {article.published && <span style={{ fontSize: "0.75rem", background: "rgba(45,122,62,0.12)", color: "#2d7a3e", borderRadius: 4, padding: "2px 8px", fontFamily: "'Public Sans', sans-serif" }}>Published</span>}
+                      </div>
+                      <div style={{ fontSize: "0.8125rem", color: "#878787", fontFamily: "'Public Sans', sans-serif" }}>
+                        {article.publicationName}{article.authorName ? ` · ${article.authorName}` : ""}{article.publishedAt ? ` · ${article.publishedAt}` : ""} · {article.category}
+                      </div>
+                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "#FF5353", fontFamily: "'Public Sans', sans-serif", wordBreak: "break-all" }}>
+                        {article.externalUrl}
+                      </a>
+                    </div>
+                    <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+                      <button
+                        className="cancel-edit-button"
+                        onClick={() => loadExtForEdit(article)}
+                        data-testid={`button-edit-ext-${article.id}`}
+                        style={{ fontSize: "0.8125rem", padding: "0.4rem 0.75rem" }}
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => deleteExternalArticle(article.id)}
+                        data-testid={`button-delete-ext-${article.id}`}
+                        style={{ fontSize: "0.8125rem", padding: "0.4rem 0.75rem" }}
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

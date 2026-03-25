@@ -188,6 +188,15 @@ Preferred communication style: Simple, everyday language.
 - Automatic page view tracking on route changes via `useAnalytics` hook
 - Environment variable: `VITE_GA_MEASUREMENT_ID`
 
+**External Articles CMS**
+- `externalArticles` table stores curated third-party articles (NYT, Vox, Substack, etc.)
+- Fields: title, externalUrl, publicationName, authorName, publishedAt (date string), coverImage, category, tags, isPaywalled, published
+- `POST /api/parse-url` (admin-only): server-side OG metadata parser — fetches HTML, extracts og:title, og:image, og:site_name, article:author
+- `GET /api/articles`: unified public endpoint — merges published blog posts + external articles, normalizes to shared shape with `isExternal` flag
+- Admin CMS in AdminPage: "Add External Article" + "External Articles" sidebar views with full CRUD
+- BlogCard: enhanced with `isExternal`, `externalUrl`, `publicationName`, `isPaywalled` props; external cards open in new tab; ExternalLink badge shows publication name; paywall badge (gold) shown for paywalled articles
+- ArticlesPage: uses `/api/articles` unified endpoint; "Submit an Article" button (disabled, coming soon)
+
 **Future Integrations**
 - User authentication system (schema exists but not implemented)
 - Commenting system (UI placeholder exists)

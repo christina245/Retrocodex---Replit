@@ -2,6 +2,7 @@ import {
   emailSubscriptions, 
   facts,
   blogPosts,
+  externalArticles,
   newsletterSubscriptions,
   type EmailSubscription, 
   type InsertEmailSubscription,
@@ -9,6 +10,8 @@ import {
   type InsertFact,
   type BlogPost,
   type InsertBlogPost,
+  type ExternalArticle,
+  type InsertExternalArticle,
   type NewsletterSubscription,
   type InsertNewsletterSubscription
 } from "@shared/schema";
@@ -39,6 +42,14 @@ export interface IStorage {
   getBlogPostById(id: string): Promise<BlogPost | undefined>;
   updateBlogPost(id: string, post: Partial<InsertBlogPost>): Promise<BlogPost | undefined>;
   deleteBlogPost(id: string): Promise<boolean>;
+
+  // External articles
+  createExternalArticle(article: InsertExternalArticle): Promise<ExternalArticle>;
+  getAllExternalArticles(): Promise<ExternalArticle[]>;
+  getPublishedExternalArticles(): Promise<ExternalArticle[]>;
+  getExternalArticleById(id: string): Promise<ExternalArticle | undefined>;
+  updateExternalArticle(id: string, article: Partial<InsertExternalArticle>): Promise<ExternalArticle | undefined>;
+  deleteExternalArticle(id: string): Promise<boolean>;
   
   // Newsletter subscriptions
   createNewsletterSubscription(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription>;
@@ -105,7 +116,6 @@ export class DatabaseStorage implements IStorage {
   async getFactsByIds(ids: string[]): Promise<Fact[]> {
     if (ids.length === 0) return [];
     const rows = await db.select().from(facts).where(inArray(facts.id, ids));
-    // Preserve the requested order
     const map = new Map(rows.map(f => [f.id, f]));
     return ids.map(id => map.get(id)).filter((f): f is Fact => f !== undefined);
   }
@@ -181,7 +191,6 @@ export class DatabaseStorage implements IStorage {
   async updateBlogPost(id: string, post: Partial<InsertBlogPost>): Promise<BlogPost | undefined> {
     const updateData: any = { ...post, updatedAt: new Date() };
     
-    // If publishing for the first time, set publishedAt
     if (post.published) {
       const existing = await this.getBlogPostById(id);
       if (existing && !existing.publishedAt) {
@@ -201,6 +210,55 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(blogPosts)
       .where(eq(blogPosts.id, id))
+      .returning();
+    return result.length > 0;
+  }
+
+  // External article methods
+  async createExternalArticle(article: InsertExternalArticle): Promise<ExternalArticle> {
+    const [result] = await db
+      .insert(externalArticles)
+      .values(article)
+      .returning();
+    return result;
+  }
+
+  async getAllExternalArticles(): Promise<ExternalArticle[]> {
+    return await db
+      .select()
+      .from(externalArticles)
+      .orderBy(desc(externalArticles.createdAt));
+  }
+
+  async getPublishedExternalArticles(): Promise<ExternalArticle[]> {
+    return await db
+      .select()
+      .from(externalArticles)
+      .where(eq(externalArticles.published, true))
+      .orderBy(desc(externalArticles.createdAt));
+  }
+
+  async getExternalArticleById(id: string): Promise<ExternalArticle | undefined> {
+    const [result] = await db
+      .select()
+      .from(externalArticles)
+      .where(eq(externalArticles.id, id));
+    return result || undefined;
+  }
+
+  async updateExternalArticle(id: string, article: Partial<InsertExternalArticle>): Promise<ExternalArticle | undefined> {
+    const [result] = await db
+      .update(externalArticles)
+      .set({ ...article, updatedAt: new Date() })
+      .where(eq(externalArticles.id, id))
+      .returning();
+    return result || undefined;
+  }
+
+  async deleteExternalArticle(id: string): Promise<boolean> {
+    const result = await db
+      .delete(externalArticles)
+      .where(eq(externalArticles.id, id))
       .returning();
     return result.length > 0;
   }

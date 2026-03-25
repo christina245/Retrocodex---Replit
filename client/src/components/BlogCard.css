@@ -25,6 +25,7 @@
   width: 100%;
   height: 180px;
   overflow: hidden;
+  position: relative;
 }
 
 .blog-card-image {
@@ -123,4 +124,47 @@
   background: rgba(255, 83, 83, 0.15);
   padding: 4px 10px;
   border-radius: 20px;
+}
+
+/* External article badges */
+.blog-card-badges {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.blog-card-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #2c2c2c;
+  color: white;
+  border-radius: 10px;
+  padding: 4px 8px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.blog-card-badge--paywall {
+  background: #c4890a;
+}
+
+.blog-card-badge-text {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.blog-card-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #e8e8e8;
 }
