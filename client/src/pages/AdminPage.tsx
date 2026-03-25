@@ -142,8 +142,10 @@ export default function AdminPage() {
   const [extTitle, setExtTitle] = useState("");
   const [extPublication, setExtPublication] = useState("");
   const [extAuthor, setExtAuthor] = useState("");
+  const [extSummary, setExtSummary] = useState("");
   const [extPublishedAt, setExtPublishedAt] = useState("");
   const [extCoverImage, setExtCoverImage] = useState("");
+  const [extCoverUploading, setExtCoverUploading] = useState(false);
   const [extCategory, setExtCategory] = useState("");
   const [extTags, setExtTags] = useState<string[]>([]);
   const [extIsPaywalled, setExtIsPaywalled] = useState(false);
@@ -160,6 +162,7 @@ export default function AdminPage() {
     externalUrl: string;
     publicationName: string;
     authorName: string;
+    summary: string | null;
     publishedAt: string | null;
     coverImage: string | null;
     category: string;
@@ -187,6 +190,7 @@ export default function AdminPage() {
     setExtTitle("");
     setExtPublication("");
     setExtAuthor("");
+    setExtSummary("");
     setExtPublishedAt("");
     setExtCoverImage("");
     setExtCategory("");
@@ -203,6 +207,7 @@ export default function AdminPage() {
     setExtTitle(article.title);
     setExtPublication(article.publicationName);
     setExtAuthor(article.authorName || "");
+    setExtSummary(article.summary || "");
     setExtPublishedAt(article.publishedAt || "");
     setExtCoverImage(article.coverImage || "");
     setExtCategory(article.category);
@@ -252,6 +257,7 @@ export default function AdminPage() {
       externalUrl: extUrl,
       publicationName: extPublication,
       authorName: extAuthor || undefined,
+      summary: extSummary || undefined,
       publishedAt: extPublishedAt || undefined,
       coverImage: extCoverImage || undefined,
       category: extCategory,
@@ -298,6 +304,26 @@ export default function AdminPage() {
       queryClient.invalidateQueries({ queryKey: ["/api/articles"] });
     } catch (err) {
       alert("Failed to delete external article");
+    }
+  };
+
+  const uploadExtCoverPhoto = async (file: File) => {
+    setExtCoverUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch("/api/uploads", {
+        method: "POST",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+        body: formData,
+      });
+      if (!response.ok) throw new Error("Upload failed");
+      const data = await response.json();
+      setExtCoverImage(data.url);
+    } catch (err) {
+      alert("Failed to upload cover photo");
+    } finally {
+      setExtCoverUploading(false);
     }
   };
 
@@ -3194,6 +3220,32 @@ export default function AdminPage() {
                   />
                 </div>
 
+                <div className="form-group">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      className="checkbox-input"
+                      checked={extIsPaywalled}
+                      onChange={e => setExtIsPaywalled(e.target.checked)}
+                      data-testid="checkbox-ext-paywalled"
+                    />
+                    Paywalled article
+                  </label>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Summary</label>
+                  <textarea
+                    className="form-textarea"
+                    placeholder="A brief description of what this article covers..."
+                    value={extSummary}
+                    onChange={e => setExtSummary(e.target.value)}
+                    rows={3}
+                    data-testid="textarea-ext-summary"
+                    style={{ minHeight: 80 }}
+                  />
+                </div>
+
                 <div className="form-row">
                   <div className="form-group form-group-large">
                     <label className="form-label">Publication Name</label>
@@ -3249,7 +3301,7 @@ export default function AdminPage() {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Cover Image URL</label>
+                  <label className="form-label">Cover Image</label>
                   <input
                     type="url"
                     className="form-input"
@@ -3258,8 +3310,37 @@ export default function AdminPage() {
                     onChange={e => setExtCoverImage(e.target.value)}
                     data-testid="input-ext-cover-image"
                   />
+                  <p className="form-hint">If the publication's image can't be used, upload a custom one below.</p>
+                  <div className="upload-area" style={{ marginTop: "0.75rem" }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="file-input"
+                      disabled={extCoverUploading}
+                      data-testid="input-ext-cover-upload"
+                      onChange={e => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadExtCoverPhoto(file);
+                      }}
+                    />
+                    {extCoverUploading && (
+                      <span style={{ fontSize: "0.85rem", color: "#878787", fontFamily: "'Public Sans', sans-serif", marginLeft: "0.5rem" }}>
+                        Uploading...
+                      </span>
+                    )}
+                  </div>
                   {extCoverImage && (
-                    <img src={extCoverImage} alt="Preview" style={{ marginTop: "0.75rem", maxHeight: 120, maxWidth: 220, borderRadius: 6, objectFit: "cover", border: "1px solid #e5e5e5" }} />
+                    <div className="uploaded-preview" style={{ marginTop: "0.75rem" }}>
+                      <img src={extCoverImage} alt="Cover preview" style={{ maxHeight: 120, maxWidth: 220, borderRadius: 6, objectFit: "cover", border: "1px solid #e5e5e5" }} />
+                      <button
+                        type="button"
+                        className="remove-upload-button"
+                        onClick={() => setExtCoverImage("")}
+                        data-testid="button-remove-ext-cover"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -3281,21 +3362,6 @@ export default function AdminPage() {
                         {tag}
                       </label>
                     ))}
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <div className="checkbox-group" style={{ gap: "1.5rem" }}>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        className="checkbox-input"
-                        checked={extIsPaywalled}
-                        onChange={e => setExtIsPaywalled(e.target.checked)}
-                        data-testid="checkbox-ext-paywalled"
-                      />
-                      Paywalled article
-                    </label>
                   </div>
                 </div>
               </div>

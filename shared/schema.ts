@@ -308,6 +308,7 @@ export const externalArticles = pgTable("external_articles", {
   externalUrl: text("external_url").notNull(),
   publicationName: text("publication_name").notNull(),
   authorName: text("author_name").default(""),
+  summary: text("summary"),
   publishedAt: text("published_at"), // date string e.g. "2024-01-15"
   coverImage: text("cover_image"),
   category: text("category").notNull(),
@@ -323,6 +324,7 @@ export const insertExternalArticleSchema = z.object({
   externalUrl: z.string().url("Must be a valid URL"),
   publicationName: z.string().min(1, "Publication name is required"),
   authorName: z.string().optional().default(""),
+  summary: z.string().optional(),
   publishedAt: z.string().optional(),
   coverImage: z.string().optional(),
   category: z.enum(CATEGORIES),
