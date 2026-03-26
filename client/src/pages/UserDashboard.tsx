@@ -2555,7 +2555,14 @@ export default function UserDashboard() {
                       <div className="submissions-section" data-testid="activity-submissions">
                         <div className="submissions-grid" data-testid="submissions-grid">
                           {mySubmissionsLoading ? (
-                            <div className="submissions-loading" data-testid="submissions-loading">Loading submissions...</div>
+                            <>
+                              {[1, 2].map((i) => (
+                                <div key={i} className="submission-skeleton-card" data-testid={`submission-skeleton-${i}`}>
+                                  <div className="submission-skeleton-body" />
+                                  <div className="submission-skeleton-footer" />
+                                </div>
+                              ))}
+                            </>
                           ) : paginatedSubmissions.length === 0 ? (
                             <div className="submissions-empty" data-testid="submissions-empty">You haven't submitted any facts yet.</div>
                           ) : paginatedSubmissions.map((sub) => (
@@ -2637,10 +2644,12 @@ export default function UserDashboard() {
                               )}
                               <div className="submission-footer-row" data-testid={`submission-footer-${sub.id}`}>
                                 <span className="submission-timestamp" data-testid={`submission-timestamp-${sub.id}`}>Submitted on {sub.submittedAt}</span>
-                                <button className="edit-submission-button" data-testid={`button-edit-submission-${sub.id}`}>
-                                  <Pencil size={14} />
-                                  <span>Edit Submission</span>
-                                </button>
+                                <span
+                                  className={`submission-status-badge ${sub.status === "saved" ? "submission-status-badge--review" : "submission-status-badge--pending"}`}
+                                  data-testid={`badge-submission-status-${sub.id}`}
+                                >
+                                  {sub.status === "saved" ? "Under Review" : "Pending"}
+                                </span>
                               </div>
                             </div>
                           ))}
@@ -2675,7 +2684,14 @@ export default function UserDashboard() {
                       <div className="submissions-section" data-testid="activity-approved">
                         <div className="submissions-grid" data-testid="approved-grid">
                           {mySubmissionsLoading ? (
-                            <div className="submissions-loading" data-testid="approved-loading">Loading submissions...</div>
+                            <>
+                              {[1, 2].map((i) => (
+                                <div key={i} className="submission-skeleton-card" data-testid={`approved-skeleton-${i}`}>
+                                  <div className="submission-skeleton-body" />
+                                  <div className="submission-skeleton-footer" />
+                                </div>
+                              ))}
+                            </>
                           ) : paginatedApproved.length === 0 ? (
                             <div className="submissions-empty" data-testid="approved-empty">No published submissions yet.</div>
                           ) : paginatedApproved.map((sub) => (
@@ -2728,10 +2744,9 @@ export default function UserDashboard() {
                               </div>
                               <div className="submission-footer-row" data-testid={`approved-footer-${sub.id}`}>
                                 <span className="submission-timestamp" data-testid={`approved-timestamp-${sub.id}`}>Published on {sub.publishedAt}</span>
-                                <Link href={`/fact/${sub.slug}`} className="view-submission-button" data-testid={`button-view-submission-${sub.id}`}>
-                                  <span>View Submission</span>
-                                  <ChevronRight size={14} />
-                                </Link>
+                                <span className="submission-status-badge submission-status-badge--approved" data-testid={`badge-approved-status-${sub.id}`}>
+                                  Approved
+                                </span>
                               </div>
                             </div>
                           ))}
@@ -2766,7 +2781,14 @@ export default function UserDashboard() {
                       <div className="submissions-section" data-testid="activity-not-approved">
                         <div className="submissions-grid" data-testid="rejected-grid">
                           {mySubmissionsLoading ? (
-                            <div className="submissions-loading" data-testid="rejected-loading">Loading submissions...</div>
+                            <>
+                              {[1, 2].map((i) => (
+                                <div key={i} className="submission-skeleton-card" data-testid={`rejected-skeleton-${i}`}>
+                                  <div className="submission-skeleton-body" />
+                                  <div className="submission-skeleton-footer" />
+                                </div>
+                              ))}
+                            </>
                           ) : paginatedRejected.length === 0 ? (
                             <div className="submissions-empty" data-testid="rejected-empty">No rejected submissions.</div>
                           ) : paginatedRejected.map((sub) => (
@@ -2829,8 +2851,11 @@ export default function UserDashboard() {
                                   </div>
                                 </div>
                               </div>
-                              <div className="submission-footer-row submission-footer-row-no-button" data-testid={`rejected-footer-${sub.id}`}>
+                              <div className="submission-footer-row" data-testid={`rejected-footer-${sub.id}`}>
                                 <span className="submission-timestamp" data-testid={`rejected-timestamp-${sub.id}`}>Submitted on {sub.submittedAt}</span>
+                                <span className="submission-status-badge submission-status-badge--rejected" data-testid={`badge-rejected-status-${sub.id}`}>
+                                  Not Approved
+                                </span>
                               </div>
                             </div>
                           ))}

@@ -2335,6 +2335,99 @@ a.following-post-username:hover {
   grid-column: 1 / -1;
 }
 
+/* Status badge on submission cards */
+.submission-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
+}
+
+.submission-status-badge--pending {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #b8860b;
+}
+
+.dark .submission-status-badge--pending {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #f5c842;
+}
+
+.submission-status-badge--review {
+  background-color: rgba(33, 150, 243, 0.12);
+  color: #1565c0;
+}
+
+.dark .submission-status-badge--review {
+  background-color: rgba(33, 150, 243, 0.2);
+  color: #64b5f6;
+}
+
+.submission-status-badge--approved {
+  background-color: rgba(76, 175, 80, 0.12);
+  color: #2e7d32;
+}
+
+.dark .submission-status-badge--approved {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #81c784;
+}
+
+.submission-status-badge--rejected {
+  background-color: rgba(255, 83, 83, 0.12);
+  color: #c62828;
+}
+
+.dark .submission-status-badge--rejected {
+  background-color: rgba(255, 83, 83, 0.2);
+  color: #ef9a9a;
+}
+
+/* Skeleton loading for submission cards */
+@keyframes submission-shimmer {
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.submission-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.submission-skeleton-body {
+  height: 515px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 600px 100%;
+  animation: submission-shimmer 1.4s ease-in-out infinite;
+}
+
+.dark .submission-skeleton-body {
+  background: linear-gradient(90deg, #2a2a2a 25%, #333333 50%, #2a2a2a 75%);
+  background-size: 600px 100%;
+}
+
+.submission-skeleton-footer {
+  height: 18px;
+  width: 40%;
+  margin-top: 10px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+  background-size: 600px 100%;
+  animation: submission-shimmer 1.4s ease-in-out infinite;
+}
+
+.dark .submission-skeleton-footer {
+  background: linear-gradient(90deg, #2a2a2a 25%, #333333 50%, #2a2a2a 75%);
+  background-size: 600px 100%;
+}
+
 .under-review-header {
   display: flex;
   align-items: flex-start;
