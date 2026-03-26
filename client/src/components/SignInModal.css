@@ -156,6 +156,19 @@
   margin-top: 2px;
 }
 
+.signin-context-message {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #c97000;
+  background: #fff8e6;
+  border: 1px solid #f0d080;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 0 0 4px;
+  text-align: center;
+}
+
 .signin-forgot {
   background: none;
   border: none;

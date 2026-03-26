@@ -7,7 +7,7 @@ interface PollProps {
   question: string;
   options: string[];
   factId: string;
-  onLoginClick?: () => void;
+  onLoginClick?: (contextMessage?: string) => void;
 }
 
 export function Poll({ question, options, factId, onLoginClick }: PollProps) {
@@ -54,8 +54,8 @@ export function Poll({ question, options, factId, onLoginClick }: PollProps) {
         const data = await res.json();
         if (res.status === 401) {
           await logout();
-          setError("Your session has expired. Please sign in again to submit your vote.");
-          onLoginClick?.();
+          setError("Your session has expired. Please sign in again.");
+          onLoginClick?.("Your session has expired. Please sign in again to submit your vote.");
           return;
         }
         throw new Error(data.message || "Failed to save vote");

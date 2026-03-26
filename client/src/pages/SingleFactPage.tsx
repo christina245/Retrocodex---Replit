@@ -34,6 +34,7 @@ export default function SingleFactPage() {
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -276,7 +277,7 @@ export default function SingleFactPage() {
                 "Other"
               ]}
               factId={factData?.id ?? ""}
-              onLoginClick={() => setShowSignIn(true)}
+              onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
             />
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
@@ -320,7 +321,8 @@ export default function SingleFactPage() {
 
       <SignInModal
         isOpen={showSignIn}
-        onClose={() => setShowSignIn(false)}
+        onClose={() => { setShowSignIn(false); setSignInContext(undefined); }}
+        contextMessage={signInContext}
       />
     </div>
   );

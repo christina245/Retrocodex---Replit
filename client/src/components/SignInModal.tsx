@@ -445,6 +445,7 @@ interface SignInModalProps {
   onClose: () => void;
   customTitle?: string;
   onSuccessRedirect?: string;
+  contextMessage?: string;
 }
 
 type ModalScreen = "auth" | "locationSetup" | "topicSelection";
@@ -456,7 +457,7 @@ interface OtherCountryEntry {
 
 type TagsByCategory = Record<string, Record<string, string[]>>;
 
-export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect }: SignInModalProps) {
+export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, contextMessage }: SignInModalProps) {
   const { login, register } = useAuth();
   const [currentPath, navigate] = useLocation();
   const [email, setEmail] = useState("");
@@ -944,6 +945,12 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect }:
                     ? "Create an account to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."
                     : "Log in to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."}
               </p>
+
+              {contextMessage && (
+                <p className="signin-context-message" data-testid="text-signin-context-message">
+                  {contextMessage}
+                </p>
+              )}
 
               <form className="signin-form" onSubmit={handleSubmit}>
                 {isSignUp && (
