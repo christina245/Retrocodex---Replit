@@ -2646,10 +2646,10 @@ export default function UserDashboard() {
                               <div className="submission-footer-row" data-testid={`submission-footer-${sub.id}`}>
                                 <span className="submission-timestamp" data-testid={`submission-timestamp-${sub.id}`}>Submitted on {sub.submittedAt}</span>
                                 <span
-                                  className={`submission-status-badge ${sub.status === "saved" ? "submission-status-badge--review" : "submission-status-badge--pending"}`}
+                                  className="submission-status-badge submission-status-badge--pending"
                                   data-testid={`badge-submission-status-${sub.id}`}
                                 >
-                                  {sub.status === "saved" ? "Under Review" : "Pending"}
+                                  Pending
                                 </span>
                               </div>
                             </div>
