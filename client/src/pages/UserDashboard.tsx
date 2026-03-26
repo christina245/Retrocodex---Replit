@@ -622,6 +622,7 @@ export default function UserDashboard() {
     considerations: string;
     status: "pending" | "saved" | "rejected" | "published";
     adminNote: string | null;
+    draftData: Record<string, any> | null;
     createdAt: string;
   }
 
@@ -813,7 +814,7 @@ export default function UserDashboard() {
       moreDetails: s.truthDetails,
       sources: s.sources,
       publishedAt: new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-      slug: "",
+      slug: (s.draftData?.slug as string) || "",
     }));
 
   const rejectedSubmissions = mySubmissions
@@ -2744,9 +2745,17 @@ export default function UserDashboard() {
                               </div>
                               <div className="submission-footer-row" data-testid={`approved-footer-${sub.id}`}>
                                 <span className="submission-timestamp" data-testid={`approved-timestamp-${sub.id}`}>Published on {sub.publishedAt}</span>
-                                <span className="submission-status-badge submission-status-badge--approved" data-testid={`badge-approved-status-${sub.id}`}>
-                                  Approved
-                                </span>
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                  {sub.slug && (
+                                    <Link href={`/fact/${sub.slug}`} className="view-submission-button" data-testid={`button-view-fact-${sub.id}`}>
+                                      <span>View Fact</span>
+                                      <ChevronRight size={14} />
+                                    </Link>
+                                  )}
+                                  <span className="submission-status-badge submission-status-badge--approved" data-testid={`badge-approved-status-${sub.id}`}>
+                                    Approved
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           ))}

@@ -1317,6 +1317,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           considerations: factSubmissions.considerations,
           status: factSubmissions.status,
           adminNote: factSubmissions.adminNote,
+          draftData: factSubmissions.draftData,
           createdAt: factSubmissions.createdAt,
         })
         .from(factSubmissions)
