@@ -7,29 +7,40 @@ interface MailOptions {
   html?: string;
 }
 
-function createTransporter() {
+let _transporter: nodemailer.Transporter | null | undefined = undefined;
+let _smtpWarningLogged = false;
+
+function getTransporter(): nodemailer.Transporter | null {
+  if (_transporter !== undefined) return _transporter;
+
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || "587", 10);
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
   if (!host || !user || !pass) {
+    _transporter = null;
     return null;
   }
 
-  return nodemailer.createTransport({
+  _transporter = nodemailer.createTransport({
     host,
     port,
     secure: port === 465,
     auth: { user, pass },
   });
+
+  return _transporter;
 }
 
 export async function sendMail(options: MailOptions): Promise<void> {
-  const transporter = createTransporter();
+  const transporter = getTransporter();
 
   if (!transporter) {
-    console.warn("[mailer] SMTP not configured (missing SMTP_HOST, SMTP_USER, or SMTP_PASS). Skipping email send.");
+    if (!_smtpWarningLogged) {
+      console.warn("[mailer] SMTP not configured (missing SMTP_HOST, SMTP_USER, or SMTP_PASS). Emails will not be sent. Set these env vars to enable email delivery.");
+      _smtpWarningLogged = true;
+    }
     return;
   }
 
