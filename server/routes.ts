@@ -10,6 +10,7 @@ import bcrypt from "bcrypt";
 import { eq, gte, count, and, sql, desc } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+import { sendMail, buildSubmissionConfirmationEmail } from "./mailer";
 
 declare module "express-session" {
   interface SessionData {
@@ -1252,6 +1253,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
           status: "pending",
         })
         .returning();
+
+      // Send confirmation email — fire and forget, never blocks the response
+      (async () => {
+        try {
+          const [account] = await db
+            .select({ email: userAccounts.email })
+            .from(userAccounts)
+            .where(eq(userAccounts.id, userId))
+            .limit(1);
+
+          if (account?.email) {
+            const { subject, text, html } = buildSubmissionConfirmationEmail(data.mythHeader);
+            await sendMail({ to: account.email, subject, text, html });
+          }
+        } catch (mailErr) {
+          console.error("[mailer] Submission confirmation email failed:", mailErr);
+        }
+      })();
 
       return res.status(201).json(submission);
     } catch (error) {
