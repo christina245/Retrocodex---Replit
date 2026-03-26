@@ -151,6 +151,12 @@
 }
 
 .poll-login-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
   color: #FF5353;
   text-decoration: underline;
 }

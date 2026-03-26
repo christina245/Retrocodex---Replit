@@ -7,10 +7,11 @@ interface PollProps {
   question: string;
   options: string[];
   factId: string;
+  onLoginClick?: () => void;
 }
 
-export function Poll({ question, options, factId }: PollProps) {
-  const { user, isLoggedIn } = useAuth();
+export function Poll({ question, options, factId, onLoginClick }: PollProps) {
+  const { user, isLoggedIn, logout } = useAuth();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
@@ -51,6 +52,11 @@ export function Poll({ question, options, factId }: PollProps) {
       });
       if (!res.ok) {
         const data = await res.json();
+        if (res.status === 401) {
+          await logout();
+          onLoginClick?.();
+          return;
+        }
         throw new Error(data.message || "Failed to save vote");
       }
       setVoted(true);
@@ -79,19 +85,15 @@ export function Poll({ question, options, factId }: PollProps) {
               {votedLocation}
             </p>
           )}
+          <p className="poll-voted-thanks" data-testid="poll-voted-thanks">Thanks for sharing your experience!</p>
+          <button
+            className="poll-change-vote-link"
+            onClick={() => setChangingVote(true)}
+            data-testid="button-poll-change-vote"
+          >
+            Change my answer
+          </button>
         </div>
-        <p className="poll-voted-thanks">Your vote was recorded. Thank you!</p>
-        <button
-          className="poll-change-vote-link"
-          onClick={() => {
-            setChangingVote(true);
-            setSelectedOption(votedOption);
-            setSelectedLocation(votedLocation || "");
-          }}
-          data-testid="button-poll-change-vote"
-        >
-          Change vote
-        </button>
       </div>
     );
   }
@@ -100,10 +102,10 @@ export function Poll({ question, options, factId }: PollProps) {
     <div className="poll-container" data-testid="poll-container">
       <h3 className="poll-title" data-testid="poll-title">{question}</h3>
 
-      <div className="poll-options">
+      <div className="poll-options" data-testid="poll-options">
         <div className="poll-column poll-column-left">
-          {options.slice(0, 4).map((option, index) => (
-            <label key={index} className="poll-option" data-testid={`poll-option-${index}`}>
+          {options.map((option) => (
+            <label key={option} className="poll-option" data-testid={`poll-option-${option.toLowerCase().replace(/\s+/g, '-')}`}>
               <input
                 type="radio"
                 name="poll"
@@ -111,16 +113,16 @@ export function Poll({ question, options, factId }: PollProps) {
                 checked={selectedOption === option}
                 onChange={() => { setSelectedOption(option); setError(null); }}
                 className="poll-radio"
-                data-testid={`radio-option-${index}`}
+                data-testid={`input-poll-${option.toLowerCase().replace(/\s+/g, '-')}`}
               />
-              <span className="poll-radio-custom"></span>
-              <span className="poll-option-text">{option}</span>
+              <span className="poll-radio-custom" />
             </label>
           ))}
         </div>
+
         <div className="poll-column poll-column-right">
-          {options.slice(4).map((option, index) => (
-            <label key={index + 4} className="poll-option" data-testid={`poll-option-${index + 4}`}>
+          {options.map((option) => (
+            <label key={option} className="poll-option" data-testid={`poll-option-label-${option.toLowerCase().replace(/\s+/g, '-')}`}>
               <input
                 type="radio"
                 name="poll"
@@ -128,9 +130,7 @@ export function Poll({ question, options, factId }: PollProps) {
                 checked={selectedOption === option}
                 onChange={() => { setSelectedOption(option); setError(null); }}
                 className="poll-radio"
-                data-testid={`radio-option-${index + 4}`}
               />
-              <span className="poll-radio-custom"></span>
               <span className="poll-option-text">{option}</span>
             </label>
           ))}
@@ -149,7 +149,7 @@ export function Poll({ question, options, factId }: PollProps) {
             onChange={(e) => setSelectedLocation(e.target.value)}
             data-testid="select-poll-location"
           >
-            <option value="" disabled>Select a location...</option>
+            <option value="">No location / skip</option>
             {locationOptions.map((loc) => (
               <option key={loc} value={loc}>{loc}</option>
             ))}
@@ -169,7 +169,13 @@ export function Poll({ question, options, factId }: PollProps) {
 
       {!isLoggedIn ? (
         <p className="poll-login-prompt" data-testid="poll-login-prompt">
-          <a href="/login" className="poll-login-link">Log in</a> to record your vote.
+          <button
+            className="poll-login-link"
+            onClick={() => onLoginClick?.()}
+            data-testid="button-poll-login"
+          >
+            Log in
+          </button>{" "}to record your vote.
         </p>
       ) : (
         <button

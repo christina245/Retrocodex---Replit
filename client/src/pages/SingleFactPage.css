@@ -382,7 +382,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 18px;
+  margin-top: 20px;
+  margin-left: 17px;
+  margin-bottom: 8px;
 }
 
 .fact-detail-filter-chip {

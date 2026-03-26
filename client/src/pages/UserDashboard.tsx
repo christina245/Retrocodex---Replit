@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -2983,11 +2983,13 @@ export default function UserDashboard() {
                                       <p className="fact-myth" data-testid={`poll-vote-fact-title-${vote.id}`}>"{vote.factTitle}"</p>
                                     </Link>
                                     <p className="following-plain-comment" data-testid={`poll-vote-answer-${vote.id}`}>
+                                      <CircleCheck size={14} className="poll-vote-answer-icon" />
                                       Your answer: <strong>{vote.optionChosen}</strong>
                                     </p>
                                     {vote.locationChosen && (
                                       <p className="poll-vote-location-display" data-testid={`poll-vote-location-${vote.id}`}>
-                                        Location: {vote.locationChosen}
+                                        <MapPinCheckInside size={14} className="poll-vote-location-icon" />
+                                        I learned this in: {vote.locationChosen}
                                       </p>
                                     )}
                                     <span className="public-comment-timestamp" data-testid={`poll-vote-time-${vote.id}`}>

@@ -1015,6 +1015,22 @@ a.following-post-username:hover {
   font-size: 12px;
   color: #777;
   margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.poll-vote-answer-icon {
+  color: #2C2C2C;
+  flex-shrink: 0;
+  display: inline;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.poll-vote-location-icon {
+  color: #777;
+  flex-shrink: 0;
 }
 
 .following-post-body .comment-actions,

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "wouter";
+import { useParams, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -12,6 +12,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { SubscribeModal } from "@/components/SubscribeModal";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
+import { SignInModal } from "@/components/SignInModal";
 import { RelatedFacts } from "@/components/RelatedFacts";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { FactTags } from "@/components/FactTags";
@@ -27,11 +28,13 @@ import "./SingleFactPage.css";
 
 export default function SingleFactPage() {
   const { id } = useParams();
+  const [currentPath] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -183,6 +186,22 @@ export default function SingleFactPage() {
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       
       <div className="page-content">
+        {factData.factFilters && factData.factFilters.length > 0 && (
+          <div className="fact-detail-filters" data-testid="fact-detail-filters">
+            {factData.factFilters.map((filter, i) => {
+              const isOfficialRevision = filter.toLowerCase() === "official revision";
+              const label = isOfficialRevision && factData.revisionYear
+                ? `Official Revision · ${factData.revisionYear}`
+                : filter.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase());
+              return (
+                <span key={i} className="fact-detail-filter-chip" data-testid={`detail-filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                  {label}
+                </span>
+              );
+            })}
+          </div>
+        )}
+
         <div className="title-row">
           <h1 className="fact-page-title" data-testid="text-fact-title">{factData.title}</h1>
           <div className="right-info">
@@ -224,22 +243,6 @@ export default function SingleFactPage() {
           </div>
         </div>
 
-        {factData.factFilters && factData.factFilters.length > 0 && (
-          <div className="fact-detail-filters" data-testid="fact-detail-filters">
-            {factData.factFilters.map((filter, i) => {
-              const isOfficialRevision = filter.toLowerCase() === "official revision";
-              const label = isOfficialRevision && factData.revisionYear
-                ? `Official Revision · ${factData.revisionYear}`
-                : filter.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase());
-              return (
-                <span key={i} className="fact-detail-filter-chip" data-testid={`detail-filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                  {label}
-                </span>
-              );
-            })}
-          </div>
-        )}
-
         <div className="content-grid">
           <div className="left-column">
             <ExtendedFactCard 
@@ -274,6 +277,7 @@ export default function SingleFactPage() {
                 "Other"
               ]}
               factId={factData?.id ?? ""}
+              onLoginClick={() => setShowSignIn(true)}
             />
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
@@ -314,6 +318,12 @@ export default function SingleFactPage() {
       )}
 
       <Footer />
+
+      <SignInModal
+        isOpen={showSignIn}
+        onClose={() => setShowSignIn(false)}
+        onSuccessRedirect={currentPath}
+      />
     </div>
   );
 }
