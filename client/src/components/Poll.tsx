@@ -54,6 +54,7 @@ export function Poll({ question, options, factId, onLoginClick }: PollProps) {
         const data = await res.json();
         if (res.status === 401) {
           await logout();
+          setError("Your session has expired. Please sign in again to submit your vote.");
           onLoginClick?.();
           return;
         }
@@ -104,8 +105,13 @@ export function Poll({ question, options, factId, onLoginClick }: PollProps) {
 
       <div className="poll-options" data-testid="poll-options">
         <div className="poll-column poll-column-left">
-          {options.map((option) => (
-            <label key={option} className="poll-option" data-testid={`poll-option-${option.toLowerCase().replace(/\s+/g, '-')}`}>
+          {options.slice(0, 4).map((option) => (
+            <label
+              key={option}
+              className="poll-option"
+              data-testid={`poll-option-${option.toLowerCase().replace(/\s+/g, '-')}`}
+              onClick={() => { setSelectedOption(option); setError(null); }}
+            >
               <input
                 type="radio"
                 name="poll"
@@ -116,25 +122,35 @@ export function Poll({ question, options, factId, onLoginClick }: PollProps) {
                 data-testid={`input-poll-${option.toLowerCase().replace(/\s+/g, '-')}`}
               />
               <span className="poll-radio-custom" />
-            </label>
-          ))}
-        </div>
-
-        <div className="poll-column poll-column-right">
-          {options.map((option) => (
-            <label key={option} className="poll-option" data-testid={`poll-option-label-${option.toLowerCase().replace(/\s+/g, '-')}`}>
-              <input
-                type="radio"
-                name="poll"
-                value={option}
-                checked={selectedOption === option}
-                onChange={() => { setSelectedOption(option); setError(null); }}
-                className="poll-radio"
-              />
               <span className="poll-option-text">{option}</span>
             </label>
           ))}
         </div>
+
+        {options.length > 4 && (
+          <div className="poll-column poll-column-right">
+            {options.slice(4).map((option) => (
+              <label
+                key={option}
+                className="poll-option"
+                data-testid={`poll-option-${option.toLowerCase().replace(/\s+/g, '-')}`}
+                onClick={() => { setSelectedOption(option); setError(null); }}
+              >
+                <input
+                  type="radio"
+                  name="poll"
+                  value={option}
+                  checked={selectedOption === option}
+                  onChange={() => { setSelectedOption(option); setError(null); }}
+                  className="poll-radio"
+                  data-testid={`input-poll-${option.toLowerCase().replace(/\s+/g, '-')}`}
+                />
+                <span className="poll-radio-custom" />
+                <span className="poll-option-text">{option}</span>
+              </label>
+            ))}
+          </div>
+        )}
       </div>
 
       {hasLocations && (
