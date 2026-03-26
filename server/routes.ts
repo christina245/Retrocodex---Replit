@@ -1302,7 +1302,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/submissions/mine — user: fetch own submissions ordered by date desc
+  // GET /api/submissions/me — user: fetch own submissions ordered by date desc
+  app.get("/api/submissions/me", requireUser, async (req, res) => {
+    try {
+      const userId = req.session.userId!;
+      const submissions = await db
+        .select({
+          id: factSubmissions.id,
+          mythHeader: factSubmissions.mythHeader,
+          mythDetails: factSubmissions.mythDetails,
+          truthHeader: factSubmissions.truthHeader,
+          truthDetails: factSubmissions.truthDetails,
+          sources: factSubmissions.sources,
+          considerations: factSubmissions.considerations,
+          status: factSubmissions.status,
+          adminNote: factSubmissions.adminNote,
+          createdAt: factSubmissions.createdAt,
+        })
+        .from(factSubmissions)
+        .where(eq(factSubmissions.userId, userId))
+        .orderBy(desc(factSubmissions.createdAt));
+      return res.json(submissions);
+    } catch (error) {
+      console.error("GET /api/submissions/me error:", error);
+      res.status(500).json({ message: "Failed to fetch your submissions" });
+    }
+  });
+
+  // GET /api/submissions/mine — alias for /api/submissions/me (backward compat)
   app.get("/api/submissions/mine", requireUser, async (req, res) => {
     try {
       const userId = req.session.userId!;

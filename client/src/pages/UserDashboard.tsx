@@ -626,7 +626,7 @@ export default function UserDashboard() {
   }
 
   const { data: mySubmissions = [], isLoading: mySubmissionsLoading } = useQuery<MySubmission[]>({
-    queryKey: ["/api/submissions/mine"],
+    queryKey: ["/api/submissions/me"],
     enabled: isLoggedIn,
   });
 
