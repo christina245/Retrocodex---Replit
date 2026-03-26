@@ -51,14 +51,18 @@ export function Poll({ question, options, factId, onLoginClick }: PollProps) {
         }),
       });
       if (!res.ok) {
-        const data = await res.json();
         if (res.status === 401) {
           await logout();
           setError("Your session has expired. Please sign in again.");
           onLoginClick?.("Your session has expired. Please sign in again to submit your vote.");
           return;
         }
-        throw new Error(data.message || "Failed to save vote");
+        let message = "Failed to save vote";
+        try {
+          const data = await res.json();
+          message = data.message || message;
+        } catch {}
+        throw new Error(message);
       }
       setVoted(true);
       setVotedOption(selectedOption);
