@@ -362,8 +362,8 @@ export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect
 // Poll votes — one per user per fact, upserted on re-vote
 export const pollVotes = pgTable("poll_votes", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull(),
-  factId: varchar("fact_id").notNull(),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
   optionChosen: varchar("option_chosen").notNull(),
   locationChosen: varchar("location_chosen"),
   votedAt: timestamp("voted_at").notNull().defaultNow(),

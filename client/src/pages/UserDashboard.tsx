@@ -1555,6 +1555,59 @@ export default function UserDashboard() {
                         </div>
                       ))}
 
+                      {/* Live poll vote notifications */}
+                      {myPollVotes.map((vote) => (
+                        <div key={`notif-poll-${vote.id}`} className="following-post" data-testid={`notif-poll-${vote.id}`}>
+                          <img
+                            src={user?.profilePhoto || placeholderPhoto}
+                            alt={user?.username || "You"}
+                            className="following-post-avatar"
+                          />
+                          <div className="following-post-main">
+                            <div className="following-post-header">
+                              <div className="following-post-header-text">
+                                <span className="following-post-username">{user?.username || "You"}</span>
+                                <span className="following-post-action">voted on a poll</span>
+                              </div>
+                              <span className="following-post-timestamp" data-testid={`notif-poll-time-${vote.id}`}>
+                                {(() => {
+                                  const diff = Date.now() - new Date(vote.votedAt).getTime();
+                                  const m = Math.floor(diff / 60000);
+                                  if (m < 1) return "just now";
+                                  if (m < 60) return `${m} min ago`;
+                                  const h = Math.floor(m / 60);
+                                  if (h < 24) return `${h}h ago`;
+                                  const d = Math.floor(h / 24);
+                                  if (d < 30) return `${d}d ago`;
+                                  return new Date(vote.votedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                                })()}
+                              </span>
+                            </div>
+                            <div className="following-post-body">
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <Link href={`/fact/${vote.factSlug}`} className="following-post-link">
+                                    <p className="fact-myth" data-testid={`notif-poll-fact-${vote.id}`}>"{vote.factTitle}"</p>
+                                  </Link>
+                                  <div className="following-poll-response" data-testid={`notif-poll-response-${vote.id}`}>
+                                    <p className="following-poll-question">Were you taught this information?</p>
+                                    <div className="following-poll-selection">
+                                      <div className="following-poll-radio-filled" />
+                                      <span className="following-poll-answer" data-testid={`notif-poll-answer-${vote.id}`}>{vote.optionChosen}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                {vote.factCoverPhoto && (
+                                  <Link href={`/fact/${vote.factSlug}`} className="following-post-cover-link" data-testid={`notif-poll-cover-${vote.id}`}>
+                                    <img src={vote.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                  </Link>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
                       {/* 1. Username1 liked your comment on */}
                       <div className="activity-post" data-testid="activity-post-1">
                         <div className="activity-post-icon-col">
