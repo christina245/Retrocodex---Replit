@@ -368,7 +368,7 @@ export default function HomePage() {
         return paginatedPopularFacts;
       case "regionally-taught":
         return regionallyTaughtFacts;
-      case "trending":
+      case "current-events":
         return trendingFacts;
       case "debated":
         return debatedFacts;
@@ -382,7 +382,7 @@ export default function HomePage() {
   const showRecentPagination = activeTab === "new" && recentTotalPages > 1;
   const showPopularPagination = activeTab === "popular" && popularTotalPages > 1;
   const showEmptyState = displayedFacts.length === 0;
-  const emptyStateMessage = (activeTab === "trending" || activeTab === "debated") 
+  const emptyStateMessage = (activeTab === "current-events" || activeTab === "debated") 
     ? "No facts have been added, check back later!"
     : (activeTab === "regionally-taught")
       ? "No regionally taught facts available yet. Check back soon!"
@@ -458,9 +458,9 @@ export default function HomePage() {
                   and Instagram.
                 </p>
               )}
-              {activeTab === "trending" && (
-                <p className="tab-subheader" data-testid="text-trending-subheader">
-                  Trending topics are relevant to upcoming holidays or current events.
+              {activeTab === "current-events" && (
+                <p className="tab-subheader" data-testid="text-current-events-subheader">
+                  Current Events topics reflect contemporary misinformation spreading through social media and news media.
                 </p>
               )}
               {activeTab === "debated" && (

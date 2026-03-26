@@ -1410,9 +1410,9 @@ export default function AdminPage() {
                         checked={isTrending}
                         onChange={(e) => setIsTrending(e.target.checked)}
                         className="checkbox-input"
-                        data-testid="checkbox-trending"
+                        data-testid="checkbox-current-events"
                       />
-                      <span>Trending</span>
+                      <span>Current Events</span>
                     </label>
                     <label className="checkbox-label">
                       <input

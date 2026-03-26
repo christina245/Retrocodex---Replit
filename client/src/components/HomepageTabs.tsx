@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./HomepageTabs.css";
 
-export type HomepageTabType = "explore" | "new" | "popular" | "trending" | "debated" | "regionally-taught";
+export type HomepageTabType = "explore" | "new" | "popular" | "current-events" | "debated" | "regionally-taught";
 
 interface HomepageTabsProps {
   activeTab: HomepageTabType;
@@ -12,7 +12,7 @@ const TABS: { id: HomepageTabType; label: string; tooltip?: string }[] = [
   { id: "explore", label: "Featured" },
   { id: "new", label: "New" },
   { id: "popular", label: "Popular", tooltip: "Topics frequently reported and upvoted by social media users." },
-  { id: "trending", label: "Trending", tooltip: "Topics relevant to current events and holidays." },
+  { id: "current-events", label: "Current Events", tooltip: "Topics relevant to misinformation spreading through current social media and news media." },
   { id: "debated", label: "Debated", tooltip: "Topics with relatively weaker consensus." },
   { id: "regionally-taught", label: "Regionally Taught", tooltip: "Topics mostly taught outside of the United States or within specific parts of it." },
 ];
