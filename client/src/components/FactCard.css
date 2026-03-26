@@ -60,6 +60,10 @@
   white-space: nowrap;
 }
 
+.fact-taught-until-tag {
+  background: #7B4E9E;
+}
+
 .category-icon-small {
   flex-shrink: 0;
 }

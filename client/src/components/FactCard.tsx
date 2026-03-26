@@ -43,6 +43,7 @@ export interface Fact {
   betaOnly?: boolean;
   factFilters?: string[];
   revisionYear?: number;
+  taughtUntilYear?: string;
 }
 
 function toTitleCase(str: string): string {
@@ -56,9 +57,10 @@ interface FactCardProps {
   onComment: () => void;
   onBetaClick?: () => void;
   isSaved?: boolean;
+  showTaughtUntilLabel?: boolean;
 }
 
-export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSaved }: FactCardProps) {
+export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSaved, showTaughtUntilLabel }: FactCardProps) {
   const CategoryIcon = getCategoryIcon(fact.category);
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
@@ -87,9 +89,9 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
               <CategoryIcon size={12} style={{ color: fact.categoryColor }} className="category-icon-small" />
               <span className="category-badge">{fact.category}</span>
             </div>
-            {fact.factFilters && fact.factFilters.length > 0 && (
+            {((fact.factFilters && fact.factFilters.length > 0) || (showTaughtUntilLabel && fact.taughtUntilYear)) && (
               <div className="fact-filter-tags">
-                {fact.factFilters.map((filter, index) => {
+                {fact.factFilters && fact.factFilters.map((filter, index) => {
                   const isOfficialRevision = filter.toLowerCase() === "official revision";
                   const label = isOfficialRevision && fact.revisionYear
                     ? `Official Revision · ${fact.revisionYear}`
@@ -109,6 +111,11 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
                     </Tooltip>
                   ) : chip;
                 })}
+                {showTaughtUntilLabel && fact.taughtUntilYear && (
+                  <span className="fact-filter-tag fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
+                    Widely Taught Until {fact.taughtUntilYear}
+                  </span>
+                )}
               </div>
             )}
           </div>

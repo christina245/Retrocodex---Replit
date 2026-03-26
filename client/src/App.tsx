@@ -74,6 +74,7 @@ function Router() {
       <Route path="/search/:query" component={SearchResultsPage} />
       <Route path="/dashboard" component={UserDashboard} />
       <Route path="/user/:username" component={PublicProfile} />
+      <Route path="/decade/:decade" component={HomePage} />
       <Route component={NotFound} />
     </Switch>
   );

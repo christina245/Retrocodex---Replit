@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useLocation, useParams } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -51,6 +52,8 @@ export default function HomePage() {
   const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string[]>([]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
+  const params = useParams<{ decade?: string }>();
 
   const { data: dbFacts = [] } = useQuery<DbFact[]>({
     queryKey: ["/api/facts"],
@@ -85,6 +88,7 @@ export default function HomePage() {
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
+          taughtUntilYear: fact.taughtUntilYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -114,6 +118,7 @@ export default function HomePage() {
         betaOnly: fact.betaOnly || false,
         factFilters: fact.factFilters || undefined,
         revisionYear: fact.revisionYear ?? undefined,
+        taughtUntilYear: fact.taughtUntilYear ?? undefined,
       };
     });
   }, [popularDbFacts]);
@@ -145,6 +150,7 @@ export default function HomePage() {
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
+          taughtUntilYear: fact.taughtUntilYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -222,6 +228,23 @@ export default function HomePage() {
   };
 
   useEffect(() => {
+    const urlDecade = params.decade;
+    if (urlDecade && DECADES.includes(urlDecade as typeof DECADES[number])) {
+      setSelectedDecade(urlDecade);
+    } else {
+      setSelectedDecade("all");
+    }
+  }, [params.decade]);
+
+  const handleDecadeClick = useCallback((decade: string) => {
+    if (selectedDecade === decade) {
+      setLocation("/");
+    } else {
+      setLocation(`/decade/${decade}`);
+    }
+  }, [selectedDecade, setLocation]);
+
+  useEffect(() => {
     if (selectedDecade !== "all") {
       setIsDecadeLoading(true);
       setDecadePage(1);
@@ -272,6 +295,7 @@ export default function HomePage() {
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
+          taughtUntilYear: fact.taughtUntilYear ?? undefined,
         };
       });
   }, [dbFacts, selectedDecade, decadeFilters, decadeCategoryFilter]);
@@ -306,6 +330,7 @@ export default function HomePage() {
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
+          taughtUntilYear: fact.taughtUntilYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -330,6 +355,7 @@ export default function HomePage() {
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
+          taughtUntilYear: fact.taughtUntilYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -354,6 +380,7 @@ export default function HomePage() {
           betaOnly: fact.betaOnly || false,
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
+          taughtUntilYear: fact.taughtUntilYear ?? undefined,
         };
       });
   }, [dbFacts]);
@@ -411,7 +438,7 @@ export default function HomePage() {
           <div className="homepage-decade-nav-container">
             <button
               className={`homepage-decade-chip${selectedDecade === "all" ? " homepage-decade-chip-selected" : ""}`}
-              onClick={() => setSelectedDecade("all")}
+              onClick={() => setLocation("/")}
               data-testid="button-decade-all"
             >
               View all topics
@@ -420,7 +447,7 @@ export default function HomePage() {
               <button
                 key={decade}
                 className={`homepage-decade-chip${selectedDecade === decade ? " homepage-decade-chip-selected" : ""}`}
-                onClick={() => setSelectedDecade(decade)}
+                onClick={() => handleDecadeClick(decade)}
                 data-testid={`button-decade-${decade}`}
               >
                 {decade}
@@ -484,6 +511,7 @@ export default function HomePage() {
                           onShare={() => handleShareClick(fact)}
                           onComment={handleCommentClick}
                           onBetaClick={handleBetaClick}
+                          showTaughtUntilLabel
                         />
                       ))
                     ) : (

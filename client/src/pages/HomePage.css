@@ -76,13 +76,12 @@
 
 .homepage-decade-chip-selected {
   background-color: #ff5353;
-  pointer-events: none;
 }
 
 .homepage-decade-chip-selected:hover {
-  transform: none;
-  box-shadow: none;
-  filter: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05);
 }
 
 .homepage-category-subtitle {
@@ -200,12 +199,26 @@
   }
 
   .homepage-decade-nav {
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .homepage-decade-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .homepage-decade-nav-container {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     padding: 0 8px;
   }
 
   .homepage-decade-chip {
     padding: 6px 8px;
     font-size: 0.625rem;
+    flex-shrink: 0;
   }
 
   .homepage-category-subtitle {
