@@ -458,7 +458,7 @@ type TagsByCategory = Record<string, Record<string, string[]>>;
 
 export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect }: SignInModalProps) {
   const { login, register } = useAuth();
-  const [, navigate] = useLocation();
+  const [currentPath, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -540,7 +540,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect }:
       setIsSubmitting(false);
       if (result.success) {
         handleClose();
-        navigate(onSuccessRedirect || "/dashboard");
+        navigate(onSuccessRedirect ?? currentPath);
       } else {
         setLoginError(result.error || "Invalid email or password.");
       }
@@ -786,7 +786,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect }:
                   setIsSubmitting(false);
                   if (result.success) {
                     handleClose();
-                    navigate(onSuccessRedirect || "/dashboard");
+                    navigate(onSuccessRedirect ?? currentPath);
                   } else {
                     setLoginError(result.error || "Registration failed. Please try again.");
                     setScreen("auth");

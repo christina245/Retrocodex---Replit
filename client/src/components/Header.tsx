@@ -209,6 +209,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
       <SignInModal
         isOpen={isSignInOpen}
         onClose={() => setIsSignInOpen(false)}
+        onSuccessRedirect="/dashboard"
       />
     </>
   );
