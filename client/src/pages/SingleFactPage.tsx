@@ -253,12 +253,11 @@ export default function SingleFactPage() {
                 "Yes, outside of school",
                 "No",
                 "Not sure",
-                
-                
                 "I was taught a different version",
                 "I was taught the presently accurate version",
                 "Other"
               ]}
+              factId={factData?.id ?? ""}
             />
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">

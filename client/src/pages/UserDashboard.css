@@ -1010,6 +1010,13 @@ a.following-post-username:hover {
   margin: 0 0 10px 0;
 }
 
+.poll-vote-location-display {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #777;
+  margin: 0 0 8px 0;
+}
+
 .following-post-body .comment-actions,
 .following-post-body-left .comment-actions,
 .saved-comment .comment-actions {

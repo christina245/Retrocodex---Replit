@@ -26,7 +26,7 @@ import "./UserDashboard.css";
 type DashboardTab = "for-you" | "following" | "local" | "fact-updates";
 type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "saved" | "settings";
 type NotificationsTab = "all" | "replies" | "comments";
-type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
+type ActivityTab = "submitted" | "approved" | "not-approved" | "comments" | "polls";
 type EditRequestsTab = "pending" | "approved" | "not-approved";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 type SavedTab = "all" | "facts" | "articles" | "comments";
@@ -49,6 +49,7 @@ const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
   { id: "approved", label: "Approved" },
   { id: "not-approved", label: "Not Approved" },
   { id: "comments", label: "Comments" },
+  { id: "polls", label: "Polls" },
 ];
 
 const SAVED_TABS: { id: SavedTab; label: string }[] = [
@@ -550,6 +551,14 @@ export default function UserDashboard() {
   const [savedTab, setSavedTab] = useState<SavedTab>("all");
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("editProfile") === "true") {
+      setSideTab("edit-profile");
+      setEditModalOpen(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!activeEllipsisId) return;
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -618,6 +627,23 @@ export default function UserDashboard() {
 
   const { data: mySubmissions = [], isLoading: mySubmissionsLoading } = useQuery<MySubmission[]>({
     queryKey: ["/api/submissions/mine"],
+    enabled: isLoggedIn,
+  });
+
+  interface PollVoteItem {
+    id: string;
+    userId: string;
+    factId: string;
+    optionChosen: string;
+    locationChosen: string | null;
+    votedAt: string;
+    factTitle: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+  }
+
+  const { data: myPollVotes = [], isLoading: pollVotesLoading } = useQuery<PollVoteItem[]>({
+    queryKey: ["/api/poll-votes/me"],
     enabled: isLoggedIn,
   });
 
@@ -1125,37 +1151,6 @@ export default function UserDashboard() {
                           </div>
                         </div>
 
-                        <div className="following-post" data-testid="following-post-2">
-                          <img src={placeholderPhoto} alt="DungeonMaster_88" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/DungeonMaster_88" className="following-post-username" data-testid="link-user-DungeonMaster_88">DungeonMaster_88</Link>
-                              <span className="following-post-action">voted on a poll</span>
-                            </div>
-                            <span className="following-post-timestamp">15 mins ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
-                                  <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
-                                </Link>
-                                <div className="following-poll-response" data-testid="following-poll-response">
-                                  <p className="following-poll-question">Were you taught this information?</p>
-                                  <div className="following-poll-selection">
-                                    <div className="following-poll-radio-filled" />
-                                    <span className="following-poll-answer">Yes, in school</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <Link href="/fact/food-pyramid-healthy-diet" className="following-post-cover-link" data-testid="cover-link-following-2">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                          </div>
-                        </div>
 
                         <div className="following-post" data-testid="following-post-3">
                           <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
@@ -1259,39 +1254,6 @@ export default function UserDashboard() {
                           </div>
                         </div>
 
-                        <div className="following-post" data-testid="local-post-2">
-                          <img src={placeholderPhoto} alt="SyntaxTerror_404" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/SyntaxTerror_404" className="following-post-username" data-testid="link-user-SyntaxTerror_404">SyntaxTerror_404</Link>
-                              <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-2">Canada</span>
-                              <span className="following-post-action">voted on a poll</span>
-                            </div>
-                            <span className="following-post-timestamp">20 mins ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/is-msg-bad-for-you" className="following-post-link">
-                                  <p className="fact-myth">"MSG is bad for you."</p>
-                                </Link>
-                                <div className="following-poll-response" data-testid="local-poll-response">
-                                  <p className="following-poll-question">Were you taught this information?</p>
-                                  <div className="following-poll-selection">
-                                    <div className="following-poll-radio-filled" />
-                                    <span className="following-poll-answer">Yes, by family</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <Link href="/fact/is-msg-bad-for-you" className="following-post-cover-link" data-testid="cover-link-local-2">
-                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                          </div>
-                        </div>
 
                         <div className="following-post" data-testid="local-post-3">
                           <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
@@ -1360,39 +1322,6 @@ export default function UserDashboard() {
                           </div>
                         </div>
 
-                        <div className="following-post" data-testid="local-post-4">
-                          <img src={placeholderPhoto} alt="RespawnPending" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/RespawnPending" className="following-post-username" data-testid="link-user-RespawnPending">RespawnPending</Link>
-                              <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-4">Canada</span>
-                              <span className="following-post-action">voted on a poll</span>
-                            </div>
-                            <span className="following-post-timestamp">3 hours ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/states-of-matter" className="following-post-link">
-                                  <p className="fact-myth">"There are three states of matter: solid, liquid, and gas."</p>
-                                </Link>
-                                <div className="following-poll-response" data-testid="local-poll-response-2">
-                                  <p className="following-poll-question">Were you taught this information?</p>
-                                  <div className="following-poll-selection">
-                                    <div className="following-poll-radio-filled" />
-                                    <span className="following-poll-answer">Yes, in school</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <Link href="/fact/states-of-matter" className="following-post-cover-link" data-testid="cover-link-local-4">
-                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                          </div>
-                        </div>
                       </div>
                     )}
 
@@ -2945,6 +2874,54 @@ export default function UserDashboard() {
                             <p className="dashboard-feed-empty-title">You haven't commented on any topics yet.</p>
                             <p className="dashboard-feed-empty-desc">
                               Leave a comment on a misconception you care about to share your experiences.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {activityTab === "polls" && (
+                      <div data-testid="activity-polls-content">
+                        {pollVotesLoading ? (
+                          <div className="dashboard-feed-empty" data-testid="activity-polls-loading">
+                            <p>Loading your poll votes...</p>
+                          </div>
+                        ) : myPollVotes.length > 0 ? (
+                          <div className="following-feed">
+                            {myPollVotes.map((vote) => (
+                              <div className="public-comment-entry" key={vote.id} data-testid={`activity-poll-${vote.id}`}>
+                                <div className="following-post-body-content">
+                                  <div className="following-post-body-left">
+                                    <Link href={`/fact/${vote.factSlug}`} className="following-post-link">
+                                      <p className="fact-myth" data-testid={`poll-vote-fact-title-${vote.id}`}>"{vote.factTitle}"</p>
+                                    </Link>
+                                    <p className="following-plain-comment" data-testid={`poll-vote-answer-${vote.id}`}>
+                                      Your answer: <strong>{vote.optionChosen}</strong>
+                                    </p>
+                                    {vote.locationChosen && (
+                                      <p className="poll-vote-location-display" data-testid={`poll-vote-location-${vote.id}`}>
+                                        Location: {vote.locationChosen}
+                                      </p>
+                                    )}
+                                    <span className="public-comment-timestamp" data-testid={`poll-vote-time-${vote.id}`}>
+                                      {new Date(vote.votedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                    </span>
+                                  </div>
+                                  {vote.factCoverPhoto && (
+                                    <Link href={`/fact/${vote.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-poll-${vote.id}`}>
+                                      <img src={vote.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                    </Link>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="dashboard-feed-empty" data-testid="activity-empty-polls">
+                            <MessageSquare size={40} className="dashboard-feed-empty-icon" />
+                            <p className="dashboard-feed-empty-title">You haven't answered any polls yet.</p>
+                            <p className="dashboard-feed-empty-desc">
+                              Visit a misconception page and answer the poll to see your responses here.
                             </p>
                           </div>
                         )}

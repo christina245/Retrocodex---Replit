@@ -4,6 +4,7 @@ import {
   blogPosts,
   externalArticles,
   newsletterSubscriptions,
+  pollVotes,
   type EmailSubscription, 
   type InsertEmailSubscription,
   type Fact,
@@ -13,7 +14,10 @@ import {
   type ExternalArticle,
   type InsertExternalArticle,
   type NewsletterSubscription,
-  type InsertNewsletterSubscription
+  type InsertNewsletterSubscription,
+  type PollVote,
+  type InsertPollVote,
+  type PollVoteWithFact,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, arrayContains, inArray } from "drizzle-orm";
@@ -55,6 +59,11 @@ export interface IStorage {
   createNewsletterSubscription(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription>;
   getAllNewsletterSubscriptions(): Promise<NewsletterSubscription[]>;
   getNewsletterSubscriptionByEmail(email: string): Promise<NewsletterSubscription | undefined>;
+
+  // Poll votes
+  upsertPollVote(data: InsertPollVote): Promise<PollVote>;
+  getPollVotesByUser(userId: string): Promise<PollVoteWithFact[]>;
+  getPollVoteForFact(userId: string, factId: string): Promise<PollVote | null>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -285,6 +294,55 @@ export class DatabaseStorage implements IStorage {
       .from(newsletterSubscriptions)
       .where(eq(newsletterSubscriptions.email, email));
     return result || undefined;
+  }
+
+  async upsertPollVote(data: InsertPollVote): Promise<PollVote> {
+    const [result] = await db
+      .insert(pollVotes)
+      .values(data)
+      .onConflictDoUpdate({
+        target: [pollVotes.userId, pollVotes.factId],
+        set: {
+          optionChosen: data.optionChosen,
+          locationChosen: data.locationChosen,
+          votedAt: new Date(),
+        },
+      })
+      .returning();
+    return result;
+  }
+
+  async getPollVotesByUser(userId: string): Promise<PollVoteWithFact[]> {
+    const rows = await db
+      .select({
+        id: pollVotes.id,
+        userId: pollVotes.userId,
+        factId: pollVotes.factId,
+        optionChosen: pollVotes.optionChosen,
+        locationChosen: pollVotes.locationChosen,
+        votedAt: pollVotes.votedAt,
+        factTitle: facts.title,
+        factSlug: facts.slug,
+        factCoverPhoto: facts.coverPhoto,
+      })
+      .from(pollVotes)
+      .leftJoin(facts, eq(pollVotes.factId, facts.id))
+      .where(eq(pollVotes.userId, userId))
+      .orderBy(desc(pollVotes.votedAt));
+    return rows.map(r => ({
+      ...r,
+      factTitle: r.factTitle || "",
+      factSlug: r.factSlug || "",
+      factCoverPhoto: r.factCoverPhoto || null,
+    }));
+  }
+
+  async getPollVoteForFact(userId: string, factId: string): Promise<PollVote | null> {
+    const [result] = await db
+      .select()
+      .from(pollVotes)
+      .where(and(eq(pollVotes.userId, userId), eq(pollVotes.factId, factId)));
+    return result || null;
   }
 }
 

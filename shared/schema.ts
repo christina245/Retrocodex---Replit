@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, jsonb, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -358,3 +358,26 @@ export const insertNewsletterSubscriptionSchema = createInsertSchema(newsletterS
 
 export type InsertNewsletterSubscription = z.infer<typeof insertNewsletterSubscriptionSchema>;
 export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect;
+
+// Poll votes — one per user per fact, upserted on re-vote
+export const pollVotes = pgTable("poll_votes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  factId: varchar("fact_id").notNull(),
+  optionChosen: varchar("option_chosen").notNull(),
+  locationChosen: varchar("location_chosen"),
+  votedAt: timestamp("voted_at").notNull().defaultNow(),
+}, (table) => ({
+  userFactUnique: unique("poll_votes_user_fact").on(table.userId, table.factId),
+}));
+
+export const insertPollVoteSchema = createInsertSchema(pollVotes).omit({ id: true, votedAt: true });
+
+export type InsertPollVote = z.infer<typeof insertPollVoteSchema>;
+export type PollVote = typeof pollVotes.$inferSelect;
+
+export type PollVoteWithFact = PollVote & {
+  factTitle: string;
+  factSlug: string;
+  factCoverPhoto: string | null;
+};

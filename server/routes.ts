@@ -1477,6 +1477,43 @@ Sitemap: ${SITE_URL}/sitemap.xml
     res.send(robotsTxt);
   });
 
+  // POST /api/poll-votes — save or update a user's poll vote
+  app.post("/api/poll-votes", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const { factId, optionChosen, locationChosen } = req.body;
+      if (!factId || !optionChosen) {
+        return res.status(400).json({ message: "factId and optionChosen are required" });
+      }
+      const vote = await storage.upsertPollVote({
+        userId: req.session.userId,
+        factId,
+        optionChosen,
+        locationChosen: locationChosen || null,
+      });
+      return res.json(vote);
+    } catch (err) {
+      console.error("Poll vote error:", err);
+      return res.status(500).json({ message: "Failed to save vote" });
+    }
+  });
+
+  // GET /api/poll-votes/me — fetch current user's poll votes with fact data
+  app.get("/api/poll-votes/me", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const votes = await storage.getPollVotesByUser(req.session.userId);
+      return res.json(votes);
+    } catch (err) {
+      console.error("Poll votes fetch error:", err);
+      return res.status(500).json({ message: "Failed to fetch votes" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
