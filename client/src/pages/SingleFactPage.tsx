@@ -224,6 +224,22 @@ export default function SingleFactPage() {
           </div>
         </div>
 
+        {factData.factFilters && factData.factFilters.length > 0 && (
+          <div className="fact-detail-filters" data-testid="fact-detail-filters">
+            {factData.factFilters.map((filter, i) => {
+              const isOfficialRevision = filter.toLowerCase() === "official revision";
+              const label = isOfficialRevision && factData.revisionYear
+                ? `Official Revision · ${factData.revisionYear}`
+                : filter.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.slice(1).toLowerCase());
+              return (
+                <span key={i} className="fact-detail-filter-chip" data-testid={`detail-filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                  {label}
+                </span>
+              );
+            })}
+          </div>
+        )}
+
         <div className="content-grid">
           <div className="left-column">
             <ExtendedFactCard 

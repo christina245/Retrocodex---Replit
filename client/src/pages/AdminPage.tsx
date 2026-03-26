@@ -921,6 +921,9 @@ export default function AdminPage() {
       setSelectedTags([...selectedTags, tag]);
     } else {
       setSelectedTags(selectedTags.filter(t => t !== tag));
+      if (tag === "Official Revision") {
+        setRevisionYear(null);
+      }
     }
   };
 

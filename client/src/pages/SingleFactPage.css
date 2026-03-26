@@ -376,3 +376,29 @@
     align-items: flex-start;
   }
 }
+
+/* Fact detail filter chips row */
+.fact-detail-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.fact-detail-filter-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #f2ece5;
+  color: #5a3e2b;
+  border: 1px solid #d9cebf;
+  letter-spacing: 0.02em;
+}
+
+.dark .fact-detail-filter-chip {
+  background-color: #2e2520;
+  color: #c4a98a;
+  border-color: #4a3828;
+}
