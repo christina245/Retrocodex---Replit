@@ -1477,6 +1477,16 @@ Sitemap: ${SITE_URL}/sitemap.xml
     res.send(robotsTxt);
   });
 
+  const POLL_OPTIONS = [
+    "Yes, in school",
+    "Yes, outside of school",
+    "No",
+    "Not sure",
+    "I was taught a different version",
+    "I was taught the presently accurate version",
+    "Other",
+  ] as const;
+
   // POST /api/poll-votes — save or update a user's poll vote
   app.post("/api/poll-votes", async (req, res) => {
     if (!req.session.userId) {
@@ -1486,6 +1496,9 @@ Sitemap: ${SITE_URL}/sitemap.xml
       const { factId, optionChosen, locationChosen } = req.body;
       if (!factId || !optionChosen) {
         return res.status(400).json({ message: "factId and optionChosen are required" });
+      }
+      if (!POLL_OPTIONS.includes(optionChosen)) {
+        return res.status(400).json({ message: "Invalid poll option" });
       }
       const vote = await storage.upsertPollVote({
         userId: req.session.userId,
