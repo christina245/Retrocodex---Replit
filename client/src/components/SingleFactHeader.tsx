@@ -138,7 +138,7 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
         </div>
       </div>
 
-      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
+      <SignInModal isOpen={isSignInOpen} onClose={() => setIsSignInOpen(false)} onSuccessRedirect="/dashboard" />
     </header>
   );
 }
