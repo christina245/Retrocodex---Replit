@@ -1631,6 +1631,51 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
+  // GET /api/user/saved-facts — get authenticated user's saved facts (full fact objects)
+  app.get("/api/user/saved-facts", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const facts = await storage.getSavedFactsByUser(req.session.userId);
+      res.json(facts);
+    } catch (error) {
+      console.error("GET /api/user/saved-facts error:", error);
+      res.status(500).json({ message: "Failed to fetch saved facts" });
+    }
+  });
+
+  // POST /api/user/saved-facts — save a fact
+  app.post("/api/user/saved-facts", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    const { factId } = req.body;
+    if (!factId) return res.status(400).json({ message: "factId is required" });
+    try {
+      const saved = await storage.saveFact(req.session.userId, factId);
+      res.json(saved);
+    } catch (error) {
+      console.error("POST /api/user/saved-facts error:", error);
+      res.status(500).json({ message: "Failed to save fact" });
+    }
+  });
+
+  // DELETE /api/user/saved-facts/:factId — unsave a fact
+  app.delete("/api/user/saved-facts/:factId", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const deleted = await storage.unsaveFact(req.session.userId, req.params.factId);
+      if (!deleted) return res.status(404).json({ message: "Saved fact not found" });
+      res.json({ message: "Fact unsaved successfully" });
+    } catch (error) {
+      console.error("DELETE /api/user/saved-facts/:factId error:", error);
+      res.status(500).json({ message: "Failed to unsave fact" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -55,7 +55,7 @@ interface FactCardProps {
   onSave: () => void;
   onShare: () => void;
   onComment: () => void;
-  onBetaClick?: () => void;
+  onBetaClick?: (factId: string) => void;
   isSaved?: boolean;
   showTaughtUntilLabel?: boolean;
 }
@@ -69,7 +69,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
     if (fact.betaOnly) {
       e.preventDefault();
       if (onBetaClick) {
-        onBetaClick();
+        onBetaClick(fact.id);
       }
     }
   };
@@ -184,7 +184,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
           onClick={handleBetaLinkClick}
         >
           <img src={forwardArrow} alt="" className="learn-more-arrow" />
-          Learn more
+          {fact.betaOnly ? "View sources" : "Learn more"}
         </Link>
       </div>
     </div>

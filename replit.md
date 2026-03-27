@@ -36,7 +36,10 @@ Preferred communication style: Simple, everyday language.
 - `FactCard`: Displays myth vs. truth with category-specific styling
 - `HomepageCategoryNav`: Colorful category navigation tiles with sticky positioning, active state red underline indicators, used across all pages with navigation
 - `EmailSignupBanner`: Sticky sidebar for email collection
-- `SaveModal` & `ShareModal`: Future functionality placeholders
+- `SaveModal`: Beehiiv newsletter modal shown to unauthenticated users who click save
+- `ShareModal`: Share functionality for facts
+- `SourcesModal`: Named-export modal (`{ SourcesModal }`) shown on betaOnly facts. Fetches its own data for the fact's sources, timeline, and nuances. Wired into all 6 category pages, 10 subcategory pages, FactsByTagPage, and SearchResultsPage
+- `useSavedFacts` hook (`client/src/lib/useSavedFacts.ts`): Manages saved fact state — fetches `savedFactIds` as a Set, exposes `toggleSave(factId)` that calls POST or DELETE `/api/user/saved-facts`. Requires `isLoggedIn: boolean`.
 - `HamburgerMenu`: Slide-out navigation menu
 - `SEO`: Reusable component for setting page titles, meta descriptions, Open Graph tags, and canonical URLs. Editable directly in each page's TSX file.
 
@@ -46,7 +49,7 @@ Preferred communication style: Simple, everyday language.
   - "For You" tab: Fetches facts matching user's favorite tags via `/api/facts/by-tags` with infinite "Load More" pagination (10 per page)
   - "Following" tab: Empty state placeholder (pending user follow system)
   - "Local" tab: Empty state with contextual messaging based on whether user has location set
-  - "Saved" tab: Empty state placeholder (pending bookmark system)
+  - "Saved" tab: Fetches user's saved facts via `GET /api/user/saved-facts`; uses `unsaveFact` mutation; empty state for no saved facts
 - Edit Profile Modal: Full profile editing with avatar picker, username, locations (current + places lived with US state support), favorite subjects (tag search with max 20), and misinformation source textarea
 - `AvatarPickerModal`: DiceBear-powered avatar picker (5 styles: fun-emoji, glass, icons, identicon, shapes) with 12-avatar 4-column grid (4×3), style selector, large preview, "Select random" randomizer, and "Use this avatar" confirmation (30% width, red). All avatars use rounded-square shape (border-radius: 8–20px, not circular). Uses `createAvatar(...).toDataUri()` API. Wired into Edit Profile modal via `isAvatarPickerOpen` state and `editProfilePhoto`.
 
@@ -78,6 +81,7 @@ Preferred communication style: Simple, everyday language.
 - Newsletter subscriptions (`POST /api/newsletter-subscriptions`)
 - Blog posts CRUD (`GET /api/blog-posts`, `GET /api/blog-posts/published`, `GET /api/blog-posts/featured`, `GET /api/blog-posts/:slug`, `POST /api/blog-posts`, `PUT /api/blog-posts/:id`, `DELETE /api/blog-posts/:id`)
 - Facts by tags with pagination (`GET /api/facts/by-tags?tags=tag1,tag2&page=1&limit=10`)
+- Saved facts CRUD (requires session): `GET /api/user/saved-facts`, `POST /api/user/saved-facts` (body: `{factId}`), `DELETE /api/user/saved-facts/:factId`
 - File upload for cover images (`POST /api/upload`)
 - Basic HTTP authentication for admin routes using environment variable
 - Zod schema validation for request payloads
@@ -107,6 +111,7 @@ Preferred communication style: Simple, everyday language.
 - `facts`: Fact entries with title, slug, coverPhoto, categories (array), subcategory, factFilters, searchTags, featured, betaOnly, isTrending, isDebated (for homepage tab filtering), mythHeader, mythDetails, truthHeader, truthDetails, sources (JSON), timeline (JSON), nuances (JSON)
 - `blog_posts`: WordPress-style blog posts with title, slug, summary, coverImage, category, tags (array), content (rich text), authorName, authorType (Staff/Guest), authorLink, authorPhoto, heroFeatured, published status, publishedAt, relatedManualIds (optional array for manual related article selection)
 - `users`: Planned table for future user authentication (currently unused)
+- `saved_facts`: User-fact bookmarks with `userId` (FK → user_accounts) and `factId` (FK → facts). Unique constraint on (userId, factId). API: `GET /api/user/saved-facts`, `POST /api/user/saved-facts`, `DELETE /api/user/saved-facts/:factId`
 - UUID primary keys using PostgreSQL's `gen_random_uuid()`
 - Timestamps with automatic `defaultNow()` for creation tracking
 

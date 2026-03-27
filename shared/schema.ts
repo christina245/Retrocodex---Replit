@@ -380,6 +380,20 @@ export const insertSavedArticleSchema = createInsertSchema(savedArticles).omit({
 export type InsertSavedArticle = z.infer<typeof insertSavedArticleSchema>;
 export type SavedArticle = typeof savedArticles.$inferSelect;
 
+// Saved facts — one row per user per fact
+export const savedFacts = pgTable("saved_facts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
+  savedAt: timestamp("saved_at").notNull().defaultNow(),
+}, (table) => ({
+  userFactUnique: unique("saved_facts_user_fact").on(table.userId, table.factId),
+}));
+
+export const insertSavedFactSchema = createInsertSchema(savedFacts).omit({ id: true, savedAt: true });
+export type InsertSavedFact = z.infer<typeof insertSavedFactSchema>;
+export type SavedFact = typeof savedFacts.$inferSelect;
+
 // Poll votes — one per user per fact, upserted on re-vote
 export const pollVotes = pgTable("poll_votes", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

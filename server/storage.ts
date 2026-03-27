@@ -5,6 +5,7 @@ import {
   externalArticles,
   newsletterSubscriptions,
   savedArticles,
+  savedFacts,
   pollVotes,
   type EmailSubscription, 
   type InsertEmailSubscription,
@@ -18,6 +19,8 @@ import {
   type InsertNewsletterSubscription,
   type SavedArticle,
   type InsertSavedArticle,
+  type SavedFact,
+  type InsertSavedFact,
   type PollVote,
   type InsertPollVote,
   type PollVoteWithFact,
@@ -67,6 +70,12 @@ export interface IStorage {
   saveArticle(data: InsertSavedArticle): Promise<SavedArticle>;
   unsaveArticle(userId: string, articleKey: string): Promise<boolean>;
   getSavedArticlesByUser(userId: string): Promise<SavedArticle[]>;
+
+  // Saved facts
+  saveFact(userId: string, factId: string): Promise<SavedFact>;
+  unsaveFact(userId: string, factId: string): Promise<boolean>;
+  getSavedFactsByUser(userId: string): Promise<Fact[]>;
+  isFactSavedByUser(userId: string, factId: string): Promise<boolean>;
 
   // Poll votes
   upsertPollVote(data: InsertPollVote): Promise<PollVote>;
@@ -339,6 +348,46 @@ export class DatabaseStorage implements IStorage {
       .from(savedArticles)
       .where(eq(savedArticles.userId, userId))
       .orderBy(desc(savedArticles.savedAt));
+  }
+
+  // Saved fact methods
+  async saveFact(userId: string, factId: string): Promise<SavedFact> {
+    const [result] = await db
+      .insert(savedFacts)
+      .values({ userId, factId })
+      .onConflictDoUpdate({
+        target: [savedFacts.userId, savedFacts.factId],
+        set: { savedAt: new Date() },
+      })
+      .returning();
+    return result;
+  }
+
+  async unsaveFact(userId: string, factId: string): Promise<boolean> {
+    const result = await db
+      .delete(savedFacts)
+      .where(and(eq(savedFacts.userId, userId), eq(savedFacts.factId, factId)))
+      .returning();
+    return result.length > 0;
+  }
+
+  async getSavedFactsByUser(userId: string): Promise<Fact[]> {
+    const rows = await db
+      .select({ fact: facts })
+      .from(savedFacts)
+      .innerJoin(facts, eq(savedFacts.factId, facts.id))
+      .where(eq(savedFacts.userId, userId))
+      .orderBy(desc(savedFacts.savedAt));
+    return rows.map((r) => r.fact);
+  }
+
+  async isFactSavedByUser(userId: string, factId: string): Promise<boolean> {
+    const rows = await db
+      .select({ id: savedFacts.id })
+      .from(savedFacts)
+      .where(and(eq(savedFacts.userId, userId), eq(savedFacts.factId, factId)))
+      .limit(1);
+    return rows.length > 0;
   }
 
   async upsertPollVote(data: InsertPollVote): Promise<PollVote> {

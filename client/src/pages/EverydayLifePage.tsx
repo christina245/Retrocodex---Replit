@@ -12,7 +12,10 @@ import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCa
 import { FactKey } from "@/components/FactKey";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
+import { useAuth } from "@/lib/auth";
+import { useSavedFacts } from "@/lib/useSavedFacts";
 import { ShareModal } from "@/components/ShareModal";
+import { SourcesModal } from "@/components/SourcesModal";
 import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
@@ -41,8 +44,11 @@ export default function EverydayLifePage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
+  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
+  const { isLoggedIn } = useAuth();
+  const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
   const queryClient = useQueryClient();
 
   // Fetch facts from database
@@ -97,8 +103,12 @@ export default function EverydayLifePage() {
     await emailMutation.mutateAsync({ email, source });
   };
 
-  const handleSaveClick = () => {
-    setIsSaveModalOpen(true);
+  const handleSaveClick = (factId: string) => {
+    if (!isLoggedIn) {
+      setIsSaveModalOpen(true);
+      return;
+    }
+    toggleSave(factId);
   };
 
   const handleShareClick = (fact: CategoryFact) => {
@@ -112,11 +122,8 @@ export default function EverydayLifePage() {
     });
   };
 
-  const handleBetaClick = () => {
-    toast({
-      title: "Unavailable in beta",
-        description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
-      });
+  const handleBetaClick = (factId: string) => {
+    setSourcesModalFactId(factId);
   };
 
   // Sort facts by most recently added (only enabled sort option for now)
@@ -196,10 +203,11 @@ export default function EverydayLifePage() {
                         key={fact.id}
                         fact={fact}
                         categoryColor={CATEGORY_COLOR}
-                        onSave={handleSaveClick}
+                        onSave={() => handleSaveClick(fact.id)}
                         onShare={() => handleShareClick(fact)}
                         onComment={handleCommentClick}
                         onBetaClick={handleBetaClick}
+                        isSaved={savedFactIds.has(fact.id)}
                       />
                     ))}
                   </div>
@@ -241,6 +249,10 @@ export default function EverydayLifePage() {
           }}
         />
       )}
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
+      />
     </div>
   );
 }

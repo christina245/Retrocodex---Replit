@@ -15,11 +15,14 @@ import { CATEGORIES } from "@shared/categories";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
+import { SourcesModal } from "@/components/SourcesModal";
 import { Footer } from "@/components/Footer";
 import { Pagination } from "@/components/Pagination";
 import { SEO } from "@/components/SEO";
 import type { Fact as DbFact } from "@shared/schema";
 import { DECADES } from "@shared/schema";
+import { useAuth } from "@/lib/auth";
+import { useSavedFacts } from "@/lib/useSavedFacts";
 import "./HomePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -42,6 +45,7 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<HomepageTabType>("explore");
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
+  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [recentPage, setRecentPage] = useState(1);
   const [popularPage, setPopularPage] = useState(1);
   const [selectedDecade, setSelectedDecade] = useState<string>("all");
@@ -52,6 +56,8 @@ export default function HomePage() {
   const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string[]>([]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { isLoggedIn } = useAuth();
+  const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
   const [, setLocation] = useLocation();
   const params = useParams<{ decade?: string }>();
 
@@ -205,8 +211,12 @@ export default function HomePage() {
     await emailMutation.mutateAsync({ email, source });
   };
 
-  const handleSaveClick = () => {
-    setIsSaveModalOpen(true);
+  const handleSaveClick = (factId: string) => {
+    if (!isLoggedIn) {
+      setIsSaveModalOpen(true);
+      return;
+    }
+    toggleSave(factId);
   };
 
   const handleShareClick = (fact: Fact) => {
@@ -220,11 +230,8 @@ export default function HomePage() {
     });
   };
 
-  const handleBetaClick = () => {
-    toast({
-      title: "Unavailable in beta",
-      description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
-    });
+  const handleBetaClick = (factId: string) => {
+    setSourcesModalFactId(factId);
   };
 
   useEffect(() => {
@@ -507,10 +514,11 @@ export default function HomePage() {
                         <FactCard
                           key={fact.id}
                           fact={fact}
-                          onSave={handleSaveClick}
+                          onSave={() => handleSaveClick(fact.id)}
                           onShare={() => handleShareClick(fact)}
                           onComment={handleCommentClick}
                           onBetaClick={handleBetaClick}
+                          isSaved={savedFactIds.has(fact.id)}
                           showTaughtUntilLabel
                         />
                       ))
@@ -584,10 +592,11 @@ export default function HomePage() {
                       >
                         <FactCard
                           fact={fact}
-                          onSave={handleSaveClick}
+                          onSave={() => handleSaveClick(fact.id)}
                           onShare={() => handleShareClick(fact)}
                           onComment={handleCommentClick}
                           onBetaClick={handleBetaClick}
+                          isSaved={savedFactIds.has(fact.id)}
                         />
                       </div>
                     ))
@@ -652,6 +661,10 @@ export default function HomePage() {
         isOpen={shareModalFact !== null}
         onClose={() => setShareModalFact(null)}
         fact={shareModalFact}
+      />
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
       />
     </div>
   );

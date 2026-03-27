@@ -21,8 +21,9 @@ interface CategoryFactCardProps {
   onSave?: () => void;
   onShare?: () => void;
   onComment?: () => void;
-  onBetaClick?: () => void;
+  onBetaClick?: (factId: string) => void;
   highlightQuery?: string;
+  isSaved?: boolean;
 }
 
 function toTitleCase(str: string): string {
@@ -55,7 +56,8 @@ export function CategoryFactCard({
   onShare, 
   onComment,
   onBetaClick,
-  highlightQuery
+  highlightQuery,
+  isSaved
 }: CategoryFactCardProps) {
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
@@ -64,7 +66,7 @@ export function CategoryFactCard({
     if (fact.betaOnly) {
       e.preventDefault();
       if (onBetaClick) {
-        onBetaClick();
+        onBetaClick(fact.id);
       }
     }
   };
@@ -128,12 +130,12 @@ export function CategoryFactCard({
             <span>0 comments</span>
           </Link>
           <button 
-            className="category-action-button" 
+            className={`category-action-button${isSaved ? ' category-action-button-saved' : ''}`}
             onClick={onSave}
             data-testid={`button-save-${fact.id}`}
           >
-            <Bookmark size={16} />
-            <span>Save</span>
+            <Bookmark size={16} className={isSaved ? 'saved-icon' : ''} />
+            <span>{isSaved ? 'Saved' : 'Save'}</span>
           </button>
           <button 
             className="category-action-button" 
@@ -152,7 +154,7 @@ export function CategoryFactCard({
           onClick={handleBetaLinkClick}
         >
           <img src={forwardArrow} alt="" className="category-learn-more-arrow" />
-          Learn more
+          {fact.betaOnly ? "View sources" : "Learn more"}
         </Link>
       </div>
     </div>

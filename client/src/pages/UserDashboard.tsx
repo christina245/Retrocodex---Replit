@@ -9,6 +9,7 @@ import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";
+import type { Fact as DbFact } from "@shared/schema";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
@@ -669,6 +670,39 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
+  const { data: savedDbFacts = [], isLoading: savedFactsLoading } = useQuery<DbFact[]>({
+    queryKey: ["/api/user/saved-facts"],
+    enabled: isLoggedIn,
+  });
+
+  const savedFactItems: FactCardFact[] = savedDbFacts.map((fact) => {
+    const primaryCategory = fact.categories?.[0] || "Other";
+    const categoryDisplay = (primaryCategory === "Other" && fact.subcategories?.[0])
+      ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
+      : primaryCategory.toUpperCase();
+    return {
+      id: fact.id,
+      category: categoryDisplay,
+      categoryColor: getCategoryColor(fact.categories || []),
+      myth: fact.mythHeader,
+      truth: fact.truthHeader,
+      dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split("T")[0] : undefined,
+      link: `/fact/${fact.slug}`,
+      coverPhoto: fact.coverPhoto || undefined,
+      betaOnly: fact.betaOnly || false,
+      factFilters: fact.factFilters || undefined,
+      revisionYear: fact.revisionYear ?? undefined,
+      taughtUntilYear: fact.taughtUntilYear ?? undefined,
+    };
+  });
+
+  const unsaveFactMutation = useMutation({
+    mutationFn: (factId: string) => apiRequest("DELETE", `/api/user/saved-facts/${factId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
+    },
+  });
+
   const unsaveArticleMutation = useMutation({
     mutationFn: (articleKey: string) => apiRequest("DELETE", `/api/user/saved-articles/${encodeURIComponent(articleKey)}`),
     onSuccess: () => {
@@ -706,52 +740,6 @@ export default function UserDashboard() {
 
   const MAX_TAGS = 20;
 
-  const demoFacts: FactCardFact[] = [
-    {
-      id: "aa5b0b21-1ee7-4996-88ef-ad0c4490adc7",
-      category: "HISTORY",
-      categoryColor: getCategoryColor(["History"]),
-      myth: "When the Mexica first met Spanish explorer Hernán Cortés, they believed he was a god.",
-      truth: "They might have assumed that the Spanish were representatives of their own god, which was misinterpreted by the Spanish.",
-      factFilters: [],
-      link: "/fact/mesoamericans-and-europeans-gods",
-      coverPhoto: "/uploads/1764719426643-922952402.png",
-      betaOnly: false,
-    },
-    {
-      id: "b1b9f88b-3d4e-4eaa-ad36-0380266ec46c",
-      category: "HEALTH & FITNESS",
-      categoryColor: getCategoryColor(["Health & Fitness"]),
-      myth: "You can burn belly fat by doing crunches and other ab workouts.",
-      truth: "Any exercise targeting a specific part of the body only builds muscle. These exercises cannot directly accelerate fat loss in the targeted area.",
-      factFilters: [],
-      link: "/fact/belly-fat-by-doing-ab-workouts",
-      coverPhoto: "/uploads/1764752045366-476242776.png",
-      betaOnly: false,
-    },
-    {
-      id: "a7aded15-3242-4c41-b644-a51048c90308",
-      category: "EVERYDAY LIFE",
-      categoryColor: getCategoryColor(["Everyday Life"]),
-      myth: "Cracking your knuckles will give you arthritis.",
-      truth: "No scientific evidence has yet to link cracking your knuckles and arthritis.",
-      factFilters: [],
-      link: "/fact/cracking-your-knuckles-arthritis",
-      coverPhoto: "/uploads/1764735935195-591724829.png",
-      betaOnly: false,
-    },
-    {
-      id: "e6bc520c-dd26-4376-be25-4862b9ee9e92",
-      category: "HEALTH & FITNESS",
-      categoryColor: getCategoryColor(["Health & Fitness", "Everyday Life"]),
-      myth: "Breakfast is the most important meal of the day.",
-      truth: "While eating breakfast can be beneficial for certain lifestyles, research shows that its importance varies widely based on individual metabolism, cultural norms, and overall diet.",
-      factFilters: [],
-      link: "/fact/breakfast-most-important-meal-of-the-day",
-      coverPhoto: "/uploads/1765021400264-394912154.png",
-      betaOnly: false,
-    },
-  ];
 
   const handleFeedTabChange = useCallback((tab: DashboardTab) => {
     setFeedTab(tab);
@@ -3212,20 +3200,23 @@ export default function UserDashboard() {
 
                   {(savedTab === "all" || savedTab === "facts") && (
                     <div className="saved-facts-row" data-testid="saved-facts-row">
-                      <FactCard
-                        fact={demoFacts[0]}
-                        onSave={() => {}}
-                        onShare={() => {}}
-                        onComment={() => {}}
-                        isSaved={true}
-                      />
-                      <FactCard
-                        fact={demoFacts[1]}
-                        onSave={() => {}}
-                        onShare={() => {}}
-                        onComment={() => {}}
-                        isSaved={true}
-                      />
+                      {savedFactsLoading ? (
+                        <p className="saved-empty-message" data-testid="text-saved-facts-loading">Loading saved facts...</p>
+                      ) : savedFactItems.length === 0 && savedTab === "facts" ? (
+                        <p className="saved-empty-message" data-testid="text-saved-facts-empty">No saved facts yet. Bookmark facts to see them here.</p>
+                      ) : (
+                        savedFactItems.map((fact) => (
+                          <FactCard
+                            key={fact.id}
+                            fact={fact}
+                            onSave={() => unsaveFactMutation.mutate(fact.id)}
+                            onShare={() => {}}
+                            onComment={() => {}}
+                            isSaved={true}
+                            onBetaClick={() => {}}
+                          />
+                        ))
+                      )}
                     </div>
                   )}
 
