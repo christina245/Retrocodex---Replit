@@ -13,8 +13,8 @@ import { CategoryFilter } from "@/components/CategoryFilter";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CATEGORIES } from "@shared/categories";
 import { BeehiivBanner } from "@/components/BeehiivBanner";
-import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
+import { SignInModal } from "@/components/SignInModal";
 import { SourcesModal } from "@/components/SourcesModal";
 import { Footer } from "@/components/Footer";
 import { Pagination } from "@/components/Pagination";
@@ -43,7 +43,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<HomepageTabType>("explore");
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [recentPage, setRecentPage] = useState(1);
@@ -213,7 +214,8 @@ export default function HomePage() {
 
   const handleSaveClick = (factId: string) => {
     if (!isLoggedIn) {
-      setIsSaveModalOpen(true);
+      setSignInContext("Sign in to save this fact to your collection.");
+      setShowSignIn(true);
       return;
     }
     toggleSave(factId);
@@ -652,10 +654,10 @@ export default function HomePage() {
 
       <Footer />
 
-      <SaveModal
-        isOpen={isSaveModalOpen}
-        onClose={() => setIsSaveModalOpen(false)}
-        onSubmit={(email) => handleEmailSubmit(email, "save-modal")}
+      <SignInModal
+        isOpen={showSignIn}
+        onClose={() => { setShowSignIn(false); setSignInContext(undefined); }}
+        contextMessage={signInContext}
       />
       <ShareModal
         isOpen={shareModalFact !== null}
