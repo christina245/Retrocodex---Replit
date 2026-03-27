@@ -225,6 +225,8 @@ export default function BlogCard({
           <button
             className="blog-card-action blog-card-action--disabled"
             onClick={handleComment}
+            disabled
+            aria-disabled="true"
             data-testid={`button-comment-${id}`}
             title="Comments coming soon"
           >

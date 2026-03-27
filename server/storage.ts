@@ -311,7 +311,15 @@ export class DatabaseStorage implements IStorage {
       .values(data)
       .onConflictDoUpdate({
         target: [savedArticles.userId, savedArticles.articleKey],
-        set: { savedAt: new Date() },
+        set: {
+          savedAt: new Date(),
+          title: data.title,
+          summary: data.summary,
+          coverImage: data.coverImage,
+          category: data.category,
+          slug: data.slug,
+          externalUrl: data.externalUrl,
+        },
       })
       .returning();
     return result;
