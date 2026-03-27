@@ -71,10 +71,6 @@ export default function BlogCard({
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
-      toast({
-        description: 'Article saved to your profile.',
-        style: { background: '#2c2c2c', color: '#fff', border: 'none' },
-      });
     },
     onError: () => {
       toast({
@@ -88,10 +84,6 @@ export default function BlogCard({
     mutationFn: (key: string) => apiRequest('DELETE', `/api/user/saved-articles/${encodeURIComponent(key)}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
-      toast({
-        description: 'Article removed from saved.',
-        style: { background: '#2c2c2c', color: '#fff', border: 'none' },
-      });
     },
     onError: () => {
       toast({
@@ -220,46 +212,48 @@ export default function BlogCard({
             Originally published on {originalPublishedAt}
           </div>
         )}
-
-        <div className="blog-card-actions" data-testid={`blog-card-actions-${id}`}>
-          <button
-            className="blog-card-action blog-card-action--disabled"
-            onClick={handleComment}
-            disabled
-            aria-disabled="true"
-            data-testid={`button-comment-${id}`}
-            title="Comments coming soon"
-          >
-            <MessageSquare size={13} />
-            <span>Comment</span>
-          </button>
-          <button
-            className={`blog-card-action${isSaved ? ' blog-card-action--saved' : ''}${isSavePending ? ' blog-card-action--pending' : ''}`}
-            onClick={handleSave}
-            disabled={isSavePending}
-            data-testid={`button-save-${id}`}
-            title={isSaved ? 'Remove from saved' : 'Save article'}
-          >
-            <Bookmark size={13} className={isSaved ? 'blog-card-action-icon--filled' : ''} />
-            <span>{isSaved ? 'Saved' : 'Save'}</span>
-          </button>
-          <button
-            className="blog-card-action"
-            onClick={handleShare}
-            data-testid={`button-share-${id}`}
-            title="Copy article link"
-          >
-            <Share2 size={13} />
-            <span>Share</span>
-          </button>
-        </div>
       </div>
     </article>
   );
 
+  const actionRow = (
+    <div className="blog-card-actions" data-testid={`blog-card-actions-${id}`}>
+      <button
+        className="blog-card-action blog-card-action--disabled"
+        onClick={handleComment}
+        disabled
+        aria-disabled="true"
+        data-testid={`button-comment-${id}`}
+        title="Comments coming soon"
+      >
+        <MessageSquare size={13} />
+        <span>Comment</span>
+      </button>
+      <button
+        className={`blog-card-action${isSaved ? ' blog-card-action--saved' : ''}${isSavePending ? ' blog-card-action--pending' : ''}`}
+        onClick={handleSave}
+        disabled={isSavePending}
+        data-testid={`button-save-${id}`}
+        title={isSaved ? 'Remove from saved' : 'Save article'}
+      >
+        <Bookmark size={13} className={isSaved ? 'blog-card-action-icon--filled' : ''} />
+        <span>{isSaved ? 'Saved' : 'Save'}</span>
+      </button>
+      <button
+        className="blog-card-action"
+        onClick={handleShare}
+        data-testid={`button-share-${id}`}
+        title="Copy article link"
+      >
+        <Share2 size={13} />
+        <span>Share</span>
+      </button>
+    </div>
+  );
+
   if (isExternal && externalUrl) {
     return (
-      <>
+      <div className="blog-card-wrapper">
         <a
           href={externalUrl}
           target="_blank"
@@ -269,25 +263,27 @@ export default function BlogCard({
         >
           {cardContent}
         </a>
+        {actionRow}
         <SignInModal
           isOpen={showSignIn}
           onClose={() => setShowSignIn(false)}
           contextMessage="Sign in to save articles to your profile."
         />
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="blog-card-wrapper">
       <Link href={`/articles/${id}`} className="blog-card-link" data-testid={`link-blog-card-${id}`}>
         {cardContent}
       </Link>
+      {actionRow}
       <SignInModal
         isOpen={showSignIn}
         onClose={() => setShowSignIn(false)}
         contextMessage="Sign in to save articles to your profile."
       />
-    </>
+    </div>
   );
 }

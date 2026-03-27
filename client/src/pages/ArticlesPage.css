@@ -187,6 +187,7 @@
     justify-content: center;
   }
 
+  .articles-grid .blog-card-wrapper,
   .articles-grid .blog-card {
     width: 100%;
     max-width: 330px;
