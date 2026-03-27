@@ -65,7 +65,7 @@ export interface IStorage {
 
   // Saved articles
   saveArticle(data: InsertSavedArticle): Promise<SavedArticle>;
-  unsaveArticle(userId: string, savedArticleId: string): Promise<boolean>;
+  unsaveArticle(userId: string, articleKey: string): Promise<boolean>;
   getSavedArticlesByUser(userId: string): Promise<SavedArticle[]>;
 
   // Poll votes
@@ -317,10 +317,10 @@ export class DatabaseStorage implements IStorage {
     return result;
   }
 
-  async unsaveArticle(userId: string, savedArticleId: string): Promise<boolean> {
+  async unsaveArticle(userId: string, articleKey: string): Promise<boolean> {
     const result = await db
       .delete(savedArticles)
-      .where(and(eq(savedArticles.id, savedArticleId), eq(savedArticles.userId, userId)))
+      .where(and(eq(savedArticles.articleKey, articleKey), eq(savedArticles.userId, userId)))
       .returning();
     return result.length > 0;
   }

@@ -670,7 +670,7 @@ export default function UserDashboard() {
   });
 
   const unsaveArticleMutation = useMutation({
-    mutationFn: (savedId: string) => apiRequest("DELETE", `/api/user/saved-articles/${savedId}`),
+    mutationFn: (articleKey: string) => apiRequest("DELETE", `/api/user/saved-articles/${encodeURIComponent(articleKey)}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/user/saved-articles"] });
     },
@@ -3246,7 +3246,7 @@ export default function UserDashboard() {
                             slug={article.slug}
                             externalUrl={article.articleType === "external" ? article.externalUrl : undefined}
                             isSaved={true}
-                            onUnsave={() => unsaveArticleMutation.mutate(article.id)}
+                            onUnsave={() => unsaveArticleMutation.mutate(article.articleKey)}
                           />
                         ))
                       )}

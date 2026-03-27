@@ -125,7 +125,7 @@ export default function BlogCard({
             <Clipboard size={15} />
             Article link copied to clipboard
           </span>
-        ) as any,
+        ),
         style: { background: '#2c2c2c', color: '#fff', border: 'none' },
       });
     }).catch(() => {

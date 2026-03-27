@@ -208,7 +208,6 @@
 .blog-card-action--disabled {
   opacity: 0.45;
   cursor: default;
-  pointer-events: none;
 }
 
 .blog-card-action--saved {

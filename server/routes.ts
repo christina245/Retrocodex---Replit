@@ -1616,17 +1616,17 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
-  // DELETE /api/user/saved-articles/:id — unsave an article by record ID
-  app.delete("/api/user/saved-articles/:id", async (req, res) => {
+  // DELETE /api/user/saved-articles/:articleId — unsave an article by articleKey
+  app.delete("/api/user/saved-articles/:articleId", async (req, res) => {
     if (!req.session?.userId) {
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const deleted = await storage.unsaveArticle(req.session.userId, req.params.id);
+      const deleted = await storage.unsaveArticle(req.session.userId, req.params.articleId);
       if (!deleted) return res.status(404).json({ message: "Saved article not found" });
       res.json({ message: "Article unsaved successfully" });
     } catch (error) {
-      console.error("DELETE /api/user/saved-articles/:id error:", error);
+      console.error("DELETE /api/user/saved-articles/:articleId error:", error);
       res.status(500).json({ message: "Failed to unsave article" });
     }
   });
