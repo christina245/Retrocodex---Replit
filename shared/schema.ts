@@ -359,6 +359,27 @@ export const insertNewsletterSubscriptionSchema = createInsertSchema(newsletterS
 export type InsertNewsletterSubscription = z.infer<typeof insertNewsletterSubscriptionSchema>;
 export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect;
 
+// Saved articles — user bookmarked articles (internal blog posts or external curated articles)
+export const savedArticles = pgTable("saved_articles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  articleKey: text("article_key").notNull(), // slug for internal, externalUrl for external
+  articleType: text("article_type").notNull(), // "internal" | "external"
+  title: text("title").notNull(),
+  summary: text("summary").default(""),
+  coverImage: text("cover_image").default(""),
+  category: text("category").notNull(),
+  slug: text("slug").default(""), // slug for internal articles
+  externalUrl: text("external_url").default(""), // url for external articles
+  savedAt: timestamp("saved_at").notNull().defaultNow(),
+}, (table) => ({
+  userArticleUnique: unique("saved_articles_user_article").on(table.userId, table.articleKey),
+}));
+
+export const insertSavedArticleSchema = createInsertSchema(savedArticles).omit({ id: true, savedAt: true });
+export type InsertSavedArticle = z.infer<typeof insertSavedArticleSchema>;
+export type SavedArticle = typeof savedArticles.$inferSelect;
+
 // Poll votes — one per user per fact, upserted on re-vote
 export const pollVotes = pgTable("poll_votes", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

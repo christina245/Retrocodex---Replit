@@ -1,6 +1,17 @@
-import { ExternalLink, CircleDollarSign } from 'lucide-react';
+import { useState } from "react";
+import { ExternalLink, CircleDollarSign, MessageSquare, Bookmark, Share2, Clipboard } from 'lucide-react';
 import { Link } from 'wouter';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/lib/auth';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
+import { SignInModal } from '@/components/SignInModal';
 import './BlogCard.css';
+
+interface SavedArticle {
+  id: string;
+  articleKey: string;
+}
 
 interface BlogCardProps {
   id: string;
@@ -31,6 +42,107 @@ export default function BlogCard({
   isPaywalled = false,
   originalPublishedAt,
 }: BlogCardProps) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [showSignIn, setShowSignIn] = useState(false);
+
+  const articleKey = isExternal && externalUrl ? externalUrl : id;
+  const articleUrl = isExternal && externalUrl ? externalUrl : `${window.location.origin}/articles/${id}`;
+
+  const { data: savedArticles = [] } = useQuery<SavedArticle[]>({
+    queryKey: ['/api/user/saved-articles'],
+    enabled: !!user,
+  });
+
+  const savedRecord = savedArticles.find(a => a.articleKey === articleKey);
+  const isSaved = !!savedRecord;
+
+  const saveMutation = useMutation({
+    mutationFn: () => apiRequest('POST', '/api/user/saved-articles', {
+      articleKey,
+      articleType: isExternal ? 'external' : 'internal',
+      title,
+      summary,
+      coverImage: image,
+      category,
+      slug: isExternal ? '' : id,
+      externalUrl: isExternal ? (externalUrl || '') : '',
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
+      toast({
+        description: 'Article saved to your profile.',
+        style: { background: '#2c2c2c', color: '#fff', border: 'none' },
+      });
+    },
+    onError: () => {
+      toast({
+        description: 'Could not save article. Please try again.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const unsaveMutation = useMutation({
+    mutationFn: (savedId: string) => apiRequest('DELETE', `/api/user/saved-articles/${savedId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
+      toast({
+        description: 'Article removed from saved.',
+        style: { background: '#2c2c2c', color: '#fff', border: 'none' },
+      });
+    },
+    onError: () => {
+      toast({
+        description: 'Could not unsave article. Please try again.',
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      setShowSignIn(true);
+      return;
+    }
+    if (isSaved && savedRecord) {
+      unsaveMutation.mutate(savedRecord.id);
+    } else {
+      saveMutation.mutate();
+    }
+  };
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(articleUrl).then(() => {
+      toast({
+        description: (
+          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Clipboard size={15} />
+            Article link copied to clipboard
+          </span>
+        ) as any,
+        style: { background: '#2c2c2c', color: '#fff', border: 'none' },
+      });
+    }).catch(() => {
+      toast({
+        description: 'Could not copy link.',
+        variant: 'destructive',
+      });
+    });
+  };
+
+  const handleComment = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const isSavePending = saveMutation.isPending || unsaveMutation.isPending;
+
   const cardContent = (
     <article className="blog-card" data-testid={`blog-card-${id}`}>
       <div className="blog-card-image-container">
@@ -108,27 +220,72 @@ export default function BlogCard({
             Originally published on {originalPublishedAt}
           </div>
         )}
+
+        <div className="blog-card-actions" data-testid={`blog-card-actions-${id}`}>
+          <button
+            className="blog-card-action blog-card-action--disabled"
+            onClick={handleComment}
+            data-testid={`button-comment-${id}`}
+            title="Comments coming soon"
+          >
+            <MessageSquare size={13} />
+            <span>Comment</span>
+          </button>
+          <button
+            className={`blog-card-action${isSaved ? ' blog-card-action--saved' : ''}${isSavePending ? ' blog-card-action--pending' : ''}`}
+            onClick={handleSave}
+            disabled={isSavePending}
+            data-testid={`button-save-${id}`}
+            title={isSaved ? 'Remove from saved' : 'Save article'}
+          >
+            <Bookmark size={13} className={isSaved ? 'blog-card-action-icon--filled' : ''} />
+            <span>{isSaved ? 'Saved' : 'Save'}</span>
+          </button>
+          <button
+            className="blog-card-action"
+            onClick={handleShare}
+            data-testid={`button-share-${id}`}
+            title="Copy article link"
+          >
+            <Share2 size={13} />
+            <span>Share</span>
+          </button>
+        </div>
       </div>
     </article>
   );
 
   if (isExternal && externalUrl) {
     return (
-      <a
-        href={externalUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="blog-card-link"
-        data-testid={`link-blog-card-${id}`}
-      >
-        {cardContent}
-      </a>
+      <>
+        <a
+          href={externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="blog-card-link"
+          data-testid={`link-blog-card-${id}`}
+        >
+          {cardContent}
+        </a>
+        <SignInModal
+          isOpen={showSignIn}
+          onClose={() => setShowSignIn(false)}
+          contextMessage="Sign in to save articles to your profile."
+        />
+      </>
     );
   }
 
   return (
-    <Link href={`/articles/${id}`} className="blog-card-link" data-testid={`link-blog-card-${id}`}>
-      {cardContent}
-    </Link>
+    <>
+      <Link href={`/articles/${id}`} className="blog-card-link" data-testid={`link-blog-card-${id}`}>
+        {cardContent}
+      </Link>
+      <SignInModal
+        isOpen={showSignIn}
+        onClose={() => setShowSignIn(false)}
+        contextMessage="Sign in to save articles to your profile."
+      />
+    </>
   );
 }

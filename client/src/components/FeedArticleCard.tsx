@@ -9,6 +9,8 @@ interface FeedArticleCardProps {
   category: string;
   slug: string;
   isSaved?: boolean;
+  externalUrl?: string;
+  onUnsave?: () => void;
 }
 
 const categoryColors: Record<string, string> = {
@@ -36,18 +38,34 @@ export default function FeedArticleCard({
   category,
   slug,
   isSaved,
+  externalUrl,
+  onUnsave,
 }: FeedArticleCardProps) {
   const upperCategory = category.toUpperCase();
   const chipColor = categoryColors[upperCategory] || "#2C2C2C";
   const chipRoute = categoryRoutes[upperCategory] || "/";
 
+  const titleLink = externalUrl ? (
+    <a
+      href={externalUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="feed-article-title-link"
+      data-testid={`link-article-${slug}`}
+    >
+      <h3 className="feed-article-title" data-testid="feed-article-title">{title}</h3>
+    </a>
+  ) : (
+    <Link href={`/articles/${slug}`} className="feed-article-title-link" data-testid={`link-article-${slug}`}>
+      <h3 className="feed-article-title" data-testid="feed-article-title">{title}</h3>
+    </Link>
+  );
+
   return (
     <div className="feed-article-card" data-testid="feed-article-card">
       <div className="feed-article-main">
         <div className="feed-article-text">
-          <Link href={`/articles/${slug}`} className="feed-article-title-link" data-testid={`link-article-${slug}`}>
-            <h3 className="feed-article-title" data-testid="feed-article-title">{title}</h3>
-          </Link>
+          {titleLink}
           <p className="feed-article-summary" data-testid="feed-article-summary">{summary}</p>
         </div>
         <div className="feed-article-cover-container">
@@ -75,7 +93,12 @@ export default function FeedArticleCard({
             <MessageSquare size={14} />
             <span>Comment</span>
           </button>
-          <button className={`comment-action disabled-action${isSaved ? ' comment-action-unsave' : ''}`} data-testid="button-article-save">
+          <button
+            className={`comment-action${isSaved ? ' comment-action-unsave' : ' disabled-action'}`}
+            onClick={onUnsave}
+            disabled={!onUnsave}
+            data-testid="button-article-save"
+          >
             <Bookmark size={14} className={isSaved ? 'unsave-icon' : ''} />
             <span>{isSaved ? 'Unsave' : 'Save'}</span>
           </button>

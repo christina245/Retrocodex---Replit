@@ -1574,6 +1574,63 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
+  // GET /api/user/saved-articles — get authenticated user's saved articles
+  app.get("/api/user/saved-articles", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const articles = await storage.getSavedArticlesByUser(req.session.userId);
+      res.json(articles);
+    } catch (error) {
+      console.error("GET /api/user/saved-articles error:", error);
+      res.status(500).json({ message: "Failed to fetch saved articles" });
+    }
+  });
+
+  // POST /api/user/saved-articles — save an article to user's account
+  app.post("/api/user/saved-articles", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const { articleKey, articleType, title, summary, coverImage, category, slug, externalUrl } = req.body;
+      if (!articleKey || !articleType || !title || !category) {
+        return res.status(400).json({ message: "articleKey, articleType, title, and category are required" });
+      }
+      const saved = await storage.saveArticle({
+        userId: req.session.userId,
+        articleKey,
+        articleType,
+        title,
+        summary: summary || "",
+        coverImage: coverImage || "",
+        category,
+        slug: slug || "",
+        externalUrl: externalUrl || "",
+      });
+      res.json(saved);
+    } catch (error) {
+      console.error("POST /api/user/saved-articles error:", error);
+      res.status(500).json({ message: "Failed to save article" });
+    }
+  });
+
+  // DELETE /api/user/saved-articles/:id — unsave an article by record ID
+  app.delete("/api/user/saved-articles/:id", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const deleted = await storage.unsaveArticle(req.session.userId, req.params.id);
+      if (!deleted) return res.status(404).json({ message: "Saved article not found" });
+      res.json({ message: "Article unsaved successfully" });
+    } catch (error) {
+      console.error("DELETE /api/user/saved-articles/:id error:", error);
+      res.status(500).json({ message: "Failed to unsave article" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

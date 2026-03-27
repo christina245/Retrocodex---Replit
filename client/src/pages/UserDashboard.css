@@ -1484,6 +1484,14 @@ a.following-post-username:hover {
   padding-right: 13rem;
 }
 
+.saved-empty-message {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  padding: 12px 0;
+  margin: 0;
+}
+
 .saved-comment {
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 24px;

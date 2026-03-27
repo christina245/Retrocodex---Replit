@@ -3,7 +3,8 @@ import ReactMarkdown from "react-markdown";
 import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import { Link, useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
@@ -646,6 +647,33 @@ export default function UserDashboard() {
   const { data: myPollVotes = [], isLoading: pollVotesLoading } = useQuery<PollVoteItem[]>({
     queryKey: ["/api/poll-votes/me"],
     enabled: isLoggedIn,
+  });
+
+  interface SavedArticleItem {
+    id: string;
+    articleKey: string;
+    articleType: string;
+    title: string;
+    summary: string;
+    coverImage: string;
+    category: string;
+    slug: string;
+    externalUrl: string;
+    savedAt: string;
+  }
+
+  const queryClient = useQueryClient();
+
+  const { data: savedArticleItems = [], isLoading: savedArticlesLoading } = useQuery<SavedArticleItem[]>({
+    queryKey: ["/api/user/saved-articles"],
+    enabled: isLoggedIn,
+  });
+
+  const unsaveArticleMutation = useMutation({
+    mutationFn: (savedId: string) => apiRequest("DELETE", `/api/user/saved-articles/${savedId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/saved-articles"] });
+    },
   });
 
   const allAvailableTags: string[] = tagsByCategory
@@ -3203,14 +3231,25 @@ export default function UserDashboard() {
 
                   {(savedTab === "all" || savedTab === "articles") && (
                     <div className="saved-article-row" data-testid="saved-article-row">
-                      <FeedArticleCard
-                        title="5 Myths You Might Hear Going Home For the Holidays"
-                        summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
-                        coverImage="/uploads/1764995940108-220172306.jpg"
-                        category="Everyday Life"
-                        slug="going-home-for-the-holidays-myths-2025"
-                        isSaved={true}
-                      />
+                      {savedArticlesLoading ? (
+                        <p className="saved-empty-message" data-testid="text-saved-articles-loading">Loading saved articles...</p>
+                      ) : savedArticleItems.length === 0 && savedTab === "articles" ? (
+                        <p className="saved-empty-message" data-testid="text-saved-articles-empty">No saved articles yet. Bookmark articles on the Articles page to see them here.</p>
+                      ) : (
+                        savedArticleItems.map((article) => (
+                          <FeedArticleCard
+                            key={article.id}
+                            title={article.title}
+                            summary={article.summary}
+                            coverImage={article.coverImage}
+                            category={article.category}
+                            slug={article.slug}
+                            externalUrl={article.articleType === "external" ? article.externalUrl : undefined}
+                            isSaved={true}
+                            onUnsave={() => unsaveArticleMutation.mutate(article.id)}
+                          />
+                        ))
+                      )}
                     </div>
                   )}
 

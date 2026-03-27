@@ -4,6 +4,7 @@ import {
   blogPosts,
   externalArticles,
   newsletterSubscriptions,
+  savedArticles,
   pollVotes,
   type EmailSubscription, 
   type InsertEmailSubscription,
@@ -15,6 +16,8 @@ import {
   type InsertExternalArticle,
   type NewsletterSubscription,
   type InsertNewsletterSubscription,
+  type SavedArticle,
+  type InsertSavedArticle,
   type PollVote,
   type InsertPollVote,
   type PollVoteWithFact,
@@ -59,6 +62,11 @@ export interface IStorage {
   createNewsletterSubscription(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription>;
   getAllNewsletterSubscriptions(): Promise<NewsletterSubscription[]>;
   getNewsletterSubscriptionByEmail(email: string): Promise<NewsletterSubscription | undefined>;
+
+  // Saved articles
+  saveArticle(data: InsertSavedArticle): Promise<SavedArticle>;
+  unsaveArticle(userId: string, savedArticleId: string): Promise<boolean>;
+  getSavedArticlesByUser(userId: string): Promise<SavedArticle[]>;
 
   // Poll votes
   upsertPollVote(data: InsertPollVote): Promise<PollVote>;
@@ -294,6 +302,35 @@ export class DatabaseStorage implements IStorage {
       .from(newsletterSubscriptions)
       .where(eq(newsletterSubscriptions.email, email));
     return result || undefined;
+  }
+
+  // Saved article methods
+  async saveArticle(data: InsertSavedArticle): Promise<SavedArticle> {
+    const [result] = await db
+      .insert(savedArticles)
+      .values(data)
+      .onConflictDoUpdate({
+        target: [savedArticles.userId, savedArticles.articleKey],
+        set: { savedAt: new Date() },
+      })
+      .returning();
+    return result;
+  }
+
+  async unsaveArticle(userId: string, savedArticleId: string): Promise<boolean> {
+    const result = await db
+      .delete(savedArticles)
+      .where(and(eq(savedArticles.id, savedArticleId), eq(savedArticles.userId, userId)))
+      .returning();
+    return result.length > 0;
+  }
+
+  async getSavedArticlesByUser(userId: string): Promise<SavedArticle[]> {
+    return await db
+      .select()
+      .from(savedArticles)
+      .where(eq(savedArticles.userId, userId))
+      .orderBy(desc(savedArticles.savedAt));
   }
 
   async upsertPollVote(data: InsertPollVote): Promise<PollVote> {
