@@ -212,6 +212,10 @@ export default function TechnologyPage() {
           }}
         />
       )}
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
+      />
     </div>
   );
 }

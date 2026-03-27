@@ -212,6 +212,10 @@ export default function HolidaysPage() {
           }}
         />
       )}
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
+      />
     </div>
   );
 }

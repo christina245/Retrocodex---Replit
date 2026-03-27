@@ -212,6 +212,10 @@ export default function MusicPage() {
           }}
         />
       )}
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
+      />
     </div>
   );
 }

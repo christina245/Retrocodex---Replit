@@ -212,6 +212,10 @@ export default function BeautyPage() {
           }}
         />
       )}
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
+      />
     </div>
   );
 }

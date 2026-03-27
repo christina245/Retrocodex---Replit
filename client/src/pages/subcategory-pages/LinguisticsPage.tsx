@@ -222,6 +222,10 @@ export default function LinguisticsPage() {
           }}
         />
       )}
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
+      />
     </div>
   );
 }

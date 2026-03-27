@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { X, BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import squirrelImg from "@assets/Scrungy_the_squirrel_at_work_1774637831739.png";
-import type { Fact as DbFact } from "@shared/schema";
+import type { Fact as DbFact, Source } from "@shared/schema";
 import "./SourcesModal.css";
 
 interface SourcesModalProps {
@@ -88,7 +88,7 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
             </p>
           ) : (
             <ul className="sources-modal-list" data-testid="sources-list">
-              {sources.map((source: any) => (
+              {(sources as Source[]).map((source) => (
                 <li key={source.id} className="sources-modal-list-item">
                   <a
                     href={source.link}

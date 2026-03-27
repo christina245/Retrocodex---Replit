@@ -15,6 +15,7 @@ import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
 import { validateUsername } from "@/lib/usernameValidation";
 import { AvatarPickerModal } from "@/components/AvatarPickerModal";
+import { SourcesModal } from "@/components/SourcesModal";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
 import FeedArticleCard from "@/components/FeedArticleCard";
@@ -551,6 +552,7 @@ export default function UserDashboard() {
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [activeEllipsisId, setActiveEllipsisId] = useState<string | null>(null);
   const [savedTab, setSavedTab] = useState<SavedTab>("all");
+  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -3213,7 +3215,7 @@ export default function UserDashboard() {
                             onShare={() => {}}
                             onComment={() => {}}
                             isSaved={true}
-                            onBetaClick={() => {}}
+                            onBetaClick={(factId) => setSourcesModalFactId(factId)}
                           />
                         ))
                       )}
@@ -3859,6 +3861,10 @@ export default function UserDashboard() {
         onClose={() => setIsAvatarPickerOpen(false)}
         currentAvatar={editProfilePhoto}
         onSave={(uri) => setEditProfilePhoto(uri)}
+      />
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
       />
     </div>
   );
