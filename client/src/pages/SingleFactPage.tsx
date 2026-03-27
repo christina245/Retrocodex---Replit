@@ -24,6 +24,8 @@ import ExtendedFactCard from "@/components/ExtendedFactCard";
 import TimelineSection from "@/components/TimelineSection";
 import type { Fact } from "@/components/FactCard";
 import type { Fact as FactType } from "@shared/schema";
+import { useAuth } from "@/lib/auth";
+import { useSavedFacts } from "@/lib/useSavedFacts";
 import "./SingleFactPage.css";
 
 export default function SingleFactPage() {
@@ -37,6 +39,8 @@ export default function SingleFactPage() {
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { isLoggedIn } = useAuth();
+  const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -99,7 +103,13 @@ export default function SingleFactPage() {
   };
 
   const handleSaveClick = () => {
-    setIsSaveModalOpen(true);
+    if (!isLoggedIn) {
+      setIsSaveModalOpen(true);
+      return;
+    }
+    if (factData?.id) {
+      toggleSave(factData.id);
+    }
   };
 
   const handleSubscribeClick = () => {
@@ -166,8 +176,8 @@ export default function SingleFactPage() {
     myth: factData.mythHeader,
     truth: factData.truthHeader,
     category: factData.categories,
-    details: factData.mythDetails,
-    moreDetails: factData.truthDetails,
+    details: factData.mythDetails ?? "",
+    moreDetails: factData.truthDetails ?? undefined,
     sources: factData.sources || [],
   };
 
@@ -249,6 +259,7 @@ export default function SingleFactPage() {
               fact={extendedFactData}
               onSave={handleSaveClick}
               onShare={handleShareClick}
+              isSaved={factData ? savedFactIds.has(factData.id) : false}
             />
           </div>
 

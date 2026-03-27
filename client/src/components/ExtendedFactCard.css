@@ -229,6 +229,18 @@
   transform: scale(0.95);
 }
 
+.floating-action-button-saved {
+  background: #2C2C2C;
+}
+
+.floating-action-button-saved:hover {
+  background: #3d3d3d;
+}
+
+.bookmark-saved {
+  fill: white;
+}
+
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .extended-fact-card-wrapper {

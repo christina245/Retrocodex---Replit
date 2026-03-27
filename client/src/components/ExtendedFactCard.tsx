@@ -21,9 +21,10 @@ interface ExtendedFactCardProps {
   };
   onSave?: () => void;
   onShare?: () => void;
+  isSaved?: boolean;
 }
 
-export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFactCardProps) {
+export default function ExtendedFactCard({ fact, onSave, onShare, isSaved }: ExtendedFactCardProps) {
   // Split sources into those with logos and those without
   const sourcesWithLogos = fact.sources.filter(s => s.logoUrl);
   const textOnlySources = fact.sources.filter(s => !s.logoUrl);
@@ -132,12 +133,12 @@ export default function ExtendedFactCard({ fact, onSave, onShare }: ExtendedFact
 
       <div className="floating-actions">
         <button 
-          className="floating-action-button"
+          className={`floating-action-button${isSaved ? ' floating-action-button-saved' : ''}`}
           onClick={onSave}
           data-testid="button-save-extended"
-          aria-label="Save fact"
+          aria-label={isSaved ? "Unsave fact" : "Save fact"}
         >
-          <Bookmark size={20} />
+          <Bookmark size={20} className={isSaved ? 'bookmark-saved' : ''} />
         </button>
         <button 
           className="floating-action-button"
