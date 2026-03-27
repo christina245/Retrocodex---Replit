@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { X, BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import squirrelImg from "@assets/Scrungy_the_squirrel_at_work_1774637831739.png";
+import squirrelImg from "@assets/Scrungy_the_squirrel_at_work_cropped_1774648658154.png";
 import type { Fact as DbFact, Source } from "@shared/schema";
 import "./SourcesModal.css";
 
@@ -113,12 +113,6 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
             data-testid="img-squirrel"
           />
           <div className="sources-modal-beehiiv-cta" data-testid="beehiiv-cta">
-            <p className="sources-modal-cta-heading">
-              We're working on the rest of this fact's entry!
-            </p>
-            <p className="sources-modal-cta-subtitle">
-              Enter your email to be notified when it's ready so you can comment and share your stories.
-            </p>
             <iframe
               src="https://subscribe-forms.beehiiv.com/70a66f54-86dc-4762-bd13-4631482f617e"
               className="beehiiv-embed"
