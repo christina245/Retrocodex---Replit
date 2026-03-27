@@ -1667,7 +1667,8 @@ Sitemap: ${SITE_URL}/sitemap.xml
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const deleted = await storage.unsaveFact(req.session.userId, req.params.factId);
+      const factId = decodeURIComponent(req.params.factId);
+      const deleted = await storage.unsaveFact(req.session.userId, factId);
       if (!deleted) return res.status(404).json({ message: "Saved fact not found" });
       res.json({ message: "Fact unsaved successfully" });
     } catch (error) {
