@@ -66,7 +66,8 @@ export function CategoryFactCard({
     if (fact.betaOnly) {
       e.preventDefault();
       if (onBetaClick) {
-        onBetaClick(fact.id);
+        const slug = factLink.split('/fact/').pop() || fact.id;
+        onBetaClick(slug);
       }
     }
   };
