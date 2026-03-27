@@ -10,7 +10,7 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { FactKey } from "@/components/FactKey";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
@@ -221,7 +221,7 @@ export default function SocialSciencesPage() {
             </div>
 
             <aside className="social-sciences-sidebar">
-              <BeehiivBanner />
+              <SendgridBanner />
             </aside>
           </div>
         </div>

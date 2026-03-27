@@ -12,7 +12,7 @@ import { FactKey } from "@/components/FactKey";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CATEGORIES } from "@shared/categories";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { ShareModal } from "@/components/ShareModal";
 import { SignInModal } from "@/components/SignInModal";
 import { SourcesModal } from "@/components/SourcesModal";
@@ -549,7 +549,7 @@ export default function HomePage() {
                 </div>
 
                 <aside className="sidebar">
-                  <BeehiivBanner />
+                  <SendgridBanner />
                 </aside>
               </div>
             </div>

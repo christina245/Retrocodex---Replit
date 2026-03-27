@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import "./BeehiivBanner.css";
+import "./SendgridBanner.css";
 
-export function BeehiivBanner() {
+export function SendgridBanner() {
   const scriptLoaded = useRef(false);
 
   useEffect(() => {

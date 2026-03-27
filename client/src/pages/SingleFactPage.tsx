@@ -13,7 +13,7 @@ import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { SignInModal } from "@/components/SignInModal";
 import { RelatedFacts } from "@/components/RelatedFacts";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
@@ -298,7 +298,7 @@ export default function SingleFactPage() {
                   <CategoryLinks categories={factData.categories} />
                   <FactTags tags={factData.searchTags || []} />
                   <div className="email-banner-wrapper">
-                    <BeehiivBanner />
+                    <SendgridBanner />
                   </div>
                 </div>
               </div>

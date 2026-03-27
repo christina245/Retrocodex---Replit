@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { SignInModal } from "@/components/SignInModal";
@@ -154,7 +154,7 @@ export default function SubmitFactPage() {
           </div>
 
           <aside className="submit-fact-sidebar">
-            <BeehiivBanner />
+            <SendgridBanner />
           </aside>
         </div>
       </main>

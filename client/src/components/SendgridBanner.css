@@ -1,0 +1,31 @@
+.sendgrid-banner-container {
+  width: 100%;
+  max-width: 340px;
+}
+
+.sendgrid-embed {
+  width: 340px;
+  height: 260px;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .sendgrid-banner-container {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .sendgrid-embed {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sendgrid-banner-container {
+    display: none;
+  }
+}

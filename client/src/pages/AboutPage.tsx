@@ -3,7 +3,7 @@ import { HandHeart } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
@@ -126,7 +126,7 @@ export default function AboutPage() {
           </div>
 
           <aside className="about-sidebar">
-            <BeehiivBanner />
+            <SendgridBanner />
           </aside>
         </div>
       </main>

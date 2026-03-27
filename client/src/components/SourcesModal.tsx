@@ -22,15 +22,6 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    if (document.getElementById("beehiiv-sources-embed-script")) return;
-    const script = document.createElement("script");
-    script.id = "beehiiv-sources-embed-script";
-    script.src = "https://subscribe-forms.beehiiv.com/embed.js";
-    script.async = true;
-    document.head.appendChild(script);
-  }, []);
-
   const { data: factData, isLoading, isError } = useQuery<DbFact>({
     queryKey: ["/api/facts", factId],
     queryFn: async () => {
@@ -106,30 +97,15 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
         </div>
 
         <div className="sources-modal-squirrel-section">
-          <div className="sources-modal-beehiiv-cta" data-testid="beehiiv-cta">
-            <iframe
-              src="https://subscribe-forms.beehiiv.com/70a66f54-86dc-4762-bd13-4631482f617e"
-              className="beehiiv-embed"
-              data-test-id="beehiiv-embed"
-              frameBorder={0}
-              scrolling="no"
-              style={{
-                width: "636px",
-                height: "199px",
-                margin: 0,
-                borderRadius: "0px",
-                backgroundColor: "transparent",
-                boxShadow: "0 0 #0000",
-                maxWidth: "100%",
-              }}
-            />
-          </div>
           <img
             src={squirrelImg}
             alt="Scrungy the squirrel working on the entry"
             className="sources-modal-squirrel"
             data-testid="img-squirrel"
           />
+          <p className="sources-modal-squirrel-text">
+            Scrungy the squirrel is working on grabbing the rest of the fact's details!
+          </p>
         </div>
       </div>
     </div>

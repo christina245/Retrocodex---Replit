@@ -13,7 +13,7 @@ import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { SourcesModal } from "@/components/SourcesModal";
 import { FactKey } from "@/components/FactKey";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { SaveModal } from "@/components/SaveModal";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
@@ -185,7 +185,7 @@ export default function TechnologyPage() {
             </div>
 
             <aside className="technology-sidebar">
-              <BeehiivBanner />
+              <SendgridBanner />
             </aside>
           </div>
         </div>

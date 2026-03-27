@@ -25,7 +25,7 @@ import BlogCard from "@/components/BlogCard";
 import { SaveModal } from "@/components/SaveModal";
 import { CommentModal } from "@/components/CommentModal";
 import { ArticleShareModal } from "@/components/ArticleShareModal";
-import { BeehiivBanner } from "@/components/BeehiivBanner";
+import { SendgridBanner } from "@/components/SendgridBanner";
 import { BlogPost } from "@shared/schema";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
 import loadingLogoLight from "@assets/white_flat_logo_1765095431508.png";
@@ -318,9 +318,9 @@ export default function SingleBlogPage() {
               </div>
             )}
 
-            <div className="sidebar-section beehiiv-section">
+            <div className="sidebar-section newsletter-section">
               <h3 className="sidebar-heading">Subscribe</h3>
-              <BeehiivBanner />
+              <SendgridBanner />
             </div>
           </aside>
         </div>
