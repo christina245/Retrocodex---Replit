@@ -7,7 +7,6 @@ import { Pencil, BellRing } from "lucide-react";
 import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { SaveModal } from "@/components/SaveModal";
 import { ShareModal } from "@/components/ShareModal";
 import { SubscribeModal } from "@/components/SubscribeModal";
 import { CommentsSection } from "@/components/CommentsSection";
@@ -31,7 +30,6 @@ import "./SingleFactPage.css";
 export default function SingleFactPage() {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
@@ -308,12 +306,6 @@ export default function SingleFactPage() {
           </div>
         </div>
       </div>
-
-      <SaveModal 
-        isOpen={isSaveModalOpen}
-        onClose={() => setIsSaveModalOpen(false)}
-        onSubmit={(email) => handleEmailSubmit(email, "save-modal")}
-      />
 
       <SubscribeModal 
         isOpen={isSubscribeModalOpen}
