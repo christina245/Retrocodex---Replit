@@ -1,6 +1,7 @@
 .blog-card-wrapper {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .blog-card-link {
@@ -124,6 +125,7 @@
   margin-top: auto;
   flex-shrink: 0;
   line-height: 1.4;
+  text-align: right;
 }
 
 .blog-card-tag {
