@@ -101,24 +101,23 @@
 
 .sources-modal-squirrel-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   position: relative;
+  gap: 0;
 }
 
 .sources-modal-squirrel {
-  width: 260px;
-  max-width: 70%;
+  width: 180px;
+  flex-shrink: 0;
   display: block;
-  margin: 0 auto;
 }
 
 .sources-modal-beehiiv-cta {
-  width: 100%;
+  flex: 1;
   background: #fFFFFF;
   text-align: center;
-  padding: 1.5rem 2rem 1.5rem;
-  margin-top: -60px;
+  padding: 1.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,7 +164,16 @@
     font-size: 16px;
   }
 
+  .sources-modal-squirrel-section {
+    flex-direction: column-reverse;
+  }
+
+  .sources-modal-squirrel {
+    width: 140px;
+  }
+
   .sources-modal-beehiiv-cta {
-    padding: 1.5rem 1rem 1.5rem;
+    padding: 1.5rem 1rem;
+    width: 100%;
   }
 }

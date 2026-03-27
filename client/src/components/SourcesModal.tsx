@@ -106,12 +106,6 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
         </div>
 
         <div className="sources-modal-squirrel-section">
-          <img
-            src={squirrelImg}
-            alt="Scrungy the squirrel working on the entry"
-            className="sources-modal-squirrel"
-            data-testid="img-squirrel"
-          />
           <div className="sources-modal-beehiiv-cta" data-testid="beehiiv-cta">
             <iframe
               src="https://subscribe-forms.beehiiv.com/70a66f54-86dc-4762-bd13-4631482f617e"
@@ -130,6 +124,12 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
               }}
             />
           </div>
+          <img
+            src={squirrelImg}
+            alt="Scrungy the squirrel working on the entry"
+            className="sources-modal-squirrel"
+            data-testid="img-squirrel"
+          />
         </div>
       </div>
     </div>
