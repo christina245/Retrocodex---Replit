@@ -104,7 +104,8 @@ export default function SingleFactPage() {
 
   const handleSaveClick = () => {
     if (!isLoggedIn) {
-      setIsSaveModalOpen(true);
+      setSignInContext("Sign in to save this fact to your collection.");
+      setShowSignIn(true);
       return;
     }
     if (factData?.id) {
