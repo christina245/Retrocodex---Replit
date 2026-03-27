@@ -85,7 +85,7 @@ export default function BlogCard({
   });
 
   const unsaveMutation = useMutation({
-    mutationFn: (savedId: string) => apiRequest('DELETE', `/api/user/saved-articles/${savedId}`),
+    mutationFn: (key: string) => apiRequest('DELETE', `/api/user/saved-articles/${encodeURIComponent(key)}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
       toast({
@@ -109,7 +109,7 @@ export default function BlogCard({
       return;
     }
     if (isSaved && savedRecord) {
-      unsaveMutation.mutate(savedRecord.id);
+      unsaveMutation.mutate(savedRecord.articleKey);
     } else {
       saveMutation.mutate();
     }

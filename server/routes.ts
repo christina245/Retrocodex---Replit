@@ -1622,7 +1622,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const deleted = await storage.unsaveArticle(req.session.userId, req.params.articleId);
+      const deleted = await storage.unsaveArticle(req.session.userId, decodeURIComponent(req.params.articleId));
       if (!deleted) return res.status(404).json({ message: "Saved article not found" });
       res.json({ message: "Article unsaved successfully" });
     } catch (error) {
