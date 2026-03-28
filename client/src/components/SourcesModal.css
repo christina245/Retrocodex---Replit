@@ -105,6 +105,7 @@
   align-items: center;
   position: relative;
   gap: 0;
+  margin: 10px;
 }
 
 .sources-modal-squirrel {

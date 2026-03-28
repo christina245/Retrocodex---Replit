@@ -128,7 +128,7 @@
 
 .content-container {
   display: flex;
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .facts-column {
@@ -237,7 +237,7 @@
 
   .content-container {
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
     align-items: center;
   }
 

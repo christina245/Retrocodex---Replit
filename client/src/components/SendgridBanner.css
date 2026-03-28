@@ -1,6 +1,6 @@
 .sendgrid-banner-container {
-  width: 280px;
-  height: 322px; /* 460 * 0.7 */
+  width: 300px;
+  height: 370px; /* 460 * 0.7 */
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -12,7 +12,7 @@
   border: none;
   background-color: transparent;
   box-shadow: none;
-  transform: scale(0.7);
+  transform: scale(0.85);
   transform-origin: top left;
 }
 

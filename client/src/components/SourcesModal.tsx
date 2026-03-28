@@ -97,15 +97,15 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
         </div>
 
         <div className="sources-modal-squirrel-section">
+          <p className="sources-modal-squirrel-text">
+            Scrungy the squirrel is working on grabbing the rest of the fact's details!
+          </p>
           <img
             src={squirrelImg}
             alt="Scrungy the squirrel working on the entry"
             className="sources-modal-squirrel"
             data-testid="img-squirrel"
           />
-          <p className="sources-modal-squirrel-text">
-            Scrungy the squirrel is working on grabbing the rest of the fact's details!
-          </p>
         </div>
       </div>
     </div>
