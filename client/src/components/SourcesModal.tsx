@@ -98,7 +98,7 @@ export function SourcesModal({ factId, onClose }: SourcesModalProps) {
 
         <div className="sources-modal-squirrel-section">
           <p className="sources-modal-squirrel-text">
-            Scrungy the squirrel is working on grabbing the rest of the fact's details!
+            Scrungy the squirrel is grabbing the rest of this fact's details!
           </p>
           <img
             src={squirrelImg}
