@@ -25,6 +25,8 @@ import type { Fact } from "@/components/FactCard";
 import type { Fact as FactType } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
+import { useVerificationGuard } from "@/lib/useVerificationGuard";
+import { VerifyEmailModal } from "@/components/VerifyEmailModal";
 import "./SingleFactPage.css";
 
 export default function SingleFactPage() {
@@ -39,6 +41,7 @@ export default function SingleFactPage() {
   const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
+  const { showVerifyModal, setShowVerifyModal, requireVerified } = useVerificationGuard();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -107,7 +110,7 @@ export default function SingleFactPage() {
       return;
     }
     if (factData?.id) {
-      toggleSave(factData.id);
+      requireVerified(() => toggleSave(factData!.id));
     }
   };
 
@@ -288,6 +291,7 @@ export default function SingleFactPage() {
               ]}
               factId={factData?.id ?? ""}
               onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
+              onVerifyClick={() => setShowVerifyModal(true)}
             />
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
@@ -328,6 +332,7 @@ export default function SingleFactPage() {
         onClose={() => { setShowSignIn(false); setSignInContext(undefined); }}
         contextMessage={signInContext}
       />
+      {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
     </div>
   );
 }

@@ -11,6 +11,8 @@ import { eq, gte, count, and, sql, desc } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 import { sendMail, buildSubmissionConfirmationEmail } from "./mailer";
+import { sendVerificationEmail } from "./sendgrid";
+import crypto from "crypto";
 
 declare module "express-session" {
   interface SessionData {
@@ -217,9 +219,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const passwordHash = await bcrypt.hash(data.password, 12);
+      const verificationToken = crypto.randomBytes(32).toString("hex");
       const [account] = await db.insert(userAccounts)
-        .values({ email: data.email.toLowerCase(), passwordHash })
+        .values({ email: data.email.toLowerCase(), passwordHash, verificationToken, emailVerified: false })
         .returning({ id: userAccounts.id });
+
+      sendVerificationEmail(data.email.toLowerCase(), verificationToken).catch((err) => {
+        console.error("[sendgrid] Failed to send verification email:", err?.response?.body || err);
+      });
 
       const [profile] = await db.insert(userProfiles)
         .values({
@@ -250,6 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showPlacesLived: profile.showPlacesLived,
         favoriteTags: profile.favoriteTags,
         misinfoSource: profile.misinfoSource,
+        emailVerified: false,
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -330,6 +338,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/auth/verify-email?token=... — verify email via link click
+  app.get("/api/auth/verify-email", async (req, res) => {
+    const token = req.query.token as string | undefined;
+    if (!token) {
+      return res.redirect("/?verified=invalid");
+    }
+    try {
+      const [account] = await db.select({ id: userAccounts.id, emailVerified: userAccounts.emailVerified })
+        .from(userAccounts)
+        .where(eq(userAccounts.verificationToken, token))
+        .limit(1);
+
+      if (!account) {
+        return res.redirect("/dashboard?verified=invalid");
+      }
+      if (account.emailVerified) {
+        return res.redirect("/dashboard?verified=already");
+      }
+
+      await db.update(userAccounts)
+        .set({ emailVerified: true, verificationToken: null })
+        .where(eq(userAccounts.id, account.id));
+
+      return res.redirect("/dashboard?verified=success");
+    } catch (error) {
+      console.error("Email verification error:", error);
+      return res.redirect("/dashboard?verified=invalid");
+    }
+  });
+
+  // POST /api/auth/resend-verification — resend verification email
+  app.post("/api/auth/resend-verification", async (req, res) => {
+    if (!req.session?.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const [account] = await db.select({ email: userAccounts.email, emailVerified: userAccounts.emailVerified })
+        .from(userAccounts)
+        .where(eq(userAccounts.id, req.session.userId))
+        .limit(1);
+
+      if (!account) return res.status(404).json({ message: "Account not found" });
+      if (account.emailVerified) return res.status(400).json({ message: "Email already verified" });
+
+      const newToken = crypto.randomBytes(32).toString("hex");
+      await db.update(userAccounts)
+        .set({ verificationToken: newToken })
+        .where(eq(userAccounts.id, req.session.userId));
+
+      sendVerificationEmail(account.email, newToken).catch((err) => {
+        console.error("[sendgrid] Resend verification failed:", err?.response?.body || err);
+      });
+
+      return res.json({ message: "Verification email sent" });
+    } catch (error) {
+      console.error("Resend verification error:", error);
+      res.status(500).json({ message: "Failed to resend verification email" });
+    }
+  });
+
   // POST /api/auth/logout
   app.post("/api/auth/logout", (req, res) => {
     req.session.destroy((err) => {
@@ -345,7 +413,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const [account] = await db.select({ email: userAccounts.email })
+      const [account] = await db.select({ email: userAccounts.email, emailVerified: userAccounts.emailVerified })
         .from(userAccounts)
         .where(eq(userAccounts.id, req.session.userId))
         .limit(1);
@@ -372,6 +440,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         favoriteTags: profile.favoriteTags,
         misinfoSource: profile.misinfoSource,
         isAdmin: profile.isAdmin ?? false,
+        emailVerified: account.emailVerified ?? false,
       });
     } catch (error) {
       console.error("GET /api/me error:", error);

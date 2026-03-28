@@ -6,6 +6,8 @@ import { useAuth } from '@/lib/auth';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { SignInModal } from '@/components/SignInModal';
+import { useVerificationGuard } from '@/lib/useVerificationGuard';
+import { VerifyEmailModal } from '@/components/VerifyEmailModal';
 import './BlogCard.css';
 
 interface SavedArticle {
@@ -46,6 +48,7 @@ export default function BlogCard({
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showSignIn, setShowSignIn] = useState(false);
+  const { showVerifyModal, setShowVerifyModal, requireVerified } = useVerificationGuard();
 
   const articleKey = isExternal && externalUrl ? externalUrl : id;
   const articleUrl = isExternal && externalUrl ? externalUrl : `${window.location.origin}/articles/${id}`;
@@ -100,11 +103,13 @@ export default function BlogCard({
       setShowSignIn(true);
       return;
     }
-    if (isSaved && savedRecord) {
-      unsaveMutation.mutate(savedRecord.articleKey);
-    } else {
-      saveMutation.mutate();
-    }
+    requireVerified(() => {
+      if (isSaved && savedRecord) {
+        unsaveMutation.mutate(savedRecord.articleKey);
+      } else {
+        saveMutation.mutate();
+      }
+    });
   };
 
   const handleShare = (e: React.MouseEvent) => {
@@ -284,6 +289,7 @@ export default function BlogCard({
         onClose={() => setShowSignIn(false)}
         contextMessage="Sign in to save articles to your profile."
       />
+      {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
     </div>
   );
 }

@@ -14,6 +14,7 @@ export interface UserData {
   misinfoSource: string;
   bio: string;
   isAdmin: boolean;
+  emailVerified: boolean;
 }
 
 interface AuthContextType {
@@ -64,6 +65,7 @@ function mapApiResponse(data: any): UserData {
     misinfoSource: data.misinfoSource || "",
     bio: data.bio || "",
     isAdmin: data.isAdmin ?? false,
+    emailVerified: data.emailVerified ?? false,
   };
 }
 

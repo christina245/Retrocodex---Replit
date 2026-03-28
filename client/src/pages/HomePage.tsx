@@ -23,6 +23,8 @@ import type { Fact as DbFact } from "@shared/schema";
 import { DECADES } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
+import { useVerificationGuard } from "@/lib/useVerificationGuard";
+import { VerifyEmailModal } from "@/components/VerifyEmailModal";
 import "./HomePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -59,6 +61,7 @@ export default function HomePage() {
   const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
+  const { showVerifyModal, setShowVerifyModal, requireVerified } = useVerificationGuard();
   const [, setLocation] = useLocation();
   const params = useParams<{ decade?: string }>();
 
@@ -218,7 +221,7 @@ export default function HomePage() {
       setShowSignIn(true);
       return;
     }
-    toggleSave(factId);
+    requireVerified(() => toggleSave(factId));
   };
 
   const handleShareClick = (fact: Fact) => {
@@ -668,6 +671,7 @@ export default function HomePage() {
         factId={sourcesModalFactId}
         onClose={() => setSourcesModalFactId(null)}
       />
+      {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
     </div>
   );
 }

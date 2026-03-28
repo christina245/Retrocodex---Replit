@@ -23,6 +23,7 @@ import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
 import { AdminBadge } from "@/components/AdminBadge";
+import { Button } from "@/components/ui/button";
 import { getCountryFlag } from "@/lib/countryFlags";
 import "./UserDashboard.css";
 
@@ -518,6 +519,14 @@ export default function UserDashboard() {
     }
     return "feed" as SideTab;
   })();
+
+  const verifiedParam = (() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("verified");
+  })();
+  const [showVerifiedModal, setShowVerifiedModal] = useState<"success" | "invalid" | "already" | null>(
+    verifiedParam === "success" ? "success" : verifiedParam === "already" ? "already" : verifiedParam === "invalid" ? "invalid" : null
+  );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
@@ -901,6 +910,52 @@ export default function UserDashboard() {
       />
       <SingleFactHeader onMenuClick={() => setIsMenuOpen(!isMenuOpen)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+
+      {showVerifiedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" data-testid="verified-success-modal">
+          <div className="bg-background rounded-md border border-border shadow-lg max-w-sm w-full p-6 relative text-center">
+            <button
+              onClick={() => setShowVerifiedModal(null)}
+              className="absolute top-3 right-3 text-muted-foreground hover-elevate rounded-md p-1"
+              data-testid="button-close-verified-modal"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            {showVerifiedModal === "success" && (
+              <>
+                <div className="flex justify-center mb-3">
+                  <div className="rounded-full bg-green-100 dark:bg-green-900/30 p-3">
+                    <CircleCheckBig className="w-7 h-7 text-green-600 dark:text-green-400" />
+                  </div>
+                </div>
+                <h2 className="text-lg font-semibold mb-2">Email verified!</h2>
+                <p className="text-sm text-muted-foreground">Your email has been verified. You now have full access to Retrocodex.</p>
+              </>
+            )}
+            {showVerifiedModal === "already" && (
+              <>
+                <div className="flex justify-center mb-3">
+                  <div className="rounded-full bg-muted p-3">
+                    <CircleCheckBig className="w-7 h-7 text-muted-foreground" />
+                  </div>
+                </div>
+                <h2 className="text-lg font-semibold mb-2">Already verified</h2>
+                <p className="text-sm text-muted-foreground">Your email is already verified — you're all set.</p>
+              </>
+            )}
+            {showVerifiedModal === "invalid" && (
+              <>
+                <h2 className="text-lg font-semibold mb-2">Invalid or expired link</h2>
+                <p className="text-sm text-muted-foreground mb-4">This verification link has expired or is invalid. Please request a new one.</p>
+              </>
+            )}
+            <Button onClick={() => setShowVerifiedModal(null)} className="mt-4 w-full" data-testid="button-dismiss-verified-modal">
+              Got it
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="user-dashboard-content">
         <div className="dashboard-two-column" data-testid="dashboard-two-column">

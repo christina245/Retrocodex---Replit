@@ -8,9 +8,10 @@ interface PollProps {
   options: string[];
   factId: string;
   onLoginClick?: (contextMessage?: string) => void;
+  onVerifyClick?: () => void;
 }
 
-export function Poll({ question, options, factId, onLoginClick }: PollProps) {
+export function Poll({ question, options, factId, onLoginClick, onVerifyClick }: PollProps) {
   const { user, isLoggedIn, logout } = useAuth();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
@@ -33,6 +34,10 @@ export function Poll({ question, options, factId, onLoginClick }: PollProps) {
 
   const handleSubmit = async () => {
     if (!isLoggedIn) return;
+    if (!user?.emailVerified) {
+      onVerifyClick?.();
+      return;
+    }
     if (!selectedOption) {
       setError("Please select an answer.");
       return;
