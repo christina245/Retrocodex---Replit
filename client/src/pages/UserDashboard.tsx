@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
+import scrungyConfetti from "@assets/Joyful_squirrel_surrounded_by_confetti_1774824005307.png";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -22,6 +23,7 @@ import FeedArticleCard from "@/components/FeedArticleCard";
 import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
+import "../components/SignInModal.css";
 import { AdminBadge } from "@/components/AdminBadge";
 import { Button } from "@/components/ui/button";
 import { getCountryFlag } from "@/lib/countryFlags";
@@ -912,47 +914,71 @@ export default function UserDashboard() {
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
       {showVerifiedModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" data-testid="verified-success-modal">
-          <div className="bg-background rounded-md border border-border shadow-lg max-w-sm w-full p-6 relative text-center">
+        <div className="signin-overlay" data-testid="verified-success-modal">
+          <div className="signin-modal" data-testid="verified-success-modal-inner">
             <button
               onClick={() => setShowVerifiedModal(null)}
-              className="absolute top-3 right-3 text-muted-foreground hover-elevate rounded-md p-1"
+              className="signin-close"
               data-testid="button-close-verified-modal"
               aria-label="Close"
             >
-              <X className="w-4 h-4" />
+              <X size={20} />
             </button>
-            {showVerifiedModal === "success" && (
-              <>
-                <div className="flex justify-center mb-3">
-                  <div className="rounded-full bg-green-100 dark:bg-green-900/30 p-3">
-                    <CircleCheckBig className="w-7 h-7 text-green-600 dark:text-green-400" />
-                  </div>
-                </div>
-                <h2 className="text-lg font-semibold mb-2">Email verified!</h2>
-                <p className="text-sm text-muted-foreground">Your email has been verified. You now have full access to Retrocodex.</p>
-              </>
-            )}
-            {showVerifiedModal === "already" && (
-              <>
-                <div className="flex justify-center mb-3">
-                  <div className="rounded-full bg-muted p-3">
-                    <CircleCheckBig className="w-7 h-7 text-muted-foreground" />
-                  </div>
-                </div>
-                <h2 className="text-lg font-semibold mb-2">Already verified</h2>
-                <p className="text-sm text-muted-foreground">Your email is already verified — you're all set.</p>
-              </>
-            )}
-            {showVerifiedModal === "invalid" && (
-              <>
-                <h2 className="text-lg font-semibold mb-2">Invalid or expired link</h2>
-                <p className="text-sm text-muted-foreground mb-4">This verification link has expired or is invalid. Please request a new one.</p>
-              </>
-            )}
-            <Button onClick={() => setShowVerifiedModal(null)} className="mt-4 w-full" data-testid="button-dismiss-verified-modal">
-              Got it
-            </Button>
+            <div className="signin-modal-body">
+              <div className="signin-email-verification">
+                {showVerifiedModal === "success" && (
+                  <>
+                    <img
+                      src={scrungyConfetti}
+                      alt="Email verified!"
+                      className="signin-logo-signup"
+                      data-testid="img-verified-success"
+                    />
+                    <h2 className="signin-confirmation-title signin-verify-title" data-testid="text-verified-heading">
+                      Email successfully verified!
+                    </h2>
+                    <p className="signin-verify-body" data-testid="text-verified-body">
+                      You now have full access to Retrocodex. Welcome aboard!
+                    </p>
+                  </>
+                )}
+                {showVerifiedModal === "already" && (
+                  <>
+                    <img
+                      src={scrungyConfetti}
+                      alt="Already verified"
+                      className="signin-logo-signup"
+                      data-testid="img-already-verified"
+                    />
+                    <h2 className="signin-confirmation-title signin-verify-title" data-testid="text-already-verified-heading">
+                      Already verified
+                    </h2>
+                    <p className="signin-verify-body" data-testid="text-already-verified-body">
+                      Your email is already verified — you're all set.
+                    </p>
+                  </>
+                )}
+                {showVerifiedModal === "invalid" && (
+                  <>
+                    <h2 className="signin-confirmation-title signin-verify-title" data-testid="text-invalid-link-heading">
+                      Invalid or expired link
+                    </h2>
+                    <p className="signin-verify-body" data-testid="text-invalid-link-body">
+                      This verification link has expired or is invalid. Please request a new one from your profile.
+                    </p>
+                  </>
+                )}
+                <button
+                  type="button"
+                  className="signin-submit-button"
+                  onClick={() => setShowVerifiedModal(null)}
+                  data-testid="button-dismiss-verified-modal"
+                  style={{ marginTop: "0.5rem" }}
+                >
+                  Got it
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

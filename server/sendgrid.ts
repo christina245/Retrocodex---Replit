@@ -20,6 +20,8 @@ export async function sendVerificationEmail(to: string, token: string): Promise<
   if (!initialized) return;
 
   const from = process.env.EMAIL_FROM || "noreply@retrocodex.com";
+  const baseUrl = (process.env.APP_URL || "https://theretrocodex.com").replace(/\/$/, "");
+  const verifyUrl = `${baseUrl}/api/auth/verify-email?token=${token}`;
 
   await sgMail.send({
     to,
@@ -27,6 +29,7 @@ export async function sendVerificationEmail(to: string, token: string): Promise<
     templateId: VERIFICATION_TEMPLATE_ID,
     dynamicTemplateData: {
       token,
+      verifyUrl,
     },
   });
 }
