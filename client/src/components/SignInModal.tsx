@@ -1,4 +1,5 @@
-import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle } from "lucide-react";
+import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle, RotateCcw } from "lucide-react";
+import envelopeImage from "@assets/email_1774815930235.png";
 import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useQuery } from "@tanstack/react-query";
@@ -448,7 +449,7 @@ interface SignInModalProps {
   contextMessage?: string;
 }
 
-type ModalScreen = "auth" | "locationSetup" | "topicSelection";
+type ModalScreen = "auth" | "locationSetup" | "topicSelection" | "emailVerification";
 
 interface OtherCountryEntry {
   country: string;
@@ -472,6 +473,9 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
   const [screen, setScreen] = useState<ModalScreen>("auth");
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [resendMessage, setResendMessage] = useState("");
 
   const [residenceCountry, setResidenceCountry] = useState("");
   const [residenceUsState, setResidenceUsState] = useState("");
@@ -633,6 +637,75 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
     (c) => c.toLowerCase() === "other"
   );
 
+  const doRegisterAndVerify = async () => {
+    setIsSubmitting(true);
+    setLoginError("");
+    const profilePhoto = generateRandomAvatar();
+    const currentLocation = residenceCountry
+      ? residenceUsState
+        ? `${residenceUsState}, ${residenceCountry}`
+        : residenceCountry
+      : "";
+    const placesLived = otherCountries
+      .filter((c) => c.country)
+      .map((c) => c.usState ? `${c.usState}, ${c.country}` : c.country);
+    const result = await register({
+      username: username || "UnlearnExplorer",
+      email,
+      password,
+      avatarUrl: profilePhoto,
+      currentLocation,
+      showCurrentLocation: featureResidence,
+      placesLived,
+      showPlacesLived: featureOtherCountries,
+      favoriteTags: selectedTags,
+      misinfoSource: "",
+      bio: "",
+    });
+    setIsSubmitting(false);
+    if (result.success) {
+      setScreen("emailVerification");
+    } else {
+      setLoginError(result.error || "Registration failed. Please try again.");
+      setScreen("auth");
+    }
+  };
+
+  const handleResendEmail = async () => {
+    if (resendCooldown > 0 || isResending) return;
+    setIsResending(true);
+    setResendMessage("");
+    try {
+      const res = await fetch("/api/auth/resend-verification", { method: "POST" });
+      const data = await res.json();
+      if (res.ok) {
+        setResendMessage("Email sent!");
+        setResendCooldown(60);
+        const interval = setInterval(() => {
+          setResendCooldown((prev) => {
+            if (prev <= 1) { clearInterval(interval); return 0; }
+            return prev - 1;
+          });
+        }, 1000);
+      } else if (res.status === 429) {
+        setResendMessage("Too many attempts. Please wait before trying again.");
+        setResendCooldown(60);
+        const interval = setInterval(() => {
+          setResendCooldown((prev) => {
+            if (prev <= 1) { clearInterval(interval); return 0; }
+            return prev - 1;
+          });
+        }, 1000);
+      } else {
+        setResendMessage(data.message || "Could not resend. Please try again.");
+      }
+    } catch {
+      setResendMessage("Network error. Please try again.");
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   return (
     <div className="signin-overlay" onClick={handleOverlayClick} data-testid="signin-modal-overlay">
       <div className={`signin-modal${(screen === "topicSelection" || screen === "locationSetup") ? " signin-modal-wide" : ""}`} data-testid="signin-modal">
@@ -646,14 +719,48 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
         </button>
 
         <div className="signin-modal-body">
-          {screen === "topicSelection" ? (
+          {screen === "emailVerification" ? (
+            <div className="signin-email-verification" data-testid="screen-email-verification">
+              <img
+                src={envelopeImage}
+                alt="Verification email sent"
+                className="signin-verify-envelope"
+                data-testid="img-verify-envelope"
+              />
+              <h2 className="signin-confirmation-title signin-verify-title" data-testid="text-verify-heading">
+                A verification email is now on its way to <span className="signin-verify-email">{email}</span>!
+              </h2>
+              <p className="signin-verify-body" data-testid="text-verify-body">
+                If you don't see it within 5 minutes in your inbox or the spam folder, let's try again.
+              </p>
+              <button
+                type="button"
+                className="signin-resend-button"
+                data-testid="button-resend-email"
+                onClick={handleResendEmail}
+                disabled={isResending || resendCooldown > 0}
+              >
+                <RotateCcw size={15} className="signin-resend-icon" />
+                {isResending
+                  ? "Sending…"
+                  : resendCooldown > 0
+                  ? `Resend email in ${resendCooldown}s`
+                  : "Resend email"}
+              </button>
+              {resendMessage && (
+                <p className="signin-verify-feedback" data-testid="text-resend-feedback">{resendMessage}</p>
+              )}
+            </div>
+          ) : screen === "topicSelection" ? (
             <div className="signin-topic-selection" data-testid="screen-topic-selection">
               <button
                 type="button"
                 className="signin-skip-button-top"
                 data-testid="button-skip-topics"
+                onClick={doRegisterAndVerify}
+                disabled={isSubmitting}
               >
-                Skip for now
+                {isSubmitting ? "Creating account…" : "Skip for now"}
               </button>
 
               <h2 className="signin-confirmation-title" data-testid="text-topic-title">
@@ -759,40 +866,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                 className="signin-submit-button"
                 data-testid="button-finish-onboarding"
                 disabled={isSubmitting}
-                onClick={async () => {
-                  setIsSubmitting(true);
-                  setLoginError("");
-                  const profilePhoto = generateRandomAvatar();
-                  const currentLocation = residenceCountry
-                    ? residenceUsState
-                      ? `${residenceUsState}, ${residenceCountry}`
-                      : residenceCountry
-                    : "";
-                  const placesLived = otherCountries
-                    .filter((c) => c.country)
-                    .map((c) => c.usState ? `${c.usState}, ${c.country}` : c.country);
-                  const result = await register({
-                    username: username || "UnlearnExplorer",
-                    email,
-                    password,
-                    avatarUrl: profilePhoto,
-                    currentLocation,
-                    showCurrentLocation: featureResidence,
-                    placesLived,
-                    showPlacesLived: featureOtherCountries,
-                    favoriteTags: selectedTags,
-                    misinfoSource: "",
-                    bio: "",
-                  });
-                  setIsSubmitting(false);
-                  if (result.success) {
-                    handleClose();
-                    navigate(onSuccessRedirect ?? currentPath);
-                  } else {
-                    setLoginError(result.error || "Registration failed. Please try again.");
-                    setScreen("auth");
-                  }
-                }}
+                onClick={doRegisterAndVerify}
               >
                 {isSubmitting ? "Creating account…" : "Finish"}
               </button>

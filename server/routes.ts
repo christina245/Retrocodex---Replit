@@ -85,6 +85,17 @@ function clearFailedAttempts(ip: string): void {
   failedLoginAttempts.delete(ip);
 }
 
+// Per-user resend-verification rate limit: max 3 per hour
+const resendVerificationLog = new Map<string, number[]>();
+function checkResendRateLimit(userId: string): boolean {
+  const now = Date.now();
+  const windowMs = 60 * 60 * 1000;
+  const attempts = (resendVerificationLog.get(userId) || []).filter(t => now - t < windowMs);
+  if (attempts.length >= 3) return false;
+  resendVerificationLog.set(userId, [...attempts, now]);
+  return true;
+}
+
 function requireAuth(req: any, res: any, next: any) {
   const clientIP = getClientIP(req);
   
@@ -372,6 +383,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/resend-verification", async (req, res) => {
     if (!req.session?.userId) {
       return res.status(401).json({ message: "Not authenticated" });
+    }
+    if (!checkResendRateLimit(req.session.userId)) {
+      return res.status(429).json({ message: "Too many resend attempts. Please wait before trying again." });
     }
     try {
       const [account] = await db.select({ email: userAccounts.email, emailVerified: userAccounts.emailVerified })

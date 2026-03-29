@@ -844,3 +844,77 @@
     font-size: 15px;
   }
 }
+
+/* ── Email Verification Screen ── */
+.signin-email-verification {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 1rem 1rem;
+  gap: 0.75rem;
+}
+
+.signin-verify-envelope {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 0;
+  background: white;
+}
+
+.signin-verify-title {
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 0.25rem 0 0;
+}
+
+.signin-verify-email {
+  font-weight: 700;
+  color: #FF5353;
+}
+
+.signin-verify-body {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  max-width: 320px;
+  margin: 0;
+}
+
+.signin-resend-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(44, 44, 44, 0.06);
+  color: #555;
+  border: 1px solid rgba(44, 44, 44, 0.12);
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.25rem;
+}
+
+.signin-resend-button:hover:not(:disabled) {
+  background: rgba(44, 44, 44, 0.1);
+}
+
+.signin-resend-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.signin-resend-icon {
+  color: #FF5353;
+  flex-shrink: 0;
+}
+
+.signin-verify-feedback {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
