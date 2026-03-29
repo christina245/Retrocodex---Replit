@@ -203,6 +203,21 @@ function requireUser(req: any, res: any, next: any) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // GET /api/auth/check-email — check if an email is already registered (sign-up only)
+  app.get("/api/auth/check-email", async (req, res) => {
+    const email = (req.query.email as string || "").toLowerCase().trim();
+    if (!email) return res.json({ exists: false });
+    try {
+      const [row] = await db.select({ id: userAccounts.id })
+        .from(userAccounts)
+        .where(eq(userAccounts.email, email))
+        .limit(1);
+      return res.json({ exists: !!row });
+    } catch {
+      return res.status(500).json({ exists: false });
+    }
+  });
+
   // POST /api/auth/register — create new user account + profile
   app.post("/api/auth/register", async (req, res) => {
     const ip = getClientIP(req);

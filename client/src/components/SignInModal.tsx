@@ -1,5 +1,6 @@
 import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle, RotateCcw } from "lucide-react";
 import envelopeImage from "@assets/email_1774815930235.png";
+import scrungyImage from "@assets/scrungy_saying_hi_1774818640303.png";
 import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useQuery } from "@tanstack/react-query";
@@ -476,6 +477,8 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
   const [isResending, setIsResending] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [resendMessage, setResendMessage] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   const [residenceCountry, setResidenceCountry] = useState("");
   const [residenceUsState, setResidenceUsState] = useState("");
@@ -529,6 +532,20 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
     }
   };
 
+  const handleEmailBlur = async () => {
+    if (!isSignUp || !email.trim()) return;
+    setIsCheckingEmail(true);
+    try {
+      const res = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email.trim())}`);
+      const data = await res.json();
+      setEmailError(data.exists ? "An account with this email already exists." : null);
+    } catch {
+      setEmailError(null);
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
@@ -538,6 +555,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
     }
     if (isSignUp) {
       if (usernameError !== null || username.trim() === "") return;
+      if (emailError) return;
       setScreen("locationSetup");
     } else {
       setIsSubmitting(true);
@@ -1010,7 +1028,11 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
             </div>
           ) : (
             <>
-              <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
+              {isSignUp ? (
+                <img src={scrungyImage} alt="Welcome to Retrocodex" className="signin-logo-signup" data-testid="img-signin-logo" />
+              ) : (
+                <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
+              )}
 
               <p className="signin-description" data-testid="text-signin-description">
                 {customTitle
@@ -1054,11 +1076,22 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                   <input
                     id="signin-email"
                     type={isSignUp ? "email" : "text"}
-                    className="signin-input"
+                    className={`signin-input${emailError ? " signin-input-error" : ""}`}
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(null); }}
+                    onBlur={handleEmailBlur}
                     data-testid="input-signin-email"
                   />
+                  {isCheckingEmail && (
+                    <p style={{ color: '#999', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }}>
+                      Checking…
+                    </p>
+                  )}
+                  {emailError && !isCheckingEmail && (
+                    <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-email-error">
+                      {emailError}
+                    </p>
+                  )}
                 </div>
 
                 <div className="signin-field">
