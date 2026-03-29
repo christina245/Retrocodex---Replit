@@ -872,7 +872,7 @@
 .signin-verify-title {
   font-size: 17px;
   line-height: 1.45;
-  margin: 0.25rem 0 0;
+  margin: 2rem 0 0;
 }
 
 .signin-verify-email {
@@ -902,7 +902,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  margin-top: 0.25rem;
+  margin-top: 1rem;
 }
 
 .signin-resend-button:hover:not(:disabled) {
