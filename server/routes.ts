@@ -274,11 +274,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .select({ id: userProfiles.id })
         .from(userProfiles)
         .where(eq(userProfiles.isAdmin, true));
-      await Promise.all(
-        adminProfiles
-          .filter((a) => a.id !== account.id)
-          .map((a) => storage.followUser(account.id, a.id).catch(() => {}))
-      );
+      const adminsToFollow = adminProfiles.filter((a) => a.id !== account.id);
+      for (const admin of adminsToFollow) {
+        await storage.followUser(account.id, admin.id);
+      }
 
       req.session.userId = account.id;
       clearAuthAttempts(ip);

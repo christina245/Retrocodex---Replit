@@ -1272,7 +1272,12 @@ export default function UserDashboard() {
 
                   <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
                     {feedTab === "for-you" && (
-                      forYouFeedLoading ? (
+                      !isLoggedIn ? (
+                        <div className="dashboard-feed-empty" data-testid="feed-empty-for-you-logged-out">
+                          <Search size={40} className="dashboard-feed-empty-icon" />
+                          <p className="dashboard-feed-empty-desc">Sign in to personalize your For You feed.</p>
+                        </div>
+                      ) : forYouFeedLoading ? (
                         <div className="dashboard-feed-empty" data-testid="feed-loading-for-you">
                           <p className="dashboard-feed-empty-desc">Loading activity...</p>
                         </div>
