@@ -632,6 +632,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/following — returns list of user IDs the current user follows (requires auth)
+  app.get("/api/following", requireUser, async (req, res) => {
+    try {
+      const ids = await storage.getFollowingIds(req.session.userId!);
+      return res.json(ids);
+    } catch (error) {
+      console.error("GET /api/following error:", error);
+      res.status(500).json({ message: "Failed to fetch following list" });
+    }
+  });
+
   // GET /api/feed — personalized following feed (requires auth)
   app.get("/api/feed", requireUser, async (req, res) => {
     try {

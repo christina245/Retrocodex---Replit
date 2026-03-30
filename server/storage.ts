@@ -727,6 +727,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(factSubmissions)
       .leftJoin(userProfiles, eq(factSubmissions.userId, userProfiles.id))
+      .where(eq(factSubmissions.status, "published"))
       .orderBy(desc(factSubmissions.createdAt))
       .limit(limit);
 

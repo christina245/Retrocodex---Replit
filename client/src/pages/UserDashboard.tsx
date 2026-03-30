@@ -722,6 +722,13 @@ export default function UserDashboard() {
     enabled: feedTab === "for-you",
   });
 
+  interface PublicProfileData { followerCount: number; followingCount: number; }
+  const { data: myPublicProfile } = useQuery<PublicProfileData>({
+    queryKey: ["/api/users", user?.username],
+    queryFn: () => fetch(`/api/users/${user?.username}`).then((r) => r.json()),
+    enabled: !!user?.username,
+  });
+
   interface MySubmission {
     id: string;
     mythHeader: string;
@@ -1249,127 +1256,6 @@ export default function UserDashboard() {
                           </p>
                         </div>
                       )
-                    )}
-
-                    {false && (
-                      <div className="following-feed" data-testid="feed-following-old">
-                        <div className="following-post" data-testid="following-post-1">
-                          <img src={placeholderPhoto} alt="LogicGamer_01" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/LogicGamer_01" className="following-post-username" data-testid="link-user-LogicGamer_01">LogicGamer_01</Link>
-                              <span className="following-post-action">submitted a new topic</span>
-                            </div>
-                            <span className="following-post-timestamp">2 mins ago</span>
-                          </div>
-                          <div className="following-post-body following-post-factcard">
-                            <FactCard
-                              fact={{
-                                id: "does-eating-sugar-make-kids-hyper",
-                                category: "EVERYDAY LIFE",
-                                categoryColor: "#0167A2",
-                                myth: "Eating too much sugar makes kids hyper.",
-                                truth: "There isn't a direct causal link between sugar and hyperactivity. Sugary foods are more likely to be present during exciting activities like birthday parties, creating an illusory correlation.",
-                                link: "/fact/does-eating-sugar-make-kids-hyper",
-                                coverPhoto: "/objects/uploads/74054346-bf6b-4820-9ace-6c5b7127937b.png",
-                              }}
-                              onSave={() => {}}
-                              onShare={() => {}}
-                              onComment={() => {}}
-                            />
-                          </div>
-                          </div>
-                        </div>
-
-                        <div className="following-post" data-testid="following-post-article">
-                          <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99">FactChecker_99</Link>
-                              <span className="following-post-action">submitted an article</span>
-                            </div>
-                            <span className="following-post-timestamp">8 mins ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <FeedArticleCard
-                              title="5 Myths You Might Hear Going Home For the Holidays"
-                              summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
-                              coverImage="/uploads/1764995940108-220172306.jpg"
-                              category="Everyday Life"
-                              slug="going-home-for-the-holidays-myths-2025"
-                            />
-                          </div>
-                          </div>
-                        </div>
-
-
-                        <div className="following-post" data-testid="following-post-3">
-                          <img src={placeholderPhoto} alt="Ackshually_42" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/Ackshually_42" className="following-post-username" data-testid="link-user-Ackshually_42">Ackshually_42</Link>
-                              <span className="following-post-action">commented on</span>
-                            </div>
-                            <span className="following-post-timestamp">3 hours ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
-                                  <p className="fact-myth">"Christopher Columbus discovered the Americas in 1492"</p>
-                                </Link>
-                                <p className="following-plain-comment" data-testid="following-plain-comment">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
-                                <div className="comment-actions" data-testid="following-comment-actions">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'following' ? null : 'following')} data-testid="button-reply-following">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-following">
-                                    <Heart size={14} />
-                                    <span>12 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-following">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'following' ? null : 'following')} data-testid="button-ellipsis-following">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'following' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-following">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-following">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-following">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {activeReplyId === 'following' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-following">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-following" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-following">Reply</button>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                              <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-following-3">
-                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                          </div>
-                        </div>
-                      </div>
                     )}
 
                     {feedTab === "local" && (
@@ -2508,6 +2394,19 @@ export default function UserDashboard() {
                           <Pencil size={16} />
                         </button>
                       </div>
+
+                      {allowFollows && myPublicProfile && (
+                        <div className="user-profile-follow-counts" data-testid="dashboard-follow-counts">
+                          <span data-testid="text-dashboard-follower-count">
+                            <strong>{myPublicProfile.followerCount}</strong>{" "}
+                            {myPublicProfile.followerCount === 1 ? "follower" : "followers"}
+                          </span>
+                          <span className="user-profile-follow-sep">·</span>
+                          <span data-testid="text-dashboard-following-count">
+                            <strong>{myPublicProfile.followingCount}</strong> following
+                          </span>
+                        </div>
+                      )}
 
                       <div className="user-profile-locations-wrapper" data-testid="user-profile-locations">
                         <div className="user-profile-current-location">
