@@ -54,6 +54,8 @@ export default function HolidaysPage() {
         link: `/fact/${fact.slug}`,
         coverPhoto: fact.coverPhoto || undefined,
         betaOnly: fact.betaOnly ?? false,
+        revisionYear: fact.revisionYear ?? undefined,
+        taughtUntilYear: fact.taughtUntilYear ?? undefined,
       }));
   }, [dbFacts]);
 

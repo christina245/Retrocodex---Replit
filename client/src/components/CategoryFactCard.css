@@ -67,6 +67,10 @@
   white-space: nowrap;
 }
 
+.category-fact-taught-until-tag {
+  background: #7B4E9E;
+}
+
 .category-fact-body {
   display: flex;
   flex: 1;

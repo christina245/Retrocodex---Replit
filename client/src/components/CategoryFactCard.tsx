@@ -13,6 +13,8 @@ export interface CategoryFact {
   dateAdded?: string;
   coverPhoto?: string;
   betaOnly?: boolean;
+  revisionYear?: number;
+  taughtUntilYear?: string;
 }
 
 interface CategoryFactCardProps {
@@ -81,13 +83,24 @@ export function CategoryFactCard({
           data-testid={`card-fact-${fact.id}`}
         >
           <div className="category-fact-header">
-            {fact.factFilters && fact.factFilters.length > 0 && (
+            {((fact.factFilters && fact.factFilters.length > 0) || fact.taughtUntilYear) && (
               <div className="category-fact-tags">
-                {fact.factFilters.map((filter, index) => (
-                  <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                    {toTitleCase(filter)}
+                {fact.factFilters && fact.factFilters.map((filter, index) => {
+                  const isOfficialRevision = filter.toLowerCase() === "official revision";
+                  const label = isOfficialRevision && fact.revisionYear
+                    ? `Official Revision · ${fact.revisionYear}`
+                    : toTitleCase(filter);
+                  return (
+                    <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {label}
+                    </span>
+                  );
+                })}
+                {fact.taughtUntilYear && (
+                  <span className="category-fact-tag category-fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
+                    Widely Taught Until {fact.taughtUntilYear}
                   </span>
-                ))}
+                )}
               </div>
             )}
           </div>
