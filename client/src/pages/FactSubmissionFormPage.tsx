@@ -136,7 +136,7 @@ export default function FactSubmissionFormPage() {
                 </div>
                 <h1 className="fact-form-success-title">Submission received!</h1>
                 <p className="fact-form-success-body">
-                  Thank you for your submission. If your topic is approved, we'll reach out to you if we need any additional information or for you to confirm our editorial changes.
+                  If your topic is approved, we'll reach out to you if we need any additional information or for you to confirm our editorial changes.
                 </p>
                 <div className="fact-form-success-actions">
                   <button
