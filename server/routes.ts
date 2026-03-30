@@ -1945,6 +1945,71 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
+  // POST /api/facts/:id/follow — follow a fact (requireUser)
+  app.post("/api/facts/:id/follow", requireUser, async (req, res) => {
+    try {
+      await storage.followFact(req.session.userId!, req.params.id);
+      return res.json({ following: true });
+    } catch (error) {
+      console.error("POST /api/facts/:id/follow error:", error);
+      res.status(500).json({ message: "Failed to follow fact" });
+    }
+  });
+
+  // DELETE /api/facts/:id/follow — unfollow a fact (requireUser)
+  app.delete("/api/facts/:id/follow", requireUser, async (req, res) => {
+    try {
+      await storage.unfollowFact(req.session.userId!, req.params.id);
+      return res.json({ following: false });
+    } catch (error) {
+      console.error("DELETE /api/facts/:id/follow error:", error);
+      res.status(500).json({ message: "Failed to unfollow fact" });
+    }
+  });
+
+  // GET /api/facts/:id/follow-status — check if current user follows a fact
+  app.get("/api/facts/:id/follow-status", requireUser, async (req, res) => {
+    try {
+      const following = await storage.getFactFollowStatus(req.session.userId!, req.params.id);
+      return res.json({ following });
+    } catch (error) {
+      console.error("GET /api/facts/:id/follow-status error:", error);
+      res.status(500).json({ message: "Failed to check follow status" });
+    }
+  });
+
+  // POST /api/facts/:id/publish-update — publish field updates to user feeds (admin only)
+  app.post("/api/facts/:id/publish-update", requireAuth, async (req, res) => {
+    try {
+      const { fields } = z.object({
+        fields: z.array(z.object({
+          updateType: z.enum(["mythHeader", "mythDetails", "truthHeader", "truthDetails", "timelineEntry", "nuanceEntry"]),
+          content: z.unknown(),
+        })).min(1, "At least one field update is required"),
+      }).parse(req.body);
+
+      await storage.createFactUpdateBatch(req.params.id, fields as any);
+      return res.json({ message: "Fact updates published" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("POST /api/facts/:id/publish-update error:", error);
+      res.status(500).json({ message: "Failed to publish updates" });
+    }
+  });
+
+  // GET /api/feed/fact-updates — get fact updates for facts the user follows
+  app.get("/api/feed/fact-updates", requireUser, async (req, res) => {
+    try {
+      const updates = await storage.getFactUpdatesFeed(req.session.userId!);
+      return res.json(updates);
+    } catch (error) {
+      console.error("GET /api/feed/fact-updates error:", error);
+      res.status(500).json({ message: "Failed to fetch fact updates feed" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

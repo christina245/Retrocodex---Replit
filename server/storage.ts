@@ -12,6 +12,8 @@ import {
   userProfiles,
   follows,
   factSubmissions,
+  factFollows,
+  factUpdates,
   type EmailSubscription, 
   type InsertEmailSubscription,
   type Fact,
@@ -33,9 +35,12 @@ import {
   type InsertComment,
   type CommentWithUser,
   type FeedItem,
+  type UpdateType,
+  type FactUpdateWithFact,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, arrayContains, inArray, sql, notInArray, ne, or } from "drizzle-orm";
+import crypto from "crypto";
 
 export interface IStorage {
   // Email subscriptions
@@ -108,6 +113,15 @@ export interface IStorage {
   getFollowingIds(userId: string): Promise<string[]>;
   getFollowingFeed(userId: string, limit?: number): Promise<FeedItem[]>;
   getForYouFeed(userId?: string, limit?: number): Promise<FeedItem[]>;
+
+  // Fact follows
+  followFact(userId: string, factId: string): Promise<void>;
+  unfollowFact(userId: string, factId: string): Promise<boolean>;
+  getFactFollowStatus(userId: string, factId: string): Promise<boolean>;
+
+  // Fact updates
+  createFactUpdateBatch(factId: string, updates: { updateType: UpdateType; content: unknown }[]): Promise<void>;
+  getFactUpdatesFeed(userId: string): Promise<FactUpdateWithFact[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -825,6 +839,85 @@ export class DatabaseStorage implements IStorage {
     return [...factItems, ...articleItems]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit);
+  }
+
+  // ─── Fact Follows ────────────────────────────────────────────────────────────
+
+  async followFact(userId: string, factId: string): Promise<void> {
+    await db
+      .insert(factFollows)
+      .values({ userId, factId })
+      .onConflictDoNothing();
+  }
+
+  async unfollowFact(userId: string, factId: string): Promise<boolean> {
+    const result = await db
+      .delete(factFollows)
+      .where(and(eq(factFollows.userId, userId), eq(factFollows.factId, factId)))
+      .returning();
+    return result.length > 0;
+  }
+
+  async getFactFollowStatus(userId: string, factId: string): Promise<boolean> {
+    const [row] = await db
+      .select({ userId: factFollows.userId })
+      .from(factFollows)
+      .where(and(eq(factFollows.userId, userId), eq(factFollows.factId, factId)))
+      .limit(1);
+    return !!row;
+  }
+
+  // ─── Fact Updates ─────────────────────────────────────────────────────────────
+
+  async createFactUpdateBatch(factId: string, updates: { updateType: UpdateType; content: unknown }[]): Promise<void> {
+    if (updates.length === 0) return;
+    const publishBatchId = crypto.randomUUID();
+    const now = new Date();
+    await db.insert(factUpdates).values(
+      updates.map((u) => ({
+        factId,
+        publishBatchId,
+        updateType: u.updateType,
+        content: u.content as any,
+        publishedAt: now,
+      }))
+    );
+  }
+
+  async getFactUpdatesFeed(userId: string): Promise<FactUpdateWithFact[]> {
+    // Get all fact IDs the user follows
+    const followedRows = await db
+      .select({ factId: factFollows.factId })
+      .from(factFollows)
+      .where(eq(factFollows.userId, userId));
+
+    if (followedRows.length === 0) return [];
+    const followedFactIds = followedRows.map((r) => r.factId);
+
+    const rows = await db
+      .select({
+        id: factUpdates.id,
+        factId: factUpdates.factId,
+        publishBatchId: factUpdates.publishBatchId,
+        updateType: factUpdates.updateType,
+        content: factUpdates.content,
+        publishedAt: factUpdates.publishedAt,
+        factSlug: facts.slug,
+        factMythHeader: facts.mythHeader,
+        factCoverPhoto: facts.coverPhoto,
+      })
+      .from(factUpdates)
+      .innerJoin(facts, eq(factUpdates.factId, facts.id))
+      .where(inArray(factUpdates.factId, followedFactIds))
+      .orderBy(desc(factUpdates.publishedAt));
+
+    return rows.map((r) => ({
+      ...r,
+      updateType: r.updateType as UpdateType,
+      factSlug: r.factSlug,
+      factMythHeader: r.factMythHeader,
+      factCoverPhoto: r.factCoverPhoto ?? null,
+    }));
   }
 }
 

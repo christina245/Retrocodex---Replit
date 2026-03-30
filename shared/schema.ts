@@ -481,6 +481,38 @@ export const follows = pgTable("follows", {
 
 export type Follow = typeof follows.$inferSelect;
 
+// Fact follows — user follows an individual fact (for update notifications)
+export const factFollows = pgTable("fact_follows", {
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  pk: primaryKey({ columns: [table.userId, table.factId] }),
+}));
+
+export type FactFollow = typeof factFollows.$inferSelect;
+
+// Fact updates — records published by admins for specific fact fields
+export const UPDATE_TYPES = ["mythHeader", "mythDetails", "truthHeader", "truthDetails", "timelineEntry", "nuanceEntry"] as const;
+export type UpdateType = typeof UPDATE_TYPES[number];
+
+export const factUpdates = pgTable("fact_updates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
+  publishBatchId: varchar("publish_batch_id").notNull(),
+  updateType: text("update_type").notNull().$type<UpdateType>(),
+  content: jsonb("content").notNull(),
+  publishedAt: timestamp("published_at").notNull().defaultNow(),
+});
+
+export type FactUpdate = typeof factUpdates.$inferSelect;
+
+export type FactUpdateWithFact = FactUpdate & {
+  factSlug: string;
+  factMythHeader: string;
+  factCoverPhoto: string | null;
+};
+
 // Feed item type — union of comment, fact, and article activity
 export type FeedItem = {
   type: "comment" | "fact" | "article";

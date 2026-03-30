@@ -404,3 +404,133 @@
   color: #c4a98a;
   border-color: #4a3828;
 }
+
+/* ─── Subscribe button following state ───────────────────────────── */
+.subscribe-button--following {
+  background: rgba(255, 83, 83, 0.1);
+  color: #FF5353;
+}
+
+.subscribe-button--following:hover {
+  background: #FF5353;
+  color: #FFFFFF;
+}
+
+/* ─── Follow Fact Modal ──────────────────────────────────────────── */
+.follow-fact-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.follow-fact-modal {
+  background: var(--background);
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 2.5rem 2rem 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.follow-fact-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.follow-fact-modal-close:hover {
+  color: hsl(var(--foreground));
+}
+
+.follow-fact-modal-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+
+.follow-fact-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  margin: 0 0 0.75rem;
+  font-family: 'Public Sans', sans-serif;
+}
+
+.follow-fact-modal-body {
+  font-size: 0.9rem;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.6;
+  margin: 0 0 1.75rem;
+  font-family: 'Public Sans', sans-serif;
+}
+
+.follow-fact-modal-body strong {
+  color: hsl(var(--foreground));
+}
+
+.follow-fact-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.follow-fact-modal-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #FF5353;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.follow-fact-modal-confirm:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.follow-fact-modal-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.follow-fact-modal-cancel {
+  background: none;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.15s;
+}
+
+.follow-fact-modal-cancel:hover {
+  color: hsl(var(--foreground));
+}

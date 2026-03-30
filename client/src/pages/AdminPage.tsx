@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2 } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
@@ -51,6 +52,7 @@ function generateId(): string {
 
 export default function AdminPage() {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
@@ -139,6 +141,8 @@ export default function AdminPage() {
   const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [isPublishingToFeed, setIsPublishingToFeed] = useState(false);
+  const [savedFactSnapshot, setSavedFactSnapshot] = useState<{ mythHeader: string; mythDetails: string; truthHeader: string; truthDetails: string } | null>(null);
 
   const CATEGORY_ROUTES: Record<string, string> = {
     "Health & Fitness": "/health-fitness",
@@ -562,6 +566,7 @@ export default function AdminPage() {
     setSubmissionUsername("");
     setSubmittedByUserId("");
     setSubmissionActionMsg(null);
+    setSavedFactSnapshot(null);
   };
 
   // Reset blog form
@@ -779,6 +784,12 @@ export default function AdminPage() {
     setNuances(fact.nuances || []);
     setRelatedMythIds(fact.relatedMythIds || []);
     setSubmittedByUserId(fact.submittedByUserId || "");
+    setSavedFactSnapshot({
+      mythHeader: fact.mythHeader ?? "",
+      mythDetails: fact.mythDetails ?? "",
+      truthHeader: fact.truthHeader ?? "",
+      truthDetails: fact.truthDetails ?? "",
+    });
     setCurrentView("add-fact");
   };
 
@@ -1096,6 +1107,64 @@ export default function AdminPage() {
   };
 
   // Form submission
+  const handlePublishToFeed = async () => {
+    if (!editingFactId || !password) return;
+    setIsPublishingToFeed(true);
+    try {
+      const fields: { updateType: string; content: unknown }[] = [];
+      const snap = savedFactSnapshot;
+
+      if (!snap || mythHeader !== snap.mythHeader) {
+        fields.push({ updateType: "mythHeader", content: mythHeader });
+      }
+      if (!snap || mythDetails !== snap.mythDetails) {
+        fields.push({ updateType: "mythDetails", content: mythDetails });
+      }
+      if (!snap || truthHeader !== snap.truthHeader) {
+        fields.push({ updateType: "truthHeader", content: truthHeader });
+      }
+      if (!snap || truthDetails !== snap.truthDetails) {
+        fields.push({ updateType: "truthDetails", content: truthDetails });
+      }
+
+      if (fields.length === 0) {
+        toast({
+          title: "No changes to publish",
+          description: "The form fields haven't changed since loading the fact.",
+        });
+        return;
+      }
+
+      const response = await fetch(`/api/facts/${editingFactId}/publish-update`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Basic " + btoa("admin:" + password),
+        },
+        body: JSON.stringify({ fields }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to publish updates");
+      }
+
+      setSavedFactSnapshot({ mythHeader, mythDetails, truthHeader, truthDetails });
+      toast({
+        title: "Published to user feeds",
+        description: `${fields.length} update${fields.length !== 1 ? "s" : ""} sent to followers of this topic.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to publish updates",
+        variant: "destructive",
+      });
+    } finally {
+      setIsPublishingToFeed(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -2187,6 +2256,17 @@ export default function AdminPage() {
                     >
                       {isSubmitting ? (editingFactId ? "Saving..." : "Creating...") : (editingFactId ? "Save Changes" : "Create Fact")}
                     </button>
+                    {editingFactId && (
+                      <button
+                        type="button"
+                        className="publish-to-feed-button"
+                        onClick={handlePublishToFeed}
+                        disabled={isPublishingToFeed}
+                        data-testid="button-publish-to-feed"
+                      >
+                        {isPublishingToFeed ? "Publishing..." : "Publish to User Feeds"}
+                      </button>
+                    )}
                   </>
                 )}
               </div>

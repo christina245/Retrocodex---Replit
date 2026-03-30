@@ -3,8 +3,9 @@ import { useParams } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Pencil, BellRing } from "lucide-react";
+import { Pencil, BellRing, Bell, BellOff, X } from "lucide-react";
 import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
+import envelopeImage from "@assets/email_1774815930235.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { ShareModal } from "@/components/ShareModal";
@@ -33,13 +34,14 @@ export default function SingleFactPage() {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
+  const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
   const { showVerifyModal, setShowVerifyModal, requireVerified } = useVerificationGuard();
 
@@ -114,8 +116,56 @@ export default function SingleFactPage() {
     }
   };
 
+  const { data: followStatusData } = useQuery<{ following: boolean }>({
+    queryKey: ["/api/facts", factData?.id, "follow-status"],
+    queryFn: async () => {
+      const res = await fetch(`/api/facts/${factData!.id}/follow-status`);
+      if (!res.ok) throw new Error("Failed to fetch follow status");
+      return res.json();
+    },
+    enabled: !!factData?.id && isLoggedIn,
+  });
+
+  const isFollowing = followStatusData?.following ?? false;
+
+  const followMutation = useMutation({
+    mutationFn: async () => {
+      const method = isFollowing ? "DELETE" : "POST";
+      return await apiRequest(method, `/api/facts/${factData!.id}/follow`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/facts", factData?.id, "follow-status"] });
+      if (!isFollowing) {
+        toast({
+          title: "Following this topic",
+          description: "You'll be notified when this topic is updated.",
+        });
+      }
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update follow status. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubscribeClick = () => {
     setIsSubscribeModalOpen(true);
+  };
+
+  const handleFollowClick = () => {
+    if (!isLoggedIn) {
+      setSignInContext("Sign in to follow this topic and get notified when it's updated.");
+      setShowSignIn(true);
+      return;
+    }
+    if (!isFollowing) {
+      setIsFollowModalOpen(true);
+    } else {
+      followMutation.mutate();
+    }
   };
 
   const handleShareClick = () => {
@@ -223,17 +273,27 @@ export default function SingleFactPage() {
               onMouseLeave={() => setShowSubscribeTooltip(false)}
             >
               <button 
-                className="subscribe-button"
-                onClick={handleSubscribeClick}
+                className={`subscribe-button${isFollowing ? " subscribe-button--following" : ""}`}
+                onClick={handleFollowClick}
                 data-testid="button-subscribe"
-                aria-label="Subscribe to fact updates"
+                aria-label={isFollowing ? "Unfollow this topic" : "Follow this topic"}
+                disabled={followMutation.isPending}
               >
-                <BellRing className="subscribe-icon" />
-                <span>Follow</span>
+                {isFollowing ? (
+                  <>
+                    <BellOff className="subscribe-icon" />
+                    <span>Unfollow</span>
+                  </>
+                ) : (
+                  <>
+                    <BellRing className="subscribe-icon" />
+                    <span>Follow</span>
+                  </>
+                )}
               </button>
               {showSubscribeTooltip && (
                 <div className="subscribe-tooltip" data-testid="tooltip-subscribe">
-                  Stay updated if this information evolves.
+                  {isFollowing ? "Stop receiving updates for this topic." : "Stay updated if this information evolves."}
                 </div>
               )}
             </div>
@@ -319,7 +379,48 @@ export default function SingleFactPage() {
         onClose={() => setIsSubscribeModalOpen(false)}
         onSubmit={(email) => handleEmailSubmit(email, "subscribe-modal")}
       />
-      
+
+      {isFollowModalOpen && (
+        <div className="follow-fact-modal-overlay" data-testid="follow-fact-modal" onClick={() => setIsFollowModalOpen(false)}>
+          <div className="follow-fact-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="follow-fact-modal-close"
+              onClick={() => setIsFollowModalOpen(false)}
+              data-testid="button-close-follow-modal"
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+            <img src={envelopeImage} alt="" className="follow-fact-modal-image" />
+            <h2 className="follow-fact-modal-title">Follow this topic</h2>
+            <p className="follow-fact-modal-body">
+              You'll receive an email to <strong>{user?.email ?? "your email"}</strong> whenever this topic is updated or evolves.
+            </p>
+            <div className="follow-fact-modal-actions">
+              <button
+                className="follow-fact-modal-confirm"
+                data-testid="button-confirm-follow"
+                onClick={() => {
+                  followMutation.mutate();
+                  setIsFollowModalOpen(false);
+                }}
+                disabled={followMutation.isPending}
+              >
+                <Bell size={15} />
+                Follow Topic
+              </button>
+              <button
+                className="follow-fact-modal-cancel"
+                data-testid="button-cancel-follow"
+                onClick={() => setIsFollowModalOpen(false)}
+              >
+                Maybe later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {shareModalFact && (
         <ShareModal 
           isOpen={!!shareModalFact}

@@ -10,7 +10,7 @@ import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";
-import type { Fact as DbFact, FeedItem } from "@shared/schema";
+import type { Fact as DbFact, FeedItem, FactUpdateWithFact, UpdateType } from "@shared/schema";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
@@ -820,6 +820,11 @@ export default function UserDashboard() {
     enabled: feedTab === "for-you",
   });
 
+  const { data: factUpdatesFeed = [], isLoading: factUpdatesFeedLoading } = useQuery<FactUpdateWithFact[]>({
+    queryKey: ["/api/feed/fact-updates"],
+    enabled: feedTab === "fact-updates",
+  });
+
   interface PublicProfileData { followerCount: number; followingCount: number; }
   const { data: myPublicProfile } = useQuery<PublicProfileData>({
     queryKey: ["/api/users", user?.username],
@@ -1469,107 +1474,144 @@ export default function UserDashboard() {
                       </div>
                     )}
 
-                    {feedTab === "fact-updates" && (
-                      <div className="following-feed" data-testid="feed-fact-updates">
-
-                        {/* Fact Update 1: Food Pyramid revision */}
-                        <div className="activity-post" data-testid="fact-update-post-1">
-                          <div className="activity-post-icon-col">
-                            <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-link">
-                                  <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
-                                </Link>
-                              </div>
-                              <span className="following-post-timestamp">1 day ago</span>
+                    {feedTab === "fact-updates" && (() => {
+                      if (factUpdatesFeedLoading) {
+                        return (
+                          <div className="following-feed" data-testid="feed-fact-updates">
+                            <div className="dashboard-feed-empty">
+                              <p className="dashboard-feed-empty-desc">Loading updates...</p>
                             </div>
-                            <div className="activity-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <p className="activity-submitted-label">Revision:</p>
-                                  <div className="activity-submitted-revision">
-                                    <Check size={16} className="activity-revision-check" />
-                                    <p className="activity-truth-text">In 2026, the US government introduced a new food pyramid that prioritized vegetables and protein while relegating grains to the bottom.</p>
-                                  </div>
+                          </div>
+                        );
+                      }
+
+                      if (factUpdatesFeed.length === 0) {
+                        return (
+                          <div className="following-feed" data-testid="feed-fact-updates">
+                            <div className="dashboard-feed-empty" data-testid="fact-updates-empty">
+                              <BellRing size={32} strokeWidth={1.5} className="dashboard-feed-empty-icon" />
+                              <p className="dashboard-feed-empty-title">No updates yet</p>
+                              <p className="dashboard-feed-empty-desc">Follow topics on their fact pages to get notified when they're updated.</p>
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      // Group by publishBatchId, keep order by first occurrence
+                      const batchMap = new Map<string, FactUpdateWithFact[]>();
+                      for (const update of factUpdatesFeed) {
+                        const arr = batchMap.get(update.publishBatchId) ?? [];
+                        arr.push(update);
+                        batchMap.set(update.publishBatchId, arr);
+                      }
+                      const batches = Array.from(batchMap.values());
+
+                      const getUpdateIcon = (type: UpdateType) => {
+                        if (type === "timelineEntry") return <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />;
+                        if (type === "nuanceEntry") return <PlusCircle size={16} className="activity-revision-icon" />;
+                        return <Check size={16} className="activity-revision-check" />;
+                      };
+
+                      const getUpdateLabel = (type: UpdateType): string => {
+                        const labels: Record<UpdateType, string> = {
+                          mythHeader: "Myth header updated",
+                          mythDetails: "Myth details updated",
+                          truthHeader: "Truth updated",
+                          truthDetails: "Truth details updated",
+                          timelineEntry: "New timeline entry",
+                          nuanceEntry: "New nuance added",
+                        };
+                        return labels[type] ?? "Updated";
+                      };
+
+                      const formatRelativeTime = (date: string | Date) => {
+                        const d = new Date(date).getTime();
+                        const now = Date.now();
+                        const diff = now - d;
+                        const minutes = Math.floor(diff / 60000);
+                        if (minutes < 60) return `${minutes}m ago`;
+                        const hours = Math.floor(minutes / 60);
+                        if (hours < 24) return `${hours}h ago`;
+                        const days = Math.floor(hours / 24);
+                        if (days < 7) return `${days}d ago`;
+                        return new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                      };
+
+                      const getContentText = (update: FactUpdateWithFact): string => {
+                        const c = update.content as any;
+                        if (typeof c === "string") return c;
+                        if (c && typeof c === "object") {
+                          if (c.text) return c.text;
+                          if (c.year && c.description) return `${c.year}: ${c.description}`;
+                          return JSON.stringify(c);
+                        }
+                        return "";
+                      };
+
+                      const getTimelineYear = (update: FactUpdateWithFact): string | null => {
+                        const c = update.content as any;
+                        if (c && typeof c === "object" && c.year) return String(c.year);
+                        return null;
+                      };
+
+                      return (
+                        <div className="following-feed" data-testid="feed-fact-updates">
+                          {batches.map((batch, batchIdx) => {
+                            const first = batch[0];
+                            const factPath = `/fact/${first.factSlug}`;
+                            const timestamp = formatRelativeTime(first.publishedAt);
+                            return (
+                              <div className="activity-post" key={first.publishBatchId} data-testid={`fact-update-post-${batchIdx + 1}`}>
+                                <div className="activity-post-icon-col">
+                                  <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
                                 </div>
-                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-cover-link" data-testid="cover-link-fact-update-1">
-                                  <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Fact Update 2: Pluto - timeline entry revision */}
-                        <div className="activity-post" data-testid="fact-update-post-2">
-                          <div className="activity-post-icon-col">
-                            <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <Link href="/fact/is-pluto-a-planet" className="following-post-link">
-                                  <p className="fact-myth">"Pluto is a planet."</p>
-                                </Link>
-                              </div>
-                              <span className="following-post-timestamp">3 days ago</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <p className="activity-submitted-label">Revision:</p>
-                                  <div className="activity-submitted-revision">
-                                    <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />
-                                    <div className="activity-timeline-revision">
-                                      <p className="activity-timeline-year">2026</p>
-                                      <p className="activity-truth-text">New Horizons data continued to reveal Pluto's geological complexity, including evidence of a subsurface ocean beneath its icy crust. Despite renewed public petitions, the IAU reaffirmed its 2006 classification, noting that the criteria for planetary status remain unchanged.</p>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      <Link href={factPath} className="following-post-link">
+                                        <p className="fact-myth">"{first.factMythHeader}"</p>
+                                      </Link>
+                                    </div>
+                                    <span className="following-post-timestamp">{timestamp}</span>
+                                  </div>
+                                  <div className="activity-post-body">
+                                    <div className="following-post-body-content">
+                                      <div className="following-post-body-left">
+                                        {batch.map((update) => {
+                                          const contentText = getContentText(update);
+                                          const timelineYear = getTimelineYear(update);
+                                          return (
+                                            <div key={update.id}>
+                                              <p className="activity-submitted-label">{getUpdateLabel(update.updateType)}:</p>
+                                              <div className="activity-submitted-revision">
+                                                {getUpdateIcon(update.updateType)}
+                                                {update.updateType === "timelineEntry" && timelineYear ? (
+                                                  <div className="activity-timeline-revision">
+                                                    <p className="activity-timeline-year">{timelineYear}</p>
+                                                    <p className="activity-truth-text">{contentText}</p>
+                                                  </div>
+                                                ) : (
+                                                  <p className="activity-truth-text">{contentText}</p>
+                                                )}
+                                              </div>
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                      {first.factCoverPhoto && (
+                                        <Link href={factPath} className="following-post-cover-link" data-testid={`cover-link-fact-update-${batchIdx + 1}`}>
+                                          <img src={first.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                        </Link>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
-                                <Link href="/fact/is-pluto-a-planet" className="following-post-cover-link" data-testid="cover-link-fact-update-2">
-                                  <img src="/objects/uploads/0c6481cd-9156-4d02-a7c1-db51995f9432.png" alt="" className="following-post-cover-photo" />
-                                </Link>
                               </div>
-                            </div>
-                          </div>
+                            );
+                          })}
                         </div>
-
-                        {/* Fact Update 3: Five senses - truth details revision */}
-                        <div className="activity-post" data-testid="fact-update-post-3">
-                          <div className="activity-post-icon-col">
-                            <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <Link href="/fact/do-humans-only-have-five-senses" className="following-post-link">
-                                  <p className="fact-myth">"Humans only have five senses."</p>
-                                </Link>
-                              </div>
-                              <span className="following-post-timestamp">1 week ago</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <p className="activity-submitted-label">Revision:</p>
-                                  <div className="activity-submitted-revision">
-                                    <Check size={16} className="activity-revision-check" />
-                                    <p className="activity-truth-text">Researchers have since identified at least 21 distinct senses, including proprioception (body position), nociception (pain), thermoception (temperature), equilibrioception (balance), and interoception (internal body states like hunger and thirst). The original five-sense model attributed to Aristotle was a simplification that persisted for centuries.</p>
-                                  </div>
-                                </div>
-                                <Link href="/fact/do-humans-only-have-five-senses" className="following-post-cover-link" data-testid="cover-link-fact-update-3">
-                                  <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    )}
+                      );
+                    })()}
 
                   </div>
                 </>
