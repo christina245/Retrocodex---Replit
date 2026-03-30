@@ -2723,7 +2723,7 @@ a.following-post-fact-link:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  margin-right: 12rem;
+  margin-right: 1rem;
   margin-left: 1.5rem;
 }
 
