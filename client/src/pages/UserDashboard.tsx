@@ -544,7 +544,8 @@ interface FeedPostHandlers {
 }
 
 function feedItemToFactCard(item: FeedItem): FactCardFact {
-  const categoryName = item.factCategories?.[0] ?? "";
+  const rawCategory = item.factCategories?.[0] ?? "";
+  const categoryName = rawCategory.toUpperCase();
   const catConfig = getCategoryConfig(categoryName);
   return {
     id: item.id,
@@ -1301,7 +1302,7 @@ export default function UserDashboard() {
                           <p className="dashboard-feed-empty-desc">Loading activity...</p>
                         </div>
                       ) : forYouFeed.length > 0 ? (
-                        <div className="following-feed" data-testid="feed-for-you">
+                        <div className="feed-for-you-grid" data-testid="feed-for-you">
                           {forYouFeed.map((item, i) => (
                             <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} handlers={feedHandlers} />
                           ))}

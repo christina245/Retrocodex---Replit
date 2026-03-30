@@ -2717,3 +2717,37 @@ a.following-post-fact-link:hover {
 .feed-add-topics-link:hover {
   opacity: 0.8;
 }
+
+/* ── For You feed: 2-column grid ── */
+.feed-for-you-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-right: 12rem;
+  margin-left: 1.5rem;
+}
+
+.feed-for-you-grid .following-post--fact,
+.feed-for-you-grid .following-post--article {
+  padding: 0;
+  border: none;
+  background: none;
+  min-width: 0;
+}
+
+.feed-for-you-grid .fact-card-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-for-you-grid .fact-footer {
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .feed-for-you-grid {
+    grid-template-columns: 1fr;
+    margin-right: 1.5rem;
+  }
+}
