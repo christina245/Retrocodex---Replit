@@ -935,10 +935,10 @@ export default function UserDashboard() {
                       data-testid="img-verified-success"
                     />
                     <h2 className="signin-confirmation-title signin-verify-title" data-testid="text-verified-heading">
-                      Email successfully verified!
+                      Email successfully verified.
                     </h2>
                     <p className="signin-verify-body" data-testid="text-verified-body">
-                      You now have full access to Retrocodex. Welcome aboard!
+                      Welcome aboard!
                     </p>
                   </>
                 )}
@@ -954,7 +954,7 @@ export default function UserDashboard() {
                       Already verified
                     </h2>
                     <p className="signin-verify-body" data-testid="text-already-verified-body">
-                      Your email is already verified — you're all set.
+                      Your email is already verified. You're all set!
                     </p>
                   </>
                 )}
@@ -975,7 +975,7 @@ export default function UserDashboard() {
                   data-testid="button-dismiss-verified-modal"
                   style={{ marginTop: "0.5rem" }}
                 >
-                  Got it
+                  Keep Unlearning
                 </button>
               </div>
             </div>

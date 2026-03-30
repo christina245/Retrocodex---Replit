@@ -10,7 +10,12 @@ interface VerifyEmailModalProps {
 }
 
 export function VerifyEmailModal({ onClose }: VerifyEmailModalProps) {
-  const { user } = useAuth();
+  const { user, refetchUser } = useAuth();
+
+  async function handleClose() {
+    await refetchUser();
+    onClose();
+  }
   const { toast } = useToast();
   const [isSending, setIsSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -51,7 +56,7 @@ export function VerifyEmailModal({ onClose }: VerifyEmailModalProps) {
     <div className="signin-overlay" data-testid="verify-email-modal">
       <div className="signin-modal" data-testid="verify-email-modal-inner">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="signin-close"
           data-testid="button-close-verify-modal"
           aria-label="Close"

@@ -25,6 +25,7 @@ interface AuthContextType {
   register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
   updateUser: (partial: Partial<Omit<UserData, "id" | "email">>) => Promise<void>;
   logout: () => Promise<void>;
+  refetchUser: () => Promise<void>;
 }
 
 export interface RegisterData {
@@ -49,6 +50,7 @@ const AuthContext = createContext<AuthContextType>({
   register: async () => ({ success: false }),
   updateUser: async () => {},
   logout: async () => {},
+  refetchUser: async () => {},
 });
 
 function mapApiResponse(data: any): UserData {
@@ -73,6 +75,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const refetchUser = useCallback(async () => {
+    try {
+      const res = await fetch("/api/me", { credentials: "include" });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(mapApiResponse(data));
+      } else {
+        setUser(null);
+      }
+    } catch {}
+  }, []);
+
   useEffect(() => {
     fetch("/api/me", { credentials: "include" })
       .then((res) => {
@@ -85,6 +99,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .catch(() => {})
       .finally(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      if (user) refetchUser();
+    };
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [user, refetchUser]);
 
   const login = useCallback(async (identifier: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
@@ -154,7 +176,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, login, register, updateUser, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn: !!user, isLoading, login, register, updateUser, logout, refetchUser }}>
       {children}
     </AuthContext.Provider>
   );
