@@ -10,6 +10,43 @@
   margin-bottom: 4px;
 }
 
+/* Sign-in prompt for unauthenticated users */
+.sign-in-to-comment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  background: white;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: #878787;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s;
+}
+
+.sign-in-to-comment:hover {
+  border-color: #aaa;
+  color: #2C2C2C;
+}
+
+.comment-error {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #FF5353;
+  margin: 0;
+}
+
+.inline-reply-composer {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .comment-input-collapsed {
   display: flex;
   align-items: center;

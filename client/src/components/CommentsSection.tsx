@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { Filter, Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2 } from "lucide-react";
+import { Filter, Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, LogIn } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
@@ -27,7 +27,7 @@ function formatDate(date: Date | string) {
 }
 
 function buildTree(comments: CommentWithUser[]) {
-  const map: Record<string, CommentWithUser & { children: (CommentWithUser & { children: any[] })[] }> = {};
+  const map: Record<string, CommentWithUser & { children: any[] }> = {};
   const roots: (CommentWithUser & { children: any[] })[] = [];
   comments.forEach(c => { map[c.id] = { ...c, children: [] }; });
   comments.forEach(c => {
@@ -42,20 +42,85 @@ function buildTree(comments: CommentWithUser[]) {
 
 type TreeComment = CommentWithUser & { children: TreeComment[] };
 
+interface InlineReplyComposerProps {
+  parentUsername: string;
+  onSubmit: (body: string) => void;
+  onCancel: () => void;
+  isPending: boolean;
+}
+
+function InlineReplyComposer({ parentUsername, onSubmit, onCancel, isPending }: InlineReplyComposerProps) {
+  const [body, setBody] = useState(`@${parentUsername} `);
+  const [error, setError] = useState<string | null>(null);
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  const handleSubmit = () => {
+    const trimmed = body.trim();
+    if (!trimmed) {
+      setError("Comment cannot be empty.");
+      return;
+    }
+    setError(null);
+    onSubmit(trimmed);
+  };
+
+  return (
+    <div className="inline-reply-composer">
+      <p className="markdown-hint">Markdown is supported.</p>
+      <textarea
+        ref={ref}
+        className="comment-textarea"
+        placeholder={`Replying to @${parentUsername}…`}
+        value={body}
+        onChange={e => { setBody(e.target.value); if (error) setError(null); }}
+        rows={3}
+        autoFocus
+        data-testid="input-reply"
+      />
+      {error && <p className="comment-error" data-testid="error-reply">{error}</p>}
+      <div className="comment-input-buttons">
+        <button
+          className="btn-cancel-comment"
+          onClick={onCancel}
+          data-testid="button-cancel-reply"
+        >
+          Cancel
+        </button>
+        <button
+          className="btn-submit-comment"
+          onClick={handleSubmit}
+          disabled={isPending}
+          data-testid="button-submit-reply"
+        >
+          {isPending ? "Posting…" : "Comment"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 interface CommentNodeProps {
   comment: TreeComment;
   depth: number;
   factId: string;
+  isLoggedIn: boolean;
   userId?: string;
   isAdmin?: boolean;
-  onReply: (parentId: string, username: string) => void;
   onDelete: (id: string) => void;
   onUpvote: (id: string) => void;
+  onLoginClick?: (msg: string) => void;
   pendingUpvote: string | null;
   pendingDelete: string | null;
+  postReply: (parentId: string, body: string) => Promise<void>;
+  replyPending: boolean;
 }
 
-function CommentNode({ comment, depth, factId, userId, isAdmin, onReply, onDelete, onUpvote, pendingUpvote, pendingDelete }: CommentNodeProps) {
+function CommentNode({
+  comment, depth, factId, isLoggedIn, userId, isAdmin,
+  onDelete, onUpvote, onLoginClick, pendingUpvote, pendingDelete,
+  postReply, replyPending
+}: CommentNodeProps) {
+  const [replyOpen, setReplyOpen] = useState(false);
   const canDelete = isAdmin || comment.userId === userId;
   const isUpvoting = pendingUpvote === comment.id;
   const isDeleting = pendingDelete === comment.id;
@@ -63,6 +128,16 @@ function CommentNode({ comment, depth, factId, userId, isAdmin, onReply, onDelet
   const hasCurrentLocation = comment.showCurrentLocation && comment.currentLocation;
   const hasPlacesLived = comment.showPlacesLived && comment.placesLived && comment.placesLived.length > 0;
   const showLocationRow = hasCurrentLocation || hasPlacesLived;
+
+  const handleReply = () => {
+    if (!isLoggedIn) { onLoginClick?.("Sign in to reply to comments"); return; }
+    setReplyOpen(true);
+  };
+
+  const handleReplySubmit = async (body: string) => {
+    await postReply(comment.id, body);
+    setReplyOpen(false);
+  };
 
   return (
     <div className={`comment-thread-node ${depth > 0 ? "comment-reply" : ""}`} data-testid={`comment-${comment.id}`}>
@@ -111,20 +186,21 @@ function CommentNode({ comment, depth, factId, userId, isAdmin, onReply, onDelet
           </div>
 
           <div className="comment-actions">
-            {userId && (
-              <button
-                className="comment-action"
-                onClick={() => onReply(comment.id, comment.username)}
-                data-testid={`button-reply-${comment.id}`}
-              >
-                <CornerUpLeft size={14} />
-                <span>Reply</span>
-              </button>
-            )}
+            <button
+              className="comment-action"
+              onClick={handleReply}
+              data-testid={`button-reply-${comment.id}`}
+            >
+              <CornerUpLeft size={14} />
+              <span>Reply</span>
+            </button>
             <button
               className={`comment-action upvote-action ${comment.isUpvotedByMe ? "upvoted" : ""}`}
-              onClick={() => onUpvote(comment.id)}
-              disabled={isUpvoting || !userId}
+              onClick={() => {
+                if (!isLoggedIn) { onLoginClick?.("Sign in to upvote comments"); return; }
+                onUpvote(comment.id);
+              }}
+              disabled={isUpvoting}
               data-testid={`button-upvote-${comment.id}`}
             >
               <ArrowUp size={14} />
@@ -141,6 +217,15 @@ function CommentNode({ comment, depth, factId, userId, isAdmin, onReply, onDelet
               </button>
             )}
           </div>
+
+          {replyOpen && (
+            <InlineReplyComposer
+              parentUsername={comment.username}
+              onSubmit={handleReplySubmit}
+              onCancel={() => setReplyOpen(false)}
+              isPending={replyPending}
+            />
+          )}
         </div>
       </div>
 
@@ -152,13 +237,16 @@ function CommentNode({ comment, depth, factId, userId, isAdmin, onReply, onDelet
               comment={child}
               depth={depth + 1}
               factId={factId}
+              isLoggedIn={isLoggedIn}
               userId={userId}
               isAdmin={isAdmin}
-              onReply={onReply}
               onDelete={onDelete}
               onUpvote={onUpvote}
+              onLoginClick={onLoginClick}
               pendingUpvote={pendingUpvote}
               pendingDelete={pendingDelete}
+              postReply={postReply}
+              replyPending={replyPending}
             />
           ))}
         </div>
@@ -170,7 +258,7 @@ function CommentNode({ comment, depth, factId, userId, isAdmin, onReply, onDelet
 export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) {
   const { user, isLoggedIn } = useAuth();
   const [inputBody, setInputBody] = useState("");
-  const [replyTo, setReplyTo] = useState<{ parentId: string; username: string } | null>(null);
+  const [inputError, setInputError] = useState<string | null>(null);
   const [isInputExpanded, setIsInputExpanded] = useState(false);
   const [pendingUpvote, setPendingUpvote] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
@@ -186,13 +274,12 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
   });
 
   const postMutation = useMutation({
-    mutationFn: async (data: { body: string; parentId?: string }) => {
-      return apiRequest("POST", `/api/facts/${factId}/comments`, data);
-    },
+    mutationFn: async (data: { body: string; parentId?: string }) =>
+      apiRequest("POST", `/api/facts/${factId}/comments`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
       setInputBody("");
-      setReplyTo(null);
+      setInputError(null);
       setIsInputExpanded(false);
     },
   });
@@ -221,31 +308,24 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
     onError: () => setPendingUpvote(null),
   });
 
-  const handleReply = useCallback((parentId: string, username: string) => {
-    setReplyTo({ parentId, username });
-    setIsInputExpanded(true);
-    setInputBody(`@${username} `);
-    setTimeout(() => textareaRef.current?.focus(), 50);
-  }, []);
+  const postReply = useCallback(async (parentId: string, body: string) => {
+    await postMutation.mutateAsync({ body, parentId });
+  }, [postMutation]);
 
   const handleCancel = () => {
     setIsInputExpanded(false);
-    setReplyTo(null);
     setInputBody("");
+    setInputError(null);
   };
 
   const handleSubmit = () => {
     const trimmed = inputBody.trim();
-    if (!trimmed) return;
-    postMutation.mutate({ body: trimmed, parentId: replyTo?.parentId });
-  };
-
-  const handleInputFocus = () => {
-    if (!isLoggedIn) {
-      onLoginClick?.("Sign in to leave a comment");
+    if (!trimmed) {
+      setInputError("Comment cannot be empty.");
       return;
     }
-    setIsInputExpanded(true);
+    setInputError(null);
+    postMutation.mutate({ body: trimmed });
   };
 
   const tree = buildTree(comments);
@@ -253,27 +333,30 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
   return (
     <div className="comments-section">
       <div className="comment-input-area">
-        {!isInputExpanded ? (
+        {!isLoggedIn ? (
+          <button
+            className="sign-in-to-comment"
+            onClick={() => onLoginClick?.("Sign in to leave a comment")}
+            data-testid="button-sign-in-to-comment"
+          >
+            <LogIn size={16} />
+            <span>Sign in to comment</span>
+          </button>
+        ) : !isInputExpanded ? (
           <div
             className="comment-input-collapsed"
-            onClick={handleInputFocus}
+            onClick={() => setIsInputExpanded(true)}
             data-testid="input-comment-collapsed"
           >
             <div className="collapsed-avatar">
-              {isLoggedIn && user ? (
-                <img
-                  src={getAvatarSrc(user.profilePhoto || "", user.username)}
-                  alt={user.username}
-                  width={32}
-                  height={32}
-                />
-              ) : (
-                <div className="collapsed-avatar-placeholder" />
-              )}
+              <img
+                src={getAvatarSrc(user?.profilePhoto || "", user?.username || "user")}
+                alt={user?.username}
+                width={32}
+                height={32}
+              />
             </div>
-            <div className="collapsed-placeholder">
-              {replyTo ? `Replying to @${replyTo.username}…` : "Share your knowledge about this fact"}
-            </div>
+            <div className="collapsed-placeholder">Share your knowledge about this fact</div>
           </div>
         ) : (
           <div className="comment-input-expanded">
@@ -281,12 +364,14 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
             <textarea
               ref={textareaRef}
               className="comment-textarea"
-              placeholder={replyTo ? `Replying to @${replyTo.username}…` : "Share your knowledge about this fact"}
+              placeholder="Share your knowledge about this fact"
               value={inputBody}
-              onChange={e => setInputBody(e.target.value)}
+              onChange={e => { setInputBody(e.target.value); if (inputError) setInputError(null); }}
               rows={4}
+              autoFocus
               data-testid="input-comment"
             />
+            {inputError && <p className="comment-error" data-testid="error-comment">{inputError}</p>}
             <div className="comment-input-buttons">
               <button
                 className="btn-cancel-comment"
@@ -298,7 +383,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
               <button
                 className="btn-submit-comment"
                 onClick={handleSubmit}
-                disabled={!inputBody.trim() || postMutation.isPending}
+                disabled={postMutation.isPending}
                 data-testid="button-submit-comment"
               >
                 {postMutation.isPending ? "Posting…" : "Comment"}
@@ -335,16 +420,16 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
               comment={comment}
               depth={0}
               factId={factId}
+              isLoggedIn={isLoggedIn}
               userId={user?.id}
               isAdmin={user?.isAdmin}
-              onReply={handleReply}
               onDelete={id => deleteMutation.mutate(id)}
-              onUpvote={id => {
-                if (!isLoggedIn) { onLoginClick?.("Sign in to upvote comments"); return; }
-                upvoteMutation.mutate(id);
-              }}
+              onUpvote={id => upvoteMutation.mutate(id)}
+              onLoginClick={onLoginClick}
               pendingUpvote={pendingUpvote}
               pendingDelete={pendingDelete}
+              postReply={postReply}
+              replyPending={postMutation.isPending}
             />
           ))}
         </div>
