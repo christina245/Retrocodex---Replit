@@ -871,7 +871,7 @@ export default function AdminPage() {
       await patchSubmissionMutation.mutateAsync({ id: editingSubmissionId, status: "published" });
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
       const mainCategory = selectedCategories.find(c => c !== "Other") || selectedCategories[0] || "Other";
-      setPublishSuccessCategory(CATEGORY_ROUTES[mainCategory] || "/");
+      setPublishSuccessCategory(CATEGORY_ROUTES[mainCategory] || "/other-categories");
       setPublishSuccess(true);
     } catch (err) {
       setSubmissionActionMsg({ type: "error", text: err instanceof Error ? err.message : "Failed to publish." });
@@ -2185,8 +2185,6 @@ export default function AdminPage() {
                         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", marginTop: "1.5rem" }}>
                           <a
                             href={publishSuccessCategory}
-                            target="_blank"
-                            rel="noreferrer"
                             className="submit-button"
                             style={{ display: "block", textAlign: "center", textDecoration: "none" }}
                             data-testid="button-view-fact"
