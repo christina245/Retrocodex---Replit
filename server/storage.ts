@@ -7,6 +7,9 @@ import {
   savedArticles,
   savedFacts,
   pollVotes,
+  comments,
+  commentUpvotes,
+  userProfiles,
   type EmailSubscription, 
   type InsertEmailSubscription,
   type Fact,
@@ -24,9 +27,12 @@ import {
   type PollVote,
   type InsertPollVote,
   type PollVoteWithFact,
+  type Comment,
+  type InsertComment,
+  type CommentWithUser,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, arrayContains, inArray } from "drizzle-orm";
+import { eq, desc, and, arrayContains, inArray, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Email subscriptions
@@ -81,6 +87,12 @@ export interface IStorage {
   upsertPollVote(data: InsertPollVote): Promise<PollVote>;
   getPollVotesByUser(userId: string): Promise<PollVoteWithFact[]>;
   getPollVoteForFact(userId: string, factId: string): Promise<PollVote | null>;
+
+  // Comments
+  getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]>;
+  createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser>;
+  deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean>;
+  toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -437,6 +449,116 @@ export class DatabaseStorage implements IStorage {
       .from(pollVotes)
       .where(and(eq(pollVotes.userId, userId), eq(pollVotes.factId, factId)));
     return result || null;
+  }
+
+  async getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]> {
+    const rows = await db
+      .select({
+        id: comments.id,
+        factId: comments.factId,
+        userId: comments.userId,
+        parentId: comments.parentId,
+        body: comments.body,
+        upvotes: comments.upvotes,
+        createdAt: comments.createdAt,
+        username: userProfiles.username,
+        avatarUrl: userProfiles.avatarUrl,
+        isAdmin: userProfiles.isAdmin,
+        currentLocation: userProfiles.currentLocation,
+        showCurrentLocation: userProfiles.showCurrentLocation,
+        placesLived: userProfiles.placesLived,
+        showPlacesLived: userProfiles.showPlacesLived,
+      })
+      .from(comments)
+      .innerJoin(userProfiles, eq(comments.userId, userProfiles.id))
+      .where(eq(comments.factId, factId))
+      .orderBy(comments.createdAt);
+
+    const upvotedSet = new Set<string>();
+    if (viewerId) {
+      const votes = await db
+        .select({ commentId: commentUpvotes.commentId })
+        .from(commentUpvotes)
+        .where(eq(commentUpvotes.userId, viewerId));
+      votes.forEach(v => upvotedSet.add(v.commentId));
+    }
+
+    return rows.map(r => ({
+      ...r,
+      avatarUrl: r.avatarUrl ?? "",
+      isAdmin: r.isAdmin ?? false,
+      currentLocation: r.currentLocation ?? "",
+      showCurrentLocation: r.showCurrentLocation ?? false,
+      placesLived: r.placesLived ?? [],
+      showPlacesLived: r.showPlacesLived ?? false,
+      isUpvotedByMe: upvotedSet.has(r.id),
+    }));
+  }
+
+  async createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser> {
+    const [comment] = await db
+      .insert(comments)
+      .values({ factId: data.factId, userId, parentId: data.parentId ?? null, body: data.body })
+      .returning();
+
+    const [profile] = await db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.id, userId))
+      .limit(1);
+
+    return {
+      ...comment,
+      username: profile.username,
+      avatarUrl: profile.avatarUrl ?? "",
+      isAdmin: profile.isAdmin ?? false,
+      currentLocation: profile.currentLocation ?? "",
+      showCurrentLocation: profile.showCurrentLocation ?? false,
+      placesLived: profile.placesLived ?? [],
+      showPlacesLived: profile.showPlacesLived ?? false,
+      isUpvotedByMe: false,
+    };
+  }
+
+  async deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean> {
+    const [comment] = await db
+      .select({ userId: comments.userId })
+      .from(comments)
+      .where(eq(comments.id, id))
+      .limit(1);
+
+    if (!comment) return false;
+    if (!isAdmin && comment.userId !== userId) return false;
+
+    const result = await db.delete(comments).where(eq(comments.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }> {
+    const [existing] = await db
+      .select()
+      .from(commentUpvotes)
+      .where(and(eq(commentUpvotes.commentId, commentId), eq(commentUpvotes.userId, userId)))
+      .limit(1);
+
+    if (existing) {
+      await db.delete(commentUpvotes)
+        .where(and(eq(commentUpvotes.commentId, commentId), eq(commentUpvotes.userId, userId)));
+      const [updated] = await db
+        .update(comments)
+        .set({ upvotes: sql`GREATEST(${comments.upvotes} - 1, 0)` })
+        .where(eq(comments.id, commentId))
+        .returning({ upvotes: comments.upvotes });
+      return { upvotes: updated?.upvotes ?? 0, isUpvoted: false };
+    } else {
+      await db.insert(commentUpvotes).values({ commentId, userId });
+      const [updated] = await db
+        .update(comments)
+        .set({ upvotes: sql`${comments.upvotes} + 1` })
+        .where(eq(comments.id, commentId))
+        .returning({ upvotes: comments.upvotes });
+      return { upvotes: updated?.upvotes ?? 1, isUpvoted: true };
+    }
   }
 }
 

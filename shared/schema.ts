@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique, serial } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -417,4 +417,51 @@ export type PollVoteWithFact = PollVote & {
   factTitle: string;
   factSlug: string;
   factCoverPhoto: string | null;
+};
+
+// Comments table — user comments on facts
+export const comments = pgTable("comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  parentId: varchar("parent_id"),
+  body: text("body").notNull(),
+  upvotes: integer("upvotes").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Comment upvotes — tracks which users upvoted which comments
+export const commentUpvotes = pgTable("comment_upvotes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  commentId: varchar("comment_id").notNull().references(() => comments.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  commentUserUnique: unique("comment_upvotes_comment_user").on(table.commentId, table.userId),
+}));
+
+export const insertCommentSchema = z.object({
+  body: z.string().min(1, "Comment cannot be empty").max(10000, "Comment is too long"),
+  parentId: z.string().optional(),
+});
+
+export type InsertComment = z.infer<typeof insertCommentSchema>;
+export type Comment = typeof comments.$inferSelect;
+
+export type CommentWithUser = {
+  id: string;
+  factId: string;
+  userId: string;
+  parentId: string | null;
+  body: string;
+  upvotes: number;
+  createdAt: Date;
+  username: string;
+  avatarUrl: string;
+  isAdmin: boolean;
+  currentLocation: string;
+  showCurrentLocation: boolean;
+  placesLived: string[];
+  showPlacesLived: boolean;
+  isUpvotedByMe: boolean;
 };

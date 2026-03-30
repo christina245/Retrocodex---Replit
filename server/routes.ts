@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -1772,6 +1772,65 @@ Sitemap: ${SITE_URL}/sitemap.xml
     } catch (error) {
       console.error("DELETE /api/user/saved-facts/:factId error:", error);
       res.status(500).json({ message: "Failed to unsave fact" });
+    }
+  });
+
+  // GET /api/facts/:id/comments — fetch all comments for a fact (public; viewer used for upvote status)
+  app.get("/api/facts/:id/comments", async (req, res) => {
+    try {
+      const factId = req.params.id;
+      const viewerId = req.session?.userId;
+      const result = await storage.getCommentsByFactId(factId, viewerId);
+      return res.json(result);
+    } catch (error) {
+      console.error("GET /api/facts/:id/comments error:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
+  // POST /api/facts/:id/comments — post a new comment
+  app.post("/api/facts/:id/comments", requireUser, async (req, res) => {
+    try {
+      const factId = req.params.id;
+      const data = insertCommentSchema.parse(req.body);
+      const comment = await storage.createComment(req.session.userId!, { ...data, factId });
+      return res.status(201).json(comment);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("POST /api/facts/:id/comments error:", error);
+      res.status(500).json({ message: "Failed to post comment" });
+    }
+  });
+
+  // DELETE /api/comments/:id — delete a comment (own or admin)
+  app.delete("/api/comments/:id", requireUser, async (req, res) => {
+    try {
+      const [profile] = await db.select({ isAdmin: userProfiles.isAdmin })
+        .from(userProfiles)
+        .where(eq(userProfiles.id, req.session.userId!))
+        .limit(1);
+      const isAdmin = profile?.isAdmin ?? false;
+      const success = await storage.deleteComment(req.params.id, req.session.userId!, isAdmin);
+      if (!success) {
+        return res.status(403).json({ message: "Not authorized to delete this comment" });
+      }
+      return res.json({ message: "Comment deleted" });
+    } catch (error) {
+      console.error("DELETE /api/comments/:id error:", error);
+      res.status(500).json({ message: "Failed to delete comment" });
+    }
+  });
+
+  // POST /api/comments/:id/upvote — toggle upvote on a comment
+  app.post("/api/comments/:id/upvote", requireUser, async (req, res) => {
+    try {
+      const result = await storage.toggleCommentUpvote(req.params.id, req.session.userId!);
+      return res.json(result);
+    } catch (error) {
+      console.error("POST /api/comments/:id/upvote error:", error);
+      res.status(500).json({ message: "Failed to toggle upvote" });
     }
   });
 

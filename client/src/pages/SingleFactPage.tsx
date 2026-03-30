@@ -275,7 +275,10 @@ export default function SingleFactPage() {
 
         <div className="below-content-grid">
           <div className="comments-column">
-            <CommentsSection />
+            <CommentsSection
+              factId={factData?.id ?? ""}
+              onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
+            />
           </div>
           <div className="sidebar-column">
             <Poll 
