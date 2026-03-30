@@ -468,6 +468,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showPlacesLived: profile.showPlacesLived,
         favoriteTags: profile.favoriteTags,
         misinfoSource: profile.misinfoSource,
+        allowFollows: profile.allowFollows ?? true,
         isAdmin: profile.isAdmin ?? false,
         emailVerified: account.emailVerified ?? false,
       });
@@ -503,6 +504,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ...(data.showPlacesLived !== undefined && { showPlacesLived: data.showPlacesLived }),
           ...(data.favoriteTags !== undefined && { favoriteTags: data.favoriteTags }),
           ...(data.misinfoSource !== undefined && { misinfoSource: data.misinfoSource }),
+          ...(data.allowFollows !== undefined && { allowFollows: data.allowFollows }),
           updatedAt: new Date(),
         })
         .where(eq(userProfiles.id, req.session.userId!))
@@ -525,6 +527,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showPlacesLived: updated.showPlacesLived,
         favoriteTags: updated.favoriteTags,
         misinfoSource: updated.misinfoSource,
+        allowFollows: updated.allowFollows ?? true,
         isAdmin: updated.isAdmin ?? false,
       });
     } catch (error) {
@@ -551,6 +554,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         showPlacesLived: userProfiles.showPlacesLived,
         favoriteTags: userProfiles.favoriteTags,
         misinfoSource: userProfiles.misinfoSource,
+        allowFollows: userProfiles.allowFollows,
         isAdmin: userProfiles.isAdmin,
         createdAt: userProfiles.createdAt,
       })
@@ -561,10 +565,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!profile) {
         return res.status(404).json({ message: "User not found" });
       }
-      return res.json(profile);
+
+      const [followerCount, followingCount] = await Promise.all([
+        storage.getFollowerCount(profile.id),
+        storage.getFollowingCount(profile.id),
+      ]);
+
+      return res.json({ ...profile, followerCount, followingCount });
     } catch (error) {
       console.error("GET /api/users/:username error:", error);
       res.status(500).json({ message: "Failed to fetch user profile" });
+    }
+  });
+
+  // GET /api/follow/status/:userId — check if current user follows target + get allowFollows
+  app.get("/api/follow/status/:userId", requireUser, async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const [isFollowing, [target]] = await Promise.all([
+        storage.isFollowing(req.session.userId!, userId),
+        db.select({ allowFollows: userProfiles.allowFollows })
+          .from(userProfiles)
+          .where(eq(userProfiles.id, userId))
+          .limit(1),
+      ]);
+      return res.json({ isFollowing, allowFollows: target?.allowFollows ?? true });
+    } catch (error) {
+      console.error("GET /api/follow/status error:", error);
+      res.status(500).json({ message: "Failed to get follow status" });
+    }
+  });
+
+  // POST /api/follow/:userId — follow a user
+  app.post("/api/follow/:userId", requireUser, async (req, res) => {
+    try {
+      const { userId } = req.params;
+      if (userId === req.session.userId!) {
+        return res.status(400).json({ message: "You cannot follow yourself" });
+      }
+      const [target] = await db.select({ id: userProfiles.id, allowFollows: userProfiles.allowFollows })
+        .from(userProfiles)
+        .where(eq(userProfiles.id, userId))
+        .limit(1);
+      if (!target) return res.status(404).json({ message: "User not found" });
+      if (!target.allowFollows) return res.status(403).json({ message: "This user does not allow followers" });
+
+      await storage.followUser(req.session.userId!, userId);
+      const followerCount = await storage.getFollowerCount(userId);
+      return res.json({ isFollowing: true, followerCount });
+    } catch (error) {
+      console.error("POST /api/follow error:", error);
+      res.status(500).json({ message: "Failed to follow user" });
+    }
+  });
+
+  // DELETE /api/follow/:userId — unfollow a user
+  app.delete("/api/follow/:userId", requireUser, async (req, res) => {
+    try {
+      const { userId } = req.params;
+      await storage.unfollowUser(req.session.userId!, userId);
+      const followerCount = await storage.getFollowerCount(userId);
+      return res.json({ isFollowing: false, followerCount });
+    } catch (error) {
+      console.error("DELETE /api/follow error:", error);
+      res.status(500).json({ message: "Failed to unfollow user" });
+    }
+  });
+
+  // GET /api/feed — personalized following feed (requires auth)
+  app.get("/api/feed", requireUser, async (req, res) => {
+    try {
+      const items = await storage.getFollowingFeed(req.session.userId!);
+      return res.json(items);
+    } catch (error) {
+      console.error("GET /api/feed error:", error);
+      res.status(500).json({ message: "Failed to fetch feed" });
+    }
+  });
+
+  // GET /api/feed/for-you — recent public activity feed (no auth required)
+  app.get("/api/feed/for-you", async (req, res) => {
+    try {
+      const items = await storage.getForYouFeed();
+      return res.json(items);
+    } catch (error) {
+      console.error("GET /api/feed/for-you error:", error);
+      res.status(500).json({ message: "Failed to fetch feed" });
     }
   });
 

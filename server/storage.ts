@@ -10,6 +10,8 @@ import {
   comments,
   commentUpvotes,
   userProfiles,
+  follows,
+  factSubmissions,
   type EmailSubscription, 
   type InsertEmailSubscription,
   type Fact,
@@ -30,9 +32,10 @@ import {
   type Comment,
   type InsertComment,
   type CommentWithUser,
+  type FeedItem,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, arrayContains, inArray, sql } from "drizzle-orm";
+import { eq, desc, and, arrayContains, inArray, sql, notInArray } from "drizzle-orm";
 
 export interface IStorage {
   // Email subscriptions
@@ -93,6 +96,18 @@ export interface IStorage {
   createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser>;
   deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean>;
   toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
+
+  // Follows
+  followUser(followerId: string, followeeId: string): Promise<void>;
+  unfollowUser(followerId: string, followeeId: string): Promise<boolean>;
+  isFollowing(followerId: string, followeeId: string): Promise<boolean>;
+  getFollowerCount(userId: string): Promise<number>;
+  getFollowingCount(userId: string): Promise<number>;
+
+  // Feed
+  getFollowingIds(userId: string): Promise<string[]>;
+  getFollowingFeed(userId: string, limit?: number): Promise<FeedItem[]>;
+  getForYouFeed(limit?: number): Promise<FeedItem[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -572,6 +587,160 @@ export class DatabaseStorage implements IStorage {
         .returning({ upvotes: comments.upvotes });
       return { upvotes: updated?.upvotes ?? 1, isUpvoted: true };
     }
+  }
+
+  // ─── Follows ────────────────────────────────────────────────────────────────
+
+  async followUser(followerId: string, followeeId: string): Promise<void> {
+    await db
+      .insert(follows)
+      .values({ followerId, followeeId })
+      .onConflictDoNothing();
+  }
+
+  async unfollowUser(followerId: string, followeeId: string): Promise<boolean> {
+    const result = await db
+      .delete(follows)
+      .where(and(eq(follows.followerId, followerId), eq(follows.followeeId, followeeId)))
+      .returning();
+    return result.length > 0;
+  }
+
+  async isFollowing(followerId: string, followeeId: string): Promise<boolean> {
+    const [row] = await db
+      .select({ followerId: follows.followerId })
+      .from(follows)
+      .where(and(eq(follows.followerId, followerId), eq(follows.followeeId, followeeId)))
+      .limit(1);
+    return !!row;
+  }
+
+  async getFollowerCount(userId: string): Promise<number> {
+    const [row] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(follows)
+      .where(eq(follows.followeeId, userId));
+    return row?.count ?? 0;
+  }
+
+  async getFollowingCount(userId: string): Promise<number> {
+    const [row] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(follows)
+      .where(eq(follows.followerId, userId));
+    return row?.count ?? 0;
+  }
+
+  // ─── Feed ───────────────────────────────────────────────────────────────────
+
+  async getFollowingIds(userId: string): Promise<string[]> {
+    const rows = await db
+      .select({ followeeId: follows.followeeId })
+      .from(follows)
+      .where(eq(follows.followerId, userId));
+    return rows.map((r) => r.followeeId);
+  }
+
+  async getFollowingFeed(userId: string, limit = 50): Promise<FeedItem[]> {
+    const followingIds = await this.getFollowingIds(userId);
+    if (followingIds.length === 0) return [];
+
+    const submissions = await db
+      .select({
+        id: factSubmissions.id,
+        userId: factSubmissions.userId,
+        username: factSubmissions.username,
+        avatarUrl: userProfiles.avatarUrl,
+        mythHeader: factSubmissions.mythHeader,
+        truthHeader: factSubmissions.truthHeader,
+        status: factSubmissions.status,
+        createdAt: factSubmissions.createdAt,
+      })
+      .from(factSubmissions)
+      .leftJoin(userProfiles, eq(factSubmissions.userId, userProfiles.id))
+      .where(inArray(factSubmissions.userId, followingIds))
+      .orderBy(desc(factSubmissions.createdAt))
+      .limit(limit);
+
+    const commentRows = await db
+      .select({
+        id: comments.id,
+        userId: comments.userId,
+        username: userProfiles.username,
+        avatarUrl: userProfiles.avatarUrl,
+        body: comments.body,
+        createdAt: comments.createdAt,
+        factId: facts.id,
+        factSlug: facts.slug,
+        factTitle: facts.title,
+        factCoverPhoto: facts.coverPhoto,
+      })
+      .from(comments)
+      .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
+      .leftJoin(facts, eq(comments.factId, facts.id))
+      .where(inArray(comments.userId, followingIds))
+      .orderBy(desc(comments.createdAt))
+      .limit(limit);
+
+    const submissionItems: FeedItem[] = submissions.map((s) => ({
+      type: "submission",
+      id: s.id,
+      userId: s.userId,
+      username: s.username,
+      avatarUrl: s.avatarUrl ?? "",
+      createdAt: s.createdAt,
+      mythHeader: s.mythHeader,
+      truthHeader: s.truthHeader,
+      submissionStatus: s.status,
+    }));
+
+    const commentItems: FeedItem[] = commentRows.map((c) => ({
+      type: "comment",
+      id: c.id,
+      userId: c.userId,
+      username: c.username ?? "",
+      avatarUrl: c.avatarUrl ?? "",
+      createdAt: c.createdAt,
+      commentBody: c.body,
+      factId: c.factId ?? undefined,
+      factSlug: c.factSlug ?? undefined,
+      factTitle: c.factTitle ?? undefined,
+      factCoverPhoto: c.factCoverPhoto ?? undefined,
+    }));
+
+    return [...submissionItems, ...commentItems]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+  }
+
+  async getForYouFeed(limit = 50): Promise<FeedItem[]> {
+    const submissions = await db
+      .select({
+        id: factSubmissions.id,
+        userId: factSubmissions.userId,
+        username: factSubmissions.username,
+        avatarUrl: userProfiles.avatarUrl,
+        mythHeader: factSubmissions.mythHeader,
+        truthHeader: factSubmissions.truthHeader,
+        status: factSubmissions.status,
+        createdAt: factSubmissions.createdAt,
+      })
+      .from(factSubmissions)
+      .leftJoin(userProfiles, eq(factSubmissions.userId, userProfiles.id))
+      .orderBy(desc(factSubmissions.createdAt))
+      .limit(limit);
+
+    return submissions.map((s) => ({
+      type: "submission" as const,
+      id: s.id,
+      userId: s.userId,
+      username: s.username,
+      avatarUrl: s.avatarUrl ?? "",
+      createdAt: s.createdAt,
+      mythHeader: s.mythHeader,
+      truthHeader: s.truthHeader,
+      submissionStatus: s.status,
+    }));
   }
 }
 

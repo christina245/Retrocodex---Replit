@@ -13,6 +13,7 @@ export interface UserData {
   favoriteTags: string[];
   misinfoSource: string;
   bio: string;
+  allowFollows: boolean;
   isAdmin: boolean;
   emailVerified: boolean;
 }
@@ -66,6 +67,7 @@ function mapApiResponse(data: any): UserData {
     favoriteTags: data.favoriteTags || [],
     misinfoSource: data.misinfoSource || "",
     bio: data.bio || "",
+    allowFollows: data.allowFollows ?? true,
     isAdmin: data.isAdmin ?? false,
     emailVerified: data.emailVerified ?? false,
   };
@@ -157,6 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (partial.showPlacesLived !== undefined) payload.showPlacesLived = partial.showPlacesLived;
     if (partial.favoriteTags !== undefined) payload.favoriteTags = partial.favoriteTags;
     if (partial.misinfoSource !== undefined) payload.misinfoSource = partial.misinfoSource;
+    if (partial.allowFollows !== undefined) payload.allowFollows = partial.allowFollows;
 
     const res = await fetch("/api/me", {
       method: "PUT",

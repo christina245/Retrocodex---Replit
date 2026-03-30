@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique, primaryKey } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -116,6 +116,7 @@ export const userProfiles = pgTable("user_profiles", {
   showPlacesLived: boolean("show_places_lived").default(false),
   favoriteTags: text("favorite_tags").array().default([]),
   misinfoSource: text("misinfo_source").default(""),
+  allowFollows: boolean("allow_follows").default(true),
   isAdmin: boolean("is_admin").default(false),
   submissionBanned: boolean("submission_banned").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -146,6 +147,7 @@ export const updateProfileSchema = z.object({
   showPlacesLived: z.boolean().optional(),
   favoriteTags: z.array(z.string()).optional(),
   misinfoSource: z.string().max(200).optional(),
+  allowFollows: z.boolean().optional(),
 });
 
 export type UserAccount = typeof userAccounts.$inferSelect;
@@ -464,4 +466,33 @@ export type CommentWithUser = {
   placesLived: string[];
   showPlacesLived: boolean;
   isUpvotedByMe: boolean;
+};
+
+// Follows table — user-to-user follow relationships
+export const follows = pgTable("follows", {
+  followerId: varchar("follower_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  followeeId: varchar("followee_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  pk: primaryKey({ columns: [table.followerId, table.followeeId] }),
+}));
+
+export type Follow = typeof follows.$inferSelect;
+
+// Feed item type — union of submission and comment activity
+export type FeedItem = {
+  type: "submission" | "comment";
+  id: string;
+  userId: string;
+  username: string;
+  avatarUrl: string;
+  createdAt: Date;
+  mythHeader?: string;
+  truthHeader?: string;
+  submissionStatus?: string;
+  commentBody?: string;
+  factId?: string;
+  factSlug?: string;
+  factTitle?: string;
+  factCoverPhoto?: string | null;
 };

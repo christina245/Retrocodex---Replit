@@ -16,7 +16,8 @@ function getDiceBearUrl(username: string) {
   return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${encodeURIComponent(username)}&radius=8`;
 }
 
-function getAvatarSrc(username: string) {
+function getAvatarSrc(avatarUrl: string, username: string) {
+  if (avatarUrl && avatarUrl.startsWith("data:")) return avatarUrl;
   return getDiceBearUrl(username);
 }
 
@@ -119,6 +120,7 @@ function CommentNode({
   postReply, replyPending
 }: CommentNodeProps) {
   const [replyOpen, setReplyOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const canDelete = isAdmin || comment.userId === userId;
   const isUpvoting = pendingUpvote === comment.id;
   const isDeleting = pendingDelete === comment.id;
@@ -143,7 +145,7 @@ function CommentNode({
       <div className="comment-inner">
         <div className="comment-avatar">
           <img
-            src={getAvatarSrc(comment.username)}
+            src={getAvatarSrc(comment.avatarUrl, comment.username)}
             alt={comment.username}
             width={40}
             height={40}
@@ -207,7 +209,7 @@ function CommentNode({
             {canDelete && (
               <button
                 className="comment-action delete-action"
-                onClick={() => onDelete(comment.id)}
+                onClick={() => setConfirmDeleteOpen(true)}
                 disabled={isDeleting}
                 data-testid={`button-delete-${comment.id}`}
               >
@@ -215,6 +217,30 @@ function CommentNode({
               </button>
             )}
           </div>
+
+          {confirmDeleteOpen && (
+            <div className="delete-confirm-modal" data-testid={`delete-confirm-${comment.id}`}>
+              <Trash2 size={30} className="delete-confirm-icon" />
+              <p className="delete-confirm-text">Are you sure you want to delete your comment?</p>
+              <div className="delete-confirm-buttons">
+                <button
+                  className="btn-cancel-comment"
+                  onClick={() => setConfirmDeleteOpen(false)}
+                  data-testid={`button-cancel-delete-${comment.id}`}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-submit-comment"
+                  onClick={() => { setConfirmDeleteOpen(false); onDelete(comment.id); }}
+                  disabled={isDeleting}
+                  data-testid={`button-confirm-delete-${comment.id}`}
+                >
+                  {isDeleting ? "Deleting…" : "Delete Comment"}
+                </button>
+              </div>
+            </div>
+          )}
 
           {replyOpen && (
             <InlineReplyComposer

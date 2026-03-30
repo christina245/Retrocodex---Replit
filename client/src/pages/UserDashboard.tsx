@@ -10,7 +10,7 @@ import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";
-import type { Fact as DbFact } from "@shared/schema";
+import type { Fact as DbFact, FeedItem } from "@shared/schema";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
@@ -509,6 +509,91 @@ function StateSelect({ value, onChange, testId }: { value: string; onChange: (v:
   );
 }
 
+function getDiceBearUrlDashboard(username: string) {
+  return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${encodeURIComponent(username)}&radius=8`;
+}
+
+function getAvatarSrcDashboard(avatarUrl: string, username: string) {
+  if (avatarUrl && avatarUrl.startsWith("data:")) return avatarUrl;
+  return getDiceBearUrlDashboard(username);
+}
+
+function formatRelativeTime(date: Date | string) {
+  const now = new Date();
+  const d = new Date(date);
+  const diff = now.getTime() - d.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+function FeedPost({ item, index }: { item: FeedItem; index: number }) {
+  const avatarSrc = getAvatarSrcDashboard(item.avatarUrl, item.username);
+  return (
+    <div className="following-post" data-testid={`feed-post-${index}`}>
+      <img src={avatarSrc} alt={item.username} className="following-post-avatar" />
+      <div className="following-post-main">
+        <div className="following-post-header">
+          <div className="following-post-header-text">
+            <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
+              {item.username}
+            </Link>
+            {item.type === "submission" && (
+              <span className="following-post-action">submitted a topic idea</span>
+            )}
+            {item.type === "comment" && item.factTitle && (
+              <>
+                <span className="following-post-action">commented on</span>
+                {item.factSlug ? (
+                  <Link href={`/fact/${item.factSlug}`} className="following-post-action following-post-fact-link" data-testid={`link-feed-fact-${index}`}>
+                    &ldquo;{item.factTitle}&rdquo;
+                  </Link>
+                ) : (
+                  <span className="following-post-action">&ldquo;{item.factTitle}&rdquo;</span>
+                )}
+              </>
+            )}
+            {item.type === "comment" && !item.factTitle && (
+              <span className="following-post-action">commented on a fact</span>
+            )}
+          </div>
+          <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
+        </div>
+        <div className="following-post-body">
+          {item.type === "submission" && (
+            <div className="feed-submission-card" data-testid={`feed-submission-${index}`}>
+              <p className="feed-submission-myth" data-testid={`feed-myth-${index}`}>{item.mythHeader}</p>
+              <p className="feed-submission-truth" data-testid={`feed-truth-${index}`}>{item.truthHeader}</p>
+            </div>
+          )}
+          {item.type === "comment" && (
+            <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
+              <div className="following-post-body-left">
+                {item.factSlug && (
+                  <Link href={`/fact/${item.factSlug}`} className="following-post-link">
+                    <p className="fact-myth" data-testid={`feed-comment-fact-${index}`}>{item.factTitle}</p>
+                  </Link>
+                )}
+                <p className="following-plain-comment" data-testid={`feed-comment-body-${index}`}>{item.commentBody}</p>
+              </div>
+              {item.factCoverPhoto && (
+                <Link href={item.factSlug ? `/fact/${item.factSlug}` : "#"} className="following-post-cover-link">
+                  <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function UserDashboard() {
   const { user, isLoggedIn, isLoading: authLoading, logout, updateUser } = useAuth();
   const [, navigate] = useLocation();
@@ -552,7 +637,7 @@ export default function UserDashboard() {
   const [profileActivityTab, setProfileActivityTab] = useState<ProfileActivityTab>("submissions");
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
-  const [allowFollows, setAllowFollows] = useState(true);
+  const [allowFollows, setAllowFollows] = useState(() => user?.allowFollows ?? true);
   const [followedBack, setFollowedBack] = useState<Record<string, boolean>>({});
   const [publicProfile, setPublicProfile] = useState(true);
   const [notifyFollows, setNotifyFollows] = useState(true);
@@ -625,6 +710,16 @@ export default function UserDashboard() {
   type TagsByCategory = Record<string, Record<string, string[]>>;
   const { data: tagsByCategory } = useQuery<TagsByCategory>({
     queryKey: ["/api/facts/tags-by-category"],
+  });
+
+  const { data: followingFeed = [], isLoading: followingFeedLoading } = useQuery<FeedItem[]>({
+    queryKey: ["/api/feed"],
+    enabled: feedTab === "following",
+  });
+
+  const { data: forYouFeed = [], isLoading: forYouFeedLoading } = useQuery<FeedItem[]>({
+    queryKey: ["/api/feed/for-you"],
+    enabled: feedTab === "for-you",
   });
 
   interface MySubmission {
@@ -1086,89 +1181,17 @@ export default function UserDashboard() {
 
                   <div className="dashboard-feed-content" data-testid="dashboard-feed-content">
                     {feedTab === "for-you" && (
-                      user.favoriteTags.length > 0 ? (
-                        <div className="following-feed" data-testid="feed-for-you">
-                          <div className="following-post" data-testid="for-you-post-1">
-                            <img src={placeholderPhoto} alt="MythBuster_77" className="following-post-avatar" />
-                            <div className="following-post-main">
-                            <div className="following-post-header">
-                              <div className="following-post-header-text">
-                                <Link href="/user/MythBuster_77" className="following-post-username" data-testid="link-user-MythBuster_77">MythBuster_77</Link>
-                                <span className="following-post-action">submitted a new topic</span>
-                              </div>
-                              <span className="following-post-timestamp">5 mins ago</span>
-                            </div>
-                            <div className="following-post-body following-post-factcard">
-                              <FactCard
-                                fact={{
-                                  id: "cracking-your-knuckles-arthritis",
-                                  category: "EVERYDAY LIFE",
-                                  categoryColor: "#0167A2",
-                                  myth: "Cracking your knuckles will give you arthritis.",
-                                  truth: "No scientific evidence has yet to link cracking your knuckles and arthritis.",
-                                  link: "/fact/cracking-your-knuckles-arthritis",
-                                  coverPhoto: "/uploads/1764735935195-591724829.png",
-                                }}
-                                onSave={() => {}}
-                                onShare={() => {}}
-                                onComment={() => {}}
-                              />
-                            </div>
-                            </div>
-                          </div>
-
-                          <div className="following-post" data-testid="for-you-post-article">
-                            <img src={placeholderPhoto} alt="FactChecker_99" className="following-post-avatar" />
-                            <div className="following-post-main">
-                            <div className="following-post-header">
-                              <div className="following-post-header-text">
-                                <Link href="/user/FactChecker_99" className="following-post-username" data-testid="link-user-FactChecker_99-foryou">FactChecker_99</Link>
-                                <span className="following-post-action">submitted an article</span>
-                              </div>
-                              <span className="following-post-timestamp">20 mins ago</span>
-                            </div>
-                            <div className="following-post-body">
-                              <FeedArticleCard
-                                title="5 Myths You Might Hear Going Home For the Holidays"
-                                summary="Some advice you might have heard from the family while growing up about what's harmful might have been an unnecessary scare, and some things you've been told will cause utter damage might be harmless. If you're heading to the family gatherings this holiday season, here are some familiar sayings about food, people, and mental health you're likely to hear that actually aren't true."
-                                coverImage="/uploads/1764995940108-220172306.jpg"
-                                category="Everyday Life"
-                                slug="going-home-for-the-holidays-myths-2025"
-                              />
-                            </div>
-                            </div>
-                          </div>
-
-                          <div className="following-post" data-testid="for-you-post-2">
-                            <img src={placeholderPhoto} alt="SkepticalSam" className="following-post-avatar" />
-                            <div className="following-post-main">
-                            <div className="following-post-header">
-                              <div className="following-post-header-text">
-                                <Link href="/user/SkepticalSam" className="following-post-username" data-testid="link-user-SkepticalSam">SkepticalSam</Link>
-                                <span className="following-post-action">submitted a new topic</span>
-                              </div>
-                              <span className="following-post-timestamp">1 hour ago</span>
-                            </div>
-                            <div className="following-post-body following-post-factcard">
-                              <FactCard
-                                fact={{
-                                  id: "breakfast-most-important-meal-of-the-day",
-                                  category: "HEALTH & FITNESS",
-                                  categoryColor: "#EC7200",
-                                  myth: "Breakfast is the most important meal of the day.",
-                                  truth: "While eating breakfast can be beneficial for certain lifestyles, research shows that its importance varies widely based on individual metabolism, cultural norms, and overall diet.",
-                                  link: "/fact/breakfast-most-important-meal-of-the-day",
-                                  coverPhoto: "/uploads/1765021400264-394912154.png",
-                                }}
-                                onSave={() => {}}
-                                onShare={() => {}}
-                                onComment={() => {}}
-                              />
-                            </div>
-                            </div>
-                          </div>
+                      forYouFeedLoading ? (
+                        <div className="dashboard-feed-empty" data-testid="feed-loading-for-you">
+                          <p className="dashboard-feed-empty-desc">Loading activity...</p>
                         </div>
-                      ) : (
+                      ) : forYouFeed.length > 0 ? (
+                        <div className="following-feed" data-testid="feed-for-you">
+                          {forYouFeed.map((item, i) => (
+                            <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} />
+                          ))}
+                        </div>
+                      ) : user.favoriteTags.length === 0 ? (
                         <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
                           <Search size={40} className="dashboard-feed-empty-icon" />
                           <p className="dashboard-feed-empty-title">Select your interests</p>
@@ -1195,11 +1218,41 @@ export default function UserDashboard() {
                             Select Interests
                           </button>
                         </div>
+                      ) : (
+                        <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
+                          <Search size={40} className="dashboard-feed-empty-icon" />
+                          <p className="dashboard-feed-empty-title">No activity yet</p>
+                          <p className="dashboard-feed-empty-desc">
+                            No recent submissions to show. Check back soon.
+                          </p>
+                        </div>
                       )
                     )}
 
                     {feedTab === "following" && (
-                      <div className="following-feed" data-testid="feed-following">
+                      followingFeedLoading ? (
+                        <div className="dashboard-feed-empty" data-testid="feed-loading-following">
+                          <p className="dashboard-feed-empty-desc">Loading your feed...</p>
+                        </div>
+                      ) : followingFeed.length > 0 ? (
+                        <div className="following-feed" data-testid="feed-following">
+                          {followingFeed.map((item, i) => (
+                            <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="dashboard-feed-empty" data-testid="feed-empty-following">
+                          <Users size={40} className="dashboard-feed-empty-icon" />
+                          <p className="dashboard-feed-empty-title">No activity yet</p>
+                          <p className="dashboard-feed-empty-desc">
+                            Follow users to see their topic submissions and comments here.
+                          </p>
+                        </div>
+                      )
+                    )}
+
+                    {false && (
+                      <div className="following-feed" data-testid="feed-following-old">
                         <div className="following-post" data-testid="following-post-1">
                           <img src={placeholderPhoto} alt="LogicGamer_01" className="following-post-avatar" />
                           <div className="following-post-main">
@@ -3407,7 +3460,11 @@ export default function UserDashboard() {
                         <input
                           type="checkbox"
                           checked={allowFollows}
-                          onChange={() => setAllowFollows(!allowFollows)}
+                          onChange={async () => {
+                            const next = !allowFollows;
+                            setAllowFollows(next);
+                            try { await updateUser({ allowFollows: next }); } catch {}
+                          }}
                         />
                         <span className="settings-toggle-slider" />
                       </label>

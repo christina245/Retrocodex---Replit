@@ -1,7 +1,8 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useRoute, Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 import { MapPin, Home, CornerUpLeft, Heart, Bookmark, Check, BookOpen, MessageCircleMore, GitCommitHorizontal, MessageSquare, FileText, FilePenLine } from "lucide-react";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -47,11 +48,10 @@ export default function PublicProfile() {
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isFollowing, setIsFollowing] = useState(false);
-
   const isOwnProfile = user?.username === username;
 
   const { data: apiProfile } = useQuery<{
+    id: string;
     username: string;
     bio: string | null;
     avatarUrl: string | null;
@@ -61,11 +61,57 @@ export default function PublicProfile() {
     showPlacesLived: boolean | null;
     favoriteTags: string[] | null;
     misinfoSource: string | null;
+    allowFollows: boolean | null;
     isAdmin: boolean | null;
+    followerCount: number;
+    followingCount: number;
   }>({
     queryKey: ["/api/users", username],
     enabled: !!username,
   });
+
+  const targetUserId = apiProfile?.id ?? "";
+  const allowFollows = apiProfile?.allowFollows ?? true;
+
+  const { data: followStatus } = useQuery<{ isFollowing: boolean; allowFollows: boolean }>({
+    queryKey: ["/api/follow/status", targetUserId],
+    enabled: !!user && !isOwnProfile && !!targetUserId,
+  });
+
+  const isFollowing = followStatus?.isFollowing ?? false;
+  const [optimisticFollowerCount, setOptimisticFollowerCount] = useState<number | null>(null);
+  const followerCount = optimisticFollowerCount ?? apiProfile?.followerCount ?? 0;
+  const followingCount = apiProfile?.followingCount ?? 0;
+
+  const followMutation = useMutation({
+    mutationFn: () => apiRequest("POST", `/api/follow/${targetUserId}`),
+    onMutate: () => setOptimisticFollowerCount((followerCount) + 1),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/follow/status", targetUserId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/users", username] });
+      setOptimisticFollowerCount(null);
+    },
+    onError: () => setOptimisticFollowerCount(null),
+  });
+
+  const unfollowMutation = useMutation({
+    mutationFn: () => apiRequest("DELETE", `/api/follow/${targetUserId}`),
+    onMutate: () => setOptimisticFollowerCount(Math.max(0, followerCount - 1)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/follow/status", targetUserId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/users", username] });
+      setOptimisticFollowerCount(null);
+    },
+    onError: () => setOptimisticFollowerCount(null),
+  });
+
+  const handleFollowToggle = () => {
+    if (isFollowing) {
+      unfollowMutation.mutate();
+    } else {
+      followMutation.mutate();
+    }
+  };
 
   const profileData = {
     username: username,
@@ -222,10 +268,11 @@ export default function PublicProfile() {
       <div className="public-profile-container">
         <div className="public-profile-banner" data-testid="public-profile-banner">
           <div className="user-profile-banner">
-            {!isOwnProfile && (
+            {!isOwnProfile && user && allowFollows && (
               <button
                 className={`profile-banner-primary-btn profile-banner-corner-btn${isFollowing ? " profile-banner-following-btn" : ""}`}
-                onClick={() => setIsFollowing(!isFollowing)}
+                onClick={handleFollowToggle}
+                disabled={followMutation.isPending || unfollowMutation.isPending}
                 data-testid="button-follow-user"
               >
                 {isFollowing ? "Following" : "Follow"}
@@ -244,6 +291,18 @@ export default function PublicProfile() {
                 {profileData.username}
                 {profileData.isAdmin && <AdminBadge className="ml-2" />}
               </h2>
+
+              {allowFollows && (
+                <div className="user-profile-follow-counts" data-testid="public-profile-follow-counts">
+                  <span data-testid="text-follower-count">
+                    <strong>{followerCount}</strong> {followerCount === 1 ? "follower" : "followers"}
+                  </span>
+                  <span className="user-profile-follow-sep">·</span>
+                  <span data-testid="text-following-count">
+                    <strong>{followingCount}</strong> following
+                  </span>
+                </div>
+              )}
 
               <div className="user-profile-locations-wrapper" data-testid="public-profile-locations">
                 {profileData.showCurrentLocation && profileData.currentLocation ? (

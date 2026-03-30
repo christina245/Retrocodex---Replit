@@ -855,6 +855,46 @@ a.following-post-username:hover {
   margin-top: 15px;
 }
 
+.feed-submission-card {
+  background: hsl(var(--muted) / 0.4);
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.feed-submission-myth {
+  font-family: 'Merriweather', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin: 0;
+  line-height: 1.5;
+}
+
+.feed-submission-truth {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: hsl(var(--muted-foreground));
+  margin: 0;
+  line-height: 1.4;
+}
+
+a.following-post-fact-link {
+  text-decoration: none;
+  color: hsl(var(--foreground));
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+a.following-post-fact-link:hover {
+  color: #FF5353;
+  text-decoration: underline;
+}
+
 .local-feed-description {
   font-family: 'Public Sans', sans-serif;
   font-size: 1rem;

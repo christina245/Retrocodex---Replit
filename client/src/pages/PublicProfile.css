@@ -77,6 +77,27 @@
   gap: 0.75rem;
 }
 
+.user-profile-follow-counts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  color: hsl(var(--muted-foreground));
+  margin-top: 4px;
+}
+
+.user-profile-follow-counts strong {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.user-profile-follow-sep {
+  color: hsl(var(--muted-foreground));
+  font-size: 16px;
+  line-height: 1;
+}
+
 @media (max-width: 768px) {
   .public-profile-container {
     padding: 1rem;
