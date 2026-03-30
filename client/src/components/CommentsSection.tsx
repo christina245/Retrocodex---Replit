@@ -274,11 +274,13 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
   const postMutation = useMutation({
     mutationFn: async (data: { body: string; parentId?: string }) =>
       apiRequest("POST", `/api/facts/${factId}/comments`, data),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
-      setInputBody("");
-      setInputError(null);
-      setIsInputExpanded(false);
+      if (!variables.parentId) {
+        setInputBody("");
+        setInputError(null);
+        setIsInputExpanded(false);
+      }
     },
   });
 
