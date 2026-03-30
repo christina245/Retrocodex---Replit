@@ -479,14 +479,15 @@ export const follows = pgTable("follows", {
 
 export type Follow = typeof follows.$inferSelect;
 
-// Feed item type — union of submission and comment activity
+// Feed item type — union of submission, comment, fact, and article activity
 export type FeedItem = {
-  type: "submission" | "comment";
+  type: "submission" | "comment" | "fact" | "article";
   id: string;
   userId: string;
   username: string;
   avatarUrl: string;
   createdAt: Date;
+  // submission / comment fields
   mythHeader?: string;
   truthHeader?: string;
   submissionStatus?: string;
@@ -495,4 +496,13 @@ export type FeedItem = {
   factSlug?: string;
   factTitle?: string;
   factCoverPhoto?: string | null;
+  // fact fields (For You feed)
+  factCategories?: string[];
+  factCoverPhoto2?: string | null;
+  // article fields (For You feed)
+  articleUrl?: string;
+  articleTitle?: string;
+  publicationName?: string;
+  articleSummary?: string;
+  articleCoverImage?: string | null;
 };

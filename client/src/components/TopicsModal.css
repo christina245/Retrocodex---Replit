@@ -1,0 +1,9 @@
+.topics-modal {
+  padding: 2rem;
+}
+
+.topics-modal .signin-confirmation-title {
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 0;
+}

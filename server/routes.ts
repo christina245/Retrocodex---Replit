@@ -269,6 +269,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
         .returning();
 
+      // Auto-follow all admin accounts so new users have a populated Following feed
+      const adminProfiles = await db
+        .select({ id: userProfiles.id })
+        .from(userProfiles)
+        .where(eq(userProfiles.isAdmin, true));
+      await Promise.all(
+        adminProfiles
+          .filter((a) => a.id !== account.id)
+          .map((a) => storage.followUser(account.id, a.id).catch(() => {}))
+      );
+
       req.session.userId = account.id;
       clearAuthAttempts(ip);
       return res.status(201).json({
@@ -654,10 +665,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET /api/feed/for-you — recent public activity feed (no auth required)
+  // GET /api/feed/for-you — tag-personalized feed (auth optional)
   app.get("/api/feed/for-you", async (req, res) => {
     try {
-      const items = await storage.getForYouFeed();
+      const userId = req.session.userId ?? undefined;
+      const items = await storage.getForYouFeed(userId);
       return res.json(items);
     } catch (error) {
       console.error("GET /api/feed/for-you error:", error);

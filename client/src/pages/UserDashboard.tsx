@@ -26,6 +26,8 @@ import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
 import "../components/SignInModal.css";
 import { AdminBadge } from "@/components/AdminBadge";
+import { TopicsModal } from "@/components/TopicsModal";
+import { getCategoryConfig } from "@shared/categories";
 import { Button } from "@/components/ui/button";
 import { getCountryFlag } from "@/lib/countryFlags";
 import "./UserDashboard.css";
@@ -533,7 +535,88 @@ function formatRelativeTime(date: Date | string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+function FactCardFeedItem({ item, index }: { item: FeedItem; index: number }) {
+  const slug = item.factSlug;
+  const categoryName = item.factCategories?.[0] ?? "";
+  const catConfig = getCategoryConfig(categoryName);
+  const catColor = catConfig?.color ?? "#2C2C2C";
+
+  const inner = (
+    <div className="feed-factcard" data-testid={`feed-factcard-${index}`}>
+      {categoryName && (
+        <div className="feed-factcard-category" style={{ backgroundColor: catColor }} data-testid={`feed-factcard-cat-${index}`}>
+          <span className="feed-factcard-category-name">{categoryName}</span>
+        </div>
+      )}
+      <div className="feed-factcard-body">
+        <div className="feed-factcard-row feed-factcard-myth" data-testid={`feed-factcard-myth-${index}`}>
+          <X size={16} className="feed-factcard-icon feed-factcard-icon-myth" strokeWidth={3} />
+          <p className="feed-factcard-text">&ldquo;{item.mythHeader}&rdquo;</p>
+        </div>
+        <div className="feed-factcard-row feed-factcard-truth" data-testid={`feed-factcard-truth-${index}`}>
+          <Check size={16} className="feed-factcard-icon feed-factcard-icon-truth" strokeWidth={3} />
+          <p className="feed-factcard-text">{item.truthHeader}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (slug) {
+    return (
+      <Link href={`/fact/${slug}`} className="feed-factcard-link" data-testid={`link-feed-factcard-${index}`}>
+        {inner}
+      </Link>
+    );
+  }
+  return inner;
+}
+
 function FeedPost({ item, index }: { item: FeedItem; index: number }) {
+  // "fact" and "article" types are For You items — no user attribution
+  if (item.type === "fact") {
+    return (
+      <div className="following-post following-post--fact" data-testid={`feed-post-${index}`}>
+        <div className="following-post-main">
+          <FactCardFeedItem item={item} index={index} />
+        </div>
+      </div>
+    );
+  }
+
+  if (item.type === "article") {
+    return (
+      <div className="following-post following-post--article" data-testid={`feed-post-${index}`}>
+        <div className="following-post-main">
+          <a
+            href={item.articleUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="feed-article-link"
+            data-testid={`link-feed-article-${index}`}
+          >
+            <div className="feed-article-card" data-testid={`feed-article-${index}`}>
+              <div className="feed-article-body">
+                {item.publicationName && (
+                  <span className="feed-article-publication" data-testid={`feed-article-pub-${index}`}>{item.publicationName}</span>
+                )}
+                <p className="feed-article-title" data-testid={`feed-article-title-${index}`}>{item.articleTitle}</p>
+                {item.articleSummary && (
+                  <p className="feed-article-summary" data-testid={`feed-article-summary-${index}`}>{item.articleSummary}</p>
+                )}
+              </div>
+              {item.articleCoverImage && (
+                <img src={item.articleCoverImage} alt="" className="feed-article-cover" />
+              )}
+            </div>
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  // submission and comment types — with user attribution
+  if (item.type === "submission" && item.submissionStatus !== "published") return null;
+
   const avatarSrc = getAvatarSrcDashboard(item.avatarUrl, item.username);
   return (
     <div className="following-post" data-testid={`feed-post-${index}`}>
@@ -545,7 +628,7 @@ function FeedPost({ item, index }: { item: FeedItem; index: number }) {
               {item.username}
             </Link>
             {item.type === "submission" && (
-              <span className="following-post-action">submitted a topic idea</span>
+              <span className="following-post-action">submitted a topic</span>
             )}
             {item.type === "comment" && item.factTitle && (
               <>
@@ -567,10 +650,7 @@ function FeedPost({ item, index }: { item: FeedItem; index: number }) {
         </div>
         <div className="following-post-body">
           {item.type === "submission" && (
-            <div className="feed-submission-card" data-testid={`feed-submission-${index}`}>
-              <p className="feed-submission-myth" data-testid={`feed-myth-${index}`}>{item.mythHeader}</p>
-              <p className="feed-submission-truth" data-testid={`feed-truth-${index}`}>{item.truthHeader}</p>
-            </div>
+            <FactCardFeedItem item={item} index={index} />
           )}
           {item.type === "comment" && (
             <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
@@ -673,6 +753,7 @@ export default function UserDashboard() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [activeEllipsisId]);
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
+  const [topicsModalOpen, setTopicsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
@@ -1201,13 +1282,25 @@ export default function UserDashboard() {
                             <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} />
                           ))}
                         </div>
+                      ) : (user?.favoriteTags?.length ?? 0) === 0 ? (
+                        <div className="dashboard-feed-empty" data-testid="feed-empty-for-you-no-tags">
+                          <Search size={40} className="dashboard-feed-empty-icon" />
+                          <p className="dashboard-feed-empty-desc feed-empty-add-topics">
+                            <button
+                              type="button"
+                              className="feed-add-topics-link"
+                              onClick={() => setTopicsModalOpen(true)}
+                              data-testid="button-add-topics"
+                            >
+                              Add topics
+                            </button>
+                            {" "}to view all related content.
+                          </p>
+                        </div>
                       ) : (
                         <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
                           <Search size={40} className="dashboard-feed-empty-icon" />
-                          <p className="dashboard-feed-empty-title">No activity yet</p>
-                          <p className="dashboard-feed-empty-desc">
-                            No recent published submissions to show. Check back soon.
-                          </p>
+                          <p className="dashboard-feed-empty-desc">No matching content yet.</p>
                         </div>
                       )
                     )}
@@ -3883,6 +3976,10 @@ export default function UserDashboard() {
       <SourcesModal
         factId={sourcesModalFactId}
         onClose={() => setSourcesModalFactId(null)}
+      />
+      <TopicsModal
+        isOpen={topicsModalOpen}
+        onClose={() => setTopicsModalOpen(false)}
       />
     </div>
   );

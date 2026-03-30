@@ -2534,3 +2534,186 @@ a.following-post-fact-link:hover {
   letter-spacing: 0.05em;
   margin-bottom: 12px;
 }
+
+/* ── For You feed: FactCard-style items ── */
+.following-post--fact,
+.following-post--article {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.following-post--fact .following-post-main,
+.following-post--article .following-post-main {
+  width: 100%;
+}
+
+.feed-factcard-link {
+  display: block;
+  text-decoration: none;
+}
+
+.feed-factcard {
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  overflow: hidden;
+  background: hsl(var(--card));
+  transition: box-shadow 0.15s ease;
+}
+
+.feed-factcard:hover {
+  box-shadow: 0 2px 8px hsl(var(--foreground) / 0.08);
+}
+
+.feed-factcard-category {
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feed-factcard-category-name {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.feed-factcard-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feed-factcard-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.feed-factcard-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.feed-factcard-icon-myth {
+  color: hsl(var(--destructive));
+}
+
+.feed-factcard-icon-truth {
+  color: #37a037;
+}
+
+.dark .feed-factcard-icon-truth {
+  color: #5ccb5c;
+}
+
+.feed-factcard-text {
+  font-family: 'Merriweather', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  color: hsl(var(--foreground));
+}
+
+.feed-factcard-myth .feed-factcard-text {
+  color: hsl(var(--muted-foreground));
+  font-size: 13px;
+}
+
+/* ── For You feed: article items ── */
+.feed-article-link {
+  display: block;
+  text-decoration: none;
+}
+
+.feed-article-card {
+  border: 1px solid hsl(var(--border));
+  border-radius: 6px;
+  overflow: hidden;
+  background: hsl(var(--card));
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  transition: box-shadow 0.15s ease;
+}
+
+.feed-article-card:hover {
+  box-shadow: 0 2px 8px hsl(var(--foreground) / 0.08);
+}
+
+.feed-article-body {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.feed-article-publication {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: hsl(var(--muted-foreground));
+}
+
+.feed-article-title {
+  font-family: 'Merriweather', serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin: 0;
+  color: hsl(var(--foreground));
+}
+
+.feed-article-summary {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: hsl(var(--muted-foreground));
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.feed-article-cover {
+  width: 90px;
+  min-width: 90px;
+  height: 90px;
+  object-fit: cover;
+  flex-shrink: 0;
+  align-self: center;
+  margin: 10px 10px 10px 0;
+  border-radius: 4px;
+}
+
+/* ── For You empty state with add-topics link ── */
+.feed-empty-add-topics {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+.feed-add-topics-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}
+
+.feed-add-topics-link:hover {
+  opacity: 0.8;
+}

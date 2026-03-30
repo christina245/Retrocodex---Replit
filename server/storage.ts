@@ -35,7 +35,7 @@ import {
   type FeedItem,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, arrayContains, inArray, sql, notInArray } from "drizzle-orm";
+import { eq, desc, and, arrayContains, inArray, sql, notInArray, ne, or } from "drizzle-orm";
 
 export interface IStorage {
   // Email subscriptions
@@ -107,7 +107,7 @@ export interface IStorage {
   // Feed
   getFollowingIds(userId: string): Promise<string[]>;
   getFollowingFeed(userId: string, limit?: number): Promise<FeedItem[]>;
-  getForYouFeed(limit?: number): Promise<FeedItem[]>;
+  getForYouFeed(userId?: string, limit?: number): Promise<FeedItem[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -713,35 +713,97 @@ export class DatabaseStorage implements IStorage {
       .slice(0, limit);
   }
 
-  async getForYouFeed(limit = 50): Promise<FeedItem[]> {
-    const submissions = await db
+  async getForYouFeed(userId?: string, limit = 50): Promise<FeedItem[]> {
+    // Get user's favorite tags
+    let favoriteTags: string[] = [];
+    if (userId) {
+      const [profile] = await db
+        .select({ favoriteTags: userProfiles.favoriteTags })
+        .from(userProfiles)
+        .where(eq(userProfiles.id, userId))
+        .limit(1);
+      favoriteTags = profile?.favoriteTags ?? [];
+    }
+
+    // No favorite tags → return empty (UI shows "Add topics" prompt)
+    if (favoriteTags.length === 0) return [];
+
+    // Build a safe PostgreSQL array parameter using ARRAY[...] constructor
+    const tagLiterals = favoriteTags.map((t) => sql`${t}`);
+    const tagsArray = sql`ARRAY[${sql.join(tagLiterals, sql`, `)}]::text[]`;
+
+    // Query published facts whose searchTags overlap with favoriteTags
+    const factRows = await db
       .select({
-        id: factSubmissions.id,
-        userId: factSubmissions.userId,
-        username: factSubmissions.username,
-        avatarUrl: userProfiles.avatarUrl,
-        mythHeader: factSubmissions.mythHeader,
-        truthHeader: factSubmissions.truthHeader,
-        status: factSubmissions.status,
-        createdAt: factSubmissions.createdAt,
+        id: facts.id,
+        slug: facts.slug,
+        mythHeader: facts.mythHeader,
+        truthHeader: facts.truthHeader,
+        coverPhoto: facts.coverPhoto,
+        categories: facts.categories,
+        createdAt: facts.createdAt,
       })
-      .from(factSubmissions)
-      .leftJoin(userProfiles, eq(factSubmissions.userId, userProfiles.id))
-      .where(eq(factSubmissions.status, "published"))
-      .orderBy(desc(factSubmissions.createdAt))
+      .from(facts)
+      .where(sql`${facts.searchTags} && ${tagsArray}`)
+      .orderBy(desc(facts.createdAt))
       .limit(limit);
 
-    return submissions.map((s) => ({
-      type: "submission" as const,
-      id: s.id,
-      userId: s.userId,
-      username: s.username,
-      avatarUrl: s.avatarUrl ?? "",
-      createdAt: s.createdAt,
-      mythHeader: s.mythHeader,
-      truthHeader: s.truthHeader,
-      submissionStatus: s.status,
+    // Query published external articles whose tags or category overlaps with favoriteTags
+    const articleRows = await db
+      .select({
+        id: externalArticles.id,
+        title: externalArticles.title,
+        externalUrl: externalArticles.externalUrl,
+        publicationName: externalArticles.publicationName,
+        summary: externalArticles.summary,
+        coverImage: externalArticles.coverImage,
+        category: externalArticles.category,
+        createdAt: externalArticles.createdAt,
+      })
+      .from(externalArticles)
+      .where(
+        and(
+          eq(externalArticles.published, true),
+          or(
+            sql`${externalArticles.tags} && ${tagsArray}`,
+            sql`${externalArticles.category} = ANY(${tagsArray})`
+          )
+        )
+      )
+      .orderBy(desc(externalArticles.createdAt))
+      .limit(limit);
+
+    const factItems: FeedItem[] = factRows.map((f) => ({
+      type: "fact" as const,
+      id: f.id,
+      userId: "",
+      username: "",
+      avatarUrl: "",
+      createdAt: f.createdAt,
+      factSlug: f.slug,
+      mythHeader: f.mythHeader,
+      truthHeader: f.truthHeader,
+      factCoverPhoto2: f.coverPhoto ?? null,
+      factCategories: f.categories,
     }));
+
+    const articleItems: FeedItem[] = articleRows.map((a) => ({
+      type: "article" as const,
+      id: a.id,
+      userId: "",
+      username: "",
+      avatarUrl: "",
+      createdAt: a.createdAt,
+      articleUrl: a.externalUrl,
+      articleTitle: a.title,
+      publicationName: a.publicationName,
+      articleSummary: a.summary ?? undefined,
+      articleCoverImage: a.coverImage ?? null,
+    }));
+
+    return [...factItems, ...articleItems]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
   }
 }
 
