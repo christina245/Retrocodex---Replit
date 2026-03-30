@@ -780,6 +780,13 @@
   min-width: 0;
 }
 
+.following-post-attribution {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .following-post-header {
   display: flex;
   align-items: flex-start;

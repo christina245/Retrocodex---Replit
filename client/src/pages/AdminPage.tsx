@@ -135,6 +135,7 @@ export default function AdminPage() {
   const [publishSuccessCategory, setPublishSuccessCategory] = useState<string>("/");
   const [editingSubmissionId, setEditingSubmissionId] = useState<string | null>(null);
   const [submissionUsername, setSubmissionUsername] = useState("");
+  const [submittedByUserId, setSubmittedByUserId] = useState("");
   const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -559,6 +560,7 @@ export default function AdminPage() {
     setSubmitMessage("");
     setEditingSubmissionId(null);
     setSubmissionUsername("");
+    setSubmittedByUserId("");
     setSubmissionActionMsg(null);
   };
 
@@ -776,6 +778,7 @@ export default function AdminPage() {
     setTimeline(fact.timeline || []);
     setNuances(fact.nuances || []);
     setRelatedMythIds(fact.relatedMythIds || []);
+    setSubmittedByUserId((fact as any).submittedByUserId || "");
     setCurrentView("add-fact");
   };
 
@@ -1136,6 +1139,7 @@ export default function AdminPage() {
       revisionYear: selectedTags.includes("Official Revision") ? revisionYear : null,
       originDecade: originDecade || null,
       taughtUntilYear: taughtUntilYear || null,
+      submittedByUserId: submittedByUserId.trim() || undefined,
     };
 
     try {
@@ -1412,6 +1416,19 @@ export default function AdminPage() {
                     placeholder="Enter fact title..."
                     data-testid="input-title"
                     required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Submitted By (User ID) <span style={{ fontWeight: 400, color: "#888" }}>— optional</span></label>
+                  <p className="form-hint">If this fact was published from a user's submission, paste their user ID here to credit them in Following feeds.</p>
+                  <input
+                    type="text"
+                    value={submittedByUserId}
+                    onChange={(e) => setSubmittedByUserId(e.target.value)}
+                    className="form-input"
+                    placeholder="e.g. 9550566f-7009-4379-bbcc-1ffe6ac11cf9"
+                    data-testid="input-submitted-by-user-id"
                   />
                 </div>
 

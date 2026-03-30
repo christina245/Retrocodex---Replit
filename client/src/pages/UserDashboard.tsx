@@ -568,8 +568,24 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
   if (item.type === "fact") {
     const fact = feedItemToFactCard(item);
     const isSaved = savedFactIds.has(item.id);
+    const hasAttribution = item.username && item.username !== "";
+    const avatarSrc = hasAttribution ? getAvatarSrcDashboard(item.avatarUrl, item.username) : null;
     return (
       <div className="following-post following-post--fact" data-testid={`feed-post-${index}`}>
+        {hasAttribution && (
+          <div className="following-post-attribution">
+            <img src={avatarSrc!} alt={item.username} className="following-post-avatar" />
+            <div className="following-post-header">
+              <div className="following-post-header-text">
+                <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
+                  {item.username}
+                </Link>
+                <span className="following-post-action">submitted a topic</span>
+              </div>
+              <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
+            </div>
+          </div>
+        )}
         <FactCard
           fact={fact}
           isSaved={isSaved}
@@ -620,9 +636,7 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
     );
   }
 
-  // submission and comment types — with user attribution
-  if (item.type === "submission" && item.submissionStatus !== "published") return null;
-
+  // comment type — with user attribution
   const avatarSrc = getAvatarSrcDashboard(item.avatarUrl, item.username);
   return (
     <div className="following-post" data-testid={`feed-post-${index}`}>
@@ -633,9 +647,6 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
             <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
               {item.username}
             </Link>
-            {item.type === "submission" && (
-              <span className="following-post-action">submitted a topic</span>
-            )}
             {item.type === "comment" && item.factTitle && (
               <>
                 <span className="following-post-action">commented on</span>

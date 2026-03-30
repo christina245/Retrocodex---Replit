@@ -180,6 +180,7 @@ export const facts = pgTable("facts", {
   revisionYear: integer("revision_year"),
   taughtUntilYear: text("taught_until_year"),
   originDecade: text("origin_decade"),
+  submittedByUserId: varchar("submitted_by_user_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -208,6 +209,7 @@ export const insertFactSchema = z.object({
   revisionYear: z.number().int().min(1800).max(2100).nullable().optional(),
   taughtUntilYear: z.string().nullable().optional(),
   originDecade: z.string().nullable().optional(),
+  submittedByUserId: z.string().optional(),
 });
 
 export type InsertFact = z.infer<typeof insertFactSchema>;
@@ -479,18 +481,17 @@ export const follows = pgTable("follows", {
 
 export type Follow = typeof follows.$inferSelect;
 
-// Feed item type — union of submission, comment, fact, and article activity
+// Feed item type — union of comment, fact, and article activity
 export type FeedItem = {
-  type: "submission" | "comment" | "fact" | "article";
+  type: "comment" | "fact" | "article";
   id: string;
   userId: string;
   username: string;
   avatarUrl: string;
   createdAt: Date;
-  // submission / comment fields
+  // comment fields
   mythHeader?: string;
   truthHeader?: string;
-  submissionStatus?: string;
   commentBody?: string;
   factId?: string;
   factSlug?: string;

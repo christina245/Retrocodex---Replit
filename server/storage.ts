@@ -645,21 +645,28 @@ export class DatabaseStorage implements IStorage {
     const followingIds = await this.getFollowingIds(userId);
     if (followingIds.length === 0) return [];
 
-    const submissions = await db
+    // Published facts credited to followed users (via submittedByUserId)
+    const submittedFacts = await db
       .select({
-        id: factSubmissions.id,
-        userId: factSubmissions.userId,
-        username: factSubmissions.username,
+        id: facts.id,
+        userId: facts.submittedByUserId,
+        username: userProfiles.username,
         avatarUrl: userProfiles.avatarUrl,
-        mythHeader: factSubmissions.mythHeader,
-        truthHeader: factSubmissions.truthHeader,
-        status: factSubmissions.status,
-        createdAt: factSubmissions.createdAt,
+        createdAt: facts.createdAt,
+        slug: facts.slug,
+        mythHeader: facts.mythHeader,
+        truthHeader: facts.truthHeader,
+        coverPhoto: facts.coverPhoto,
+        categories: facts.categories,
+        factFilters: facts.factFilters,
+        betaOnly: facts.betaOnly,
+        revisionYear: facts.revisionYear,
+        taughtUntilYear: facts.taughtUntilYear,
       })
-      .from(factSubmissions)
-      .leftJoin(userProfiles, eq(factSubmissions.userId, userProfiles.id))
-      .where(and(inArray(factSubmissions.userId, followingIds), eq(factSubmissions.status, "published")))
-      .orderBy(desc(factSubmissions.createdAt))
+      .from(facts)
+      .innerJoin(userProfiles, eq(facts.submittedByUserId, userProfiles.id))
+      .where(inArray(facts.submittedByUserId, followingIds))
+      .orderBy(desc(facts.createdAt))
       .limit(limit);
 
     const commentRows = await db
@@ -682,20 +689,26 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(comments.createdAt))
       .limit(limit);
 
-    const submissionItems: FeedItem[] = submissions.map((s) => ({
-      type: "submission",
-      id: s.id,
-      userId: s.userId,
-      username: s.username,
-      avatarUrl: s.avatarUrl ?? "",
-      createdAt: s.createdAt,
-      mythHeader: s.mythHeader,
-      truthHeader: s.truthHeader,
-      submissionStatus: s.status,
+    const factItems: FeedItem[] = submittedFacts.map((f) => ({
+      type: "fact" as const,
+      id: f.id,
+      userId: f.userId ?? "",
+      username: f.username ?? "",
+      avatarUrl: f.avatarUrl ?? "",
+      createdAt: f.createdAt,
+      factSlug: f.slug,
+      mythHeader: f.mythHeader,
+      truthHeader: f.truthHeader,
+      factCoverPhoto2: f.coverPhoto ?? null,
+      factCategories: f.categories,
+      factFilters: f.factFilters ?? [],
+      factBetaOnly: f.betaOnly ?? false,
+      factRevisionYear: f.revisionYear ?? null,
+      factTaughtUntilYear: f.taughtUntilYear ?? null,
     }));
 
     const commentItems: FeedItem[] = commentRows.map((c) => ({
-      type: "comment",
+      type: "comment" as const,
       id: c.id,
       userId: c.userId,
       username: c.username ?? "",
@@ -708,7 +721,7 @@ export class DatabaseStorage implements IStorage {
       factCoverPhoto: c.factCoverPhoto ?? undefined,
     }));
 
-    return [...submissionItems, ...commentItems]
+    return [...factItems, ...commentItems]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit);
   }
