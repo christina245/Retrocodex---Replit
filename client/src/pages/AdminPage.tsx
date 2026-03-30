@@ -778,7 +778,7 @@ export default function AdminPage() {
     setTimeline(fact.timeline || []);
     setNuances(fact.nuances || []);
     setRelatedMythIds(fact.relatedMythIds || []);
-    setSubmittedByUserId((fact as any).submittedByUserId || "");
+    setSubmittedByUserId(fact.submittedByUserId || "");
     setCurrentView("add-fact");
   };
 
@@ -818,6 +818,7 @@ export default function AdminPage() {
     setTimeline(d.timeline ?? []);
     setNuances(d.nuances ?? []);
     setRelatedMythIds(d.relatedMythIds ?? []);
+    setSubmittedByUserId(sub.userId || "");
     window.scrollTo(0, 0);
   };
 
@@ -861,6 +862,7 @@ export default function AdminPage() {
         mythHeader, mythDetails, truthHeader, truthDetails,
         sources: validSources, timeline: timeline.filter(t => t.year && t.description),
         nuances: nuances.filter(n => n.type && n.body), relatedMythIds: relatedMythIds.filter(id => id),
+        submittedByUserId: submittedByUserId.trim() || undefined,
       };
       const factRes = await fetch("/api/facts", {
         method: "POST",
