@@ -640,6 +640,7 @@ export default function UserDashboard() {
   const [bioEditOpen, setBioEditOpen] = useState(false);
   const [editBio, setEditBio] = useState("");
   const [allowFollows, setAllowFollows] = useState(() => user?.allowFollows ?? true);
+  useEffect(() => { setAllowFollows(user?.allowFollows ?? true); }, [user?.allowFollows]);
   const [followedBack, setFollowedBack] = useState<Record<string, boolean>>({});
   const [publicProfile, setPublicProfile] = useState(true);
   const [notifyFollows, setNotifyFollows] = useState(true);
