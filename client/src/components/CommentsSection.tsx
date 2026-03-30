@@ -25,11 +25,13 @@ function formatDate(date: Date | string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function buildTree(comments: CommentWithUser[]) {
-  const map: Record<string, CommentWithUser & { children: any[] }> = {};
-  const roots: (CommentWithUser & { children: any[] })[] = [];
-  comments.forEach(c => { map[c.id] = { ...c, children: [] }; });
-  comments.forEach(c => {
+type TreeComment = CommentWithUser & { children: TreeComment[] };
+
+function buildTree(flatComments: CommentWithUser[]): TreeComment[] {
+  const map: Record<string, TreeComment> = {};
+  const roots: TreeComment[] = [];
+  flatComments.forEach(c => { map[c.id] = { ...c, children: [] }; });
+  flatComments.forEach(c => {
     if (c.parentId && map[c.parentId]) {
       map[c.parentId].children.push(map[c.id]);
     } else {
@@ -38,8 +40,6 @@ function buildTree(comments: CommentWithUser[]) {
   });
   return roots;
 }
-
-type TreeComment = CommentWithUser & { children: TreeComment[] };
 
 interface InlineReplyComposerProps {
   parentUsername: string;
@@ -343,21 +343,14 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
             <span>Sign in to comment</span>
           </button>
         ) : !isInputExpanded ? (
-          <div
-            className="comment-input-collapsed"
+          <textarea
+            className="comment-textarea comment-textarea-inactive"
+            placeholder="Share your knowledge about this fact"
+            readOnly
             onClick={() => setIsInputExpanded(true)}
+            rows={2}
             data-testid="input-comment-collapsed"
-          >
-            <div className="collapsed-avatar">
-              <img
-                src={getAvatarSrc(user?.profilePhoto || "", user?.username || "user")}
-                alt={user?.username}
-                width={32}
-                height={32}
-              />
-            </div>
-            <div className="collapsed-placeholder">Share your knowledge about this fact</div>
-          </div>
+          />
         ) : (
           <div className="comment-input-expanded">
             <p className="markdown-hint">Markdown is supported.</p>
