@@ -6,8 +6,8 @@
 }
 
 .beauty-main-content {
- 
-  padding: 0 40px;
+  flex: 1;
+  padding: 0 5px;
   max-width: 95%;
   margin: 0 auto;
 }
