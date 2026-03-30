@@ -2395,7 +2395,7 @@ export default function UserDashboard() {
                         </button>
                       </div>
 
-                      {allowFollows && myPublicProfile && (
+                      {myPublicProfile && (
                         <div className="user-profile-follow-counts" data-testid="dashboard-follow-counts">
                           <span data-testid="text-dashboard-follower-count">
                             <strong>{myPublicProfile.followerCount}</strong>{" "}

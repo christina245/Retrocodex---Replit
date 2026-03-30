@@ -89,6 +89,7 @@ export default function PublicProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/follow/status", targetUserId] });
       queryClient.invalidateQueries({ queryKey: ["/api/users", username] });
+      if (user?.username) queryClient.invalidateQueries({ queryKey: ["/api/users", user.username] });
       setOptimisticFollowerCount(null);
     },
     onError: () => setOptimisticFollowerCount(null),
@@ -100,6 +101,7 @@ export default function PublicProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/follow/status", targetUserId] });
       queryClient.invalidateQueries({ queryKey: ["/api/users", username] });
+      if (user?.username) queryClient.invalidateQueries({ queryKey: ["/api/users", user.username] });
       setOptimisticFollowerCount(null);
     },
     onError: () => setOptimisticFollowerCount(null),
@@ -292,17 +294,15 @@ export default function PublicProfile() {
                 {profileData.isAdmin && <AdminBadge className="ml-2" />}
               </h2>
 
-              {allowFollows && (
-                <div className="user-profile-follow-counts" data-testid="public-profile-follow-counts">
-                  <span data-testid="text-follower-count">
-                    <strong>{followerCount}</strong> {followerCount === 1 ? "follower" : "followers"}
-                  </span>
-                  <span className="user-profile-follow-sep">·</span>
-                  <span data-testid="text-following-count">
-                    <strong>{followingCount}</strong> following
-                  </span>
-                </div>
-              )}
+              <div className="user-profile-follow-counts" data-testid="public-profile-follow-counts">
+                <span data-testid="text-follower-count">
+                  <strong>{followerCount}</strong> {followerCount === 1 ? "follower" : "followers"}
+                </span>
+                <span className="user-profile-follow-sep">·</span>
+                <span data-testid="text-following-count">
+                  <strong>{followingCount}</strong> following
+                </span>
+              </div>
 
               <div className="user-profile-locations-wrapper" data-testid="public-profile-locations">
                 {profileData.showCurrentLocation && profileData.currentLocation ? (
