@@ -208,6 +208,15 @@
   flex-shrink: 0;
 }
 
+.category-action-button-saved {
+  color: #FF5353;
+}
+
+.category-action-button-saved .saved-icon {
+  fill: #FF5353;
+  stroke: #FF5353;
+}
+
 /* Mobile layout - photo on right like homepage */
 @media (max-width: 768px) {
   .category-fact-card-wrapper {
