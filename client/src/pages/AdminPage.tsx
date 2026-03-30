@@ -1138,20 +1138,30 @@ export default function AdminPage() {
         fields.push({ updateType: "truthDetails", content: truthDetails });
       }
 
-      // Diff timeline entries: publish newly added or modified entries
+      // Diff timeline entries by ID (new entries have no matching ID in snapshot; edited entries have changed fields)
       const snapTimeline = snap?.timeline ?? [];
-      const snapTimelineKeys = new Set(snapTimeline.map((t) => `${t.year}::${t.description}`));
+      const snapTimelineById = new Map(snapTimeline.map((t) => [t.id, t]));
       for (const entry of timeline.filter((t) => t.year && t.description)) {
-        if (!snapTimelineKeys.has(`${entry.year}::${entry.description}`)) {
+        const existing = snapTimelineById.get(entry.id);
+        if (!existing) {
+          // Newly added entry (ID not in snapshot)
+          fields.push({ updateType: "timelineEntry", content: { year: entry.year, description: entry.description } });
+        } else if (existing.year !== entry.year || existing.description !== entry.description) {
+          // Modified entry
           fields.push({ updateType: "timelineEntry", content: { year: entry.year, description: entry.description } });
         }
       }
 
-      // Diff nuance entries: publish newly added or modified entries
+      // Diff nuance entries by ID (new entries have no matching ID in snapshot; edited entries have changed fields)
       const snapNuances = snap?.nuances ?? [];
-      const snapNuanceKeys = new Set(snapNuances.map((n) => `${n.type}::${n.body}`));
+      const snapNuancesById = new Map(snapNuances.map((n) => [n.id, n]));
       for (const nuance of nuances.filter((n) => n.type && n.body)) {
-        if (!snapNuanceKeys.has(`${nuance.type}::${nuance.body}`)) {
+        const existing = snapNuancesById.get(nuance.id);
+        if (!existing) {
+          // Newly added nuance
+          fields.push({ updateType: "nuanceEntry", content: { type: nuance.type, body: nuance.body } });
+        } else if (existing.type !== nuance.type || existing.body !== nuance.body) {
+          // Modified nuance
           fields.push({ updateType: "nuanceEntry", content: { type: nuance.type, body: nuance.body } });
         }
       }

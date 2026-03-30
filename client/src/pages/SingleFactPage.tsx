@@ -9,7 +9,6 @@ import envelopeImage from "@assets/email_1774815930235.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { ShareModal } from "@/components/ShareModal";
-import { SubscribeModal } from "@/components/SubscribeModal";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { SignInModal } from "@/components/SignInModal";
@@ -33,7 +32,6 @@ import "./SingleFactPage.css";
 export default function SingleFactPage() {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
@@ -150,10 +148,6 @@ export default function SingleFactPage() {
       });
     },
   });
-
-  const handleSubscribeClick = () => {
-    setIsSubscribeModalOpen(true);
-  };
 
   const handleFollowClick = () => {
     if (!isLoggedIn) {
@@ -373,12 +367,6 @@ export default function SingleFactPage() {
           </div>
         </div>
       </div>
-
-      <SubscribeModal 
-        isOpen={isSubscribeModalOpen}
-        onClose={() => setIsSubscribeModalOpen(false)}
-        onSubmit={(email) => handleEmailSubmit(email, "subscribe-modal")}
-      />
 
       {isFollowModalOpen && (
         <div className="follow-fact-modal-overlay" data-testid="follow-fact-modal" onClick={() => setIsFollowModalOpen(false)}>
