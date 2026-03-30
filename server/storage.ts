@@ -487,10 +487,10 @@ export class DatabaseStorage implements IStorage {
       ...r,
       avatarUrl: r.avatarUrl ?? "",
       isAdmin: r.isAdmin ?? false,
-      currentLocation: r.currentLocation ?? "",
       showCurrentLocation: r.showCurrentLocation ?? false,
-      placesLived: r.placesLived ?? [],
+      currentLocation: (r.showCurrentLocation) ? (r.currentLocation ?? "") : "",
       showPlacesLived: r.showPlacesLived ?? false,
+      placesLived: (r.showPlacesLived) ? (r.placesLived ?? []) : [],
       isUpvotedByMe: upvotedSet.has(r.id),
     }));
   }
@@ -507,15 +507,17 @@ export class DatabaseStorage implements IStorage {
       .where(eq(userProfiles.id, userId))
       .limit(1);
 
+    const showCurrentLocation = profile.showCurrentLocation ?? false;
+    const showPlacesLived = profile.showPlacesLived ?? false;
     return {
       ...comment,
       username: profile.username,
       avatarUrl: profile.avatarUrl ?? "",
       isAdmin: profile.isAdmin ?? false,
-      currentLocation: profile.currentLocation ?? "",
-      showCurrentLocation: profile.showCurrentLocation ?? false,
-      placesLived: profile.placesLived ?? [],
-      showPlacesLived: profile.showPlacesLived ?? false,
+      showCurrentLocation,
+      currentLocation: showCurrentLocation ? (profile.currentLocation ?? "") : "",
+      showPlacesLived,
+      placesLived: showPlacesLived ? (profile.placesLived ?? []) : [],
       isUpvotedByMe: false,
     };
   }
