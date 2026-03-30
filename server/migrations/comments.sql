@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS comments (
   id varchar PRIMARY KEY DEFAULT gen_random_uuid(),
   fact_id varchar NOT NULL REFERENCES facts(id) ON DELETE CASCADE,
   user_id varchar NOT NULL REFERENCES user_accounts(id) ON DELETE CASCADE,
-  parent_id varchar,
+  parent_id varchar REFERENCES comments(id) ON DELETE CASCADE,
   body text NOT NULL,
   upvotes integer NOT NULL DEFAULT 0,
   created_at timestamp NOT NULL DEFAULT NOW()

@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique, serial } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, jsonb, integer, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -441,7 +441,7 @@ export const commentUpvotes = pgTable("comment_upvotes", {
 }));
 
 export const insertCommentSchema = z.object({
-  body: z.string().min(1, "Comment cannot be empty").max(10000, "Comment is too long"),
+  body: z.string().trim().min(1, "Comment cannot be empty").max(10000, "Comment is too long"),
   parentId: z.string().optional(),
 });
 

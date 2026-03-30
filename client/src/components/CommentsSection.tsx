@@ -16,7 +16,7 @@ function getDiceBearUrl(username: string) {
   return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${encodeURIComponent(username)}&radius=8`;
 }
 
-function getAvatarSrc(_avatarUrl: string, username: string) {
+function getAvatarSrc(username: string) {
   return getDiceBearUrl(username);
 }
 
@@ -101,7 +101,6 @@ function InlineReplyComposer({ parentUsername, onSubmit, onCancel, isPending }: 
 interface CommentNodeProps {
   comment: TreeComment;
   depth: number;
-  factId: string;
   isLoggedIn: boolean;
   userId?: string;
   isAdmin?: boolean;
@@ -115,7 +114,7 @@ interface CommentNodeProps {
 }
 
 function CommentNode({
-  comment, depth, factId, isLoggedIn, userId, isAdmin,
+  comment, depth, isLoggedIn, userId, isAdmin,
   onDelete, onUpvote, onLoginClick, pendingUpvote, pendingDelete,
   postReply, replyPending
 }: CommentNodeProps) {
@@ -144,7 +143,7 @@ function CommentNode({
       <div className="comment-inner">
         <div className="comment-avatar">
           <img
-            src={getAvatarSrc(comment.avatarUrl, comment.username)}
+            src={getAvatarSrc(comment.username)}
             alt={comment.username}
             width={40}
             height={40}
@@ -235,7 +234,6 @@ function CommentNode({
               key={child.id}
               comment={child}
               depth={depth + 1}
-              factId={factId}
               isLoggedIn={isLoggedIn}
               userId={userId}
               isAdmin={isAdmin}
@@ -412,7 +410,6 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
               key={comment.id}
               comment={comment}
               depth={0}
-              factId={factId}
               isLoggedIn={isLoggedIn}
               userId={user?.id}
               isAdmin={user?.isAdmin}
