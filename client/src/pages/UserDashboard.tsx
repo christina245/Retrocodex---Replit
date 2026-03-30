@@ -1200,39 +1200,12 @@ export default function UserDashboard() {
                             <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} />
                           ))}
                         </div>
-                      ) : user.favoriteTags.length === 0 ? (
-                        <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
-                          <Search size={40} className="dashboard-feed-empty-icon" />
-                          <p className="dashboard-feed-empty-title">Select your interests</p>
-                          <p className="dashboard-feed-empty-desc">
-                            Choose topics you're interested in to see relevant submissions in your feed.
-                          </p>
-                          <button
-                            className="for-you-select-tags-button"
-                            onClick={() => {
-                              const parsed = parseLocation(user?.currentLocation || "");
-                              setEditUsername(user?.username || "");
-                              setEditMisinfo(user?.misinfoSource || "");
-                              setEditProfilePhoto(user?.profilePhoto || "");
-                              setEditCurrentCountry(parsed.country);
-                              setEditCurrentState(parsed.usState);
-                              setEditShowCurrentLocation(user?.showCurrentLocation || false);
-                              setEditPlacesLived((user?.placesLived && user.placesLived.length > 0) ? user.placesLived.map((p) => parseLocation(p)) : [{ country: "", usState: "" }, { country: "", usState: "" }]);
-                              setEditShowPlacesLived(user?.showPlacesLived || false);
-                              setEditTags(user?.favoriteTags || []);
-                              setEditModalOpen(true);
-                            }}
-                            data-testid="button-select-interests"
-                          >
-                            Select Interests
-                          </button>
-                        </div>
                       ) : (
                         <div className="dashboard-feed-empty" data-testid="feed-empty-for-you">
                           <Search size={40} className="dashboard-feed-empty-icon" />
                           <p className="dashboard-feed-empty-title">No activity yet</p>
                           <p className="dashboard-feed-empty-desc">
-                            No recent submissions to show. Check back soon.
+                            No recent published submissions to show. Check back soon.
                           </p>
                         </div>
                       )

@@ -17,7 +17,7 @@ function getDiceBearUrl(username: string) {
 }
 
 function getAvatarSrc(avatarUrl: string, username: string) {
-  if (avatarUrl && avatarUrl.startsWith("data:")) return avatarUrl;
+  if (avatarUrl && avatarUrl.trim() !== "") return avatarUrl;
   return getDiceBearUrl(username);
 }
 
