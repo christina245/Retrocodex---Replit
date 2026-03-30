@@ -131,11 +131,23 @@ export default function AdminPage() {
   const [rejectingSubmissionId, setRejectingSubmissionId] = useState<string | null>(null);
   const [rejectNote, setRejectNote] = useState("");
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [publishSuccess, setPublishSuccess] = useState(false);
+  const [publishSuccessCategory, setPublishSuccessCategory] = useState<string>("/");
   const [editingSubmissionId, setEditingSubmissionId] = useState<string | null>(null);
   const [submissionUsername, setSubmissionUsername] = useState("");
   const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+
+  const CATEGORY_ROUTES: Record<string, string> = {
+    "Health & Fitness": "/health-fitness",
+    "Everyday Life": "/everyday-life",
+    "History": "/history",
+    "Life Sciences": "/life-sciences",
+    "Social Sciences": "/social-sciences",
+    "Gender & Sexuality": "/gender-sexuality",
+    "Other": "/other-categories",
+  };
 
   // External article form state
   const [extUrl, setExtUrl] = useState("");
@@ -858,9 +870,9 @@ export default function AdminPage() {
       }
       await patchSubmissionMutation.mutateAsync({ id: editingSubmissionId, status: "published" });
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
-      setShowPublishModal(false);
-      resetForm();
-      setCurrentView("submissions");
+      const mainCategory = selectedCategories.find(c => c !== "Other") || selectedCategories[0] || "Other";
+      setPublishSuccessCategory(CATEGORY_ROUTES[mainCategory] || "/");
+      setPublishSuccess(true);
     } catch (err) {
       setSubmissionActionMsg({ type: "error", text: err instanceof Error ? err.message : "Failed to publish." });
       setShowPublishModal(false);
@@ -2162,39 +2174,69 @@ export default function AdminPage() {
 
               {/* Publish confirmation modal */}
               {showPublishModal && (
-                <div className="modal-overlay" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }}>
+                <div className="modal-overlay" onClick={() => { if (!publishSuccess) handleSaveDraft(); setShowPublishModal(false); setPublishSuccess(false); }}>
                   <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
-                    <div className="modal-header">
-                      <h3 className="modal-title">Ready to publish?</h3>
-                      <button className="modal-close" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-close-publish-modal"><X size={18} /></button>
-                    </div>
-                    <p style={{ margin: "1rem 0", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
-                      This will create a live published fact from the current form data and mark the submission as published.
-                    </p>
-                    <div style={{ marginBottom: "1rem" }}>
-                      <p style={{ fontSize: "0.8rem", color: "var(--muted-foreground)", marginBottom: "0.5rem" }}>Notify the submitter:</p>
-                      <button
-                        type="button"
-                        className="export-button"
-                        style={{ background: "#1565c0", fontSize: "0.85rem" }}
-                        onClick={() => {}}
-                        data-testid="button-notify-submitter"
-                      >
-                        <Mail size={14} />
-                        Send notification email to submitter
-                      </button>
-                    </div>
-                    <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
-                      <button className="cancel-edit-button" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-cancel-publish">Cancel (Save Draft)</button>
-                      <button
-                        className="submit-button"
-                        onClick={handlePublishSubmission}
-                        disabled={isPublishing}
-                        data-testid="button-confirm-publish"
-                      >
-                        {isPublishing ? "Publishing..." : "Yes, Publish"}
-                      </button>
-                    </div>
+                    {publishSuccess ? (
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "2rem 1.5rem" }}>
+                        <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#31A66B", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
+                          <Check size={36} strokeWidth={2.5} />
+                        </div>
+                        <h3 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 900, fontSize: 24, color: "#2C2C2C", margin: "0 0 12px 0" }}>Fact successfully published</h3>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", marginTop: "1.5rem" }}>
+                          <a
+                            href={publishSuccessCategory}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="submit-button"
+                            style={{ display: "block", textAlign: "center", textDecoration: "none" }}
+                            data-testid="button-view-fact"
+                          >
+                            View fact
+                          </a>
+                          <button
+                            className="cancel-edit-button"
+                            onClick={() => { setShowPublishModal(false); setPublishSuccess(false); resetForm(); setCurrentView("submissions"); }}
+                            data-testid="button-back-to-submissions"
+                          >
+                            Back to submissions
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="modal-header">
+                          <h3 className="modal-title">Ready to publish?</h3>
+                          <button className="modal-close" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-close-publish-modal"><X size={18} /></button>
+                        </div>
+                        <p style={{ margin: "1rem 0", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
+                          This will create a live published fact from the current form data and mark the submission as published.
+                        </p>
+                        <div style={{ marginBottom: "1rem" }}>
+                          <p style={{ fontSize: "0.8rem", color: "var(--muted-foreground)", marginBottom: "0.5rem" }}>Notify the submitter:</p>
+                          <button
+                            type="button"
+                            className="export-button"
+                            style={{ background: "#1565c0", fontSize: "0.85rem" }}
+                            onClick={() => {}}
+                            data-testid="button-notify-submitter"
+                          >
+                            <Mail size={14} />
+                            Send notification email to submitter
+                          </button>
+                        </div>
+                        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+                          <button className="cancel-edit-button" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-cancel-publish">Cancel (Save Draft)</button>
+                          <button
+                            className="submit-button"
+                            onClick={handlePublishSubmission}
+                            disabled={isPublishing}
+                            data-testid="button-confirm-publish"
+                          >
+                            {isPublishing ? "Publishing..." : "Yes, Publish"}
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               )}
