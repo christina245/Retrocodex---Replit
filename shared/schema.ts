@@ -499,6 +499,10 @@ export type FeedItem = {
   // fact fields (For You feed)
   factCategories?: string[];
   factCoverPhoto2?: string | null;
+  factFilters?: string[];
+  factBetaOnly?: boolean;
+  factRevisionYear?: number | null;
+  factTaughtUntilYear?: string | null;
   // article fields (For You feed)
   articleUrl?: string;
   articleTitle?: string;

@@ -741,6 +741,10 @@ export class DatabaseStorage implements IStorage {
         truthHeader: facts.truthHeader,
         coverPhoto: facts.coverPhoto,
         categories: facts.categories,
+        factFilters: facts.factFilters,
+        betaOnly: facts.betaOnly,
+        revisionYear: facts.revisionYear,
+        taughtUntilYear: facts.taughtUntilYear,
         createdAt: facts.createdAt,
       })
       .from(facts)
@@ -785,6 +789,10 @@ export class DatabaseStorage implements IStorage {
       truthHeader: f.truthHeader,
       factCoverPhoto2: f.coverPhoto ?? null,
       factCategories: f.categories,
+      factFilters: f.factFilters ?? [],
+      factBetaOnly: f.betaOnly ?? false,
+      factRevisionYear: f.revisionYear ?? null,
+      factTaughtUntilYear: f.taughtUntilYear ?? null,
     }));
 
     const articleItems: FeedItem[] = articleRows.map((a) => ({

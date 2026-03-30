@@ -535,50 +535,55 @@ function formatRelativeTime(date: Date | string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-function FactCardFeedItem({ item, index }: { item: FeedItem; index: number }) {
-  const slug = item.factSlug;
-  const categoryName = item.factCategories?.[0] ?? "";
-  const catConfig = getCategoryConfig(categoryName);
-  const catColor = catConfig?.color ?? "#2C2C2C";
-
-  const inner = (
-    <div className="feed-factcard" data-testid={`feed-factcard-${index}`}>
-      {categoryName && (
-        <div className="feed-factcard-category" style={{ backgroundColor: catColor }} data-testid={`feed-factcard-cat-${index}`}>
-          <span className="feed-factcard-category-name">{categoryName}</span>
-        </div>
-      )}
-      <div className="feed-factcard-body">
-        <div className="feed-factcard-row feed-factcard-myth" data-testid={`feed-factcard-myth-${index}`}>
-          <X size={16} className="feed-factcard-icon feed-factcard-icon-myth" strokeWidth={3} />
-          <p className="feed-factcard-text">&ldquo;{item.mythHeader}&rdquo;</p>
-        </div>
-        <div className="feed-factcard-row feed-factcard-truth" data-testid={`feed-factcard-truth-${index}`}>
-          <Check size={16} className="feed-factcard-icon feed-factcard-icon-truth" strokeWidth={3} />
-          <p className="feed-factcard-text">{item.truthHeader}</p>
-        </div>
-      </div>
-    </div>
-  );
-
-  if (slug) {
-    return (
-      <Link href={`/fact/${slug}`} className="feed-factcard-link" data-testid={`link-feed-factcard-${index}`}>
-        {inner}
-      </Link>
-    );
-  }
-  return inner;
+interface FeedPostHandlers {
+  savedFactIds: Set<string>;
+  onSaveFact: (id: string) => void;
+  onUnsaveFact: (id: string) => void;
+  onBetaClick: (slug: string) => void;
+  onNavigate: (path: string) => void;
 }
 
-function FeedPost({ item, index }: { item: FeedItem; index: number }) {
-  // "fact" and "article" types are For You items — no user attribution
+function feedItemToFactCard(item: FeedItem): FactCardFact {
+  const categoryName = item.factCategories?.[0] ?? "";
+  const catConfig = getCategoryConfig(categoryName);
+  return {
+    id: item.id,
+    category: categoryName,
+    categoryColor: catConfig?.color ?? "#2C2C2C",
+    myth: item.mythHeader ?? "",
+    truth: item.truthHeader ?? "",
+    link: item.factSlug ? `/fact/${item.factSlug}` : undefined,
+    coverPhoto: item.factCoverPhoto2 ?? undefined,
+    betaOnly: item.factBetaOnly ?? false,
+    factFilters: item.factFilters ?? [],
+    revisionYear: item.factRevisionYear ?? undefined,
+    taughtUntilYear: item.factTaughtUntilYear ?? undefined,
+  };
+}
+
+function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; handlers: FeedPostHandlers }) {
+  const { savedFactIds, onSaveFact, onUnsaveFact, onBetaClick, onNavigate } = handlers;
+
   if (item.type === "fact") {
+    const fact = feedItemToFactCard(item);
+    const isSaved = savedFactIds.has(item.id);
     return (
       <div className="following-post following-post--fact" data-testid={`feed-post-${index}`}>
-        <div className="following-post-main">
-          <FactCardFeedItem item={item} index={index} />
-        </div>
+        <FactCard
+          fact={fact}
+          isSaved={isSaved}
+          onSave={() => isSaved ? onUnsaveFact(item.id) : onSaveFact(item.id)}
+          onShare={() => {
+            if (navigator.share) {
+              navigator.share({ url: `${window.location.origin}/fact/${item.factSlug}` });
+            } else {
+              navigator.clipboard.writeText(`${window.location.origin}/fact/${item.factSlug}`);
+            }
+          }}
+          onComment={() => onNavigate(`/fact/${item.factSlug}#comments`)}
+          onBetaClick={onBetaClick}
+          showTaughtUntilLabel
+        />
       </div>
     );
   }
@@ -649,9 +654,6 @@ function FeedPost({ item, index }: { item: FeedItem; index: number }) {
           <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
         </div>
         <div className="following-post-body">
-          {item.type === "submission" && (
-            <FactCardFeedItem item={item} index={index} />
-          )}
           {item.type === "comment" && (
             <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
               <div className="following-post-body-left">
@@ -895,6 +897,13 @@ export default function UserDashboard() {
     };
   });
 
+  const saveFactMutation = useMutation({
+    mutationFn: (factId: string) => apiRequest("POST", `/api/user/saved-facts`, { factId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
+    },
+  });
+
   const unsaveFactMutation = useMutation({
     mutationFn: (factId: string) => apiRequest("DELETE", `/api/user/saved-facts/${factId}`),
     onSuccess: () => {
@@ -908,6 +917,16 @@ export default function UserDashboard() {
       queryClient.invalidateQueries({ queryKey: ["/api/user/saved-articles"] });
     },
   });
+
+  const savedFactIdSet = new Set(savedDbFacts.map((f) => f.id));
+
+  const feedHandlers: FeedPostHandlers = {
+    savedFactIds: savedFactIdSet,
+    onSaveFact: (id) => saveFactMutation.mutate(id),
+    onUnsaveFact: (id) => unsaveFactMutation.mutate(id),
+    onBetaClick: (slug) => setSourcesModalFactId(slug),
+    onNavigate: (path) => navigate(path),
+  };
 
   const allAvailableTags: string[] = tagsByCategory
     ? Array.from(
@@ -1284,7 +1303,7 @@ export default function UserDashboard() {
                       ) : forYouFeed.length > 0 ? (
                         <div className="following-feed" data-testid="feed-for-you">
                           {forYouFeed.map((item, i) => (
-                            <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} />
+                            <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} handlers={feedHandlers} />
                           ))}
                         </div>
                       ) : (user?.favoriteTags?.length ?? 0) === 0 ? (
@@ -1318,7 +1337,7 @@ export default function UserDashboard() {
                       ) : followingFeed.length > 0 ? (
                         <div className="following-feed" data-testid="feed-following">
                           {followingFeed.map((item, i) => (
-                            <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} />
+                            <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} handlers={feedHandlers} />
                           ))}
                         </div>
                       ) : (
