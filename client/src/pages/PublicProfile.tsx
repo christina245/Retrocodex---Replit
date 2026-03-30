@@ -270,7 +270,7 @@ export default function PublicProfile() {
       <div className="public-profile-container">
         <div className="public-profile-banner" data-testid="public-profile-banner">
           <div className="user-profile-banner">
-            {!isOwnProfile && user && allowFollows && (
+            {!isOwnProfile && user && allowFollows && !!targetUserId && (
               <button
                 className={`profile-banner-primary-btn profile-banner-corner-btn${isFollowing ? " profile-banner-following-btn" : ""}`}
                 onClick={handleFollowToggle}

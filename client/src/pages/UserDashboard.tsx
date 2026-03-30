@@ -14,6 +14,7 @@ import type { Fact as DbFact, FeedItem } from "@shared/schema";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
 import { validateUsername } from "@/lib/usernameValidation";
 import { AvatarPickerModal } from "@/components/AvatarPickerModal";
 import { SourcesModal } from "@/components/SourcesModal";
@@ -514,7 +515,7 @@ function getDiceBearUrlDashboard(username: string) {
 }
 
 function getAvatarSrcDashboard(avatarUrl: string, username: string) {
-  if (avatarUrl && avatarUrl.startsWith("data:")) return avatarUrl;
+  if (avatarUrl && avatarUrl.trim() !== "") return avatarUrl;
   return getDiceBearUrlDashboard(username);
 }
 
@@ -596,6 +597,7 @@ function FeedPost({ item, index }: { item: FeedItem; index: number }) {
 
 export default function UserDashboard() {
   const { user, isLoggedIn, isLoading: authLoading, logout, updateUser } = useAuth();
+  const { toast } = useToast();
   const [, navigate] = useLocation();
 
   const initialTab = (() => {
@@ -3362,7 +3364,12 @@ export default function UserDashboard() {
                           onChange={async () => {
                             const next = !allowFollows;
                             setAllowFollows(next);
-                            try { await updateUser({ allowFollows: next }); } catch {}
+                            try {
+                              await updateUser({ allowFollows: next });
+                            } catch {
+                              setAllowFollows(!next);
+                              toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" });
+                            }
                           }}
                         />
                         <span className="settings-toggle-slider" />
