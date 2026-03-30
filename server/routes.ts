@@ -1799,6 +1799,9 @@ Sitemap: ${SITE_URL}/sitemap.xml
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
       }
+      if (error instanceof Error && error.message.startsWith("Invalid parentId")) {
+        return res.status(400).json({ message: error.message });
+      }
       console.error("POST /api/facts/:id/comments error:", error);
       res.status(500).json({ message: "Failed to post comment" });
     }

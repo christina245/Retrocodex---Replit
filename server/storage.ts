@@ -496,6 +496,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser> {
+    if (data.parentId) {
+      const [parent] = await db
+        .select({ id: comments.id, factId: comments.factId })
+        .from(comments)
+        .where(eq(comments.id, data.parentId))
+        .limit(1);
+      if (!parent || parent.factId !== data.factId) {
+        throw new Error("Invalid parentId: parent comment does not exist or belongs to a different fact");
+      }
+    }
+
     const [comment] = await db
       .insert(comments)
       .values({ factId: data.factId, userId, parentId: data.parentId ?? null, body: data.body })

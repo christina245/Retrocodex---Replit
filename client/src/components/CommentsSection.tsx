@@ -16,8 +16,7 @@ function getDiceBearUrl(username: string) {
   return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${encodeURIComponent(username)}&radius=8`;
 }
 
-function getAvatarSrc(avatarUrl: string, username: string) {
-  if (avatarUrl && avatarUrl.startsWith("data:")) return avatarUrl;
+function getAvatarSrc(_avatarUrl: string, username: string) {
   return getDiceBearUrl(username);
 }
 
@@ -271,6 +270,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       if (!res.ok) throw new Error("Failed to fetch comments");
       return res.json();
     },
+    enabled: !!factId,
   });
 
   const postMutation = useMutation({
