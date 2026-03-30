@@ -1983,12 +1983,12 @@ Sitemap: ${SITE_URL}/sitemap.xml
     try {
       const { fields } = z.object({
         fields: z.array(z.object({
-          updateType: z.enum(["mythHeader", "mythDetails", "truthHeader", "truthDetails", "timelineEntry", "nuanceEntry"]),
+          updateType: z.enum(["mythHeader", "mythDetails", "truthHeader", "truthDetails", "timelineEntry", "nuanceEntry"] as const),
           content: z.unknown(),
         })).min(1, "At least one field update is required"),
       }).parse(req.body);
 
-      await storage.createFactUpdateBatch(req.params.id, fields as any);
+      await storage.createFactUpdateBatch(req.params.id, fields);
       return res.json({ message: "Fact updates published" });
     } catch (error) {
       if (error instanceof z.ZodError) {

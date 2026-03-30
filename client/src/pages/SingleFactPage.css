@@ -407,12 +407,12 @@
 
 /* ─── Subscribe button following state ───────────────────────────── */
 .subscribe-button--following {
-  background: rgba(255, 83, 83, 0.1);
-  color: #FF5353;
+  background: #FF5353;
+  color: #FFFFFF;
 }
 
 .subscribe-button--following:hover {
-  background: #FF5353;
+  background: rgba(255, 83, 83, 0.85);
   color: #FFFFFF;
 }
 

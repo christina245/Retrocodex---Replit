@@ -878,7 +878,7 @@ export class DatabaseStorage implements IStorage {
         factId,
         publishBatchId,
         updateType: u.updateType,
-        content: u.content as any,
+        content: JSON.parse(JSON.stringify(u.content)),
         publishedAt: now,
       }))
     );

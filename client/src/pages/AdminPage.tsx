@@ -142,7 +142,14 @@ export default function AdminPage() {
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [isPublishingToFeed, setIsPublishingToFeed] = useState(false);
-  const [savedFactSnapshot, setSavedFactSnapshot] = useState<{ mythHeader: string; mythDetails: string; truthHeader: string; truthDetails: string } | null>(null);
+  const [savedFactSnapshot, setSavedFactSnapshot] = useState<{
+    mythHeader: string;
+    mythDetails: string;
+    truthHeader: string;
+    truthDetails: string;
+    timeline: TimelineEntry[];
+    nuances: Nuance[];
+  } | null>(null);
 
   const CATEGORY_ROUTES: Record<string, string> = {
     "Health & Fitness": "/health-fitness",
@@ -789,6 +796,8 @@ export default function AdminPage() {
       mythDetails: fact.mythDetails ?? "",
       truthHeader: fact.truthHeader ?? "",
       truthDetails: fact.truthDetails ?? "",
+      timeline: fact.timeline || [],
+      nuances: fact.nuances || [],
     });
     setCurrentView("add-fact");
   };
@@ -1111,9 +1120,11 @@ export default function AdminPage() {
     if (!editingFactId || !password) return;
     setIsPublishingToFeed(true);
     try {
-      const fields: { updateType: string; content: unknown }[] = [];
+      type FieldUpdate = { updateType: string; content: string | { year: string; description: string } | { type: string; body: string } };
+      const fields: FieldUpdate[] = [];
       const snap = savedFactSnapshot;
 
+      // Diff text fields
       if (!snap || mythHeader !== snap.mythHeader) {
         fields.push({ updateType: "mythHeader", content: mythHeader });
       }
@@ -1125,6 +1136,24 @@ export default function AdminPage() {
       }
       if (!snap || truthDetails !== snap.truthDetails) {
         fields.push({ updateType: "truthDetails", content: truthDetails });
+      }
+
+      // Diff timeline entries: publish newly added or modified entries
+      const snapTimeline = snap?.timeline ?? [];
+      const snapTimelineKeys = new Set(snapTimeline.map((t) => `${t.year}::${t.description}`));
+      for (const entry of timeline.filter((t) => t.year && t.description)) {
+        if (!snapTimelineKeys.has(`${entry.year}::${entry.description}`)) {
+          fields.push({ updateType: "timelineEntry", content: { year: entry.year, description: entry.description } });
+        }
+      }
+
+      // Diff nuance entries: publish newly added or modified entries
+      const snapNuances = snap?.nuances ?? [];
+      const snapNuanceKeys = new Set(snapNuances.map((n) => `${n.type}::${n.body}`));
+      for (const nuance of nuances.filter((n) => n.type && n.body)) {
+        if (!snapNuanceKeys.has(`${nuance.type}::${nuance.body}`)) {
+          fields.push({ updateType: "nuanceEntry", content: { type: nuance.type, body: nuance.body } });
+        }
       }
 
       if (fields.length === 0) {
@@ -1149,7 +1178,7 @@ export default function AdminPage() {
         throw new Error(data.message || "Failed to publish updates");
       }
 
-      setSavedFactSnapshot({ mythHeader, mythDetails, truthHeader, truthDetails });
+      setSavedFactSnapshot({ mythHeader, mythDetails, truthHeader, truthDetails, timeline: [...timeline], nuances: [...nuances] });
       toast({
         title: "Published to user feeds",
         description: `${fields.length} update${fields.length !== 1 ? "s" : ""} sent to followers of this topic.`,

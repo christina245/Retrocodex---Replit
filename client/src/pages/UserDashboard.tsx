@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import scrungyConfetti from "@assets/Joyful_squirrel_surrounded_by_confetti_1774824005307.png";
 import { Link, useLocation } from "wouter";
@@ -1506,22 +1506,30 @@ export default function UserDashboard() {
                       }
                       const batches = Array.from(batchMap.values());
 
-                      const getUpdateIcon = (type: UpdateType) => {
-                        if (type === "timelineEntry") return <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />;
-                        if (type === "nuanceEntry") return <PlusCircle size={16} className="activity-revision-icon" />;
-                        return <Check size={16} className="activity-revision-check" />;
-                      };
+                      type TextContent = string;
+                      type TimelineContent = { year: string; description: string };
+                      type NuanceContent = { type: string; body: string };
+                      type UpdateContent = TextContent | TimelineContent | NuanceContent;
 
-                      const getUpdateLabel = (type: UpdateType): string => {
-                        const labels: Record<UpdateType, string> = {
-                          mythHeader: "Myth header updated",
-                          mythDetails: "Myth details updated",
-                          truthHeader: "Truth updated",
-                          truthDetails: "Truth details updated",
-                          timelineEntry: "New timeline entry",
-                          nuanceEntry: "New nuance added",
-                        };
-                        return labels[type] ?? "Updated";
+                      const isTimelineContent = (c: UpdateContent): c is TimelineContent =>
+                        typeof c === "object" && c !== null && "year" in c && "description" in c;
+
+                      const isNuanceContent = (c: UpdateContent): c is NuanceContent =>
+                        typeof c === "object" && c !== null && "type" in c && "body" in c;
+
+                      const parseContent = (update: FactUpdateWithFact): UpdateContent => {
+                        const raw = update.content;
+                        if (typeof raw === "string") return raw;
+                        if (raw !== null && typeof raw === "object") {
+                          const obj = raw as Record<string, unknown>;
+                          if (typeof obj.year === "string" && typeof obj.description === "string") {
+                            return { year: obj.year, description: obj.description };
+                          }
+                          if (typeof obj.type === "string" && typeof obj.body === "string") {
+                            return { type: obj.type, body: obj.body };
+                          }
+                        }
+                        return String(raw ?? "");
                       };
 
                       const formatRelativeTime = (date: string | Date) => {
@@ -1537,21 +1545,47 @@ export default function UserDashboard() {
                         return new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" });
                       };
 
-                      const getContentText = (update: FactUpdateWithFact): string => {
-                        const c = update.content as any;
-                        if (typeof c === "string") return c;
-                        if (c && typeof c === "object") {
-                          if (c.text) return c.text;
-                          if (c.year && c.description) return `${c.year}: ${c.description}`;
-                          return JSON.stringify(c);
+                      const renderUpdateEntry = (update: FactUpdateWithFact) => {
+                        const content = parseContent(update);
+                        if (update.updateType === "timelineEntry" && isTimelineContent(content)) {
+                          return (
+                            <div key={update.id} className="mb-2">
+                              <p className="activity-submitted-label">Revision:</p>
+                              <div className="activity-submitted-revision">
+                                <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />
+                                <div className="activity-timeline-revision">
+                                  <p className="activity-timeline-year">{content.year}</p>
+                                  <p className="activity-truth-text">{content.description}</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
                         }
-                        return "";
-                      };
-
-                      const getTimelineYear = (update: FactUpdateWithFact): string | null => {
-                        const c = update.content as any;
-                        if (c && typeof c === "object" && c.year) return String(c.year);
-                        return null;
+                        if (update.updateType === "nuanceEntry" && isNuanceContent(content)) {
+                          return (
+                            <div key={update.id} className="mb-2">
+                              <p className="activity-submitted-label">Nuance added:</p>
+                              <div className="activity-submitted-revision">
+                                <Blend size={16} className="activity-revision-icon" />
+                                <div className="activity-timeline-revision">
+                                  <p className="activity-timeline-year">{content.type}</p>
+                                  <p className="activity-truth-text">{content.body}</p>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+                        // Text revision (mythHeader, mythDetails, truthHeader, truthDetails)
+                        const text = typeof content === "string" ? content : String(content);
+                        return (
+                          <div key={update.id} className="mb-2">
+                            <p className="activity-submitted-label">Revision:</p>
+                            <div className="activity-submitted-revision">
+                              <Check size={16} className="activity-revision-check" />
+                              <p className="activity-truth-text">{text}</p>
+                            </div>
+                          </div>
+                        );
                       };
 
                       return (
@@ -1577,26 +1611,7 @@ export default function UserDashboard() {
                                   <div className="activity-post-body">
                                     <div className="following-post-body-content">
                                       <div className="following-post-body-left">
-                                        {batch.map((update) => {
-                                          const contentText = getContentText(update);
-                                          const timelineYear = getTimelineYear(update);
-                                          return (
-                                            <div key={update.id}>
-                                              <p className="activity-submitted-label">{getUpdateLabel(update.updateType)}:</p>
-                                              <div className="activity-submitted-revision">
-                                                {getUpdateIcon(update.updateType)}
-                                                {update.updateType === "timelineEntry" && timelineYear ? (
-                                                  <div className="activity-timeline-revision">
-                                                    <p className="activity-timeline-year">{timelineYear}</p>
-                                                    <p className="activity-truth-text">{contentText}</p>
-                                                  </div>
-                                                ) : (
-                                                  <p className="activity-truth-text">{contentText}</p>
-                                                )}
-                                              </div>
-                                            </div>
-                                          );
-                                        })}
+                                        {batch.map((update) => renderUpdateEntry(update))}
                                       </div>
                                       {first.factCoverPhoto && (
                                         <Link href={factPath} className="following-post-cover-link" data-testid={`cover-link-fact-update-${batchIdx + 1}`}>
