@@ -1555,7 +1555,7 @@ export default function UserDashboard() {
                                 <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />
                                 <div className="activity-timeline-revision">
                                   <p className="activity-timeline-year">{content.year}</p>
-                                  <ReactMarkdown className="activity-truth-text activity-truth-markdown">{content.description}</ReactMarkdown>
+                                  <div className="activity-truth-text activity-truth-markdown"><ReactMarkdown>{content.description}</ReactMarkdown></div>
                                 </div>
                               </div>
                             </div>
@@ -1569,7 +1569,7 @@ export default function UserDashboard() {
                                 <Blend size={16} className="activity-revision-icon" />
                                 <div className="activity-timeline-revision">
                                   <p className="activity-timeline-year">{content.type}</p>
-                                  <ReactMarkdown className="activity-truth-text activity-truth-markdown">{content.body}</ReactMarkdown>
+                                  <div className="activity-truth-text activity-truth-markdown"><ReactMarkdown>{content.body}</ReactMarkdown></div>
                                 </div>
                               </div>
                             </div>
@@ -1582,7 +1582,7 @@ export default function UserDashboard() {
                             <p className="activity-submitted-label">Revision:</p>
                             <div className="activity-submitted-revision">
                               <Check size={16} className="activity-revision-check" />
-                              <ReactMarkdown className="activity-truth-text activity-truth-markdown">{text}</ReactMarkdown>
+                              <div className="activity-truth-text activity-truth-markdown"><ReactMarkdown>{text}</ReactMarkdown></div>
                             </div>
                           </div>
                         );
