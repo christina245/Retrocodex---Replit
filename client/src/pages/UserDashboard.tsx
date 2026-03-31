@@ -1555,7 +1555,7 @@ export default function UserDashboard() {
                                 <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />
                                 <div className="activity-timeline-revision">
                                   <p className="activity-timeline-year">{content.year}</p>
-                                  <p className="activity-truth-text">{content.description}</p>
+                                  <ReactMarkdown className="activity-truth-text activity-truth-markdown">{content.description}</ReactMarkdown>
                                 </div>
                               </div>
                             </div>
@@ -1569,7 +1569,7 @@ export default function UserDashboard() {
                                 <Blend size={16} className="activity-revision-icon" />
                                 <div className="activity-timeline-revision">
                                   <p className="activity-timeline-year">{content.type}</p>
-                                  <p className="activity-truth-text">{content.body}</p>
+                                  <ReactMarkdown className="activity-truth-text activity-truth-markdown">{content.body}</ReactMarkdown>
                                 </div>
                               </div>
                             </div>
@@ -1582,7 +1582,7 @@ export default function UserDashboard() {
                             <p className="activity-submitted-label">Revision:</p>
                             <div className="activity-submitted-revision">
                               <Check size={16} className="activity-revision-check" />
-                              <p className="activity-truth-text">{text}</p>
+                              <ReactMarkdown className="activity-truth-text activity-truth-markdown">{text}</ReactMarkdown>
                             </div>
                           </div>
                         );

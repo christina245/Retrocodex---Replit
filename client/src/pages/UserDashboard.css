@@ -1325,6 +1325,42 @@ a.following-post-fact-link:hover {
   margin: 0;
 }
 
+.activity-truth-markdown {
+  font-family: 'Merriweather', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #2C2C2C;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.activity-truth-markdown p {
+  margin: 0 0 0.5em 0;
+}
+
+.activity-truth-markdown p:last-child {
+  margin-bottom: 0;
+}
+
+.activity-truth-markdown a {
+  color: #1a6fbf;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+
+.activity-truth-markdown a:hover {
+  color: #14509a;
+}
+
+.activity-truth-markdown strong {
+  font-weight: 700;
+}
+
+.activity-truth-markdown em {
+  font-style: italic;
+}
+
 .activity-revision-check {
   color: #419F36;
   flex-shrink: 0;
