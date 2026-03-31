@@ -99,6 +99,7 @@ export interface IStorage {
   // Comments
   getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]>;
   createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser>;
+  updateComment(id: string, userId: string, body: string): Promise<boolean>;
   deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean>;
   toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
 
@@ -490,6 +491,8 @@ export class DatabaseStorage implements IStorage {
         body: comments.body,
         upvotes: comments.upvotes,
         createdAt: comments.createdAt,
+        deletedByAdmin: comments.deletedByAdmin,
+        editedAt: comments.editedAt,
         username: userProfiles.username,
         avatarUrl: userProfiles.avatarUrl,
         isAdmin: userProfiles.isAdmin,
@@ -514,6 +517,8 @@ export class DatabaseStorage implements IStorage {
 
     return rows.map(r => ({
       ...r,
+      deletedByAdmin: r.deletedByAdmin ?? false,
+      editedAt: r.editedAt ?? null,
       avatarUrl: r.avatarUrl ?? "",
       isAdmin: r.isAdmin ?? false,
       showCurrentLocation: r.showCurrentLocation ?? false,
@@ -551,6 +556,8 @@ export class DatabaseStorage implements IStorage {
     const showPlacesLived = profile.showPlacesLived ?? false;
     return {
       ...comment,
+      deletedByAdmin: false,
+      editedAt: null,
       username: profile.username,
       avatarUrl: profile.avatarUrl ?? "",
       isAdmin: profile.isAdmin ?? false,
@@ -560,6 +567,23 @@ export class DatabaseStorage implements IStorage {
       placesLived: showPlacesLived ? (profile.placesLived ?? []) : [],
       isUpvotedByMe: false,
     };
+  }
+
+  async updateComment(id: string, userId: string, body: string): Promise<boolean> {
+    const [comment] = await db
+      .select({ userId: comments.userId })
+      .from(comments)
+      .where(eq(comments.id, id))
+      .limit(1);
+
+    if (!comment || comment.userId !== userId) return false;
+
+    const result = await db
+      .update(comments)
+      .set({ body, editedAt: new Date() })
+      .where(eq(comments.id, id))
+      .returning();
+    return result.length > 0;
   }
 
   async deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean> {
@@ -572,6 +596,17 @@ export class DatabaseStorage implements IStorage {
     if (!comment) return false;
     if (!isAdmin && comment.userId !== userId) return false;
 
+    // Admin deleting someone else's comment → soft-delete (keep row, mark as removed)
+    if (isAdmin && comment.userId !== userId) {
+      const result = await db
+        .update(comments)
+        .set({ deletedByAdmin: true })
+        .where(eq(comments.id, id))
+        .returning();
+      return result.length > 0;
+    }
+
+    // Own comment → hard delete
     const result = await db.delete(comments).where(eq(comments.id, id)).returning();
     return result.length > 0;
   }

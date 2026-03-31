@@ -1,10 +1,11 @@
-import { useState, useRef, useCallback } from "react";
-import { Filter, Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, LogIn } from "lucide-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { Filter, Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, LogIn, MoreHorizontal, Bookmark, Flag, Bell, Pencil, X } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
 import type { CommentWithUser } from "@shared/schema";
 import ReactMarkdown from "react-markdown";
+import exclamationImg from "@assets/exclaimation_mark_1774947906423.jpg";
 import "./CommentsSection.css";
 
 interface CommentsSectionProps {
@@ -41,6 +42,81 @@ function buildTree(flatComments: CommentWithUser[]): TreeComment[] {
   });
   return roots;
 }
+
+// ─── Report reasons ─────────────────────────────────────────────────────────
+
+const REPORT_REASONS = [
+  "Harassment",
+  "Inappropriate content",
+  "Promoting hate",
+  "Impersonation",
+  "Spam",
+  "May be a bot",
+  "Other",
+];
+
+// ─── Report modal ────────────────────────────────────────────────────────────
+
+function ReportModal({ onClose }: { onClose: () => void }) {
+  const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [detail, setDetail] = useState("");
+  const anyChecked = checked.size > 0;
+
+  const toggle = (reason: string) => {
+    setChecked(prev => {
+      const next = new Set(prev);
+      if (next.has(reason)) next.delete(reason);
+      else next.add(reason);
+      return next;
+    });
+  };
+
+  return (
+    <div className="report-modal-overlay" onClick={onClose} data-testid="report-modal-overlay">
+      <div className="report-modal" onClick={e => e.stopPropagation()} data-testid="report-modal">
+        <button className="report-modal-close" onClick={onClose} data-testid="button-close-report">
+          <X size={16} />
+        </button>
+        <img src={exclamationImg} alt="Report" className="report-modal-icon" />
+        <h2 className="report-modal-title">Report Comment</h2>
+        <p className="report-modal-subtitle">Select all reasons that apply</p>
+        <div className="report-reasons">
+          {REPORT_REASONS.map(reason => (
+            <label key={reason} className="report-reason-label">
+              <input
+                type="checkbox"
+                checked={checked.has(reason)}
+                onChange={() => toggle(reason)}
+                className="report-reason-checkbox"
+                data-testid={`checkbox-report-${reason.toLowerCase().replace(/\s+/g, "-")}`}
+              />
+              <span>{reason}</span>
+            </label>
+          ))}
+        </div>
+        <textarea
+          className="report-detail-input"
+          placeholder="Describe reason"
+          value={detail}
+          onChange={e => setDetail(e.target.value)}
+          disabled={!anyChecked}
+          rows={2}
+          data-testid="input-report-detail"
+        />
+        <button
+          className="btn-submit-report"
+          disabled={!anyChecked}
+          onClick={() => onClose()}
+          data-testid="button-submit-report"
+        >
+          Submit Report
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Inline reply composer ────────────────────────────────────────────────────
 
 interface InlineReplyComposerProps {
   parentUsername: string;
@@ -99,6 +175,8 @@ function InlineReplyComposer({ parentUsername, onSubmit, onCancel, isPending }: 
   );
 }
 
+// ─── Comment node ────────────────────────────────────────────────────────────
+
 interface CommentNodeProps {
   comment: TreeComment;
   depth: number;
@@ -106,28 +184,58 @@ interface CommentNodeProps {
   userId?: string;
   isAdmin?: boolean;
   onDelete: (id: string) => void;
+  onEdit: (id: string, body: string) => Promise<void>;
   onUpvote: (id: string) => void;
   onLoginClick?: (msg: string) => void;
   pendingUpvote: string | null;
   pendingDelete: string | null;
+  pendingEdit: string | null;
   postReply: (parentId: string, body: string) => Promise<void>;
   replyPending: boolean;
 }
 
 function CommentNode({
   comment, depth, isLoggedIn, userId, isAdmin,
-  onDelete, onUpvote, onLoginClick, pendingUpvote, pendingDelete,
+  onDelete, onEdit, onUpvote, onLoginClick,
+  pendingUpvote, pendingDelete, pendingEdit,
   postReply, replyPending
 }: CommentNodeProps) {
   const [replyOpen, setReplyOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-  const canDelete = isAdmin || comment.userId === userId;
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editBody, setEditBody] = useState(comment.body);
+  const [reportOpen, setReportOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const isOwnComment = isLoggedIn && comment.userId === userId;
+  const canDelete = isAdmin || isOwnComment;
   const isUpvoting = pendingUpvote === comment.id;
   const isDeleting = pendingDelete === comment.id;
+  const isSavingEdit = pendingEdit === comment.id;
 
   const hasCurrentLocation = comment.showCurrentLocation && comment.currentLocation;
   const hasPlacesLived = comment.showPlacesLived && comment.placesLived && comment.placesLived.length > 0;
   const showLocationRow = hasCurrentLocation || hasPlacesLived;
+
+  // Close dropdown on outside click or Escape
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [dropdownOpen]);
 
   const handleReply = () => {
     if (!isLoggedIn) { onLoginClick?.("Sign in to reply to comments"); return; }
@@ -137,6 +245,28 @@ function CommentNode({
   const handleReplySubmit = async (body: string) => {
     await postReply(comment.id, body);
     setReplyOpen(false);
+  };
+
+  const handleDeleteClick = () => {
+    setDropdownOpen(false);
+    setConfirmDeleteOpen(true);
+  };
+
+  const handleEditClick = () => {
+    setDropdownOpen(false);
+    setEditBody(comment.body);
+    setEditOpen(true);
+  };
+
+  const handleSaveEdit = async () => {
+    const trimmed = editBody.trim();
+    if (!trimmed) return;
+    try {
+      await onEdit(comment.id, trimmed);
+      setEditOpen(false);
+    } catch {
+      // keep edit open on error
+    }
   };
 
   return (
@@ -157,6 +287,9 @@ function CommentNode({
             {comment.isAdmin && <span className="admin-badge">ADMIN</span>}
             <span className="comment-separator">•</span>
             <span className="comment-date">{formatDate(comment.createdAt)}</span>
+            {comment.editedAt && !comment.deletedByAdmin && (
+              <span className="comment-edited-label">• edited</span>
+            )}
           </div>
 
           {showLocationRow && (
@@ -181,9 +314,43 @@ function CommentNode({
             </div>
           )}
 
-          <div className="comment-body">
-            <ReactMarkdown>{comment.body}</ReactMarkdown>
-          </div>
+          {comment.deletedByAdmin ? (
+            <div className="comment-body">
+              <p className="comment-removed-by-admin">This comment was removed by an admin.</p>
+            </div>
+          ) : editOpen ? (
+            <div className="comment-edit-state">
+              <textarea
+                className="comment-textarea"
+                value={editBody}
+                onChange={e => setEditBody(e.target.value)}
+                rows={3}
+                autoFocus
+                data-testid={`input-edit-${comment.id}`}
+              />
+              <div className="comment-input-buttons">
+                <button
+                  className="btn-cancel-comment"
+                  onClick={() => setEditOpen(false)}
+                  data-testid={`button-cancel-edit-${comment.id}`}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-submit-comment"
+                  onClick={handleSaveEdit}
+                  disabled={isSavingEdit || !editBody.trim()}
+                  data-testid={`button-save-edit-${comment.id}`}
+                >
+                  {isSavingEdit ? "Saving…" : "Save Edits"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="comment-body">
+              <ReactMarkdown>{comment.body}</ReactMarkdown>
+            </div>
+          )}
 
           <div className="comment-actions">
             <button
@@ -206,22 +373,91 @@ function CommentNode({
               <ArrowUp size={14} />
               <span>{comment.upvotes}</span>
             </button>
-            {canDelete && (
-              <button
-                className="comment-action delete-action"
-                onClick={() => setConfirmDeleteOpen(true)}
-                disabled={isDeleting}
-                data-testid={`button-delete-${comment.id}`}
-              >
-                <Trash2 size={14} />
-              </button>
+
+            {isLoggedIn && (
+              <div className="comment-ellipsis-wrapper" ref={dropdownRef}>
+                <button
+                  className="comment-action"
+                  onClick={() => setDropdownOpen(p => !p)}
+                  data-testid={`button-more-${comment.id}`}
+                  aria-label="More options"
+                >
+                  <MoreHorizontal size={14} />
+                </button>
+
+                {dropdownOpen && (
+                  <div className="comment-dropdown" data-testid={`dropdown-${comment.id}`}>
+                    {isOwnComment ? (
+                      <>
+                        <button
+                          className="comment-dropdown-item"
+                          onClick={handleEditClick}
+                          data-testid={`dropdown-edit-${comment.id}`}
+                        >
+                          <Pencil size={14} />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          className="comment-dropdown-item comment-dropdown-delete"
+                          onClick={handleDeleteClick}
+                          data-testid={`dropdown-delete-${comment.id}`}
+                        >
+                          <Trash2 size={14} />
+                          <span>Delete</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="comment-dropdown-item"
+                          onClick={() => setDropdownOpen(false)}
+                          data-testid={`dropdown-save-${comment.id}`}
+                        >
+                          <Bookmark size={14} />
+                          <span>Save</span>
+                        </button>
+                        <button
+                          className="comment-dropdown-item"
+                          onClick={() => { setDropdownOpen(false); setReportOpen(true); }}
+                          data-testid={`dropdown-report-${comment.id}`}
+                        >
+                          <Flag size={14} />
+                          <span>Report</span>
+                        </button>
+                        <div
+                          className="comment-dropdown-item comment-dropdown-item--disabled"
+                          data-testid={`dropdown-follow-${comment.id}`}
+                        >
+                          <Bell size={14} />
+                          <span>Follow</span>
+                          <span className="unavailable-tooltip">Unavailable in beta</span>
+                        </div>
+                        {isAdmin && (
+                          <button
+                            className="comment-dropdown-item comment-dropdown-delete"
+                            onClick={handleDeleteClick}
+                            data-testid={`dropdown-admin-delete-${comment.id}`}
+                          >
+                            <Trash2 size={14} />
+                            <span>Delete</span>
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
           {confirmDeleteOpen && (
             <div className="delete-confirm-modal" data-testid={`delete-confirm-${comment.id}`}>
               <Trash2 size={30} className="delete-confirm-icon" />
-              <p className="delete-confirm-text">Are you sure you want to delete your comment?</p>
+              <p className="delete-confirm-text">
+                {isOwnComment
+                  ? "Are you sure you want to delete your comment?"
+                  : "Remove this comment? It will be marked as removed by an admin."}
+              </p>
               <div className="delete-confirm-buttons">
                 <button
                   className="btn-cancel-comment"
@@ -236,7 +472,7 @@ function CommentNode({
                   disabled={isDeleting}
                   data-testid={`button-confirm-delete-${comment.id}`}
                 >
-                  {isDeleting ? "Deleting…" : "Delete Comment"}
+                  {isDeleting ? "Removing…" : isOwnComment ? "Delete Comment" : "Remove Comment"}
                 </button>
               </div>
             </div>
@@ -253,6 +489,8 @@ function CommentNode({
         </div>
       </div>
 
+      {reportOpen && <ReportModal onClose={() => setReportOpen(false)} />}
+
       {comment.children.length > 0 && (
         <div className="comment-children">
           {comment.children.map(child => (
@@ -264,10 +502,12 @@ function CommentNode({
               userId={userId}
               isAdmin={isAdmin}
               onDelete={onDelete}
+              onEdit={onEdit}
               onUpvote={onUpvote}
               onLoginClick={onLoginClick}
               pendingUpvote={pendingUpvote}
               pendingDelete={pendingDelete}
+              pendingEdit={pendingEdit}
               postReply={postReply}
               replyPending={replyPending}
             />
@@ -278,6 +518,8 @@ function CommentNode({
   );
 }
 
+// ─── Comments section (root) ──────────────────────────────────────────────────
+
 export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) {
   const { user, isLoggedIn } = useAuth();
   const [inputBody, setInputBody] = useState("");
@@ -285,6 +527,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
   const [isInputExpanded, setIsInputExpanded] = useState(false);
   const [pendingUpvote, setPendingUpvote] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [pendingEdit, setPendingEdit] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { data: comments = [], isLoading } = useQuery<CommentWithUser[]>({
@@ -322,6 +565,18 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
     onError: () => setPendingDelete(null),
   });
 
+  const editMutation = useMutation({
+    mutationFn: async ({ id, body }: { id: string; body: string }) => {
+      setPendingEdit(id);
+      return apiRequest("PATCH", `/api/comments/${id}`, { body });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+      setPendingEdit(null);
+    },
+    onError: () => setPendingEdit(null),
+  });
+
   const upvoteMutation = useMutation({
     mutationFn: async (commentId: string) => {
       setPendingUpvote(commentId);
@@ -337,6 +592,10 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
   const postReply = useCallback(async (parentId: string, body: string) => {
     await postMutation.mutateAsync({ body, parentId });
   }, [postMutation]);
+
+  const onEdit = useCallback(async (id: string, body: string) => {
+    await editMutation.mutateAsync({ id, body });
+  }, [editMutation]);
 
   const handleCancel = () => {
     setIsInputExpanded(false);
@@ -442,10 +701,12 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
               userId={user?.id}
               isAdmin={user?.isAdmin}
               onDelete={id => deleteMutation.mutate(id)}
+              onEdit={onEdit}
               onUpvote={id => upvoteMutation.mutate(id)}
               onLoginClick={onLoginClick}
               pendingUpvote={pendingUpvote}
               pendingDelete={pendingDelete}
+              pendingEdit={pendingEdit}
               postReply={postReply}
               replyPending={postMutation.isPending}
             />

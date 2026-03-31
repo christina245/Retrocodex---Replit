@@ -1915,7 +1915,27 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
-  // DELETE /api/comments/:id — delete a comment (own or admin)
+  // PATCH /api/comments/:id — edit own comment body (author only, not admin-on-others)
+  app.patch("/api/comments/:id", requireUser, async (req, res) => {
+    try {
+      const { body } = z.object({
+        body: z.string().trim().min(1, "Comment cannot be empty").max(10000, "Comment is too long"),
+      }).parse(req.body);
+      const success = await storage.updateComment(req.params.id, req.session.userId!, body);
+      if (!success) {
+        return res.status(403).json({ message: "Not authorized to edit this comment" });
+      }
+      return res.json({ message: "Comment updated" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("PATCH /api/comments/:id error:", error);
+      res.status(500).json({ message: "Failed to update comment" });
+    }
+  });
+
+  // DELETE /api/comments/:id — delete a comment (own or admin; admin soft-deletes others')
   app.delete("/api/comments/:id", requireUser, async (req, res) => {
     try {
       const [profile] = await db.select({ isAdmin: userProfiles.isAdmin })

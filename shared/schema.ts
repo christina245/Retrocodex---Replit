@@ -432,6 +432,8 @@ export const comments = pgTable("comments", {
   body: text("body").notNull(),
   upvotes: integer("upvotes").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  deletedByAdmin: boolean("deleted_by_admin").notNull().default(false),
+  editedAt: timestamp("edited_at"),
 });
 
 // Comment upvotes — tracks which users upvoted which comments
@@ -460,6 +462,8 @@ export type CommentWithUser = {
   body: string;
   upvotes: number;
   createdAt: Date;
+  deletedByAdmin: boolean;
+  editedAt: Date | null;
   username: string;
   avatarUrl: string;
   isAdmin: boolean;
