@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import scrungyConfetti from "@assets/Joyful_squirrel_surrounded_by_confetti_1774824005307.png";
 import { Link, useLocation } from "wouter";
@@ -857,6 +857,7 @@ export default function UserDashboard() {
     factId: string;
     optionChosen: string;
     locationChosen: string | null;
+    decadeChosen: string | null;
     votedAt: string;
     factTitle: string;
     factSlug: string;
@@ -2778,7 +2779,7 @@ export default function UserDashboard() {
                               ))}
                             </>
                           ) : paginatedSubmissions.length === 0 ? (
-                            <div className="submissions-empty" data-testid="submissions-empty">You haven't submitted any facts yet.</div>
+                            <div className="submissions-empty" data-testid="submissions-empty">No submissions currently pending</div>
                           ) : paginatedSubmissions.map((sub) => (
                             <div key={sub.id} className="submission-card-wrapper" data-testid={`submission-card-${sub.id}`}>
                               {sub.status === "saved" ? (
@@ -3203,6 +3204,12 @@ export default function UserDashboard() {
                                       <p className="poll-vote-location-display" data-testid={`poll-vote-location-${vote.id}`}>
                                         <MapPinCheckInside size={14} className="poll-vote-location-icon" />
                                         I learned this in: {vote.locationChosen}
+                                      </p>
+                                    )}
+                                    {vote.decadeChosen && (
+                                      <p className="poll-vote-location-display" data-testid={`poll-vote-decade-${vote.id}`}>
+                                        <CalendarCheck size={14} className="poll-vote-location-icon" />
+                                        I learned this in the {vote.decadeChosen}
                                       </p>
                                     )}
                                     <span className="public-comment-timestamp" data-testid={`poll-vote-time-${vote.id}`}>
