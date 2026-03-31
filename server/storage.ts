@@ -98,7 +98,7 @@ export interface IStorage {
   getPollVoteForFact(userId: string, factId: string): Promise<PollVote | null>;
 
   // Comments
-  getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]>;
+  getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]>;
   getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]>;
   createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser>;
   updateComment(id: string, userId: string, body: string): Promise<boolean>;
@@ -487,12 +487,13 @@ export class DatabaseStorage implements IStorage {
     return result || null;
   }
 
-  async getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]> {
+  async getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]> {
     const rows = await db
       .select({
         id: comments.id,
         body: comments.body,
         createdAt: comments.createdAt,
+        upvotes: comments.upvotes,
         factTitle: facts.mythHeader,
         factSlug: facts.slug,
         factCoverPhoto: facts.coverPhoto,
@@ -501,7 +502,14 @@ export class DatabaseStorage implements IStorage {
       .innerJoin(facts, eq(comments.factId, facts.id))
       .where(and(eq(comments.userId, userId), eq(comments.deletedByAdmin, false)))
       .orderBy(desc(comments.createdAt));
-    return rows;
+
+    const myUpvotes = await db
+      .select({ commentId: commentUpvotes.commentId })
+      .from(commentUpvotes)
+      .where(eq(commentUpvotes.userId, userId));
+    const upvotedSet = new Set(myUpvotes.map(u => u.commentId));
+
+    return rows.map(row => ({ ...row, isUpvotedByMe: upvotedSet.has(row.id) }));
   }
 
   async getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]> {

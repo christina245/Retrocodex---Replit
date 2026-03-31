@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck, ArrowUp } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
-import scrungyConfetti from "@assets/Joyful_squirrel_surrounded_by_confetti_1774824005307.png";
+import scrungyConfetti from "@assets/Scrungy_the_squirrel_at_work_cropped_1774648658154.png";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -873,6 +873,8 @@ export default function UserDashboard() {
     id: string;
     body: string;
     createdAt: string;
+    upvotes: number;
+    isUpvotedByMe: boolean;
     factTitle: string;
     factSlug: string;
     factCoverPhoto: string | null;
@@ -881,6 +883,28 @@ export default function UserDashboard() {
   const { data: myComments = [], isLoading: myCommentsLoading } = useQuery<MyCommentItem[]>({
     queryKey: ["/api/comments/me"],
     enabled: isLoggedIn,
+  });
+
+  const [dashboardEditingId, setDashboardEditingId] = useState<string | null>(null);
+  const [dashboardEditBody, setDashboardEditBody] = useState("");
+
+  const dashboardDeleteMutation = useMutation({
+    mutationFn: (id: string) => apiRequest("DELETE", `/api/comments/${id}`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/comments/me"] }),
+  });
+
+  const dashboardEditMutation = useMutation({
+    mutationFn: ({ id, body }: { id: string; body: string }) =>
+      apiRequest("PATCH", `/api/comments/${id}`, { body }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/comments/me"] });
+      setDashboardEditingId(null);
+    },
+  });
+
+  const dashboardUpvoteMutation = useMutation({
+    mutationFn: (id: string) => apiRequest("POST", `/api/comments/${id}/upvote`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/comments/me"] }),
   });
 
   interface SavedArticleItem {
@@ -3138,7 +3162,66 @@ export default function UserDashboard() {
                                     <Link href={`/fact/${c.factSlug}`} className="following-post-link">
                                       <p className="fact-myth">"{c.factTitle}"</p>
                                     </Link>
-                                    <p className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}>{c.body}</p>
+                                    {dashboardEditingId === c.id ? (
+                                      <div className="dashboard-comment-edit-box" data-testid={`edit-box-comment-${c.id}`}>
+                                        <textarea
+                                          className="dashboard-comment-edit-textarea"
+                                          value={dashboardEditBody}
+                                          onChange={(e) => setDashboardEditBody(e.target.value)}
+                                          data-testid={`input-edit-comment-${c.id}`}
+                                        />
+                                        <div className="dashboard-comment-edit-actions">
+                                          <button
+                                            className="dashboard-comment-save-btn"
+                                            onClick={() => dashboardEditMutation.mutate({ id: c.id, body: dashboardEditBody })}
+                                            disabled={dashboardEditMutation.isPending || !dashboardEditBody.trim()}
+                                            data-testid={`button-save-edit-comment-${c.id}`}
+                                          >
+                                            {dashboardEditMutation.isPending ? "Saving…" : "Save"}
+                                          </button>
+                                          <button
+                                            className="dashboard-comment-cancel-btn"
+                                            onClick={() => setDashboardEditingId(null)}
+                                            data-testid={`button-cancel-edit-comment-${c.id}`}
+                                          >
+                                            Cancel
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <p className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}>{c.body}</p>
+                                    )}
+                                    <div className="comment-actions" data-testid={`activity-comment-actions-${c.id}`}>
+                                      <button
+                                        className={`comment-action upvote-action${c.isUpvotedByMe ? " upvoted" : ""}`}
+                                        onClick={() => dashboardUpvoteMutation.mutate(c.id)}
+                                        disabled={dashboardUpvoteMutation.isPending}
+                                        data-testid={`button-upvote-comment-${c.id}`}
+                                      >
+                                        <ArrowUp size={14} />
+                                        <span>{c.upvotes}</span>
+                                      </button>
+                                      <button
+                                        className="comment-action"
+                                        onClick={() => {
+                                          setDashboardEditingId(c.id);
+                                          setDashboardEditBody(c.body);
+                                        }}
+                                        data-testid={`button-edit-comment-${c.id}`}
+                                      >
+                                        <Pencil size={14} />
+                                        <span>Edit</span>
+                                      </button>
+                                      <button
+                                        className="comment-action"
+                                        onClick={() => dashboardDeleteMutation.mutate(c.id)}
+                                        disabled={dashboardDeleteMutation.isPending}
+                                        data-testid={`button-delete-comment-${c.id}`}
+                                      >
+                                        <Trash2 size={14} />
+                                        <span>Delete</span>
+                                      </button>
+                                    </div>
                                     <span className="public-comment-timestamp" data-testid={`activity-comment-time-${c.id}`}>
                                       {new Date(c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                                     </span>
@@ -3232,7 +3315,7 @@ export default function UserDashboard() {
                           key={tab.id}
                           className="notifications-tab edit-requests-tab-disabled"
                           data-testid={`button-edit-requests-tab-${tab.id}`}
-                          disabled
+                          onClick={(e) => e.preventDefault()}
                         >
                           <span>{tab.label}</span>
                         </button>
