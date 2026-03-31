@@ -1735,6 +1735,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
   const POLL_OPTIONS = [
     "Yes, in school",
     "Yes, outside of school",
+    "Yes, unsure where",
     "No",
     "Not sure",
     "I was taught a different version",

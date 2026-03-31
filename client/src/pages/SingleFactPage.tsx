@@ -291,16 +291,14 @@ export default function SingleFactPage() {
               )}
             </div>
             <div className="edit-date-cell">
-              <a 
-                href="https://form.typeform.com/to/x2EOj8Ex" 
-                target="_blank" 
-                rel="noopener noreferrer"
+              <span
                 className="suggest-edit-link"
                 data-testid="link-suggest-edit"
               >
                 <Pencil className="suggest-edit-icon" />
                 <span className="suggest-edit-text">Suggest an edit</span>
-              </a>
+                <span className="suggest-edit-tooltip">Unavailable in beta</span>
+              </span>
               <div className="date-label">
                 {formattedDate ? `Added on ${formattedDate}` : ''}
               </div>
@@ -339,6 +337,7 @@ export default function SingleFactPage() {
               options={[
                 "Yes, in school",
                 "Yes, outside of school",
+                "Yes, unsure where",
                 "No",
                 "Not sure",
                 "I was taught a different version",

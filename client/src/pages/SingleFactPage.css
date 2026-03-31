@@ -114,6 +114,7 @@
 }
 
 .suggest-edit-link {
+  position: relative;
   background: none;
   border: none;
   color: #2C2C2C;
@@ -122,26 +123,33 @@
   font-size: 12px;
   font-weight: 500;
   text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s;
+  cursor: not-allowed;
   display: flex;
   align-items: center;
   gap: 0.3rem;
   line-height: 1;
+  user-select: none;
 }
 
-.suggest-edit-link:hover {
-  color: #FF5353;
+.suggest-edit-tooltip {
+  visibility: hidden;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2C2C2C;
+  color: #fff;
+  font-size: 11px;
+  font-family: 'Public Sans', sans-serif;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 300;
 }
 
-.suggest-edit-link:hover .suggest-edit-text {
-  text-decoration: underline;
-}
-
-.suggest-edit-link:focus-visible {
-  outline: 2px solid #FF5353;
-  outline-offset: 2px;
-  border-radius: 2px;
+.suggest-edit-link:hover .suggest-edit-tooltip {
+  visibility: visible;
 }
 
 .suggest-edit-icon {
