@@ -74,6 +74,17 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
       }
     }
   };
+
+  const handleCommentClick = () => {
+    if (fact.betaOnly) {
+      if (onBetaClick) {
+        const slug = factLink.split('/fact/').pop() || fact.id;
+        onBetaClick(slug);
+      }
+      return;
+    }
+    onComment();
+  };
   
   return (
     <div className="fact-card-wrapper">
@@ -154,7 +165,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
         <div className="fact-actions">
           <button 
             className="action-button"
-            onClick={onComment}
+            onClick={handleCommentClick}
             data-testid={`button-comment-${fact.id}`}
           >
             <MessageCircle size={16} />
