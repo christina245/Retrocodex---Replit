@@ -1748,7 +1748,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const { factId, optionChosen, locationChosen } = req.body;
+      const { factId, optionChosen, locationChosen, decadeChosen } = req.body;
       if (!factId || !optionChosen) {
         return res.status(400).json({ message: "factId and optionChosen are required" });
       }
@@ -1760,6 +1760,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
         factId,
         optionChosen,
         locationChosen: locationChosen || null,
+        decadeChosen: decadeChosen || null,
       });
       return res.json(vote);
     } catch (err) {

@@ -11,10 +11,13 @@ interface PollProps {
   onVerifyClick?: () => void;
 }
 
+const DECADES = ["1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020s"];
+
 export function Poll({ question, options, factId, onLoginClick, onVerifyClick }: PollProps) {
   const { user, isLoggedIn, logout } = useAuth();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [selectedDecade, setSelectedDecade] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const [voted, setVoted] = useState(false);
   const [votedOption, setVotedOption] = useState<string | null>(null);
@@ -53,6 +56,7 @@ export function Poll({ question, options, factId, onLoginClick, onVerifyClick }:
           factId,
           optionChosen: selectedOption,
           locationChosen: selectedLocation || null,
+          decadeChosen: selectedDecade || null,
         }),
       });
       if (!res.ok) {
@@ -164,29 +168,48 @@ export function Poll({ question, options, factId, onLoginClick, onVerifyClick }:
 
       {hasLocations && (
         <div className="poll-location-section" data-testid="poll-location-section">
-          <label className="poll-location-label" htmlFor="poll-location-select">
-            Where did you learn this?
-          </label>
-          <select
-            id="poll-location-select"
-            className="poll-location-select"
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            data-testid="select-poll-location"
-          >
-            <option value="">No location / skip</option>
-            {locationOptions.map((loc) => (
-              <option key={loc} value={loc}>{loc}</option>
-            ))}
-          </select>
-          {hasOnlyOneLocation && (
-            <p className="poll-location-hint" data-testid="poll-location-hint">
-              Learned this somewhere else?{" "}
-              <a href="/dashboard?editProfile=true" className="poll-location-hint-link">
-                Add other locations to your profile
-              </a>
-            </p>
-          )}
+          <div className="poll-location-col poll-location-col--wide">
+            <label className="poll-location-label" htmlFor="poll-location-select">
+              Where did you learn this?
+            </label>
+            <select
+              id="poll-location-select"
+              className="poll-location-select"
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+              data-testid="select-poll-location"
+            >
+              <option value="">---</option>
+              {locationOptions.map((loc) => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+            {hasOnlyOneLocation && (
+              <p className="poll-location-hint" data-testid="poll-location-hint">
+                Learned this somewhere else?{" "}
+                <a href="/dashboard?editProfile=true" className="poll-location-hint-link">
+                  Add other locations to your profile
+                </a>
+              </p>
+            )}
+          </div>
+          <div className="poll-location-col poll-location-col--narrow">
+            <label className="poll-location-label" htmlFor="poll-decade-select">
+              In which decade?
+            </label>
+            <select
+              id="poll-decade-select"
+              className="poll-decade-select"
+              value={selectedDecade}
+              onChange={(e) => setSelectedDecade(e.target.value)}
+              data-testid="select-poll-decade"
+            >
+              <option value="">---</option>
+              {DECADES.map((decade) => (
+                <option key={decade} value={decade}>{decade}</option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
 

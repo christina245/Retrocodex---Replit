@@ -444,6 +444,7 @@ export class DatabaseStorage implements IStorage {
         set: {
           optionChosen: data.optionChosen,
           locationChosen: data.locationChosen,
+          decadeChosen: data.decadeChosen,
           votedAt: new Date(),
         },
       })

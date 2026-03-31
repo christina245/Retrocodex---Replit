@@ -90,12 +90,27 @@
   line-height: 1.3;
 }
 
-/* Location dropdown */
+/* Location + decade row */
 .poll-location-section {
   margin-top: 16px;
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.poll-location-col {
+  display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.poll-location-col--wide {
+  flex: 1.5;
+}
+
+.poll-location-col--narrow {
+  flex: 1;
 }
 
 .poll-location-label {
@@ -105,7 +120,8 @@
   color: #555;
 }
 
-.poll-location-select {
+.poll-location-select,
+.poll-decade-select {
   width: 100%;
   font-family: 'Public Sans', sans-serif;
   font-size: 13px;
@@ -119,7 +135,8 @@
   box-sizing: border-box;
 }
 
-.poll-location-select:focus {
+.poll-location-select:focus,
+.poll-decade-select:focus {
   border-color: #888;
 }
 
@@ -287,6 +304,17 @@
 
   .poll-option-text {
     font-size: 14px;
+  }
+
+  .poll-location-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .poll-location-col--wide,
+  .poll-location-col--narrow {
+    flex: unset;
+    width: 100%;
   }
 
   .poll-submit-button {

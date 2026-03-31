@@ -409,6 +409,7 @@ export const pollVotes = pgTable("poll_votes", {
   factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
   optionChosen: varchar("option_chosen").notNull(),
   locationChosen: varchar("location_chosen"),
+  decadeChosen: varchar("decade_chosen"),
   votedAt: timestamp("voted_at").notNull().defaultNow(),
 }, (table) => ({
   userFactUnique: unique("poll_votes_user_fact").on(table.userId, table.factId),
