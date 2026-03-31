@@ -460,6 +460,7 @@ export class DatabaseStorage implements IStorage {
         factId: pollVotes.factId,
         optionChosen: pollVotes.optionChosen,
         locationChosen: pollVotes.locationChosen,
+        decadeChosen: pollVotes.decadeChosen,
         votedAt: pollVotes.votedAt,
         factTitle: facts.title,
         factSlug: facts.slug,
