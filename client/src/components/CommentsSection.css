@@ -188,18 +188,13 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   color: #878787;
-  cursor: default;
+  cursor: not-allowed;
   user-select: none;
 }
 
 .comment-control-arrow {
   font-size: 8px;
   color: #FF5353;
-}
-
-.comment-control-ban {
-  font-size: 11px;
-  opacity: 0.7;
 }
 
 .comment-control-tooltip {
@@ -336,12 +331,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  cursor: default;
-}
-
-.comment-username-ban {
-  font-size: 12px;
-  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .comment-username-tooltip {

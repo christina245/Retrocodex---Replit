@@ -290,7 +290,6 @@ function CommentNode({
             ) : !comment.allowPublicProfile ? (
               <span className="comment-username-private-wrapper">
                 <span className="comment-username">{comment.username}</span>
-                <span className="comment-username-ban">🚫</span>
                 <span className="comment-username-tooltip">Profile unavailable</span>
               </span>
             ) : (
@@ -702,13 +701,11 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
         <div className="comment-control-disabled">
           <span>Sort comments by</span>
           <span className="comment-control-arrow">▼</span>
-          <span className="comment-control-ban">🚫</span>
           <span className="comment-control-tooltip">Unavailable in beta</span>
         </div>
         <div className="comment-control-disabled">
           <Search size={12} />
           <span>Search comments</span>
-          <span className="comment-control-ban">🚫</span>
           <span className="comment-control-tooltip">Unavailable in beta</span>
         </div>
       </div>
