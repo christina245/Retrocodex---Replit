@@ -515,6 +515,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ...(data.favoriteTags !== undefined && { favoriteTags: data.favoriteTags }),
           ...(data.misinfoSource !== undefined && { misinfoSource: data.misinfoSource }),
           ...(data.allowFollows !== undefined && { allowFollows: data.allowFollows }),
+          ...(data.allowPublicProfile !== undefined && { allowPublicProfile: data.allowPublicProfile }),
           updatedAt: new Date(),
         })
         .where(eq(userProfiles.id, req.session.userId!))
@@ -565,6 +566,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         favoriteTags: userProfiles.favoriteTags,
         misinfoSource: userProfiles.misinfoSource,
         allowFollows: userProfiles.allowFollows,
+        allowPublicProfile: userProfiles.allowPublicProfile,
         isAdmin: userProfiles.isAdmin,
         createdAt: userProfiles.createdAt,
       })
@@ -1962,6 +1964,28 @@ Sitemap: ${SITE_URL}/sitemap.xml
     } catch (error) {
       console.error("POST /api/comments/:id/upvote error:", error);
       res.status(500).json({ message: "Failed to toggle upvote" });
+    }
+  });
+
+  // POST /api/comments/:id/save — save a comment
+  app.post("/api/comments/:id/save", requireUser, async (req, res) => {
+    try {
+      await storage.saveComment(req.session.userId!, req.params.id);
+      return res.json({ message: "Comment saved" });
+    } catch (error) {
+      console.error("POST /api/comments/:id/save error:", error);
+      res.status(500).json({ message: "Failed to save comment" });
+    }
+  });
+
+  // DELETE /api/comments/:id/save — unsave a comment
+  app.delete("/api/comments/:id/save", requireUser, async (req, res) => {
+    try {
+      await storage.unsaveComment(req.session.userId!, req.params.id);
+      return res.json({ message: "Comment unsaved" });
+    } catch (error) {
+      console.error("DELETE /api/comments/:id/save error:", error);
+      res.status(500).json({ message: "Failed to unsave comment" });
     }
   });
 

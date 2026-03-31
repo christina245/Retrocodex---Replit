@@ -117,6 +117,7 @@ export const userProfiles = pgTable("user_profiles", {
   favoriteTags: text("favorite_tags").array().default([]),
   misinfoSource: text("misinfo_source").default(""),
   allowFollows: boolean("allow_follows").default(true),
+  allowPublicProfile: boolean("allow_public_profile").default(true),
   isAdmin: boolean("is_admin").default(false),
   submissionBanned: boolean("submission_banned").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -148,6 +149,7 @@ export const updateProfileSchema = z.object({
   favoriteTags: z.array(z.string()).optional(),
   misinfoSource: z.string().max(200).optional(),
   allowFollows: z.boolean().optional(),
+  allowPublicProfile: z.boolean().optional(),
 });
 
 export type UserAccount = typeof userAccounts.$inferSelect;
@@ -427,7 +429,7 @@ export type PollVoteWithFact = PollVote & {
 export const comments = pgTable("comments", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
-  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").references(() => userAccounts.id, { onDelete: "set null" }),
   parentId: varchar("parent_id"),
   body: text("body").notNull(),
   upvotes: integer("upvotes").notNull().default(0),
@@ -454,24 +456,38 @@ export const insertCommentSchema = z.object({
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type Comment = typeof comments.$inferSelect;
 
+// Saved comments — one row per user per comment
+export const savedComments = pgTable("saved_comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  commentId: varchar("comment_id").notNull().references(() => comments.id, { onDelete: "cascade" }),
+  savedAt: timestamp("saved_at").notNull().defaultNow(),
+}, (table) => ({
+  userCommentUnique: unique("saved_comments_user_comment").on(table.userId, table.commentId),
+}));
+
+export type SavedComment = typeof savedComments.$inferSelect;
+
 export type CommentWithUser = {
   id: string;
   factId: string;
-  userId: string;
+  userId: string | null;
   parentId: string | null;
   body: string;
   upvotes: number;
   createdAt: Date;
   deletedByAdmin: boolean;
   editedAt: Date | null;
-  username: string;
+  username: string | null;
   avatarUrl: string;
   isAdmin: boolean;
   currentLocation: string;
   showCurrentLocation: boolean;
   placesLived: string[];
   showPlacesLived: boolean;
+  allowPublicProfile: boolean;
   isUpvotedByMe: boolean;
+  isSavedByMe: boolean;
 };
 
 // Follows table — user-to-user follow relationships

@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Filter, Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, LogIn, MoreHorizontal, Bookmark, Flag, Bell, Pencil, X } from "lucide-react";
+import { Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, LogIn, MoreHorizontal, Bookmark, Flag, Bell, Pencil, X } from "lucide-react";
+import { Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
@@ -13,11 +14,11 @@ interface CommentsSectionProps {
   onLoginClick?: (msg: string) => void;
 }
 
-function getDiceBearUrl(username: string) {
-  return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${encodeURIComponent(username)}&radius=8`;
+function getDiceBearUrl(username: string | null) {
+  return `https://api.dicebear.com/9.x/fun-emoji/svg?seed=${encodeURIComponent(username ?? "deleted")}&radius=8`;
 }
 
-function getAvatarSrc(avatarUrl: string, username: string) {
+function getAvatarSrc(avatarUrl: string, username: string | null) {
   if (avatarUrl && avatarUrl.trim() !== "") return avatarUrl;
   return getDiceBearUrl(username);
 }
@@ -186,6 +187,7 @@ interface CommentNodeProps {
   onDelete: (id: string) => void;
   onEdit: (id: string, body: string) => Promise<void>;
   onUpvote: (id: string) => void;
+  onSaveComment: (commentId: string, isSaved: boolean) => void;
   onLoginClick?: (msg: string) => void;
   pendingUpvote: string | null;
   pendingDelete: string | null;
@@ -196,7 +198,7 @@ interface CommentNodeProps {
 
 function CommentNode({
   comment, depth, isLoggedIn, userId, isAdmin,
-  onDelete, onEdit, onUpvote, onLoginClick,
+  onDelete, onEdit, onUpvote, onSaveComment, onLoginClick,
   pendingUpvote, pendingDelete, pendingEdit,
   postReply, replyPending
 }: CommentNodeProps) {
@@ -208,7 +210,7 @@ function CommentNode({
   const [reportOpen, setReportOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const isOwnComment = isLoggedIn && comment.userId === userId;
+  const isOwnComment = isLoggedIn && !!comment.userId && comment.userId === userId;
   const canDelete = isAdmin || isOwnComment;
   const isUpvoting = pendingUpvote === comment.id;
   const isDeleting = pendingDelete === comment.id;
@@ -283,7 +285,19 @@ function CommentNode({
         </div>
         <div className="comment-content">
           <div className="comment-header">
-            <span className="comment-username">{comment.username}</span>
+            {comment.userId === null ? (
+              <span className="comment-username comment-username--deleted">[Deleted profile]</span>
+            ) : !comment.allowPublicProfile ? (
+              <span className="comment-username-private-wrapper">
+                <span className="comment-username">{comment.username}</span>
+                <span className="comment-username-ban">🚫</span>
+                <span className="comment-username-tooltip">Profile unavailable</span>
+              </span>
+            ) : (
+              <Link href={`/user/${comment.username}`} className="comment-username comment-username--link">
+                {comment.username}
+              </Link>
+            )}
             {comment.isAdmin && <span className="admin-badge">ADMIN</span>}
             <span className="comment-separator">•</span>
             <span className="comment-date">{formatDate(comment.createdAt)}</span>
@@ -409,12 +423,12 @@ function CommentNode({
                     ) : (
                       <>
                         <button
-                          className="comment-dropdown-item"
-                          onClick={() => setDropdownOpen(false)}
+                          className={`comment-dropdown-item${comment.isSavedByMe ? " comment-dropdown-item--saved" : ""}`}
+                          onClick={() => { setDropdownOpen(false); onSaveComment(comment.id, comment.isSavedByMe); }}
                           data-testid={`dropdown-save-${comment.id}`}
                         >
-                          <Bookmark size={14} />
-                          <span>Save</span>
+                          <Bookmark size={14} className={comment.isSavedByMe ? "bookmark-icon--saved" : ""} />
+                          <span>{comment.isSavedByMe ? "Unsave" : "Save"}</span>
                         </button>
                         <button
                           className="comment-dropdown-item"
@@ -480,7 +494,7 @@ function CommentNode({
 
           {replyOpen && (
             <InlineReplyComposer
-              parentUsername={comment.username}
+              parentUsername={comment.username ?? "user"}
               onSubmit={handleReplySubmit}
               onCancel={() => setReplyOpen(false)}
               isPending={replyPending}
@@ -504,6 +518,7 @@ function CommentNode({
               onDelete={onDelete}
               onEdit={onEdit}
               onUpvote={onUpvote}
+              onSaveComment={onSaveComment}
               onLoginClick={onLoginClick}
               pendingUpvote={pendingUpvote}
               pendingDelete={pendingDelete}
@@ -589,6 +604,18 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
     onError: () => setPendingUpvote(null),
   });
 
+  const saveMutation = useMutation({
+    mutationFn: async ({ commentId, isSaved }: { commentId: string; isSaved: boolean }) =>
+      apiRequest(isSaved ? "DELETE" : "POST", `/api/comments/${commentId}/save`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+    },
+  });
+
+  const onSaveComment = useCallback((commentId: string, isSaved: boolean) => {
+    saveMutation.mutate({ commentId, isSaved });
+  }, [saveMutation]);
+
   const postReply = useCallback(async (parentId: string, body: string) => {
     await postMutation.mutateAsync({ body, parentId });
   }, [postMutation]);
@@ -672,15 +699,17 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       </div>
 
       <div className="comments-controls">
-        <div className="filter-control">
-          <Filter size={14} />
-          <span className="filter-label">Filter by:</span>
-          <span className="filter-value">View all comments</span>
-          <span className="filter-dropdown">▼</span>
+        <div className="comment-control-disabled">
+          <span>Sort comments by</span>
+          <span className="comment-control-arrow">▼</span>
+          <span className="comment-control-ban">🚫</span>
+          <span className="comment-control-tooltip">Unavailable in beta</span>
         </div>
-        <div className="search-control">
-          <Search size={14} />
+        <div className="comment-control-disabled">
+          <Search size={12} />
           <span>Search comments</span>
+          <span className="comment-control-ban">🚫</span>
+          <span className="comment-control-tooltip">Unavailable in beta</span>
         </div>
       </div>
 
@@ -703,6 +732,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
               onDelete={id => deleteMutation.mutate(id)}
               onEdit={onEdit}
               onUpvote={id => upvoteMutation.mutate(id)}
+              onSaveComment={onSaveComment}
               onLoginClick={onLoginClick}
               pendingUpvote={pendingUpvote}
               pendingDelete={pendingDelete}

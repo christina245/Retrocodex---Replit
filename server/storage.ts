@@ -9,6 +9,7 @@ import {
   pollVotes,
   comments,
   commentUpvotes,
+  savedComments,
   userProfiles,
   follows,
   factSubmissions,
@@ -102,6 +103,8 @@ export interface IStorage {
   updateComment(id: string, userId: string, body: string): Promise<boolean>;
   deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean>;
   toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
+  saveComment(userId: string, commentId: string): Promise<void>;
+  unsaveComment(userId: string, commentId: string): Promise<boolean>;
 
   // Follows
   followUser(followerId: string, followeeId: string): Promise<void>;
@@ -500,32 +503,43 @@ export class DatabaseStorage implements IStorage {
         showCurrentLocation: userProfiles.showCurrentLocation,
         placesLived: userProfiles.placesLived,
         showPlacesLived: userProfiles.showPlacesLived,
+        allowPublicProfile: userProfiles.allowPublicProfile,
       })
       .from(comments)
-      .innerJoin(userProfiles, eq(comments.userId, userProfiles.id))
+      .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
       .where(eq(comments.factId, factId))
       .orderBy(comments.createdAt);
 
     const upvotedSet = new Set<string>();
+    const savedSet = new Set<string>();
     if (viewerId) {
-      const votes = await db
-        .select({ commentId: commentUpvotes.commentId })
-        .from(commentUpvotes)
-        .where(eq(commentUpvotes.userId, viewerId));
+      const [votes, saved] = await Promise.all([
+        db.select({ commentId: commentUpvotes.commentId })
+          .from(commentUpvotes)
+          .where(eq(commentUpvotes.userId, viewerId)),
+        db.select({ commentId: savedComments.commentId })
+          .from(savedComments)
+          .where(eq(savedComments.userId, viewerId)),
+      ]);
       votes.forEach(v => upvotedSet.add(v.commentId));
+      saved.forEach(s => savedSet.add(s.commentId));
     }
 
     return rows.map(r => ({
       ...r,
+      userId: r.userId ?? null,
+      username: r.username ?? null,
       deletedByAdmin: r.deletedByAdmin ?? false,
       editedAt: r.editedAt ?? null,
       avatarUrl: r.avatarUrl ?? "",
       isAdmin: r.isAdmin ?? false,
       showCurrentLocation: r.showCurrentLocation ?? false,
-      currentLocation: (r.showCurrentLocation) ? (r.currentLocation ?? "") : "",
+      currentLocation: r.showCurrentLocation ? (r.currentLocation ?? "") : "",
       showPlacesLived: r.showPlacesLived ?? false,
-      placesLived: (r.showPlacesLived) ? (r.placesLived ?? []) : [],
+      placesLived: r.showPlacesLived ? (r.placesLived ?? []) : [],
+      allowPublicProfile: r.allowPublicProfile ?? true,
       isUpvotedByMe: upvotedSet.has(r.id),
+      isSavedByMe: savedSet.has(r.id),
     }));
   }
 
@@ -565,7 +579,9 @@ export class DatabaseStorage implements IStorage {
       currentLocation: showCurrentLocation ? (profile.currentLocation ?? "") : "",
       showPlacesLived,
       placesLived: showPlacesLived ? (profile.placesLived ?? []) : [],
+      allowPublicProfile: profile.allowPublicProfile ?? true,
       isUpvotedByMe: false,
+      isSavedByMe: false,
     };
   }
 
@@ -636,6 +652,21 @@ export class DatabaseStorage implements IStorage {
         .returning({ upvotes: comments.upvotes });
       return { upvotes: updated?.upvotes ?? 1, isUpvoted: true };
     }
+  }
+
+  async saveComment(userId: string, commentId: string): Promise<void> {
+    await db
+      .insert(savedComments)
+      .values({ userId, commentId })
+      .onConflictDoNothing();
+  }
+
+  async unsaveComment(userId: string, commentId: string): Promise<boolean> {
+    const result = await db
+      .delete(savedComments)
+      .where(and(eq(savedComments.userId, userId), eq(savedComments.commentId, commentId)))
+      .returning();
+    return result.length > 0;
   }
 
   // ─── Follows ────────────────────────────────────────────────────────────────
