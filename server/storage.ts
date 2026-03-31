@@ -443,8 +443,8 @@ export class DatabaseStorage implements IStorage {
         target: [pollVotes.userId, pollVotes.factId],
         set: {
           optionChosen: data.optionChosen,
-          locationChosen: data.locationChosen,
-          decadeChosen: data.decadeChosen,
+          locationChosen: data.locationChosen || null,
+          decadeChosen: data.decadeChosen || null,
           votedAt: new Date(),
         },
       })
