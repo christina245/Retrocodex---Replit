@@ -1887,6 +1887,20 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
+  // GET /api/comments/me — fetch the current user's own comments
+  app.get("/api/comments/me", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    try {
+      const result = await storage.getCommentsByUserId(req.session.userId);
+      return res.json(result);
+    } catch (err) {
+      console.error("GET /api/comments/me error:", err);
+      return res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
   // GET /api/facts/:id/comments — fetch all comments for a fact (public; viewer used for upvote status)
   app.get("/api/facts/:id/comments", async (req, res) => {
     try {

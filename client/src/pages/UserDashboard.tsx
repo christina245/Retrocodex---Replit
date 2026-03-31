@@ -869,6 +869,20 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
+  interface MyCommentItem {
+    id: string;
+    body: string;
+    createdAt: string;
+    factTitle: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+  }
+
+  const { data: myComments = [], isLoading: myCommentsLoading } = useQuery<MyCommentItem[]>({
+    queryKey: ["/api/comments/me"],
+    enabled: isLoggedIn,
+  });
+
   interface SavedArticleItem {
     id: string;
     articleKey: string;
@@ -3111,60 +3125,29 @@ export default function UserDashboard() {
 
                     {activityTab === "comments" && (
                       <div data-testid="activity-comments-content">
-                        {dummyActivityComments.length > 0 ? (
+                        {myCommentsLoading ? (
+                          <div className="dashboard-feed-empty" data-testid="activity-comments-loading">
+                            <p>Loading your comments...</p>
+                          </div>
+                        ) : myComments.length > 0 ? (
                           <div className="following-feed">
-                            {dummyActivityComments.map((c) => (
+                            {myComments.map((c) => (
                               <div className="public-comment-entry" key={c.id} data-testid={`activity-comment-${c.id}`}>
                                 <div className="following-post-body-content">
                                   <div className="following-post-body-left">
-                                    <Link href={c.factLink} className="following-post-link">
+                                    <Link href={`/fact/${c.factSlug}`} className="following-post-link">
                                       <p className="fact-myth">"{c.factTitle}"</p>
                                     </Link>
-                                    <p className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}>{c.comment}</p>
-                                    <div className="comment-actions" data-testid={`activity-comment-actions-${c.id}`}>
-                                      <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === c.id ? null : c.id)} data-testid={`button-reply-activity-comment-${c.id}`}>
-                                        <CornerUpLeft size={14} />
-                                        <span>Reply</span>
-                                      </button>
-                                      <button className="comment-action disabled-action" data-testid={`button-like-activity-comment-${c.id}`}>
-                                        <Heart size={14} />
-                                        <span>0 likes</span>
-                                      </button>
-                                      <button className="comment-action disabled-action" data-testid={`button-save-activity-comment-${c.id}`}>
-                                        <Bookmark size={14} />
-                                        <span>Save</span>
-                                      </button>
-                                      <div className="comment-ellipsis-wrapper">
-                                        <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === c.id ? null : c.id)} data-testid={`button-ellipsis-activity-comment-${c.id}`}>
-                                          <MoreHorizontal size={14} />
-                                        </button>
-                                        {activeEllipsisId === c.id && (
-                                          <div className="comment-ellipsis-dropdown" data-testid={`dropdown-ellipsis-activity-comment-${c.id}`}>
-                                            <button className="comment-ellipsis-item" data-testid={`button-edit-activity-comment-${c.id}`}>
-                                              <Pencil size={14} />
-                                              <span>Edit</span>
-                                            </button>
-                                            <button className="comment-ellipsis-item" data-testid={`button-delete-activity-comment-${c.id}`}>
-                                              <Trash2 size={14} />
-                                              <span>Delete</span>
-                                            </button>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                    {activeReplyId === c.id && (
-                                      <div className="inline-reply-box" data-testid={`inline-reply-activity-comment-${c.id}`}>
-                                        <textarea placeholder="Write a reply..." data-testid={`input-reply-activity-comment-${c.id}`} />
-                                        <div className="inline-reply-actions">
-                                          <button className="inline-reply-btn" data-testid={`button-submit-reply-activity-comment-${c.id}`}>Reply</button>
-                                        </div>
-                                      </div>
-                                    )}
-                                    <span className="public-comment-timestamp" data-testid={`activity-comment-time-${c.id}`}>{c.timestamp}</span>
+                                    <p className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}>{c.body}</p>
+                                    <span className="public-comment-timestamp" data-testid={`activity-comment-time-${c.id}`}>
+                                      {new Date(c.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                    </span>
                                   </div>
-                                  <Link href={c.factLink} className="following-post-cover-link" data-testid={`cover-link-activity-comment-${c.id}`}>
-                                    <img src={c.coverPhoto} alt="" className="following-post-cover-photo" />
-                                  </Link>
+                                  {c.factCoverPhoto && (
+                                    <Link href={`/fact/${c.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-activity-comment-${c.id}`}>
+                                      <img src={c.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                    </Link>
+                                  )}
                                 </div>
                               </div>
                             ))}
@@ -3247,9 +3230,9 @@ export default function UserDashboard() {
                       {EDIT_REQUESTS_TABS.map((tab) => (
                         <button
                           key={tab.id}
-                          className={`notifications-tab${editRequestsTab === tab.id ? " notifications-tab-active" : ""}`}
-                          onClick={() => setEditRequestsTab(tab.id)}
+                          className="notifications-tab edit-requests-tab-disabled"
                           data-testid={`button-edit-requests-tab-${tab.id}`}
+                          disabled
                         >
                           <span>{tab.label}</span>
                         </button>
@@ -3257,129 +3240,16 @@ export default function UserDashboard() {
                     </nav>
                   </div>
 
+                  {/* Mock data preserved below for future use — hidden during beta */}
+                  {/* Pending: "Breakfast is the most important meal of the day" — Sources */}
+                  {/* Approved: "Autism is caused by broken mirror neurons." — Timeline */}
+                  {/* Not Approved: "People often repress traumatic memories." — Current Understanding */}
+
                   <div className="dashboard-feed-content" data-testid="dashboard-edit-requests-content">
-                    {editRequestsTab === "pending" && (
-                      <div className="following-feed" data-testid="edit-requests-pending">
-
-                        {/* Pending edit request 1 */}
-                        <div className="activity-post" data-testid="edit-request-pending-1">
-                          <div className="activity-post-icon-col">
-                            <Clock size={40} strokeWidth={1.5} className="activity-status-icon activity-status-pending" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-link">
-                                  <p className="fact-myth">"Breakfast is the most important meal of the day."</p>
-                                </Link>
-                              </div>
-                              <span className="following-post-timestamp">5 hours ago</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <p className="edit-section-label"><strong>Section editing:</strong> Sources</p>
-                                  <p className="activity-submitted-label">You submitted:</p>
-                                  <p className="activity-submitted-text" data-testid="edit-request-text-pending-1">You should add this 2024 meta-analysis that found no significant health benefits to eating breakfast vs. skipping it for healthy adults: https://pubmed.ncbi.nlm.nih.gov/example123/</p>
-                                  <div className="activity-action-row">
-                                    <button className="activity-learn-more-button" data-testid="button-view-submission-pending-1">
-                                      <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
-                                      View submission
-                                    </button>
-                                  </div>
-                                </div>
-                                <Link href="/fact/breakfast-most-important-meal-of-the-day" className="following-post-cover-link" data-testid="cover-link-edit-pending-1">
-                                  <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    )}
-
-                    {editRequestsTab === "approved" && (
-                      <div className="following-feed" data-testid="edit-requests-approved">
-
-                        {/* Approved edit request 1: Autism - Timeline */}
-                        <div className="activity-post" data-testid="edit-request-approved-1">
-                          <div className="activity-post-icon-col">
-                            <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <Link href="/fact/autism-broken-mirror-neurons" className="following-post-link">
-                                  <p className="fact-myth">"Autism is caused by broken mirror neurons."</p>
-                                </Link>
-                              </div>
-                              <span className="following-post-timestamp">2 hours ago</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <p className="edit-section-label"><strong>Section editing:</strong> Timeline</p>
-                                  <p className="activity-submitted-label">You submitted:</p>
-                                  <p className="activity-submitted-text" data-testid="edit-request-text-approved-1">Don't forget to cite this 2020 study that further disproved it! Here's the study: https://pubmed.ncbi.nlm.nih.gov/32668956/</p>
-                                  <div className="activity-action-row">
-                                    <Link href="/fact/autism-broken-mirror-neurons" className="activity-learn-more-button" data-testid="button-view-updated-entry-approved-1">
-                                      <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
-                                      View updated entry
-                                    </Link>
-                                  </div>
-                                </div>
-                                <Link href="/fact/autism-broken-mirror-neurons" className="following-post-cover-link" data-testid="cover-link-edit-approved-1">
-                                  <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    )}
-
-                    {editRequestsTab === "not-approved" && (
-                      <div className="following-feed" data-testid="edit-requests-not-approved">
-
-                        {/* Not approved edit request 1: Repressed memories - Current Understanding */}
-                        <div className="activity-post" data-testid="edit-request-not-approved-1">
-                          <div className="activity-post-icon-col">
-                            <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <Link href="/fact/people-repress-traumatic-memories" className="following-post-link">
-                                  <p className="fact-myth">"People often repress traumatic memories."</p>
-                                </Link>
-                              </div>
-                              <span className="following-post-timestamp">3 hours ago</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <p className="edit-section-label"><strong>Section editing:</strong> Current Understanding</p>
-                                  <p className="activity-submitted-label">You submitted:</p>
-                                  <p className="activity-submitted-text" data-testid="edit-request-text-not-approved-1">There's actually plenty of evidence that people do repress traumatic memories! I know it's a popular trope in the media. If it's that popular, it must be true, right?</p>
-                                  <div className="activity-action-row">
-                                    <button className="activity-learn-more-button" data-testid="button-view-submission-not-approved-1">
-                                      <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
-                                      View submission
-                                    </button>
-                                  </div>
-                                </div>
-                                <Link href="/fact/people-repress-traumatic-memories" className="following-post-cover-link" data-testid="cover-link-edit-not-approved-1">
-                                  <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                                </Link>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    )}
+                    <div className="edit-requests-beta-state" data-testid="edit-requests-beta-empty">
+                      <p className="edit-requests-beta-text">Editing content is unavailable in the beta. Scrungy is working on it!</p>
+                      <img src={scrungyConfetti} alt="Scrungy the squirrel" className="edit-requests-beta-squirrel" />
+                    </div>
                   </div>
                 </>
               )}

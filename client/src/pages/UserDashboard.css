@@ -2794,3 +2794,33 @@ a.following-post-fact-link:hover {
     margin-right: 1.5rem;
   }
 }
+
+.edit-requests-tab-disabled {
+  opacity: 0.45;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+.edit-requests-beta-state {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 2rem 1rem;
+}
+
+.edit-requests-beta-text {
+  color: #878787;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.edit-requests-beta-squirrel {
+  width: 90px;
+  height: auto;
+  flex-shrink: 0;
+}
