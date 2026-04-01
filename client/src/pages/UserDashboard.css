@@ -2584,6 +2584,7 @@ a.following-post-fact-link:hover {
   padding: 0;
   border: none;
   background: none;
+  flex-direction: column;
 }
 
 .following-post--fact .following-post-main,
@@ -2780,6 +2781,10 @@ a.following-post-fact-link:hover {
   border: none;
   background: none;
   min-width: 0;
+}
+
+.feed-for-you-grid .following-post-fact-card-wrap {
+  margin-left: 0;
 }
 
 .feed-for-you-grid .fact-card-wrapper {
