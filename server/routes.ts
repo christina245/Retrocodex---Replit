@@ -666,6 +666,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/feed/local — location-based feed (requires auth)
+  app.get("/api/feed/local", requireUser, async (req, res) => {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const pageSize = 20;
+      const result = await storage.getLocalFeed(req.session.userId!, page, pageSize);
+      return res.json({
+        items: result.items,
+        total: result.total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(result.total / pageSize),
+      });
+    } catch (error) {
+      console.error("GET /api/feed/local error:", error);
+      res.status(500).json({ message: "Failed to fetch local feed" });
+    }
+  });
+
   // GET /api/feed/for-you — tag-personalized feed (auth optional)
   app.get("/api/feed/for-you", async (req, res) => {
     try {

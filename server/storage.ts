@@ -156,6 +156,7 @@ export interface IStorage {
   getFollowingIds(userId: string): Promise<string[]>;
   getFollowingFeed(userId: string, limit?: number): Promise<FeedItem[]>;
   getForYouFeed(userId?: string, limit?: number): Promise<FeedItem[]>;
+  getLocalFeed(userId: string, page?: number, pageSize?: number): Promise<{ items: FeedItem[]; total: number }>;
 
   // Fact follows
   followFact(userId: string, factId: string): Promise<void>;
@@ -1043,6 +1044,135 @@ export class DatabaseStorage implements IStorage {
     return [...factItems, ...commentItems]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, limit);
+  }
+
+  async getLocalFeed(userId: string, page = 1, pageSize = 20): Promise<{ items: FeedItem[]; total: number }> {
+    // Step 1: Load the current user's own locations (regardless of privacy settings)
+    const [myProfile] = await db
+      .select({ currentLocation: userProfiles.currentLocation, placesLived: userProfiles.placesLived })
+      .from(userProfiles)
+      .where(eq(userProfiles.id, userId))
+      .limit(1);
+
+    if (!myProfile) return { items: [], total: 0 };
+
+    const rawLocations = [
+      ...(myProfile.currentLocation ? [myProfile.currentLocation] : []),
+      ...(myProfile.placesLived ?? []),
+    ];
+    const myLocations = [...new Set(rawLocations.map(l => l.trim().toLowerCase()).filter(Boolean))];
+
+    if (myLocations.length === 0) return { items: [], total: 0 };
+
+    // Step 2: Find other users with at least one *public* location matching ours
+    // Case-insensitive match: showCurrentLocation=true AND LOWER(current_location) in myLocations
+    // OR showPlacesLived=true AND any element of places_lived (lowercased) in myLocations
+    const locationConds = myLocations.flatMap(loc => [
+      and(
+        eq(userProfiles.showCurrentLocation, true),
+        sql`LOWER(${userProfiles.currentLocation}) = ${loc}`
+      ),
+      and(
+        eq(userProfiles.showPlacesLived, true),
+        sql`EXISTS (SELECT 1 FROM UNNEST(${userProfiles.placesLived}) AS _pl WHERE LOWER(_pl) = ${loc})`
+      ),
+    ]);
+
+    const localUserRows = await db
+      .selectDistinct({ id: userProfiles.id })
+      .from(userProfiles)
+      .where(and(ne(userProfiles.id, userId), or(...locationConds)));
+
+    const localUserIds = localUserRows.map(r => r.id);
+    if (localUserIds.length === 0) return { items: [], total: 0 };
+
+    // Step 3: Fetch facts submitted by local users (same fields as getFollowingFeed)
+    const submittedFacts = await db
+      .select({
+        id: facts.id,
+        userId: facts.submittedByUserId,
+        username: userProfiles.username,
+        avatarUrl: userProfiles.avatarUrl,
+        createdAt: facts.createdAt,
+        slug: facts.slug,
+        mythHeader: facts.mythHeader,
+        truthHeader: facts.truthHeader,
+        coverPhoto: facts.coverPhoto,
+        categories: facts.categories,
+        factFilters: facts.factFilters,
+        betaOnly: facts.betaOnly,
+        revisionYear: facts.revisionYear,
+        taughtUntilYear: facts.taughtUntilYear,
+      })
+      .from(facts)
+      .innerJoin(userProfiles, eq(facts.submittedByUserId, userProfiles.id))
+      .where(inArray(facts.submittedByUserId, localUserIds))
+      .orderBy(desc(facts.createdAt));
+
+    // Step 4: Fetch comments by local users
+    const commentRows = await db
+      .select({
+        id: comments.id,
+        userId: comments.userId,
+        username: userProfiles.username,
+        avatarUrl: userProfiles.avatarUrl,
+        body: comments.body,
+        createdAt: comments.createdAt,
+        factId: facts.id,
+        factSlug: facts.slug,
+        factTitle: facts.mythHeader,
+        factCoverPhoto: facts.coverPhoto,
+      })
+      .from(comments)
+      .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
+      .leftJoin(facts, eq(comments.factId, facts.id))
+      .where(inArray(comments.userId, localUserIds))
+      .orderBy(desc(comments.createdAt));
+
+    const factCountMap = await this.getCommentCountsByFactIds(submittedFacts.map(f => f.id));
+
+    const factItems: FeedItem[] = submittedFacts.map((f) => ({
+      type: "fact" as const,
+      id: f.id,
+      userId: f.userId ?? "",
+      username: f.username ?? "",
+      avatarUrl: f.avatarUrl ?? "",
+      createdAt: f.createdAt,
+      factSlug: f.slug,
+      mythHeader: f.mythHeader,
+      truthHeader: f.truthHeader,
+      factCoverPhoto2: f.coverPhoto ?? null,
+      factCategories: f.categories,
+      factFilters: f.factFilters ?? [],
+      factBetaOnly: f.betaOnly ?? false,
+      factRevisionYear: f.revisionYear ?? null,
+      factTaughtUntilYear: f.taughtUntilYear ?? null,
+      commentCount: factCountMap[f.id] ?? 0,
+    }));
+
+    const commentItems: FeedItem[] = commentRows.map((c) => ({
+      type: "comment" as const,
+      id: c.id,
+      userId: c.userId ?? "",
+      username: c.username ?? "",
+      avatarUrl: c.avatarUrl ?? "",
+      createdAt: c.createdAt,
+      commentBody: c.body,
+      factId: c.factId ?? undefined,
+      factSlug: c.factSlug ?? undefined,
+      factTitle: c.factTitle ?? undefined,
+      factCoverPhoto: c.factCoverPhoto ?? undefined,
+    }));
+
+    // Step 5: Merge, sort by date descending, paginate in memory
+    const allItems = [...factItems, ...commentItems]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    const total = allItems.length;
+    const offset = (page - 1) * pageSize;
+    const items = allItems.slice(offset, offset + pageSize);
+
+    return { items, total };
   }
 
   async getForYouFeed(userId?: string, limit = 50): Promise<FeedItem[]> {

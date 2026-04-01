@@ -718,6 +718,7 @@ export default function UserDashboard() {
   const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
   const [editProfilePhoto, setEditProfilePhoto] = useState(user?.profilePhoto || "");
   const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
+  const [localPage, setLocalPage] = useState(1);
   const [hoveredFeedTab, setHoveredFeedTab] = useState<DashboardTab | null>(null);
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
   const [notificationsTab, setNotificationsTab] = useState<NotificationsTab>("all");
@@ -836,6 +837,19 @@ export default function UserDashboard() {
   const { data: factUpdatesFeed = [], isLoading: factUpdatesFeedLoading } = useQuery<FactUpdateWithFact[]>({
     queryKey: ["/api/feed/fact-updates"],
     enabled: feedTab === "fact-updates",
+  });
+
+  interface LocalFeedResponse {
+    items: FeedItem[];
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  }
+  const { data: localFeedData, isLoading: localFeedLoading } = useQuery<LocalFeedResponse>({
+    queryKey: ["/api/feed/local", localPage],
+    queryFn: () => fetch(`/api/feed/local?page=${localPage}`).then(r => r.json()),
+    enabled: feedTab === "local" && isLoggedIn,
   });
 
   interface PublicProfileData { followerCount: number; followingCount: number; }
@@ -1106,6 +1120,7 @@ export default function UserDashboard() {
 
   const handleFeedTabChange = useCallback((tab: DashboardTab) => {
     setFeedTab(tab);
+    if (tab === "local") setLocalPage(1);
   }, []);
 
   const MAX_VISIBLE_TAGS = 5;
@@ -1497,109 +1512,86 @@ export default function UserDashboard() {
                     )}
 
                     {feedTab === "local" && (
-                      <div className="following-feed" data-testid="feed-local">
-                        <p className="local-feed-description" data-testid="local-feed-description">Activity from users currently located in your current or past locations.</p>
+                      (() => {
+                        const hasNoLocations = !user?.currentLocation && (!user?.placesLived || user.placesLived.length === 0);
+                        const localItems = localFeedData?.items ?? [];
+                        const localTotalPages = localFeedData?.totalPages ?? 1;
 
-                        <div className="following-post" data-testid="local-post-1">
-                          <img src={placeholderPhoto} alt="CtrlAltDefeat" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/CtrlAltDefeat" className="following-post-username" data-testid="link-user-CtrlAltDefeat">CtrlAltDefeat</Link>
-                              <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-1">New York, United States</span>
-                              <span className="following-post-action">submitted a new topic</span>
+                        if (hasNoLocations) {
+                          return (
+                            <div className="dashboard-feed-empty" data-testid="feed-empty-local-no-location">
+                              <MapPin size={40} className="dashboard-feed-empty-icon" />
+                              <p className="dashboard-feed-empty-title">No location set</p>
+                              <p className="dashboard-feed-empty-desc">
+                                Add your current location or places you've lived in{" "}
+                                <button
+                                  type="button"
+                                  className="feed-add-topics-link"
+                                  onClick={() => setSideTab("settings")}
+                                  data-testid="button-go-to-settings-local"
+                                >
+                                  Settings
+                                </button>{" "}
+                                to see activity from nearby users.
+                              </p>
                             </div>
-                            <span className="following-post-timestamp">5 mins ago</span>
-                          </div>
-                          <div className="following-post-body following-post-factcard">
-                            <FactCard
-                              fact={{
-                                id: "tongue-taste-map",
-                                category: "LIFE SCIENCES",
-                                categoryColor: "#419F36",
-                                myth: "The tongue has separate zones for different tastes: sweet at the tip, salty and sour on the sides, and bitter at the back.",
-                                truth: "All taste buds can detect all basic tastes. The tongue map myth originated from a misinterpretation of research by Edwin Boring in the 1940s.",
-                                link: "/fact/tongue-taste-map",
-                                coverPhoto: "/uploads/1764732977459-366971984.png",
-                              }}
-                              onSave={() => {}}
-                              onShare={() => {}}
-                              onComment={() => {}}
-                            />
-                          </div>
-                          </div>
-                        </div>
+                          );
+                        }
 
-
-                        <div className="following-post" data-testid="local-post-3">
-                          <img src={placeholderPhoto} alt="CaffeineOverflow" className="following-post-avatar" />
-                          <div className="following-post-main">
-                          <div className="following-post-header">
-                            <div className="following-post-header-text">
-                              <Link href="/user/CaffeineOverflow" className="following-post-username" data-testid="link-user-CaffeineOverflow">CaffeineOverflow</Link>
-                              <span className="following-post-action">from</span>
-                              <span className="following-post-location" data-testid="local-location-3">Brazil</span>
-                              <span className="following-post-action">commented on</span>
+                        if (localFeedLoading) {
+                          return (
+                            <div className="dashboard-feed-empty" data-testid="feed-loading-local">
+                              <p className="dashboard-feed-empty-desc">Loading local activity...</p>
                             </div>
-                            <span className="following-post-timestamp">1 hour ago</span>
-                          </div>
-                          <div className="following-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/sweating-burning-fat" className="following-post-link">
-                                  <p className="fact-myth">"Does sweating mean you're burning fat?"</p>
-                                </Link>
-                                <p className="following-plain-comment" data-testid="local-plain-comment">Living in Rio, people at the gym constantly think sweating buckets equals a better workout. But sweat is just thermoregulation — your body cooling itself down. You can burn tons of calories in cold water swimming without sweating at all.</p>
-                                <div className="comment-actions" data-testid="local-comment-actions-1">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'local-1' ? null : 'local-1')} data-testid="button-reply-local-1">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-local-1">
-                                    <Heart size={14} />
-                                    <span>8 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-local-1">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'local-1' ? null : 'local-1')} data-testid="button-ellipsis-local-1">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'local-1' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-local-1">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-local-1">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-local-1">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {activeReplyId === 'local-1' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-local-1">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-local-1" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-local-1">Reply</button>
-                                    </div>
-                                  </div>
-                                )}
+                          );
+                        }
+
+                        if (localItems.length === 0) {
+                          return (
+                            <div className="dashboard-feed-empty" data-testid="feed-empty-local">
+                              <MapPin size={40} className="dashboard-feed-empty-icon" />
+                              <p className="dashboard-feed-empty-title">No local activity yet</p>
+                              <p className="dashboard-feed-empty-desc">
+                                No other users with a matching public location have submitted topics or comments yet.
+                              </p>
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div className="following-feed" data-testid="feed-local">
+                            <p className="local-feed-description" data-testid="local-feed-description">
+                              Activity from users currently located in your current or past locations.
+                            </p>
+                            {localItems.map((item, i) => (
+                              <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} handlers={feedHandlers} />
+                            ))}
+                            {localTotalPages > 1 && (
+                              <div className="feed-pagination" data-testid="local-feed-pagination">
+                                <button
+                                  className="feed-pagination-btn"
+                                  onClick={() => setLocalPage(p => Math.max(1, p - 1))}
+                                  disabled={localPage === 1}
+                                  data-testid="button-local-prev"
+                                >
+                                  Previous
+                                </button>
+                                <span className="feed-pagination-info" data-testid="local-pagination-info">
+                                  Page {localPage} of {localTotalPages}
+                                </span>
+                                <button
+                                  className="feed-pagination-btn"
+                                  onClick={() => setLocalPage(p => Math.min(localTotalPages, p + 1))}
+                                  disabled={localPage === localTotalPages}
+                                  data-testid="button-local-next"
+                                >
+                                  Next
+                                </button>
                               </div>
-                              <Link href="/fact/sweating-burning-fat" className="following-post-cover-link" data-testid="cover-link-local-3">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
+                            )}
                           </div>
-                          </div>
-                        </div>
-
-                      </div>
+                        );
+                      })()
                     )}
 
                     {feedTab === "fact-updates" && (() => {

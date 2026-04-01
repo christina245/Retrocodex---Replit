@@ -2855,3 +2855,40 @@ a.following-post-fact-link:hover {
   height: auto;
   flex-shrink: 0;
 }
+
+.feed-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px 0 8px;
+}
+
+.feed-pagination-btn {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #FF5353;
+  background: none;
+  border: 1px solid #FF5353;
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.feed-pagination-btn:hover:not(:disabled) {
+  background: #FF5353;
+  color: #fff;
+}
+
+.feed-pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.feed-pagination-info {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+}
