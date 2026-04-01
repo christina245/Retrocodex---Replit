@@ -1682,6 +1682,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "An admin note is required when rejecting a submission." });
       }
 
+      // Fetch current status before updating so we can detect a true transition
+      const [current] = await db
+        .select({ status: factSubmissions.status })
+        .from(factSubmissions)
+        .where(eq(factSubmissions.id, id))
+        .limit(1);
+
+      if (!current) {
+        return res.status(404).json({ message: "Submission not found." });
+      }
+
+      const previousStatus = current.status;
+
       const updates: Record<string, any> = {};
       if (status !== undefined) updates.status = status;
       if (adminNote !== undefined) updates.adminNote = adminNote;
@@ -1698,8 +1711,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Submission not found." });
       }
 
-      // Fire status-change emails asynchronously — never blocks the response
-      if (status === "saved" || status === "published") {
+      // Fire status-change emails only on a true transition — never blocks the response
+      const isTransition = status !== undefined && status !== previousStatus;
+      if (isTransition && (status === "saved" || status === "published")) {
         (async () => {
           try {
             const [account] = await db
@@ -2224,30 +2238,33 @@ Sitemap: ${SITE_URL}/sitemap.xml
 
           if (followerRows.length === 0) return;
 
+          const escHtml = (s: string) => s
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
           const updatesHtml = fields.map((f) => {
             const labels: Record<string, string> = {
               mythHeader:    "Myth/false belief updated:",
               mythDetails:   "Myth details updated:",
               truthHeader:   "Current consensus as of 2026 updated:",
               truthDetails:  "Consensus details updated:",
-              nuanceEntry:   "Nuance added:",
             };
 
             if (f.updateType === "timelineEntry") {
               const c = f.content as { year?: string; description?: string };
-              const year = c?.year ?? "";
-              const desc = c?.description ?? "";
+              const year = escHtml(c?.year ?? "");
+              const desc = escHtml(c?.description ?? "");
               return `<p><strong>Timeline revision (${year}):</strong><br>${desc}</p>`;
             }
 
             if (f.updateType === "nuanceEntry") {
               const c = f.content as { type?: string; body?: string };
-              const label = c?.type ? `${c.type}` : "";
-              return `<p><strong>Nuance added${label ? ` — ${label}` : ""}:</strong><br>${c?.body ?? ""}</p>`;
+              const nuanceType = escHtml(c?.type ?? "");
+              return `<p><strong>Nuance added${nuanceType ? ` — ${nuanceType}` : ""}:</strong><br>${escHtml(c?.body ?? "")}</p>`;
             }
 
             const label = labels[f.updateType] ?? "Updated:";
-            const text = typeof f.content === "string" ? f.content : JSON.stringify(f.content);
+            const text = typeof f.content === "string" ? escHtml(f.content) : escHtml(JSON.stringify(f.content));
             return `<p><strong>${label}</strong><br>${text}</p>`;
           }).join("");
 
