@@ -2254,18 +2254,18 @@ Sitemap: ${SITE_URL}/sitemap.xml
               const c = f.content as { year?: string; description?: string };
               const year = escHtml(c?.year ?? "");
               const desc = escHtml(c?.description ?? "");
-              return `<p><strong>Timeline revision (${year}):</strong><br>${desc}</p>`;
+              return `<p style="margin-bottom:1em"><strong>Timeline revision (${year}):</strong><br>${desc}</p>`;
             }
 
             if (f.updateType === "nuanceEntry") {
               const c = f.content as { type?: string; body?: string };
               const nuanceType = escHtml(c?.type ?? "");
-              return `<p><strong>Nuance added${nuanceType ? ` — ${nuanceType}` : ""}:</strong><br>${escHtml(c?.body ?? "")}</p>`;
+              return `<p style="margin-bottom:1em"><strong>Nuance added${nuanceType ? ` — ${nuanceType}` : ""}:</strong><br>${escHtml(c?.body ?? "")}</p>`;
             }
 
             const label = labels[f.updateType] ?? "Updated:";
             const text = typeof f.content === "string" ? escHtml(f.content) : escHtml(JSON.stringify(f.content));
-            return `<p><strong>${label}</strong><br>${text}</p>`;
+            return `<p style="margin-bottom:1em"><strong>${label}</strong><br>${text}</p>`;
           }).join("");
 
           const factUrl = buildFactUrl(factRow.slug);
