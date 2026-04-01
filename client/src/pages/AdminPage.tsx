@@ -3308,7 +3308,7 @@ export default function AdminPage() {
             {/* Reject modal */}
             {showRejectModal && (
               <div className="modal-overlay" onClick={() => setShowRejectModal(false)}>
-                <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+                <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480, padding: 20 }}>
                   <div className="modal-header">
                     <h3 className="modal-title">Reject Submission</h3>
                     <button className="modal-close" onClick={() => setShowRejectModal(false)} data-testid="button-close-reject-modal"><X size={18} /></button>

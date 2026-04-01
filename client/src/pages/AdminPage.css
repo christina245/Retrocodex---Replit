@@ -918,6 +918,47 @@
   border-radius: 6px;
 }
 
+/* Reject Submission Modal */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.modal-title {
+  font-family: 'Merriweather', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.delete-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #c62828;
+  color: white;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-button:hover:not(:disabled) {
+  background: #b71c1c;
+}
+
+.delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Cancel Edit Button */
 .cancel-edit-button {
   background: none;
