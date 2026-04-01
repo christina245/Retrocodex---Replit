@@ -938,6 +938,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/facts/category/:slug - Get facts by category slug, enriched with commentCount (public)
+  app.get("/api/facts/category/:slug", async (req, res) => {
+    try {
+      const slug = req.params.slug.toLowerCase();
+      const allFacts = await storage.getAllFacts();
+      const matching = allFacts.filter(fact =>
+        fact.categories && fact.categories.some(cat =>
+          cat.toLowerCase().replace(/[^a-z0-9]+/g, "-") === slug ||
+          cat.toLowerCase().replace(/\s+/g, "-") === slug
+        )
+      );
+      const factIds = matching.map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(factIds);
+      res.json(matching.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 })));
+    } catch (error) {
+      console.error("Error fetching facts by category:", error);
+      res.status(500).json({ message: "Failed to fetch facts by category" });
+    }
+  });
+
   // GET /api/search - Search facts and subcategories (public)
   app.get("/api/search", async (req, res) => {
     try {

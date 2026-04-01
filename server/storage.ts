@@ -108,6 +108,7 @@ export interface IStorage {
   unsaveComment(userId: string, commentId: string): Promise<boolean>;
   getCommentCountsByFactIds(factIds: string[]): Promise<Record<string, number>>;
   getSavedCommentsByUser(userId: string): Promise<{
+    saveId: string;
     commentId: string;
     body: string;
     upvotes: number;
@@ -728,6 +729,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSavedCommentsByUser(userId: string): Promise<{
+    saveId: string;
     commentId: string;
     body: string;
     upvotes: number;
@@ -741,6 +743,7 @@ export class DatabaseStorage implements IStorage {
   }[]> {
     const rows = await db
       .select({
+        saveId: savedComments.id,
         commentId: comments.id,
         body: comments.body,
         upvotes: comments.upvotes,
@@ -761,6 +764,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(savedComments.savedAt));
 
     return rows.map(r => ({
+      saveId: r.saveId,
       commentId: r.commentId,
       body: r.body,
       upvotes: r.upvotes,

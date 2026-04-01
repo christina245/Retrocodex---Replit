@@ -972,6 +972,7 @@ export default function UserDashboard() {
   });
 
   interface SavedCommentItem {
+    saveId: string;
     commentId: string;
     body: string;
     upvotes: number;
