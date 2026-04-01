@@ -978,17 +978,17 @@ export default function UserDashboard() {
 
   const formatSavedArticleDate = (isoDate: string | null): string => {
     if (!isoDate) return '';
-    try {
-      return new Date(isoDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    } catch {
-      return '';
-    }
+    const t = Date.parse(isoDate);
+    if (!Number.isFinite(t)) return '';
+    return new Date(t).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   const sortedArticleItems = [...savedArticleItems].sort((a, b) => {
     if (savedArticlesSort === "posted") {
-      const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-      const bDate = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+      const tA = Date.parse(a.publishedAt ?? '');
+      const tB = Date.parse(b.publishedAt ?? '');
+      const aDate = Number.isFinite(tA) ? tA : -Infinity;
+      const bDate = Number.isFinite(tB) ? tB : -Infinity;
       return bDate - aDate;
     }
     return new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime();
