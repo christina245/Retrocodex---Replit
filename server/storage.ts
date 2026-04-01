@@ -1064,24 +1064,26 @@ export class DatabaseStorage implements IStorage {
 
     if (myLocations.length === 0) return { items: [], total: 0 };
 
-    // Step 2: Find other users with at least one *public* location matching ours
-    // Case-insensitive match: showCurrentLocation=true AND LOWER(current_location) in myLocations
-    // OR showPlacesLived=true AND any element of places_lived (lowercased) in myLocations
-    const locationConds = myLocations.flatMap(loc => [
-      and(
-        eq(userProfiles.showCurrentLocation, true),
-        sql`LOWER(${userProfiles.currentLocation}) = ${loc}`
-      ),
-      and(
-        eq(userProfiles.showPlacesLived, true),
-        sql`EXISTS (SELECT 1 FROM UNNEST(${userProfiles.placesLived}) AS _pl WHERE LOWER(_pl) = ${loc})`
-      ),
-    ]);
+    // Step 2: Find other users with at least one *public* location matching ours.
+    // myLocations are already lowercase. Build a parameterized ARRAY[...] SQL expression.
+    // showCurrentLocation: LOWER(current_location) = ANY(locArray)
+    // showPlacesLived: lowercased places_lived array && locArray (PostgreSQL && array-overlap operator)
+    const locArray = sql`ARRAY[${sql.join(myLocations.map(loc => sql`${loc}`), sql`, `)}]::text[]`;
+
+    const currentLocationCond = and(
+      eq(userProfiles.showCurrentLocation, true),
+      sql`LOWER(${userProfiles.currentLocation}) = ANY(${locArray})`
+    );
+
+    const placesLivedCond = and(
+      eq(userProfiles.showPlacesLived, true),
+      sql`(SELECT ARRAY_AGG(LOWER(_pl)) FROM UNNEST(${userProfiles.placesLived}) AS _pl) && ${locArray}`
+    );
 
     const localUserRows = await db
       .selectDistinct({ id: userProfiles.id })
       .from(userProfiles)
-      .where(and(ne(userProfiles.id, userId), or(...locationConds)));
+      .where(and(ne(userProfiles.id, userId), or(currentLocationCond, placesLivedCond)));
 
     const localUserIds = localUserRows.map(r => r.id);
     if (localUserIds.length === 0) return { items: [], total: 0 };

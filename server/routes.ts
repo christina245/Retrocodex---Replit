@@ -669,7 +669,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GET /api/feed/local — location-based feed (requires auth)
   app.get("/api/feed/local", requireUser, async (req, res) => {
     try {
-      const page = parseInt(req.query.page as string) || 1;
+      const page = Math.max(1, parseInt(req.query.page as string) || 1);
       const pageSize = 20;
       const result = await storage.getLocalFeed(req.session.userId!, page, pageSize);
       return res.json({

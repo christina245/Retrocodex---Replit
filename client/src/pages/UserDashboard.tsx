@@ -1561,7 +1561,7 @@ export default function UserDashboard() {
                         return (
                           <div className="following-feed" data-testid="feed-local">
                             <p className="local-feed-description" data-testid="local-feed-description">
-                              Activity from users currently located in your current or past locations.
+                              Activity from users who share a location with you — current or past.
                             </p>
                             {localItems.map((item, i) => (
                               <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} handlers={feedHandlers} />
