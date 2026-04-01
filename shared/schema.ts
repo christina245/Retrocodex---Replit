@@ -569,4 +569,9 @@ export type FeedItem = {
   articleCoverImage?: string | null;
   // enriched count (only on type === "fact" items)
   commentCount?: number;
+  // user location fields — populated by local feed only
+  userCurrentLocation?: string;
+  userShowCurrentLocation?: boolean;
+  userPlacesLived?: string[];
+  userShowPlacesLived?: boolean;
 };

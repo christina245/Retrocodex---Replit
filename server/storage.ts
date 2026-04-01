@@ -1088,13 +1088,17 @@ export class DatabaseStorage implements IStorage {
     const localUserIds = localUserRows.map(r => r.id);
     if (localUserIds.length === 0) return { items: [], total: 0 };
 
-    // Step 3: Fetch facts submitted by local users (same fields as getFollowingFeed)
+    // Step 3: Fetch facts submitted by local users (excluding self as belt-and-suspenders)
     const submittedFacts = await db
       .select({
         id: facts.id,
         userId: facts.submittedByUserId,
         username: userProfiles.username,
         avatarUrl: userProfiles.avatarUrl,
+        currentLocation: userProfiles.currentLocation,
+        showCurrentLocation: userProfiles.showCurrentLocation,
+        placesLived: userProfiles.placesLived,
+        showPlacesLived: userProfiles.showPlacesLived,
         createdAt: facts.createdAt,
         slug: facts.slug,
         mythHeader: facts.mythHeader,
@@ -1108,16 +1112,20 @@ export class DatabaseStorage implements IStorage {
       })
       .from(facts)
       .innerJoin(userProfiles, eq(facts.submittedByUserId, userProfiles.id))
-      .where(inArray(facts.submittedByUserId, localUserIds))
+      .where(and(inArray(facts.submittedByUserId, localUserIds), ne(facts.submittedByUserId, userId)))
       .orderBy(desc(facts.createdAt));
 
-    // Step 4: Fetch comments by local users
+    // Step 4: Fetch comments by local users (excluding self as belt-and-suspenders)
     const commentRows = await db
       .select({
         id: comments.id,
         userId: comments.userId,
         username: userProfiles.username,
         avatarUrl: userProfiles.avatarUrl,
+        currentLocation: userProfiles.currentLocation,
+        showCurrentLocation: userProfiles.showCurrentLocation,
+        placesLived: userProfiles.placesLived,
+        showPlacesLived: userProfiles.showPlacesLived,
         body: comments.body,
         createdAt: comments.createdAt,
         factId: facts.id,
@@ -1128,7 +1136,7 @@ export class DatabaseStorage implements IStorage {
       .from(comments)
       .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
       .leftJoin(facts, eq(comments.factId, facts.id))
-      .where(inArray(comments.userId, localUserIds))
+      .where(and(inArray(comments.userId, localUserIds), ne(comments.userId, userId)))
       .orderBy(desc(comments.createdAt));
 
     const factCountMap = await this.getCommentCountsByFactIds(submittedFacts.map(f => f.id));
@@ -1150,6 +1158,10 @@ export class DatabaseStorage implements IStorage {
       factRevisionYear: f.revisionYear ?? null,
       factTaughtUntilYear: f.taughtUntilYear ?? null,
       commentCount: factCountMap[f.id] ?? 0,
+      userCurrentLocation: f.currentLocation ?? "",
+      userShowCurrentLocation: f.showCurrentLocation ?? false,
+      userPlacesLived: f.placesLived ?? [],
+      userShowPlacesLived: f.showPlacesLived ?? false,
     }));
 
     const commentItems: FeedItem[] = commentRows.map((c) => ({
@@ -1164,6 +1176,10 @@ export class DatabaseStorage implements IStorage {
       factSlug: c.factSlug ?? undefined,
       factTitle: c.factTitle ?? undefined,
       factCoverPhoto: c.factCoverPhoto ?? undefined,
+      userCurrentLocation: c.currentLocation ?? "",
+      userShowCurrentLocation: c.showCurrentLocation ?? false,
+      userPlacesLived: c.placesLived ?? [],
+      userShowPlacesLived: c.showPlacesLived ?? false,
     }));
 
     // Step 5: Merge, sort by date descending, paginate in memory

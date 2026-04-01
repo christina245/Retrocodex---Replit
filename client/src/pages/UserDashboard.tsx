@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, ChevronDown, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck, ArrowUp, List } from "lucide-react";
+import { MapPin, House, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, ChevronDown, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck, ArrowUp, List } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import scrungyConfetti from "@assets/Scrungy_the_squirrel_at_work_cropped_1774648658154.png";
 import { Link, useLocation } from "wouter";
@@ -564,6 +564,33 @@ function feedItemToFactCard(item: FeedItem): FactCardFact {
   };
 }
 
+function FeedUserLocation({ item, index }: { item: FeedItem; index: number }) {
+  const hasCurrentLoc = item.userShowCurrentLocation && item.userCurrentLocation;
+  const hasPlaces = item.userShowPlacesLived && item.userPlacesLived && item.userPlacesLived.length > 0;
+  if (!hasCurrentLoc && !hasPlaces) return null;
+  return (
+    <div className="comment-user-info" data-testid={`feed-user-location-${index}`}>
+      {hasCurrentLoc && (
+        <span className="user-info-item">
+          <MapPin size={12} />
+          <span>{item.userCurrentLocation}</span>
+        </span>
+      )}
+      {hasPlaces && (
+        <span className={`user-info-item${hasCurrentLoc ? " user-info-hometowns" : ""}`}>
+          <House size={12} />
+          {item.userPlacesLived!.map((place, i) => (
+            <span key={i}>
+              {place}
+              {i < item.userPlacesLived!.length - 1 && <span className="info-separator">•</span>}
+            </span>
+          ))}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; handlers: FeedPostHandlers }) {
   const { savedFactIds, onSaveFact, onUnsaveFact, onBetaClick, onNavigate } = handlers;
 
@@ -588,6 +615,7 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
             </div>
           </div>
         )}
+        <FeedUserLocation item={item} index={index} />
         <div className="following-post-fact-card-wrap">
           <FactCard
             fact={fact}
@@ -669,6 +697,7 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
           </div>
           <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
         </div>
+        <FeedUserLocation item={item} index={index} />
         <div className="following-post-body">
           {item.type === "comment" && (
             <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
