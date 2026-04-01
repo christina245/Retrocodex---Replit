@@ -965,6 +965,8 @@ export default function UserDashboard() {
     category: string;
     slug: string;
     externalUrl: string;
+    publicationName: string | null;
+    originalPublishedAt: string | null;
     publishedAt: string | null;
     savedAt: string;
   }
@@ -3364,6 +3366,8 @@ export default function UserDashboard() {
                                 tags={[]}
                                 isExternal={article.articleType === "external"}
                                 externalUrl={article.articleType === "external" ? article.externalUrl : null}
+                                publicationName={article.publicationName}
+                                originalPublishedAt={article.originalPublishedAt}
                                 publishedAtIso={article.publishedAt}
                               />
                             ))}

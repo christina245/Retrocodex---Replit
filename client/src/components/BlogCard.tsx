@@ -73,6 +73,8 @@ export default function BlogCard({
       category,
       slug: isExternal ? '' : id,
       externalUrl: isExternal ? (externalUrl || '') : '',
+      publicationName: isExternal ? (publicationName || null) : null,
+      originalPublishedAt: isExternal ? (originalPublishedAt || null) : null,
       publishedAt: publishedAtIso || null,
     }),
     onSuccess: () => {

@@ -1869,7 +1869,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const { articleKey, articleType, title, summary, coverImage, category, slug, externalUrl, publishedAt } = req.body;
+      const { articleKey, articleType, title, summary, coverImage, category, slug, externalUrl, publicationName, originalPublishedAt, publishedAt } = req.body;
       if (!articleKey || !articleType || !title || !category) {
         return res.status(400).json({ message: "articleKey, articleType, title, and category are required" });
       }
@@ -1883,6 +1883,8 @@ Sitemap: ${SITE_URL}/sitemap.xml
         category,
         slug: slug || "",
         externalUrl: externalUrl || "",
+        publicationName: publicationName || null,
+        originalPublishedAt: originalPublishedAt || null,
         publishedAt: publishedAt ? new Date(publishedAt) : null,
       });
       res.json(saved);

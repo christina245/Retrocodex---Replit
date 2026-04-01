@@ -380,6 +380,8 @@ export const savedArticles = pgTable("saved_articles", {
   category: text("category").notNull(),
   slug: text("slug").default(""), // slug for internal articles
   externalUrl: text("external_url").default(""), // url for external articles
+  publicationName: text("publication_name"), // publication name for external articles
+  originalPublishedAt: text("original_published_at"), // original publication date string for external articles
   publishedAt: timestamp("published_at"), // article's original publish date (nullable for older saved records)
   savedAt: timestamp("saved_at").notNull().defaultNow(),
 }, (table) => ({
