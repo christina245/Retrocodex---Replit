@@ -878,6 +878,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(comments.createdAt))
       .limit(limit);
 
+    const factCountMap = await this.getCommentCountsByFactIds(submittedFacts.map(f => f.id));
     const factItems: FeedItem[] = submittedFacts.map((f) => ({
       type: "fact" as const,
       id: f.id,
@@ -894,6 +895,7 @@ export class DatabaseStorage implements IStorage {
       factBetaOnly: f.betaOnly ?? false,
       factRevisionYear: f.revisionYear ?? null,
       factTaughtUntilYear: f.taughtUntilYear ?? null,
+      commentCount: factCountMap[f.id] ?? 0,
     }));
 
     const commentItems: FeedItem[] = commentRows.map((c) => ({
@@ -979,6 +981,7 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(externalArticles.createdAt))
       .limit(limit);
 
+    const forYouCountMap = await this.getCommentCountsByFactIds(factRows.map(f => f.id));
     const factItems: FeedItem[] = factRows.map((f) => ({
       type: "fact" as const,
       id: f.id,
@@ -995,6 +998,7 @@ export class DatabaseStorage implements IStorage {
       factBetaOnly: f.betaOnly ?? false,
       factRevisionYear: f.revisionYear ?? null,
       factTaughtUntilYear: f.taughtUntilYear ?? null,
+      commentCount: forYouCountMap[f.id] ?? 0,
     }));
 
     const articleItems: FeedItem[] = articleRows.map((a) => ({

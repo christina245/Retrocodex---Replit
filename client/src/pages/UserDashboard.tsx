@@ -10,7 +10,7 @@ import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";
-import type { Fact as DbFact, FeedItem, FactUpdateWithFact, UpdateType } from "@shared/schema";
+import type { Fact as DbFact, FeedItem, FactUpdateWithFact, UpdateType, FactWithCommentCount } from "@shared/schema";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
@@ -559,6 +559,7 @@ function feedItemToFactCard(item: FeedItem): FactCardFact {
     factFilters: item.factFilters ?? [],
     revisionYear: item.factRevisionYear ?? undefined,
     taughtUntilYear: item.factTaughtUntilYear ?? undefined,
+    commentCount: item.commentCount ?? 0,
   };
 }
 
@@ -924,7 +925,7 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
-  const { data: savedDbFacts = [], isLoading: savedFactsLoading } = useQuery<DbFact[]>({
+  const { data: savedDbFacts = [], isLoading: savedFactsLoading } = useQuery<FactWithCommentCount[]>({
     queryKey: ["/api/user/saved-facts"],
     enabled: isLoggedIn,
   });
@@ -947,6 +948,7 @@ export default function UserDashboard() {
       factFilters: fact.factFilters || undefined,
       revisionYear: fact.revisionYear ?? undefined,
       taughtUntilYear: fact.taughtUntilYear ?? undefined,
+      commentCount: fact.commentCount ?? 0,
     };
   });
 

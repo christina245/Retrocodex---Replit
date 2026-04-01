@@ -1890,7 +1890,10 @@ Sitemap: ${SITE_URL}/sitemap.xml
       return res.status(401).json({ message: "Not authenticated" });
     }
     try {
-      const facts = await storage.getSavedFactsByUser(req.session.userId);
+      const savedFacts = await storage.getSavedFactsByUser(req.session.userId);
+      const factIds = savedFacts.map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(factIds);
+      const facts = savedFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 }));
       res.json(facts);
     } catch (error) {
       console.error("GET /api/user/saved-facts error:", error);

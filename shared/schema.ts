@@ -564,4 +564,6 @@ export type FeedItem = {
   publicationName?: string;
   articleSummary?: string;
   articleCoverImage?: string | null;
+  // enriched count (only on type === "fact" items)
+  commentCount?: number;
 };
