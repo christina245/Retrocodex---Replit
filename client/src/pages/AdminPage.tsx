@@ -135,6 +135,7 @@ export default function AdminPage() {
   const [showPublishModal, setShowPublishModal] = useState(false);
   const [publishSuccess, setPublishSuccess] = useState(false);
   const [publishSuccessCategory, setPublishSuccessCategory] = useState<string>("/");
+  const [notifyEmailSent, setNotifyEmailSent] = useState(false);
   const [editingSubmissionId, setEditingSubmissionId] = useState<string | null>(null);
   const [submissionUsername, setSubmissionUsername] = useState("");
   const [submittedByUserId, setSubmittedByUserId] = useState("");
@@ -152,13 +153,13 @@ export default function AdminPage() {
   } | null>(null);
 
   const CATEGORY_ROUTES: Record<string, string> = {
-    "Health & Fitness": "/health-fitness",
-    "Everyday Life": "/everyday-life",
-    "History": "/history",
-    "Life Sciences": "/life-sciences",
-    "Social Sciences": "/social-sciences",
-    "Gender & Sexuality": "/gender-sexuality",
-    "Other": "/other-categories",
+    "Health & Fitness": "/category/health-fitness",
+    "Everyday Life": "/category/everyday-life",
+    "History": "/category/history",
+    "Life Sciences": "/category/life-sciences",
+    "Social Sciences": "/category/social-sciences",
+    "Gender & Sexuality": "/category/gender-sexuality",
+    "Other": "/category/other-categories",
   };
 
   // External article form state
@@ -2312,8 +2313,8 @@ export default function AdminPage() {
 
               {/* Publish confirmation modal */}
               {showPublishModal && (
-                <div className="modal-overlay" onClick={() => { if (!publishSuccess) handleSaveDraft(); setShowPublishModal(false); setPublishSuccess(false); }}>
-                  <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480 }}>
+                <div className="modal-overlay" onClick={() => { if (!publishSuccess) handleSaveDraft(); setShowPublishModal(false); setPublishSuccess(false); setNotifyEmailSent(false); }}>
+                  <div className="modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480, padding: "16px" }}>
                     {publishSuccess ? (
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "2rem 1.5rem" }}>
                         <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#31A66B", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
@@ -2342,7 +2343,7 @@ export default function AdminPage() {
                       <>
                         <div className="modal-header">
                           <h3 className="modal-title">Ready to publish?</h3>
-                          <button className="modal-close" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-close-publish-modal"><X size={18} /></button>
+                          <button className="modal-close" onClick={() => { handleSaveDraft(); setShowPublishModal(false); setNotifyEmailSent(false); }} data-testid="button-close-publish-modal"><X size={18} /></button>
                         </div>
                         <p style={{ margin: "1rem 0", color: "var(--muted-foreground)", fontSize: "0.9rem" }}>
                           This will create a live published fact from the current form data and mark the submission as published.
@@ -2352,16 +2353,27 @@ export default function AdminPage() {
                           <button
                             type="button"
                             className="export-button"
-                            style={{ background: "#1565c0", fontSize: "0.85rem" }}
-                            onClick={() => {}}
+                            style={{
+                              background: notifyEmailSent ? "#9e9e9e" : "#1565c0",
+                              fontSize: "0.85rem",
+                              cursor: notifyEmailSent ? "default" : "pointer",
+                            }}
+                            disabled={notifyEmailSent}
+                            onClick={async () => {
+                              if (!editingSubmissionId || notifyEmailSent) return;
+                              try {
+                                await patchSubmissionMutation.mutateAsync({ id: editingSubmissionId, status: "saved" });
+                              } catch (_) { /* fire-and-forget */ }
+                              setNotifyEmailSent(true);
+                            }}
                             data-testid="button-notify-submitter"
                           >
                             <Mail size={14} />
-                            Send notification email to submitter
+                            {notifyEmailSent ? "Notification sent" : "Send notification email to submitter"}
                           </button>
                         </div>
                         <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
-                          <button className="cancel-edit-button" onClick={() => { handleSaveDraft(); setShowPublishModal(false); }} data-testid="button-cancel-publish">Cancel (Save Draft)</button>
+                          <button className="cancel-edit-button" onClick={() => { handleSaveDraft(); setShowPublishModal(false); setNotifyEmailSent(false); }} data-testid="button-cancel-publish">Cancel (Save Draft)</button>
                           <button
                             className="submit-button"
                             onClick={handlePublishSubmission}
