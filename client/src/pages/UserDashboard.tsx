@@ -974,17 +974,17 @@ export default function UserDashboard() {
   });
 
   interface SavedCommentItem {
-    saveId: string;
+    id: string;
     commentId: string;
     body: string;
     upvotes: number;
-    createdAt: string;
+    commentCreatedAt: string;
     savedAt: string;
-    factTitle: string;
+    factMythHeader: string;
     factSlug: string;
     factCoverPhoto: string | null;
-    authorUsername: string | null;
-    authorAvatarUrl: string | null;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
   }
 
   const { data: savedCommentItems = [], isLoading: savedCommentsLoading } = useQuery<SavedCommentItem[]>({
@@ -3436,25 +3436,25 @@ export default function UserDashboard() {
                         savedCommentItems.map((item) => {
                           const ellipsisKey = `ellipsis-saved-${item.commentId}`;
                           const timeAgo = (() => {
-                            const diff = Date.now() - new Date(item.createdAt).getTime();
+                            const diff = Date.now() - new Date(item.commentCreatedAt).getTime();
                             const mins = Math.floor(diff / 60000);
                             if (mins < 60) return `${mins || 1}m ago`;
                             const hrs = Math.floor(mins / 60);
                             if (hrs < 24) return `${hrs}h ago`;
                             const days = Math.floor(hrs / 24);
                             if (days < 7) return `${days}d ago`;
-                            return new Date(item.createdAt).toLocaleDateString();
+                            return new Date(item.commentCreatedAt).toLocaleDateString();
                           })();
                           return (
                             <div key={item.commentId} className="saved-comment" data-testid={`saved-comment-${item.commentId}`}>
                               <div className="following-post-body-content">
                                 <div className="following-post-body-left">
                                   <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-saved-fact-${item.commentId}`}>
-                                    <p className="fact-myth">"{item.factTitle}"</p>
+                                    <p className="fact-myth">"{item.factMythHeader}"</p>
                                   </Link>
                                   <div className="saved-comment-meta" data-testid={`saved-comment-meta-${item.commentId}`}>
-                                    {item.authorUsername ? (
-                                      <Link href={`/user/${item.authorUsername}`} className="saved-comment-username" data-testid={`link-saved-user-${item.commentId}`}>{item.authorUsername}</Link>
+                                    {item.commenterUsername ? (
+                                      <Link href={`/user/${item.commenterUsername}`} className="saved-comment-username" data-testid={`link-saved-user-${item.commentId}`}>{item.commenterUsername}</Link>
                                     ) : (
                                       <span className="saved-comment-username" data-testid={`saved-user-deleted-${item.commentId}`}>[deleted]</span>
                                     )}

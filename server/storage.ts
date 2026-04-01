@@ -108,17 +108,17 @@ export interface IStorage {
   unsaveComment(userId: string, commentId: string): Promise<boolean>;
   getCommentCountsByFactIds(factIds: string[]): Promise<Record<string, number>>;
   getSavedCommentsByUser(userId: string): Promise<{
-    saveId: string;
+    id: string;
     commentId: string;
     body: string;
     upvotes: number;
-    createdAt: Date;
+    commentCreatedAt: Date;
     savedAt: Date;
-    factTitle: string;
+    factMythHeader: string;
     factSlug: string;
     factCoverPhoto: string | null;
-    authorUsername: string | null;
-    authorAvatarUrl: string | null;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
   }[]>;
 
   // Follows
@@ -729,31 +729,31 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSavedCommentsByUser(userId: string): Promise<{
-    saveId: string;
+    id: string;
     commentId: string;
     body: string;
     upvotes: number;
-    createdAt: Date;
+    commentCreatedAt: Date;
     savedAt: Date;
-    factTitle: string;
+    factMythHeader: string;
     factSlug: string;
     factCoverPhoto: string | null;
-    authorUsername: string | null;
-    authorAvatarUrl: string | null;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
   }[]> {
     const rows = await db
       .select({
-        saveId: savedComments.id,
+        id: savedComments.id,
         commentId: comments.id,
         body: comments.body,
         upvotes: comments.upvotes,
-        createdAt: comments.createdAt,
+        commentCreatedAt: comments.createdAt,
         savedAt: savedComments.savedAt,
-        factTitle: facts.mythHeader,
+        factMythHeader: facts.mythHeader,
         factSlug: facts.slug,
         factCoverPhoto: facts.coverPhoto,
-        authorUsername: userProfiles.username,
-        authorAvatarUrl: userProfiles.avatarUrl,
+        commenterUsername: userProfiles.username,
+        commenterAvatarUrl: userProfiles.avatarUrl,
         deletedByAdmin: comments.deletedByAdmin,
       })
       .from(savedComments)
@@ -764,17 +764,17 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(savedComments.savedAt));
 
     return rows.map(r => ({
-      saveId: r.saveId,
+      id: r.id,
       commentId: r.commentId,
       body: r.body,
       upvotes: r.upvotes,
-      createdAt: r.createdAt,
+      commentCreatedAt: r.commentCreatedAt,
       savedAt: r.savedAt,
-      factTitle: r.factTitle,
+      factMythHeader: r.factMythHeader,
       factSlug: r.factSlug,
       factCoverPhoto: r.factCoverPhoto ?? null,
-      authorUsername: r.authorUsername ?? null,
-      authorAvatarUrl: r.authorAvatarUrl ?? null,
+      commenterUsername: r.commenterUsername ?? null,
+      commenterAvatarUrl: r.commenterAvatarUrl ?? null,
     }));
   }
 
