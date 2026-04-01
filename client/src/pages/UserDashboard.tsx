@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
-import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck, ArrowUp } from "lucide-react";
+import { MapPin, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, ChevronDown, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck, ArrowUp, List } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
 import scrungyConfetti from "@assets/Scrungy_the_squirrel_at_work_cropped_1774648658154.png";
 import { Link, useLocation } from "wouter";
@@ -24,6 +24,7 @@ import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
 import "../components/SignInModal.css";
+import "../components/SortSelector.css";
 import { AdminBadge } from "@/components/AdminBadge";
 import { TopicsModal } from "@/components/TopicsModal";
 import { getCategoryConfig } from "@shared/categories";
@@ -743,6 +744,8 @@ export default function UserDashboard() {
   const [activeEllipsisId, setActiveEllipsisId] = useState<string | null>(null);
   const [savedTab, setSavedTab] = useState<SavedTab>("all");
   const [savedArticlesSort, setSavedArticlesSort] = useState<"saved" | "posted">("saved");
+  const [savedArticlesSortOpen, setSavedArticlesSortOpen] = useState(false);
+  const savedArticlesSortRef = useRef<HTMLDivElement>(null);
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -764,6 +767,17 @@ export default function UserDashboard() {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [activeEllipsisId]);
+
+  useEffect(() => {
+    if (!savedArticlesSortOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (savedArticlesSortRef.current && !savedArticlesSortRef.current.contains(e.target as Node)) {
+        setSavedArticlesSortOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [savedArticlesSortOpen]);
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [topicsModalOpen, setTopicsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -3304,18 +3318,35 @@ export default function UserDashboard() {
                         <p className="saved-empty-message" data-testid="text-saved-articles-empty">No saved articles yet. Bookmark articles on the Articles page to see them here.</p>
                       ) : sortedArticleItems.length > 0 ? (
                         <>
-                          <div className="saved-articles-controls" data-testid="saved-articles-controls">
-                            <label className="saved-articles-sort-label" htmlFor="saved-articles-sort-select">Sort by:</label>
-                            <select
-                              id="saved-articles-sort-select"
-                              value={savedArticlesSort}
-                              onChange={(e) => setSavedArticlesSort(e.target.value as "saved" | "posted")}
-                              className="saved-articles-sort-select"
-                              data-testid="select-saved-articles-sort"
-                            >
-                              <option value="saved">By date saved</option>
-                              <option value="posted">By date posted</option>
-                            </select>
+                          <div className="sort-selector" ref={savedArticlesSortRef} data-testid="saved-articles-controls">
+                            <div className="sort-selector-label">
+                              <List size={16} className="sort-selector-icon" />
+                              <span className="sort-selector-text">Sort by:</span>
+                            </div>
+                            <div className="sort-selector-dropdown-wrapper">
+                              <button
+                                className="sort-selector-dropdown-trigger"
+                                onClick={() => setSavedArticlesSortOpen(o => !o)}
+                                data-testid="button-saved-articles-sort"
+                              >
+                                <span>{savedArticlesSort === "posted" ? "By date posted" : "By date saved"}</span>
+                                <ChevronDown size={14} className={`sort-selector-chevron${savedArticlesSortOpen ? " open" : ""}`} />
+                              </button>
+                              {savedArticlesSortOpen && (
+                                <div className="sort-selector-dropdown" data-testid="sort-articles-dropdown-menu">
+                                  {(["saved", "posted"] as const).map(opt => (
+                                    <button
+                                      key={opt}
+                                      className={`sort-selector-option${savedArticlesSort === opt ? " selected" : ""}`}
+                                      onClick={() => { setSavedArticlesSort(opt); setSavedArticlesSortOpen(false); }}
+                                      data-testid={`button-articles-sort-${opt}`}
+                                    >
+                                      {opt === "saved" ? "By date saved" : "By date posted"}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div className="saved-articles-grid" data-testid="saved-articles-grid">
                             {sortedArticleItems.map((article) => {
