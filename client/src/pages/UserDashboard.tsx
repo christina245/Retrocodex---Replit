@@ -20,7 +20,6 @@ import { AvatarPickerModal } from "@/components/AvatarPickerModal";
 import { SourcesModal } from "@/components/SourcesModal";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
-import FeedArticleCard from "@/components/FeedArticleCard";
 import "../components/ExtendedFactCard.css";
 import "../components/HomepageTabs.css";
 import "../components/CommentsSection.css";
@@ -743,6 +742,7 @@ export default function UserDashboard() {
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [activeEllipsisId, setActiveEllipsisId] = useState<string | null>(null);
   const [savedTab, setSavedTab] = useState<SavedTab>("all");
+  const [savedArticlesSort, setSavedArticlesSort] = useState<"saved" | "posted">("saved");
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -867,6 +867,41 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
+  interface NotifCommentItem {
+    commentId: string;
+    body: string;
+    upvotes: number;
+    commentCreatedAt: string;
+    factMythHeader: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
+  }
+
+  interface NotifReplyItem {
+    replyId: string;
+    replyBody: string;
+    replyCreatedAt: string;
+    replyUpvotes: number;
+    parentBody: string;
+    factMythHeader: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    replierUsername: string | null;
+    replierAvatarUrl: string | null;
+  }
+
+  const { data: notifComments = [], isLoading: notifCommentsLoading } = useQuery<NotifCommentItem[]>({
+    queryKey: ["/api/notifications/comments"],
+    enabled: isLoggedIn,
+  });
+
+  const { data: notifReplies = [], isLoading: notifRepliesLoading } = useQuery<NotifReplyItem[]>({
+    queryKey: ["/api/notifications/replies"],
+    enabled: isLoggedIn,
+  });
+
   interface MyCommentItem {
     id: string;
     body: string;
@@ -923,6 +958,13 @@ export default function UserDashboard() {
   const { data: savedArticleItems = [], isLoading: savedArticlesLoading } = useQuery<SavedArticleItem[]>({
     queryKey: ["/api/user/saved-articles"],
     enabled: isLoggedIn,
+  });
+
+  const sortedArticleItems = [...savedArticleItems].sort((a, b) => {
+    if (savedArticlesSort === "posted") {
+      return new Date(a.savedAt).getTime() - new Date(b.savedAt).getTime();
+    }
+    return new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime();
   });
 
   const { data: savedDbFacts = [], isLoading: savedFactsLoading } = useQuery<FactWithCommentCount[]>({
@@ -2259,319 +2301,168 @@ export default function UserDashboard() {
 
                   {notificationsTab === "replies" && (
                     <div className="following-feed" data-testid="activity-feed-replies">
-
-                      {/* Reply 1: username5 replied on spiders */}
-                      <div className="activity-post" data-testid="reply-post-1">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="username5" className="activity-post-avatar" />
-                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/username5" className="following-post-username" data-testid="link-user-reply-username5">username5</Link>
-                              <span className="following-post-action">replied to your comment on</span>
+                      {notifRepliesLoading ? (
+                        <p className="saved-empty-message" data-testid="text-notif-replies-loading">Loading replies...</p>
+                      ) : notifReplies.length === 0 ? (
+                        <p className="saved-empty-message" data-testid="text-notif-replies-empty">No replies to your comments yet.</p>
+                      ) : notifReplies.map((reply) => {
+                        const timeAgo = (() => {
+                          const diff = Date.now() - new Date(reply.replyCreatedAt).getTime();
+                          const m = Math.floor(diff / 60000);
+                          if (m < 1) return "just now";
+                          if (m < 60) return `${m} min ago`;
+                          const h = Math.floor(m / 60);
+                          if (h < 24) return `${h}h ago`;
+                          const d = Math.floor(h / 24);
+                          if (d < 30) return `${d}d ago`;
+                          return new Date(reply.replyCreatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                        })();
+                        return (
+                          <div key={reply.replyId} className="activity-post" data-testid={`reply-post-${reply.replyId}`}>
+                            <div className="activity-post-icon-col">
+                              <img
+                                src={reply.replierAvatarUrl || placeholderPhoto}
+                                alt={reply.replierUsername || "User"}
+                                className="activity-post-avatar"
+                              />
+                              <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
                             </div>
-                            <span className="following-post-timestamp">6 hours ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
-                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
-                                </Link>
-                                <div className="activity-comment-thread">
-                                  <div className="activity-thread-comment">
-                                    <div className="activity-thread-author">
-                                      <span className="activity-thread-username">retrocodexadmin</span>
-                                    </div>
-                                    <div className="following-comment-quote">
-                                      <p className="following-comment-text">I wonder where this myth originated if it was never Snopes this entire time. Growing up in California, I heard it around when I was 10, but haven't talked to anyone else from other states and countries about it.</p>
-                                    </div>
-                                  </div>
-                                  <div className="activity-thread-comment">
-                                    <div className="activity-thread-author">
-                                      <span className="activity-thread-username">username5</span>
-                                    </div>
-                                    <p className="following-plain-comment">This myth had to have come from the US or one of the colder countries. Where I'm from, spiders are often massive. You would definitely feel them even if they're just a foot away, lol</p>
-                                  </div>
+                            <div className="activity-post-main">
+                              <div className="activity-post-header">
+                                <div className="activity-post-header-text">
+                                  {reply.replierUsername ? (
+                                    <Link href={`/user/${reply.replierUsername}`} className="following-post-username" data-testid={`link-user-reply-${reply.replyId}`}>{reply.replierUsername}</Link>
+                                  ) : (
+                                    <span className="following-post-username" data-testid={`user-deleted-reply-${reply.replyId}`}>[deleted]</span>
+                                  )}
+                                  <span className="following-post-action">replied to your comment on</span>
                                 </div>
-                                <div className="comment-actions" data-testid="reply-comment-actions-1">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'reply-1' ? null : 'reply-1')} data-testid="button-reply-reply-1">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-reply-1">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-reply-1">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'reply-1' ? null : 'reply-1')} data-testid="button-ellipsis-reply-1">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'reply-1' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-reply-1">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-reply-1">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-reply-1">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {activeReplyId === 'reply-1' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-reply-1">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-reply-1" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-reply-1">Reply</button>
-                                    </div>
-                                  </div>
-                                )}
+                                <span className="following-post-timestamp" data-testid={`notif-reply-time-${reply.replyId}`}>{timeAgo}</span>
                               </div>
-                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-reply-1">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Reply 2: NightOwlNerd replied on carrots */}
-                      <div className="activity-post" data-testid="reply-post-2">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="NightOwlNerd" className="activity-post-avatar" />
-                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/NightOwlNerd" className="following-post-username" data-testid="link-user-reply-NightOwlNerd">NightOwlNerd</Link>
-                              <span className="following-post-action">replied to your comment on</span>
-                            </div>
-                            <span className="following-post-timestamp">2 days ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/does-eating-carrots-make-you-see-better" className="following-post-link">
-                                  <p className="fact-myth">"Eating carrots will give you better eyesight."</p>
-                                </Link>
-                                <div className="activity-comment-thread">
-                                  <div className="activity-thread-comment">
-                                    <div className="activity-thread-author">
-                                      <span className="activity-thread-username">retrocodexadmin</span>
-                                    </div>
-                                    <div className="following-comment-quote">
-                                      <p className="following-comment-text">The British literally invented this myth during WWII to hide their radar technology. They told everyone their pilots could see in the dark because they ate carrots. It was wartime propaganda!</p>
-                                    </div>
-                                  </div>
-                                  <div className="activity-thread-comment">
-                                    <div className="activity-thread-author">
-                                      <span className="activity-thread-username">NightOwlNerd</span>
-                                    </div>
-                                    <p className="following-plain-comment">That's wild. My mom used to force me to eat carrots as a kid specifically for my eyesight. Decades of propaganda working perfectly, I guess. Though I still love carrots, just not for that reason anymore.</p>
-                                  </div>
-                                </div>
-                                <div className="comment-actions" data-testid="reply-comment-actions-2">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'reply-2' ? null : 'reply-2')} data-testid="button-reply-reply-2">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-reply-2">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-reply-2">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'reply-2' ? null : 'reply-2')} data-testid="button-ellipsis-reply-2">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'reply-2' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-reply-2">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-reply-2">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-reply-2">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
+                              <div className="activity-post-body">
+                                <div className="following-post-body-content">
+                                  <div className="following-post-body-left">
+                                    <Link href={`/fact/${reply.factSlug}`} className="following-post-link" data-testid={`link-reply-fact-${reply.replyId}`}>
+                                      <p className="fact-myth">"{reply.factMythHeader}"</p>
+                                    </Link>
+                                    <div className="activity-comment-thread">
+                                      <div className="activity-thread-comment">
+                                        <div className="activity-thread-author">
+                                          <span className="activity-thread-username">{user?.username || "You"}</span>
+                                        </div>
+                                        <div className="following-comment-quote">
+                                          <p className="following-comment-text" data-testid={`reply-parent-body-${reply.replyId}`}>{reply.parentBody}</p>
+                                        </div>
                                       </div>
-                                    )}
-                                  </div>
-                                </div>
-                                {activeReplyId === 'reply-2' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-reply-2">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-reply-2" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-reply-2">Reply</button>
+                                      <div className="activity-thread-comment">
+                                        <div className="activity-thread-author">
+                                          <span className="activity-thread-username">{reply.replierUsername || "[deleted]"}</span>
+                                        </div>
+                                        <p className="following-plain-comment" data-testid={`reply-body-${reply.replyId}`}>{reply.replyBody}</p>
+                                      </div>
+                                    </div>
+                                    <div className="comment-actions" data-testid={`reply-comment-actions-${reply.replyId}`}>
+                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-reply-reply-${reply.replyId}`}>
+                                        <CornerUpLeft size={14} />
+                                        <span>Reply</span>
+                                      </button>
+                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-like-reply-${reply.replyId}`}>
+                                        <Heart size={14} />
+                                        <span>{reply.replyUpvotes} likes</span>
+                                      </button>
+                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-save-reply-${reply.replyId}`}>
+                                        <Bookmark size={14} />
+                                        <span>Save</span>
+                                      </button>
                                     </div>
                                   </div>
-                                )}
+                                  {reply.factCoverPhoto && (
+                                    <Link href={`/fact/${reply.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-reply-${reply.replyId}`}>
+                                      <img src={reply.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                    </Link>
+                                  )}
+                                </div>
                               </div>
-                              <Link href="/fact/does-eating-carrots-make-you-see-better" className="following-post-cover-link" data-testid="cover-link-reply-2">
-                                <img src="/objects/uploads/80ca466a-5bc8-4420-bcac-2ed39def2b3c.png" alt="" className="following-post-cover-photo" />
-                              </Link>
                             </div>
                           </div>
-                        </div>
-                      </div>
-
+                        );
+                      })}
                     </div>
                   )}
 
                   {notificationsTab === "comments" && (
                     <div className="following-feed" data-testid="activity-feed-comments">
-
-                      {/* Comment 1: Username2 commented on spiders submission */}
-                      <div className="activity-post" data-testid="comment-post-1">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="Username2" className="activity-post-avatar" />
-                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/Username2" className="following-post-username" data-testid="link-user-comment-Username2">Username2</Link>
-                              <span className="following-post-action">commented on your submission</span>
+                      {notifCommentsLoading ? (
+                        <p className="saved-empty-message" data-testid="text-notif-comments-loading">Loading comments...</p>
+                      ) : notifComments.length === 0 ? (
+                        <p className="saved-empty-message" data-testid="text-notif-comments-empty">No comments on your submitted facts yet.</p>
+                      ) : notifComments.map((notif) => {
+                        const timeAgo = (() => {
+                          const diff = Date.now() - new Date(notif.commentCreatedAt).getTime();
+                          const m = Math.floor(diff / 60000);
+                          if (m < 1) return "just now";
+                          if (m < 60) return `${m} min ago`;
+                          const h = Math.floor(m / 60);
+                          if (h < 24) return `${h}h ago`;
+                          const d = Math.floor(h / 24);
+                          if (d < 30) return `${d}d ago`;
+                          return new Date(notif.commentCreatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                        })();
+                        return (
+                          <div key={notif.commentId} className="activity-post" data-testid={`comment-post-${notif.commentId}`}>
+                            <div className="activity-post-icon-col">
+                              <img
+                                src={notif.commenterAvatarUrl || placeholderPhoto}
+                                alt={notif.commenterUsername || "User"}
+                                className="activity-post-avatar"
+                              />
+                              <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
                             </div>
-                            <span className="following-post-timestamp">10 mins ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
-                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
-                                </Link>
-                                <p className="following-plain-comment" data-testid="comment-text-1">Given how many spiders have crawled on me, I always believed this was true. I'm so happy to see it's been debunked. Although I have to admit, as someone who once woke up through an earthquake, I probably wouldn't wake up if a spider crawled on my face.</p>
-                                <div className="comment-actions" data-testid="comment-tab-actions-1">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'comment-tab-1' ? null : 'comment-tab-1')} data-testid="button-reply-comment-tab-1">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-comment-tab-1">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-comment-tab-1">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'comment-tab-1' ? null : 'comment-tab-1')} data-testid="button-ellipsis-comment-tab-1">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'comment-tab-1' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-comment-tab-1">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-comment-tab-1">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-comment-tab-1">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
-                                      </div>
-                                    )}
-                                  </div>
+                            <div className="activity-post-main">
+                              <div className="activity-post-header">
+                                <div className="activity-post-header-text">
+                                  {notif.commenterUsername ? (
+                                    <Link href={`/user/${notif.commenterUsername}`} className="following-post-username" data-testid={`link-user-comment-${notif.commentId}`}>{notif.commenterUsername}</Link>
+                                  ) : (
+                                    <span className="following-post-username" data-testid={`user-deleted-comment-${notif.commentId}`}>[deleted]</span>
+                                  )}
+                                  <span className="following-post-action">commented on your submission</span>
                                 </div>
-                                {activeReplyId === 'comment-tab-1' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-comment-tab-1">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-comment-tab-1" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-comment-tab-1">Reply</button>
+                                <span className="following-post-timestamp" data-testid={`notif-comment-time-${notif.commentId}`}>{timeAgo}</span>
+                              </div>
+                              <div className="activity-post-body">
+                                <div className="following-post-body-content">
+                                  <div className="following-post-body-left">
+                                    <Link href={`/fact/${notif.factSlug}`} className="following-post-link" data-testid={`link-comment-fact-${notif.commentId}`}>
+                                      <p className="fact-myth">"{notif.factMythHeader}"</p>
+                                    </Link>
+                                    <p className="following-plain-comment" data-testid={`comment-text-${notif.commentId}`}>{notif.body}</p>
+                                    <div className="comment-actions" data-testid={`comment-tab-actions-${notif.commentId}`}>
+                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-reply-comment-${notif.commentId}`}>
+                                        <CornerUpLeft size={14} />
+                                        <span>Reply</span>
+                                      </button>
+                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-like-comment-${notif.commentId}`}>
+                                        <Heart size={14} />
+                                        <span>{notif.upvotes} likes</span>
+                                      </button>
+                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-save-comment-${notif.commentId}`}>
+                                        <Bookmark size={14} />
+                                        <span>Save</span>
+                                      </button>
                                     </div>
                                   </div>
-                                )}
-                              </div>
-                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-comment-1">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Comment 2: PixelPusher99 commented on vikings submission */}
-                      <div className="activity-post" data-testid="comment-post-2">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="PixelPusher99" className="activity-post-avatar" />
-                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/PixelPusher99" className="following-post-username" data-testid="link-user-comment-PixelPusher99">PixelPusher99</Link>
-                              <span className="following-post-action">commented on your submission</span>
-                            </div>
-                            <span className="following-post-timestamp">3 days ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/did-vikings-wear-horned-helmets" className="following-post-link">
-                                  <p className="fact-myth">"Vikings wore horned helmets into battle."</p>
-                                </Link>
-                                <p className="following-plain-comment" data-testid="comment-text-2">I blame every movie and TV show I've ever watched for this one. They always show Vikings with those massive horns on their helmets. Turns out the horned helmet thing was invented by costume designers in the 1800s for operas. The actual helmets were pretty plain.</p>
-                                <div className="comment-actions" data-testid="comment-tab-actions-2">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'comment-tab-2' ? null : 'comment-tab-2')} data-testid="button-reply-comment-tab-2">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-comment-tab-2">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-comment-tab-2">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'comment-tab-2' ? null : 'comment-tab-2')} data-testid="button-ellipsis-comment-tab-2">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'comment-tab-2' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-comment-tab-2">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-comment-tab-2">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-comment-tab-2">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
-                                      </div>
-                                    )}
-                                  </div>
+                                  {notif.factCoverPhoto && (
+                                    <Link href={`/fact/${notif.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-comment-${notif.commentId}`}>
+                                      <img src={notif.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                    </Link>
+                                  )}
                                 </div>
-                                {activeReplyId === 'comment-tab-2' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-comment-tab-2">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-comment-tab-2" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-comment-tab-2">Reply</button>
-                                    </div>
-                                  </div>
-                                )}
                               </div>
-                              <Link href="/fact/did-vikings-wear-horned-helmets" className="following-post-cover-link" data-testid="cover-link-comment-2">
-                                <img src="/objects/uploads/155b09a1-773c-4e60-a73d-5eab03cc71b9.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
                             </div>
                           </div>
-                        </div>
-                      </div>
-
+                        );
+                      })}
                     </div>
                   )}
 
@@ -3403,26 +3294,81 @@ export default function UserDashboard() {
                   )}
 
                   {(savedTab === "all" || savedTab === "articles") && (
-                    <div className="saved-article-row" data-testid="saved-article-row">
+                    <div className="saved-article-section" data-testid="saved-article-row">
                       {savedArticlesLoading ? (
                         <p className="saved-empty-message" data-testid="text-saved-articles-loading">Loading saved articles...</p>
-                      ) : savedArticleItems.length === 0 && savedTab === "articles" ? (
+                      ) : sortedArticleItems.length === 0 && savedTab === "articles" ? (
                         <p className="saved-empty-message" data-testid="text-saved-articles-empty">No saved articles yet. Bookmark articles on the Articles page to see them here.</p>
-                      ) : (
-                        savedArticleItems.map((article) => (
-                          <FeedArticleCard
-                            key={article.id}
-                            title={article.title}
-                            summary={article.summary}
-                            coverImage={article.coverImage}
-                            category={article.category}
-                            slug={article.slug}
-                            externalUrl={article.articleType === "external" ? article.externalUrl : undefined}
-                            isSaved={true}
-                            onUnsave={() => unsaveArticleMutation.mutate(article.articleKey)}
-                          />
-                        ))
-                      )}
+                      ) : sortedArticleItems.length > 0 ? (
+                        <>
+                          <div className="saved-articles-controls" data-testid="saved-articles-controls">
+                            <label className="saved-articles-sort-label" htmlFor="saved-articles-sort-select">Sort by:</label>
+                            <select
+                              id="saved-articles-sort-select"
+                              value={savedArticlesSort}
+                              onChange={(e) => setSavedArticlesSort(e.target.value as "saved" | "posted")}
+                              className="saved-articles-sort-select"
+                              data-testid="select-saved-articles-sort"
+                            >
+                              <option value="saved">By date saved</option>
+                              <option value="posted">By date posted</option>
+                            </select>
+                          </div>
+                          <div className="saved-articles-grid" data-testid="saved-articles-grid">
+                            {sortedArticleItems.map((article) => {
+                              const upperCat = article.category.toUpperCase();
+                              const chipColor = ({
+                                "HISTORY": "#D29E00",
+                                "LIFE SCIENCES": "#419F36",
+                                "HEALTH & FITNESS": "#EC7200",
+                                "SOCIAL SCIENCES": "#9D0085",
+                                "GENDER & SEXUALITY": "#FF6F98",
+                                "EVERYDAY LIFE": "#0167A2",
+                              } as Record<string, string>)[upperCat] || "#2C2C2C";
+                              return (
+                                <div key={article.id} className="saved-article-card" data-testid={`saved-article-card-${article.id}`}>
+                                  <div className="saved-article-card-img-wrap">
+                                    {article.articleType === "external" && article.externalUrl ? (
+                                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer">
+                                        <img src={article.coverImage} alt={article.title} className="saved-article-card-img" />
+                                      </a>
+                                    ) : (
+                                      <Link href={`/articles/${article.slug}`}>
+                                        <img src={article.coverImage} alt={article.title} className="saved-article-card-img" />
+                                      </Link>
+                                    )}
+                                  </div>
+                                  <div className="saved-article-card-body">
+                                    <span className="saved-article-card-category" style={{ color: chipColor }} data-testid={`saved-article-category-${article.id}`}>
+                                      {upperCat}
+                                    </span>
+                                    {article.articleType === "external" && article.externalUrl ? (
+                                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer" className="saved-article-card-title-link">
+                                        <h3 className="saved-article-card-title" data-testid={`saved-article-title-${article.id}`}>{article.title}</h3>
+                                      </a>
+                                    ) : (
+                                      <Link href={`/articles/${article.slug}`} className="saved-article-card-title-link">
+                                        <h3 className="saved-article-card-title" data-testid={`saved-article-title-${article.id}`}>{article.title}</h3>
+                                      </Link>
+                                    )}
+                                    <p className="saved-article-card-summary" data-testid={`saved-article-summary-${article.id}`}>{article.summary}</p>
+                                  </div>
+                                  <div className="saved-article-card-footer">
+                                    <button
+                                      className="comment-action comment-action-unsave"
+                                      onClick={() => unsaveArticleMutation.mutate(article.articleKey)}
+                                      data-testid={`button-unsave-article-${article.id}`}
+                                    >
+                                      <Bookmark size={14} className="unsave-icon" />
+                                      <span>Unsave</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </>
+                      ) : null}
                     </div>
                   )}
 

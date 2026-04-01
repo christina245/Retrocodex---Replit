@@ -40,7 +40,8 @@ import {
   type FactUpdateWithFact,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, arrayContains, inArray, sql, notInArray, ne, or } from "drizzle-orm";
+import { eq, desc, and, arrayContains, inArray, sql, notInArray, ne, or, isNull, isNotNull } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import crypto from "crypto";
 
 export interface IStorage {
@@ -119,6 +120,29 @@ export interface IStorage {
     factCoverPhoto: string | null;
     commenterUsername: string | null;
     commenterAvatarUrl: string | null;
+  }[]>;
+  getNotificationComments(userId: string): Promise<{
+    commentId: string;
+    body: string;
+    upvotes: number;
+    commentCreatedAt: Date;
+    factMythHeader: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
+  }[]>;
+  getNotificationReplies(userId: string): Promise<{
+    replyId: string;
+    replyBody: string;
+    replyCreatedAt: Date;
+    replyUpvotes: number;
+    parentBody: string;
+    factMythHeader: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    replierUsername: string | null;
+    replierAvatarUrl: string | null;
   }[]>;
 
   // Follows
@@ -775,6 +799,105 @@ export class DatabaseStorage implements IStorage {
       factCoverPhoto: r.factCoverPhoto ?? null,
       commenterUsername: r.commenterUsername ?? null,
       commenterAvatarUrl: r.commenterAvatarUrl ?? null,
+    }));
+  }
+
+  async getNotificationComments(userId: string): Promise<{
+    commentId: string;
+    body: string;
+    upvotes: number;
+    commentCreatedAt: Date;
+    factMythHeader: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
+  }[]> {
+    const rows = await db
+      .select({
+        commentId: comments.id,
+        body: comments.body,
+        upvotes: comments.upvotes,
+        commentCreatedAt: comments.createdAt,
+        factMythHeader: facts.mythHeader,
+        factSlug: facts.slug,
+        factCoverPhoto: facts.coverPhoto,
+        commenterUsername: userProfiles.username,
+        commenterAvatarUrl: userProfiles.avatarUrl,
+      })
+      .from(comments)
+      .innerJoin(facts, eq(comments.factId, facts.id))
+      .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
+      .where(and(
+        eq(facts.submittedByUserId, userId),
+        isNotNull(comments.userId),
+        ne(comments.userId, userId),
+        isNull(comments.parentId),
+        eq(comments.deletedByAdmin, false),
+      ))
+      .orderBy(desc(comments.createdAt));
+
+    return rows.map(r => ({
+      commentId: r.commentId,
+      body: r.body,
+      upvotes: r.upvotes,
+      commentCreatedAt: r.commentCreatedAt,
+      factMythHeader: r.factMythHeader,
+      factSlug: r.factSlug,
+      factCoverPhoto: r.factCoverPhoto ?? null,
+      commenterUsername: r.commenterUsername ?? null,
+      commenterAvatarUrl: r.commenterAvatarUrl ?? null,
+    }));
+  }
+
+  async getNotificationReplies(userId: string): Promise<{
+    replyId: string;
+    replyBody: string;
+    replyCreatedAt: Date;
+    replyUpvotes: number;
+    parentBody: string;
+    factMythHeader: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    replierUsername: string | null;
+    replierAvatarUrl: string | null;
+  }[]> {
+    const parentComments = alias(comments, "parent_comments");
+    const rows = await db
+      .select({
+        replyId: comments.id,
+        replyBody: comments.body,
+        replyCreatedAt: comments.createdAt,
+        replyUpvotes: comments.upvotes,
+        parentBody: parentComments.body,
+        factMythHeader: facts.mythHeader,
+        factSlug: facts.slug,
+        factCoverPhoto: facts.coverPhoto,
+        replierUsername: userProfiles.username,
+        replierAvatarUrl: userProfiles.avatarUrl,
+      })
+      .from(comments)
+      .innerJoin(parentComments, eq(comments.parentId, parentComments.id))
+      .innerJoin(facts, eq(comments.factId, facts.id))
+      .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
+      .where(and(
+        eq(parentComments.userId, userId),
+        eq(comments.deletedByAdmin, false),
+        eq(parentComments.deletedByAdmin, false),
+      ))
+      .orderBy(desc(comments.createdAt));
+
+    return rows.map(r => ({
+      replyId: r.replyId,
+      replyBody: r.replyBody,
+      replyCreatedAt: r.replyCreatedAt,
+      replyUpvotes: r.replyUpvotes,
+      parentBody: r.parentBody,
+      factMythHeader: r.factMythHeader,
+      factSlug: r.factSlug,
+      factCoverPhoto: r.factCoverPhoto ?? null,
+      replierUsername: r.replierUsername ?? null,
+      replierAvatarUrl: r.replierAvatarUrl ?? null,
     }));
   }
 

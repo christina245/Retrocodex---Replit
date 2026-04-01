@@ -1567,6 +1567,131 @@ a.following-post-fact-link:hover {
   padding-right: 13rem;
 }
 
+.saved-article-section {
+  padding-bottom: 24px;
+  padding-right: 13rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.saved-articles-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.saved-articles-sort-label {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: #878787;
+}
+
+.saved-articles-sort-select {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  color: #2C2C2C;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  background: #fff;
+}
+
+.saved-articles-sort-select:focus {
+  outline: none;
+  border-color: #aaa;
+}
+
+.saved-articles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.saved-article-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.saved-article-card-img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.saved-article-card-img-wrap a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.saved-article-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.saved-article-card-img-wrap:hover .saved-article-card-img {
+  transform: scale(1.02);
+}
+
+.saved-article-card-body {
+  padding: 12px 14px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.saved-article-card-category {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.saved-article-card-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.saved-article-card-title {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 2px 0 5px;
+  line-height: 1.4;
+}
+
+.saved-article-card-title-link:hover .saved-article-card-title {
+  text-decoration: underline;
+}
+
+.saved-article-card-summary {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #555;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.saved-article-card-footer {
+  padding: 8px 14px;
+  border-top: 1px solid #f0f0f0;
+}
+
 .saved-empty-message {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;

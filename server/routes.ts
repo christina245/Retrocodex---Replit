@@ -873,6 +873,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/notifications/comments — comments by others on the user's submitted facts
+  app.get("/api/notifications/comments", requireUser, async (req, res) => {
+    try {
+      const items = await storage.getNotificationComments(req.session.userId!);
+      res.json(items);
+    } catch (error) {
+      console.error("GET /api/notifications/comments error:", error);
+      res.status(500).json({ message: "Failed to fetch comment notifications" });
+    }
+  });
+
+  // GET /api/notifications/replies — replies to the user's own comments
+  app.get("/api/notifications/replies", requireUser, async (req, res) => {
+    try {
+      const items = await storage.getNotificationReplies(req.session.userId!);
+      res.json(items);
+    } catch (error) {
+      console.error("GET /api/notifications/replies error:", error);
+      res.status(500).json({ message: "Failed to fetch reply notifications" });
+    }
+  });
+
   // GET /api/comments/saved — get saved comments for the current user
   app.get("/api/comments/saved", requireUser, async (req, res) => {
     try {
