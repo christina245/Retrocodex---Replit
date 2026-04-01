@@ -65,7 +65,7 @@ export default function HomePage() {
   const [, setLocation] = useLocation();
   const params = useParams<{ decade?: string }>();
 
-  const { data: dbFacts = [] } = useQuery<DbFact[]>({
+  const { data: dbFacts = [], isLoading: isFactsLoading } = useQuery<DbFact[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -527,6 +527,10 @@ export default function HomePage() {
                           showTaughtUntilLabel
                         />
                       ))
+                    ) : activeTab === "explore" && isFactsLoading ? (
+                      <div className="decade-loading-state" data-testid="featured-loading">
+                        <div className="decade-loading-spinner" />
+                      </div>
                     ) : (
                       <div className="empty-state" data-testid="empty-facts">
                         <p>{emptyStateMessage}</p>

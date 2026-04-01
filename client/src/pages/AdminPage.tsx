@@ -3322,7 +3322,7 @@ export default function AdminPage() {
                     value={rejectNote}
                     onChange={e => setRejectNote(e.target.value)}
                     data-testid="input-reject-note"
-                    style={{ width: "100%", padding: "0.6rem 0.75rem", borderRadius: "6px", border: "1px solid var(--border)", background: "var(--background)", color: "var(--foreground)", fontSize: "0.9rem", resize: "vertical", boxSizing: "border-box", marginBottom: "1rem" }}
+                    style={{ width: "100%", padding: "0.6rem 0.75rem", borderRadius: "6px", border: "1px solid #878787", background: "var(--background)", color: "var(--foreground)", fontSize: "0.9rem", resize: "vertical", boxSizing: "border-box", marginBottom: "1rem" }}
                   />
                   <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
                     <button className="cancel-edit-button" onClick={() => setShowRejectModal(false)} data-testid="button-cancel-reject">Cancel</button>

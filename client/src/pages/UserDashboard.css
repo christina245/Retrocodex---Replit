@@ -2812,7 +2812,7 @@ a.following-post-fact-link:hover {
 
 .edit-requests-beta-state {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   gap: 1.25rem;
   padding: 2rem 1rem;

@@ -3327,8 +3327,8 @@ export default function UserDashboard() {
 
                   <div className="dashboard-feed-content" data-testid="dashboard-edit-requests-content">
                     <div className="edit-requests-beta-state" data-testid="edit-requests-beta-empty">
-                      <p className="edit-requests-beta-text">Editing content is unavailable in the beta. Scrungy is working on it!</p>
                       <img src={scrungyConfetti} alt="Scrungy the squirrel" className="edit-requests-beta-squirrel" />
+                      <p className="edit-requests-beta-text">Editing content is unavailable in the beta. Scrungy is working on it!</p>
                     </div>
                   </div>
                 </>
