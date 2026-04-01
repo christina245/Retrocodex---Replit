@@ -883,6 +883,8 @@ export class DatabaseStorage implements IStorage {
       .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
       .where(and(
         eq(parentComments.userId, userId),
+        isNotNull(comments.userId),
+        ne(comments.userId, userId),
         eq(comments.deletedByAdmin, false),
         eq(parentComments.deletedByAdmin, false),
       ))
