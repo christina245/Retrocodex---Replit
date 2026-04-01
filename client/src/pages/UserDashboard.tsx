@@ -950,6 +950,7 @@ export default function UserDashboard() {
     category: string;
     slug: string;
     externalUrl: string;
+    publishedAt: string | null;
     savedAt: string;
   }
 
@@ -962,7 +963,9 @@ export default function UserDashboard() {
 
   const sortedArticleItems = [...savedArticleItems].sort((a, b) => {
     if (savedArticlesSort === "posted") {
-      return new Date(a.savedAt).getTime() - new Date(b.savedAt).getTime();
+      const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+      const bDate = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+      return bDate - aDate;
     }
     return new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime();
   });

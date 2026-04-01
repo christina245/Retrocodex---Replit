@@ -412,6 +412,7 @@ export class DatabaseStorage implements IStorage {
           category: data.category,
           slug: data.slug,
           externalUrl: data.externalUrl,
+          publishedAt: data.publishedAt ?? null,
         },
       })
       .returning();

@@ -71,6 +71,7 @@ export default function BlogCard({
       category,
       slug: isExternal ? '' : id,
       externalUrl: isExternal ? (externalUrl || '') : '',
+      publishedAt: date || null,
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
