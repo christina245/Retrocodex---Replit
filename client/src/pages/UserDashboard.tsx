@@ -586,21 +586,23 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
             </div>
           </div>
         )}
-        <FactCard
-          fact={fact}
-          isSaved={isSaved}
-          onSave={() => isSaved ? onUnsaveFact(item.id) : onSaveFact(item.id)}
-          onShare={() => {
-            if (navigator.share) {
-              navigator.share({ url: `${window.location.origin}/fact/${item.factSlug}` });
-            } else {
-              navigator.clipboard.writeText(`${window.location.origin}/fact/${item.factSlug}`);
-            }
-          }}
-          onComment={() => onNavigate(`/fact/${item.factSlug}#comments`)}
-          onBetaClick={onBetaClick}
-          showTaughtUntilLabel
-        />
+        <div className="following-post-fact-card-wrap">
+          <FactCard
+            fact={fact}
+            isSaved={isSaved}
+            onSave={() => isSaved ? onUnsaveFact(item.id) : onSaveFact(item.id)}
+            onShare={() => {
+              if (navigator.share) {
+                navigator.share({ url: `${window.location.origin}/fact/${item.factSlug}` });
+              } else {
+                navigator.clipboard.writeText(`${window.location.origin}/fact/${item.factSlug}`);
+              }
+            }}
+            onComment={() => onNavigate(`/fact/${item.factSlug}#comments`)}
+            onBetaClick={onBetaClick}
+            showTaughtUntilLabel
+          />
+        </div>
       </div>
     );
   }
@@ -669,11 +671,6 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
           {item.type === "comment" && (
             <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
               <div className="following-post-body-left">
-                {item.factSlug && (
-                  <Link href={`/fact/${item.factSlug}`} className="following-post-link">
-                    <p className="fact-myth" data-testid={`feed-comment-fact-${index}`}>{item.factTitle}</p>
-                  </Link>
-                )}
                 <p className="following-plain-comment" data-testid={`feed-comment-body-${index}`}>{item.commentBody}</p>
               </div>
               {item.factCoverPhoto && (

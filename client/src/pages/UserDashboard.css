@@ -2591,6 +2591,10 @@ a.following-post-fact-link:hover {
   width: 100%;
 }
 
+.following-post-fact-card-wrap {
+  margin-left: 52px;
+}
+
 .feed-factcard-link {
   display: block;
   text-decoration: none;

@@ -787,7 +787,7 @@ export class DatabaseStorage implements IStorage {
         createdAt: comments.createdAt,
         factId: facts.id,
         factSlug: facts.slug,
-        factTitle: facts.title,
+        factTitle: facts.mythHeader,
         factCoverPhoto: facts.coverPhoto,
       })
       .from(comments)
