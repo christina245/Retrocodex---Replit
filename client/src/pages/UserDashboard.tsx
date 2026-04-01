@@ -27,6 +27,7 @@ import "../components/SignInModal.css";
 import "../components/SortSelector.css";
 import { AdminBadge } from "@/components/AdminBadge";
 import { TopicsModal } from "@/components/TopicsModal";
+import BlogCard from "@/components/BlogCard";
 import { getCategoryConfig } from "@shared/categories";
 import { Button } from "@/components/ui/button";
 import { getCountryFlag } from "@/lib/countryFlags";
@@ -975,6 +976,15 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
+  const formatSavedArticleDate = (isoDate: string | null): string => {
+    if (!isoDate) return '';
+    try {
+      return new Date(isoDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    } catch {
+      return '';
+    }
+  };
+
   const sortedArticleItems = [...savedArticleItems].sort((a, b) => {
     if (savedArticlesSort === "posted") {
       const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
@@ -1022,13 +1032,6 @@ export default function UserDashboard() {
     mutationFn: (factId: string) => apiRequest("DELETE", `/api/user/saved-facts/${factId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
-    },
-  });
-
-  const unsaveArticleMutation = useMutation({
-    mutationFn: (articleKey: string) => apiRequest("DELETE", `/api/user/saved-articles/${encodeURIComponent(articleKey)}`),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/user/saved-articles"] });
     },
   });
 
@@ -3349,57 +3352,21 @@ export default function UserDashboard() {
                             </div>
                           </div>
                           <div className="saved-articles-grid" data-testid="saved-articles-grid">
-                            {sortedArticleItems.map((article) => {
-                              const upperCat = article.category.toUpperCase();
-                              const chipColor = ({
-                                "HISTORY": "#D29E00",
-                                "LIFE SCIENCES": "#419F36",
-                                "HEALTH & FITNESS": "#EC7200",
-                                "SOCIAL SCIENCES": "#9D0085",
-                                "GENDER & SEXUALITY": "#FF6F98",
-                                "EVERYDAY LIFE": "#0167A2",
-                              } as Record<string, string>)[upperCat] || "#2C2C2C";
-                              return (
-                                <div key={article.id} className="saved-article-card" data-testid={`saved-article-card-${article.id}`}>
-                                  <div className="saved-article-card-img-wrap">
-                                    {article.articleType === "external" && article.externalUrl ? (
-                                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer">
-                                        <img src={article.coverImage} alt={article.title} className="saved-article-card-img" />
-                                      </a>
-                                    ) : (
-                                      <Link href={`/articles/${article.slug}`}>
-                                        <img src={article.coverImage} alt={article.title} className="saved-article-card-img" />
-                                      </Link>
-                                    )}
-                                  </div>
-                                  <div className="saved-article-card-body">
-                                    <span className="saved-article-card-category" style={{ color: chipColor }} data-testid={`saved-article-category-${article.id}`}>
-                                      {upperCat}
-                                    </span>
-                                    {article.articleType === "external" && article.externalUrl ? (
-                                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer" className="saved-article-card-title-link">
-                                        <h3 className="saved-article-card-title" data-testid={`saved-article-title-${article.id}`}>{article.title}</h3>
-                                      </a>
-                                    ) : (
-                                      <Link href={`/articles/${article.slug}`} className="saved-article-card-title-link">
-                                        <h3 className="saved-article-card-title" data-testid={`saved-article-title-${article.id}`}>{article.title}</h3>
-                                      </Link>
-                                    )}
-                                    <p className="saved-article-card-summary" data-testid={`saved-article-summary-${article.id}`}>{article.summary}</p>
-                                  </div>
-                                  <div className="saved-article-card-footer">
-                                    <button
-                                      className="comment-action comment-action-unsave"
-                                      onClick={() => unsaveArticleMutation.mutate(article.articleKey)}
-                                      data-testid={`button-unsave-article-${article.id}`}
-                                    >
-                                      <Bookmark size={14} className="unsave-icon" />
-                                      <span>Unsave</span>
-                                    </button>
-                                  </div>
-                                </div>
-                              );
-                            })}
+                            {sortedArticleItems.map((article) => (
+                              <BlogCard
+                                key={article.id}
+                                id={article.articleType === "internal" ? article.slug : article.id}
+                                image={article.coverImage || ""}
+                                date={formatSavedArticleDate(article.publishedAt)}
+                                category={article.category}
+                                title={article.title}
+                                summary={article.summary || ""}
+                                tags={[]}
+                                isExternal={article.articleType === "external"}
+                                externalUrl={article.articleType === "external" ? article.externalUrl : null}
+                                publishedAtIso={article.publishedAt}
+                              />
+                            ))}
                           </div>
                         </>
                       ) : null}

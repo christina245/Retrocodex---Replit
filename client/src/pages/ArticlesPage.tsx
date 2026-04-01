@@ -203,6 +203,7 @@ export default function ArticlesPage() {
                 publicationName={article.publicationName}
                 isPaywalled={article.isPaywalled}
                 originalPublishedAt={article.isExternal ? formatDate(article.originalPublishedAt) : null}
+                publishedAtIso={article.isExternal ? article.createdAt : article.publishedAt}
               />
             ))}
           </div>

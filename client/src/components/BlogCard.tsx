@@ -28,6 +28,7 @@ interface BlogCardProps {
   publicationName?: string | null;
   isPaywalled?: boolean;
   originalPublishedAt?: string | null;
+  publishedAtIso?: string | null;
 }
 
 export default function BlogCard({
@@ -43,6 +44,7 @@ export default function BlogCard({
   publicationName,
   isPaywalled = false,
   originalPublishedAt,
+  publishedAtIso,
 }: BlogCardProps) {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -71,7 +73,7 @@ export default function BlogCard({
       category,
       slug: isExternal ? '' : id,
       externalUrl: isExternal ? (externalUrl || '') : '',
-      publishedAt: date || null,
+      publishedAt: publishedAtIso || null,
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/user/saved-articles'] });
