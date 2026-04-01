@@ -65,11 +65,13 @@ export default function HomePage() {
   const [, setLocation] = useLocation();
   const params = useParams<{ decade?: string }>();
 
-  const { data: dbFacts = [], isLoading: isFactsLoading } = useQuery<DbFact[]>({
+  type DbFactWithCount = DbFact & { commentCount?: number };
+
+  const { data: dbFacts = [], isLoading: isFactsLoading } = useQuery<DbFactWithCount[]>({
     queryKey: ["/api/facts"],
   });
 
-  const { data: popularDbFacts = [] } = useQuery<DbFact[]>({
+  const { data: popularDbFacts = [] } = useQuery<DbFactWithCount[]>({
     queryKey: ["/api/facts/popular"],
   });
 
@@ -99,6 +101,7 @@ export default function HomePage() {
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
           taughtUntilYear: fact.taughtUntilYear ?? undefined,
+          commentCount: fact.commentCount ?? 0,
         };
       });
   }, [dbFacts]);
@@ -129,6 +132,7 @@ export default function HomePage() {
         factFilters: fact.factFilters || undefined,
         revisionYear: fact.revisionYear ?? undefined,
         taughtUntilYear: fact.taughtUntilYear ?? undefined,
+        commentCount: fact.commentCount ?? 0,
       };
     });
   }, [popularDbFacts]);
@@ -161,6 +165,7 @@ export default function HomePage() {
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
           taughtUntilYear: fact.taughtUntilYear ?? undefined,
+          commentCount: fact.commentCount ?? 0,
         };
       });
   }, [dbFacts]);
@@ -308,6 +313,7 @@ export default function HomePage() {
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
           taughtUntilYear: fact.taughtUntilYear ?? undefined,
+          commentCount: fact.commentCount ?? 0,
         };
       });
   }, [dbFacts, selectedDecade, decadeFilters, decadeCategoryFilter]);
@@ -343,6 +349,7 @@ export default function HomePage() {
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
           taughtUntilYear: fact.taughtUntilYear ?? undefined,
+          commentCount: fact.commentCount ?? 0,
         };
       });
   }, [dbFacts]);
@@ -368,6 +375,7 @@ export default function HomePage() {
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
           taughtUntilYear: fact.taughtUntilYear ?? undefined,
+          commentCount: fact.commentCount ?? 0,
         };
       });
   }, [dbFacts]);
@@ -393,6 +401,7 @@ export default function HomePage() {
           factFilters: fact.factFilters || undefined,
           revisionYear: fact.revisionYear ?? undefined,
           taughtUntilYear: fact.taughtUntilYear ?? undefined,
+          commentCount: fact.commentCount ?? 0,
         };
       });
   }, [dbFacts]);

@@ -836,8 +836,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GET /api/facts - Get all facts (public)
   app.get("/api/facts", async (req, res) => {
     try {
-      const facts = await storage.getAllFacts();
-      res.json(facts);
+      const allFacts = await storage.getAllFacts();
+      const factIds = allFacts.map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(factIds);
+      const factsWithCounts = allFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 }));
+      res.json(factsWithCounts);
     } catch (error) {
       console.error("Error fetching facts:", error);
       res.status(500).json({ message: "Failed to fetch facts" });
@@ -851,21 +854,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const popularFacts = allFacts
         .filter(fact => fact.isPopular === true)
         .sort((a, b) => {
-          // Sort by popularOrder if both have it, otherwise by createdAt
           if (a.popularOrder != null && b.popularOrder != null) {
             return a.popularOrder - b.popularOrder;
           }
           if (a.popularOrder != null) return -1;
           if (b.popularOrder != null) return 1;
-          // Fallback to createdAt (newest first)
           const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
           const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
           return bDate - aDate;
         });
-      res.json(popularFacts);
+      const factIds = popularFacts.map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(factIds);
+      const popularWithCounts = popularFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 }));
+      res.json(popularWithCounts);
     } catch (error) {
       console.error("Error fetching popular facts:", error);
       res.status(500).json({ message: "Failed to fetch popular facts" });
+    }
+  });
+
+  // GET /api/comments/saved — get saved comments for the current user
+  app.get("/api/comments/saved", requireUser, async (req, res) => {
+    try {
+      const items = await storage.getSavedCommentsByUser(req.session.userId!);
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching saved comments:", error);
+      res.status(500).json({ message: "Failed to fetch saved comments" });
     }
   });
 

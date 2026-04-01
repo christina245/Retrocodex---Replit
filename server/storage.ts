@@ -106,6 +106,19 @@ export interface IStorage {
   toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
   saveComment(userId: string, commentId: string): Promise<void>;
   unsaveComment(userId: string, commentId: string): Promise<boolean>;
+  getCommentCountsByFactIds(factIds: string[]): Promise<Record<string, number>>;
+  getSavedCommentsByUser(userId: string): Promise<{
+    commentId: string;
+    body: string;
+    upvotes: number;
+    createdAt: Date;
+    savedAt: Date;
+    factTitle: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    authorUsername: string | null;
+    authorAvatarUrl: string | null;
+  }[]>;
 
   // Follows
   followUser(followerId: string, followeeId: string): Promise<void>;
@@ -695,6 +708,70 @@ export class DatabaseStorage implements IStorage {
       .where(and(eq(savedComments.userId, userId), eq(savedComments.commentId, commentId)))
       .returning();
     return result.length > 0;
+  }
+
+  async getCommentCountsByFactIds(factIds: string[]): Promise<Record<string, number>> {
+    if (factIds.length === 0) return {};
+    const rows = await db
+      .select({
+        factId: comments.factId,
+        count: sql<number>`count(*)::int`,
+      })
+      .from(comments)
+      .where(and(inArray(comments.factId, factIds), eq(comments.deletedByAdmin, false)))
+      .groupBy(comments.factId);
+    const result: Record<string, number> = {};
+    for (const row of rows) {
+      result[row.factId] = row.count;
+    }
+    return result;
+  }
+
+  async getSavedCommentsByUser(userId: string): Promise<{
+    commentId: string;
+    body: string;
+    upvotes: number;
+    createdAt: Date;
+    savedAt: Date;
+    factTitle: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    authorUsername: string | null;
+    authorAvatarUrl: string | null;
+  }[]> {
+    const rows = await db
+      .select({
+        commentId: comments.id,
+        body: comments.body,
+        upvotes: comments.upvotes,
+        createdAt: comments.createdAt,
+        savedAt: savedComments.savedAt,
+        factTitle: facts.mythHeader,
+        factSlug: facts.slug,
+        factCoverPhoto: facts.coverPhoto,
+        authorUsername: userProfiles.username,
+        authorAvatarUrl: userProfiles.avatarUrl,
+        deletedByAdmin: comments.deletedByAdmin,
+      })
+      .from(savedComments)
+      .innerJoin(comments, eq(comments.id, savedComments.commentId))
+      .innerJoin(facts, eq(facts.id, comments.factId))
+      .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
+      .where(and(eq(savedComments.userId, userId), eq(comments.deletedByAdmin, false)))
+      .orderBy(desc(savedComments.savedAt));
+
+    return rows.map(r => ({
+      commentId: r.commentId,
+      body: r.body,
+      upvotes: r.upvotes,
+      createdAt: r.createdAt,
+      savedAt: r.savedAt,
+      factTitle: r.factTitle,
+      factSlug: r.factSlug,
+      factCoverPhoto: r.factCoverPhoto ?? null,
+      authorUsername: r.authorUsername ?? null,
+      authorAvatarUrl: r.authorAvatarUrl ?? null,
+    }));
   }
 
   // ─── Follows ────────────────────────────────────────────────────────────────

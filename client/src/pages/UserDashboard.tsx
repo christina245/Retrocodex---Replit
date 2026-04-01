@@ -971,6 +971,31 @@ export default function UserDashboard() {
     },
   });
 
+  interface SavedCommentItem {
+    commentId: string;
+    body: string;
+    upvotes: number;
+    createdAt: string;
+    savedAt: string;
+    factTitle: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+    authorUsername: string | null;
+    authorAvatarUrl: string | null;
+  }
+
+  const { data: savedCommentItems = [], isLoading: savedCommentsLoading } = useQuery<SavedCommentItem[]>({
+    queryKey: ["/api/comments/saved"],
+    enabled: isLoggedIn,
+  });
+
+  const unsaveCommentMutation = useMutation({
+    mutationFn: (commentId: string) => apiRequest("DELETE", `/api/comments/${commentId}/save`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/comments/saved"] });
+    },
+  });
+
   const savedFactIdSet = new Set(savedDbFacts.map((f) => f.id));
 
   const feedHandlers: FeedPostHandlers = {
@@ -3399,63 +3424,88 @@ export default function UserDashboard() {
                   )}
 
                   {(savedTab === "all" || savedTab === "comments") && (
-                    <div className="saved-comment" data-testid="saved-comment-1">
-                      <div className="following-post-body-content">
-                        <div className="following-post-body-left">
-                          <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-link">
-                            <p className="fact-myth">"Christopher Columbus discovered the Americas in 1492"</p>
-                          </Link>
-                          <div className="saved-comment-meta" data-testid="saved-comment-meta-1">
-                            <Link href="/user/Ackshually_42" className="saved-comment-username" data-testid="link-saved-user-Ackshually_42">Ackshually_42</Link>
-                            <span className="saved-comment-action">commented</span>
-                            <span className="saved-comment-dot">·</span>
-                            <span className="saved-comment-time">3 hours ago</span>
-                          </div>
-                          <p className="following-plain-comment" data-testid="saved-comment-text-1">Ackshually, to be pedantic, the term 'discovery' is a Eurocentric misnomer. Not only were millions of Indigenous people already inhabitant of the land, but the Norse explorer Leif Erikson had already established a settlement at L'Anse aux Meadows nearly five centuries prior. Columbus didn't even set foot on the North American mainland during his 1492 voyage; he was strictly in the Caribbean.</p>
-                          <div className="comment-actions" data-testid="saved-comment-actions-1">
-                            <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'saved-1' ? null : 'saved-1')} data-testid="button-reply-saved-1">
-                              <CornerUpLeft size={14} />
-                              <span>Reply</span>
-                            </button>
-                            <button className="comment-action disabled-action" data-testid="button-like-saved-1">
-                              <Heart size={14} />
-                              <span>0 likes</span>
-                            </button>
-                            <button className="comment-action comment-action-unsave" data-testid="button-unsave-saved-1">
-                              <Bookmark size={14} className="unsave-icon" />
-                              <span>Unsave</span>
-                            </button>
-                            <div className="comment-ellipsis-wrapper">
-                              <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'saved-1' ? null : 'saved-1')} data-testid="button-ellipsis-saved-1">
-                                <MoreHorizontal size={14} />
-                              </button>
-                              {activeEllipsisId === 'saved-1' && (
-                                <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-saved-1">
-                                  <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-saved-1">
-                                    <BellPlus size={14} />
-                                    <span>Follow comment</span>
-                                  </button>
-                                  <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-saved-1">
-                                    <FlagTriangleRight size={14} />
-                                    <span>Report</span>
-                                  </button>
+                    <div data-testid="saved-comments-section">
+                      {savedCommentsLoading ? (
+                        <p className="saved-empty-message" data-testid="text-saved-comments-loading">Loading saved comments...</p>
+                      ) : savedCommentItems.length === 0 ? (
+                        <p className="saved-empty-message" data-testid="text-saved-comments-empty">No saved comments yet. Bookmark comments on fact pages to see them here.</p>
+                      ) : (
+                        savedCommentItems.map((item) => {
+                          const ellipsisKey = `ellipsis-saved-${item.commentId}`;
+                          const timeAgo = (() => {
+                            const diff = Date.now() - new Date(item.createdAt).getTime();
+                            const mins = Math.floor(diff / 60000);
+                            if (mins < 60) return `${mins || 1}m ago`;
+                            const hrs = Math.floor(mins / 60);
+                            if (hrs < 24) return `${hrs}h ago`;
+                            const days = Math.floor(hrs / 24);
+                            if (days < 7) return `${days}d ago`;
+                            return new Date(item.createdAt).toLocaleDateString();
+                          })();
+                          return (
+                            <div key={item.commentId} className="saved-comment" data-testid={`saved-comment-${item.commentId}`}>
+                              <div className="following-post-body-content">
+                                <div className="following-post-body-left">
+                                  <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-saved-fact-${item.commentId}`}>
+                                    <p className="fact-myth">"{item.factTitle}"</p>
+                                  </Link>
+                                  <div className="saved-comment-meta" data-testid={`saved-comment-meta-${item.commentId}`}>
+                                    {item.authorUsername ? (
+                                      <Link href={`/user/${item.authorUsername}`} className="saved-comment-username" data-testid={`link-saved-user-${item.commentId}`}>{item.authorUsername}</Link>
+                                    ) : (
+                                      <span className="saved-comment-username" data-testid={`saved-user-deleted-${item.commentId}`}>[deleted]</span>
+                                    )}
+                                    <span className="saved-comment-action">commented</span>
+                                    <span className="saved-comment-dot">·</span>
+                                    <span className="saved-comment-time" data-testid={`saved-comment-time-${item.commentId}`}>{timeAgo}</span>
+                                  </div>
+                                  <p className="following-plain-comment" data-testid={`saved-comment-text-${item.commentId}`}>{item.body}</p>
+                                  <div className="comment-actions" data-testid={`saved-comment-actions-${item.commentId}`}>
+                                    <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-reply-saved-${item.commentId}`}>
+                                      <CornerUpLeft size={14} />
+                                      <span>Reply</span>
+                                    </button>
+                                    <button className="comment-action disabled-action" data-testid={`button-like-saved-${item.commentId}`}>
+                                      <Heart size={14} />
+                                      <span>{item.upvotes} {item.upvotes === 1 ? "like" : "likes"}</span>
+                                    </button>
+                                    <button
+                                      className="comment-action comment-action-unsave"
+                                      onClick={() => unsaveCommentMutation.mutate(item.commentId)}
+                                      data-testid={`button-unsave-saved-${item.commentId}`}
+                                    >
+                                      <Bookmark size={14} className="unsave-icon" />
+                                      <span>Unsave</span>
+                                    </button>
+                                    <div className="comment-ellipsis-wrapper">
+                                      <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === ellipsisKey ? null : ellipsisKey)} data-testid={`button-ellipsis-saved-${item.commentId}`}>
+                                        <MoreHorizontal size={14} />
+                                      </button>
+                                      {activeEllipsisId === ellipsisKey && (
+                                        <div className="comment-ellipsis-dropdown" data-testid={`dropdown-ellipsis-saved-${item.commentId}`}>
+                                          <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-follow-comment-saved-${item.commentId}`}>
+                                            <BellPlus size={14} />
+                                            <span>Follow comment</span>
+                                          </button>
+                                          <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-report-saved-${item.commentId}`}>
+                                            <FlagTriangleRight size={14} />
+                                            <span>Report</span>
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                          {activeReplyId === 'saved-1' && (
-                            <div className="inline-reply-box" data-testid="inline-reply-saved-1">
-                              <textarea placeholder="Write a reply..." data-testid="input-reply-saved-1" />
-                              <div className="inline-reply-actions">
-                                <button className="inline-reply-btn" data-testid="button-submit-reply-saved-1">Reply</button>
+                                {item.factCoverPhoto && (
+                                  <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-saved-comment-${item.commentId}`}>
+                                    <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                  </Link>
+                                )}
                               </div>
                             </div>
-                          )}
-                        </div>
-                        <Link href="/fact/christopher-columbus-discovered-americas" className="following-post-cover-link" data-testid="cover-link-saved-comment-1">
-                          <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                        </Link>
-                      </div>
+                          );
+                        })
+                      )}
                     </div>
                   )}
 

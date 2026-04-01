@@ -1,5 +1,5 @@
 import { X, Check, MessageCircle, Bookmark, Share2 } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import forwardArrow from "@assets/forward triangle red.png";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
 import "./CategoryFactCard.css";
@@ -15,6 +15,7 @@ export interface CategoryFact {
   betaOnly?: boolean;
   revisionYear?: number;
   taughtUntilYear?: string;
+  commentCount?: number;
 }
 
 interface CategoryFactCardProps {
@@ -59,10 +60,11 @@ export function CategoryFactCard({
   onComment,
   onBetaClick,
   highlightQuery,
-  isSaved
+  isSaved,
 }: CategoryFactCardProps) {
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
+  const [, setLocation] = useLocation();
 
   const handleBetaLinkClick = (e: React.MouseEvent) => {
     if (fact.betaOnly) {
@@ -73,6 +75,22 @@ export function CategoryFactCard({
       }
     }
   };
+
+  const handleCommentClick = (e: React.MouseEvent) => {
+    if (fact.betaOnly) {
+      e.preventDefault();
+      if (onBetaClick) {
+        const slug = factLink.split('/fact/').pop() || fact.id;
+        onBetaClick(slug);
+      }
+      return;
+    }
+    e.preventDefault();
+    setLocation(`${factLink}#comments`);
+  };
+
+  const count = fact.commentCount ?? 0;
+  const commentLabel = count === 1 ? "1 comment" : `${count} comments`;
 
   return (
     <div className="category-fact-card-wrapper">
@@ -134,15 +152,14 @@ export function CategoryFactCard({
 
       <div className="category-fact-footer">
         <div className="category-fact-actions">
-          <Link 
-            href={factLink}
+          <button
             className="category-action-button"
             data-testid={`button-comment-${fact.id}`}
-            onClick={handleBetaLinkClick}
+            onClick={handleCommentClick}
           >
             <MessageCircle size={16} />
-            <span>0 comments</span>
-          </Link>
+            <span>{commentLabel}</span>
+          </button>
           <button 
             className={`category-action-button${isSaved ? ' category-action-button-saved' : ''}`}
             onClick={onSave}

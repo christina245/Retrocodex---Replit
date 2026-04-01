@@ -1,5 +1,5 @@
 import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap, Activity, HeartHandshake, DiamondPlus } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import forwardArrow from "@assets/forward triangle red.png";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
@@ -44,6 +44,7 @@ export interface Fact {
   factFilters?: string[];
   revisionYear?: number;
   taughtUntilYear?: string;
+  commentCount?: number;
 }
 
 function toTitleCase(str: string): string {
@@ -54,7 +55,7 @@ interface FactCardProps {
   fact: Fact;
   onSave: () => void;
   onShare: () => void;
-  onComment: () => void;
+  onComment?: () => void;
   onBetaClick?: (factId: string) => void;
   isSaved?: boolean;
   showTaughtUntilLabel?: boolean;
@@ -64,6 +65,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
   const CategoryIcon = getCategoryIcon(fact.category);
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
+  const [, setLocation] = useLocation();
 
   const handleBetaLinkClick = (e: React.MouseEvent) => {
     if (fact.betaOnly) {
@@ -83,8 +85,11 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
       }
       return;
     }
-    onComment();
+    setLocation(`${factLink}#comments`);
   };
+
+  const count = fact.commentCount ?? 0;
+  const commentLabel = count === 1 ? "1 comment" : `${count} comments`;
   
   return (
     <div className="fact-card-wrapper">
@@ -169,7 +174,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
             data-testid={`button-comment-${fact.id}`}
           >
             <MessageCircle size={16} />
-            <span>0 comments</span>
+            <span>{commentLabel}</span>
           </button>
           <button 
             className={`action-button${isSaved ? ' action-button-unsave' : ''}`}
