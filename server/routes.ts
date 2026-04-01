@@ -906,7 +906,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const total = matching.length;
       const totalPages = Math.ceil(total / limit);
       const start = (page - 1) * limit;
-      const facts = matching.slice(start, start + limit);
+      const pageFacts = matching.slice(start, start + limit);
+      const factIds = pageFacts.map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(factIds);
+      const facts = pageFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 }));
       res.json({ facts, total, page, totalPages });
     } catch (error) {
       console.error("Error fetching facts by tags:", error);
@@ -926,7 +929,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           t.toLowerCase().replace(/\s+/g, '-') === tagSlug.toLowerCase()
         )
       );
-      res.json(matchingFacts);
+      const factIds = matchingFacts.map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(factIds);
+      res.json(matchingFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 })));
     } catch (error) {
       console.error("Error fetching facts by tag:", error);
       res.status(500).json({ message: "Failed to fetch facts by tag" });
@@ -966,16 +971,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         );
 
         if (hasTextMatch) {
-          textMatchFacts.push({ ...fact, matchType: 'text' });
+          textMatchFacts.push(fact);
         } else if (hasTagMatch) {
-          tagOnlyFacts.push({ ...fact, matchType: 'tag' });
+          tagOnlyFacts.push(fact);
         }
       }
 
+      const allMatchedIds = [...textMatchFacts, ...tagOnlyFacts].map(f => f.id);
+      const commentCounts = await storage.getCommentCountsByFactIds(allMatchedIds);
+
       res.json({ 
-        facts: textMatchFacts, 
+        facts: textMatchFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 })), 
         matchingSubcategories,
-        tagOnlyFacts 
+        tagOnlyFacts: tagOnlyFacts.map(f => ({ ...f, commentCount: commentCounts[f.id] ?? 0 })),
       });
     } catch (error) {
       console.error("Error searching:", error);

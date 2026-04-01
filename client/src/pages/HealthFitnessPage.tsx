@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Fact } from "@shared/schema";
+import type { Fact, FactWithCommentCount } from "@shared/schema";
 import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -45,7 +45,7 @@ export default function HealthFitnessPage() {
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
 
-  const { data: dbFacts = [] } = useQuery<Fact[]>({
+  const { data: dbFacts = [] } = useQuery<FactWithCommentCount[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -63,7 +63,7 @@ export default function HealthFitnessPage() {
         betaOnly: fact.betaOnly || false,
         revisionYear: fact.revisionYear ?? undefined,
         taughtUntilYear: fact.taughtUntilYear ?? undefined,
-        commentCount: (fact as any).commentCount ?? 0,
+        commentCount: fact.commentCount ?? 0,
       }));
   }, [dbFacts]);
 

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Fact } from "@shared/schema";
+import type { Fact, FactWithCommentCount } from "@shared/schema";
 import { SEO } from "@/components/SEO";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -42,7 +42,7 @@ export default function LinguisticsPage() {
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
   const queryClient = useQueryClient();
 
-  const { data: dbFacts = [], isLoading } = useQuery<Fact[]>({
+  const { data: dbFacts = [], isLoading } = useQuery<FactWithCommentCount[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -60,7 +60,7 @@ export default function LinguisticsPage() {
         betaOnly: fact.betaOnly ?? false,
         revisionYear: fact.revisionYear ?? undefined,
         taughtUntilYear: fact.taughtUntilYear ?? undefined,
-        commentCount: (fact as any).commentCount ?? 0,
+        commentCount: fact.commentCount ?? 0,
       }));
   }, [dbFacts]);
 

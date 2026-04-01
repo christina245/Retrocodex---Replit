@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Fact } from "@shared/schema";
+import type { Fact, FactWithCommentCount } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -33,9 +33,9 @@ import photoTechnology from "@assets/tech_1764816085490.png";
 import photoHolidays from "@assets/holidays_1766472598101.png";
 
 interface SearchResult {
-  facts: Fact[];
+  facts: FactWithCommentCount[];
   matchingSubcategories: string[];
-  tagOnlyFacts: Fact[];
+  tagOnlyFacts: FactWithCommentCount[];
 }
 
 interface SearchFact extends CategoryFact {
@@ -153,7 +153,7 @@ export default function SearchResultsPage() {
       link: `/fact/${fact.slug}`,
       coverPhoto: fact.coverPhoto || undefined,
       betaOnly: fact.betaOnly ?? false,
-      commentCount: (fact as any).commentCount ?? 0,
+      commentCount: fact.commentCount ?? 0,
       matchType: 'text' as const,
     }));
 
@@ -166,7 +166,7 @@ export default function SearchResultsPage() {
       link: `/fact/${fact.slug}`,
       coverPhoto: fact.coverPhoto || undefined,
       betaOnly: fact.betaOnly ?? false,
-      commentCount: (fact as any).commentCount ?? 0,
+      commentCount: fact.commentCount ?? 0,
       matchType: 'tag' as const,
     }));
 

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Fact } from "@shared/schema";
+import type { Fact, FactWithCommentCount } from "@shared/schema";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -35,7 +35,7 @@ export default function FactsByTagPage() {
 
   const tagName = tagSlug ? tagSlug.replace(/-/g, ' ') : '';
 
-  const { data: dbFacts = [], isLoading } = useQuery<Fact[]>({
+  const { data: dbFacts = [], isLoading } = useQuery<FactWithCommentCount[]>({
     queryKey: ["/api/facts/by-tag", tagSlug],
     queryFn: async () => {
       const response = await fetch(`/api/facts/by-tag/${tagSlug}`);
@@ -55,7 +55,7 @@ export default function FactsByTagPage() {
       link: `/fact/${fact.slug}`,
       coverPhoto: fact.coverPhoto || undefined,
       betaOnly: fact.betaOnly ?? false,
-      commentCount: (fact as any).commentCount ?? 0,
+      commentCount: fact.commentCount ?? 0,
     }));
   }, [dbFacts]);
 

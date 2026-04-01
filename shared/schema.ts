@@ -216,6 +216,7 @@ export const insertFactSchema = z.object({
 
 export type InsertFact = z.infer<typeof insertFactSchema>;
 export type Fact = typeof facts.$inferSelect;
+export type FactWithCommentCount = Fact & { commentCount: number };
 
 // Blog post author types
 export const AUTHOR_TYPES = ["Staff", "Guest"] as const;
