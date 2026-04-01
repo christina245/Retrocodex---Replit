@@ -1548,12 +1548,9 @@ export default function UserDashboard() {
 
                         if (localItems.length === 0) {
                           return (
-                            <div className="dashboard-feed-empty" data-testid="feed-empty-local">
-                              <MapPin size={40} className="dashboard-feed-empty-icon" />
-                              <p className="dashboard-feed-empty-title">No local activity yet</p>
-                              <p className="dashboard-feed-empty-desc">
-                                No other users with a matching public location have submitted topics or comments yet.
-                              </p>
+                            <div className="edit-requests-beta-state" data-testid="feed-empty-local">
+                              <img src={scrungyConfetti} alt="Scrungy the squirrel" className="edit-requests-beta-squirrel" />
+                              <p className="edit-requests-beta-text">There aren't any other users from your location yet. Scrungy's working on reaching out to them!</p>
                             </div>
                           );
                         }
