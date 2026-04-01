@@ -63,6 +63,7 @@ export default function HealthFitnessPage() {
         betaOnly: fact.betaOnly || false,
         revisionYear: fact.revisionYear ?? undefined,
         taughtUntilYear: fact.taughtUntilYear ?? undefined,
+        commentCount: (fact as any).commentCount ?? 0,
       }));
   }, [dbFacts]);
 

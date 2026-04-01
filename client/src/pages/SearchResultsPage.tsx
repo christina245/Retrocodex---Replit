@@ -152,7 +152,8 @@ export default function SearchResultsPage() {
       dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
       link: `/fact/${fact.slug}`,
       coverPhoto: fact.coverPhoto || undefined,
-      betaOnly: false,
+      betaOnly: fact.betaOnly ?? false,
+      commentCount: (fact as any).commentCount ?? 0,
       matchType: 'text' as const,
     }));
 
@@ -164,7 +165,8 @@ export default function SearchResultsPage() {
       dateAdded: fact.createdAt ? new Date(fact.createdAt).toISOString().split('T')[0] : undefined,
       link: `/fact/${fact.slug}`,
       coverPhoto: fact.coverPhoto || undefined,
-      betaOnly: false,
+      betaOnly: fact.betaOnly ?? false,
+      commentCount: (fact as any).commentCount ?? 0,
       matchType: 'tag' as const,
     }));
 

@@ -88,7 +88,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
     setLocation(`${factLink}#comments`);
   };
 
-  const count = fact.commentCount ?? 0;
+  const count = fact.betaOnly ? 0 : (fact.commentCount ?? 0);
   const commentLabel = count === 1 ? "1 comment" : `${count} comments`;
   
   return (
