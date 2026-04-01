@@ -561,6 +561,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/facts/popular"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
       if (!variables.parentId) {
         setInputBody("");
         setInputError(null);
@@ -578,6 +579,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/facts/popular"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
       setPendingDelete(null);
     },
     onError: () => setPendingDelete(null),
