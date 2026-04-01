@@ -1,17 +1,23 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, facts, factFollows } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import { eq, gte, count, and, sql, desc } from "drizzle-orm";
+import { eq, gte, count, and, sql, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
-import { sendMail, buildSubmissionConfirmationEmail } from "./mailer";
-import { sendVerificationEmail } from "./sendgrid";
+import {
+  sendVerificationEmail,
+  sendSubmissionConfirmationEmail,
+  sendSubmissionReviewingEmail,
+  sendSubmissionPublishedEmail,
+  sendFactUpdateEmail,
+  buildFactUrl,
+} from "./sendgrid";
 import crypto from "crypto";
 
 declare module "express-session" {
@@ -1546,7 +1552,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         })
         .returning();
 
-      // Send confirmation email — fire and forget, never blocks the response
+      // Send confirmation email via SendGrid — fire and forget, never blocks the response
       (async () => {
         try {
           const [account] = await db
@@ -1556,11 +1562,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             .limit(1);
 
           if (account?.email) {
-            const { subject, text, html } = buildSubmissionConfirmationEmail(data.mythHeader);
-            await sendMail({ to: account.email, subject, text, html });
+            await sendSubmissionConfirmationEmail(account.email, {
+              mythHeader: data.mythHeader,
+              mythDetails: data.mythDetails || "",
+              truthHeader: data.truthHeader,
+              truthDetails: data.truthDetails || "",
+            });
           }
         } catch (mailErr) {
-          console.error("[mailer] Submission confirmation email failed:", mailErr);
+          console.error("[sendgrid] Submission confirmation email failed:", mailErr);
         }
       })();
 
@@ -1657,14 +1667,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // PATCH /api/submissions/:id — admin: update status, adminNote, or draftData
+  // PATCH /api/submissions/:id — admin: update status, adminNote, draftData, or publishedFactId
   app.patch("/api/submissions/:id", requireAuth, async (req, res) => {
     try {
       const { id } = req.params;
-      const { status, adminNote, draftData } = z.object({
+      const { status, adminNote, draftData, publishedFactId } = z.object({
         status: z.enum(["pending", "saved", "rejected", "published"]).optional(),
         adminNote: z.string().optional(),
         draftData: z.record(z.any()).optional(),
+        publishedFactId: z.string().optional(),
       }).parse(req.body);
 
       if (status === "rejected" && !adminNote) {
@@ -1675,6 +1686,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (status !== undefined) updates.status = status;
       if (adminNote !== undefined) updates.adminNote = adminNote;
       if (draftData !== undefined) updates.draftData = draftData;
+      if (publishedFactId !== undefined) updates.publishedFactId = publishedFactId;
 
       const [updated] = await db
         .update(factSubmissions)
@@ -1685,6 +1697,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!updated) {
         return res.status(404).json({ message: "Submission not found." });
       }
+
+      // Fire status-change emails asynchronously — never blocks the response
+      if (status === "saved" || status === "published") {
+        (async () => {
+          try {
+            const [account] = await db
+              .select({ email: userAccounts.email })
+              .from(userAccounts)
+              .where(eq(userAccounts.id, updated.userId))
+              .limit(1);
+
+            if (!account?.email) return;
+
+            if (status === "saved") {
+              await sendSubmissionReviewingEmail(account.email, {
+                mythHeader: updated.mythHeader,
+                mythDetails: updated.mythDetails || "",
+                truthHeader: updated.truthHeader,
+                truthDetails: updated.truthDetails || "",
+              });
+            } else if (status === "published") {
+              const factId = publishedFactId ?? updated.publishedFactId;
+              if (factId) {
+                const [publishedFact] = await db
+                  .select({
+                    slug: facts.slug,
+                    mythHeader: facts.mythHeader,
+                    mythDetails: facts.mythDetails,
+                    truthHeader: facts.truthHeader,
+                    truthDetails: facts.truthDetails,
+                  })
+                  .from(facts)
+                  .where(eq(facts.id, factId))
+                  .limit(1);
+
+                if (publishedFact) {
+                  await sendSubmissionPublishedEmail(account.email, {
+                    mythHeader: publishedFact.mythHeader,
+                    mythDetails: publishedFact.mythDetails || "",
+                    truthHeader: publishedFact.truthHeader,
+                    truthDetails: publishedFact.truthDetails || "",
+                    factUrl: buildFactUrl(publishedFact.slug),
+                  });
+                }
+              }
+            }
+          } catch (mailErr) {
+            console.error("[sendgrid] Submission status email failed:", mailErr);
+          }
+        })();
+      }
+
       return res.json(updated);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -2138,7 +2202,71 @@ Sitemap: ${SITE_URL}/sitemap.xml
         })).min(1, "At least one field update is required"),
       }).parse(req.body);
 
-      await storage.createFactUpdateBatch(req.params.id, fields);
+      const factId = req.params.id;
+      await storage.createFactUpdateBatch(factId, fields);
+
+      // Fan out fact update emails to followers — fire and forget
+      (async () => {
+        try {
+          const [factRow] = await db
+            .select({ slug: facts.slug, mythHeader: facts.mythHeader })
+            .from(facts)
+            .where(eq(facts.id, factId))
+            .limit(1);
+
+          if (!factRow) return;
+
+          const followerRows = await db
+            .select({ email: userAccounts.email })
+            .from(factFollows)
+            .innerJoin(userAccounts, eq(userAccounts.id, factFollows.userId))
+            .where(eq(factFollows.factId, factId));
+
+          if (followerRows.length === 0) return;
+
+          const updatesHtml = fields.map((f) => {
+            const labels: Record<string, string> = {
+              mythHeader:    "Myth/false belief updated:",
+              mythDetails:   "Myth details updated:",
+              truthHeader:   "Current consensus as of 2026 updated:",
+              truthDetails:  "Consensus details updated:",
+              nuanceEntry:   "Nuance added:",
+            };
+
+            if (f.updateType === "timelineEntry") {
+              const c = f.content as { year?: string; description?: string };
+              const year = c?.year ?? "";
+              const desc = c?.description ?? "";
+              return `<p><strong>Timeline revision (${year}):</strong><br>${desc}</p>`;
+            }
+
+            if (f.updateType === "nuanceEntry") {
+              const c = f.content as { type?: string; body?: string };
+              const label = c?.type ? `${c.type}` : "";
+              return `<p><strong>Nuance added${label ? ` — ${label}` : ""}:</strong><br>${c?.body ?? ""}</p>`;
+            }
+
+            const label = labels[f.updateType] ?? "Updated:";
+            const text = typeof f.content === "string" ? f.content : JSON.stringify(f.content);
+            return `<p><strong>${label}</strong><br>${text}</p>`;
+          }).join("");
+
+          const factUrl = buildFactUrl(factRow.slug);
+
+          await Promise.allSettled(
+            followerRows
+              .filter((r) => !!r.email)
+              .map((r) => sendFactUpdateEmail(r.email!, {
+                factMythHeader: factRow.mythHeader,
+                factUrl,
+                updatesHtml,
+              }))
+          );
+        } catch (mailErr) {
+          console.error("[sendgrid] Fact update emails failed:", mailErr);
+        }
+      })();
+
       return res.json({ message: "Fact updates published" });
     } catch (error) {
       if (error instanceof z.ZodError) {

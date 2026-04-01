@@ -295,6 +295,7 @@ export const factSubmissions = pgTable("fact_submissions", {
   status: text("status").notNull().default("pending"),
   adminNote: text("admin_note"),
   draftData: jsonb("draft_data"),
+  publishedFactId: varchar("published_fact_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
