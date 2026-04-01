@@ -377,7 +377,7 @@ export default function SingleFactPage() {
             <img src={envelopeImage} alt="" className="follow-fact-modal-image" />
             <h2 className="follow-fact-modal-title">Follow this topic</h2>
             <p className="follow-fact-modal-body">
-              You'll receive an email to <strong>{user?.email ?? "your email"}</strong> whenever this topic is updated or evolves. Stay informed as information changes over time.
+              You'll receive an email to <strong>{user?.email ?? "your email"}</strong> whenever this topic is updated or evolves. 
             </p>
             <div className="follow-fact-modal-actions">
               <button

@@ -19,6 +19,7 @@ export default function SubmitFactPage() {
 
   const handleSubmitClick = () => {
     if (isLoggedIn) {
+      window.scrollTo(0, 0);
       navigate("/submit/form");
     } else {
       setShowSignIn(true);

@@ -96,6 +96,7 @@ export default function FactSubmissionFormPage() {
 
       resetForm();
       setSubmitted(true);
+      window.scrollTo(0, 0);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "";
       if (message.startsWith("429:")) {

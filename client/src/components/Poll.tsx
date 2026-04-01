@@ -170,7 +170,7 @@ export function Poll({ question, options, factId, onLoginClick, onVerifyClick }:
         <div className="poll-location-section" data-testid="poll-location-section">
           <div className="poll-location-col poll-location-col--wide">
             <label className="poll-location-label" htmlFor="poll-location-select">
-              Where did you learn this?
+              I learned this in:
             </label>
             <select
               id="poll-location-select"
@@ -195,7 +195,7 @@ export function Poll({ question, options, factId, onLoginClick, onVerifyClick }:
           </div>
           <div className="poll-location-col poll-location-col--narrow">
             <label className="poll-location-label" htmlFor="poll-decade-select">
-              In which decade?
+              In this decade:
             </label>
             <select
               id="poll-decade-select"
