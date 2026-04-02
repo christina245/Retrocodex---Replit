@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, comments, facts, factFollows } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, comments, facts, factFollows, passwordResetTokens } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -19,6 +19,7 @@ import {
   sendNewFollowerEmail,
   sendNewCommentEmail,
   sendNewReplyEmail,
+  sendPasswordResetEmail,
   buildFactUrl,
   buildDashboardUrl,
   buildProfileUrl,
@@ -455,6 +456,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.clearCookie("connect.sid");
       res.json({ message: "Logged out" });
     });
+  });
+
+  // POST /api/auth/forgot-password — generate reset token and send email
+  app.post("/api/auth/forgot-password", async (req, res) => {
+    const ip = getClientIP(req);
+    if (isAuthRateLimited(ip)) {
+      return res.status(429).json({ message: "Too many attempts. Please try again later." });
+    }
+    try {
+      const { email } = req.body;
+      if (!email || typeof email !== "string") {
+        return res.status(400).json({ message: "Email is required." });
+      }
+      const normalizedEmail = email.toLowerCase().trim();
+      const [account] = await db.select({ id: userAccounts.id })
+        .from(userAccounts)
+        .where(eq(userAccounts.email, normalizedEmail))
+        .limit(1);
+      if (account) {
+        const token = crypto.randomBytes(32).toString("hex");
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+        await db.delete(passwordResetTokens)
+          .where(and(eq(passwordResetTokens.userId, account.id), eq(passwordResetTokens.used, false)));
+        await db.insert(passwordResetTokens).values({ userId: account.id, token, expiresAt });
+        const baseUrl = (process.env.APP_URL || "https://theretrocodex.com").replace(/\/$/, "");
+        const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+        sendPasswordResetEmail(normalizedEmail, resetUrl).catch((err) => {
+          console.error("[sendgrid] Failed to send password reset email:", err?.response?.body || err);
+        });
+      }
+      recordAuthAttempt(ip);
+      return res.json({ message: "If that email is registered, a reset link has been sent." });
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      res.status(500).json({ message: "Something went wrong. Please try again." });
+    }
+  });
+
+  // POST /api/auth/reset-password — validate token and update password
+  app.post("/api/auth/reset-password", async (req, res) => {
+    try {
+      const { token, password } = req.body;
+      if (!token || !password) {
+        return res.status(400).json({ message: "Token and password are required." });
+      }
+      if (password.length < 8) {
+        return res.status(400).json({ message: "Password must be at least 8 characters." });
+      }
+      const [resetToken] = await db.select()
+        .from(passwordResetTokens)
+        .where(eq(passwordResetTokens.token, token))
+        .limit(1);
+      if (!resetToken || resetToken.used || resetToken.expiresAt < new Date()) {
+        return res.status(400).json({ message: "This reset link is invalid or has expired." });
+      }
+      const passwordHash = await bcrypt.hash(password, 12);
+      await db.update(userAccounts).set({ passwordHash }).where(eq(userAccounts.id, resetToken.userId));
+      await db.update(passwordResetTokens).set({ used: true }).where(eq(passwordResetTokens.id, resetToken.id));
+      return res.json({ message: "Password updated successfully." });
+    } catch (error) {
+      console.error("Reset password error:", error);
+      res.status(500).json({ message: "Something went wrong. Please try again." });
+    }
   });
 
   // GET /api/me — returns current session user or 401

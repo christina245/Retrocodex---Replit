@@ -38,6 +38,8 @@ import TechnologyPage from "@/pages/subcategory-pages/TechnologyPage";
 import HolidaysPage from "@/pages/subcategory-pages/HolidaysPage";
 import UserDashboard from "@/pages/UserDashboard";
 import PublicProfile from "@/pages/PublicProfile";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 
 function Router() {
   // Track page views when routes change
@@ -74,6 +76,8 @@ function Router() {
       <Route path="/search/:query" component={SearchResultsPage} />
       <Route path="/dashboard" component={UserDashboard} />
       <Route path="/user/:username" component={PublicProfile} />
+      <Route path="/forgot-password" component={ForgotPasswordPage} />
+      <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/decade/:decade" component={HomePage} />
       <Route component={NotFound} />
     </Switch>

@@ -11,10 +11,10 @@
 
 .fact-card {
   width: 515px;
-  height: 300px;
+  height: 310px;
   background: #fdfdfd;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-  border: 1.5px solid var(--card-category-color);
+  box-shadow: none;
+  border: 1px solid color-mix(in srgb, var(--card-category-color) 25%, transparent);
   border-radius: 8px;
   overflow: hidden;
   display: flex;

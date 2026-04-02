@@ -104,6 +104,16 @@ export const userAccounts = pgTable("user_accounts", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+// Password reset tokens
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => userAccounts.id, { onDelete: "cascade" }),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  used: boolean("used").notNull().default(false),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 // Public profile data tied to a user account
 export const userProfiles = pgTable("user_profiles", {
   id: varchar("id").primaryKey(),

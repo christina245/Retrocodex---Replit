@@ -21,6 +21,7 @@ const SUBMISSION_CONFIRMATION_TEMPLATE_ID = "d-387d05ac44ac453f81b2ac9e8de498db"
 const SUBMISSION_REVIEWING_TEMPLATE_ID  = "d-4aace1bea41145ec8e91078c654d8dcc";
 const SUBMISSION_PUBLISHED_TEMPLATE_ID  = "d-d6cf98bb71024e23bc6768e3cc4bd7e6";
 const FACT_UPDATE_TEMPLATE_ID           = "d-194e0c5efa484f96bf2314c4afc77658";
+const PASSWORD_RESET_TEMPLATE_ID            = "d-4ea15870bfe24e59a38e497deaac8be4";
 const NEW_FOLLOWER_TEMPLATE_ID          = "d-8e043d858268484e843ca3099904cda0";
 const NEW_COMMENT_TEMPLATE_ID           = "d-f3ab4f4127ab4f16bfb00808ce987437";
 const NEW_REPLY_TEMPLATE_ID             = "d-cfa7337db2954836ba7a8c5e35c1b597";
@@ -88,6 +89,17 @@ export async function sendFactUpdateEmail(
     from: FROM(),
     templateId: FACT_UPDATE_TEMPLATE_ID,
     dynamicTemplateData: data,
+  });
+}
+
+export async function sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {
+  init();
+  if (!initialized) return;
+  await sgMail.send({
+    to,
+    from: FROM(),
+    templateId: PASSWORD_RESET_TEMPLATE_ID,
+    dynamicTemplateData: { resetUrl },
   });
 }
 

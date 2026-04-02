@@ -1114,6 +1114,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                       type="button"
                       className="signin-forgot"
                       data-testid="button-forgot-password"
+                      onClick={() => { onClose(); navigate("/forgot-password"); }}
                     >
                       Reset password
                     </button>
