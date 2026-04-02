@@ -21,6 +21,9 @@ const SUBMISSION_CONFIRMATION_TEMPLATE_ID = "d-387d05ac44ac453f81b2ac9e8de498db"
 const SUBMISSION_REVIEWING_TEMPLATE_ID  = "d-4aace1bea41145ec8e91078c654d8dcc";
 const SUBMISSION_PUBLISHED_TEMPLATE_ID  = "d-d6cf98bb71024e23bc6768e3cc4bd7e6";
 const FACT_UPDATE_TEMPLATE_ID           = "d-194e0c5efa484f96bf2314c4afc77658";
+const NEW_FOLLOWER_TEMPLATE_ID          = "d-8e043d858268484e843ca3099904cda0";
+const NEW_COMMENT_TEMPLATE_ID           = "d-f3ab4f4127ab4f16bfb00808ce987437";
+const NEW_REPLY_TEMPLATE_ID             = "d-cfa7337db2954836ba7a8c5e35c1b597";
 
 interface SubmissionFields {
   mythHeader: string;
@@ -88,6 +91,56 @@ export async function sendFactUpdateEmail(
   });
 }
 
+export async function sendNewFollowerEmail(
+  to: string,
+  data: { followerUsername: string; followerAvatarUrl: string | null; followerProfileUrl: string; dashboardUrl: string },
+): Promise<void> {
+  init();
+  if (!initialized) return;
+  await sgMail.send({
+    to,
+    from: FROM(),
+    templateId: NEW_FOLLOWER_TEMPLATE_ID,
+    dynamicTemplateData: data,
+  });
+}
+
+export async function sendNewCommentEmail(
+  to: string,
+  data: { commenterUsername: string; commenterAvatarUrl: string | null; factMythHeader: string; commentBody: string; factUrl: string; dashboardUrl: string },
+): Promise<void> {
+  init();
+  if (!initialized) return;
+  await sgMail.send({
+    to,
+    from: FROM(),
+    templateId: NEW_COMMENT_TEMPLATE_ID,
+    dynamicTemplateData: data,
+  });
+}
+
+export async function sendNewReplyEmail(
+  to: string,
+  data: { replierUsername: string; replierAvatarUrl: string | null; factMythHeader: string; replyBody: string; parentBody: string; factUrl: string; dashboardUrl: string },
+): Promise<void> {
+  init();
+  if (!initialized) return;
+  await sgMail.send({
+    to,
+    from: FROM(),
+    templateId: NEW_REPLY_TEMPLATE_ID,
+    dynamicTemplateData: data,
+  });
+}
+
 export function buildFactUrl(slug: string): string {
   return `${BASE_URL()}/fact/${slug}`;
+}
+
+export function buildDashboardUrl(): string {
+  return `${BASE_URL()}/dashboard`;
+}
+
+export function buildProfileUrl(username: string): string {
+  return `${BASE_URL()}/profile/${encodeURIComponent(username)}`;
 }

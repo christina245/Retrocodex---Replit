@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, facts, factFollows } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, comments, facts, factFollows } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -16,7 +16,12 @@ import {
   sendSubmissionReviewingEmail,
   sendSubmissionPublishedEmail,
   sendFactUpdateEmail,
+  sendNewFollowerEmail,
+  sendNewCommentEmail,
+  sendNewReplyEmail,
   buildFactUrl,
+  buildDashboardUrl,
+  buildProfileUrl,
 } from "./sendgrid";
 import crypto from "crypto";
 
@@ -630,6 +635,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await storage.followUser(req.session.userId!, userId);
       const followerCount = await storage.getFollowerCount(userId);
+
+      // Fire-and-forget: new follower email to the target user
+      (async () => {
+        try {
+          const [targetAccount] = await db.select({ email: userAccounts.email })
+            .from(userAccounts)
+            .where(eq(userAccounts.id, userId))
+            .limit(1);
+          if (!targetAccount?.email) return;
+          const [followerProfile] = await db.select({ username: userProfiles.username, avatarUrl: userProfiles.avatarUrl })
+            .from(userProfiles)
+            .where(eq(userProfiles.id, req.session.userId!))
+            .limit(1);
+          if (!followerProfile?.username) return;
+          await sendNewFollowerEmail(targetAccount.email, {
+            followerUsername: followerProfile.username,
+            followerAvatarUrl: followerProfile.avatarUrl ?? null,
+            followerProfileUrl: buildProfileUrl(followerProfile.username),
+            dashboardUrl: buildDashboardUrl(),
+          });
+        } catch (mailErr) {
+          console.error("[sendgrid] New follower email failed:", mailErr);
+        }
+      })();
+
       return res.json({ isFollowing: true, followerCount });
     } catch (error) {
       console.error("POST /api/follow error:", error);
@@ -2104,6 +2134,74 @@ Sitemap: ${SITE_URL}/sitemap.xml
       const factId = req.params.id;
       const data = insertCommentSchema.parse(req.body);
       const comment = await storage.createComment(req.session.userId!, { ...data, factId });
+
+      // Fire-and-forget: comment or reply email
+      (async () => {
+        try {
+          const commenterId = req.session.userId!;
+          // Fetch commenter profile once — needed for both branches
+          const [commenterProfile] = await db.select({ username: userProfiles.username, avatarUrl: userProfiles.avatarUrl })
+            .from(userProfiles)
+            .where(eq(userProfiles.id, commenterId))
+            .limit(1);
+          if (!commenterProfile?.username) return;
+
+          // Fetch the fact's myth header and slug — needed for both branches
+          const [factRow] = await db.select({ mythHeader: facts.mythHeader, slug: facts.slug })
+            .from(facts)
+            .where(eq(facts.id, factId))
+            .limit(1);
+          if (!factRow) return;
+          const factUrl = buildFactUrl(factRow.slug);
+
+          if (!data.parentId) {
+            // Top-level comment: notify the original fact submitter
+            const [submission] = await db.select({ userId: factSubmissions.userId })
+              .from(factSubmissions)
+              .where(and(eq(factSubmissions.publishedFactId, factId), eq(factSubmissions.status, "published")))
+              .orderBy(desc(factSubmissions.createdAt))
+              .limit(1);
+            if (!submission?.userId || submission.userId === commenterId) return;
+            const [submitterAccount] = await db.select({ email: userAccounts.email })
+              .from(userAccounts)
+              .where(eq(userAccounts.id, submission.userId))
+              .limit(1);
+            if (!submitterAccount?.email) return;
+            await sendNewCommentEmail(submitterAccount.email, {
+              commenterUsername: commenterProfile.username,
+              commenterAvatarUrl: commenterProfile.avatarUrl ?? null,
+              factMythHeader: factRow.mythHeader,
+              commentBody: comment.body,
+              factUrl,
+              dashboardUrl: buildDashboardUrl(),
+            });
+          } else {
+            // Reply: notify the parent comment's author
+            const [parentComment] = await db.select({ userId: comments.userId, body: comments.body })
+              .from(comments)
+              .where(eq(comments.id, data.parentId))
+              .limit(1);
+            if (!parentComment?.userId || parentComment.userId === commenterId) return;
+            const [parentAuthorAccount] = await db.select({ email: userAccounts.email })
+              .from(userAccounts)
+              .where(eq(userAccounts.id, parentComment.userId))
+              .limit(1);
+            if (!parentAuthorAccount?.email) return;
+            await sendNewReplyEmail(parentAuthorAccount.email, {
+              replierUsername: commenterProfile.username,
+              replierAvatarUrl: commenterProfile.avatarUrl ?? null,
+              factMythHeader: factRow.mythHeader,
+              replyBody: comment.body,
+              parentBody: parentComment.body,
+              factUrl,
+              dashboardUrl: buildDashboardUrl(),
+            });
+          }
+        } catch (mailErr) {
+          console.error("[sendgrid] Comment/reply email failed:", mailErr);
+        }
+      })();
+
       return res.status(201).json(comment);
     } catch (error) {
       if (error instanceof z.ZodError) {
