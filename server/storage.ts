@@ -166,6 +166,11 @@ export interface IStorage {
   // Fact updates
   createFactUpdateBatch(factId: string, updates: { updateType: UpdateType; content: unknown }[]): Promise<void>;
   getFactUpdatesFeed(userId: string): Promise<FactUpdateWithFact[]>;
+
+  // Unified activity notification feed
+  getNewFollowers(userId: string): Promise<{ followerId: string; followerUsername: string | null; followerAvatarUrl: string | null; createdAt: Date }[]>;
+  getUnifiedActivityFeed(userId: string, page: number, limit: number): Promise<{ items: import("@shared/schema").UnifiedNotification[]; total: number; page: number; totalPages: number }>;
+  getActivityCount(userId: string, since: Date): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1373,6 +1378,179 @@ export class DatabaseStorage implements IStorage {
       factMythHeader: r.factMythHeader,
       factCoverPhoto: r.factCoverPhoto ?? null,
     }));
+  }
+
+  async getNewFollowers(userId: string): Promise<{ followerId: string; followerUsername: string | null; followerAvatarUrl: string | null; createdAt: Date }[]> {
+    const rows = await db
+      .select({
+        followerId: follows.followerId,
+        followerUsername: userProfiles.username,
+        followerAvatarUrl: userProfiles.avatarUrl,
+        createdAt: follows.createdAt,
+      })
+      .from(follows)
+      .leftJoin(userProfiles, eq(userProfiles.id, follows.followerId))
+      .where(eq(follows.followeeId, userId))
+      .orderBy(desc(follows.createdAt));
+    return rows.map(r => ({
+      followerId: r.followerId,
+      followerUsername: r.followerUsername ?? null,
+      followerAvatarUrl: r.followerAvatarUrl ?? null,
+      createdAt: r.createdAt,
+    }));
+  }
+
+  async getUnifiedActivityFeed(userId: string, page: number, limit: number): Promise<{ items: import("@shared/schema").UnifiedNotification[]; total: number; page: number; totalPages: number }> {
+    const [submissions, commentNotifs, replyNotifs, factUpdateNotifs, newFollowers] = await Promise.all([
+      db.select({
+        id: factSubmissions.id,
+        mythHeader: factSubmissions.mythHeader,
+        truthHeader: factSubmissions.truthHeader,
+        adminNote: factSubmissions.adminNote,
+        publishedFactId: factSubmissions.publishedFactId,
+        status: factSubmissions.status,
+        updatedAt: factSubmissions.updatedAt,
+      })
+        .from(factSubmissions)
+        .where(and(
+          eq(factSubmissions.userId, userId),
+          inArray(factSubmissions.status, ["saved", "published", "rejected"]),
+        ))
+        .orderBy(desc(factSubmissions.updatedAt)),
+      this.getNotificationComments(userId),
+      this.getNotificationReplies(userId),
+      this.getFactUpdatesFeed(userId),
+      this.getNewFollowers(userId),
+    ]);
+
+    const all: import("@shared/schema").UnifiedNotification[] = [];
+
+    for (const s of submissions) {
+      const ts = (s.updatedAt as Date).toISOString();
+      if (s.status === "saved") {
+        all.push({ type: "submission_reviewing", id: s.id, mythHeader: s.mythHeader, truthHeader: s.truthHeader, timestamp: ts });
+      } else if (s.status === "published") {
+        all.push({ type: "submission_published", id: s.id, mythHeader: s.mythHeader, publishedFactId: s.publishedFactId ?? null, timestamp: ts });
+      } else if (s.status === "rejected") {
+        all.push({ type: "submission_rejected", id: s.id, mythHeader: s.mythHeader, adminNote: s.adminNote ?? null, timestamp: ts });
+      }
+    }
+
+    for (const c of commentNotifs) {
+      all.push({
+        type: "comment",
+        commentId: c.commentId,
+        body: c.body,
+        factMythHeader: c.factMythHeader,
+        factSlug: c.factSlug,
+        factCoverPhoto: c.factCoverPhoto,
+        commenterUsername: c.commenterUsername,
+        commenterAvatarUrl: c.commenterAvatarUrl,
+        timestamp: (c.commentCreatedAt as Date).toISOString(),
+      });
+    }
+
+    for (const r of replyNotifs) {
+      all.push({
+        type: "reply",
+        replyId: r.replyId,
+        replyBody: r.replyBody,
+        parentBody: r.parentBody,
+        factMythHeader: r.factMythHeader,
+        factSlug: r.factSlug,
+        factCoverPhoto: r.factCoverPhoto,
+        replierUsername: r.replierUsername,
+        replierAvatarUrl: r.replierAvatarUrl,
+        timestamp: (r.replyCreatedAt as Date).toISOString(),
+      });
+    }
+
+    for (const u of factUpdateNotifs) {
+      all.push({
+        type: "fact_update",
+        id: u.id,
+        publishBatchId: u.publishBatchId,
+        updateType: u.updateType,
+        factMythHeader: u.factMythHeader,
+        factSlug: u.factSlug,
+        factCoverPhoto: u.factCoverPhoto,
+        timestamp: (u.publishedAt as Date).toISOString(),
+      });
+    }
+
+    for (const f of newFollowers) {
+      all.push({
+        type: "new_follower",
+        followerId: f.followerId,
+        followerUsername: f.followerUsername,
+        followerAvatarUrl: f.followerAvatarUrl,
+        timestamp: (f.createdAt as Date).toISOString(),
+      });
+    }
+
+    all.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+    const total = all.length;
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const offset = (page - 1) * limit;
+    const items = all.slice(offset, offset + limit);
+
+    return { items, total, page, totalPages };
+  }
+
+  async getActivityCount(userId: string, since: Date): Promise<number> {
+    const sinceIso = since.toISOString();
+    const [subCount, commentCount, replyCount, updateCount, followerCount] = await Promise.all([
+      db.select({ count: sql<number>`count(*)::int` })
+        .from(factSubmissions)
+        .where(and(
+          eq(factSubmissions.userId, userId),
+          inArray(factSubmissions.status, ["saved", "published", "rejected"]),
+          sql`${factSubmissions.updatedAt} > ${sinceIso}::timestamptz`,
+        )),
+      db.select({ count: sql<number>`count(*)::int` })
+        .from(comments)
+        .innerJoin(facts, eq(comments.factId, facts.id))
+        .where(and(
+          eq(facts.submittedByUserId, userId),
+          isNotNull(comments.userId),
+          ne(comments.userId, userId),
+          isNull(comments.parentId),
+          eq(comments.deletedByAdmin, false),
+          sql`${comments.createdAt} > ${sinceIso}::timestamptz`,
+        )),
+      db.select({ count: sql<number>`count(*)::int` })
+        .from(comments)
+        .innerJoin(alias(comments, "parent_comments"), eq(comments.parentId, sql`parent_comments.id`))
+        .where(and(
+          sql`parent_comments.user_id = ${userId}`,
+          isNotNull(comments.userId),
+          ne(comments.userId, userId),
+          eq(comments.deletedByAdmin, false),
+          sql`${comments.createdAt} > ${sinceIso}::timestamptz`,
+        )),
+      db.select({ count: sql<number>`count(*)::int` })
+        .from(factUpdates)
+        .innerJoin(factFollows, eq(factUpdates.factId, factFollows.factId))
+        .where(and(
+          eq(factFollows.userId, userId),
+          sql`${factUpdates.publishedAt} > ${sinceIso}::timestamptz`,
+        )),
+      db.select({ count: sql<number>`count(*)::int` })
+        .from(follows)
+        .where(and(
+          eq(follows.followeeId, userId),
+          sql`${follows.createdAt} > ${sinceIso}::timestamptz`,
+        )),
+    ]);
+
+    return (
+      (subCount[0]?.count ?? 0) +
+      (commentCount[0]?.count ?? 0) +
+      (replyCount[0]?.count ?? 0) +
+      (updateCount[0]?.count ?? 0) +
+      (followerCount[0]?.count ?? 0)
+    );
   }
 }
 

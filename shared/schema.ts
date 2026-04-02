@@ -297,6 +297,7 @@ export const factSubmissions = pgTable("fact_submissions", {
   draftData: jsonb("draft_data"),
   publishedFactId: varchar("published_fact_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const insertFactSubmissionSchema = z.object({
@@ -537,6 +538,23 @@ export type FactUpdateWithFact = FactUpdate & {
   factSlug: string;
   factMythHeader: string;
   factCoverPhoto: string | null;
+};
+
+// Unified notification types for the Activity bell tab
+export type UnifiedNotification =
+  | { type: 'submission_reviewing'; id: string; mythHeader: string; truthHeader: string; timestamp: string }
+  | { type: 'submission_published'; id: string; mythHeader: string; publishedFactId: string | null; timestamp: string }
+  | { type: 'submission_rejected'; id: string; mythHeader: string; adminNote: string | null; timestamp: string }
+  | { type: 'comment'; commentId: string; body: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; commenterUsername: string | null; commenterAvatarUrl: string | null; timestamp: string }
+  | { type: 'reply'; replyId: string; replyBody: string; parentBody: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; replierUsername: string | null; replierAvatarUrl: string | null; timestamp: string }
+  | { type: 'fact_update'; id: string; publishBatchId: string; updateType: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; timestamp: string }
+  | { type: 'new_follower'; followerId: string; followerUsername: string | null; followerAvatarUrl: string | null; timestamp: string };
+
+export type ActivityFeedResponse = {
+  items: UnifiedNotification[];
+  total: number;
+  page: number;
+  totalPages: number;
 };
 
 // Feed item type — union of comment, fact, and article activity

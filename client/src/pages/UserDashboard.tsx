@@ -10,7 +10,7 @@ import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";
-import type { Fact as DbFact, FeedItem, FactUpdateWithFact, UpdateType, FactWithCommentCount } from "@shared/schema";
+import type { Fact as DbFact, FeedItem, FactUpdateWithFact, UpdateType, FactWithCommentCount, ActivityFeedResponse, UnifiedNotification } from "@shared/schema";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/lib/auth";
@@ -35,8 +35,7 @@ import "./UserDashboard.css";
 
 type DashboardTab = "for-you" | "following" | "local" | "fact-updates";
 type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-requests" | "saved" | "settings";
-type NotificationsTab = "all" | "replies" | "comments";
-type ActivityTab = "submitted" | "approved" | "not-approved" | "comments" | "polls";
+type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
 type EditRequestsTab = "pending" | "approved" | "not-approved";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
 type SavedTab = "all" | "facts" | "articles" | "comments";
@@ -59,7 +58,6 @@ const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
   { id: "approved", label: "Approved" },
   { id: "not-approved", label: "Not Approved" },
   { id: "comments", label: "Comments" },
-  { id: "polls", label: "Polls" },
 ];
 
 const SAVED_TABS: { id: SavedTab; label: string }[] = [
@@ -750,7 +748,7 @@ export default function UserDashboard() {
   const [localPage, setLocalPage] = useState(1);
   const [hoveredFeedTab, setHoveredFeedTab] = useState<DashboardTab | null>(null);
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
-  const [notificationsTab, setNotificationsTab] = useState<NotificationsTab>("all");
+  const [notifPage, setNotifPage] = useState(1);
   const [activityTab, setActivityTab] = useState<ActivityTab>("submitted");
   const [submissionsPage, setSubmissionsPage] = useState(1);
   const [approvedPage, setApprovedPage] = useState(1);
@@ -764,7 +762,7 @@ export default function UserDashboard() {
   const [editBio, setEditBio] = useState("");
   const [allowFollows, setAllowFollows] = useState(() => user?.allowFollows ?? true);
   useEffect(() => { setAllowFollows(user?.allowFollows ?? true); }, [user?.allowFollows]);
-  const [followedBack, setFollowedBack] = useState<Record<string, boolean>>({});
+  const [followedBackIds, setFollowedBackIds] = useState<Record<string, boolean>>({});
   const [publicProfile, setPublicProfile] = useState(true);
   const [notifyFollows, setNotifyFollows] = useState(true);
   const [notifyComments, setNotifyComments] = useState(true);
@@ -809,12 +807,32 @@ export default function UserDashboard() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [savedArticlesSortOpen]);
+  const [activityLastSeenAt, setActivityLastSeenAt] = useState<string>(() => {
+    try {
+      return localStorage.getItem("activityLastSeenAt") || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    } catch {
+      return new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    }
+  });
+  useEffect(() => {
+    if (sideTab === "notifications") {
+      const now = new Date().toISOString();
+      try { localStorage.setItem("activityLastSeenAt", now); } catch {}
+      setActivityLastSeenAt(now);
+    }
+  }, [sideTab]);
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [topicsModalOpen, setTopicsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
-  const [notificationCount] = useState(3);
+  const { data: notifCountData } = useQuery<{ count: number }>({
+    queryKey: ["/api/notifications/count", activityLastSeenAt],
+    queryFn: () => fetch(`/api/notifications/count?since=${encodeURIComponent(activityLastSeenAt)}`, { credentials: "include" }).then(r => r.json()),
+    enabled: isLoggedIn,
+    staleTime: 60_000,
+  });
+  const notificationCount = notifCountData?.count ?? 0;
 
 
   const allCountries = [...PINNED_COUNTRIES, ...ALL_COUNTRIES];
@@ -907,57 +925,17 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
-  interface PollVoteItem {
-    id: string;
-    userId: string;
-    factId: string;
-    optionChosen: string;
-    locationChosen: string | null;
-    decadeChosen: string | null;
-    votedAt: string;
-    factTitle: string;
-    factSlug: string;
-    factCoverPhoto: string | null;
-  }
-
-  const { data: myPollVotes = [], isLoading: pollVotesLoading } = useQuery<PollVoteItem[]>({
-    queryKey: ["/api/poll-votes/me"],
+  const { data: activityFeed, isLoading: activityFeedLoading } = useQuery<ActivityFeedResponse>({
+    queryKey: ["/api/notifications/activity", notifPage],
+    queryFn: () => fetch(`/api/notifications/activity?page=${notifPage}`, { credentials: "include" }).then(r => r.json()),
     enabled: isLoggedIn,
   });
 
-  interface NotifCommentItem {
-    commentId: string;
-    body: string;
-    upvotes: number;
-    commentCreatedAt: string;
-    factMythHeader: string;
-    factSlug: string;
-    factCoverPhoto: string | null;
-    commenterUsername: string | null;
-    commenterAvatarUrl: string | null;
-  }
-
-  interface NotifReplyItem {
-    replyId: string;
-    replyBody: string;
-    replyCreatedAt: string;
-    replyUpvotes: number;
-    parentBody: string;
-    factMythHeader: string;
-    factSlug: string;
-    factCoverPhoto: string | null;
-    replierUsername: string | null;
-    replierAvatarUrl: string | null;
-  }
-
-  const { data: notifComments = [], isLoading: notifCommentsLoading } = useQuery<NotifCommentItem[]>({
-    queryKey: ["/api/notifications/comments"],
-    enabled: isLoggedIn,
-  });
-
-  const { data: notifReplies = [], isLoading: notifRepliesLoading } = useQuery<NotifReplyItem[]>({
-    queryKey: ["/api/notifications/replies"],
-    enabled: isLoggedIn,
+  const followBackMutation = useMutation({
+    mutationFn: (followerId: string) => apiRequest("POST", `/api/follow/${followerId}`),
+    onSuccess: (_data: unknown, followerId: string) => {
+      setFollowedBackIds(prev => ({ ...prev, [followerId]: true }));
+    },
   });
 
   interface MyCommentItem {
@@ -1192,25 +1170,6 @@ export default function UserDashboard() {
       setEditPlacesLived(editPlacesLived.filter((_, i) => i !== index));
     }
   };
-
-  const dummyActivityComments = [
-    {
-      id: "act-comment-1",
-      factTitle: "Christopher Columbus discovered the Americas in 1492",
-      factLink: "/fact/christopher-columbus-discovered-americas",
-      coverPhoto: "/uploads/1764719426643-922952402.png",
-      comment: "This is one of the most persistent myths I grew up with. It wasn't until college that I learned about the Norse expeditions and the millions of Indigenous peoples who had been living there for thousands of years. History education really needs an overhaul.",
-      timestamp: "3 hours ago",
-    },
-    {
-      id: "act-comment-2",
-      factTitle: "Men and women have very different brains.",
-      factLink: "/fact/men-women-different-brains",
-      coverPhoto: "/uploads/1764752045366-476242776.png",
-      comment: "I was told this so many times by everybody growing up! I just thought it made sense because I saw so many differences in how men and women behaved. But the evidence is actually very clear that a lot of these distinctions come from socialization and not innate differences.",
-      timestamp: "1 day ago",
-    },
-  ];
 
   const pendingSubmissions = mySubmissions
     .filter(s => s.status === "pending" || s.status === "saved")
@@ -1779,737 +1738,329 @@ export default function UserDashboard() {
               )}
 
               {sideTab === "notifications" && (
-                <div className="notifications-page" data-testid="notifications-page">
-                  <div className="notifications-tabs-wrapper">
-                    <nav className="notifications-tabs" data-testid="notifications-tabs">
-                      {([
-                        { id: "all" as NotificationsTab, label: "All" },
-                        { id: "replies" as NotificationsTab, label: "Replies" },
-                        { id: "comments" as NotificationsTab, label: "Comments" },
-                      ]).map((tab) => (
-                        <button
-                          key={tab.id}
-                          className={`notifications-tab${notificationsTab === tab.id ? " notifications-tab-active" : ""}`}
-                          onClick={() => setNotificationsTab(tab.id)}
-                          data-testid={`button-notifications-tab-${tab.id}`}
-                        >
-                          <span>{tab.label}</span>
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-
-                  {notificationsTab === "all" && (
-                    <div className="following-feed" data-testid="activity-feed-all">
-
-                      {/* SAMPLE CARD — static placeholder for CSS styling, remove when live data is ready */}
-                      <div className="activity-post" data-testid="notif-sample-under-review">
-                        <div className="activity-post-icon-col">
-                          <SearchCheck size={40} strokeWidth={1.5} className="activity-status-icon" style={{ color: "#878787" }} />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <span className="activity-status-text" style={{ color: "#555" }}>Your submission is currently under review!</span>
-                            </div>
-                            <span className="following-post-timestamp">Mar 24</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <p style={{ margin: "0 0 0.5rem", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
-                            <p className="activity-submitted-label">You submitted:</p>
-                            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", marginBottom: "0.3rem" }}>
-                              <X size={13} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
-                              <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }} data-testid="notif-myth-sample">"Humans only use 10% of their brain"</p>
-                            </div>
-                            <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem" }}>
-                              <Check size={13} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
-                              <p style={{ margin: 0, fontSize: "0.9rem" }} data-testid="notif-truth-sample">Brain scans show activity across virtually all brain regions, even during sleep.</p>
-                            </div>
-                          </div>
-                        </div>
+                  <div className="notifications-page" data-testid="notifications-page">
+                    {activityFeedLoading ? (
+                      <p className="saved-empty-message" data-testid="text-activity-loading">Loading activity...</p>
+                    ) : !activityFeed || activityFeed.items.length === 0 ? (
+                      <div className="dashboard-feed-empty" data-testid="activity-empty">
+                        <BellRing size={40} strokeWidth={1.5} className="dashboard-feed-empty-icon" />
+                        <p className="dashboard-feed-empty-title">No notifications yet.</p>
+                        <p className="dashboard-feed-empty-desc">When others comment on your submissions, reply to your comments, follow you, or a fact you follow is updated, you'll see it here.</p>
                       </div>
-                      {/* END SAMPLE CARD */}
+                    ) : (
+                      <div className="following-feed" data-testid="activity-feed-all">
+                        {activityFeed.items.map((item: UnifiedNotification, idx: number) => {
+                          const timeAgo = (() => {
+                            const diff = Date.now() - new Date(item.timestamp).getTime();
+                            const m = Math.floor(diff / 60000);
+                            if (m < 1) return "just now";
+                            if (m < 60) return `${m} min ago`;
+                            const h = Math.floor(m / 60);
+                            if (h < 24) return `${h}h ago`;
+                            const d = Math.floor(h / 24);
+                            if (d < 30) return `${d}d ago`;
+                            return new Date(item.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                          })();
 
-                      {/* Live submission notifications */}
-                      {mySubmissions.filter(s => s.status === "saved").map(s => (
-                        <div key={`notif-saved-${s.id}`} className="activity-post" data-testid={`notif-under-review-${s.id}`}>
-                          <div className="activity-post-icon-col">
-                            <SearchCheck size={40} strokeWidth={1.5} className="activity-status-icon" style={{ color: "#878787" }} />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <span className="activity-status-text" style={{ color: "#555" }}>Your submission is currently under review!</span>
-                              </div>
-                              <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <p style={{ margin: "0 0 0.5rem", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
-                              <p className="activity-submitted-label">You submitted:</p>
-                              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", marginBottom: "0.3rem" }}>
-                                <X size={13} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
-                                <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }} data-testid={`notif-myth-${s.id}`}>"{s.mythHeader}"</p>
-                              </div>
-                              <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem" }}>
-                                <Check size={13} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
-                                <p style={{ margin: 0, fontSize: "0.9rem" }} data-testid={`notif-truth-${s.id}`}>{s.truthHeader}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-
-                      {mySubmissions.filter(s => s.status === "published").map(s => (
-                        <div key={`notif-pub-${s.id}`} className="activity-post" data-testid={`notif-published-${s.id}`}>
-                          <div className="activity-post-icon-col">
-                            <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <span className="activity-status-text activity-status-text-approved">Your submission has been published!</span>
-                              </div>
-                              <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }}>"{s.mythHeader}"</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-
-                      {mySubmissions.filter(s => s.status === "rejected").map(s => (
-                        <div key={`notif-rej-${s.id}`} className="activity-post" data-testid={`notif-rejected-${s.id}`}>
-                          <div className="activity-post-icon-col">
-                            <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
-                          </div>
-                          <div className="activity-post-main">
-                            <div className="activity-post-header">
-                              <div className="activity-post-header-text">
-                                <span className="activity-status-text activity-status-text-denied">Your post submission was not approved.</span>
-                              </div>
-                              <span className="following-post-timestamp">{new Date(s.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                            </div>
-                            <div className="activity-post-body">
-                              <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }}>"{s.mythHeader}"</p>
-                              {s.adminNote && (
-                                <div className="activity-admin-feedback" data-testid={`notif-admin-note-${s.id}`}>
-                                  <p className="activity-admin-feedback-text">{s.adminNote}</p>
+                          if (item.type === "submission_reviewing") {
+                            return (
+                              <div key={`sr-${item.id}-${idx}`} className="activity-post" data-testid={`notif-under-review-${item.id}`}>
+                                <div className="activity-post-icon-col">
+                                  <SearchCheck size={40} strokeWidth={1.5} className="activity-status-icon" style={{ color: "#878787" }} />
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-
-                      {/* Live poll vote notifications */}
-                      {myPollVotes.map((vote) => (
-                        <div key={`notif-poll-${vote.id}`} className="following-post" data-testid={`notif-poll-${vote.id}`}>
-                          <img
-                            src={user?.profilePhoto || placeholderPhoto}
-                            alt={user?.username || "You"}
-                            className="following-post-avatar"
-                          />
-                          <div className="following-post-main">
-                            <div className="following-post-header">
-                              <div className="following-post-header-text">
-                                <span className="following-post-username">{user?.username || "You"}</span>
-                                <span className="following-post-action">voted on a poll</span>
-                              </div>
-                              <span className="following-post-timestamp" data-testid={`notif-poll-time-${vote.id}`}>
-                                {(() => {
-                                  const diff = Date.now() - new Date(vote.votedAt).getTime();
-                                  const m = Math.floor(diff / 60000);
-                                  if (m < 1) return "just now";
-                                  if (m < 60) return `${m} min ago`;
-                                  const h = Math.floor(m / 60);
-                                  if (h < 24) return `${h}h ago`;
-                                  const d = Math.floor(h / 24);
-                                  if (d < 30) return `${d}d ago`;
-                                  return new Date(vote.votedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-                                })()}
-                              </span>
-                            </div>
-                            <div className="following-post-body">
-                              <div className="following-post-body-content">
-                                <div className="following-post-body-left">
-                                  <Link href={`/fact/${vote.factSlug}`} className="following-post-link">
-                                    <p className="fact-myth" data-testid={`notif-poll-fact-${vote.id}`}>"{vote.factTitle}"</p>
-                                  </Link>
-                                  <div className="following-poll-response" data-testid={`notif-poll-response-${vote.id}`}>
-                                    <p className="following-poll-question">Were you taught this information?</p>
-                                    <div className="following-poll-selection">
-                                      <div className="following-poll-radio-filled" />
-                                      <span className="following-poll-answer" data-testid={`notif-poll-answer-${vote.id}`}>{vote.optionChosen}</span>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      <span className="activity-status-text" style={{ color: "#555" }}>Your submission is currently under review!</span>
+                                    </div>
+                                    <span className="following-post-timestamp">{timeAgo}</span>
+                                  </div>
+                                  <div className="activity-post-body">
+                                    <p style={{ margin: "0 0 0.5rem", fontSize: "0.85rem", color: "var(--muted-foreground)" }}>We'll email you when we've made our edits and additions.</p>
+                                    <p className="activity-submitted-label">You submitted:</p>
+                                    <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", marginBottom: "0.3rem" }}>
+                                      <X size={13} style={{ color: "#e53e3e", flexShrink: 0, marginTop: "3px" }} />
+                                      <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }} data-testid={`notif-myth-${item.id}`}>"{item.mythHeader}"</p>
+                                    </div>
+                                    <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem" }}>
+                                      <Check size={13} style={{ color: "#38a169", flexShrink: 0, marginTop: "3px" }} />
+                                      <p style={{ margin: 0, fontSize: "0.9rem" }} data-testid={`notif-truth-${item.id}`}>{item.truthHeader}</p>
                                     </div>
                                   </div>
                                 </div>
-                                {vote.factCoverPhoto && (
-                                  <Link href={`/fact/${vote.factSlug}`} className="following-post-cover-link" data-testid={`notif-poll-cover-${vote.id}`}>
-                                    <img src={vote.factCoverPhoto} alt="" className="following-post-cover-photo" />
-                                  </Link>
-                                )}
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                            );
+                          }
 
-                      {/* 1. Username1 liked your comment on */}
-                      <div className="activity-post" data-testid="activity-post-1">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="Username1" className="activity-post-avatar" />
-                          <Heart size={20} className="activity-type-icon activity-type-heart" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/Username1" className="following-post-username" data-testid="link-user-Username1">Username1</Link>
-                              <span className="following-post-action">liked your comment on</span>
-                            </div>
-                            <span className="following-post-timestamp">2 mins ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/men-women-different-brains" className="following-post-link">
-                                  <p className="fact-myth">"Men and women have very different brains."</p>
-                                </Link>
-                                <p className="following-plain-comment" data-testid="activity-comment-1">I was told this so many times by everybody growing up! I just thought it made sense because I saw so many differences in how men and women behaved. But the evidence is actually very clear that a lot of these distinctions come from socialization and not innate differences.</p>
-                                <div className="comment-actions" data-testid="activity-comment-actions-1">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'activity-1' ? null : 'activity-1')} data-testid="button-reply-activity-1">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-activity-1">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-edit-activity-1">
-                                    <Pencil size={14} />
-                                    <span>Edit</span>
-                                  </button>
+                          if (item.type === "submission_published") {
+                            return (
+                              <div key={`sp-${item.id}-${idx}`} className="activity-post" data-testid={`notif-published-${item.id}`}>
+                                <div className="activity-post-icon-col">
+                                  <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
                                 </div>
-                                {activeReplyId === 'activity-1' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-activity-1">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-activity-1" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-activity-1">Reply</button>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      <span className="activity-status-text activity-status-text-approved">Your submission has been published!</span>
                                     </div>
+                                    <span className="following-post-timestamp">{timeAgo}</span>
                                   </div>
-                                )}
-                              </div>
-                              <Link href="/fact/men-women-different-brains" className="following-post-cover-link" data-testid="cover-link-activity-1">
-                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 2. Username2 commented on your submission */}
-                      <div className="activity-post" data-testid="activity-post-2">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="Username2" className="activity-post-avatar" />
-                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/Username2" className="following-post-username" data-testid="link-user-Username2">Username2</Link>
-                              <span className="following-post-action">commented on your submission</span>
-                            </div>
-                            <span className="following-post-timestamp">10 mins ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
-                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
-                                </Link>
-                                <p className="following-plain-comment" data-testid="activity-comment-2">Given how many spiders have crawled on me, I always believed this was true. I'm so happy to see it's been debunked. Although I have to admit, as someone who once woke up through an earthquake, I probably wouldn't wake up if a spider crawled on my face.</p>
-                                <div className="comment-actions" data-testid="activity-comment-actions-2">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'activity-2' ? null : 'activity-2')} data-testid="button-reply-activity-2">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-activity-2">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-activity-2">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
-                                  <div className="comment-ellipsis-wrapper">
-                                    <button className="comment-action comment-ellipsis-btn" onClick={() => setActiveEllipsisId(activeEllipsisId === 'activity-2' ? null : 'activity-2')} data-testid="button-ellipsis-activity-2">
-                                      <MoreHorizontal size={14} />
-                                    </button>
-                                    {activeEllipsisId === 'activity-2' && (
-                                      <div className="comment-ellipsis-dropdown" data-testid="dropdown-ellipsis-activity-2">
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-follow-comment-activity-2">
-                                          <BellPlus size={14} />
-                                          <span>Follow comment</span>
-                                        </button>
-                                        <button className="comment-ellipsis-item disabled-action" data-tooltip="Unavailable in beta" data-testid="button-report-activity-2">
-                                          <FlagTriangleRight size={14} />
-                                          <span>Report</span>
-                                        </button>
+                                  <div className="activity-post-body">
+                                    <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }} data-testid={`notif-myth-${item.id}`}>"{item.mythHeader}"</p>
+                                    {item.publishedFactId && (
+                                      <div className="activity-action-row" style={{ marginTop: "0.5rem" }}>
+                                        <Link href={`/fact/${item.publishedFactId}`} className="activity-learn-more-button" data-testid={`button-view-published-${item.id}`}>
+                                          <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
+                                          View published fact
+                                        </Link>
                                       </div>
                                     )}
                                   </div>
                                 </div>
-                                {activeReplyId === 'activity-2' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-activity-2">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-activity-2" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-activity-2">Reply</button>
-                                    </div>
-                                  </div>
-                                )}
                               </div>
-                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-activity-2">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                            );
+                          }
 
-                      {/* 3. Username3 started following you */}
-                      <div className="activity-post" data-testid="activity-post-3">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="Username3" className="activity-post-avatar" />
-                          <UserRoundPlus size={20} className="activity-type-icon activity-type-follow" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/Username3" className="following-post-username" data-testid="link-user-Username3">Username3</Link>
-                              <span className="following-post-action">started following you</span>
-                            </div>
-                            <span className="following-post-timestamp">30 mins ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <button
-                              className={`activity-follow-button${followedBack["Username3"] ? " activity-follow-button-following" : ""}`}
-                              onClick={() => setFollowedBack(prev => ({ ...prev, Username3: !prev.Username3 }))}
-                              data-testid="button-follow-back-Username3"
-                            >
-                              {followedBack["Username3"] ? "Following" : "Follow back"}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 4. Your fact submission was approved! */}
-                      <div className="activity-post" data-testid="activity-post-4">
-                        <div className="activity-post-icon-col">
-                          <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <span className="activity-status-text activity-status-text-approved">Your submission has been published!</span>
-                            </div>
-                            <span className="following-post-timestamp">1 hour ago</span>
-                          </div>
-                          <div className="activity-post-body following-post-factcard">
-                            <FactCard
-                              fact={{
-                                id: "columbus-americas",
-                                category: "HISTORY",
-                                categoryColor: "#D29E00",
-                                myth: "Christopher Columbus discovered the Americas in 1492.",
-                                truth: "Columbus only reached Central and South America where vast Indigenous civilizations had already established themselves over thousands of years.",
-                                link: "/fact/christopher-columbus-discovered-americas",
-                                coverPhoto: "/uploads/1764732977459-366971984.png",
-                              }}
-                              onSave={() => {}}
-                              onShare={() => {}}
-                              onComment={() => {}}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 5. Your edit request was approved! */}
-                      <div className="activity-post" data-testid="activity-post-5">
-                        <div className="activity-post-icon-col">
-                          <CircleCheckBig size={40} strokeWidth={1.5} className="activity-status-icon activity-status-approved" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <span className="activity-status-text activity-status-text-approved">Your edit request was approved!</span>
-                            </div>
-                            <span className="following-post-timestamp">2 hours ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/autism-broken-mirror-neurons" className="following-post-link">
-                                  <p className="fact-myth">"Autism is caused by broken mirror neurons."</p>
-                                </Link>
-                                <p className="activity-submitted-label">You submitted:</p>
-                                <p className="activity-submitted-text" data-testid="activity-submitted-5">Don't forget this: cite this 2020 study that further disproved it! Here's the study: https://pubmed.ncbi.nlm.nih.gov/30668956.</p>
-                                <div className="activity-action-row">
-                                  <Link href="/fact/autism-broken-mirror-neurons" className="activity-learn-more-button" data-testid="button-view-updated-entry-5">
-                                    <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
-                                    View updated entry
-                                  </Link>
+                          if (item.type === "submission_rejected") {
+                            return (
+                              <div key={`srej-${item.id}-${idx}`} className="activity-post" data-testid={`notif-rejected-${item.id}`}>
+                                <div className="activity-post-icon-col">
+                                  <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
                                 </div>
-                              </div>
-                              <Link href="/fact/autism-broken-mirror-neurons" className="following-post-cover-link" data-testid="cover-link-activity-5">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 6. Your edit request was not approved. */}
-                      <div className="activity-post" data-testid="activity-post-6">
-                        <div className="activity-post-icon-col">
-                          <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <span className="activity-status-text activity-status-text-denied">Your edit request was not approved.</span>
-                            </div>
-                            <span className="following-post-timestamp">3 hours ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/people-repress-traumatic-memories" className="following-post-link">
-                                  <p className="fact-myth">"People often repress traumatic memories."</p>
-                                </Link>
-                                <p className="activity-submitted-label">You submitted:</p>
-                                <p className="activity-submitted-text" data-testid="activity-submitted-6">There's actually plenty of evidence that people do repress traumatic memories! I know it's a popular trope in the media. If it's that popular, it must be true, right?</p>
-                                <div className="activity-action-row">
-                                  <button className="activity-learn-more-button" data-testid="button-view-submission-6">
-                                    <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
-                                    View submission
-                                  </button>
-                                </div>
-                              </div>
-                              <Link href="/fact/people-repress-traumatic-memories" className="following-post-cover-link" data-testid="cover-link-activity-6">
-                                <img src="/uploads/1764732977459-366971984.png" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 7. Your post submission was not approved (no cover photo) */}
-                      <div className="activity-post" data-testid="activity-post-7">
-                        <div className="activity-post-icon-col">
-                          <MonitorX size={40} strokeWidth={1.5} className="activity-status-icon activity-status-denied" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <span className="activity-status-text activity-status-text-denied">Your post submission was not approved.</span>
-                            </div>
-                            <span className="following-post-timestamp">5 hours ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <p className="activity-submitted-label">You submitted:</p>
-                            <Link href="/fact/hard-work-always-success" className="following-post-link">
-                              <p className="fact-myth">"Hard work will always result in success."</p>
-                            </Link>
-                            <div className="activity-submitted-revision">
-                              <Check size={16} className="activity-revision-check" />
-                              <p className="activity-truth-text">Success is so much more complicated than hard work. It's a mix of luck, family background, and education.</p>
-                            </div>
-                            <div className="activity-admin-feedback" data-testid="activity-admin-feedback-7">
-                              <p className="activity-admin-feedback-text">This submission reads more like a personal opinion than a verifiable fact. The claims made are subjective in nature and cannot be objectively measured or tested. We encourage submissions that present commonly held beliefs alongside evidence-based corrections.</p>
-                            </div>
-                            <div className="activity-action-row">
-                              <button className="activity-learn-more-button" data-testid="button-view-submission-7">
-                                <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
-                                View submission
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 8. Username5 replied to your comment on */}
-                      <div className="activity-post" data-testid="activity-post-8">
-                        <div className="activity-post-icon-col">
-                          <img src={placeholderPhoto} alt="username5" className="activity-post-avatar" />
-                          <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href="/user/username5" className="following-post-username" data-testid="link-user-username5">username5</Link>
-                              <span className="following-post-action">replied to your comment on</span>
-                            </div>
-                            <span className="following-post-timestamp">6 hours ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/swallow-spiders-in-sleep" className="following-post-link">
-                                  <p className="fact-myth">"Humans swallow an average of 8 spiders in their sleep every year."</p>
-                                </Link>
-                                <div className="activity-comment-thread">
-                                  <div className="activity-thread-comment">
-                                    <div className="activity-thread-author">
-                                      <span className="activity-thread-username">retrocodexadmin</span>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      <span className="activity-status-text activity-status-text-denied">Your post submission was not approved.</span>
                                     </div>
-                                    <div className="following-comment-quote">
-                                      <p className="following-comment-text">I wonder where this myth originated if it was never Snopes this entire time. Growing up in California, I heard it around when I was 10, but haven't talked to anyone else from other states and countries about it.</p>
-                                    </div>
+                                    <span className="following-post-timestamp">{timeAgo}</span>
                                   </div>
-                                  <div className="activity-thread-comment">
-                                    <div className="activity-thread-author">
-                                      <span className="activity-thread-username">username5</span>
-                                    </div>
-                                    <p className="following-plain-comment">This myth had to have come from the US or one of the colder countries. Where I'm from, spiders are often massive. You would definitely feel them even if they're just a foot away, lol</p>
+                                  <div className="activity-post-body">
+                                    <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }} data-testid={`notif-myth-${item.id}`}>"{item.mythHeader}"</p>
+                                    {item.adminNote && (
+                                      <div className="activity-admin-feedback" data-testid={`notif-admin-note-${item.id}`}>
+                                        <p className="activity-admin-feedback-text">{item.adminNote}</p>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
-                                <div className="comment-actions" data-testid="activity-comment-actions-8">
-                                  <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === 'activity-8' ? null : 'activity-8')} data-testid="button-reply-activity-8">
-                                    <CornerUpLeft size={14} />
-                                    <span>Reply</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-like-activity-8">
-                                    <Heart size={14} />
-                                    <span>0 likes</span>
-                                  </button>
-                                  <button className="comment-action disabled-action" data-testid="button-save-activity-8">
-                                    <Bookmark size={14} />
-                                    <span>Save</span>
-                                  </button>
+                              </div>
+                            );
+                          }
+
+                          if (item.type === "comment") {
+                            return (
+                              <div key={`c-${item.commentId}-${idx}`} className="activity-post" data-testid={`notif-comment-${item.commentId}`}>
+                                <div className="activity-post-icon-col">
+                                  <img
+                                    src={item.commenterAvatarUrl || placeholderPhoto}
+                                    alt={item.commenterUsername || "User"}
+                                    className="activity-post-avatar"
+                                  />
+                                  <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
                                 </div>
-                                {activeReplyId === 'activity-8' && (
-                                  <div className="inline-reply-box" data-testid="inline-reply-activity-8">
-                                    <textarea placeholder="Write a reply..." data-testid="input-reply-activity-8" />
-                                    <div className="inline-reply-actions">
-                                      <button className="inline-reply-btn" data-testid="button-submit-reply-activity-8">Reply</button>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      {item.commenterUsername ? (
+                                        <Link href={`/user/${item.commenterUsername}`} className="following-post-username" data-testid={`link-user-comment-${item.commentId}`}>{item.commenterUsername}</Link>
+                                      ) : (
+                                        <span className="following-post-username">[deleted]</span>
+                                      )}
+                                      <span className="following-post-action">commented on your submission</span>
+                                    </div>
+                                    <span className="following-post-timestamp" data-testid={`notif-comment-time-${item.commentId}`}>{timeAgo}</span>
+                                  </div>
+                                  <div className="activity-post-body">
+                                    <div className="following-post-body-content">
+                                      <div className="following-post-body-left">
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-comment-fact-${item.commentId}`}>
+                                          <p className="fact-myth">"{item.factMythHeader}"</p>
+                                        </Link>
+                                        <p className="following-plain-comment" data-testid={`comment-text-${item.commentId}`}>{item.body}</p>
+                                      </div>
+                                      {item.factCoverPhoto && (
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-comment-${item.commentId}`}>
+                                          <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                        </Link>
+                                      )}
                                     </div>
                                   </div>
-                                )}
-                              </div>
-                              <Link href="/fact/swallow-spiders-in-sleep" className="following-post-cover-link" data-testid="cover-link-activity-8">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* 9. An update was posted to a fact you follow */}
-                      <div className="activity-post" data-testid="activity-post-9">
-                        <div className="activity-post-icon-col">
-                          <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <span className="activity-status-text">An update was posted to a fact you follow</span>
-                            </div>
-                            <span className="following-post-timestamp">1 day ago</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <Link href="/fact/food-pyramid-healthy-diet" className="following-post-link">
-                                  <p className="fact-myth">"The Food Pyramid is the model for a healthy, balanced diet."</p>
-                                </Link>
-                                <p className="activity-submitted-label">Revision:</p>
-                                <div className="activity-submitted-revision">
-                                  <Check size={16} className="activity-revision-check" />
-                                  <p className="activity-truth-text">In 2026, the US government introduced a new food pyramid that prioritized vegetables and protein while relegating grains to the bottom.</p>
                                 </div>
                               </div>
-                              <Link href="/fact/food-pyramid-healthy-diet" className="following-post-cover-link" data-testid="cover-link-activity-9">
-                                <img src="/uploads/1764995940108-220172306.jpg" alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                            );
+                          }
 
-                    </div>
-                  )}
-
-                  {notificationsTab === "replies" && (
-                    <div className="following-feed" data-testid="activity-feed-replies">
-                      {notifRepliesLoading ? (
-                        <p className="saved-empty-message" data-testid="text-notif-replies-loading">Loading replies...</p>
-                      ) : notifReplies.length === 0 ? (
-                        <p className="saved-empty-message" data-testid="text-notif-replies-empty">No replies to your comments yet.</p>
-                      ) : notifReplies.map((reply) => {
-                        const timeAgo = (() => {
-                          const diff = Date.now() - new Date(reply.replyCreatedAt).getTime();
-                          const m = Math.floor(diff / 60000);
-                          if (m < 1) return "just now";
-                          if (m < 60) return `${m} min ago`;
-                          const h = Math.floor(m / 60);
-                          if (h < 24) return `${h}h ago`;
-                          const d = Math.floor(h / 24);
-                          if (d < 30) return `${d}d ago`;
-                          return new Date(reply.replyCreatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-                        })();
-                        return (
-                          <div key={reply.replyId} className="activity-post" data-testid={`reply-post-${reply.replyId}`}>
-                            <div className="activity-post-icon-col">
-                              <img
-                                src={reply.replierAvatarUrl || placeholderPhoto}
-                                alt={reply.replierUsername || "User"}
-                                className="activity-post-avatar"
-                              />
-                              <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                            </div>
-                            <div className="activity-post-main">
-                              <div className="activity-post-header">
-                                <div className="activity-post-header-text">
-                                  {reply.replierUsername ? (
-                                    <Link href={`/user/${reply.replierUsername}`} className="following-post-username" data-testid={`link-user-reply-${reply.replyId}`}>{reply.replierUsername}</Link>
-                                  ) : (
-                                    <span className="following-post-username" data-testid={`user-deleted-reply-${reply.replyId}`}>[deleted]</span>
-                                  )}
-                                  <span className="following-post-action">replied to your comment on</span>
+                          if (item.type === "reply") {
+                            return (
+                              <div key={`r-${item.replyId}-${idx}`} className="activity-post" data-testid={`notif-reply-${item.replyId}`}>
+                                <div className="activity-post-icon-col">
+                                  <img
+                                    src={item.replierAvatarUrl || placeholderPhoto}
+                                    alt={item.replierUsername || "User"}
+                                    className="activity-post-avatar"
+                                  />
+                                  <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
                                 </div>
-                                <span className="following-post-timestamp" data-testid={`notif-reply-time-${reply.replyId}`}>{timeAgo}</span>
-                              </div>
-                              <div className="activity-post-body">
-                                <div className="following-post-body-content">
-                                  <div className="following-post-body-left">
-                                    <Link href={`/fact/${reply.factSlug}`} className="following-post-link" data-testid={`link-reply-fact-${reply.replyId}`}>
-                                      <p className="fact-myth">"{reply.factMythHeader}"</p>
-                                    </Link>
-                                    <div className="activity-comment-thread">
-                                      <div className="activity-thread-comment">
-                                        <div className="activity-thread-author">
-                                          <span className="activity-thread-username">{user?.username || "You"}</span>
-                                        </div>
-                                        <div className="following-comment-quote">
-                                          <p className="following-comment-text" data-testid={`reply-parent-body-${reply.replyId}`}>{reply.parentBody}</p>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      {item.replierUsername ? (
+                                        <Link href={`/user/${item.replierUsername}`} className="following-post-username" data-testid={`link-user-reply-${item.replyId}`}>{item.replierUsername}</Link>
+                                      ) : (
+                                        <span className="following-post-username">[deleted]</span>
+                                      )}
+                                      <span className="following-post-action">replied to your comment on</span>
+                                    </div>
+                                    <span className="following-post-timestamp" data-testid={`notif-reply-time-${item.replyId}`}>{timeAgo}</span>
+                                  </div>
+                                  <div className="activity-post-body">
+                                    <div className="following-post-body-content">
+                                      <div className="following-post-body-left">
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-reply-fact-${item.replyId}`}>
+                                          <p className="fact-myth">"{item.factMythHeader}"</p>
+                                        </Link>
+                                        <div className="activity-comment-thread">
+                                          <div className="activity-thread-comment">
+                                            <div className="activity-thread-author">
+                                              <span className="activity-thread-username">{user?.username || "You"}</span>
+                                            </div>
+                                            <div className="following-comment-quote">
+                                              <p className="following-comment-text" data-testid={`reply-parent-body-${item.replyId}`}>{item.parentBody}</p>
+                                            </div>
+                                          </div>
+                                          <div className="activity-thread-comment">
+                                            <div className="activity-thread-author">
+                                              <span className="activity-thread-username">{item.replierUsername || "[deleted]"}</span>
+                                            </div>
+                                            <p className="following-plain-comment" data-testid={`reply-body-${item.replyId}`}>{item.replyBody}</p>
+                                          </div>
                                         </div>
                                       </div>
-                                      <div className="activity-thread-comment">
-                                        <div className="activity-thread-author">
-                                          <span className="activity-thread-username">{reply.replierUsername || "[deleted]"}</span>
-                                        </div>
-                                        <p className="following-plain-comment" data-testid={`reply-body-${reply.replyId}`}>{reply.replyBody}</p>
+                                      {item.factCoverPhoto && (
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-reply-${item.replyId}`}>
+                                          <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                        </Link>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          if (item.type === "fact_update") {
+                            const updateLabel: Record<string, string> = {
+                              mythHeader: "Myth header updated",
+                              mythDetails: "Myth details updated",
+                              truthHeader: "Truth header updated",
+                              truthDetails: "Truth details updated",
+                              timelineEntry: "Timeline entry added",
+                              nuanceEntry: "Nuance added",
+                            };
+                            return (
+                              <div key={`fu-${item.id}-${idx}`} className="activity-post" data-testid={`notif-fact-update-${item.id}`}>
+                                <div className="activity-post-icon-col">
+                                  <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
+                                </div>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      <span className="activity-status-text">An update was posted to a fact you follow</span>
+                                    </div>
+                                    <span className="following-post-timestamp">{timeAgo}</span>
+                                  </div>
+                                  <div className="activity-post-body">
+                                    <div className="following-post-body-content">
+                                      <div className="following-post-body-left">
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-fact-update-${item.id}`}>
+                                          <p className="fact-myth">"{item.factMythHeader}"</p>
+                                        </Link>
+                                        <p className="activity-submitted-label">{updateLabel[item.updateType] || "Update posted"}</p>
                                       </div>
-                                    </div>
-                                    <div className="comment-actions" data-testid={`reply-comment-actions-${reply.replyId}`}>
-                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-reply-reply-${reply.replyId}`}>
-                                        <CornerUpLeft size={14} />
-                                        <span>Reply</span>
-                                      </button>
-                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-like-reply-${reply.replyId}`}>
-                                        <Heart size={14} />
-                                        <span>{reply.replyUpvotes} likes</span>
-                                      </button>
-                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-save-reply-${reply.replyId}`}>
-                                        <Bookmark size={14} />
-                                        <span>Save</span>
-                                      </button>
+                                      {item.factCoverPhoto && (
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-fact-update-${item.id}`}>
+                                          <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                                        </Link>
+                                      )}
                                     </div>
                                   </div>
-                                  {reply.factCoverPhoto && (
-                                    <Link href={`/fact/${reply.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-reply-${reply.replyId}`}>
-                                      <img src={reply.factCoverPhoto} alt="" className="following-post-cover-photo" />
-                                    </Link>
-                                  )}
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                            );
+                          }
 
-                  {notificationsTab === "comments" && (
-                    <div className="following-feed" data-testid="activity-feed-comments">
-                      {notifCommentsLoading ? (
-                        <p className="saved-empty-message" data-testid="text-notif-comments-loading">Loading comments...</p>
-                      ) : notifComments.length === 0 ? (
-                        <p className="saved-empty-message" data-testid="text-notif-comments-empty">No comments on your submitted facts yet.</p>
-                      ) : notifComments.map((notif) => {
-                        const timeAgo = (() => {
-                          const diff = Date.now() - new Date(notif.commentCreatedAt).getTime();
-                          const m = Math.floor(diff / 60000);
-                          if (m < 1) return "just now";
-                          if (m < 60) return `${m} min ago`;
-                          const h = Math.floor(m / 60);
-                          if (h < 24) return `${h}h ago`;
-                          const d = Math.floor(h / 24);
-                          if (d < 30) return `${d}d ago`;
-                          return new Date(notif.commentCreatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-                        })();
-                        return (
-                          <div key={notif.commentId} className="activity-post" data-testid={`comment-post-${notif.commentId}`}>
-                            <div className="activity-post-icon-col">
-                              <img
-                                src={notif.commenterAvatarUrl || placeholderPhoto}
-                                alt={notif.commenterUsername || "User"}
-                                className="activity-post-avatar"
-                              />
-                              <MessageSquareMore size={20} className="activity-type-icon activity-type-comment" />
-                            </div>
-                            <div className="activity-post-main">
-                              <div className="activity-post-header">
-                                <div className="activity-post-header-text">
-                                  {notif.commenterUsername ? (
-                                    <Link href={`/user/${notif.commenterUsername}`} className="following-post-username" data-testid={`link-user-comment-${notif.commentId}`}>{notif.commenterUsername}</Link>
-                                  ) : (
-                                    <span className="following-post-username" data-testid={`user-deleted-comment-${notif.commentId}`}>[deleted]</span>
-                                  )}
-                                  <span className="following-post-action">commented on your submission</span>
+                          if (item.type === "new_follower") {
+                            const alreadyFollowedBack = followedBackIds[item.followerId] || false;
+                            return (
+                              <div key={`nf-${item.followerId}-${idx}`} className="activity-post" data-testid={`notif-follower-${item.followerId}`}>
+                                <div className="activity-post-icon-col">
+                                  <img
+                                    src={item.followerAvatarUrl || placeholderPhoto}
+                                    alt={item.followerUsername || "User"}
+                                    className="activity-post-avatar"
+                                  />
+                                  <UserRoundPlus size={20} className="activity-type-icon activity-type-follow" />
                                 </div>
-                                <span className="following-post-timestamp" data-testid={`notif-comment-time-${notif.commentId}`}>{timeAgo}</span>
-                              </div>
-                              <div className="activity-post-body">
-                                <div className="following-post-body-content">
-                                  <div className="following-post-body-left">
-                                    <Link href={`/fact/${notif.factSlug}`} className="following-post-link" data-testid={`link-comment-fact-${notif.commentId}`}>
-                                      <p className="fact-myth">"{notif.factMythHeader}"</p>
-                                    </Link>
-                                    <p className="following-plain-comment" data-testid={`comment-text-${notif.commentId}`}>{notif.body}</p>
-                                    <div className="comment-actions" data-testid={`comment-tab-actions-${notif.commentId}`}>
-                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-reply-comment-${notif.commentId}`}>
-                                        <CornerUpLeft size={14} />
-                                        <span>Reply</span>
-                                      </button>
-                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-like-comment-${notif.commentId}`}>
-                                        <Heart size={14} />
-                                        <span>{notif.upvotes} likes</span>
-                                      </button>
-                                      <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-save-comment-${notif.commentId}`}>
-                                        <Bookmark size={14} />
-                                        <span>Save</span>
-                                      </button>
+                                <div className="activity-post-main">
+                                  <div className="activity-post-header">
+                                    <div className="activity-post-header-text">
+                                      {item.followerUsername ? (
+                                        <Link href={`/user/${item.followerUsername}`} className="following-post-username" data-testid={`link-user-follower-${item.followerId}`}>{item.followerUsername}</Link>
+                                      ) : (
+                                        <span className="following-post-username">[deleted]</span>
+                                      )}
+                                      <span className="following-post-action">started following you</span>
                                     </div>
+                                    <span className="following-post-timestamp">{timeAgo}</span>
                                   </div>
-                                  {notif.factCoverPhoto && (
-                                    <Link href={`/fact/${notif.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-comment-${notif.commentId}`}>
-                                      <img src={notif.factCoverPhoto} alt="" className="following-post-cover-photo" />
-                                    </Link>
-                                  )}
+                                  <div className="activity-post-body">
+                                    <button
+                                      className={`activity-follow-button${alreadyFollowedBack ? " activity-follow-button-following" : ""}`}
+                                      onClick={() => { if (!alreadyFollowedBack) followBackMutation.mutate(item.followerId); }}
+                                      disabled={followBackMutation.isPending}
+                                      data-testid={`button-follow-back-${item.followerId}`}
+                                    >
+                                      {alreadyFollowedBack ? "Following" : "Follow back"}
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+                            );
+                          }
 
-                </div>
-              )}
+                          return null;
+                        })}
+                      </div>
+                    )}
 
-              {sideTab === "edit-profile" && (
+                    {activityFeed && activityFeed.totalPages > 1 && (
+                      <div className="submissions-pagination" data-testid="activity-pagination">
+                        <button
+                          className="submissions-page-button"
+                          disabled={notifPage === 1}
+                          onClick={() => setNotifPage(notifPage - 1)}
+                          data-testid="button-activity-prev"
+                        >
+                          Previous
+                        </button>
+                        <span className="submissions-page-info" data-testid="activity-page-info">
+                          Page {notifPage} of {activityFeed.totalPages}
+                        </span>
+                        <button
+                          className="submissions-page-button"
+                          disabled={notifPage === activityFeed.totalPages}
+                          onClick={() => setNotifPage(notifPage + 1)}
+                          data-testid="button-activity-next"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+
+                  </div>
+                )}
+
+                {sideTab === "edit-profile" && (
                 <>
                 <div className="dashboard-profile-banner" data-testid="dashboard-profile-banner">
                   <div className="user-profile-banner">
@@ -3203,61 +2754,6 @@ export default function UserDashboard() {
                       </div>
                     )}
 
-                    {activityTab === "polls" && (
-                      <div data-testid="activity-polls-content">
-                        {pollVotesLoading ? (
-                          <div className="dashboard-feed-empty" data-testid="activity-polls-loading">
-                            <p>Loading your poll votes...</p>
-                          </div>
-                        ) : myPollVotes.length > 0 ? (
-                          <div className="following-feed">
-                            {myPollVotes.map((vote) => (
-                              <div className="public-comment-entry" key={vote.id} data-testid={`activity-poll-${vote.id}`}>
-                                <div className="following-post-body-content">
-                                  <div className="following-post-body-left">
-                                    <Link href={`/fact/${vote.factSlug}`} className="following-post-link">
-                                      <p className="fact-myth" data-testid={`poll-vote-fact-title-${vote.id}`}>"{vote.factTitle}"</p>
-                                    </Link>
-                                    <p className="following-plain-comment" data-testid={`poll-vote-answer-${vote.id}`}>
-                                      <CircleCheck size={14} className="poll-vote-answer-icon" />
-                                      Your answer: <strong>{vote.optionChosen}</strong>
-                                    </p>
-                                    {vote.locationChosen && (
-                                      <p className="poll-vote-location-display" data-testid={`poll-vote-location-${vote.id}`}>
-                                        <MapPinCheckInside size={14} className="poll-vote-location-icon" />
-                                        I learned this in: {vote.locationChosen}
-                                      </p>
-                                    )}
-                                    {vote.decadeChosen && (
-                                      <p className="poll-vote-location-display" data-testid={`poll-vote-decade-${vote.id}`}>
-                                        <CalendarCheck size={14} className="poll-vote-location-icon" />
-                                        I learned this in the {vote.decadeChosen}
-                                      </p>
-                                    )}
-                                    <span className="public-comment-timestamp" data-testid={`poll-vote-time-${vote.id}`}>
-                                      {new Date(vote.votedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                                    </span>
-                                  </div>
-                                  {vote.factCoverPhoto && (
-                                    <Link href={`/fact/${vote.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-poll-${vote.id}`}>
-                                      <img src={vote.factCoverPhoto} alt="" className="following-post-cover-photo" />
-                                    </Link>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="dashboard-feed-empty" data-testid="activity-empty-polls">
-                            <MessageSquare size={40} className="dashboard-feed-empty-icon" />
-                            <p className="dashboard-feed-empty-title">You haven't answered any polls yet.</p>
-                            <p className="dashboard-feed-empty-desc">
-                              Visit a misconception page and answer the poll to see your responses here.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </>
               )}

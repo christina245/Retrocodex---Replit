@@ -920,6 +920,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/notifications/activity — unified paginated activity feed for the bell tab
+  app.get("/api/notifications/activity", requireUser, async (req, res) => {
+    try {
+      const page = Math.max(1, parseInt((req.query.page as string) || "1", 10));
+      const limit = 20;
+      const result = await storage.getUnifiedActivityFeed(req.session.userId!, page, limit);
+      res.json(result);
+    } catch (error) {
+      console.error("GET /api/notifications/activity error:", error);
+      res.status(500).json({ message: "Failed to fetch activity feed" });
+    }
+  });
+
+  // GET /api/notifications/count — count of notifications newer than ?since=<iso>
+  app.get("/api/notifications/count", requireUser, async (req, res) => {
+    try {
+      const sinceParam = req.query.since as string;
+      const since = sinceParam ? new Date(sinceParam) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+      if (isNaN(since.getTime())) {
+        return res.status(400).json({ message: "Invalid since parameter" });
+      }
+      const count = await storage.getActivityCount(req.session.userId!, since);
+      res.json({ count });
+    } catch (error) {
+      console.error("GET /api/notifications/count error:", error);
+      res.status(500).json({ message: "Failed to fetch notification count" });
+    }
+  });
+
   // GET /api/comments/saved — get saved comments for the current user
   app.get("/api/comments/saved", requireUser, async (req, res) => {
     try {
@@ -1700,6 +1729,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (adminNote !== undefined) updates.adminNote = adminNote;
       if (draftData !== undefined) updates.draftData = draftData;
       if (publishedFactId !== undefined) updates.publishedFactId = publishedFactId;
+      if (status !== undefined && status !== previousStatus) updates.updatedAt = new Date();
 
       const [updated] = await db
         .update(factSubmissions)
