@@ -807,6 +807,7 @@ export default function UserDashboard() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [savedArticlesSortOpen]);
+  const queryClientHook = useQueryClient();
   const [activityLastSeenAt, setActivityLastSeenAt] = useState<string>(() => {
     try {
       return localStorage.getItem("activityLastSeenAt") || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -820,6 +821,7 @@ export default function UserDashboard() {
       try { localStorage.setItem("activityLastSeenAt", now); } catch {}
       setActivityLastSeenAt(now);
       setNotifPage(1);
+      queryClientHook.invalidateQueries({ queryKey: ["/api/notifications/count"] });
     }
   }, [sideTab]);
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
@@ -944,11 +946,17 @@ export default function UserDashboard() {
     }
   }, [followingIds]);
 
+  const [pendingFollowId, setPendingFollowId] = useState<string | null>(null);
   const followBackMutation = useMutation({
-    mutationFn: (followerId: string) => apiRequest("POST", `/api/follow/${followerId}`),
+    mutationFn: (followerId: string) => {
+      setPendingFollowId(followerId);
+      return apiRequest("POST", `/api/follow/${followerId}`);
+    },
     onSuccess: (_data: unknown, followerId: string) => {
       setFollowedBackIds(prev => ({ ...prev, [followerId]: true }));
+      setPendingFollowId(null);
     },
+    onError: () => setPendingFollowId(null),
   });
 
   interface MyCommentItem {
@@ -2030,7 +2038,7 @@ export default function UserDashboard() {
                                     <button
                                       className={`activity-follow-button${alreadyFollowedBack ? " activity-follow-button-following" : ""}`}
                                       onClick={() => { if (!alreadyFollowedBack) followBackMutation.mutate(item.followerId); }}
-                                      disabled={followBackMutation.isPending}
+                                      disabled={pendingFollowId === item.followerId}
                                       data-testid={`button-follow-back-${item.followerId}`}
                                     >
                                       {alreadyFollowedBack ? "Following" : "Follow back"}
