@@ -1962,20 +1962,6 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
-  // GET /api/poll-votes/me — fetch current user's poll votes with fact data
-  app.get("/api/poll-votes/me", async (req, res) => {
-    if (!req.session.userId) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
-    try {
-      const votes = await storage.getPollVotesByUser(req.session.userId);
-      return res.json(votes);
-    } catch (err) {
-      console.error("Poll votes fetch error:", err);
-      return res.status(500).json({ message: "Failed to fetch votes" });
-    }
-  });
-
   // GET /api/user/saved-articles — get authenticated user's saved articles
   app.get("/api/user/saved-articles", async (req, res) => {
     if (!req.session?.userId) {
