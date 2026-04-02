@@ -819,6 +819,7 @@ export default function UserDashboard() {
       const now = new Date().toISOString();
       try { localStorage.setItem("activityLastSeenAt", now); } catch {}
       setActivityLastSeenAt(now);
+      setNotifPage(1);
     }
   }, [sideTab]);
   const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);

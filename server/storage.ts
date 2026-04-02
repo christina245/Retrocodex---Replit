@@ -1524,6 +1524,7 @@ export class DatabaseStorage implements IStorage {
         .innerJoin(alias(comments, "parent_comments"), eq(comments.parentId, sql`parent_comments.id`))
         .where(and(
           sql`parent_comments.user_id = ${userId}`,
+          sql`parent_comments.deleted_by_admin = false`,
           isNotNull(comments.userId),
           ne(comments.userId, userId),
           eq(comments.deletedByAdmin, false),
