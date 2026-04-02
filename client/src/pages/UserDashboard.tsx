@@ -38,7 +38,7 @@ type SideTab = "feed" | "notifications" | "edit-profile" | "activity" | "edit-re
 type ActivityTab = "submitted" | "approved" | "not-approved" | "comments";
 type EditRequestsTab = "pending" | "approved" | "not-approved";
 type ProfileActivityTab = "submissions" | "edits" | "comments";
-type SavedTab = "all" | "facts" | "articles" | "comments";
+type SavedTab = "facts" | "articles" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string; tooltip?: string }[] = [
   { id: "for-you", label: "For You", tooltip: "New topics and articles based on your interests." },
@@ -61,7 +61,6 @@ const ACTIVITY_TABS: { id: ActivityTab; label: string }[] = [
 ];
 
 const SAVED_TABS: { id: SavedTab; label: string }[] = [
-  { id: "all", label: "All" },
   { id: "facts", label: "Facts" },
   { id: "articles", label: "Articles" },
   { id: "comments", label: "Comments" },
@@ -771,7 +770,7 @@ export default function UserDashboard() {
   const [emailNotifyComments, setEmailNotifyComments] = useState(true);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [activeEllipsisId, setActiveEllipsisId] = useState<string | null>(null);
-  const [savedTab, setSavedTab] = useState<SavedTab>("all");
+  const [savedTab, setSavedTab] = useState<SavedTab>("facts");
   const [savedArticlesSort, setSavedArticlesSort] = useState<"saved" | "posted">("saved");
   const [savedArticlesSortOpen, setSavedArticlesSortOpen] = useState(false);
   const savedArticlesSortRef = useRef<HTMLDivElement>(null);
@@ -2906,11 +2905,11 @@ export default function UserDashboard() {
                     </div>
                   </div>
 
-                  {(savedTab === "all" || savedTab === "facts") && (
+                  {savedTab === "facts" && (
                     <div className="saved-facts-row" data-testid="saved-facts-row">
                       {savedFactsLoading ? (
                         <p className="saved-empty-message" data-testid="text-saved-facts-loading">Loading saved facts...</p>
-                      ) : savedFactItems.length === 0 && savedTab === "facts" ? (
+                      ) : savedFactItems.length === 0 ? (
                         <p className="saved-empty-message" data-testid="text-saved-facts-empty">No saved facts yet. Bookmark facts to see them here.</p>
                       ) : (
                         savedFactItems.map((fact) => (
@@ -2928,11 +2927,11 @@ export default function UserDashboard() {
                     </div>
                   )}
 
-                  {(savedTab === "all" || savedTab === "articles") && (
+                  {savedTab === "articles" && (
                     <div className="saved-article-section" data-testid="saved-article-row">
                       {savedArticlesLoading ? (
                         <p className="saved-empty-message" data-testid="text-saved-articles-loading">Loading saved articles...</p>
-                      ) : sortedArticleItems.length === 0 && savedTab === "articles" ? (
+                      ) : sortedArticleItems.length === 0 ? (
                         <p className="saved-empty-message" data-testid="text-saved-articles-empty">No saved articles yet. Bookmark articles on the Articles page to see them here.</p>
                       ) : sortedArticleItems.length > 0 ? (
                         <>
@@ -2990,7 +2989,7 @@ export default function UserDashboard() {
                     </div>
                   )}
 
-                  {(savedTab === "all" || savedTab === "comments") && (
+                  {savedTab === "comments" && (
                     <div data-testid="saved-comments-section">
                       {savedCommentsLoading ? (
                         <p className="saved-empty-message" data-testid="text-saved-comments-loading">Loading saved comments...</p>
