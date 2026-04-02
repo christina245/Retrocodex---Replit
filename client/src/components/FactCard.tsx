@@ -97,6 +97,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
         <div 
           className="fact-card"
           data-testid={`card-fact-${fact.id}`}
+          style={{ '--card-category-color': fact.categoryColor } as React.CSSProperties}
         >
           <div 
             className="fact-category"

@@ -14,7 +14,7 @@
   height: 300px;
   background: #fdfdfd;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-  border: none;
+  border: 1.5px solid var(--card-category-color);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -73,7 +73,7 @@
   font-size: 10px;
   font-weight: 600;
   color: #2C2C2C;
-  letter-spacing: 0.015em;
+  letter-spacing: 0.04em;
 }
 
 .fact-body {

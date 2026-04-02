@@ -14,7 +14,7 @@
   height: 300px;
   background: #FDfDfD;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-  border: none;
+  border: 1.5px solid var(--card-category-color);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
