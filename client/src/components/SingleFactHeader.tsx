@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, X, UserRound, Bell } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/red black gray logo.png";
 import { SignInModal } from "./SignInModal";
 import { useAuth } from "@/lib/auth";
+import { useQuery } from "@tanstack/react-query";
 import "./SingleFactHeader.css";
 
 interface SingleFactHeaderProps {
@@ -17,7 +18,31 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [, navigate] = useLocation();
-  const notificationCount = 3;
+  const [since, setSince] = useState(() => {
+    try {
+      return localStorage.getItem("activityLastSeenAt") || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    } catch {
+      return new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    }
+  });
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const stored = localStorage.getItem("activityLastSeenAt");
+        if (stored) setSince(stored);
+      } catch {}
+    };
+    window.addEventListener("focus", sync);
+    return () => window.removeEventListener("focus", sync);
+  }, []);
+  const { data: notifCountData } = useQuery<{ count: number }>({
+    queryKey: ["/api/notifications/count", since],
+    queryFn: () => fetch(`/api/notifications/count?since=${encodeURIComponent(since)}`, { credentials: "include" }).then(r => r.json()),
+    enabled: isLoggedIn,
+    staleTime: 60_000,
+    refetchInterval: 90_000,
+  });
+  const notificationCount = notifCountData?.count ?? 0;
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
