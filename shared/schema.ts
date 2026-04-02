@@ -547,7 +547,7 @@ export type UnifiedNotification =
   | { type: 'submission_rejected'; id: string; mythHeader: string; adminNote: string | null; timestamp: string }
   | { type: 'comment'; commentId: string; body: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; commenterUsername: string | null; commenterAvatarUrl: string | null; timestamp: string }
   | { type: 'reply'; replyId: string; replyBody: string; parentBody: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; replierUsername: string | null; replierAvatarUrl: string | null; timestamp: string }
-  | { type: 'fact_update'; id: string; publishBatchId: string; updateType: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; timestamp: string }
+  | { type: 'fact_update'; publishBatchId: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; timestamp: string; updates: Array<{ id: string; updateType: string; content: unknown }> }
   | { type: 'new_follower'; followerId: string; followerUsername: string | null; followerAvatarUrl: string | null; timestamp: string };
 
 export type ActivityFeedResponse = {

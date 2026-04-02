@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Search, HandHeart, X, UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { useQuery } from "@tanstack/react-query";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
@@ -24,7 +25,31 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [, navigate] = useLocation();
-  const notificationCount = 3;
+  const [since, setSince] = useState(() => {
+    try {
+      return localStorage.getItem("activityLastSeenAt") || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    } catch {
+      return new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    }
+  });
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const stored = localStorage.getItem("activityLastSeenAt");
+        if (stored) setSince(stored);
+      } catch {}
+    };
+    window.addEventListener("focus", sync);
+    return () => window.removeEventListener("focus", sync);
+  }, []);
+  const { data: notifCountData } = useQuery<{ count: number }>({
+    queryKey: ["/api/notifications/count", since],
+    queryFn: () => fetch(`/api/notifications/count?since=${encodeURIComponent(since)}`, { credentials: "include" }).then(r => r.json()),
+    enabled: isLoggedIn,
+    staleTime: 60_000,
+    refetchInterval: 90_000,
+  });
+  const notificationCount = notifCountData?.count ?? 0;
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

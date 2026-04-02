@@ -1471,6 +1471,23 @@ a.following-post-fact-link:hover {
   border-color: #d0d0d0;
 }
 
+.notif-view-more-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #2c2c2c;
+  cursor: pointer;
+  display: inline-block;
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.notif-view-more-toggle:hover {
+  color: #ff5353;
+}
+
 .activity-admin-feedback {
   background: #fff8e1;
   border: 1px solid #e0d6a8;

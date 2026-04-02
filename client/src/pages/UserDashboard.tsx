@@ -1272,6 +1272,75 @@ export default function UserDashboard() {
     setExpandedDenials((prev) => ({ ...prev, [id]: !prev[id] }));
   }, []);
 
+  const [expandedBatches, setExpandedBatches] = useState<Set<string>>(new Set());
+
+  type NotifTextContent = string;
+  type NotifTimelineContent = { year: string; description: string };
+  type NotifNuanceContent = { type: string; body: string };
+  type NotifUpdateContent = NotifTextContent | NotifTimelineContent | NotifNuanceContent;
+
+  const isNotifTimelineContent = (c: NotifUpdateContent): c is NotifTimelineContent =>
+    typeof c === "object" && c !== null && "year" in c && "description" in c;
+
+  const isNotifNuanceContent = (c: NotifUpdateContent): c is NotifNuanceContent =>
+    typeof c === "object" && c !== null && "type" in c && "body" in c;
+
+  const parseNotifContent = (raw: unknown): NotifUpdateContent => {
+    if (typeof raw === "string") return raw;
+    if (raw !== null && typeof raw === "object") {
+      const obj = raw as Record<string, unknown>;
+      if (typeof obj.year === "string" && typeof obj.description === "string") {
+        return { year: obj.year, description: obj.description };
+      }
+      if (typeof obj.type === "string" && typeof obj.body === "string") {
+        return { type: obj.type, body: obj.body };
+      }
+    }
+    return String(raw ?? "");
+  };
+
+  const renderNotifUpdateEntry = (update: { id: string; updateType: string; content: unknown }) => {
+    const content = parseNotifContent(update.content);
+    if (update.updateType === "timelineEntry" && isNotifTimelineContent(content)) {
+      return (
+        <div key={update.id} className="mb-2">
+          <p className="activity-submitted-label">Revision:</p>
+          <div className="activity-submitted-revision">
+            <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />
+            <div className="activity-timeline-revision">
+              <p className="activity-timeline-year">{content.year}</p>
+              <div className="activity-truth-text activity-truth-markdown"><ReactMarkdown>{content.description}</ReactMarkdown></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    if (update.updateType === "nuanceEntry" && isNotifNuanceContent(content)) {
+      return (
+        <div key={update.id} className="mb-2">
+          <p className="activity-submitted-label">Nuance added:</p>
+          <div className="activity-submitted-revision">
+            <Blend size={16} className="activity-revision-icon" />
+            <div className="activity-timeline-revision">
+              <p className="activity-timeline-year">{content.type}</p>
+              <div className="activity-truth-text activity-truth-markdown"><ReactMarkdown>{content.body}</ReactMarkdown></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    const text = typeof content === "string" ? content : String(content);
+    return (
+      <div key={update.id} className="mb-2">
+        <p className="activity-submitted-label">Revision:</p>
+        <div className="activity-submitted-revision">
+          <Check size={16} className="activity-revision-check" />
+          <div className="activity-truth-text activity-truth-markdown"><ReactMarkdown>{text}</ReactMarkdown></div>
+        </div>
+      </div>
+    );
+  };
+
   if (authLoading) return null;
   if (!isLoggedIn || !user) {
     navigate("/");
@@ -1970,16 +2039,11 @@ export default function UserDashboard() {
                           }
 
                           if (item.type === "fact_update") {
-                            const updateLabel: Record<string, string> = {
-                              mythHeader: "Myth header updated",
-                              mythDetails: "Myth details updated",
-                              truthHeader: "Truth header updated",
-                              truthDetails: "Truth details updated",
-                              timelineEntry: "Timeline entry added",
-                              nuanceEntry: "Nuance added",
-                            };
+                            const isExpanded = expandedBatches.has(item.publishBatchId);
+                            const visibleUpdates = isExpanded ? item.updates : item.updates.slice(0, 1);
+                            const hasMore = item.updates.length > 1;
                             return (
-                              <div key={`fu-${item.id}-${idx}`} className="activity-post" data-testid={`notif-fact-update-${item.id}`}>
+                              <div key={`fu-${item.publishBatchId}-${idx}`} className="activity-post" data-testid={`notif-fact-update-${item.publishBatchId}`}>
                                 <div className="activity-post-icon-col">
                                   <PlusCircle size={40} strokeWidth={1.5} className="activity-status-icon activity-status-update" />
                                 </div>
@@ -1993,13 +2057,27 @@ export default function UserDashboard() {
                                   <div className="activity-post-body">
                                     <div className="following-post-body-content">
                                       <div className="following-post-body-left">
-                                        <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-fact-update-${item.id}`}>
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-fact-update-${item.publishBatchId}`}>
                                           <p className="fact-myth">"{item.factMythHeader}"</p>
                                         </Link>
-                                        <p className="activity-submitted-label">{updateLabel[item.updateType] || "Update posted"}</p>
+                                        {visibleUpdates.map((u) => renderNotifUpdateEntry(u))}
+                                        {hasMore && (
+                                          <button
+                                            className="notif-view-more-toggle"
+                                            onClick={() => setExpandedBatches(prev => {
+                                              const next = new Set(prev);
+                                              if (next.has(item.publishBatchId)) next.delete(item.publishBatchId);
+                                              else next.add(item.publishBatchId);
+                                              return next;
+                                            })}
+                                            data-testid={`button-view-more-${item.publishBatchId}`}
+                                          >
+                                            {isExpanded ? "View Less" : `View More (${item.updates.length - 1} more)`}
+                                          </button>
+                                        )}
                                       </div>
                                       {item.factCoverPhoto && (
-                                        <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-fact-update-${item.id}`}>
+                                        <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-fact-update-${item.publishBatchId}`}>
                                           <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
                                         </Link>
                                       )}

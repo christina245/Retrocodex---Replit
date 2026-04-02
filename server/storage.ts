@@ -1467,16 +1467,22 @@ export class DatabaseStorage implements IStorage {
       });
     }
 
+    const factUpdateBatchMap = new Map<string, typeof factUpdateNotifs>();
     for (const u of factUpdateNotifs) {
+      const arr = factUpdateBatchMap.get(u.publishBatchId) ?? [];
+      arr.push(u);
+      factUpdateBatchMap.set(u.publishBatchId, arr);
+    }
+    for (const [batchId, batchUpdates] of factUpdateBatchMap.entries()) {
+      const first = batchUpdates[0];
       all.push({
         type: "fact_update",
-        id: u.id,
-        publishBatchId: u.publishBatchId,
-        updateType: u.updateType,
-        factMythHeader: u.factMythHeader,
-        factSlug: u.factSlug,
-        factCoverPhoto: u.factCoverPhoto,
-        timestamp: (u.publishedAt as Date).toISOString(),
+        publishBatchId: batchId,
+        factMythHeader: first.factMythHeader,
+        factSlug: first.factSlug,
+        factCoverPhoto: first.factCoverPhoto,
+        timestamp: (first.publishedAt as Date).toISOString(),
+        updates: batchUpdates.map((u) => ({ id: u.id, updateType: u.updateType, content: u.content })),
       });
     }
 
