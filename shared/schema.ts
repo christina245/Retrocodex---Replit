@@ -543,7 +543,7 @@ export type FactUpdateWithFact = FactUpdate & {
 // Unified notification types for the Activity bell tab
 export type UnifiedNotification =
   | { type: 'submission_reviewing'; id: string; mythHeader: string; truthHeader: string; timestamp: string }
-  | { type: 'submission_published'; id: string; mythHeader: string; publishedFactId: string | null; timestamp: string }
+  | { type: 'submission_published'; id: string; mythHeader: string; publishedFactSlug: string | null; timestamp: string }
   | { type: 'submission_rejected'; id: string; mythHeader: string; adminNote: string | null; timestamp: string }
   | { type: 'comment'; commentId: string; body: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; commenterUsername: string | null; commenterAvatarUrl: string | null; timestamp: string }
   | { type: 'reply'; replyId: string; replyBody: string; parentBody: string; factMythHeader: string; factSlug: string; factCoverPhoto: string | null; replierUsername: string | null; replierAvatarUrl: string | null; timestamp: string }

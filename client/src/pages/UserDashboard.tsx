@@ -1820,9 +1820,9 @@ export default function UserDashboard() {
                                   </div>
                                   <div className="activity-post-body">
                                     <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 600 }} data-testid={`notif-myth-${item.id}`}>"{item.mythHeader}"</p>
-                                    {item.publishedFactId && (
+                                    {item.publishedFactSlug && (
                                       <div className="activity-action-row" style={{ marginTop: "0.5rem" }}>
-                                        <Link href={`/fact/${item.publishedFactId}`} className="activity-learn-more-button" data-testid={`button-view-published-${item.id}`}>
+                                        <Link href={`/fact/${item.publishedFactSlug}`} className="activity-learn-more-button" data-testid={`button-view-published-${item.id}`}>
                                           <img src={forwardArrow} alt="" className="activity-learn-more-arrow" />
                                           View published fact
                                         </Link>

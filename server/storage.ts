@@ -1432,7 +1432,7 @@ export class DatabaseStorage implements IStorage {
       if (s.status === "saved") {
         all.push({ type: "submission_reviewing", id: s.id, mythHeader: s.mythHeader, truthHeader: s.truthHeader, timestamp: ts });
       } else if (s.status === "published") {
-        all.push({ type: "submission_published", id: s.id, mythHeader: s.mythHeader, publishedFactId: s.publishedFactSlug ?? s.publishedFactId ?? null, timestamp: ts });
+        all.push({ type: "submission_published", id: s.id, mythHeader: s.mythHeader, publishedFactSlug: s.publishedFactSlug ?? null, timestamp: ts });
       } else if (s.status === "rejected") {
         all.push({ type: "submission_rejected", id: s.id, mythHeader: s.mythHeader, adminNote: s.adminNote ?? null, timestamp: ts });
       }
