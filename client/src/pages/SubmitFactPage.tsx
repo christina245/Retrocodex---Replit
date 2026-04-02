@@ -44,6 +44,8 @@ export default function SubmitFactPage() {
             <p className="submit-fact-body">
               This site documents widely believed myths and misconceptions that have circulated broadly, and are often repeated by educators, the media, or the public despite strong factual opposing evidence.
             </p>
+            <p><b>Submissions only require the "what you learned" header and the "current understanding" headers (the text you can see on each fact card) -- the admins will fill the rest of the details out!</b></p>
+            <br></br>
 
             <p className="submit-fact-body">
               Before submitting, please review the rules. Submissions that do not meet the following criteria will not be accepted:

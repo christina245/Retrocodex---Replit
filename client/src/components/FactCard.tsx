@@ -111,7 +111,7 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
                 {fact.factFilters && fact.factFilters.map((filter, index) => {
                   const isOfficialRevision = filter.toLowerCase() === "official revision";
                   const label = isOfficialRevision && fact.revisionYear
-                    ? `Official Revision · ${fact.revisionYear}`
+                    ? `Official Revision - ${fact.revisionYear}`
                     : toTitleCase(filter);
                   const tooltipText = FILTER_TOOLTIPS[filter.toLowerCase()];
                   const chip = (
