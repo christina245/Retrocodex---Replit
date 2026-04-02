@@ -106,35 +106,40 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
               <CategoryIcon size={12} style={{ color: fact.categoryColor }} className="category-icon-small" />
               <span className="category-badge">{fact.category}</span>
             </div>
-            {((fact.factFilters && fact.factFilters.length > 0) || (showTaughtUntilLabel && fact.taughtUntilYear)) && (
-              <div className="fact-filter-tags">
-                {fact.factFilters && fact.factFilters.map((filter, index) => {
-                  const isOfficialRevision = filter.toLowerCase() === "official revision";
-                  const label = isOfficialRevision && fact.revisionYear
-                    ? `Official Revision - ${fact.revisionYear}`
-                    : toTitleCase(filter);
-                  const tooltipText = FILTER_TOOLTIPS[filter.toLowerCase()];
-                  const chip = (
-                    <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                      {label}
+            {(() => {
+              const hasOfficialRevision = fact.factFilters?.some(f => f.toLowerCase() === "official revision") ?? false;
+              const showTaughtUntil = showTaughtUntilLabel && !!fact.taughtUntilYear && !hasOfficialRevision;
+              if (!((fact.factFilters && fact.factFilters.length > 0) || showTaughtUntil)) return null;
+              return (
+                <div className="fact-filter-tags">
+                  {fact.factFilters && fact.factFilters.map((filter, index) => {
+                    const isOfficialRevision = filter.toLowerCase() === "official revision";
+                    const label = isOfficialRevision && fact.revisionYear
+                      ? `Official Revision - ${fact.revisionYear}`
+                      : toTitleCase(filter);
+                    const tooltipText = FILTER_TOOLTIPS[filter.toLowerCase()];
+                    const chip = (
+                      <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                        {label}
+                      </span>
+                    );
+                    return tooltipText ? (
+                      <Tooltip key={index}>
+                        <TooltipTrigger asChild>{chip}</TooltipTrigger>
+                        <TooltipContent side="bottom" className="fact-filter-tooltip bg-[#2C2C2C] text-white border-0 z-[9999]">
+                          <p>{tooltipText}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : chip;
+                  })}
+                  {showTaughtUntil && (
+                    <span className="fact-filter-tag fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
+                      Widely Taught Until {fact.taughtUntilYear}
                     </span>
-                  );
-                  return tooltipText ? (
-                    <Tooltip key={index}>
-                      <TooltipTrigger asChild>{chip}</TooltipTrigger>
-                      <TooltipContent side="bottom" className="fact-filter-tooltip bg-[#2C2C2C] text-white border-0 z-[9999]">
-                        <p>{tooltipText}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ) : chip;
-                })}
-                {showTaughtUntilLabel && fact.taughtUntilYear && (
-                  <span className="fact-filter-tag fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
-                    Widely Taught Until {fact.taughtUntilYear}
-                  </span>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           <div className="fact-body">

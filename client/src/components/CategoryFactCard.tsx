@@ -101,26 +101,31 @@ export function CategoryFactCard({
           data-testid={`card-fact-${fact.id}`}
         >
           <div className="category-fact-header">
-            {((fact.factFilters && fact.factFilters.length > 0) || fact.taughtUntilYear) && (
-              <div className="category-fact-tags">
-                {fact.factFilters && fact.factFilters.map((filter, index) => {
-                  const isOfficialRevision = filter.toLowerCase() === "official revision";
-                  const label = isOfficialRevision && fact.revisionYear
-                    ? `Official Revision - ${fact.revisionYear}`
-                    : toTitleCase(filter);
-                  return (
-                    <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
-                      {label}
+            {(() => {
+              const hasOfficialRevision = fact.factFilters?.some(f => f.toLowerCase() === "official revision") ?? false;
+              const showTaughtUntil = !!fact.taughtUntilYear && !hasOfficialRevision;
+              if (!((fact.factFilters && fact.factFilters.length > 0) || showTaughtUntil)) return null;
+              return (
+                <div className="category-fact-tags">
+                  {fact.factFilters && fact.factFilters.map((filter, index) => {
+                    const isOfficialRevision = filter.toLowerCase() === "official revision";
+                    const label = isOfficialRevision && fact.revisionYear
+                      ? `Official Revision - ${fact.revisionYear}`
+                      : toTitleCase(filter);
+                    return (
+                      <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                        {label}
+                      </span>
+                    );
+                  })}
+                  {showTaughtUntil && (
+                    <span className="category-fact-tag category-fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
+                      Widely Taught Until {fact.taughtUntilYear}
                     </span>
-                  );
-                })}
-                {fact.taughtUntilYear && (
-                  <span className="category-fact-tag category-fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
-                    Widely Taught Until {fact.taughtUntilYear}
-                  </span>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           <div className="category-fact-body">
