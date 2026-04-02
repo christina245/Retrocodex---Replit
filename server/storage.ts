@@ -1408,10 +1408,12 @@ export class DatabaseStorage implements IStorage {
         truthHeader: factSubmissions.truthHeader,
         adminNote: factSubmissions.adminNote,
         publishedFactId: factSubmissions.publishedFactId,
+        publishedFactSlug: facts.slug,
         status: factSubmissions.status,
         updatedAt: factSubmissions.updatedAt,
       })
         .from(factSubmissions)
+        .leftJoin(facts, eq(factSubmissions.publishedFactId, facts.id))
         .where(and(
           eq(factSubmissions.userId, userId),
           inArray(factSubmissions.status, ["saved", "published", "rejected"]),
@@ -1430,7 +1432,7 @@ export class DatabaseStorage implements IStorage {
       if (s.status === "saved") {
         all.push({ type: "submission_reviewing", id: s.id, mythHeader: s.mythHeader, truthHeader: s.truthHeader, timestamp: ts });
       } else if (s.status === "published") {
-        all.push({ type: "submission_published", id: s.id, mythHeader: s.mythHeader, publishedFactId: s.publishedFactId ?? null, timestamp: ts });
+        all.push({ type: "submission_published", id: s.id, mythHeader: s.mythHeader, publishedFactId: s.publishedFactSlug ?? s.publishedFactId ?? null, timestamp: ts });
       } else if (s.status === "rejected") {
         all.push({ type: "submission_rejected", id: s.id, mythHeader: s.mythHeader, adminNote: s.adminNote ?? null, timestamp: ts });
       }

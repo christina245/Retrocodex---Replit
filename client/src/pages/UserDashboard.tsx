@@ -932,6 +932,18 @@ export default function UserDashboard() {
     enabled: isLoggedIn,
   });
 
+  const { data: followingIds = [] } = useQuery<string[]>({
+    queryKey: ["/api/following"],
+    enabled: isLoggedIn,
+  });
+  useEffect(() => {
+    if (followingIds.length > 0) {
+      const map: Record<string, boolean> = {};
+      followingIds.forEach((id: string) => { map[id] = true; });
+      setFollowedBackIds(map);
+    }
+  }, [followingIds]);
+
   const followBackMutation = useMutation({
     mutationFn: (followerId: string) => apiRequest("POST", `/api/follow/${followerId}`),
     onSuccess: (_data: unknown, followerId: string) => {
