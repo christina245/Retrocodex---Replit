@@ -1,0 +1,2 @@
+ALTER TABLE fact_submissions
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now();

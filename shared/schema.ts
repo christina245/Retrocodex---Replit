@@ -297,7 +297,7 @@ export const factSubmissions = pgTable("fact_submissions", {
   draftData: jsonb("draft_data"),
   publishedFactId: varchar("published_fact_id"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const insertFactSubmissionSchema = z.object({
