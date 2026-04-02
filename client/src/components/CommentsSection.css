@@ -33,6 +33,12 @@
   color: #2C2C2C;
 }
 
+.sign-in-to-comment-link {
+  color: #2c2c2c;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .comment-error {
   font-family: 'Public Sans', sans-serif;
   font-size: 12px;

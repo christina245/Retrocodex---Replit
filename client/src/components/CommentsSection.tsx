@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, LogIn, MoreHorizontal, Bookmark, Flag, Bell, Pencil, X } from "lucide-react";
+import { Search, MapPin, House, CornerUpLeft, ArrowUp, Trash2, MoreHorizontal, Bookmark, Flag, Bell, Pencil, X } from "lucide-react";
 import { Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -653,11 +653,10 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
         {!isLoggedIn ? (
           <button
             className="sign-in-to-comment"
-            onClick={() => onLoginClick?.("Sign in to leave a comment")}
+            onClick={() => onLoginClick?.("")}
             data-testid="button-sign-in-to-comment"
           >
-            <LogIn size={16} />
-            <span>Sign in to comment</span>
+            <span><span className="sign-in-to-comment-link">Log in</span> to comment</span>
           </button>
         ) : !isInputExpanded ? (
           <textarea

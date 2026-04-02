@@ -1042,12 +1042,6 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                     : "Log in to save your favorite topics, be notified when they're updated, and leave comments sharing your experiences."}
               </p>
 
-              {contextMessage && (
-                <p className="signin-context-message" data-testid="text-signin-context-message">
-                  {contextMessage}
-                </p>
-              )}
-
               <form className="signin-form" onSubmit={handleSubmit}>
                 {isSignUp && (
                   <div className="signin-field">
