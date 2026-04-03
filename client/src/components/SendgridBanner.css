@@ -1,3 +1,16 @@
+.sendgrid-banner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.sendgrid-banner-mascot {
+  height: 150px;
+  width: auto;
+  display: block;
+}
+
 .sendgrid-banner-container {
   width: 300px;
   height: 370px; /* 460 * 0.7 */
@@ -26,7 +39,7 @@
 }
 
 @media (max-width: 768px) {
-  .sendgrid-banner-container {
+  .sendgrid-banner-wrapper {
     display: none;
   }
 }
