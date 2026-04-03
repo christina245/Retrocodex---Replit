@@ -6,7 +6,7 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
 import type { CommentWithUser } from "@shared/schema";
 import ReactMarkdown from "react-markdown";
-import exclamationImg from "@assets/exclaimation_mark_1774947906423.jpg";
+import exclamationImg from "@assets/alert.png";
 import "./CommentsSection.css";
 
 interface CommentsSectionProps {
