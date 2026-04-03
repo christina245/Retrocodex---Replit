@@ -189,14 +189,17 @@ export function CategoryFactCard({
           {fact.betaOnly ? (
             <Tooltip>
               <TooltipTrigger asChild>
-                <button
-                  className="category-action-button category-action-button-disabled"
-                  data-testid={`button-share-${fact.id}`}
-                  aria-disabled="true"
-                >
-                  <Share2 size={16} />
-                  <span>Share</span>
-                </button>
+                <span style={{ cursor: 'not-allowed', display: 'inline-flex' }}>
+                  <button
+                    className="category-action-button category-action-button-disabled"
+                    data-testid={`button-share-${fact.id}`}
+                    disabled
+                    style={{ pointerEvents: 'none' }}
+                  >
+                    <Share2 size={16} />
+                    <span>Share</span>
+                  </button>
+                </span>
               </TooltipTrigger>
               <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999]">
                 Unavailable in beta
