@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { X, Check, BookOpen, Bookmark, Share2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
@@ -24,10 +25,21 @@ interface ExtendedFactCardProps {
   isSaved?: boolean;
 }
 
-export default function ExtendedFactCard({ fact, onSave, onShare, isSaved }: ExtendedFactCardProps) {
+export default function ExtendedFactCard({ fact, onSave, isSaved }: ExtendedFactCardProps) {
   // Split sources into those with logos and those without
   const sourcesWithLogos = fact.sources.filter(s => s.logoUrl);
   const textOnlySources = fact.sources.filter(s => !s.logoUrl);
+  const [showCopiedToast, setShowCopiedToast] = useState(false);
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setShowCopiedToast(true);
+      setTimeout(() => setShowCopiedToast(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
 
   return (
     <div className="extended-fact-card-wrapper" data-testid="extended-fact-card">
@@ -142,13 +154,19 @@ export default function ExtendedFactCard({ fact, onSave, onShare, isSaved }: Ext
         </button>
         <button 
           className="floating-action-button"
-          onClick={onShare}
+          onClick={handleShare}
           data-testid="button-share-extended"
           aria-label="Share fact"
         >
           <Share2 size={20} />
         </button>
       </div>
+
+      {showCopiedToast && (
+        <div className="copied-toast" data-testid="toast-copied-fact">
+          Copied link to fact
+        </div>
+      )}
     </div>
   );
 }

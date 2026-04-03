@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap, Activity, HeartHandshake, DiamondPlus } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -54,18 +55,19 @@ function toTitleCase(str: string): string {
 interface FactCardProps {
   fact: Fact;
   onSave: () => void;
-  onShare: () => void;
+  onShare?: () => void;
   onComment?: () => void;
   onBetaClick?: (factId: string) => void;
   isSaved?: boolean;
   showTaughtUntilLabel?: boolean;
 }
 
-export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSaved, showTaughtUntilLabel }: FactCardProps) {
+export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTaughtUntilLabel }: FactCardProps) {
   const CategoryIcon = getCategoryIcon(fact.category);
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
   const [, setLocation] = useLocation();
+  const [showCopiedToast, setShowCopiedToast] = useState(false);
 
   const handleBetaLinkClick = (e: React.MouseEvent) => {
     if (fact.betaOnly) {
@@ -86,6 +88,17 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
       return;
     }
     setLocation(`${factLink}#comments`);
+  };
+
+  const handleShare = async () => {
+    if (fact.betaOnly) return;
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${factLink}`);
+      setShowCopiedToast(true);
+      setTimeout(() => setShowCopiedToast(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
   };
 
   const count = fact.betaOnly ? 0 : (fact.commentCount ?? 0);
@@ -190,14 +203,32 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
             <Bookmark size={16} className={isSaved ? 'unsave-icon' : ''} />
             <span>{isSaved ? 'Unsave' : 'Save'}</span>
           </button>
-          <button 
-            className="action-button"
-            onClick={onShare}
-            data-testid={`button-share-${fact.id}`}
-          >
-            <Share2 size={16} />
-            <span>Share</span>
-          </button>
+          {fact.betaOnly ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className="action-button action-button-disabled"
+                  data-testid={`button-share-${fact.id}`}
+                  aria-disabled="true"
+                >
+                  <Share2 size={16} />
+                  <span>Share</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999]">
+                Unavailable in beta
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <button
+              className="action-button"
+              onClick={handleShare}
+              data-testid={`button-share-${fact.id}`}
+            >
+              <Share2 size={16} />
+              <span>Share</span>
+            </button>
+          )}
         </div>
 
         <Link 
@@ -210,6 +241,12 @@ export function FactCard({ fact, onSave, onShare, onComment, onBetaClick, isSave
           {fact.betaOnly ? "View sources" : "Learn more"}
         </Link>
       </div>
+
+      {showCopiedToast && (
+        <div className="copied-toast" data-testid="toast-copied-fact">
+          Copied link to fact
+        </div>
+      )}
     </div>
   );
 }

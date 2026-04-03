@@ -225,6 +225,16 @@
   flex-shrink: 0;
 }
 
+.action-button-disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+.action-button-disabled:hover {
+  color: #999;
+  background: none;
+}
+
 /* Mobile layout */
 @media (max-width: 768px) {
   .fact-card-wrapper {

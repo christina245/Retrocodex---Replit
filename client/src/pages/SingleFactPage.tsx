@@ -8,7 +8,6 @@ import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import envelopeImage from "@assets/email_1774815930235.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
-import { ShareModal } from "@/components/ShareModal";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { SignInModal } from "@/components/SignInModal";
@@ -20,7 +19,6 @@ import { FAQSchema } from "@/components/FAQSchema";
 import { CategoryLinks } from "@/components/CategoryLinks";
 import ExtendedFactCard from "@/components/ExtendedFactCard";
 import TimelineSection from "@/components/TimelineSection";
-import type { Fact } from "@/components/FactCard";
 import type { Fact as FactType } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
@@ -32,7 +30,6 @@ export default function SingleFactPage() {
   const { id } = useParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFollowModalOpen, setIsFollowModalOpen] = useState(false);
-  const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
@@ -159,19 +156,6 @@ export default function SingleFactPage() {
     } else {
       followMutation.mutate();
     }
-  };
-
-  const handleShareClick = () => {
-    if (!factData) return;
-    const factForShare: Fact = {
-      id: factData.id,
-      category: factData.categories[0] || "OTHER",
-      categoryColor: "#6FCF97",
-      myth: factData.mythHeader,
-      truth: factData.truthHeader,
-      link: `/fact/${factData.slug}`,
-    };
-    setShareModalFact(factForShare);
   };
 
   if (isLoading) {
@@ -311,7 +295,6 @@ export default function SingleFactPage() {
             <ExtendedFactCard 
               fact={extendedFactData}
               onSave={handleSaveClick}
-              onShare={handleShareClick}
               isSaved={factData ? savedFactIds.has(factData.id) : false}
             />
           </div>
@@ -402,14 +385,6 @@ export default function SingleFactPage() {
             </div>
           </div>
         </div>
-      )}
-
-      {shareModalFact && (
-        <ShareModal 
-          isOpen={!!shareModalFact}
-          onClose={() => setShareModalFact(null)}
-          fact={shareModalFact}
-        />
       )}
 
       <Footer />

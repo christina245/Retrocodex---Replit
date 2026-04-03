@@ -212,6 +212,16 @@
   flex-shrink: 0;
 }
 
+.category-action-button-disabled {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+}
+
+.category-action-button-disabled:hover {
+  color: #999;
+  background: none;
+}
+
 .category-action-button-saved {
   color: #FF5353;
 }

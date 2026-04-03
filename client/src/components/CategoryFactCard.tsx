@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { X, Check, MessageCircle, Bookmark, Share2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import forwardArrow from "@assets/forward triangle red.png";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
 import "./CategoryFactCard.css";
@@ -56,7 +58,6 @@ export function CategoryFactCard({
   fact, 
   categoryColor,
   onSave, 
-  onShare, 
   onComment,
   onBetaClick,
   highlightQuery,
@@ -65,6 +66,18 @@ export function CategoryFactCard({
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
   const [, setLocation] = useLocation();
+  const [showCopiedToast, setShowCopiedToast] = useState(false);
+
+  const handleShare = async () => {
+    if (fact.betaOnly) return;
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}${factLink}`);
+      setShowCopiedToast(true);
+      setTimeout(() => setShowCopiedToast(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
 
   const handleBetaLinkClick = (e: React.MouseEvent) => {
     if (fact.betaOnly) {
@@ -173,14 +186,32 @@ export function CategoryFactCard({
             <Bookmark size={16} className={isSaved ? 'saved-icon' : ''} />
             <span>{isSaved ? 'Saved' : 'Save'}</span>
           </button>
-          <button 
-            className="category-action-button" 
-            onClick={onShare}
-            data-testid={`button-share-${fact.id}`}
-          >
-            <Share2 size={16} />
-            <span>Share</span>
-          </button>
+          {fact.betaOnly ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  className="category-action-button category-action-button-disabled"
+                  data-testid={`button-share-${fact.id}`}
+                  aria-disabled="true"
+                >
+                  <Share2 size={16} />
+                  <span>Share</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999]">
+                Unavailable in beta
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <button
+              className="category-action-button"
+              onClick={handleShare}
+              data-testid={`button-share-${fact.id}`}
+            >
+              <Share2 size={16} />
+              <span>Share</span>
+            </button>
+          )}
         </div>
 
         <Link 
@@ -193,6 +224,12 @@ export function CategoryFactCard({
           {fact.betaOnly ? "View sources" : "Learn more"}
         </Link>
       </div>
+
+      {showCopiedToast && (
+        <div className="copied-toast" data-testid="toast-copied-fact">
+          Copied link to fact
+        </div>
+      )}
     </div>
   );
 }
