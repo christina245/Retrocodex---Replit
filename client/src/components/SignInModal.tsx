@@ -1,6 +1,6 @@
 import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle, RotateCcw } from "lucide-react";
 import envelopeImage from "@assets/email_1774815930235.png";
-import scrungyImage from "@assets/scrungy_saying_hi_1774818640303.png";
+import scrungyWavingImage from "@assets/scrungy_waving_signin_1775206753767.png";
 import { useState, useRef, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +9,6 @@ import { CATEGORIES } from "@shared/categories";
 import { OTHER_SUBCATEGORIES } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 import { validateUsername } from "@/lib/usernameValidation";
-import logoImage from "@assets/thicker_logo_only_1771065757126.png";
 import { createAvatar } from "@dicebear/core";
 import { funEmoji, glass, icons, identicon, shapes } from "@dicebear/collection";
 import "./SignInModal.css";
@@ -1029,9 +1028,9 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
           ) : (
             <>
               {isSignUp ? (
-                <img src={scrungyImage} alt="Welcome to Retrocodex" className="signin-logo-signup" data-testid="img-signin-logo" />
+                <img src={scrungyWavingImage} alt="Welcome to Retrocodex" className="signin-logo-signup" data-testid="img-signin-logo" />
               ) : (
-                <img src={logoImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
+                <img src={scrungyWavingImage} alt="Retrocodex" className="signin-logo" data-testid="img-signin-logo" />
               )}
 
               <p className="signin-description" data-testid="text-signin-description">
