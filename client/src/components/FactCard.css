@@ -12,7 +12,7 @@
 .fact-card {
   width: 515px;
   height: 310px;
-  background: #fdfdfd;
+  background: #ffffff;
   box-shadow: none;
   border: 1px solid color-mix(in srgb, var(--card-category-color) 25%, transparent);
   border-radius: 8px;

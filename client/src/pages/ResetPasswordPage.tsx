@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
+import lockImage from "@assets/cute_lock_1775201659214.png";
 import "./ForgotPasswordPage.css";
 
 export default function ResetPasswordPage() {
@@ -48,7 +49,7 @@ export default function ResetPasswordPage() {
     return (
       <div className="forgot-password-page">
         <div className="forgot-password-card">
-          <Link href="/" className="forgot-password-logo">Retrocodex</Link>
+          <Link href="/"><img src={lockImage} className="forgot-password-logo" alt="Retrocodex" /></Link>
           <p className="forgot-password-title">Invalid link</p>
           <p className="forgot-password-subtitle">This password reset link is missing or invalid.</p>
           <Link href="/forgot-password" className="forgot-password-back-link">Request a new reset link</Link>
@@ -60,7 +61,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="forgot-password-page">
       <div className="forgot-password-card">
-        <Link href="/" className="forgot-password-logo">Retrocodex</Link>
+        <Link href="/"><img src={lockImage} className="forgot-password-logo" alt="Retrocodex" /></Link>
 
         {success ? (
           <div className="forgot-password-success">

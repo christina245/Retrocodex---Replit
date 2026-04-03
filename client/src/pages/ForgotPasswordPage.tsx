@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import lockImage from "@assets/cute_lock_1775201659214.png";
 import "./ForgotPasswordPage.css";
 
 export default function ForgotPasswordPage() {
@@ -34,7 +35,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="forgot-password-page">
       <div className="forgot-password-card">
-        <Link href="/" className="forgot-password-logo">Retrocodex</Link>
+        <Link href="/"><img src={lockImage} className="forgot-password-logo" alt="Retrocodex" /></Link>
 
         {submitted ? (
           <div className="forgot-password-success">
