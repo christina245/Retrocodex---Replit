@@ -2620,8 +2620,8 @@ a.following-post-fact-link:hover {
 /* ── For You feed: FactCard-style items ── */
 .following-post--fact,
 .following-post--article {
-  padding: 0;
-  border: none;
+  padding: 24px 0;
+  border-bottom: 1px solid #f0f0f0;
   background: none;
   flex-direction: column;
 }
@@ -2633,6 +2633,10 @@ a.following-post-fact-link:hover {
 
 .following-post-fact-card-wrap {
   margin-left: 52px;
+}
+
+.following-post-fact-card-wrap .fact-card-wrapper {
+  max-width: 515px;
 }
 
 .feed-factcard-link {
