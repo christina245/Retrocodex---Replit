@@ -25,10 +25,16 @@ import {
   buildProfileUrl,
 } from "./sendgrid";
 import crypto from "crypto";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 declare module "express-session" {
   interface SessionData {
     userId: string;
+    pendingGoogleUser?: {
+      googleId: string;
+      email: string;
+    };
   }
 }
 
@@ -215,6 +221,169 @@ function requireUser(req: any, res: any, next: any) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // ── Google OAuth setup ───────────────────────────────────────────────────────
+  const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL ||
+    `https://${process.env.REPLIT_DOMAINS}/api/auth/google/callback`;
+
+  passport.use(new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      callbackURL: googleCallbackUrl,
+    },
+    async (_accessToken, _refreshToken, profile, done) => {
+      done(null, profile);
+    }
+  ));
+  passport.serializeUser((user, done) => done(null, user));
+  passport.deserializeUser((user, done) => done(null, user as Express.User));
+  app.use(passport.initialize());
+
+  // GET /api/auth/google — redirect to Google consent screen
+  app.get("/api/auth/google",
+    passport.authenticate("google", { scope: ["email", "profile"], session: false })
+  );
+
+  // GET /api/auth/google/callback — handle Google response
+  app.get("/api/auth/google/callback",
+    passport.authenticate("google", { session: false, failureRedirect: "/?oauth_error=1" }),
+    async (req, res) => {
+      try {
+        const profile = req.user as any;
+        const googleId: string = profile.id;
+        const email: string = (profile.emails?.[0]?.value || "").toLowerCase();
+
+        if (!email) {
+          return res.redirect("/?oauth_error=1");
+        }
+
+        // Check if account already exists by google_id
+        const [byGoogleId] = await db.select()
+          .from(userAccounts)
+          .where(eq(userAccounts.googleId, googleId))
+          .limit(1);
+
+        if (byGoogleId) {
+          // Returning Google user — log in directly
+          req.session.userId = byGoogleId.id;
+          return res.redirect("/?loggedin=1");
+        }
+
+        // Check if account exists by email (was created with email+password)
+        const [byEmail] = await db.select()
+          .from(userAccounts)
+          .where(eq(userAccounts.email, email))
+          .limit(1);
+
+        if (byEmail) {
+          // Link Google ID to existing account and log in
+          await db.update(userAccounts)
+            .set({ googleId, emailVerified: true })
+            .where(eq(userAccounts.id, byEmail.id));
+          req.session.userId = byEmail.id;
+          return res.redirect("/?loggedin=1");
+        }
+
+        // Brand new user — store pending data in session, redirect to profile setup
+        req.session.pendingGoogleUser = { googleId, email };
+        return res.redirect("/?needs_setup=1");
+      } catch (err) {
+        console.error("Google OAuth callback error:", err);
+        return res.redirect("/?oauth_error=1");
+      }
+    }
+  );
+
+  // POST /api/auth/google/complete-profile — create profile for new Google users
+  app.post("/api/auth/google/complete-profile", async (req, res) => {
+    const pending = req.session.pendingGoogleUser;
+    if (!pending) {
+      return res.status(400).json({ message: "No pending Google sign-in found. Please sign in with Google again." });
+    }
+    try {
+      const data = z.object({
+        username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_-]+$/, "Username can only contain letters, numbers, underscores, and hyphens"),
+        avatarUrl: z.string().optional(),
+        currentLocation: z.string().optional(),
+        showCurrentLocation: z.boolean().optional(),
+        placesLived: z.array(z.string()).optional(),
+        showPlacesLived: z.boolean().optional(),
+        favoriteTags: z.array(z.string()).optional(),
+        misinfoSource: z.string().optional(),
+        bio: z.string().optional(),
+      }).parse(req.body);
+
+      // Check username uniqueness
+      const [existingProfile] = await db.select({ id: userProfiles.id })
+        .from(userProfiles)
+        .where(eq(userProfiles.username, data.username))
+        .limit(1);
+      if (existingProfile) {
+        return res.status(409).json({ message: "This username is already taken." });
+      }
+
+      // Create the user_accounts row
+      const [account] = await db.insert(userAccounts)
+        .values({
+          email: pending.email,
+          googleId: pending.googleId,
+          emailVerified: true,
+          passwordHash: null,
+        })
+        .returning({ id: userAccounts.id });
+
+      // Create the user_profiles row
+      const [profile] = await db.insert(userProfiles)
+        .values({
+          id: account.id,
+          username: data.username,
+          avatarUrl: data.avatarUrl || "",
+          currentLocation: data.currentLocation || "",
+          showCurrentLocation: data.showCurrentLocation ?? false,
+          placesLived: data.placesLived || [],
+          showPlacesLived: data.showPlacesLived ?? false,
+          favoriteTags: data.favoriteTags || [],
+          misinfoSource: data.misinfoSource || "",
+          bio: data.bio || "",
+        })
+        .returning();
+
+      // Auto-follow all admin accounts
+      const adminProfiles = await db
+        .select({ id: userProfiles.id })
+        .from(userProfiles)
+        .where(eq(userProfiles.isAdmin, true));
+      for (const admin of adminProfiles.filter((a) => a.id !== account.id)) {
+        await storage.followUser(account.id, admin.id);
+      }
+
+      // Establish session, clear pending
+      req.session.userId = account.id;
+      delete req.session.pendingGoogleUser;
+
+      return res.status(201).json({
+        id: profile.id,
+        username: profile.username,
+        email: pending.email,
+        bio: profile.bio,
+        profilePhoto: profile.avatarUrl,
+        currentLocation: profile.currentLocation,
+        showCurrentLocation: profile.showCurrentLocation,
+        placesLived: profile.placesLived,
+        showPlacesLived: profile.showPlacesLived,
+        favoriteTags: profile.favoriteTags,
+        misinfoSource: profile.misinfoSource,
+        emailVerified: true,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("Google complete-profile error:", error);
+      return res.status(500).json({ message: "Profile creation failed. Please try again." });
+    }
+  });
+
   // GET /api/auth/check-email — check if an email is already registered (sign-up only)
   app.get("/api/auth/check-email", async (req, res) => {
     const email = (req.query.email as string || "").toLowerCase().trim();
@@ -349,6 +518,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!account) {
         recordAuthAttempt(ip);
         return res.status(401).json({ message: "Invalid email or password." });
+      }
+
+      if (!account.passwordHash) {
+        recordAuthAttempt(ip);
+        return res.status(401).json({ message: "This account uses Google sign-in. Please sign in with Google." });
       }
 
       const passwordMatch = await bcrypt.compare(password, account.passwordHash);

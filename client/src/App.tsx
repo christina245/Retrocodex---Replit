@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -6,7 +6,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
-import { AuthProvider } from "./lib/auth";
+import { AuthProvider, useAuth } from "./lib/auth";
+import { SignInModal } from "@/components/SignInModal";
+import { useToast } from "@/hooks/use-toast";
 import HomePage from "@/pages/HomePage";
 import AdminPage from "@/pages/AdminPage";
 import SingleFactPage from "@/pages/SingleFactPage";
@@ -40,6 +42,51 @@ import UserDashboard from "@/pages/UserDashboard";
 import PublicProfile from "@/pages/PublicProfile";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
+
+function OAuthCallbackHandler() {
+  const { refetchUser } = useAuth();
+  const { toast } = useToast();
+  const [showGoogleSetup, setShowGoogleSetup] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("loggedin")) {
+      params.delete("loggedin");
+      const newUrl = window.location.pathname + (params.toString() ? `?${params}` : "");
+      window.history.replaceState({}, "", newUrl);
+      refetchUser();
+    }
+
+    if (params.has("needs_setup")) {
+      params.delete("needs_setup");
+      const newUrl = window.location.pathname + (params.toString() ? `?${params}` : "");
+      window.history.replaceState({}, "", newUrl);
+      setShowGoogleSetup(true);
+    }
+
+    if (params.has("oauth_error")) {
+      params.delete("oauth_error");
+      const newUrl = window.location.pathname + (params.toString() ? `?${params}` : "");
+      window.history.replaceState({}, "", newUrl);
+      toast({
+        title: "Sign-in failed",
+        description: "Something went wrong with Google sign-in. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [refetchUser, toast]);
+
+  if (!showGoogleSetup) return null;
+
+  return (
+    <SignInModal
+      isOpen={true}
+      onClose={() => setShowGoogleSetup(false)}
+      googleSetupMode={true}
+    />
+  );
+}
 
 function Router() {
   // Track page views when routes change
@@ -99,6 +146,7 @@ function App() {
       <AuthProvider>
         <TooltipProvider delayDuration={0}>
           <Toaster />
+          <OAuthCallbackHandler />
           <Router />
         </TooltipProvider>
       </AuthProvider>

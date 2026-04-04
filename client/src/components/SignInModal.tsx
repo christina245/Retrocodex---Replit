@@ -447,9 +447,10 @@ interface SignInModalProps {
   customTitle?: string;
   onSuccessRedirect?: string;
   contextMessage?: string;
+  googleSetupMode?: boolean;
 }
 
-type ModalScreen = "auth" | "locationSetup" | "topicSelection" | "emailVerification";
+type ModalScreen = "auth" | "locationSetup" | "topicSelection" | "emailVerification" | "googleUsernameSetup";
 
 interface OtherCountryEntry {
   country: string;
@@ -458,8 +459,8 @@ interface OtherCountryEntry {
 
 type TagsByCategory = Record<string, Record<string, string[]>>;
 
-export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, contextMessage }: SignInModalProps) {
-  const { login, register } = useAuth();
+export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, contextMessage, googleSetupMode }: SignInModalProps) {
+  const { login, register, refetchUser } = useAuth();
   const [currentPath, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -478,6 +479,14 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
   const [resendMessage, setResendMessage] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isGoogleFlow, setIsGoogleFlow] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && googleSetupMode) {
+      setIsGoogleFlow(true);
+      setScreen("googleUsernameSetup");
+    }
+  }, [isOpen, googleSetupMode]);
 
   const [residenceCountry, setResidenceCountry] = useState("");
   const [residenceUsState, setResidenceUsState] = useState("");
@@ -580,6 +589,9 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
     setSelectedCategories([]);
     setSelectedSubcategories([]);
     setSelectedTags([]);
+    setIsGoogleFlow(false);
+    setUsername("");
+    setLoginError("");
     onClose();
   };
 
@@ -666,6 +678,43 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
     const placesLived = otherCountries
       .filter((c) => c.country)
       .map((c) => c.usState ? `${c.usState}, ${c.country}` : c.country);
+
+    if (isGoogleFlow) {
+      try {
+        const res = await fetch("/api/auth/google/complete-profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            username,
+            avatarUrl: profilePhoto,
+            currentLocation,
+            showCurrentLocation: featureResidence,
+            placesLived,
+            showPlacesLived: featureOtherCountries,
+            favoriteTags: selectedTags,
+            misinfoSource: "",
+            bio: "",
+          }),
+        });
+        const data = await res.json();
+        setIsSubmitting(false);
+        if (res.ok) {
+          await refetchUser();
+          handleClose();
+        } else {
+          setLoginError(data.message || "Profile creation failed. Please try again.");
+          if (res.status === 409) {
+            setScreen("googleUsernameSetup");
+          }
+        }
+      } catch {
+        setIsSubmitting(false);
+        setLoginError("Something went wrong. Please try again.");
+      }
+      return;
+    }
+
     const result = await register({
       username: username || "UnlearnExplorer",
       email,
@@ -1025,6 +1074,58 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                 Next step
               </button>
             </div>
+          ) : screen === "googleUsernameSetup" ? (
+            <div className="signin-location-setup" data-testid="screen-google-username-setup">
+              <img
+                src={scrungyWavingImage}
+                alt="Welcome to Retrocodex"
+                className="signin-logo-signup"
+                data-testid="img-signin-logo-google"
+              />
+              <h2 className="signin-confirmation-title" data-testid="text-google-username-title">
+                One last step — choose a username
+              </h2>
+              <p className="signin-description" data-testid="text-google-username-subtitle">
+                Your username is public and identifies you across Retrocodex.
+              </p>
+              <div className="signin-field" style={{ marginTop: 16 }}>
+                <label className="signin-label" htmlFor="google-username">USERNAME</label>
+                <input
+                  id="google-username"
+                  type="text"
+                  className="signin-input"
+                  value={username}
+                  onChange={(e) => handleUsernameChange(e.target.value)}
+                  placeholder="Choose a username"
+                  data-testid="input-google-username"
+                  autoFocus
+                />
+                {usernameError && (
+                  <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-google-username-error">
+                    {usernameError}
+                  </p>
+                )}
+              </div>
+              {loginError && (
+                <p className="signin-error-text" style={{ textAlign: "center", marginTop: 8 }} data-testid="text-google-setup-error">
+                  {loginError}
+                </p>
+              )}
+              <button
+                type="button"
+                className="signin-submit-button"
+                data-testid="button-google-username-next"
+                disabled={!!usernameError || username.trim().length < 3}
+                onClick={() => {
+                  if (!usernameError && username.trim().length >= 3) {
+                    setLoginError("");
+                    setScreen("locationSetup");
+                  }
+                }}
+              >
+                Next step
+              </button>
+            </div>
           ) : (
             <>
               {isSignUp ? (
@@ -1175,6 +1276,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                   type="button"
                   className="signin-social-button"
                   data-testid="button-signin-google"
+                  onClick={() => { window.location.href = "/api/auth/google"; }}
                 >
                   <FcGoogle size={20} />
                   <span>Google</span>

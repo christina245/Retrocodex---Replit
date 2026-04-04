@@ -98,7 +98,8 @@ export type User = typeof users.$inferSelect;
 export const userAccounts = pgTable("user_accounts", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
-  passwordHash: text("password_hash").notNull(),
+  passwordHash: text("password_hash"),
+  googleId: text("google_id").unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   verificationToken: text("verification_token"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
