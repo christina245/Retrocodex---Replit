@@ -187,7 +187,7 @@ export function CategoryFactCard({
             <span>{isSaved ? 'Saved' : 'Save'}</span>
           </button>
           {fact.betaOnly ? (
-            <Tooltip>
+            <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <span style={{ cursor: 'not-allowed', display: 'inline-flex' }}>
                   <button
@@ -201,7 +201,7 @@ export function CategoryFactCard({
                   </button>
                 </span>
               </TooltipTrigger>
-              <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999]">
+              <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999] text-[10px] px-2 py-0.5">
                 Unavailable in beta
               </TooltipContent>
             </Tooltip>
