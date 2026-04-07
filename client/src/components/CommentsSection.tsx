@@ -25,6 +25,11 @@ function getAvatarSrc(avatarUrl: string, username: string | null) {
 
 function formatDate(date: Date | string) {
   const d = new Date(date);
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return "just now";
+  if (diff < 3600) return `${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  if (diff < 604800) return `${Math.floor(diff / 86400)}d`;
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 

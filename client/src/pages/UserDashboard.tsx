@@ -525,11 +525,11 @@ function formatRelativeTime(date: Date | string) {
   const diff = now.getTime() - d.getTime();
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) return `${mins} min`;
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `${hours}h`;
   const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
+  if (days < 30) return `${days}d`;
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
@@ -1766,14 +1766,14 @@ export default function UserDashboard() {
 
                       const formatRelativeTime = (date: string | Date) => {
                         const d = new Date(date).getTime();
-                        const now = Date.now();
-                        const diff = now - d;
+                        const diff = Date.now() - d;
                         const minutes = Math.floor(diff / 60000);
-                        if (minutes < 60) return `${minutes}m ago`;
+                        if (minutes < 1) return "just now";
+                        if (minutes < 60) return `${minutes} min`;
                         const hours = Math.floor(minutes / 60);
-                        if (hours < 24) return `${hours}h ago`;
+                        if (hours < 24) return `${hours}h`;
                         const days = Math.floor(hours / 24);
-                        if (days < 7) return `${days}d ago`;
+                        if (days < 30) return `${days}d`;
                         return new Date(date).toLocaleDateString("en-US", { month: "short", day: "numeric" });
                       };
 
@@ -1881,11 +1881,11 @@ export default function UserDashboard() {
                             const diff = Date.now() - new Date(item.timestamp).getTime();
                             const m = Math.floor(diff / 60000);
                             if (m < 1) return "just now";
-                            if (m < 60) return `${m} min ago`;
+                            if (m < 60) return `${m} min`;
                             const h = Math.floor(m / 60);
-                            if (h < 24) return `${h}h ago`;
+                            if (h < 24) return `${h}h`;
                             const d = Math.floor(h / 24);
-                            if (d < 30) return `${d}d ago`;
+                            if (d < 30) return `${d}d`;
                             return new Date(item.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" });
                           })();
 
@@ -3039,12 +3039,13 @@ export default function UserDashboard() {
                           const timeAgo = (() => {
                             const diff = Date.now() - new Date(item.commentCreatedAt).getTime();
                             const mins = Math.floor(diff / 60000);
-                            if (mins < 60) return `${mins || 1}m ago`;
+                            if (mins < 1) return "just now";
+                            if (mins < 60) return `${mins} min`;
                             const hrs = Math.floor(mins / 60);
-                            if (hrs < 24) return `${hrs}h ago`;
+                            if (hrs < 24) return `${hrs}h`;
                             const days = Math.floor(hrs / 24);
-                            if (days < 7) return `${days}d ago`;
-                            return new Date(item.commentCreatedAt).toLocaleDateString();
+                            if (days < 30) return `${days}d`;
+                            return new Date(item.commentCreatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" });
                           })();
                           return (
                             <div key={item.commentId} className="saved-comment" data-testid={`saved-comment-${item.commentId}`}>
