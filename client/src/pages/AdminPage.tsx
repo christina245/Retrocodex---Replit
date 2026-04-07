@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Download, Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2 } from "lucide-react";
+import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2 } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
@@ -9,14 +9,7 @@ import "./AdminPage.css";
 import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
 
-interface EmailSubscription {
-  id: string;
-  email: string;
-  source: string;
-  createdAt: string;
-}
-
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "view-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports";
 
 interface FactSubmission {
   id: string;
@@ -357,28 +350,6 @@ export default function AdminPage() {
       setExtCoverUploading(false);
     }
   };
-
-  const { data: emails, isLoading: emailsLoading, error: emailsError } = useQuery<EmailSubscription[]>({
-    queryKey: ["/api/emails"],
-    queryFn: async () => {
-      const response = await fetch("/api/emails", {
-        headers: {
-          'Authorization': 'Basic ' + btoa('admin:' + password)
-        }
-      });
-
-      if (response.status === 401) {
-        throw new Error("Invalid password");
-      }
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch emails");
-      }
-
-      return response.json();
-    },
-    enabled: isAuthenticated && currentView === "emails",
-  });
 
   const { data: facts, isLoading: factsLoading, error: factsError } = useQuery<Fact[]>({
     queryKey: ["/api/facts"],
@@ -1392,30 +1363,6 @@ export default function AdminPage() {
     }
   };
 
-  const exportToCSV = () => {
-    if (!emails) return;
-    
-    const headers = ["Email", "Source", "Date Submitted"];
-    const rows = emails.map(sub => [
-      sub.email,
-      sub.source,
-      new Date(sub.createdAt).toLocaleDateString()
-    ]);
-
-    const csvContent = [
-      headers.join(","),
-      ...rows.map(row => row.join(","))
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `retrocodex-emails-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
-
   // Get the category color for fact cards (matching frontend colors)
   const getCategoryColor = (categories: string[]): string => {
     if (categories.includes("History")) return "#F5D547";
@@ -1533,24 +1480,6 @@ export default function AdminPage() {
           </button>
           
           <button
-            className={`sidebar-nav-item ${currentView === 'emails' ? 'active' : ''}`}
-            onClick={() => setCurrentView('emails')}
-            data-testid="nav-emails"
-          >
-            <Mail size={18} />
-            <span>View Email Signups</span>
-          </button>
-
-          <button
-            className={`sidebar-nav-item ${currentView === 'manage-admins' ? 'active' : ''}`}
-            onClick={() => { setAdminActionMessage(null); setCurrentView('manage-admins'); }}
-            data-testid="nav-manage-admins"
-          >
-            <Shield size={18} />
-            <span>Manage Admins</span>
-          </button>
-
-          <button
             className={`sidebar-nav-item ${currentView === 'submissions' ? 'active' : ''}`}
             onClick={() => setCurrentView('submissions')}
             data-testid="nav-submissions"
@@ -1607,6 +1536,15 @@ export default function AdminPage() {
                 {reportsCount.count}
               </span>
             )}
+          </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'manage-admins' ? 'active' : ''}`}
+            onClick={() => { setAdminActionMessage(null); setCurrentView('manage-admins'); }}
+            data-testid="nav-manage-admins"
+          >
+            <Shield size={18} />
+            <span>Manage Admins</span>
           </button>
         </nav>
       </aside>
@@ -3090,78 +3028,6 @@ export default function AdminPage() {
           </div>
         )}
 
-        {currentView === 'emails' && (
-          <div className="admin-content">
-            <header className="content-header">
-              <div>
-                <h1 className="content-title">Email Subscriptions</h1>
-                <p className="content-subtitle" data-testid="text-count">
-                  {emails?.length || 0} {emails?.length === 1 ? 'subscription' : 'subscriptions'}
-                </p>
-              </div>
-              <button 
-                onClick={exportToCSV}
-                className="export-button"
-                data-testid="button-export-csv"
-                disabled={!emails || emails.length === 0}
-              >
-                <Download size={18} />
-                Export CSV
-              </button>
-            </header>
-
-            {emailsLoading ? (
-              <div className="loading-message" data-testid="text-loading">Loading...</div>
-            ) : emailsError ? (
-              <div className="error-container">
-                <div className="error-message" data-testid="text-error">
-                  {emailsError instanceof Error ? emailsError.message : "Failed to load emails"}
-                </div>
-              </div>
-            ) : (
-              <div className="emails-table-container">
-                {emails && emails.length > 0 ? (
-                  <table className="emails-table">
-                    <thead>
-                      <tr>
-                        <th>Email</th>
-                        <th>Source</th>
-                        <th>Date Submitted</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {emails.map((subscription) => (
-                        <tr key={subscription.id} data-testid={`row-email-${subscription.id}`}>
-                          <td className="email-cell" data-testid={`text-email-${subscription.id}`}>
-                            {subscription.email}
-                          </td>
-                          <td className="source-cell">
-                            <span className="source-badge" data-testid={`text-source-${subscription.id}`}>
-                              {subscription.source === 'signup-banner' ? 'Signup Banner' : 'Save Modal'}
-                            </span>
-                          </td>
-                          <td className="date-cell" data-testid={`text-date-${subscription.id}`}>
-                            {new Date(subscription.createdAt).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <div className="empty-state">
-                    <p data-testid="text-empty">No email subscriptions yet.</p>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
         {currentView === 'manage-admins' && (
           <div className="admin-content">
             <header className="content-header">
