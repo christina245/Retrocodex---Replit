@@ -911,6 +911,32 @@ a.following-post-fact-link:hover {
   padding: 16px 0 8px 0;
 }
 
+.local-feed-us-banner {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #878787;
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+
+.local-feed-us-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.local-feed-us-link:hover {
+  color: #FF5353;
+}
+
 .following-post-location {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;

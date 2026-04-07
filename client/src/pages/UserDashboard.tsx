@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import ReactMarkdown from "react-markdown";
 import { MapPin, House, Pencil, X, Home, Plus, Minus, XCircle, Search, Bookmark, Users, MapPinned, BellRing, FileText, MessageSquare, FilePenLine, CheckCircle, Check, BookOpen, ChevronRight, ChevronDown, Send, Newspaper, UserRoundPen, PenLine, Settings, LogOut, Shield, Bell, User, Trash2, Lock, CornerUpLeft, Heart, MessageSquareMore, UserRoundPlus, CircleCheckBig, CircleCheck, MapPinCheckInside, MonitorX, PlusCircle, Clock, MoreHorizontal, BellPlus, FlagTriangleRight, GitCommitHorizontal, MessageCircleMore, SearchCheck, Blend, CalendarCheck, ArrowUp, List } from "lucide-react";
 import forwardArrow from "@assets/forward triangle red.png";
-import scrungyConfetti from "@assets/Scrungy_the_squirrel_at_work_cropped_1774648658154.png";
+import scrungyConfetti from "@assets/scrungy_at_work_painted_1775522114338.png";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -1594,6 +1594,11 @@ export default function UserDashboard() {
                         const localItems = localFeedData?.items ?? [];
                         const localTotalPages = localFeedData?.totalPages ?? 1;
 
+                        const isUsWithoutState = (loc: string) => loc.trim().toLowerCase() === "united states";
+                        const userHasUsWithoutState =
+                          (user?.currentLocation ? isUsWithoutState(user.currentLocation) : false) ||
+                          (user?.placesLived ?? []).some(isUsWithoutState);
+
                         if (hasNoLocations) {
                           return (
                             <div className="dashboard-feed-empty" data-testid="feed-empty-local-no-location">
@@ -1623,6 +1628,26 @@ export default function UserDashboard() {
                           );
                         }
 
+                        if (userHasUsWithoutState && localItems.length === 0) {
+                          return (
+                            <div className="dashboard-feed-empty" data-testid="feed-empty-local-us-no-state">
+                              <MapPin size={40} className="dashboard-feed-empty-icon" />
+                              <p className="dashboard-feed-empty-title">No U.S. state selected</p>
+                              <p className="dashboard-feed-empty-desc">
+                                To view local activity from users based in the United States, please select the state where you're currently based out of or have lived in the past.
+                              </p>
+                              <button
+                                type="button"
+                                className="dashboard-feed-empty-action"
+                                onClick={() => setSideTab("edit-profile")}
+                                data-testid="button-go-to-edit-profile-local"
+                              >
+                                Edit Profile
+                              </button>
+                            </div>
+                          );
+                        }
+
                         if (localItems.length === 0) {
                           return (
                             <div className="edit-requests-beta-state" data-testid="feed-empty-local">
@@ -1637,6 +1662,19 @@ export default function UserDashboard() {
                             <p className="local-feed-description" data-testid="local-feed-description">
                               Activity from users who share a location with you — current or past.
                             </p>
+                            {userHasUsWithoutState && (
+                              <p className="local-feed-us-banner" data-testid="local-feed-us-banner">
+                                To also see activity from users in the United States,{" "}
+                                <button
+                                  type="button"
+                                  className="local-feed-us-link"
+                                  onClick={() => setSideTab("edit-profile")}
+                                  data-testid="button-select-state-banner"
+                                >
+                                  please select a state
+                                </button>.
+                              </p>
+                            )}
                             {localItems.map((item, i) => (
                               <FeedPost key={`${item.type}-${item.id}`} item={item} index={i} handlers={feedHandlers} />
                             ))}
