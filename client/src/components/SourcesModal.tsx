@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { X, BookOpen } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import squirrelImg from "@assets/Scrungy_the_squirrel_at_work_cropped_1774648658154.png";
+import squirrelImg from "@assets/scrungy_at_work_painted_1775522114338.png";
 import type { Fact as DbFact, Source } from "@shared/schema";
 import "./SourcesModal.css";
 
