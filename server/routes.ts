@@ -1,13 +1,13 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, comments, facts, factFollows, passwordResetTokens } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, insertCommentReportSchema, commentReports, comments, facts, factFollows, passwordResetTokens } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import bcrypt from "bcrypt";
-import { eq, gte, count, and, sql, desc, inArray } from "drizzle-orm";
+import { eq, gte, count, and, sql, desc, inArray, isNull } from "drizzle-orm";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 import {
@@ -28,6 +28,7 @@ import {
 import crypto from "crypto";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { moderateText } from "./openai";
 
 declare module "express-session" {
   interface SessionData {
@@ -2446,7 +2447,19 @@ Sitemap: ${SITE_URL}/sitemap.xml
     try {
       const factId = req.params.id;
       const data = insertCommentSchema.parse(req.body);
-      const comment = await storage.createComment(req.session.userId!, { ...data, factId });
+
+      // AI moderation — skip gracefully if OPENAI_API_KEY is unset
+      const modResult = await moderateText(data.body);
+      if (modResult?.flagged) {
+        return res.status(400).json({ message: "Your comment was flagged by our content filter. Please review our community guidelines and try again." });
+      }
+
+      const comment = await storage.createComment(req.session.userId!, {
+        ...data,
+        factId,
+        needsReview: modResult?.needsReview ?? false,
+        aiCategories: modResult?.needsReview ? modResult.categories : undefined,
+      });
 
       // Fire-and-forget: comment or reply email
       (async () => {
@@ -2729,6 +2742,158 @@ Sitemap: ${SITE_URL}/sitemap.xml
     } catch (error) {
       console.error("GET /api/feed/fact-updates error:", error);
       res.status(500).json({ message: "Failed to fetch fact updates feed" });
+    }
+  });
+
+  // POST /api/comments/:id/report — user reports a comment (requireUser)
+  app.post("/api/comments/:id/report", requireUser, async (req, res) => {
+    try {
+      const commentId = req.params.id;
+      const reporterId = req.session.userId!;
+      const data = insertCommentReportSchema.parse(req.body);
+
+      // Check the comment exists
+      const [existing] = await db.select({ id: comments.id }).from(comments).where(eq(comments.id, commentId)).limit(1);
+      if (!existing) return res.status(404).json({ message: "Comment not found" });
+
+      // Check for duplicate report (one report per user per comment)
+      const [dupReport] = await db
+        .select({ id: commentReports.id })
+        .from(commentReports)
+        .where(and(eq(commentReports.commentId, commentId), eq(commentReports.reporterId, reporterId)))
+        .limit(1);
+      if (dupReport) return res.status(409).json({ message: "You have already reported this comment" });
+
+      await db.insert(commentReports).values({
+        commentId,
+        reporterId,
+        reasons: data.reasons,
+        detail: data.detail ?? "",
+      });
+
+      return res.status(201).json({ message: "Report submitted" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      console.error("POST /api/comments/:id/report error:", error);
+      res.status(500).json({ message: "Failed to submit report" });
+    }
+  });
+
+  // GET /api/admin/reports — get all unresolved user reports + AI-flagged comments (admin only)
+  app.get("/api/admin/reports", requireAuth, async (req, res) => {
+    try {
+      // User reports with comment + reporter info (raw SQL for double user_profiles join)
+      const userReportsRaw = await db.execute(sql`
+        SELECT
+          cr.id AS "reportId",
+          cr.comment_id AS "commentId",
+          c.body AS "commentBody",
+          c.created_at AS "commentCreatedAt",
+          c.user_id AS "commentUserId",
+          c.fact_id AS "commentFactId",
+          f.myth_header AS "factMythHeader",
+          f.slug AS "factSlug",
+          ap.username AS "authorUsername",
+          cr.reporter_id AS "reporterId",
+          rp.username AS "reporterUsername",
+          cr.reasons AS "reasons",
+          cr.detail AS "detail",
+          cr.resolved_at AS "resolvedAt",
+          cr.created_at AS "reportCreatedAt"
+        FROM comment_reports cr
+        INNER JOIN comments c ON c.id = cr.comment_id
+        INNER JOIN facts f ON f.id = c.fact_id
+        LEFT JOIN user_profiles ap ON ap.id = c.user_id
+        LEFT JOIN user_profiles rp ON rp.id = cr.reporter_id
+        WHERE cr.resolved_at IS NULL
+        ORDER BY cr.created_at DESC
+      `);
+      const userReports = userReportsRaw.rows as any[];
+
+      // AI-flagged comments (needsReview = true, not deleted)
+      const aiFlagged = await db
+        .select({
+          commentId: comments.id,
+          commentBody: comments.body,
+          commentCreatedAt: comments.createdAt,
+          commentUserId: comments.userId,
+          commentFactId: comments.factId,
+          factMythHeader: facts.mythHeader,
+          factSlug: facts.slug,
+          authorUsername: userProfiles.username,
+          aiCategories: comments.aiCategories,
+        })
+        .from(comments)
+        .innerJoin(facts, eq(facts.id, comments.factId))
+        .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
+        .where(and(eq(comments.needsReview, true), eq(comments.deletedByAdmin, false)))
+        .orderBy(desc(comments.createdAt));
+
+      return res.json({ userReports, aiFlagged });
+    } catch (error) {
+      console.error("GET /api/admin/reports error:", error);
+      res.status(500).json({ message: "Failed to fetch reports" });
+    }
+  });
+
+  // GET /api/admin/reports/count — unresolved reports + AI-flagged count (admin only)
+  app.get("/api/admin/reports/count", requireAuth, async (req, res) => {
+    try {
+      const [reportCount] = await db
+        .select({ count: count() })
+        .from(commentReports)
+        .where(isNull(commentReports.resolvedAt));
+
+      const [aiCount] = await db
+        .select({ count: count() })
+        .from(comments)
+        .where(and(eq(comments.needsReview, true), eq(comments.deletedByAdmin, false)));
+
+      return res.json({ count: (reportCount?.count ?? 0) + (aiCount?.count ?? 0) });
+    } catch (error) {
+      console.error("GET /api/admin/reports/count error:", error);
+      res.status(500).json({ message: "Failed to fetch report count" });
+    }
+  });
+
+  // PATCH /api/admin/reports/:id/resolve — mark a user report resolved (admin only)
+  app.patch("/api/admin/reports/:id/resolve", requireAuth, async (req, res) => {
+    try {
+      await db
+        .update(commentReports)
+        .set({ resolvedAt: new Date() })
+        .where(eq(commentReports.id, req.params.id));
+      return res.json({ message: "Report resolved" });
+    } catch (error) {
+      console.error("PATCH /api/admin/reports/:id/resolve error:", error);
+      res.status(500).json({ message: "Failed to resolve report" });
+    }
+  });
+
+  // PATCH /api/admin/comments/:id/clear-review — dismiss AI flag (admin only)
+  app.patch("/api/admin/comments/:id/clear-review", requireAuth, async (req, res) => {
+    try {
+      await db
+        .update(comments)
+        .set({ needsReview: false, aiCategories: null })
+        .where(eq(comments.id, req.params.id));
+      return res.json({ message: "Review flag cleared" });
+    } catch (error) {
+      console.error("PATCH /api/admin/comments/:id/clear-review error:", error);
+      res.status(500).json({ message: "Failed to clear review flag" });
+    }
+  });
+
+  // DELETE /api/admin/comments/:id — hard-delete a comment from admin queue (admin only)
+  app.delete("/api/admin/comments/:id", requireAuth, async (req, res) => {
+    try {
+      await db.delete(comments).where(eq(comments.id, req.params.id));
+      return res.json({ message: "Comment deleted" });
+    } catch (error) {
+      console.error("DELETE /api/admin/comments/:id error:", error);
+      res.status(500).json({ message: "Failed to delete comment" });
     }
   });
 

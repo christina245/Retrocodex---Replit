@@ -466,6 +466,8 @@ export const comments = pgTable("comments", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   deletedByAdmin: boolean("deleted_by_admin").notNull().default(false),
   editedAt: timestamp("edited_at"),
+  needsReview: boolean("needs_review").notNull().default(false),
+  aiCategories: jsonb("ai_categories").$type<Record<string, number>>(),
 });
 
 // Comment upvotes — tracks which users upvoted which comments
@@ -485,6 +487,27 @@ export const insertCommentSchema = z.object({
 
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type Comment = typeof comments.$inferSelect;
+
+// Comment reports — user reports on comments
+export const commentReports = pgTable("comment_reports", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  commentId: varchar("comment_id").notNull().references(() => comments.id, { onDelete: "cascade" }),
+  reporterId: varchar("reporter_id").references(() => userAccounts.id, { onDelete: "set null" }),
+  reasons: text("reasons").array().notNull().default([]),
+  detail: text("detail").default(""),
+  resolvedAt: timestamp("resolved_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  commentReporterUnique: unique("comment_reports_comment_reporter").on(table.commentId, table.reporterId),
+}));
+
+export const insertCommentReportSchema = z.object({
+  reasons: z.array(z.string()).min(1, "Select at least one reason"),
+  detail: z.string().max(1000).optional().default(""),
+});
+
+export type InsertCommentReport = z.infer<typeof insertCommentReportSchema>;
+export type CommentReport = typeof commentReports.$inferSelect;
 
 // Saved comments — one row per user per comment
 export const savedComments = pgTable("saved_comments", {

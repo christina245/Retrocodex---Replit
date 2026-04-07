@@ -101,7 +101,7 @@ export interface IStorage {
   // Comments
   getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]>;
   getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]>;
-  createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser>;
+  createComment(userId: string, data: InsertComment & { factId: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser>;
   updateComment(id: string, userId: string, body: string): Promise<boolean>;
   deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean>;
   toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
@@ -632,7 +632,14 @@ export class DatabaseStorage implements IStorage {
 
     const [comment] = await db
       .insert(comments)
-      .values({ factId: data.factId, userId, parentId: data.parentId ?? null, body: data.body })
+      .values({
+        factId: data.factId,
+        userId,
+        parentId: data.parentId ?? null,
+        body: data.body,
+        needsReview: data.needsReview ?? false,
+        aiCategories: data.aiCategories ?? null,
+      })
       .returning();
 
     const [profile] = await db

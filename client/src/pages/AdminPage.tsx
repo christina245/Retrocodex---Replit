@@ -16,7 +16,7 @@ interface EmailSubscription {
   createdAt: string;
 }
 
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins" | "submissions" | "add-external" | "view-external";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "emails" | "view-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports";
 
 interface FactSubmission {
   id: string;
@@ -446,6 +446,109 @@ export default function AdminPage() {
       return response.json();
     },
     enabled: isAuthenticated && currentView === "submissions",
+  });
+
+  // ── Reports ──────────────────────────────────────────────────────────────
+
+  interface UserReport {
+    reportId: string;
+    commentId: string;
+    commentBody: string;
+    commentCreatedAt: string;
+    commentUserId: string | null;
+    commentFactId: string;
+    factMythHeader: string;
+    factSlug: string;
+    authorUsername: string | null;
+    reporterId: string | null;
+    reporterUsername: string | null;
+    reasons: string[];
+    detail: string | null;
+    resolvedAt: string | null;
+    reportCreatedAt: string;
+  }
+
+  interface AiFlaggedComment {
+    commentId: string;
+    commentBody: string;
+    commentCreatedAt: string;
+    commentUserId: string | null;
+    commentFactId: string;
+    factMythHeader: string;
+    factSlug: string;
+    authorUsername: string | null;
+    aiCategories: Record<string, number> | null;
+  }
+
+  const { data: reportsData, isLoading: reportsLoading, refetch: refetchReports } = useQuery<{ userReports: UserReport[]; aiFlagged: AiFlaggedComment[] }>({
+    queryKey: ["/api/admin/reports"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/reports", {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to fetch reports");
+      return response.json();
+    },
+    enabled: isAuthenticated && currentView === "reports",
+    staleTime: 0,
+  });
+
+  const { data: reportsCount } = useQuery<{ count: number }>({
+    queryKey: ["/api/admin/reports/count"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/reports/count", {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) return { count: 0 };
+      return response.json();
+    },
+    enabled: isAuthenticated,
+    refetchInterval: 60000,
+  });
+
+  const resolveReportMutation = useMutation({
+    mutationFn: async (reportId: string) => {
+      const response = await fetch(`/api/admin/reports/${reportId}/resolve`, {
+        method: "PATCH",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to resolve report");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reports"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reports/count"] });
+    },
+  });
+
+  const clearReviewMutation = useMutation({
+    mutationFn: async (commentId: string) => {
+      const response = await fetch(`/api/admin/comments/${commentId}/clear-review`, {
+        method: "PATCH",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to clear review flag");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reports"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reports/count"] });
+    },
+  });
+
+  const deleteCommentAdminMutation = useMutation({
+    mutationFn: async (commentId: string) => {
+      const response = await fetch(`/api/admin/comments/${commentId}`, {
+        method: "DELETE",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to delete comment");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reports"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/reports/count"] });
+    },
   });
 
   const patchSubmissionMutation = useMutation({
@@ -1472,6 +1575,38 @@ export default function AdminPage() {
           >
             <Newspaper size={18} />
             <span>External Articles</span>
+          </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'reports' ? 'active' : ''}`}
+            onClick={() => setCurrentView('reports')}
+            data-testid="nav-reports"
+            style={{ position: "relative" }}
+          >
+            <AlertCircle size={18} />
+            <span>Reports</span>
+            {!!reportsCount?.count && reportsCount.count > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  right: "0.75rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "#e53935",
+                  color: "#fff",
+                  borderRadius: "9999px",
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  lineHeight: 1,
+                  padding: "2px 6px",
+                  minWidth: 18,
+                  textAlign: "center",
+                }}
+                data-testid="badge-reports-count"
+              >
+                {reportsCount.count}
+              </span>
+            )}
           </button>
         </nav>
       </aside>
@@ -3669,6 +3804,150 @@ export default function AdminPage() {
                   </div>
                 ))}
               </div>
+            )}
+          </div>
+        )}
+        {/* ==================== REPORTS ==================== */}
+        {currentView === 'reports' && (
+          <div className="admin-content" style={{ maxWidth: 900 }}>
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">Reports</h1>
+                <p className="content-subtitle">
+                  {(reportsData?.userReports.length ?? 0) + (reportsData?.aiFlagged.length ?? 0)} unresolved items
+                </p>
+              </div>
+              <button className="cancel-edit-button" onClick={() => refetchReports()} data-testid="button-refresh-reports">
+                Refresh
+              </button>
+            </div>
+
+            {reportsLoading ? (
+              <div className="loading-message">Loading…</div>
+            ) : (
+              <>
+                {/* ── User Reports ── */}
+                <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: "1rem", color: "#2C2C2C", margin: "1.5rem 0 0.75rem" }}>
+                  User Reports ({reportsData?.userReports.length ?? 0})
+                </h2>
+                {!reportsData?.userReports.length ? (
+                  <div className="empty-state"><p>No unresolved user reports.</p></div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "2rem" }}>
+                    {reportsData.userReports.map(report => (
+                      <div
+                        key={report.reportId}
+                        data-testid={`card-report-${report.reportId}`}
+                        style={{ border: "1px solid #e5e5e5", borderRadius: 8, padding: "1rem 1.25rem", background: "white" }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#2C2C2C", marginBottom: "0.25rem" }}>
+                              Comment by <span style={{ color: "#FF5353" }}>{report.authorUsername ?? "deleted user"}</span>
+                              {" on "}<em style={{ fontWeight: 400, color: "#555" }}>{report.factMythHeader}</em>
+                            </div>
+                            <div style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#f9f9f9", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.5rem 0", borderLeft: "3px solid #e0e0e0" }}>
+                              {report.commentBody}
+                            </div>
+                            <div style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.8125rem", color: "#878787" }}>
+                              Reported by <strong>{report.reporterUsername ?? "unknown"}</strong> · Reasons: {(report.reasons ?? []).join(", ")}
+                              {report.detail && <span> · "{report.detail}"</span>}
+                            </div>
+                          </div>
+                          <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0, alignItems: "flex-start" }}>
+                            <button
+                              className="cancel-edit-button"
+                              style={{ fontSize: "0.8125rem", padding: "0.35rem 0.75rem" }}
+                              onClick={() => resolveReportMutation.mutate(report.reportId)}
+                              disabled={resolveReportMutation.isPending}
+                              data-testid={`button-resolve-report-${report.reportId}`}
+                            >
+                              <Check size={14} /> Resolve
+                            </button>
+                            <button
+                              className="delete-button"
+                              style={{ fontSize: "0.8125rem", padding: "0.35rem 0.75rem" }}
+                              onClick={() => deleteCommentAdminMutation.mutate(report.commentId)}
+                              disabled={deleteCommentAdminMutation.isPending}
+                              data-testid={`button-delete-reported-comment-${report.commentId}`}
+                            >
+                              <X size={14} /> Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* ── AI-Flagged ── */}
+                <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: "1rem", color: "#2C2C2C", margin: "0 0 0.75rem" }}>
+                  AI-Flagged for Review ({reportsData?.aiFlagged.length ?? 0})
+                </h2>
+                {!reportsData?.aiFlagged.length ? (
+                  <div className="empty-state"><p>No AI-flagged comments awaiting review.</p></div>
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    {reportsData.aiFlagged.map(item => {
+                      const topCategories = item.aiCategories
+                        ? Object.entries(item.aiCategories)
+                            .filter(([, score]) => score > 0.1)
+                            .sort(([, a], [, b]) => b - a)
+                            .slice(0, 3)
+                        : [];
+
+                      return (
+                        <div
+                          key={item.commentId}
+                          data-testid={`card-ai-flagged-${item.commentId}`}
+                          style={{ border: "1px solid #ffe0b2", borderRadius: 8, padding: "1rem 1.25rem", background: "#fffaf5" }}
+                        >
+                          <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#2C2C2C", marginBottom: "0.25rem" }}>
+                                Comment by <span style={{ color: "#FF5353" }}>{item.authorUsername ?? "deleted user"}</span>
+                                {" on "}<em style={{ fontWeight: 400, color: "#555" }}>{item.factMythHeader}</em>
+                              </div>
+                              <div style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#fff3e0", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.5rem 0", borderLeft: "3px solid #ff9800" }}>
+                                {item.commentBody}
+                              </div>
+                              {topCategories.length > 0 && (
+                                <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                                  {topCategories.map(([cat, score]) => (
+                                    <span key={cat} style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.7rem", background: "rgba(229,57,53,0.1)", color: "#c62828", borderRadius: 4, padding: "2px 7px" }}>
+                                      {cat}: {(score * 100).toFixed(0)}%
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0, alignItems: "flex-start" }}>
+                              <button
+                                className="cancel-edit-button"
+                                style={{ fontSize: "0.8125rem", padding: "0.35rem 0.75rem" }}
+                                onClick={() => clearReviewMutation.mutate(item.commentId)}
+                                disabled={clearReviewMutation.isPending}
+                                data-testid={`button-dismiss-ai-${item.commentId}`}
+                              >
+                                <Check size={14} /> Approve
+                              </button>
+                              <button
+                                className="delete-button"
+                                style={{ fontSize: "0.8125rem", padding: "0.35rem 0.75rem" }}
+                                onClick={() => deleteCommentAdminMutation.mutate(item.commentId)}
+                                disabled={deleteCommentAdminMutation.isPending}
+                                data-testid={`button-delete-ai-comment-${item.commentId}`}
+                              >
+                                <X size={14} /> Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

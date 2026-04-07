@@ -66,9 +66,12 @@ const REPORT_REASONS = [
 
 // ─── Report modal ────────────────────────────────────────────────────────────
 
-function ReportModal({ onClose }: { onClose: () => void }) {
+function ReportModal({ commentId, onClose }: { commentId: string; onClose: () => void }) {
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [detail, setDetail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const anyChecked = checked.size > 0;
 
   const toggle = (reason: string) => {
@@ -80,6 +83,28 @@ function ReportModal({ onClose }: { onClose: () => void }) {
     });
   };
 
+  const handleSubmit = async () => {
+    if (!anyChecked || submitting) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      const resp = await apiRequest("POST", `/api/comments/${commentId}/report`, {
+        reasons: Array.from(checked),
+        detail,
+      });
+      if (!resp.ok) {
+        const body = await resp.json();
+        setError(body.message ?? "Failed to submit report");
+      } else {
+        setSubmitted(true);
+      }
+    } catch {
+      setError("Failed to submit report. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="report-modal-overlay" onClick={onClose} data-testid="report-modal-overlay">
       <div className="report-modal" onClick={e => e.stopPropagation()} data-testid="report-modal">
@@ -87,39 +112,52 @@ function ReportModal({ onClose }: { onClose: () => void }) {
           <X size={16} />
         </button>
         <img src={exclamationImg} alt="Report" className="report-modal-icon" />
-        <h2 className="report-modal-title">Report Comment</h2>
-        <p className="report-modal-subtitle">Select all reasons that apply</p>
-        <div className="report-reasons">
-          {REPORT_REASONS.map(reason => (
-            <label key={reason} className="report-reason-label">
-              <input
-                type="checkbox"
-                checked={checked.has(reason)}
-                onChange={() => toggle(reason)}
-                className="report-reason-checkbox"
-                data-testid={`checkbox-report-${reason.toLowerCase().replace(/\s+/g, "-")}`}
-              />
-              <span>{reason}</span>
-            </label>
-          ))}
-        </div>
-        <textarea
-          className="report-detail-input"
-          placeholder="Describe reason"
-          value={detail}
-          onChange={e => setDetail(e.target.value)}
-          disabled={!anyChecked}
-          rows={2}
-          data-testid="input-report-detail"
-        />
-        <button
-          className="btn-submit-report"
-          disabled={!anyChecked}
-          onClick={() => onClose()}
-          data-testid="button-submit-report"
-        >
-          Submit Report
-        </button>
+        {submitted ? (
+          <>
+            <h2 className="report-modal-title">Report Submitted</h2>
+            <p className="report-modal-subtitle">Thank you. Our team will review this comment.</p>
+            <button className="btn-submit-report" onClick={onClose} data-testid="button-close-report-success">
+              Close
+            </button>
+          </>
+        ) : (
+          <>
+            <h2 className="report-modal-title">Report Comment</h2>
+            <p className="report-modal-subtitle">Select all reasons that apply</p>
+            <div className="report-reasons">
+              {REPORT_REASONS.map(reason => (
+                <label key={reason} className="report-reason-label">
+                  <input
+                    type="checkbox"
+                    checked={checked.has(reason)}
+                    onChange={() => toggle(reason)}
+                    className="report-reason-checkbox"
+                    data-testid={`checkbox-report-${reason.toLowerCase().replace(/\s+/g, "-")}`}
+                  />
+                  <span>{reason}</span>
+                </label>
+              ))}
+            </div>
+            <textarea
+              className="report-detail-input"
+              placeholder="Describe reason"
+              value={detail}
+              onChange={e => setDetail(e.target.value)}
+              disabled={!anyChecked}
+              rows={2}
+              data-testid="input-report-detail"
+            />
+            {error && <p style={{ color: "var(--destructive)", fontSize: "0.8125rem", marginTop: "0.5rem" }}>{error}</p>}
+            <button
+              className="btn-submit-report"
+              disabled={!anyChecked || submitting}
+              onClick={handleSubmit}
+              data-testid="button-submit-report"
+            >
+              {submitting ? "Submitting…" : "Submit Report"}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -510,7 +548,7 @@ function CommentNode({
         </div>
       </div>
 
-      {reportOpen && <ReportModal onClose={() => setReportOpen(false)} />}
+      {reportOpen && <ReportModal commentId={comment.id} onClose={() => setReportOpen(false)} />}
 
       {comment.children.length > 0 && (
         <div className="comment-children">
