@@ -848,6 +848,10 @@ export default function UserDashboard() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [savedArticlesSortOpen]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [sideTab]);
+
   const queryClientHook = useQueryClient();
   const [activityLastSeenAt, setActivityLastSeenAt] = useState<string>(() => {
     try {
@@ -1911,11 +1915,27 @@ export default function UserDashboard() {
                     {activityFeedLoading ? (
                       <p className="saved-empty-message" data-testid="text-activity-loading">Loading activity...</p>
                     ) : !activityFeed || activityFeed.items.length === 0 ? (
-                      <div className="dashboard-feed-empty" data-testid="activity-empty">
-                        <BellRing size={40} strokeWidth={1.5} className="dashboard-feed-empty-icon" />
-                        <p className="dashboard-feed-empty-title">No notifications yet.</p>
-                        <p className="dashboard-feed-empty-desc">When others comment on your submissions, reply to your comments, follow you, or a fact you follow is updated, you'll see it here.</p>
-                      </div>
+                      <>
+                        <div className="notifications-tabs-wrapper">
+                          <nav className="notifications-tabs" data-testid="dashboard-notifications-empty-tabs">
+                            {ACTIVITY_TABS.map((tab) => (
+                              <button
+                                key={tab.id}
+                                className="notifications-tab edit-requests-tab-disabled"
+                                disabled
+                                data-testid={`button-notif-tab-disabled-${tab.id}`}
+                              >
+                                <span>{tab.label}</span>
+                              </button>
+                            ))}
+                          </nav>
+                        </div>
+                        <div className="dashboard-feed-empty" data-testid="activity-empty">
+                          <BellRing size={40} strokeWidth={1.5} className="dashboard-feed-empty-icon" />
+                          <p className="dashboard-feed-empty-title">No notifications yet.</p>
+                          <p className="dashboard-feed-empty-desc">When others comment on your submissions, reply to your comments, follow you, or a fact you follow is updated, you'll see it here.</p>
+                        </div>
+                      </>
                     ) : (
                       <div className="following-feed" data-testid="activity-feed-all">
                         {activityFeed.items.map((item: UnifiedNotification, idx: number) => {

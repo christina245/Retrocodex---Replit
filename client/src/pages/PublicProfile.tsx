@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useRoute, Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -49,6 +49,10 @@ export default function PublicProfile() {
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isOwnProfile = user?.username === username;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [username, activeTab]);
 
   const { data: apiProfile } = useQuery<{
     id: string;
