@@ -20,6 +20,7 @@ import {
   sendNewCommentEmail,
   sendNewReplyEmail,
   sendPasswordResetEmail,
+  sendGoogleWelcomeEmail,
   buildFactUrl,
   buildDashboardUrl,
   buildProfileUrl,
@@ -360,6 +361,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Establish session, clear pending
       req.session.userId = account.id;
       delete req.session.pendingGoogleUser;
+
+      // Send welcome email (fire-and-forget)
+      sendGoogleWelcomeEmail(pending.email, { username: data.username, email: pending.email })
+        .catch(err => console.error("[sendgrid] Google welcome email failed:", err));
 
       return res.status(201).json({
         id: profile.id,

@@ -25,6 +25,7 @@ const PASSWORD_RESET_TEMPLATE_ID            = "d-4ea15870bfe24e59a38e497deaac8be
 const NEW_FOLLOWER_TEMPLATE_ID          = "d-8e043d858268484e843ca3099904cda0";
 const NEW_COMMENT_TEMPLATE_ID           = "d-f3ab4f4127ab4f16bfb00808ce987437";
 const NEW_REPLY_TEMPLATE_ID             = "d-cfa7337db2954836ba7a8c5e35c1b597";
+const GOOGLE_WELCOME_TEMPLATE_ID        = "d-1efe90364fb14e888efb3e052907b385";
 
 interface SubmissionFields {
   mythHeader: string;
@@ -141,6 +142,17 @@ export async function sendNewReplyEmail(
     to,
     from: FROM(),
     templateId: NEW_REPLY_TEMPLATE_ID,
+    dynamicTemplateData: data,
+  });
+}
+
+export async function sendGoogleWelcomeEmail(to: string, data: { username: string; email: string }): Promise<void> {
+  init();
+  if (!initialized) return;
+  await sgMail.send({
+    to,
+    from: FROM(),
+    templateId: GOOGLE_WELCOME_TEMPLATE_ID,
     dynamicTemplateData: data,
   });
 }
