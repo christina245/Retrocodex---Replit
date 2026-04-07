@@ -1664,14 +1664,14 @@ export default function UserDashboard() {
                             </p>
                             {userHasUsWithoutState && (
                               <p className="local-feed-us-banner" data-testid="local-feed-us-banner">
-                                To also see activity from users in the United States,{" "}
+                                To also see activity from users in the United States, please{" "}
                                 <button
                                   type="button"
                                   className="local-feed-us-link"
                                   onClick={() => setSideTab("edit-profile")}
                                   data-testid="button-select-state-banner"
                                 >
-                                  please select a state
+                                  select a state
                                 </button>.
                               </p>
                             )}
