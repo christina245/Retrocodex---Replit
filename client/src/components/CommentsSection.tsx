@@ -88,18 +88,23 @@ function ReportModal({ commentId, onClose }: { commentId: string; onClose: () =>
     setSubmitting(true);
     setError("");
     try {
-      const resp = await apiRequest("POST", `/api/comments/${commentId}/report`, {
+      await apiRequest("POST", `/api/comments/${commentId}/report`, {
         reasons: Array.from(checked),
         detail,
       });
-      if (!resp.ok) {
-        const body = await resp.json();
-        setError(body.message ?? "Failed to submit report");
-      } else {
-        setSubmitted(true);
+      setSubmitted(true);
+    } catch (err) {
+      let msg = "Failed to submit report. Please try again.";
+      if (err instanceof Error) {
+        const colonIdx = err.message.indexOf(": ");
+        if (colonIdx !== -1) {
+          try {
+            const parsed = JSON.parse(err.message.slice(colonIdx + 2));
+            if (parsed?.message) msg = parsed.message;
+          } catch { /* leave default */ }
+        }
       }
-    } catch {
-      setError("Failed to submit report. Please try again.");
+      setError(msg);
     } finally {
       setSubmitting(false);
     }
@@ -612,6 +617,24 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
         setInputBody("");
         setInputError(null);
         setIsInputExpanded(false);
+      }
+    },
+    onError: (_err, variables, _ctx) => {
+      // Parse server message from the error thrown by apiRequest (format: "STATUS: {json}")
+      let msg = "Failed to post comment. Please try again.";
+      if (_err instanceof Error) {
+        const colonIdx = _err.message.indexOf(": ");
+        if (colonIdx !== -1) {
+          try {
+            const parsed = JSON.parse(_err.message.slice(colonIdx + 2));
+            if (parsed?.message) msg = parsed.message;
+          } catch {
+            // leave default
+          }
+        }
+      }
+      if (!variables.parentId) {
+        setInputError(msg);
       }
     },
   });
