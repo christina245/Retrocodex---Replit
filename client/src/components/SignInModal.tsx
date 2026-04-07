@@ -1083,10 +1083,10 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                 data-testid="img-signin-logo-google"
               />
               <h2 className="signin-confirmation-title" data-testid="text-google-username-title">
-                One last step — choose a username
+                Choose a username
               </h2>
               <p className="signin-description" data-testid="text-google-username-subtitle">
-                Your username is public and identifies you across Retrocodex.
+                No real names. Your username is public and can't be changed.
               </p>
               <div className="signin-field" style={{ marginTop: 16 }}>
                 <label className="signin-label" htmlFor="google-username">USERNAME</label>
