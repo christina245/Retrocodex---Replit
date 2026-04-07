@@ -2785,6 +2785,24 @@ Sitemap: ${SITE_URL}/sitemap.xml
   app.get("/api/admin/reports", requireAuth, async (req, res) => {
     try {
       // User reports with comment + reporter info (raw SQL for double user_profiles join)
+      interface UserReportRow {
+        reportId: string;
+        commentId: string;
+        commentBody: string;
+        commentCreatedAt: Date;
+        commentUserId: string | null;
+        commentFactId: string;
+        factMythHeader: string;
+        factSlug: string;
+        authorUsername: string | null;
+        reporterId: string | null;
+        reporterUsername: string | null;
+        reasons: string[];
+        detail: string | null;
+        resolvedAt: Date | null;
+        reportCreatedAt: Date;
+      }
+
       const userReportsRaw = await db.execute(sql`
         SELECT
           cr.id AS "reportId",
@@ -2810,7 +2828,23 @@ Sitemap: ${SITE_URL}/sitemap.xml
         WHERE cr.resolved_at IS NULL
         ORDER BY cr.created_at DESC
       `);
-      const userReports = userReportsRaw.rows as any[];
+      const userReports: UserReportRow[] = userReportsRaw.rows.map((row: Record<string, unknown>) => ({
+        reportId: row.reportId as string,
+        commentId: row.commentId as string,
+        commentBody: row.commentBody as string,
+        commentCreatedAt: row.commentCreatedAt as Date,
+        commentUserId: row.commentUserId as string | null,
+        commentFactId: row.commentFactId as string,
+        factMythHeader: row.factMythHeader as string,
+        factSlug: row.factSlug as string,
+        authorUsername: row.authorUsername as string | null,
+        reporterId: row.reporterId as string | null,
+        reporterUsername: row.reporterUsername as string | null,
+        reasons: row.reasons as string[],
+        detail: row.detail as string | null,
+        resolvedAt: row.resolvedAt as Date | null,
+        reportCreatedAt: row.reportCreatedAt as Date,
+      }));
 
       // AI-flagged comments (needsReview = true, not deleted)
       const aiFlagged = await db
