@@ -618,7 +618,7 @@ export class DatabaseStorage implements IStorage {
     }));
   }
 
-  async createComment(userId: string, data: InsertComment & { factId: string }): Promise<CommentWithUser> {
+  async createComment(userId: string, data: InsertComment & { factId: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser> {
     if (data.parentId) {
       const [parent] = await db
         .select({ id: comments.id, factId: comments.factId })
