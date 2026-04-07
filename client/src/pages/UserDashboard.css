@@ -787,6 +787,11 @@
   margin-bottom: 12px;
 }
 
+.following-post-attribution .following-post-header {
+  flex: 1;
+  min-width: 0;
+}
+
 .following-post-header {
   display: flex;
   align-items: flex-start;
@@ -2658,6 +2663,10 @@ a.following-post-fact-link:hover {
 }
 
 .following-post-fact-card-wrap {
+  margin-left: 52px;
+}
+
+.following-post--fact .comment-user-info {
   margin-left: 52px;
 }
 
