@@ -733,6 +733,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         favoriteTags: profile.favoriteTags,
         misinfoSource: profile.misinfoSource,
         allowFollows: profile.allowFollows ?? true,
+        allowPublicProfile: profile.allowPublicProfile ?? true,
+        notifyFollowsWeb: profile.notifyFollowsWeb ?? true,
+        notifyFollowsEmail: profile.notifyFollowsEmail ?? true,
+        notifyCommentsWeb: profile.notifyCommentsWeb ?? true,
+        notifyCommentsEmail: profile.notifyCommentsEmail ?? true,
+        notifyFactUpdatesWeb: profile.notifyFactUpdatesWeb ?? true,
+        notifyFactUpdatesEmail: profile.notifyFactUpdatesEmail ?? true,
         isAdmin: profile.isAdmin ?? false,
         emailVerified: account.emailVerified ?? false,
       });
@@ -770,6 +777,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           ...(data.misinfoSource !== undefined && { misinfoSource: data.misinfoSource }),
           ...(data.allowFollows !== undefined && { allowFollows: data.allowFollows }),
           ...(data.allowPublicProfile !== undefined && { allowPublicProfile: data.allowPublicProfile }),
+          ...(data.notifyFollowsWeb !== undefined && { notifyFollowsWeb: data.notifyFollowsWeb }),
+          ...(data.notifyFollowsEmail !== undefined && { notifyFollowsEmail: data.notifyFollowsEmail }),
+          ...(data.notifyCommentsWeb !== undefined && { notifyCommentsWeb: data.notifyCommentsWeb }),
+          ...(data.notifyCommentsEmail !== undefined && { notifyCommentsEmail: data.notifyCommentsEmail }),
+          ...(data.notifyFactUpdatesWeb !== undefined && { notifyFactUpdatesWeb: data.notifyFactUpdatesWeb }),
+          ...(data.notifyFactUpdatesEmail !== undefined && { notifyFactUpdatesEmail: data.notifyFactUpdatesEmail }),
           updatedAt: new Date(),
         })
         .where(eq(userProfiles.id, req.session.userId!))
@@ -793,6 +806,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         favoriteTags: updated.favoriteTags,
         misinfoSource: updated.misinfoSource,
         allowFollows: updated.allowFollows ?? true,
+        allowPublicProfile: updated.allowPublicProfile ?? true,
+        notifyFollowsWeb: updated.notifyFollowsWeb ?? true,
+        notifyFollowsEmail: updated.notifyFollowsEmail ?? true,
+        notifyCommentsWeb: updated.notifyCommentsWeb ?? true,
+        notifyCommentsEmail: updated.notifyCommentsEmail ?? true,
+        notifyFactUpdatesWeb: updated.notifyFactUpdatesWeb ?? true,
+        notifyFactUpdatesEmail: updated.notifyFactUpdatesEmail ?? true,
         isAdmin: updated.isAdmin ?? false,
       });
     } catch (error) {

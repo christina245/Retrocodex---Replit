@@ -14,6 +14,13 @@ export interface UserData {
   misinfoSource: string;
   bio: string;
   allowFollows: boolean;
+  allowPublicProfile: boolean;
+  notifyFollowsWeb: boolean;
+  notifyFollowsEmail: boolean;
+  notifyCommentsWeb: boolean;
+  notifyCommentsEmail: boolean;
+  notifyFactUpdatesWeb: boolean;
+  notifyFactUpdatesEmail: boolean;
   isAdmin: boolean;
   emailVerified: boolean;
 }
@@ -68,6 +75,13 @@ function mapApiResponse(data: any): UserData {
     misinfoSource: data.misinfoSource || "",
     bio: data.bio || "",
     allowFollows: data.allowFollows ?? true,
+    allowPublicProfile: data.allowPublicProfile ?? true,
+    notifyFollowsWeb: data.notifyFollowsWeb ?? true,
+    notifyFollowsEmail: data.notifyFollowsEmail ?? true,
+    notifyCommentsWeb: data.notifyCommentsWeb ?? true,
+    notifyCommentsEmail: data.notifyCommentsEmail ?? true,
+    notifyFactUpdatesWeb: data.notifyFactUpdatesWeb ?? true,
+    notifyFactUpdatesEmail: data.notifyFactUpdatesEmail ?? true,
     isAdmin: data.isAdmin ?? false,
     emailVerified: data.emailVerified ?? false,
   };
@@ -160,6 +174,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (partial.favoriteTags !== undefined) payload.favoriteTags = partial.favoriteTags;
     if (partial.misinfoSource !== undefined) payload.misinfoSource = partial.misinfoSource;
     if (partial.allowFollows !== undefined) payload.allowFollows = partial.allowFollows;
+    if (partial.allowPublicProfile !== undefined) payload.allowPublicProfile = partial.allowPublicProfile;
+    if (partial.notifyFollowsWeb !== undefined) payload.notifyFollowsWeb = partial.notifyFollowsWeb;
+    if (partial.notifyFollowsEmail !== undefined) payload.notifyFollowsEmail = partial.notifyFollowsEmail;
+    if (partial.notifyCommentsWeb !== undefined) payload.notifyCommentsWeb = partial.notifyCommentsWeb;
+    if (partial.notifyCommentsEmail !== undefined) payload.notifyCommentsEmail = partial.notifyCommentsEmail;
+    if (partial.notifyFactUpdatesWeb !== undefined) payload.notifyFactUpdatesWeb = partial.notifyFactUpdatesWeb;
+    if (partial.notifyFactUpdatesEmail !== undefined) payload.notifyFactUpdatesEmail = partial.notifyFactUpdatesEmail;
 
     const res = await fetch("/api/me", {
       method: "PUT",

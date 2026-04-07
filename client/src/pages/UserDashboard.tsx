@@ -804,12 +804,20 @@ export default function UserDashboard() {
   const [allowFollows, setAllowFollows] = useState(() => user?.allowFollows ?? true);
   useEffect(() => { setAllowFollows(user?.allowFollows ?? true); }, [user?.allowFollows]);
   const [followedBackIds, setFollowedBackIds] = useState<Record<string, boolean>>({});
-  const [publicProfile, setPublicProfile] = useState(true);
-  const [notifyFollows, setNotifyFollows] = useState(true);
-  const [notifyComments, setNotifyComments] = useState(true);
-  const [notifyFactUpdates, setNotifyFactUpdates] = useState(true);
-  const [emailNotifyFollows, setEmailNotifyFollows] = useState(true);
-  const [emailNotifyComments, setEmailNotifyComments] = useState(true);
+  const [publicProfile, setPublicProfile] = useState(() => user?.allowPublicProfile ?? true);
+  useEffect(() => { setPublicProfile(user?.allowPublicProfile ?? true); }, [user?.allowPublicProfile]);
+  const [notifyFollows, setNotifyFollows] = useState(() => user?.notifyFollowsWeb ?? true);
+  useEffect(() => { setNotifyFollows(user?.notifyFollowsWeb ?? true); }, [user?.notifyFollowsWeb]);
+  const [emailNotifyFollows, setEmailNotifyFollows] = useState(() => user?.notifyFollowsEmail ?? true);
+  useEffect(() => { setEmailNotifyFollows(user?.notifyFollowsEmail ?? true); }, [user?.notifyFollowsEmail]);
+  const [notifyComments, setNotifyComments] = useState(() => user?.notifyCommentsWeb ?? true);
+  useEffect(() => { setNotifyComments(user?.notifyCommentsWeb ?? true); }, [user?.notifyCommentsWeb]);
+  const [emailNotifyComments, setEmailNotifyComments] = useState(() => user?.notifyCommentsEmail ?? true);
+  useEffect(() => { setEmailNotifyComments(user?.notifyCommentsEmail ?? true); }, [user?.notifyCommentsEmail]);
+  const [notifyFactUpdates, setNotifyFactUpdates] = useState(() => user?.notifyFactUpdatesWeb ?? true);
+  useEffect(() => { setNotifyFactUpdates(user?.notifyFactUpdatesWeb ?? true); }, [user?.notifyFactUpdatesWeb]);
+  const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(() => user?.notifyFactUpdatesEmail ?? true);
+  useEffect(() => { setEmailNotifyFactUpdates(user?.notifyFactUpdatesEmail ?? true); }, [user?.notifyFactUpdatesEmail]);
   const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [activeEllipsisId, setActiveEllipsisId] = useState<string | null>(null);
   const [savedTab, setSavedTab] = useState<SavedTab>("facts");
@@ -869,7 +877,6 @@ export default function UserDashboard() {
       queryClientHook.invalidateQueries({ queryKey: ["/api/notifications/count"] });
     }
   }, [sideTab]);
-  const [emailNotifyFactUpdates, setEmailNotifyFactUpdates] = useState(true);
   const [topicsModalOpen, setTopicsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -3218,7 +3225,16 @@ export default function UserDashboard() {
                         <input
                           type="checkbox"
                           checked={publicProfile}
-                          onChange={() => setPublicProfile(!publicProfile)}
+                          onChange={async () => {
+                            const next = !publicProfile;
+                            setPublicProfile(next);
+                            try {
+                              await updateUser({ allowPublicProfile: next });
+                            } catch {
+                              setPublicProfile(!next);
+                              toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" });
+                            }
+                          }}
                         />
                         <span className="settings-toggle-slider" />
                       </label>
@@ -3242,7 +3258,12 @@ export default function UserDashboard() {
                             <input
                               type="checkbox"
                               checked={notifyFollows}
-                              onChange={() => setNotifyFollows(!notifyFollows)}
+                              onChange={async () => {
+                                const next = !notifyFollows;
+                                setNotifyFollows(next);
+                                try { await updateUser({ notifyFollowsWeb: next }); }
+                                catch { setNotifyFollows(!next); toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" }); }
+                              }}
                             />
                             <span className="settings-toggle-slider" />
                           </label>
@@ -3253,7 +3274,12 @@ export default function UserDashboard() {
                             <input
                               type="checkbox"
                               checked={emailNotifyFollows}
-                              onChange={() => setEmailNotifyFollows(!emailNotifyFollows)}
+                              onChange={async () => {
+                                const next = !emailNotifyFollows;
+                                setEmailNotifyFollows(next);
+                                try { await updateUser({ notifyFollowsEmail: next }); }
+                                catch { setEmailNotifyFollows(!next); toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" }); }
+                              }}
                             />
                             <span className="settings-toggle-slider" />
                           </label>
@@ -3272,7 +3298,12 @@ export default function UserDashboard() {
                             <input
                               type="checkbox"
                               checked={notifyComments}
-                              onChange={() => setNotifyComments(!notifyComments)}
+                              onChange={async () => {
+                                const next = !notifyComments;
+                                setNotifyComments(next);
+                                try { await updateUser({ notifyCommentsWeb: next }); }
+                                catch { setNotifyComments(!next); toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" }); }
+                              }}
                             />
                             <span className="settings-toggle-slider" />
                           </label>
@@ -3283,7 +3314,12 @@ export default function UserDashboard() {
                             <input
                               type="checkbox"
                               checked={emailNotifyComments}
-                              onChange={() => setEmailNotifyComments(!emailNotifyComments)}
+                              onChange={async () => {
+                                const next = !emailNotifyComments;
+                                setEmailNotifyComments(next);
+                                try { await updateUser({ notifyCommentsEmail: next }); }
+                                catch { setEmailNotifyComments(!next); toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" }); }
+                              }}
                             />
                             <span className="settings-toggle-slider" />
                           </label>
@@ -3302,7 +3338,12 @@ export default function UserDashboard() {
                             <input
                               type="checkbox"
                               checked={notifyFactUpdates}
-                              onChange={() => setNotifyFactUpdates(!notifyFactUpdates)}
+                              onChange={async () => {
+                                const next = !notifyFactUpdates;
+                                setNotifyFactUpdates(next);
+                                try { await updateUser({ notifyFactUpdatesWeb: next }); }
+                                catch { setNotifyFactUpdates(!next); toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" }); }
+                              }}
                             />
                             <span className="settings-toggle-slider" />
                           </label>
@@ -3313,7 +3354,12 @@ export default function UserDashboard() {
                             <input
                               type="checkbox"
                               checked={emailNotifyFactUpdates}
-                              onChange={() => setEmailNotifyFactUpdates(!emailNotifyFactUpdates)}
+                              onChange={async () => {
+                                const next = !emailNotifyFactUpdates;
+                                setEmailNotifyFactUpdates(next);
+                                try { await updateUser({ notifyFactUpdatesEmail: next }); }
+                                catch { setEmailNotifyFactUpdates(!next); toast({ title: "Failed to update setting", description: "Please try again.", variant: "destructive" }); }
+                              }}
                             />
                             <span className="settings-toggle-slider" />
                           </label>

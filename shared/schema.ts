@@ -129,6 +129,12 @@ export const userProfiles = pgTable("user_profiles", {
   misinfoSource: text("misinfo_source").default(""),
   allowFollows: boolean("allow_follows").default(true),
   allowPublicProfile: boolean("allow_public_profile").default(true),
+  notifyFollowsWeb: boolean("notify_follows_web").default(true),
+  notifyFollowsEmail: boolean("notify_follows_email").default(true),
+  notifyCommentsWeb: boolean("notify_comments_web").default(true),
+  notifyCommentsEmail: boolean("notify_comments_email").default(true),
+  notifyFactUpdatesWeb: boolean("notify_fact_updates_web").default(true),
+  notifyFactUpdatesEmail: boolean("notify_fact_updates_email").default(true),
   isAdmin: boolean("is_admin").default(false),
   submissionBanned: boolean("submission_banned").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -161,6 +167,12 @@ export const updateProfileSchema = z.object({
   misinfoSource: z.string().max(200).optional(),
   allowFollows: z.boolean().optional(),
   allowPublicProfile: z.boolean().optional(),
+  notifyFollowsWeb: z.boolean().optional(),
+  notifyFollowsEmail: z.boolean().optional(),
+  notifyCommentsWeb: z.boolean().optional(),
+  notifyCommentsEmail: z.boolean().optional(),
+  notifyFactUpdatesWeb: z.boolean().optional(),
+  notifyFactUpdatesEmail: z.boolean().optional(),
 });
 
 export type UserAccount = typeof userAccounts.$inferSelect;
