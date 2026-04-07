@@ -1117,6 +1117,15 @@ a.following-post-fact-link:hover {
   justify-content: flex-start;
 }
 
+.feed-comment-actions {
+  margin-top: 6px;
+}
+
+.public-comment-entry .comment-actions {
+  justify-content: flex-start;
+  margin-top: 6px;
+}
+
 .comment-action-unsave {
   display: flex;
   align-items: center;

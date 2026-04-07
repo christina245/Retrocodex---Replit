@@ -590,6 +590,22 @@ function FeedUserLocation({ item, index }: { item: FeedItem; index: number }) {
 
 function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; handlers: FeedPostHandlers }) {
   const { savedFactIds, onSaveFact, onUnsaveFact, onBetaClick, onNavigate } = handlers;
+  const { isLoggedIn } = useAuth();
+  const { toast } = useToast();
+  const [feedUpvotes, setFeedUpvotes] = useState(item.commentUpvotes ?? 0);
+  const [feedIsUpvoted, setFeedIsUpvoted] = useState(item.commentIsUpvotedByMe ?? false);
+
+  const feedUpvoteMutation = useMutation({
+    mutationFn: (commentId: string) => apiRequest("POST", `/api/comments/${commentId}/upvote`),
+    onSuccess: async (res) => {
+      const data = await res.json();
+      setFeedUpvotes(data.upvotes ?? feedUpvotes);
+      setFeedIsUpvoted(data.isUpvoted ?? !feedIsUpvoted);
+    },
+    onError: () => {
+      toast({ title: "Failed to upvote", variant: "destructive" });
+    },
+  });
 
   if (item.type === "fact") {
     const fact = feedItemToFactCard(item);
@@ -697,16 +713,42 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
         <FeedUserLocation item={item} index={index} />
         <div className="following-post-body">
           {item.type === "comment" && (
-            <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
-              <div className="following-post-body-left">
-                <p className="following-plain-comment" data-testid={`feed-comment-body-${index}`}>{item.commentBody}</p>
+            <>
+              <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
+                <div className="following-post-body-left">
+                  <p className="following-plain-comment" data-testid={`feed-comment-body-${index}`}>{item.commentBody}</p>
+                </div>
+                {item.factCoverPhoto && (
+                  <Link href={item.factSlug ? `/fact/${item.factSlug}` : "#"} className="following-post-cover-link">
+                    <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                  </Link>
+                )}
               </div>
-              {item.factCoverPhoto && (
-                <Link href={item.factSlug ? `/fact/${item.factSlug}` : "#"} className="following-post-cover-link">
-                  <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
-                </Link>
-              )}
-            </div>
+              <div className="comment-actions feed-comment-actions">
+                {item.factSlug && (
+                  <Link
+                    href={`/fact/${item.factSlug}#comments`}
+                    className="comment-action"
+                    data-testid={`link-feed-reply-${index}`}
+                  >
+                    <CornerUpLeft size={14} />
+                    <span>Reply</span>
+                  </Link>
+                )}
+                <button
+                  className={`comment-action upvote-action${feedIsUpvoted ? " upvoted" : ""}`}
+                  onClick={() => {
+                    if (!isLoggedIn) { toast({ title: "Sign in to upvote comments" }); return; }
+                    feedUpvoteMutation.mutate(item.id);
+                  }}
+                  disabled={feedUpvoteMutation.isPending}
+                  data-testid={`button-feed-upvote-${index}`}
+                >
+                  <ArrowUp size={14} />
+                  <span>{feedUpvotes}</span>
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

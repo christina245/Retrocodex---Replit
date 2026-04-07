@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { useRoute, Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { MapPin, Home, MessageSquare } from "lucide-react";
+import { MapPin, Home, MessageSquare, ArrowUp, CornerUpLeft } from "lucide-react";
 import scrungyAtWork from "@assets/scrungy_at_work_painted_1775522114338.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -175,6 +175,7 @@ export default function PublicProfile() {
     body: string;
     createdAt: string;
     upvotes: number;
+    isUpvotedByMe?: boolean;
     factTitle: string;
     factSlug: string;
     factCoverPhoto: string | null;
@@ -191,6 +192,32 @@ export default function PublicProfile() {
     enabled: !!username && activeTab === "comments",
     staleTime: 0,
   });
+
+  const [commentUpvoteStates, setCommentUpvoteStates] = useState<Record<string, { upvotes: number; isUpvotedByMe: boolean }>>({});
+  const [pendingProfileUpvote, setPendingProfileUpvote] = useState<string | null>(null);
+
+  const profileUpvoteMutation = useMutation({
+    mutationFn: (commentId: string) => {
+      setPendingProfileUpvote(commentId);
+      return apiRequest("POST", `/api/comments/${commentId}/upvote`);
+    },
+    onSuccess: async (res, commentId) => {
+      const data = await res.json();
+      setCommentUpvoteStates(prev => ({
+        ...prev,
+        [commentId]: { upvotes: data.upvotes, isUpvotedByMe: data.isUpvoted },
+      }));
+      setPendingProfileUpvote(null);
+    },
+    onError: () => setPendingProfileUpvote(null),
+  });
+
+  function getCommentUpvotes(c: CommentRow) {
+    return commentUpvoteStates[c.id]?.upvotes ?? c.upvotes;
+  }
+  function getCommentIsUpvoted(c: CommentRow) {
+    return commentUpvoteStates[c.id]?.isUpvotedByMe ?? (c.isUpvotedByMe ?? false);
+  }
 
   function formatRelativeTime(date: Date | string) {
     const d = typeof date === "string" ? new Date(date) : date;
@@ -431,6 +458,28 @@ export default function PublicProfile() {
                               <img src={c.factCoverPhoto} alt="" className="following-post-cover-photo" />
                             </Link>
                           )}
+                        </div>
+                        <div className="comment-actions">
+                          <Link
+                            href={`/fact/${c.factSlug}#comments`}
+                            className="comment-action"
+                            data-testid={`link-profile-reply-${c.id}`}
+                          >
+                            <CornerUpLeft size={14} />
+                            <span>Reply</span>
+                          </Link>
+                          <button
+                            className={`comment-action upvote-action${getCommentIsUpvoted(c) ? " upvoted" : ""}`}
+                            onClick={() => {
+                              if (!isLoggedIn) return;
+                              profileUpvoteMutation.mutate(c.id);
+                            }}
+                            disabled={pendingProfileUpvote === c.id}
+                            data-testid={`button-profile-upvote-${c.id}`}
+                          >
+                            <ArrowUp size={14} />
+                            <span>{getCommentUpvotes(c)}</span>
+                          </button>
                         </div>
                       </div>
                     ))}

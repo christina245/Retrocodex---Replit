@@ -999,6 +999,7 @@ export class DatabaseStorage implements IStorage {
         username: userProfiles.username,
         avatarUrl: userProfiles.avatarUrl,
         body: comments.body,
+        upvotes: comments.upvotes,
         createdAt: comments.createdAt,
         factId: facts.id,
         factSlug: facts.slug,
@@ -1011,6 +1012,16 @@ export class DatabaseStorage implements IStorage {
       .where(inArray(comments.userId, followingIds))
       .orderBy(desc(comments.createdAt))
       .limit(limit);
+
+    // Determine which comments the current user has upvoted
+    let upvotedCommentIds = new Set<string>();
+    if (commentRows.length > 0) {
+      const upvotedRows = await db
+        .select({ commentId: commentUpvotes.commentId })
+        .from(commentUpvotes)
+        .where(and(eq(commentUpvotes.userId, userId), inArray(commentUpvotes.commentId, commentRows.map(c => c.id))));
+      upvotedCommentIds = new Set(upvotedRows.map(r => r.commentId));
+    }
 
     const factCountMap = await this.getCommentCountsByFactIds(submittedFacts.map(f => f.id));
     const factItems: FeedItem[] = submittedFacts.map((f) => ({
@@ -1044,6 +1055,8 @@ export class DatabaseStorage implements IStorage {
       factSlug: c.factSlug ?? undefined,
       factTitle: c.factTitle ?? undefined,
       factCoverPhoto: c.factCoverPhoto ?? undefined,
+      commentUpvotes: c.upvotes ?? 0,
+      commentIsUpvotedByMe: upvotedCommentIds.has(c.id),
     }));
 
     return [...factItems, ...commentItems]
@@ -1132,6 +1145,7 @@ export class DatabaseStorage implements IStorage {
         placesLived: userProfiles.placesLived,
         showPlacesLived: userProfiles.showPlacesLived,
         body: comments.body,
+        upvotes: comments.upvotes,
         createdAt: comments.createdAt,
         factId: facts.id,
         factSlug: facts.slug,
@@ -1143,6 +1157,16 @@ export class DatabaseStorage implements IStorage {
       .leftJoin(facts, eq(comments.factId, facts.id))
       .where(and(inArray(comments.userId, localUserIds), ne(comments.userId, userId)))
       .orderBy(desc(comments.createdAt));
+
+    // Determine which comments the current user has upvoted
+    let localUpvotedCommentIds = new Set<string>();
+    if (commentRows.length > 0) {
+      const upvotedRows = await db
+        .select({ commentId: commentUpvotes.commentId })
+        .from(commentUpvotes)
+        .where(and(eq(commentUpvotes.userId, userId), inArray(commentUpvotes.commentId, commentRows.map(c => c.id))));
+      localUpvotedCommentIds = new Set(upvotedRows.map(r => r.commentId));
+    }
 
     const factCountMap = await this.getCommentCountsByFactIds(submittedFacts.map(f => f.id));
 
@@ -1181,6 +1205,8 @@ export class DatabaseStorage implements IStorage {
       factSlug: c.factSlug ?? undefined,
       factTitle: c.factTitle ?? undefined,
       factCoverPhoto: c.factCoverPhoto ?? undefined,
+      commentUpvotes: c.upvotes ?? 0,
+      commentIsUpvotedByMe: localUpvotedCommentIds.has(c.id),
       userCurrentLocation: c.currentLocation ?? "",
       userShowCurrentLocation: c.showCurrentLocation ?? false,
       userPlacesLived: c.placesLived ?? [],

@@ -599,6 +599,9 @@ export type FeedItem = {
   articleCoverImage?: string | null;
   // enriched count (only on type === "fact" items)
   commentCount?: number;
+  // upvote fields — populated for comment feed items
+  commentUpvotes?: number;
+  commentIsUpvotedByMe?: boolean;
   // user location fields — populated by local feed only
   userCurrentLocation?: string;
   userShowCurrentLocation?: boolean;
