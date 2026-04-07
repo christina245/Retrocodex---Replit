@@ -844,6 +844,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/users/:username/submissions — public; approved facts submitted by this user
+  app.get("/api/users/:username/submissions", async (req, res) => {
+    try {
+      const { username } = req.params;
+      const [profile] = await db.select({ id: userProfiles.id })
+        .from(userProfiles)
+        .where(eq(userProfiles.username, username))
+        .limit(1);
+      if (!profile) return res.status(404).json({ message: "User not found" });
+
+      const userFacts = await db
+        .select({
+          id: facts.id,
+          slug: facts.slug,
+          mythHeader: facts.mythHeader,
+          truthHeader: facts.truthHeader,
+          coverPhoto: facts.coverPhoto,
+          categories: facts.categories,
+          factFilters: facts.factFilters,
+          betaOnly: facts.betaOnly,
+        })
+        .from(facts)
+        .where(eq(facts.submittedByUserId, profile.id))
+        .orderBy(desc(facts.createdAt));
+
+      return res.json(userFacts);
+    } catch (error) {
+      console.error("GET /api/users/:username/submissions error:", error);
+      res.status(500).json({ message: "Failed to fetch submissions" });
+    }
+  });
+
+  // GET /api/users/:username/comments — public; non-deleted comments by this user
+  app.get("/api/users/:username/comments", async (req, res) => {
+    try {
+      const { username } = req.params;
+      const [profile] = await db.select({ id: userProfiles.id })
+        .from(userProfiles)
+        .where(eq(userProfiles.username, username))
+        .limit(1);
+      if (!profile) return res.status(404).json({ message: "User not found" });
+
+      const result = await storage.getCommentsByUserId(profile.id);
+      return res.json(result);
+    } catch (error) {
+      console.error("GET /api/users/:username/comments error:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
   // GET /api/follow/status/:userId — check if current user follows target + get allowFollows
   app.get("/api/follow/status/:userId", requireUser, async (req, res) => {
     try {

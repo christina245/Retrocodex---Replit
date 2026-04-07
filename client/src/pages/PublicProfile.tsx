@@ -3,7 +3,8 @@ import ReactMarkdown from "react-markdown";
 import { useRoute, Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { MapPin, Home, CornerUpLeft, Heart, Bookmark, Check, BookOpen, MessageCircleMore, GitCommitHorizontal, MessageSquare, FileText, FilePenLine } from "lucide-react";
+import { MapPin, Home, MessageSquare } from "lucide-react";
+import scrungyAtWork from "@assets/scrungy_at_work_painted_1775522114338.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
@@ -46,7 +47,6 @@ export default function PublicProfile() {
   const [activeTab, setActiveTab] = useState<PublicProfileTab>("submissions");
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
-  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isOwnProfile = user?.username === username;
 
@@ -159,104 +159,58 @@ export default function PublicProfile() {
 
   const getTagSlug = (tag: string) => tag.toLowerCase().replace(/\s+/g, "-");
 
-  const demoFacts: FactCardFact[] = [
-    {
-      id: "aa5b0b21-1ee7-4996-88ef-ad0c4490adc7",
-      category: "HISTORY",
-      categoryColor: getCategoryColor(["History"]),
-      myth: "When the Mexica first met Spanish explorer Hernán Cortés, they believed he was a god.",
-      truth: "They might have assumed that the Spanish were representatives of their own god, which was misinterpreted by the Spanish.",
-      factFilters: [],
-      link: "/fact/mesoamericans-and-europeans-gods",
-      coverPhoto: "/uploads/1764719426643-922952402.png",
-      betaOnly: false,
-    },
-    {
-      id: "b1b9f88b-3d4e-4eaa-ad36-0380266ec46c",
-      category: "HEALTH & FITNESS",
-      categoryColor: getCategoryColor(["Health & Fitness"]),
-      myth: "You can burn belly fat by doing crunches and other ab workouts.",
-      truth: "Any exercise targeting a specific part of the body only builds muscle. These exercises cannot directly accelerate fat loss in the targeted area.",
-      factFilters: [],
-      link: "/fact/belly-fat-by-doing-ab-workouts",
-      coverPhoto: "/uploads/1764752045366-476242776.png",
-      betaOnly: false,
-    },
-  ];
-
-  const dummyEdits = [
-    {
-      id: "edit-1",
-      factTitle: "Breakfast is the most important meal of the day.",
-      factLink: "/fact/breakfast-most-important-meal-of-the-day",
-      coverPhoto: "/uploads/1765021400264-394912154.png",
-      sectionType: "truth" as const,
-      revision: "While eating breakfast can be beneficial for certain lifestyles, research shows that its importance varies widely based on individual metabolism, cultural norms, and overall diet. The phrase was originally popularized by cereal companies in the early 20th century as a marketing strategy.",
-      timestamp: "2 weeks ago",
-    },
-    {
-      id: "edit-2",
-      factTitle: "Pluto is a planet.",
-      factLink: "/fact/is-pluto-a-planet",
-      coverPhoto: "/objects/uploads/0c6481cd-9156-4d02-a7c1-db51995f9432.png",
-      sectionType: "timeline" as const,
-      timelineYear: "2026",
-      revision: "New Horizons data continued to reveal Pluto's geological complexity, including evidence of a subsurface ocean beneath its icy crust.",
-      timestamp: "1 month ago",
-    },
-    {
-      id: "edit-3",
-      factTitle: "Humans only have five senses.",
-      factLink: "/fact/do-humans-only-have-five-senses",
-      coverPhoto: "/uploads/1764732977459-366971984.png",
-      sectionType: "sources" as const,
-      revision: "Added peer-reviewed study from Nature Neuroscience (2025) on interoceptive awareness as a distinct sensory modality.",
-      timestamp: "1 month ago",
-    },
-    {
-      id: "edit-4",
-      factTitle: "Cracking your knuckles will give you arthritis.",
-      factLink: "/fact/cracking-your-knuckles-arthritis",
-      coverPhoto: "/uploads/1764735935195-591724829.png",
-      sectionType: "considerations" as const,
-      revision: "While cracking does not cause arthritis, some studies suggest habitual cracking may lead to reduced grip strength over time, though evidence is limited and inconclusive.",
-      timestamp: "2 months ago",
-    },
-  ];
-
-  const dummyComments = [
-    {
-      id: "pub-comment-1",
-      factTitle: "Christopher Columbus discovered the Americas in 1492",
-      factLink: "/fact/christopher-columbus-discovered-americas",
-      coverPhoto: "/uploads/1764719426643-922952402.png",
-      comment: "This is one of the most persistent myths I grew up with. It wasn't until college that I learned about the Norse expeditions and the millions of Indigenous peoples who had been living there for thousands of years. History education really needs an overhaul.",
-      timestamp: "3 hours ago",
-    },
-    {
-      id: "pub-comment-2",
-      factTitle: "Men and women have very different brains.",
-      factLink: "/fact/men-women-different-brains",
-      coverPhoto: "/uploads/1764752045366-476242776.png",
-      comment: "I was told this so many times by everybody growing up! I just thought it made sense because I saw so many differences in how men and women behaved. But the evidence is actually very clear that a lot of these distinctions come from socialization and not innate differences.",
-      timestamp: "1 day ago",
-    },
-  ];
-
-  const getSectionIcon = (sectionType: string) => {
-    switch (sectionType) {
-      case "truth":
-        return <Check size={16} className="activity-revision-check" />;
-      case "timeline":
-        return <GitCommitHorizontal size={16} className="activity-revision-icon activity-revision-timeline" />;
-      case "sources":
-        return <BookOpen size={16} className="activity-revision-icon activity-revision-sources" />;
-      case "considerations":
-        return <MessageCircleMore size={16} className="activity-revision-icon activity-revision-considerations" />;
-      default:
-        return <Check size={16} className="activity-revision-check" />;
-    }
+  type SubmissionRow = {
+    id: string;
+    slug: string;
+    mythHeader: string;
+    truthHeader: string;
+    coverPhoto: string | null;
+    categories: string[];
+    factFilters: string[];
+    betaOnly: boolean;
   };
+
+  type CommentRow = {
+    id: string;
+    body: string;
+    createdAt: string;
+    upvotes: number;
+    factTitle: string;
+    factSlug: string;
+    factCoverPhoto: string | null;
+  };
+
+  const { data: submissionsData, isLoading: submissionsLoading } = useQuery<SubmissionRow[]>({
+    queryKey: ["/api/users", username, "submissions"],
+    enabled: !!username && activeTab === "submissions",
+  });
+
+  const { data: commentsData, isLoading: commentsLoading } = useQuery<CommentRow[]>({
+    queryKey: ["/api/users", username, "comments"],
+    enabled: !!username && activeTab === "comments",
+  });
+
+  function formatRelativeTime(date: Date | string) {
+    const d = typeof date === "string" ? new Date(date) : date;
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return "just now";
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
+
+  const submissionFacts: FactCardFact[] = (submissionsData ?? []).map((s) => ({
+    id: s.id,
+    category: (s.categories?.[0] || "Everyday Life").toUpperCase(),
+    categoryColor: getCategoryColor(s.categories ?? []),
+    myth: s.mythHeader,
+    truth: s.truthHeader,
+    factFilters: s.factFilters ?? [],
+    link: `/fact/${s.slug}`,
+    coverPhoto: s.coverPhoto ?? "",
+    betaOnly: s.betaOnly ?? false,
+  }));
 
   return (
     <div className="public-profile-page">
@@ -416,9 +370,13 @@ export default function PublicProfile() {
 
             {activeTab === "submissions" && (
               <div className="public-submissions-content" data-testid="public-submissions-content">
-                {demoFacts.length > 0 ? (
+                {submissionsLoading ? (
+                  <div className="profile-activity-empty" data-testid="public-submissions-loading">
+                    <p className="profile-activity-empty-desc">Loading submissions...</p>
+                  </div>
+                ) : submissionFacts.length > 0 ? (
                   <div className="saved-facts-row" data-testid="public-submissions-grid">
-                    {demoFacts.map((fact) => (
+                    {submissionFacts.map((fact) => (
                       <FactCard
                         key={fact.id}
                         fact={fact}
@@ -430,8 +388,7 @@ export default function PublicProfile() {
                   </div>
                 ) : (
                   <div className="profile-activity-empty" data-testid="public-submissions-empty">
-                    <FileText size={40} className="profile-activity-empty-icon" />
-                    <p className="profile-activity-empty-title">No approved submissions yet.</p>
+                    <p className="profile-activity-empty-desc">This user doesn't have any approved submissions yet.</p>
                   </div>
                 )}
               </div>
@@ -439,95 +396,36 @@ export default function PublicProfile() {
 
             {activeTab === "edits" && (
               <div className="public-edits-content" data-testid="public-edits-content">
-                {dummyEdits.length > 0 ? (
-                  <div className="following-feed">
-                    {dummyEdits.map((edit) => (
-                      <div className="activity-post" key={edit.id} data-testid={`public-edit-${edit.id}`}>
-                        <div className="activity-post-icon-col">
-                          <PlusCircleIcon size={40} />
-                        </div>
-                        <div className="activity-post-main">
-                          <div className="activity-post-header">
-                            <div className="activity-post-header-text">
-                              <Link href={edit.factLink} className="following-post-link">
-                                <p className="fact-myth">"{edit.factTitle}"</p>
-                              </Link>
-                            </div>
-                            <span className="following-post-timestamp">{edit.timestamp}</span>
-                          </div>
-                          <div className="activity-post-body">
-                            <div className="following-post-body-content">
-                              <div className="following-post-body-left">
-                                <p className="activity-submitted-label">Revision:</p>
-                                <div className="activity-submitted-revision">
-                                  {getSectionIcon(edit.sectionType)}
-                                  {edit.sectionType === "timeline" ? (
-                                    <div className="activity-timeline-revision">
-                                      <p className="activity-timeline-year">{edit.timelineYear}</p>
-                                      <p className="activity-truth-text">{edit.revision}</p>
-                                    </div>
-                                  ) : (
-                                    <p className="activity-truth-text">{edit.revision}</p>
-                                  )}
-                                </div>
-                              </div>
-                              <Link href={edit.factLink} className="following-post-cover-link" data-testid={`cover-link-public-edit-${edit.id}`}>
-                                <img src={edit.coverPhoto} alt="" className="following-post-cover-photo" />
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="profile-activity-empty" data-testid="public-edits-empty">
-                    <FilePenLine size={40} className="profile-activity-empty-icon" />
-                    <p className="profile-activity-empty-title">No approved edits yet.</p>
-                  </div>
-                )}
+                <div className="edit-requests-beta-state" data-testid="public-edits-beta-empty">
+                  <img src={scrungyAtWork} alt="Scrungy the squirrel" className="edit-requests-beta-squirrel" />
+                  <p className="edit-requests-beta-text">Editing content is currently unavailable in the beta. Scrungy is working on it!</p>
+                </div>
               </div>
             )}
 
             {activeTab === "comments" && (
               <div className="public-comments-content" data-testid="public-comments-content">
-                {dummyComments.length > 0 ? (
+                {commentsLoading ? (
+                  <div className="profile-activity-empty" data-testid="public-comments-loading">
+                    <p className="profile-activity-empty-desc">Loading comments...</p>
+                  </div>
+                ) : (commentsData ?? []).length > 0 ? (
                   <div className="following-feed">
-                    {dummyComments.map((c) => (
+                    {(commentsData ?? []).map((c) => (
                       <div className="public-comment-entry" key={c.id} data-testid={`public-comment-${c.id}`}>
                         <div className="following-post-body-content">
                           <div className="following-post-body-left">
-                            <Link href={c.factLink} className="following-post-link">
+                            <Link href={`/fact/${c.factSlug}`} className="following-post-link">
                               <p className="fact-myth">"{c.factTitle}"</p>
                             </Link>
-                            <p className="following-plain-comment" data-testid={`public-comment-text-${c.id}`}>{c.comment}</p>
-                            <div className="comment-actions" data-testid={`public-comment-actions-${c.id}`}>
-                              <button className="comment-action" onClick={() => setActiveReplyId(activeReplyId === c.id ? null : c.id)} data-testid={`button-reply-public-${c.id}`}>
-                                <CornerUpLeft size={14} />
-                                <span>Reply</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid={`button-like-public-${c.id}`}>
-                                <Heart size={14} />
-                                <span>0 likes</span>
-                              </button>
-                              <button className="comment-action disabled-action" data-testid={`button-save-public-${c.id}`}>
-                                <Bookmark size={14} />
-                                <span>Save</span>
-                              </button>
-                            </div>
-                            {activeReplyId === c.id && (
-                              <div className="inline-reply-box" data-testid={`inline-reply-public-${c.id}`}>
-                                <textarea placeholder="Write a reply..." data-testid={`input-reply-public-${c.id}`} />
-                                <div className="inline-reply-actions">
-                                  <button className="inline-reply-btn" data-testid={`button-submit-reply-public-${c.id}`}>Reply</button>
-                                </div>
-                              </div>
-                            )}
-                            <span className="public-comment-timestamp" data-testid={`public-comment-time-${c.id}`}>{c.timestamp}</span>
+                            <p className="following-plain-comment" data-testid={`public-comment-text-${c.id}`}>{c.body}</p>
+                            <span className="public-comment-timestamp" data-testid={`public-comment-time-${c.id}`}>{formatRelativeTime(c.createdAt)}</span>
                           </div>
-                          <Link href={c.factLink} className="following-post-cover-link" data-testid={`cover-link-public-comment-${c.id}`}>
-                            <img src={c.coverPhoto} alt="" className="following-post-cover-photo" />
-                          </Link>
+                          {c.factCoverPhoto && (
+                            <Link href={`/fact/${c.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-public-comment-${c.id}`}>
+                              <img src={c.factCoverPhoto} alt="" className="following-post-cover-photo" />
+                            </Link>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -550,12 +448,3 @@ export default function PublicProfile() {
   );
 }
 
-function PlusCircleIcon({ size }: { size: number }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#878787" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M8 12h8" />
-      <path d="M12 8v8" />
-    </svg>
-  );
-}
