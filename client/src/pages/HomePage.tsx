@@ -290,18 +290,21 @@ export default function HomePage() {
           const cats = (fact.categories || []).map(c => c.toLowerCase());
           if (!decadeCategoryFilter.some(f => cats.includes(f.toLowerCase()))) return false;
         }
-        // Fact Type toggle filter — only applies to explicitly tagged facts
+        // Fact Type toggle filter — strict explicit matching
+        // A fact must have at least one type tag that matches an active toggle
         const factTypesOnFact = (fact.factFilters || [])
           .map(f => f.toLowerCase())
           .filter(f => FACT_TYPE_KEYS.includes(f));
-        if (factTypesOnFact.length > 0) {
+        if (factTypesOnFact.length === 0) {
+          // No type tag — only visible when School toggle is on (default/unclassified)
+          if (!decadeTypeToggles.school) return false;
+        } else {
           const matchesToggle =
             (decadeTypeToggles.school && factTypesOnFact.includes("school")) ||
             (decadeTypeToggles.folkWisdom && factTypesOnFact.includes("folk wisdom")) ||
             (decadeTypeToggles.mediaClaims && factTypesOnFact.includes("media claims"));
           if (!matchesToggle) return false;
         }
-        // Untagged facts (no type tag) always pass through
         return true;
       })
       .sort((a, b) => {
