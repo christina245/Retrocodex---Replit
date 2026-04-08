@@ -267,11 +267,12 @@
   align-items: center;
   justify-content: center;
   padding: 80px 20px 120px;
-  gap: 20px;
+  gap: 8px;
 }
 
 .decade-loading-gif {
-  width: 120px;
+  width: 500px;
+  max-width: 100%;
   height: auto;
 }
 
