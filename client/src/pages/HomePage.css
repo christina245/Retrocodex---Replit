@@ -437,6 +437,11 @@
   min-width: 0;
 }
 
+.decade-facts-column .fact-card {
+  width: 100%;
+  max-width: 100%;
+}
+
 .decade-controls-bar {
   display: flex;
   align-items: flex-start;
