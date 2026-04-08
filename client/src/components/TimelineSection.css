@@ -31,7 +31,7 @@
 .timeline-tab.active {
   font-weight: 600;
   color: #2C2C2C;
-  background: rgba(255, 83, 83, 0.2);
+  background: #f0f0f0;
 }
 
 .timeline-tab:hover:not(.active) {
