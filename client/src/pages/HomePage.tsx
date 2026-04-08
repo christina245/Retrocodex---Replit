@@ -57,6 +57,7 @@ export default function HomePage() {
   const [decadeSort, setDecadeSort] = useState<SortOption>("recent");
   const [decadePage, setDecadePage] = useState(1);
   const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string[]>([]);
+  const [decadeTypeToggles, setDecadeTypeToggles] = useState({ school: true, folkWisdom: true, mediaClaims: false });
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
@@ -265,6 +266,7 @@ export default function HomePage() {
     if (selectedDecade !== "all") {
       setIsDecadeLoading(true);
       setDecadePage(1);
+      setDecadeTypeToggles({ school: true, folkWisdom: true, mediaClaims: false });
       const timer = setTimeout(() => setIsDecadeLoading(false), 3000);
       return () => clearTimeout(timer);
     }
@@ -272,6 +274,7 @@ export default function HomePage() {
 
   const decadeFacts: Fact[] = useMemo(() => {
     if (selectedDecade === "all") return [];
+    const FACT_TYPE_KEYS = ["school", "folk wisdom", "media claims"];
     return dbFacts
       .filter(fact => {
         if (fact.originDecade && fact.originDecade > selectedDecade) return false;
@@ -286,6 +289,20 @@ export default function HomePage() {
         if (decadeCategoryFilter.length > 0) {
           const cats = (fact.categories || []).map(c => c.toLowerCase());
           if (!decadeCategoryFilter.some(f => cats.includes(f.toLowerCase()))) return false;
+        }
+        // Fact Type toggle filter
+        const factTypesOnFact = (fact.factFilters || [])
+          .map(f => f.toLowerCase())
+          .filter(f => FACT_TYPE_KEYS.includes(f));
+        if (factTypesOnFact.length > 0) {
+          const matchesToggle =
+            (decadeTypeToggles.school && factTypesOnFact.includes("school")) ||
+            (decadeTypeToggles.folkWisdom && factTypesOnFact.includes("folk wisdom")) ||
+            (decadeTypeToggles.mediaClaims && factTypesOnFact.includes("media claims"));
+          if (!matchesToggle) return false;
+        } else {
+          // Untagged facts: treat as School type for backward compatibility
+          if (!decadeTypeToggles.school) return false;
         }
         return true;
       })
@@ -316,7 +333,7 @@ export default function HomePage() {
           commentCount: fact.commentCount ?? 0,
         };
       });
-  }, [dbFacts, selectedDecade, decadeFilters, decadeCategoryFilter]);
+  }, [dbFacts, selectedDecade, decadeFilters, decadeCategoryFilter, decadeTypeToggles]);
 
   const decadeTotalPages = Math.max(1, Math.ceil(decadeFacts.length / DECADE_FACTS_PER_PAGE));
   const clampedDecadePage = Math.min(decadePage, decadeTotalPages);
@@ -592,47 +609,77 @@ export default function HomePage() {
 
                 <div className="decade-divider" />
 
-                <div className="decade-controls-bar">
-                  <FactKey />
-                  <div className="decade-sort-filter">
-                    <SortSelector selectedSort={decadeSort} onSortChange={setDecadeSort} />
-                    <CategoryFilter selectedFilters={decadeFilters} onFilterChange={(f) => { setDecadeFilters(f); setDecadePage(1); }} />
+                <div className="decade-main-layout">
+                  <aside className="decade-type-sidebar">
+                    <div className="decade-type-card">
+                      <div className="decade-type-card-head">Fact Type</div>
+                      {([
+                        { key: "school" as const, label: "School", sub: "Textbooks & curricula" },
+                        { key: "folkWisdom" as const, label: "Folk Wisdom", sub: "Oral tradition, old wives' tales" },
+                        { key: "mediaClaims" as const, label: "Media Claims", sub: "News, ads, social media" },
+                      ]).map(({ key, label, sub }) => (
+                        <button
+                          key={key}
+                          className="decade-type-toggle-item"
+                          onClick={() => { setDecadeTypeToggles(prev => ({ ...prev, [key]: !prev[key] })); setDecadePage(1); }}
+                          data-testid={`toggle-fact-type-${key}`}
+                        >
+                          <div className="decade-type-toggle-label">
+                            <span className="decade-type-toggle-name">{label}</span>
+                            <span className="decade-type-toggle-sub">{sub}</span>
+                          </div>
+                          <div className={`decade-type-toggle-switch${decadeTypeToggles[key] ? " decade-type-toggle-on" : ""}`}>
+                            <div className="decade-type-toggle-thumb" />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </aside>
+
+                  <div className="decade-facts-column">
+                    <div className="decade-controls-bar">
+                      <FactKey />
+                      <div className="decade-sort-filter">
+                        <SortSelector selectedSort={decadeSort} onSortChange={setDecadeSort} />
+                        <CategoryFilter selectedFilters={decadeFilters} onFilterChange={(f) => { setDecadeFilters(f); setDecadePage(1); }} />
+                      </div>
+                    </div>
+
+                    <div className="decade-facts-grid">
+                      {paginatedDecadeFacts.length > 0 ? (
+                        paginatedDecadeFacts.map((fact, index) => (
+                          <div
+                            key={fact.id}
+                            className="decade-fact-row-item"
+                            style={{ animationDelay: `${Math.floor(index / 2) * 80}ms` }}
+                          >
+                            <FactCard
+                              fact={fact}
+                              onSave={() => handleSaveClick(fact.id)}
+                              onShare={() => handleShareClick(fact)}
+                              onComment={handleCommentClick}
+                              onBetaClick={handleBetaClick}
+                              isSaved={savedFactIds.has(fact.id)}
+                            />
+                          </div>
+                        ))
+                      ) : (
+                        <div className="decade-empty-state" data-testid="decade-empty">
+                          <p>No facts found for the {selectedDecade}. Check back as we add more entries!</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {decadeTotalPages > 1 && (
+                      <Pagination
+                        currentPage={clampedDecadePage}
+                        totalPages={decadeTotalPages}
+                        onPageChange={(p) => { setDecadePage(p); document.getElementById("decade-content-area")?.scrollIntoView({ behavior: "smooth" }); }}
+                        scrollTargetId="decade-content-area"
+                      />
+                    )}
                   </div>
                 </div>
-
-                <div className="decade-facts-grid">
-                  {paginatedDecadeFacts.length > 0 ? (
-                    paginatedDecadeFacts.map((fact, index) => (
-                      <div
-                        key={fact.id}
-                        className="decade-fact-row-item"
-                        style={{ animationDelay: `${Math.floor(index / 2) * 80}ms` }}
-                      >
-                        <FactCard
-                          fact={fact}
-                          onSave={() => handleSaveClick(fact.id)}
-                          onShare={() => handleShareClick(fact)}
-                          onComment={handleCommentClick}
-                          onBetaClick={handleBetaClick}
-                          isSaved={savedFactIds.has(fact.id)}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <div className="decade-empty-state" data-testid="decade-empty">
-                      <p>No facts found for the {selectedDecade}. Check back as we add more entries!</p>
-                    </div>
-                  )}
-                </div>
-
-                {decadeTotalPages > 1 && (
-                  <Pagination
-                    currentPage={clampedDecadePage}
-                    totalPages={decadeTotalPages}
-                    onPageChange={(p) => { setDecadePage(p); document.getElementById("decade-content-area")?.scrollIntoView({ behavior: "smooth" }); }}
-                    scrollTargetId="decade-content-area"
-                  />
-                )}
               </div>
             )}
 

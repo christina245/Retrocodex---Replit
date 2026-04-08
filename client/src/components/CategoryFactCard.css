@@ -71,6 +71,10 @@
   background: #7B4E9E;
 }
 
+.category-fact-media-claims-tag {
+  background: #009176;
+}
+
 .category-fact-body {
   display: flex;
   flex: 1;

@@ -1759,6 +1759,25 @@ export default function AdminPage() {
                   </div>
                 </div>
 
+                <div className="form-group" style={{ marginTop: "1.25rem" }}>
+                  <label className="form-label">Fact Type</label>
+                  <p className="form-hint">Internal classification used to filter facts in the decades view sidebar. School and Folk Wisdom are not shown to users. Media Claims displays a teal badge on the fact card.</p>
+                  <div className="checkbox-group">
+                    {(["School", "Folk Wisdom", "Media Claims"] as const).map((factType) => (
+                      <label key={factType} className="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={selectedTags.includes(factType)}
+                          onChange={(e) => handleTagChange(factType, e.target.checked)}
+                          className="checkbox-input"
+                          data-testid={`checkbox-fact-type-${factType.toLowerCase().replace(/\s+/g, '-')}`}
+                        />
+                        <span>{factType}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
                 {selectedTags.includes("Official Revision") && (
                   <div className="form-group">
                     <label className="form-label">Revision Year</label>

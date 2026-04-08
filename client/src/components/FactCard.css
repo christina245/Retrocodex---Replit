@@ -64,6 +64,10 @@
   background: #7B4E9E;
 }
 
+.fact-media-claims-tag {
+  background: #009176;
+}
+
 .category-icon-small {
   flex-shrink: 0;
 }

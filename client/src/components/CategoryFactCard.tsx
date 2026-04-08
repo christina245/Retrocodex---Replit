@@ -115,12 +115,20 @@ export function CategoryFactCard({
         >
           <div className="category-fact-header">
             {(() => {
+              const FACT_TYPE_KEYS = ["school", "folk wisdom", "media claims"];
               const hasOfficialRevision = fact.factFilters?.some(f => f.toLowerCase() === "official revision") ?? false;
               const showTaughtUntil = !!fact.taughtUntilYear && !hasOfficialRevision;
-              if (!((fact.factFilters && fact.factFilters.length > 0) || showTaughtUntil)) return null;
+              const isMediaClaims = fact.factFilters?.some(f => f.toLowerCase() === "media claims") ?? false;
+              const displayFilters = (fact.factFilters || []).filter(f => !FACT_TYPE_KEYS.includes(f.toLowerCase()));
+              if (!(isMediaClaims || displayFilters.length > 0 || showTaughtUntil)) return null;
               return (
                 <div className="category-fact-tags">
-                  {fact.factFilters && fact.factFilters.map((filter, index) => {
+                  {isMediaClaims && (
+                    <span className="category-fact-tag category-fact-media-claims-tag" data-testid={`label-media-claims-${fact.id}`}>
+                      Media Claims
+                    </span>
+                  )}
+                  {displayFilters.map((filter, index) => {
                     const isOfficialRevision = filter.toLowerCase() === "official revision";
                     const label = isOfficialRevision && fact.revisionYear
                       ? `Official Revision - ${fact.revisionYear}`
