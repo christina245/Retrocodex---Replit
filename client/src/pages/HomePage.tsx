@@ -611,9 +611,9 @@ export default function HomePage() {
                     <div className="decade-type-card">
                       <div className="decade-type-card-head">Fact Type</div>
                       {([
-                        { key: "school" as const, label: "School", sub: "Textbooks & curricula" },
-                        { key: "folkWisdom" as const, label: "Folk Wisdom", sub: "Oral tradition, old wives' tales" },
-                        { key: "mediaClaims" as const, label: "Media Claims", sub: "News, ads, social media" },
+                        { key: "school" as const, label: "Taught In School", sub: "Facts that may have been taught by your teachers that are now outdated." },
+                        { key: "folkWisdom" as const, label: "Folk Wisdom", sub: "Informal lessons from family or pop culture." },
+                        { key: "mediaClaims" as const, label: "Media Claims", sub: "Misinformation commonly circulating through news media and social media in 2026." },
                       ]).map(({ key, label, sub }) => (
                         <button
                           key={key}
