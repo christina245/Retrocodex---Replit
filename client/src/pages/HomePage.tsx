@@ -290,7 +290,7 @@ export default function HomePage() {
           const cats = (fact.categories || []).map(c => c.toLowerCase());
           if (!decadeCategoryFilter.some(f => cats.includes(f.toLowerCase()))) return false;
         }
-        // Fact Type toggle filter
+        // Fact Type toggle filter — only applies to explicitly tagged facts
         const factTypesOnFact = (fact.factFilters || [])
           .map(f => f.toLowerCase())
           .filter(f => FACT_TYPE_KEYS.includes(f));
@@ -300,10 +300,8 @@ export default function HomePage() {
             (decadeTypeToggles.folkWisdom && factTypesOnFact.includes("folk wisdom")) ||
             (decadeTypeToggles.mediaClaims && factTypesOnFact.includes("media claims"));
           if (!matchesToggle) return false;
-        } else {
-          // Untagged facts: treat as School type for backward compatibility
-          if (!decadeTypeToggles.school) return false;
         }
+        // Untagged facts (no type tag) always pass through
         return true;
       })
       .sort((a, b) => {
