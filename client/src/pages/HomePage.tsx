@@ -449,10 +449,10 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What were you taught that <u>isn't true</u>?
+          What have you learned that's <u>now outdated</u>?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
-          Pick the decade you graduated high school. Then discover what you may have been taught that was later disproven.
+          Pick the decade you graduated high school. Then discover what you may have been taught growing up that has since been disproven.
         </p>
 
         <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">

@@ -1,0 +1,282 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans, sans-serif); background: transparent; }
+
+.page { max-width: 900px; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
+
+.top-bar { text-align: center; margin-bottom: 1.25rem; }
+.site-title { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.site-title u { text-decoration: underline; text-decoration-color: #D85A30; }
+.site-sub { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 14px; }
+.decade-row { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; }
+.dbtn { padding: 5px 13px; border-radius: 999px; border: 1.5px solid; font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; transition: all .15s; border-color: var(--color-border-secondary); color: var(--color-text-secondary); }
+.dbtn.active { background: #D85A30; border-color: #D85A30; color: #fff; }
+.dbtn:hover:not(.active) { border-color: var(--color-border-primary); color: var(--color-text-primary); }
+
+.main { display: grid; grid-template-columns: 164px 1fr; gap: 14px; margin-top: 1.25rem; }
+.sidebar { display: flex; flex-direction: column; gap: 0; }
+.sidebar-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; overflow: hidden; }
+.sidebar-head { padding: 9px 12px 8px; font-size: 10px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: .06em; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.toggle-item { padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: background .1s; }
+.toggle-item:last-child { border-bottom: none; }
+.toggle-item:hover { background: var(--color-background-secondary); }
+.toggle-label { display: flex; flex-direction: column; gap: 2px; }
+.tl-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; gap: 5px; }
+.tl-sub { font-size: 10px; color: var(--color-text-tertiary); line-height: 1.35; }
+.tog { width: 28px; height: 16px; background: var(--color-border-secondary); border-radius: 8px; position: relative; flex-shrink: 0; transition: background .2s; }
+.tog.on { background: #D85A30; }
+.tog-thumb { position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; background: #fff; border-radius: 50%; transition: transform .2s; pointer-events: none; }
+.tog.on .tog-thumb { transform: translateX(12px); }
+.sidebar-note { margin-top: 8px; font-size: 10px; color: var(--color-text-tertiary); line-height: 1.5; padding: 0 2px; }
+
+.content { min-width: 0; }
+.content-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+.showing-label { font-size: 12px; color: var(--color-text-secondary); }
+.showing-label strong { color: var(--color-text-primary); font-weight: 500; }
+.sort-row { display: flex; align-items: center; gap: 8px; }
+.sort-select { font-size: 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 6px; padding: 4px 8px; background: var(--color-background-primary); color: var(--color-text-primary); cursor: pointer; }
+
+.legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.xmark { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--color-text-secondary); }
+.xdot { width: 8px; height: 8px; flex-shrink: 0; }
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 580px) { .main { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr; } }
+
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 12px; overflow: hidden; }
+.card.media-override { border-color: #85B7EB; }
+.card-top { padding: 7px 10px 6px; display: flex; align-items: center; justify-content: space-between; }
+.cat { font-size: 10px; font-weight: 500; color: var(--color-text-secondary); }
+.badges { display: flex; gap: 4px; align-items: center; }
+.badge { font-size: 9px; padding: 2px 7px; border-radius: 999px; font-weight: 500; white-space: nowrap; }
+.b-folk   { background: #FAEEDA; color: #633806; }
+.b-school { background: #EAF3DE; color: #27500A; }
+.b-media  { background: #E6F1FB; color: #0C447C; }
+.b-social { background: #EEEDFE; color: #3C3489; }
+.until-badge { font-size: 9px; padding: 2px 7px; border-radius: 999px; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
+.divider { height: 0.5px; background: var(--color-border-tertiary); }
+.media-note { padding: 4px 10px; font-size: 10px; color: #185FA5; display: flex; align-items: center; gap: 5px; font-style: italic; }
+.card-body { padding: 9px 10px 11px; }
+.myth { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 6px; }
+.icon { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; }
+.myth-text { font-size: 12px; font-weight: 500; color: var(--color-text-primary); font-style: italic; line-height: 1.4; }
+.truth { display: flex; gap: 6px; align-items: flex-start; }
+.truth-text { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; }
+.folk-tx { padding: 0 10px 8px; font-size: 10px; color: var(--color-text-tertiary); font-style: italic; }
+
+.bot-filter { margin-top: 1.25rem; padding: 10px 0 0; border-top: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bot-label { font-size: 11px; color: var(--color-text-tertiary); font-weight: 500; }
+.cat-pill { padding: 5px 11px; border-radius: 999px; border: 1px solid var(--color-border-secondary); font-size: 11px; color: var(--color-text-secondary); cursor: pointer; background: transparent; transition: all .12s; }
+.cat-pill.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); }
+</style>
+
+<div class="page">
+  <div class="top-bar">
+    <h1 class="site-title">What were you taught that <u>isn't true</u>?</h1>
+    <p class="site-sub">Pick the decade you graduated high school. Then discover what you may have been taught that was later disproven.</p>
+    <div class="decade-row">
+      <button class="dbtn">View all</button>
+      <button class="dbtn">1950s</button>
+      <button class="dbtn">1960s</button>
+      <button class="dbtn">1970s</button>
+      <button class="dbtn">1980s</button>
+      <button class="dbtn active" id="decade-2000s">2000s</button>
+      <button class="dbtn">2010s</button>
+      <button class="dbtn">2020s</button>
+    </div>
+  </div>
+
+  <div class="main" id="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-head">Show sources</div>
+        <div class="toggle-item" onclick="toggleSource('school', this)">
+          <div class="toggle-label">
+            <span class="tl-name">🏫 School</span>
+            <span class="tl-sub">Textbooks, curricula</span>
+          </div>
+          <div class="tog on" id="tog-school"><div class="tog-thumb"></div></div>
+        </div>
+        <div class="toggle-item" onclick="toggleSource('folk', this)">
+          <div class="toggle-label">
+            <span class="tl-name">🧓 Folk wisdom</span>
+            <span class="tl-sub">Oral tradition, old wives' tales</span>
+          </div>
+          <div class="tog on" id="tog-folk"><div class="tog-thumb"></div></div>
+        </div>
+        <div class="toggle-item" onclick="toggleSource('media', this)">
+          <div class="toggle-label">
+            <span class="tl-name">📺 Media</span>
+            <span class="tl-sub">News, ads, film & TV</span>
+          </div>
+          <div class="tog" id="tog-media"><div class="tog-thumb"></div></div>
+        </div>
+        <div class="toggle-item" onclick="toggleSource('social', this)">
+          <div class="toggle-label">
+            <span class="tl-name">📱 Social media</span>
+            <span class="tl-sub">Influencers, viral claims</span>
+          </div>
+          <div class="tog" id="tog-social"><div class="tog-thumb"></div></div>
+        </div>
+      </div>
+      <p class="sidebar-note">Folk wisdom appears across all decades — it has no single era.</p>
+    </aside>
+
+    <div class="content">
+      <div class="content-top">
+        <span class="showing-label">Showing <strong>2000s</strong> — school & folk wisdom</span>
+        <div class="sort-row">
+          <select class="sort-select"><option>Most recently added</option><option>Oldest first</option><option>Most surprising</option></select>
+        </div>
+      </div>
+
+      <div class="legend-row">
+        <span class="xmark"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4.5" fill="#FCEBEB" stroke="#E24B4A" stroke-width=".8"/><path d="M3 3l4 4M7 3l-4 4" stroke="#E24B4A" stroke-width="1.2" stroke-linecap="round"/></svg> What you may have learned</span>
+        <span class="xmark"><svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4.5" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".8"/><path d="M2.5 5l1.5 1.5 3.5-3.5" stroke="#3B6D11" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg> Current understanding as of 2026</span>
+      </div>
+
+      <div class="cards" id="cards-grid">
+
+        <div class="card" data-source="school">
+          <div class="card-top">
+            <span class="cat">🧠 Social sciences</span>
+            <div class="badges">
+              <span class="badge b-school">School</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-body">
+            <div class="myth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#FCEBEB" stroke="#E24B4A" stroke-width=".8"/><path d="M4 4l5 5M9 4l-5 5" stroke="#E24B4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="myth-text">"You have a learning style — visual, auditory, or kinesthetic."</span>
+            </div>
+            <div class="truth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".8"/><path d="M3.5 6.5l2 2 4-4" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="truth-text">No evidence shows matching teaching style to learning style improves outcomes. VARK has been debunked in education research.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-source="folk">
+          <div class="card-top">
+            <span class="cat">💪 Health & fitness</span>
+            <div class="badges">
+              <span class="badge b-folk">Folk wisdom</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="folk-tx">Passed down through families — no traceable origin</div>
+          <div class="divider"></div>
+          <div class="card-body">
+            <div class="myth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#FCEBEB" stroke="#E24B4A" stroke-width=".8"/><path d="M4 4l5 5M9 4l-5 5" stroke="#E24B4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="myth-text">"Cracking your knuckles causes arthritis."</span>
+            </div>
+            <div class="truth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".8"/><path d="M3.5 6.5l2 2 4-4" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="truth-text">A doctor cracked one hand's knuckles for 60 years and compared them — no difference in arthritis rates.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" data-source="school">
+          <div class="card-top">
+            <span class="cat">🧠 Social sciences</span>
+            <div class="badges">
+              <span class="badge b-school">School</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="card-body">
+            <div class="myth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#FCEBEB" stroke="#E24B4A" stroke-width=".8"/><path d="M4 4l5 5M9 4l-5 5" stroke="#E24B4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="myth-text">"The Stanford Prison Experiment proved how power corrupts universally."</span>
+            </div>
+            <div class="truth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".8"/><path d="M3.5 6.5l2 2 4-4" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="truth-text">Participants were coached to behave badly. The study had no controls and has never been replicated.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card media-override" data-source="media" style="display:none" id="media-card-1">
+          <div class="card-top">
+            <span class="cat">💻 Technology</span>
+            <div class="badges">
+              <span class="badge b-media">Media</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="media-note">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#E6F1FB" stroke="#185FA5" stroke-width=".8"/><path d="M5 3v2.5M5 7h.01" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Shown because media filter is on — not decade-specific
+          </div>
+          <div class="divider"></div>
+          <div class="card-body">
+            <div class="myth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#FCEBEB" stroke="#E24B4A" stroke-width=".8"/><path d="M4 4l5 5M9 4l-5 5" stroke="#E24B4A" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <span class="myth-text">"AI chatbots are just searching the internet."</span>
+            </div>
+            <div class="truth">
+              <svg class="icon" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.8" fill="#EAF3DE" stroke="#3B6D11" stroke-width=".8"/><path d="M3.5 6.5l2 2 4-4" stroke="#3B6D11" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="truth-text">LLMs generate responses from patterns learned during training, not live search results, unless explicitly given a search tool.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bot-filter">
+        <span class="bot-label">Filter by category:</span>
+        <button class="cat-pill active">🏛 History</button>
+        <button class="cat-pill active">🌿 Life sciences</button>
+        <button class="cat-pill active">🏠 Everyday life</button>
+        <button class="cat-pill active">💪 Health & fitness</button>
+        <button class="cat-pill active">🧠 Social sciences</button>
+        <button class="cat-pill active">⚧ Gender & sexuality</button>
+        <button class="cat-pill active">• Other</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const state = { school: true, folk: true, media: false, social: false };
+
+function toggleSource(src, item) {
+  state[src] = !state[src];
+  const tog = document.getElementById('tog-' + src);
+  tog.classList.toggle('on', state[src]);
+  updateCards();
+  updateLabel();
+}
+
+function updateCards() {
+  document.querySelectorAll('.card[data-source]').forEach(c => {
+    const src = c.dataset.source;
+    c.style.display = state[src] ? '' : 'none';
+  });
+}
+
+function updateLabel() {
+  const on = Object.entries(state).filter(([,v])=>v).map(([k])=>k);
+  const labels = { school: 'school', folk: 'folk wisdom', media: 'media', social: 'social media' };
+  const str = on.length ? on.map(k=>labels[k]).join(' & ') : 'nothing selected';
+  document.querySelector('.showing-label').innerHTML = 'Showing <strong>2000s</strong> — ' + str;
+}
+
+document.querySelectorAll('.dbtn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.dbtn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    const isViewAll = b.textContent.trim() === 'View all';
+    document.getElementById('main-layout').style.gridTemplateColumns = isViewAll ? '1fr' : '164px 1fr';
+    document.querySelector('.sidebar').style.display = isViewAll ? 'none' : '';
+  });
+});
+
+document.querySelectorAll('.cat-pill').forEach(p => {
+  p.addEventListener('click', () => p.classList.toggle('active'));
+});
+</script>
