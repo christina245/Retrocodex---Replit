@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -46,6 +46,16 @@ export default function EverydayLifePage() {
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const el = document.getElementById("everyday-life-content-area");
+    if (!el) return;
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: "smooth" });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [currentPage]);
+
   const { toast } = useToast();
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
@@ -218,7 +228,7 @@ export default function EverydayLifePage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
-                    scrollTargetId="everyday-life-content-area"
+                    scrollTargetId="__noscroll__"
                   />
                 </>
               )}

@@ -1,5 +1,5 @@
 import { FaInstagram, FaReddit, FaBluesky } from "react-icons/fa6";
-import footerLogo from "@assets/footer logo beta.png";
+import footerLogo from "@assets/logos/white logo.png";
 import "./Footer.css";
 
 export function Footer() {

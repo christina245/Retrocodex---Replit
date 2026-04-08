@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -40,6 +40,16 @@ export default function HistoryPage() {
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const el = document.getElementById("history-content-area");
+    if (!el) return;
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY, behavior: "smooth" });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [currentPage]);
+
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
@@ -218,7 +228,7 @@ export default function HistoryPage() {
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
-                    scrollTargetId="history-content-area"
+                    scrollTargetId="__noscroll__"
                   />
                 </>
               )}
