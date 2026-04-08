@@ -272,6 +272,17 @@ export default function HomePage() {
     }
   }, [selectedDecade]);
 
+  useEffect(() => {
+    if (selectedDecade === "all") return;
+    const el = document.getElementById("decade-content-area");
+    if (!el) return;
+    const timer = setTimeout(() => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top, behavior: "smooth" });
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [decadePage, selectedDecade]);
+
   const decadeFacts: Fact[] = useMemo(() => {
     if (selectedDecade === "all") return [];
     const FACT_TYPE_KEYS = ["school", "folk wisdom", "media claims"];
@@ -611,9 +622,9 @@ export default function HomePage() {
                     <div className="decade-type-card">
                       <div className="decade-type-card-head">Fact Type</div>
                       {([
-                        { key: "school" as const, label: "Taught In School", sub: "Facts that may have been taught by your teachers that are now outdated." },
-                        { key: "folkWisdom" as const, label: "Folk Wisdom", sub: "Informal lessons from family or pop culture." },
-                        { key: "mediaClaims" as const, label: "Media Claims", sub: "Misinformation commonly circulating through news media and social media in 2026." },
+                        { key: "school" as const, label: "Taught In School", sub: "Facts from your teachers that are now outdated." },
+                        { key: "folkWisdom" as const, label: "Folk Wisdom", sub: "Informal lessons from family, community, or pop culture." },
+                        { key: "mediaClaims" as const, label: "Media Claims", sub: "Misinformation commonly circulating through 2026's news media and social media." },
                       ]).map(({ key, label, sub }) => (
                         <button
                           key={key}
@@ -671,8 +682,8 @@ export default function HomePage() {
                       <Pagination
                         currentPage={clampedDecadePage}
                         totalPages={decadeTotalPages}
-                        onPageChange={(p) => { setDecadePage(p); document.getElementById("decade-content-area")?.scrollIntoView({ behavior: "smooth" }); }}
-                        scrollTargetId="decade-content-area"
+                        onPageChange={(p) => setDecadePage(p)}
+                        scrollTargetId="__noscroll__"
                       />
                     )}
                   </div>

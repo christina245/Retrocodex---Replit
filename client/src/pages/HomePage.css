@@ -312,7 +312,7 @@
 .decade-disclaimer-item {
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   color: #2C2C2C;
   line-height: 1.5;
   display: flex;
@@ -328,9 +328,9 @@
 
 .decade-main-layout {
   display: grid;
-  grid-template-columns: 184px 1fr;
-  gap: 14px;
-  max-width: 1264px;
+  grid-template-columns: 225px 1fr;
+  gap: 30px;
+  max-width: 1360px;
   margin: 0 auto;
   align-items: start;
 }
@@ -391,14 +391,14 @@
 
 .decade-type-toggle-name {
   font-family: 'Public Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   color: hsl(var(--foreground));
 }
 
 .decade-type-toggle-sub {
   font-family: 'Public Sans', sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   color: hsl(var(--muted-foreground));
   line-height: 1.35;
 }
