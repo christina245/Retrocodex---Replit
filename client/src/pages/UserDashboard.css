@@ -3011,3 +3011,66 @@ a.following-post-fact-link:hover {
   font-size: 13px;
   color: #888;
 }
+
+/* ── Mobile feed layout fixes (≤900px) ── */
+@media (max-width: 900px) {
+  /* Remove the huge desktop side margins from the following/local feed */
+  .following-feed {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Reduce top spacing above feed content */
+  .dashboard-feed-content {
+    margin-top: 8px;
+  }
+
+  /* Tighten per-item padding for all feed post types */
+  .following-post {
+    padding: 14px 0;
+  }
+
+  .following-post--fact,
+  .following-post--article {
+    padding: 14px 0;
+  }
+
+  /* Remove the 52px left indent so fact cards span full width */
+  .following-post-fact-card-wrap {
+    margin-left: 0;
+  }
+
+  /* Allow fact cards to fill the available container width */
+  .following-post-fact-card-wrap .fact-card-wrapper {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Remove the 52px indent on the user-location row inside fact posts */
+  .following-post--fact .comment-user-info {
+    margin-left: 0;
+  }
+
+  /* Tighten the attribution row below the avatar */
+  .following-post-attribution {
+    margin-bottom: 6px;
+  }
+
+  /* Reduce gap between attribution and body */
+  .following-post-body {
+    margin-top: 8px;
+  }
+
+  /* Shrink the cover photo thumbnail to a compact right-side square */
+  .following-post-cover-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+  }
+
+  /* Remove extra side margins from the For You 2→1 column grid */
+  .feed-for-you-grid {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
