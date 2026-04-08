@@ -8,7 +8,6 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import BlogCard from "@/components/BlogCard";
 import workInProgressImage from "@assets/No articles found (yet)._1764112278730.png";
-import loadingLogoLight from "@assets/white_flat_logo_1765095431508.png";
 import "./ArticlesPage.css";
 
 interface UnifiedArticle {
@@ -180,7 +179,7 @@ export default function ArticlesPage() {
         {isLoading ? (
           <div className="loading-state" data-testid="loading-state">
             <img 
-              src={loadingLogoLight} 
+              src="/loading-bar.gif" 
               alt="" 
               className="loading-logo"
               data-testid="img-loading-logo"

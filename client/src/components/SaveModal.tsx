@@ -1,6 +1,5 @@
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import "./SaveModal.css";
 
 interface SaveModalProps {
@@ -48,7 +47,7 @@ export function SaveModal({ isOpen, onClose }: SaveModalProps) {
           {isLoading && (
             <div className="modal-loading-state">
               <img 
-                src={loadingLogo} 
+                src="/loading-bar.gif" 
                 alt="Loading..." 
                 className="modal-loading-logo"
               />

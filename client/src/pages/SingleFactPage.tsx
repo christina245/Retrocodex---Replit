@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Pencil, BellRing, Bell, BellOff, X } from "lucide-react";
-import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import envelopeImage from "@assets/email_1774815930235.png";
 import { SingleFactHeader } from "@/components/SingleFactHeader";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -166,7 +165,7 @@ export default function SingleFactPage() {
         <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <div className="loading-state" data-testid="loading-state">
           <img 
-            src={loadingLogo} 
+            src="/loading-bar.gif" 
             alt="" 
             className="loading-logo"
             data-testid="img-loading-logo"

@@ -21,7 +21,6 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import "./PhysicsPage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -161,7 +160,7 @@ export default function PhysicsPage() {
               {isLoading ? (
                 <div className="physics-loading-state" data-testid="loading-state">
                   <img 
-                    src={loadingLogo} 
+                    src="/loading-bar.gif" 
                     alt="" 
                     className="physics-loading-logo"
                     data-testid="img-loading-logo"

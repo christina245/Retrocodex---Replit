@@ -563,7 +563,7 @@ export default function HomePage() {
                       ))
                     ) : activeTab === "explore" && isFactsLoading ? (
                       <div className="decade-loading-state" data-testid="featured-loading">
-                        <div className="decade-loading-spinner" />
+                        <img src="/loading-bar.gif" className="decade-loading-gif" alt="" />
                       </div>
                     ) : (
                       <div className="empty-state" data-testid="empty-facts">
@@ -599,7 +599,7 @@ export default function HomePage() {
           <>
             {isDecadeLoading ? (
               <div className="decade-loading-state" data-testid="decade-loading">
-                <div className="decade-loading-spinner" />
+                <img src="/loading-bar.gif" className="decade-loading-gif" alt="" />
                 <p className="decade-loading-text">Generating your {selectedDecade} results…</p>
               </div>
             ) : (

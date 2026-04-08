@@ -21,7 +21,6 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import "./AnimalsPage.css";
 
 import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
@@ -173,7 +172,7 @@ export default function AnimalsPage() {
               {isLoading ? (
                 <div className="animals-loading-state" data-testid="loading-state">
                   <img 
-                    src={loadingLogo} 
+                    src="/loading-bar.gif" 
                     alt="" 
                     className="animals-loading-logo"
                     data-testid="img-loading-logo"

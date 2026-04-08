@@ -99,20 +99,11 @@
 }
 
 .earth-science-loading-logo {
-  width: 60px;
-  height: 60px;
+  width: 120px;
+  height: auto;
   object-fit: contain;
-  animation: pulse-loading 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse-loading {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
 
 .earth-science-facts-grid {
   display: grid;

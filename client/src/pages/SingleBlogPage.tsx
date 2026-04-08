@@ -28,7 +28,6 @@ import { ArticleShareModal } from "@/components/ArticleShareModal";
 import { SendgridBanner } from "@/components/SendgridBanner";
 import { BlogPost } from "@shared/schema";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
-import loadingLogoLight from "@assets/white_flat_logo_1765095431508.png";
 import "./SingleBlogPage.css";
 
 const getCategoryIcon = (category: string): LucideIcon => {
@@ -135,7 +134,7 @@ export default function SingleBlogPage() {
         <main className="single-blog-main">
           <div className="loading-container">
             <img 
-              src={loadingLogoLight} 
+              src="/loading-bar.gif" 
               alt="" 
               className="loading-logo"
               data-testid="img-loading-logo"

@@ -1746,17 +1746,9 @@ a.following-post-fact-link:hover {
   margin: 0;
 }
 
-.dashboard-feed-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid #f0f0f0;
-  border-top-color: #FF5353;
-  border-radius: 50%;
-  animation: dashboard-spin 0.7s linear infinite;
-}
-
-@keyframes dashboard-spin {
-  to { transform: rotate(360deg); }
+.dashboard-feed-gif {
+  width: 100px;
+  height: auto;
 }
 
 .dashboard-feed-load-more {

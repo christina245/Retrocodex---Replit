@@ -21,7 +21,6 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import loadingLogo from "@assets/line_logo_white_background_1764717128944.png";
 import "./BeautyPage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -161,7 +160,7 @@ export default function BeautyPage() {
               {isLoading ? (
                 <div className="beauty-loading-state" data-testid="loading-state">
                   <img 
-                    src={loadingLogo} 
+                    src="/loading-bar.gif" 
                     alt="" 
                     className="beauty-loading-logo"
                     data-testid="img-loading-logo"

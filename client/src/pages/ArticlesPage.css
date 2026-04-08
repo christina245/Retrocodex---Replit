@@ -126,17 +126,8 @@
   width: 60px;
   height: 60px;
   object-fit: contain;
-  animation: pulse-loading 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse-loading {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
 
 .empty-state-image {
   max-width: 400px;
