@@ -125,6 +125,30 @@
   object-fit: contain;
 }
 
+.logo-full {
+  display: block;
+}
+
+.logo-icon-mobile {
+  display: none;
+  height: 38px;
+  width: 38px;
+  object-fit: contain;
+}
+
+.header-mobile-username {
+  display: none;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FF5353;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
 .tagline-image {
   width: 260px;
   height: auto;
@@ -310,6 +334,19 @@
 
   .logo-image {
     width: 180px;
+  }
+
+  .logo-full {
+    display: none;
+  }
+
+  .logo-icon-mobile {
+    display: block;
+  }
+
+  .header-mobile-username {
+    display: flex;
+    align-items: center;
   }
 
   .tagline-desktop {

@@ -39,6 +39,19 @@
   object-fit: contain;
 }
 
+.header-mobile-username {
+  display: none;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #FF5353;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
 .mobile-sidebar-toggle-btn {
   display: none;
   background: transparent;
@@ -206,6 +219,19 @@
 @media (max-width: 768px) {
   .header-logo-hidden-mobile {
     display: none;
+  }
+
+  .logo-full {
+    display: none;
+  }
+
+  .logo-icon-mobile {
+    display: block;
+  }
+
+  .header-mobile-username {
+    display: flex;
+    align-items: center;
   }
 
   .header-search-form {

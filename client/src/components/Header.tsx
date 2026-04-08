@@ -119,11 +119,8 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
           )}
 
           <Link href="/" className="header-branding" data-testid="link-home-logo">
-            <img 
-              src={logoImage} 
-              alt="Retrocodex" 
-              className="logo-image"
-            />
+            <img src={logoImage} alt="Retrocodex" className="logo-image logo-full" />
+            <img src="/transparent logo.png" alt="Retrocodex" className="logo-icon-mobile" />
           </Link>
 
           <div className="header-actions">
@@ -188,6 +185,18 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
               >
                 <UserRound size={16} className="header-signin-icon" />
                 Sign In
+              </button>
+            )}
+            {isLoggedIn && user && (
+              <button
+                className="header-mobile-username"
+                onClick={() => navigate("/dashboard")}
+                data-testid="button-profile-mobile"
+                aria-label="Go to profile"
+              >
+                {(user.username || "").length > 10
+                  ? (user.username || "").slice(0, 10) + "…"
+                  : (user.username || "")}
               </button>
             )}
             {isLoggedIn && (
