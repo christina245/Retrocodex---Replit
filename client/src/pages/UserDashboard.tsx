@@ -778,6 +778,7 @@ export default function UserDashboard() {
     verifiedParam === "success" ? "success" : verifiedParam === "already" ? "already" : verifiedParam === "invalid" ? "invalid" : null
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
   const [showAllPlaces, setShowAllPlaces] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -1405,7 +1406,10 @@ export default function UserDashboard() {
         title={`${user.username} - Retrocodex`}
         description={`${user.username}'s profile on Retrocodex`}
       />
-      <SingleFactHeader onMenuClick={() => setIsMenuOpen(!isMenuOpen)} />
+      <SingleFactHeader
+        onMenuClick={() => setIsMenuOpen(!isMenuOpen)}
+        onMobileSidebarToggle={() => setIsMobileSidebarOpen(prev => !prev)}
+      />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
       {showVerifiedModal && (
@@ -1480,11 +1484,21 @@ export default function UserDashboard() {
 
       <div className="user-dashboard-content">
         <div className="dashboard-two-column" data-testid="dashboard-two-column">
-          <nav className="dashboard-side-tabs" data-testid="dashboard-side-tabs">
+          {isMobileSidebarOpen && (
+            <div
+              className="dashboard-mobile-overlay"
+              onClick={() => setIsMobileSidebarOpen(false)}
+              data-testid="dashboard-mobile-overlay"
+            />
+          )}
+          <nav
+            className={`dashboard-side-tabs${isMobileSidebarOpen ? " dashboard-side-tabs-open" : ""}`}
+            data-testid="dashboard-side-tabs"
+          >
             <div className="dashboard-side-tabs-top">
               <button
                 className={`dashboard-side-tab${sideTab === "feed" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("feed")}
+                onClick={() => { setSideTab("feed"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-feed"
               >
                 <Newspaper size={20} className="dashboard-side-tab-icon" />
@@ -1492,7 +1506,7 @@ export default function UserDashboard() {
               </button>
               <button
                 className={`dashboard-side-tab dashboard-side-tab-notifications${sideTab === "notifications" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("notifications")}
+                onClick={() => { setSideTab("notifications"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-notifications"
               >
                 <NotificationBell count={notificationCount} size={20} className="dashboard-side-tab-bell" testId="sidebar-notification-bell" />
@@ -1500,7 +1514,7 @@ export default function UserDashboard() {
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "edit-profile" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("edit-profile")}
+                onClick={() => { setSideTab("edit-profile"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-edit-profile"
               >
                 <UserRoundPen size={20} className="dashboard-side-tab-icon" />
@@ -1508,7 +1522,7 @@ export default function UserDashboard() {
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "activity" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("activity")}
+                onClick={() => { setSideTab("activity"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-activity"
               >
                 <Send size={20} className="dashboard-side-tab-icon" />
@@ -1516,7 +1530,7 @@ export default function UserDashboard() {
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "edit-requests" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("edit-requests")}
+                onClick={() => { setSideTab("edit-requests"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-edit-requests"
               >
                 <PenLine size={20} className="dashboard-side-tab-icon" />
@@ -1524,7 +1538,7 @@ export default function UserDashboard() {
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "saved" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("saved")}
+                onClick={() => { setSideTab("saved"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-saved"
               >
                 <Bookmark size={20} className="dashboard-side-tab-icon" />
@@ -1532,7 +1546,7 @@ export default function UserDashboard() {
               </button>
               <button
                 className={`dashboard-side-tab${sideTab === "settings" ? " dashboard-side-tab-active" : ""}`}
-                onClick={() => setSideTab("settings")}
+                onClick={() => { setSideTab("settings"); setIsMobileSidebarOpen(false); }}
                 data-testid="button-side-tab-settings"
               >
                 <Settings size={20} className="dashboard-side-tab-icon" />

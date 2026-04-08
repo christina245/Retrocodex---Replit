@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, X, UserRound, Bell } from "lucide-react";
+import { Search, X, UserRound, Bell, CircleEllipsis } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/red black gray logo.png";
@@ -10,9 +10,10 @@ import "./SingleFactHeader.css";
 
 interface SingleFactHeaderProps {
   onMenuClick?: () => void;
+  onMobileSidebarToggle?: () => void;
 }
 
-export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
+export function SingleFactHeader({ onMenuClick, onMobileSidebarToggle }: SingleFactHeaderProps) {
   const { isLoggedIn, user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,15 +66,22 @@ export function SingleFactHeader({ onMenuClick }: SingleFactHeaderProps) {
       <div className="single-fact-header-container">
         <div className={`header-logo ${isSearchOpen ? 'header-logo-hidden-mobile' : ''}`}>
           <Link href="/" data-testid="link-home-logo">
-            <img 
-              src={logoImage} 
-              alt="Retrocodex" 
-              className="logo-image"
-            />
+            <img src={logoImage} alt="Retrocodex" className="logo-image logo-full" />
+            <img src="/transparent logo.png" alt="Retrocodex" className="logo-image logo-icon-mobile" />
           </Link>
         </div>
 
         <div className="header-actions">
+          {onMobileSidebarToggle && (
+            <button
+              className="mobile-sidebar-toggle-btn"
+              onClick={onMobileSidebarToggle}
+              data-testid="button-mobile-sidebar-toggle"
+              aria-label="Open navigation"
+            >
+              <CircleEllipsis size={22} />
+            </button>
+          )}
           {isSearchOpen ? (
             <form onSubmit={handleSearchSubmit} className="header-search-form">
               <input

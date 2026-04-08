@@ -2188,6 +2188,15 @@ a.following-post-fact-link:hover {
   background: #f0f0f0;
 }
 
+/* Mobile sidebar drawer */
+.dashboard-mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1999;
+}
+
 @media (max-width: 900px) {
   .user-dashboard-content {
     padding: 1rem;
@@ -2197,24 +2206,69 @@ a.following-post-fact-link:hover {
     flex-direction: column;
   }
 
+  /* Sidebar becomes a fixed off-screen drawer */
   .dashboard-side-tabs {
-    flex-direction: row;
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 260px;
+    height: 100vh;
+    min-height: 100vh;
+    background: #ffffff;
+    z-index: 2000;
+    flex-direction: column;
+    padding: 80px 8px 20px;
+    overflow-y: auto;
+    transition: left 0.25s ease;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.12);
+    justify-content: flex-start;
     min-width: unset;
-    padding-right: 0;
-    padding-bottom: 0;
     gap: 0;
-    overflow-x: auto;
+  }
+
+  .dashboard-side-tabs.dashboard-side-tabs-open {
+    left: 0;
+  }
+
+  .dashboard-mobile-overlay {
+    display: block;
   }
 
   .dashboard-side-tab {
-    padding: 10px 25px;
-    border-radius: 0;
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+
+  /* Log Out flows directly below Settings (no auto-margin spacer) */
+  .dashboard-side-tabs-bottom {
+    margin-top: 4px;
+    padding-top: 0;
+    border-top: none;
   }
 
   .dashboard-center-column {
     padding: 0;
     border-left: none;
     padding-top: 16px;
+  }
+
+  /* Logo: show icon only on dashboard mobile */
+  .user-dashboard .logo-full {
+    display: none;
+  }
+
+  .user-dashboard .logo-icon-mobile {
+    display: block;
+  }
+
+  /* Hide search button on dashboard mobile */
+  .user-dashboard .search-button {
+    display: none;
+  }
+
+  /* Show the CircleEllipsis sidebar toggle */
+  .mobile-sidebar-toggle-btn {
+    display: flex;
   }
 
   .user-profile-banner {

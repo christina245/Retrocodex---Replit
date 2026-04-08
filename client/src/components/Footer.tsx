@@ -1,5 +1,5 @@
 import { FaInstagram, FaReddit, FaBluesky } from "react-icons/fa6";
-import footerLogo from "@assets/logos/white logo.png";
+import footerLogo from "@assets/logos/white red logo.png";
 import "./Footer.css";
 
 export function Footer() {
@@ -46,7 +46,7 @@ export function Footer() {
             </li>
             <li>
               <a 
-                href="https://form.typeform.com/to/pal6ZbpG" 
+                href="http://theretrocodex.com/submit" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 data-testid="link-footer-submit"

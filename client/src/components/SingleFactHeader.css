@@ -28,6 +28,33 @@
   width: auto;
 }
 
+.logo-full {
+  display: block;
+}
+
+.logo-icon-mobile {
+  display: none;
+  height: 38px;
+  width: 38px;
+  object-fit: contain;
+}
+
+.mobile-sidebar-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #2C2C2C;
+  cursor: pointer;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.mobile-sidebar-toggle-btn:hover {
+  color: #FF5353;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
