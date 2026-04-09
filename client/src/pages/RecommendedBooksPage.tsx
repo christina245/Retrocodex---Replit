@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { TriangleAlert } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
+import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 
@@ -291,24 +291,23 @@ export default function RecommendedBooksPage() {
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <HomepageCategoryNav sticky />
 
       <main className="books-main">
         <div className="books-intro-wrap">
           <div className="books-intro-text">
             <h1 className="books-h1" data-testid="text-books-heading">Recommended reading</h1>
             <p className="books-subtitle">
-              Books for curious minds who like questioning what they were told.
-              From debunked history to the psychology of misinformation, these
-              are the reads we think belong on every skeptic's shelf.
+              Looking to learn more about common misconceptions and myths? Here&rsquo;s some
+              books for curious minds who like questioning what they were told. From debunked
+              history to the psychology of misinformation, these reads will help you better
+              recognize fact from fiction whether you learned it from school, the media, or
+              even right here on this site.
             </p>
-            <div className="books-affiliate-notice" data-testid="text-affiliate-notice">
-              <TriangleAlert className="books-affiliate-icon" size={15} aria-hidden="true" />
-              <span>
-                <strong>Heads up:</strong> Amazon links on this page may include an affiliate
-                tag — if you buy through them, we earn a small commission at no extra cost
-                to you. Every purchase helps keep Retrocodex running. Thank you!
-              </span>
-            </div>
+            <p className="books-subtitle books-subtitle-note">
+              &#9888;&#65039; Note: because information often evolves, it&rsquo;s possible some
+              content in the books below were disproven after publication and thus is outdated.
+            </p>
           </div>
           <div className="books-intro-squirrel" aria-hidden="true">
             <img src={scrungyImg} alt="" className="books-squirrel-img" />
@@ -334,7 +333,7 @@ export default function RecommendedBooksPage() {
 
         <p className="books-footer-note">
           Have a recommendation that belongs here?{" "}
-          <a href="mailto:contact@theretrocodex.com" className="books-footer-link">
+          <a href="/contact" className="books-footer-link">
             Let us know
           </a>
           .
