@@ -32,7 +32,16 @@
 }
 
 .physics-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.physics-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .physics-intro-text {
@@ -140,6 +149,14 @@
 }
 
 @media (max-width: 900px) {
+  .physics-header-section {
+    flex-direction: column;
+  }
+  .physics-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .physics-tabs-row {
     flex-wrap: wrap;
     gap: 15px;

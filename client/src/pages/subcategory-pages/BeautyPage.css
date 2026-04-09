@@ -32,7 +32,16 @@
 }
 
 .beauty-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.beauty-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .beauty-intro-text {
@@ -141,6 +150,14 @@
 }
 
 @media (max-width: 900px) {
+  .beauty-header-section {
+    flex-direction: column;
+  }
+  .beauty-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .beauty-tabs-row {
     flex-wrap: wrap;
     gap: 15px;

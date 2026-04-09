@@ -21,6 +21,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./BeautyPage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -138,7 +139,10 @@ export default function BeautyPage() {
         </Link>
 
         <div className="beauty-header-section">
-          <h1 className="category-page-h1">All Misconceptions In Beauty</h1>
+          <h1 className="category-page-h1">All Common Misconceptions In Beauty</h1>
+          <div className="beauty-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
+          </div>
         </div>
 
         <div className="beauty-content-area">
@@ -187,7 +191,7 @@ export default function BeautyPage() {
             </div>
 
             <aside className="beauty-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

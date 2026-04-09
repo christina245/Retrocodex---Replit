@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,6 +20,7 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./EverydayLifePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -47,7 +48,13 @@ export default function EverydayLifePage() {
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const el = document.getElementById("everyday-life-content-area");
     if (!el) return;
     const timer = setTimeout(() => {
@@ -181,12 +188,15 @@ export default function EverydayLifePage() {
       <main className="everyday-life-main-content">
         <div className="everyday-life-intro-row">
           <div className="everyday-life-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In Everyday Life</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Common Misconceptions In Everyday Life</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders?</h2>
             <p>
               These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.
               This collection explores both untrue information in today's popular culture and the classic old wives' tales we were taught at home growing up.</p> 
             
+          </div>
+          <div className="everyday-life-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
           </div>
         </div>
 
@@ -235,7 +245,7 @@ export default function EverydayLifePage() {
             </div>
 
             <aside className="everyday-life-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

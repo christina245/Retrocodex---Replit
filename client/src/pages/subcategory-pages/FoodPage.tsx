@@ -21,6 +21,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./FoodPage.css";
 
 import photoFoodPyramid from "@assets/stock_images/food pyramid.png";
@@ -160,7 +161,10 @@ export default function FoodPage() {
         </Link>
 
         <div className="food-header-section">
-          <h1 className="category-page-h1">All Misconceptions In Food</h1>
+          <h1 className="category-page-h1">All Common Misconceptions In Food</h1>
+          <div className="food-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
+          </div>
         </div>
 
         <div className="food-content-area">
@@ -209,7 +213,7 @@ export default function FoodPage() {
             </div>
 
             <aside className="food-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

@@ -32,7 +32,16 @@
 }
 
 .earth-science-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.earth-science-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .earth-science-intro-text {
@@ -140,6 +149,14 @@
 }
 
 @media (max-width: 900px) {
+  .earth-science-header-section {
+    flex-direction: column;
+  }
+  .earth-science-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .earth-science-tabs-row {
     flex-wrap: wrap;
     gap: 15px;

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,6 +20,7 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./SocialSciencesPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -49,7 +50,13 @@ export default function SocialSciencesPage() {
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const el = document.getElementById("social-sciences-content-area");
     if (!el) return;
     const timer = setTimeout(() => {
@@ -180,12 +187,15 @@ export default function SocialSciencesPage() {
       <main className="social-sciences-main-content">
         <div className="social-sciences-intro-row">
           <div className="social-sciences-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In Social Sciences</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Common Misconceptions In Social Sciences</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">The way humans work isn't as simple as what the media portrays.</h2>
             <p>
               Throughout history, daily human interaction made it too easy for us to form assumptions about each other. This intuition ingrained such powerful mental biases that they shaped entire fields of study.
             These misconceptions in psychology, sociology, economics, and more were often based on limited data, cultural biases, social prejudice and inequality, or just a narrow range of personal experiences and the instinctual expectations that followed.
             </p>
+          </div>
+          <div className="social-sciences-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
           </div>
         </div>
 
@@ -234,7 +244,7 @@ export default function SocialSciencesPage() {
             </div>
 
             <aside className="social-sciences-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

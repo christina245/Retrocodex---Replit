@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,6 +20,7 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./HistoryPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -41,7 +42,13 @@ export default function HistoryPage() {
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const el = document.getElementById("history-content-area");
     if (!el) return;
     const timer = setTimeout(() => {
@@ -177,7 +184,7 @@ export default function HistoryPage() {
       <main className="history-main-content">
         <div className="history-intro-row">
           <div className="history-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In History</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Common Misconceptions In History</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">Your school history lessons might have left out certain critical perspectives.</h2>
             <p>
               What we know about history is always evolving as new archaelogical records surface, modern analytical tools reinterpret old texts, and previously overlooked, marginalized voices finally become heard.
@@ -187,6 +194,9 @@ export default function HistoryPage() {
               <p><b>Note:</b> Certain historical events may be taught differently depending on where you grew up.</p>
 
             
+          </div>
+          <div className="history-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
           </div>
         </div>
 
@@ -235,7 +245,7 @@ export default function HistoryPage() {
             </div>
 
             <aside className="history-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

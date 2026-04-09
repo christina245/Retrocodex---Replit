@@ -32,7 +32,16 @@
 }
 
 .holidays-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.holidays-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .holidays-intro-text {
@@ -140,6 +149,14 @@
 }
 
 @media (max-width: 900px) {
+  .holidays-header-section {
+    flex-direction: column;
+  }
+  .holidays-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .holidays-tabs-row {
     flex-wrap: wrap;
     gap: 15px;

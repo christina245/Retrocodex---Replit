@@ -32,7 +32,16 @@
 }
 
 .astronomy-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.astronomy-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .astronomy-intro-text {
@@ -140,6 +149,14 @@
 }
 
 @media (max-width: 900px) {
+  .astronomy-header-section {
+    flex-direction: column;
+  }
+  .astronomy-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .astronomy-tabs-row {
     flex-wrap: wrap;
     gap: 15px;

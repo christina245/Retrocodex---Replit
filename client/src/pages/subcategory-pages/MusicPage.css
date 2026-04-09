@@ -32,7 +32,16 @@
 }
 
 .music-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.music-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .music-intro-text {
@@ -140,6 +149,14 @@
 }
 
 @media (max-width: 900px) {
+  .music-header-section {
+    flex-direction: column;
+  }
+  .music-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .music-tabs-row {
     flex-wrap: wrap;
     gap: 15px;

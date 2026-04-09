@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,6 +20,7 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./GenderSexualityPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -41,7 +42,13 @@ export default function GenderSexualityPage() {
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const el = document.getElementById("gender-sexuality-content-area");
     if (!el) return;
     const timer = setTimeout(() => {
@@ -172,13 +179,16 @@ export default function GenderSexualityPage() {
       <main className="gender-sexuality-main-content">
         <div className="gender-sexuality-intro-row">
           <div className="gender-sexuality-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In Gender & Sexuality</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Common Misconceptions In Gender & Sexuality</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">They've never been as binary as what many of us would like to believe.</h2>
               <p> Throughout history, myths in gender and sexuality were often formed through prejudice, rigid social norms, superficial assumptions, or the attempt to reinforce power structures rather than scientific or historical data. The exclusion of women and sexual minorities from scientific and cultural authority further slowed progress towards understanding these complex topics.
             </p>
             <p>
               <b>Note:</b> To keep Retrocodex family-friendly, sexually explicit facts will be featured on a future page.
             </p>
+          </div>
+          <div className="gender-sexuality-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
           </div>
         </div>
 
@@ -227,7 +237,7 @@ export default function GenderSexualityPage() {
             </div>
 
             <aside className="gender-sexuality-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

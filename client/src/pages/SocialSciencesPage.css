@@ -15,13 +15,21 @@
 }
 
 .social-sciences-intro-row {
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 20px;
   margin-bottom: 20px;
-  padding-right: 25%;
+}
+
+.social-sciences-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .social-sciences-description {
+  flex: 0 1 55%;
+  min-width: 0;
   font-family: 'Public Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -117,7 +125,16 @@
 
 @media (max-width: 900px) {
   .social-sciences-intro-row {
-    padding-right: 0;
+    flex-direction: column;
+  }
+  .social-sciences-description {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  .social-sciences-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
   }
 
   .social-sciences-tabs-row {

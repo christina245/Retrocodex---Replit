@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,6 +20,7 @@ import { Footer } from "@/components/Footer";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
+import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./LifeSciencesPage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -41,7 +42,13 @@ export default function LifeSciencesPage() {
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const isInitialMount = useRef(true);
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     const el = document.getElementById("life-sciences-content-area");
     if (!el) return;
     const timer = setTimeout(() => {
@@ -175,13 +182,16 @@ export default function LifeSciencesPage() {
       <main className="life-sciences-main-content">
         <div className="life-sciences-intro-row">
           <div className="life-sciences-description">
-            <h1 className="category-page-h1" data-testid="text-category-title">All Misconceptions In Life Sciences</h1>
+            <h1 className="category-page-h1" data-testid="text-category-title">All Common Misconceptions In Life Sciences</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">What were you taught in school that was oversimplified or is now outdated?</h2>
              <p>As technological advancements uncover new discoveries, plenty of familiar “facts” about animals, humans, microbes, and ecosystems no longer match contemporary evidence.
           
               Many outdated facts in the life sciences are rooted in misinterpreted fossils, oversimplified diagrams, or debunked models of how living beings sense, adapt, and interact with the world.
             </p>
             <p><b>Note:</b> This category focuses on facts you may have been taught in school or on social media. For related old wives' tales typically passed down through family, see <a href="http://theretrocodex.com/category/everyday-life">Everyday Life. </a> </p>
+          </div>
+          <div className="life-sciences-scrungy-promo-wrapper">
+            <ScrungyBooksPromo />
           </div>
         </div>
 
@@ -230,7 +240,7 @@ export default function LifeSciencesPage() {
             </div>
 
             <aside className="life-sciences-sidebar">
-              <SendgridBanner />
+              <SendgridBanner hideMascot />
             </aside>
           </div>
         </div>

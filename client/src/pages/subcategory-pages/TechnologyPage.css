@@ -32,7 +32,16 @@
 }
 
 .technology-header-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
   margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.technology-scrungy-promo-wrapper {
+  flex: 0 0 auto;
+  width: 280px;
 }
 
 .technology-intro-text {
@@ -140,6 +149,14 @@
 }
 
 @media (max-width: 900px) {
+  .technology-header-section {
+    flex-direction: column;
+  }
+  .technology-scrungy-promo-wrapper {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
   .technology-tabs-row {
     flex-wrap: wrap;
     gap: 15px;
