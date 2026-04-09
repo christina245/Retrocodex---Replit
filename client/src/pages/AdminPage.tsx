@@ -49,6 +49,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
   const [currentView, setCurrentView] = useState<AdminView>("add-fact");
   
   // Admin management state
@@ -993,14 +994,29 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password) {
       setAuthError("Please enter a password");
       return;
     }
     setAuthError("");
-    setIsAuthenticated(true);
+    setLoginLoading(true);
+    try {
+      const res = await fetch("/api/admin/verify", {
+        headers: { "Authorization": "Basic " + btoa("admin:" + password) },
+      });
+      if (res.ok) {
+        setIsAuthenticated(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setAuthError(data.message || "Incorrect password");
+      }
+    } catch {
+      setAuthError("Network error — please try again");
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   const handleTitleChange = (value: string) => {
@@ -1423,8 +1439,9 @@ export default function AdminPage() {
                 type="submit" 
                 className="login-button"
                 data-testid="button-login"
+                disabled={loginLoading}
               >
-                Access Admin Panel
+                {loginLoading ? "Checking..." : "Access Admin Panel"}
               </button>
             </form>
           </div>

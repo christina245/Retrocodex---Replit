@@ -1047,6 +1047,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/admin/verify — lightweight password check (no WWW-Authenticate header)
+  app.get("/api/admin/verify", (req, res) => {
+    const clientIP = getClientIP(req);
+    if (isRateLimited(clientIP)) {
+      return res.status(429).json({ message: "Too many failed login attempts. Please try again later." });
+    }
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Basic ")) {
+      recordFailedAttempt(clientIP);
+      return res.status(401).json({ message: "Authentication required" });
+    }
+    const [, password] = Buffer.from(authHeader.split(" ")[1], "base64").toString("ascii").split(":");
+    if (password === ADMIN_PASSWORD) {
+      clearFailedAttempts(clientIP);
+      return res.status(200).json({ ok: true });
+    }
+    recordFailedAttempt(clientIP);
+    const record = failedLoginAttempts.get(clientIP);
+    const remaining = MAX_FAILED_ATTEMPTS - (record?.count || 0);
+    return res.status(401).json({
+      message: remaining > 0
+        ? `Invalid credentials. ${remaining} attempts remaining.`
+        : "Too many failed login attempts. Please try again later.",
+    });
+  });
+
   // POST /api/admin/grant-admin — grant admin status to a user by username
   app.post("/api/admin/grant-admin", requireAuth, async (req, res) => {
     try {
