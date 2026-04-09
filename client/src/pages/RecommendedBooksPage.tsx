@@ -12,7 +12,7 @@ import fiftyMythsCover from "@assets/50_great_myths_1775699653541.jpeg";
 import misconceptionsCover from "@assets/misconceptions_guide_1775699653541.jpeg";
 import badAstronomyCover from "@assets/bad_astronomy_1775699653540.jpeg";
 import dontSwallowCover from "@assets/don't_swallow_your_gum_1775699653539.jpeg";
-import scrungyImg from "@assets/scrungy_affiliate_links_1_1775696029046.png";
+import scrungyImg from "@assets/scrungy/recommended reading.png";
 
 import "./RecommendedBooksPage.css";
 
