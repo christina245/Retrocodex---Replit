@@ -12,6 +12,17 @@ import fiftyMythsCover from "@assets/50_great_myths_1775699653541.jpeg";
 import misconceptionsCover from "@assets/misconceptions_guide_1775699653541.jpeg";
 import badAstronomyCover from "@assets/bad_astronomy_1775699653540.jpeg";
 import dontSwallowCover from "@assets/don't_swallow_your_gum_1775699653539.jpeg";
+import misinformationAgeCover from "@assets/the_misinformation_age_1775722625899.jpeg";
+import foolproofCover from "@assets/foolproof_1775722625898.jpeg";
+import weirdThingsCover from "@assets/why_people_believe_weird_things_1775722621167.jpeg";
+import factfulnessCover from "@assets/factfulness_1775722611406.jpg";
+import notSoSmartCover from "@assets/you_are_not_so_smart_1775722611410.jpeg";
+import thinkingFastSlowCover from "@assets/thinking_fast_and_slow_1775722611409.jpeg";
+import thinkAgainCover from "@assets/think_again_1775722611408.jpg";
+import skepticsGuideCover from "@assets/skeptic's_guide_1775722616715.jpeg";
+import beingWrongCover from "@assets/being_wrong_1775722616714.jpg";
+import badScienceCover from "@assets/bad_science_1775722611408.jpg";
+import scienceFictionsCover from "@assets/science_fictions_1775722611407.jpg";
 import scrungyImg from "@assets/scrungy/recommended reading.png";
 
 import "./RecommendedBooksPage.css";
@@ -36,9 +47,9 @@ interface Section {
 const sections: Section[] = [
   {
     id: "myths-we-were-taught",
-    heading: "Myths & Misconceptions We Were Taught",
+    heading: "Outdated Lessons and Myths We Were Taught",
     description:
-      'History textbooks, teachers, and popular culture have handed down plenty of \u201cfacts\u201d that turn out to be legend, half-truth, or outright invention. These books set the record straight.',
+      'Several history textbooks, teachers, and popular culture have handed down plenty of \u201cfacts\u201d that turn out to be legend, half-truth, or outright invention. These books explore what actually happened, who was involved, and why their voices were relatively silenced or misunderstood.',
     books: [
       {
         title: "Lies My Teacher Told Me",
@@ -46,7 +57,7 @@ const sections: Section[] = [
         author: "James W. Loewen",
         year: 2018,
         summary:
-          "Loewen combs through a dozen leading U.S. history textbooks to expose the myths, omissions, and distortions that generations of Americans learned in school—from Columbus to the civil rights movement.",
+          "Loewen reviews a dozen leading U.S. history textbooks to expose the myths, omissions, and distortions that generations of Americans learned in school—from Columbus to the civil rights movement.",
         amazonLink: "https://amzn.to/4t3O3uC",
         cover: liesCover,
       },
@@ -55,7 +66,7 @@ const sections: Section[] = [
         author: "Richard Shenkman",
         year: 1993,
         summary:
-          "Explodes enduring myths from ancient Rome to WWII—from the real height of Napoleon to what the Iron Maiden actually was. A witty, well-researched guide to history's most stubborn falsehoods.",
+          "A witty guide to history's most stubborn falsehoods, such as persistent myths about ancient Rome, WWII, the real height of Napoleon, to what an Iron Maiden actually was. ",
         amazonLink: "https://amzn.to/4tBw3HO",
         cover: legendsCover,
       },
@@ -64,7 +75,7 @@ const sections: Section[] = [
         author: "John Lloyd & John Mitchinson",
         year: 2007,
         summary:
-          "From the QI team: a delightful compendium of things everyone thinks they know but don't—from who really invented the telephone to how many legs a centipede actually has.",
+          "What do you think you know, but don't? Do you know who really invented the telephone? Or how many legs a centipede actually has.",
         amazonLink: "https://amzn.to/41iQz3U",
         cover: generalIgnoranceCover,
       },
@@ -91,7 +102,7 @@ const sections: Section[] = [
         author: "Philip Plait",
         year: 2002,
         summary:
-          "Astronomer Philip Plait dismantles popular astronomy misconceptions—from astrology to moon landing conspiracy theories—with humor, solid science, and genuine enthusiasm.",
+          "Astronomer Philip Plait dismantles popular astronomy misconceptions from their role in astrology to moon landing conspiracy theories.",
         amazonLink: "https://amzn.to/3PXHbAd",
         cover: badAstronomyCover,
       },
@@ -110,7 +121,7 @@ const sections: Section[] = [
     id: "why-misinformation-persists",
     heading: "Why Misinformation Persists",
     description:
-      "Even when hard evidence debunks a belief, many people hold on to it anyway. These books explore the psychology, sociology, and neuroscience behind why false beliefs spread—and why they're so hard to dislodge.",
+      "You probably know that even when hard evidence debunks a belief, many people hold on to it anyway. These books explore the psychology, sociology, and neuroscience behind why false beliefs spread and why they're so hard to mentally dislodge.",
     books: [
       {
         title: "The Misinformation Age",
@@ -118,9 +129,9 @@ const sections: Section[] = [
         author: "Cailin O'Connor & James Weatherall",
         year: 2019,
         summary:
-          "Two philosophers of science argue that social networks—not individual irrationality—drive false beliefs, using game theory and social epistemology to reveal why truth so often loses.",
+          "Two philosophers of science argue that social networks, rather than individual irrationality, drive false beliefs, using game theory and social epistemology to reveal why the facts aren't always believed.",
         amazonLink: "https://amzn.to/4dB9JcH",
-        cover: null,
+        cover: misinformationAgeCover,
       },
       {
         title: "Foolproof",
@@ -130,7 +141,7 @@ const sections: Section[] = [
         summary:
           "A leading misinformation researcher explains why fake news spreads and introduces \"prebunking\"—a psychological inoculation strategy that builds resistance to disinformation before it takes hold.",
         amazonLink: "https://amzn.to/3NT16Ql",
-        cover: null,
+        cover: foolproofCover,
       },
       {
         title: "Why People Believe Weird Things",
@@ -139,7 +150,7 @@ const sections: Section[] = [
         summary:
           "Science historian Shermer explores the psychology behind pseudoscience, superstition, and conspiracy theories—from creationism to Holocaust denial—and what it might take to change minds.",
         amazonLink: "https://amzn.to/41WKev6",
-        cover: null,
+        cover: weirdThingsCover,
       },
       {
         title: "Factfulness",
@@ -147,18 +158,18 @@ const sections: Section[] = [
         author: "Hans Rosling",
         year: 2018,
         summary:
-          "The late Swedish physician reveals that most people—including experts—hold profoundly wrong ideas about global trends, and explains how media and cognitive instincts distort our worldview.",
+          "The late Swedish physician reveals that most people, including experts, hold profoundly wrong ideas about global trends, and explains how media and cognitive instincts distort our worldview.",
         amazonLink: "https://amzn.to/3QsEd6R",
-        cover: null,
+        cover: factfulnessCover,
       },
       {
         title: "You Are Not So Smart",
         author: "David McRaney",
         year: 2011,
         summary:
-          "A journalist catalogs the cognitive biases and self-delusions that lead smart people into irrational thinking—entertaining, accessible, and uncomfortably accurate.",
+          "Are you as cool and 'rational' as you think you are? A journalist catalogs the cognitive biases and self-delusions that lead smart people into seemingly irrational thinking.",
         amazonLink: "https://amzn.to/3NVpyR3",
-        cover: null,
+        cover: notSoSmartCover,
       },
     ],
   },
@@ -166,16 +177,16 @@ const sections: Section[] = [
     id: "critical-thinking",
     heading: "The Critical Thinking Toolkit",
     description:
-      "Knowing that misinformation exists is just the start. These books give you practical tools to evaluate claims, spot logical fallacies, and—perhaps hardest of all—change your own mind when the evidence demands it.",
+      "Knowing that misinformation exists is just the start. These books give you practical tools to evaluate claims, spot logical fallacies, and perhaps hardest of all, change your own mind to align with new evidence.",
     books: [
       {
         title: "Thinking, Fast and Slow",
         author: "Daniel Kahneman",
         year: 2011,
         summary:
-          "Nobel laureate Kahneman explains the two systems driving our thinking—one fast and intuitive, one slow and deliberate—revealing why we're prone to systematic, predictable mental errors.",
+          "Nobel laureate Kahneman explains the two systems driving our thinking: one fast and intuitive, one slow and deliberate, revealing why we're prone to systematic, predictable mental errors.",
         amazonLink: "https://amzn.to/4cgPZsu",
-        cover: null,
+        cover: thinkingFastSlowCover,
       },
       {
         title: "Think Again",
@@ -183,18 +194,18 @@ const sections: Section[] = [
         author: "Adam Grant",
         year: 2021,
         summary:
-          "Organizational psychologist Adam Grant argues that the ability to rethink and unlearn is one of our most valuable skills—and explains how to cultivate the intellectual humility it requires.",
+          "Organizational psychologist Adam Grant argues that the ability to rethink and unlearn is one of our most valuable skills, explaining how to cultivate the intellectual humility it requires.",
         amazonLink: "https://amzn.to/4veX31v",
-        cover: null,
+        cover: thinkAgainCover,
       },
       {
         title: "The Skeptic's Guide to the Universe",
         author: "Steven Novella",
         year: 2018,
         summary:
-          "Neurologist and Science-Based Medicine host Steven Novella delivers a comprehensive guide to practical skepticism: cognitive biases, logical fallacies, and evaluating scientific claims.",
+          "Neurologist Steven Novella delivers a comprehensive guide to practical skepticism: cognitive biases, logical fallacies, and evaluating scientific claims.",
         amazonLink: "https://amzn.to/41mKDqG",
-        cover: null,
+        cover: skepticsGuideCover,
       },
       {
         title: "Being Wrong",
@@ -202,17 +213,17 @@ const sections: Section[] = [
         author: "Kathryn Schulz",
         year: 2010,
         summary:
-          "A journalist explores the rich, underexamined experience of being wrong—what it feels like, why it happens, and why our instinct to believe we're right is often our biggest blind spot.",
+          "A journalist explores the rich, underexamined experience of being wrong: what it feels like, why it happens, and why our instinct to believe we're right is often our biggest blind spot.",
         amazonLink: "https://amzn.to/4mfYLLM",
-        cover: null,
+        cover: beingWrongCover,
       },
     ],
   },
   {
     id: "junk-science",
-    heading: "Junk Science & Research Under the Microscope",
+    heading: "When Even Science Gets I Wrong",
     description:
-      'Not all misinformation comes from bad actors\u2014sometimes it comes from flawed studies, bad statistics, and a broken publish-or-perish culture. These books pull back the curtain on how \u201cscientific\u201d claims can mislead us.',
+      'Not all misinformation comes from pure malice\u2014sometimes it comes from flawed studies, misrepresented statistics, and an environment that pushes publication at all costs. These books pull back the curtain on how \u201cscientific\u201d claims can mislead us.',
     books: [
       {
         title: "Bad Science",
@@ -222,7 +233,7 @@ const sections: Section[] = [
         summary:
           "A British physician skewers misleading media health reporting, dubious supplement claims, and pseudoscientific fads, arming readers with the tools to recognize flawed evidence.",
         amazonLink: "https://amzn.to/4smnFLe",
-        cover: null,
+        cover: badScienceCover,
       },
       {
         title: "Science Fictions",
@@ -232,14 +243,14 @@ const sections: Section[] = [
         summary:
           "A psychologist exposes the replication crisis rocking modern science, examining how publication bias and perverse incentives corrupt the research we rely on to understand the world.",
         amazonLink: "https://amzn.to/4smnGPi",
-        cover: null,
+        cover: scienceFictionsCover,
       },
       {
         title: "The Body: A Guide for Occupants",
         author: "Bill Bryson",
         year: 2019,
         summary:
-          "Bryson's entertaining tour of the human body debunks decades of medical mythology while celebrating the astonishing complexity modern science has uncovered—warm, funny, and full of surprises.",
+          "Bryson's entertaining tour of the human body debunks decades of medical mythology while celebrating the astonishing complexity modern science has uncovered.",
         amazonLink: "https://amzn.to/3Or8676",
         cover: null,
       },
