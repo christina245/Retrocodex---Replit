@@ -39,12 +39,6 @@
   margin-bottom: 20px;
 }
 
-.holidays-scrungy-promo-wrapper {
-  flex: 0 0 auto;
-  width: 420px;
-  margin-left: auto;
-}
-
 .holidays-intro-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 18px;
@@ -153,12 +147,7 @@
   .holidays-header-section {
     flex-direction: column;
   }
-  .holidays-scrungy-promo-wrapper {
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
-  }
-  .holidays-tabs-row {
+.holidays-tabs-row {
     flex-wrap: wrap;
     gap: 15px;
   }

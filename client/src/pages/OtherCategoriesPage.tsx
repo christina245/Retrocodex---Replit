@@ -5,7 +5,6 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
-import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./OtherCategoriesPage.css";
 
 import photoAnimals from "@assets/animals_1764816085493.png";
@@ -103,12 +102,7 @@ export default function OtherCategoriesPage() {
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 
       <main className="other-categories-main-content">
-        <div className="other-categories-intro-row">
-          <h1 className="other-categories-title">All Common Misconceptions In Other Categories</h1>
-          <div className="other-categories-scrungy-promo-wrapper">
-            <ScrungyBooksPromo />
-          </div>
-        </div>
+        <h1 className="other-categories-title">All Common Misconceptions In Other Categories</h1>
 
         <div className="subcategories-grid">
           {subcategories.map((subcategory) => (

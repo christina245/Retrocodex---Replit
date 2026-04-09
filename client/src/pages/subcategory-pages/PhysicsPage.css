@@ -39,12 +39,6 @@
   margin-bottom: 20px;
 }
 
-.physics-scrungy-promo-wrapper {
-  flex: 0 0 auto;
-  width: 420px;
-  margin-left: auto;
-}
-
 .physics-intro-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 18px;
@@ -153,12 +147,7 @@
   .physics-header-section {
     flex-direction: column;
   }
-  .physics-scrungy-promo-wrapper {
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
-  }
-  .physics-tabs-row {
+.physics-tabs-row {
     flex-wrap: wrap;
     gap: 15px;
   }

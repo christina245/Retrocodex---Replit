@@ -21,7 +21,6 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./EarthSciencePage.css";
 
 const SUBCATEGORY_COLOR = "#2C2C2C";
@@ -140,9 +139,6 @@ export default function EarthSciencePage() {
 
         <div className="earth-science-header-section">
           <h1 className="category-page-h1">All Common Misconceptions In Earth Science</h1>
-          <div className="earth-science-scrungy-promo-wrapper">
-            <ScrungyBooksPromo />
-          </div>
         </div>
 
         <div className="earth-science-content-area">

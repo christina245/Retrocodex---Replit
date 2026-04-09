@@ -12,18 +12,6 @@
   margin: 0 auto;
 }
 
-.other-categories-intro-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  margin: 20px 0;
-}
-
-.other-categories-scrungy-promo-wrapper {
-  flex: 0 0 auto;
-  width: 420px;
-}
-
 .other-categories-title {
   flex: 1;
   min-width: 0;
@@ -99,22 +87,12 @@
 }
 
 @media (max-width: 900px) {
-  .other-categories-intro-row {
-    flex-direction: column;
-  }
-
-  .other-categories-title {
+.other-categories-title {
     flex: 1 1 auto;
     width: 100%;
   }
 
-  .other-categories-scrungy-promo-wrapper {
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
-  }
-
-  .subcategories-grid {
+.subcategories-grid {
     grid-template-columns: 1fr;
     width: 100%;
     margin: 0 auto;

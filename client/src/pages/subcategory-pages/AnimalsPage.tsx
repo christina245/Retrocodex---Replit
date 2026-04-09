@@ -21,7 +21,6 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./AnimalsPage.css";
 
 import photoDinosaurs from "@assets/dinosaurs (1)_1764363998621.png";
@@ -152,9 +151,6 @@ export default function AnimalsPage() {
 
         <div className="animals-header-section">
           <h1 className="category-page-h1">All Common Misconceptions In Animals</h1>
-          <div className="animals-scrungy-promo-wrapper">
-            <ScrungyBooksPromo />
-          </div>
         </div>
 
         <div className="animals-content-area">

@@ -21,7 +21,6 @@ import { ShareModal } from "@/components/ShareModal";
 import { Footer } from "@/components/Footer";
 import { ArrowLeft } from "lucide-react";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
-import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
 import "./LinguisticsPage.css";
 
 const linguisticsFacts: CategoryFact[] = [
@@ -150,9 +149,6 @@ export default function LinguisticsPage() {
 
         <div className="linguistics-header-section">
           <h1 className="category-page-h1">All Common Misconceptions In Linguistics</h1>
-          <div className="linguistics-scrungy-promo-wrapper">
-            <ScrungyBooksPromo />
-          </div>
         </div>
 
         <div className="linguistics-content-area">

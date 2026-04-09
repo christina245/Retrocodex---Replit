@@ -39,12 +39,6 @@
   margin-bottom: 20px;
 }
 
-.beauty-scrungy-promo-wrapper {
-  flex: 0 0 auto;
-  width: 420px;
-  margin-left: auto;
-}
-
 .beauty-intro-text {
   font-family: 'Public Sans', sans-serif;
   font-size: 18px;
@@ -154,12 +148,7 @@
   .beauty-header-section {
     flex-direction: column;
   }
-  .beauty-scrungy-promo-wrapper {
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto;
-  }
-  .beauty-tabs-row {
+.beauty-tabs-row {
     flex-wrap: wrap;
     gap: 15px;
   }

@@ -12,7 +12,7 @@ export function ScrungyBooksPromo({ className }: { className?: string }) {
       <div className="scrungy-speech-bubble-text">
         <p>Heads up -- many of these topics were disproven years ago, but are still taught today!</p>
         <p>
-          Want to learn why this happens? Check out the{" "}
+          Check out the{" "}
           <a
             href="/recommended-reading"
             target="_blank"
@@ -20,7 +20,7 @@ export function ScrungyBooksPromo({ className }: { className?: string }) {
           >
             Recommended Reading
           </a>{" "}
-          page to see why outdated information and myths stick around.
+          page to see why!
         </p>
       </div>
     </div>
