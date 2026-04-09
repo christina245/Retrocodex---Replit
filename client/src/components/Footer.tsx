@@ -12,6 +12,7 @@ export function Footer() {
           <ul className="footer-links">
 
             <li><a href="http://theretrocodex.com/about" data-testid="link-footer-about">What is Retrocodex?</a></li>
+            <li><a href="http://theretrocodex.com/recommended-reading" data-testid="link-footer-recommended-reading">Recommended reading</a></li>
             <li><a href="http://theretrocodex.com/articles" data-testid="link-footer-blog">Articles</a></li>
           </ul>
         </div>
