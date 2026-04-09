@@ -1,9 +1,9 @@
 import scrungyBubbleImage from "@assets/category_page_blank_1775711054375.png";
 import "./ScrungyBooksPromo.css";
 
-export function ScrungyBooksPromo() {
+export function ScrungyBooksPromo({ className }: { className?: string }) {
   return (
-    <div className="scrungy-books-promo">
+    <div className={`scrungy-books-promo${className ? ` ${className}` : ""}`}>
       <img
         src={scrungyBubbleImage}
         alt="Scrungy the squirrel with a speech bubble"
