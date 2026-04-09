@@ -1,4 +1,4 @@
-import scrungyBubbleImage from "@assets/category_page_blank_1775711054375.png";
+import scrungyBubbleImage from "@assets/category_page_wider_1775715349886.png";
 import "./ScrungyBooksPromo.css";
 
 export function ScrungyBooksPromo({ className }: { className?: string }) {

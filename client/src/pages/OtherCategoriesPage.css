@@ -21,11 +21,11 @@
 
 .other-categories-scrungy-promo-wrapper {
   flex: 0 0 auto;
-  width: 280px;
+  width: 420px;
 }
 
 .other-categories-title {
-  flex: 0 1 55%;
+  flex: 1;
   min-width: 0;
   font-family: 'Public Sans', sans-serif;
   font-size: 32px;
@@ -110,7 +110,7 @@
 
   .other-categories-scrungy-promo-wrapper {
     width: 100%;
-    max-width: 340px;
+    max-width: 420px;
     margin: 0 auto;
   }
 

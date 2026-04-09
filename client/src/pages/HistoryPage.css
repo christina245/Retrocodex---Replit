@@ -24,11 +24,11 @@
 
 .history-scrungy-promo-wrapper {
   flex: 0 0 auto;
-  width: 280px;
+  width: 420px;
 }
 
 .history-description {
-  flex: 0 1 55%;
+  flex: 0 1 65%;
   min-width: 0;
   font-family: 'Public Sans', sans-serif;
   font-size: 16px;
@@ -133,7 +133,7 @@
   }
   .history-scrungy-promo-wrapper {
     width: 100%;
-    max-width: 340px;
+    max-width: 420px;
     margin: 0 auto;
   }
 

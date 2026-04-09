@@ -41,7 +41,8 @@
 
 .astronomy-scrungy-promo-wrapper {
   flex: 0 0 auto;
-  width: 280px;
+  width: 420px;
+  margin-left: auto;
 }
 
 .astronomy-intro-text {
@@ -154,7 +155,7 @@
   }
   .astronomy-scrungy-promo-wrapper {
     width: 100%;
-    max-width: 340px;
+    max-width: 420px;
     margin: 0 auto;
   }
   .astronomy-tabs-row {
