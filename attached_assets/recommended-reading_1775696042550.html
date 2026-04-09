@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recommended Reading | Retrocodex</title>
+  <style>
+    /* ── Base ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f7f4ee;
+      --card-bg:   #ffffff;
+      --navy:      #1e2240;
+      --accent:    #b85c2a;
+      --accent-lt: #f0e6dc;
+      --text:      #2c2c2c;
+      --muted:     #666666;
+      --border:    #e0dbd1;
+      --shadow:    0 2px 12px rgba(0,0,0,.08);
+      --radius:    10px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Page Header ────────────────────────────────────────────────── */
+    .page-header {
+      background: var(--navy);
+      color: #fff;
+      padding: 56px 24px 48px;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .page-header p {
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+      color: #c8cde0;
+      line-height: 1.7;
+    }
+
+    /* ── Affiliate notice ───────────────────────────────────────────── */
+    .affiliate-notice {
+      background: var(--accent-lt);
+      border-left: 4px solid var(--accent);
+      padding: 14px 20px;
+      max-width: 900px;
+      margin: 28px auto 0;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.85rem;
+      color: #5a3a20;
+    }
+
+    /* ── Main layout ────────────────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+
+    /* ── Section ────────────────────────────────────────────────────── */
+    .section {
+      margin-top: 56px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+    .section-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      color: var(--navy);
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 0.97rem;
+      margin-bottom: 28px;
+      padding-left: 2px;
+      max-width: 760px;
+    }
+    .section-divider {
+      border: none;
+      border-top: 2px solid var(--border);
+      margin-bottom: 28px;
+    }
+
+    /* ── Book Grid ──────────────────────────────────────────────────── */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      gap: 22px;
+    }
+
+    /* ── Book Card ──────────────────────────────────────────────────── */
+    .book-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .book-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(0,0,0,.13);
+    }
+
+    .book-cover-wrap {
+      background: #edeae2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 18px 10px;
+      min-height: 220px;
+    }
+    .book-cover-wrap img {
+      max-width: 130px;
+      max-height: 190px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 3px 4px 12px rgba(0,0,0,.22);
+      display: block;
+    }
+    /* fallback cover shown when image fails */
+    .cover-fallback {
+      width: 120px;
+      height: 175px;
+      background: var(--navy);
+      border-radius: 4px;
+      box-shadow: 3px 4px 12px rgba(0,0,0,.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .book-info {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .book-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+      line-height: 1.35;
+    }
+    .book-author {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 2px;
+    }
+    .book-year {
+      font-size: 0.78rem;
+      color: #999;
+      margin-bottom: 10px;
+    }
+    .book-summary {
+      font-size: 0.82rem;
+      color: #4a4a4a;
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 14px;
+    }
+    .btn-amazon {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff !important;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none !important;
+      letter-spacing: 0.02em;
+      transition: background .15s ease;
+      margin-top: auto;
+    }
+    .btn-amazon:hover { background: #9a4b20; }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    .page-footer {
+      background: var(--navy);
+      color: #8a90a8;
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 0.82rem;
+      margin-top: 64px;
+    }
+    .page-footer a { color: #c8cde0; }
+
+    /* ── Responsive ──────────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .books-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .book-cover-wrap { min-height: 160px; padding: 12px 12px 8px; }
+      .book-cover-wrap img { max-width: 95px; max-height: 140px; }
+    }
+    @media (max-width: 340px) {
+      .books-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PAGE HEADER
+════════════════════════════════════════════════════════════════ -->
+<header class="page-header">
+  <h1>📚 Recommended Reading</h1>
+  <p>Books for curious minds who like questioning what they were told.
+     From debunked history to the psychology of misinformation, these
+     are the reads we think belong on every skeptic's shelf.</p>
+  <div class="affiliate-notice">
+    ℹ️ <strong>Heads up:</strong> Amazon links on this page may include an affiliate tag—
+    if you buy through them, we earn a small commission at no extra cost to you.
+    Every purchase helps keep Retrocodex running. Thank you!
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════════════ -->
+<main class="container">
+
+  <!-- ── SECTION 1 ─────────────────────────────────────────────── -->
+  <section class="section" id="myths-we-were-taught">
+    <div class="section-header">
+      <span class="section-icon">🏛️</span>
+      <h2>Myths &amp; Misconceptions We Were Taught</h2>
+    </div>
+    <p class="section-desc">
+      History textbooks, teachers, and popular culture have handed down plenty of "facts"
+      that turn out to be legend, half-truth, or outright invention.
+      These books set the record straight.
+    </p>
+    <hr class="section-divider" />
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0060922559-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Legends, Lies & Cherished Myths of World History cover" />
+          <div class="cover-fallback" style="display:none">Legends, Lies &amp; Cherished Myths of World History</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Legends, Lies &amp; Cherished Myths of World History</div>
+          <div class="book-author">Richard Shenkman</div>
+          <div class="book-year">1993</div>
+          <p class="book-summary">Explodes enduring myths from ancient Rome to WWII—from the real height of Napoleon to what the Iron Maiden actually was. A witty, well-researched guide to history's most stubborn falsehoods.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0060922559" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0060972610-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Legends, Lies & Cherished Myths of American History cover" />
+          <div class="cover-fallback" style="display:none">Legends, Lies &amp; Cherished Myths of American History</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Legends, Lies &amp; Cherished Myths of American History</div>
+          <div class="book-author">Richard Shenkman</div>
+          <div class="book-year">1989</div>
+          <p class="book-summary">Tackles America's most beloved legends: what Paul Revere actually shouted, why the Pilgrims never lived in log cabins, and why Washington's cherry tree story is pure invention.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0060972610" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0752451995-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Debunking History cover" />
+          <div class="cover-fallback" style="display:none">Debunking History: 152 Popular Myths Exploded</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Debunking History: 152 Popular Myths Exploded</div>
+          <div class="book-author">Ed Rayner &amp; Ron Stapley</div>
+          <div class="book-year">2004</div>
+          <p class="book-summary">Examines 152 widely believed historical myths spanning revolutions and world wars, separating enduring fact from entrenched fiction with wit and careful research.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0752451995" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0307394913-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="The Book of General Ignorance cover" />
+          <div class="cover-fallback" style="display:none">The Book of General Ignorance</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">The Book of General Ignorance</div>
+          <div class="book-author">John Lloyd &amp; John Mitchinson</div>
+          <div class="book-year">2007</div>
+          <p class="book-summary">From the QI team: a delightful compendium of things everyone thinks they know but don't—from who really invented the telephone to how many legs a centipede actually has.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0307394913" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1405131128-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="50 Great Myths of Popular Psychology cover" />
+          <div class="cover-fallback" style="display:none">50 Great Myths of Popular Psychology</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">50 Great Myths of Popular Psychology</div>
+          <div class="book-author">Scott O. Lilienfeld et al.</div>
+          <div class="book-year">2010</div>
+          <p class="book-summary">Four psychology professors dismantle 50 widespread misconceptions about human behavior—from "we only use 10% of our brains" to "opposites attract"—with clear, accessible science.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1405131128" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1951511042-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Misconceptions: A Guide to the World's Most Popular Myths cover" />
+          <div class="cover-fallback" style="display:none">Misconceptions: A Guide to the World's Most Popular Myths</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Misconceptions: A Guide to the World's Most Popular Myths</div>
+          <div class="book-author">Tim Rayborn</div>
+          <div class="book-year">2021</div>
+          <p class="book-summary">A wide-ranging tour of popular false facts about history, science, and culture. Rayborn traces where each myth originated, why it stuck, and what the evidence actually shows.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1951511042" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0471409766-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Bad Astronomy cover" />
+          <div class="cover-fallback" style="display:none">Bad Astronomy</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Bad Astronomy: Misconceptions and Misuses Revealed</div>
+          <div class="book-author">Philip Plait</div>
+          <div class="book-year">2002</div>
+          <p class="book-summary">Astronomer Philip Plait dismantles popular astronomy misconceptions—from astrology to moon landing conspiracy theories—with humor, solid science, and genuine enthusiasm.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0471409766" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0312538577-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Don't Swallow Your Gum! cover" />
+          <div class="cover-fallback" style="display:none">Don't Swallow Your Gum!</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Don't Swallow Your Gum!</div>
+          <div class="book-author">Aaron Carroll &amp; Rachel Vreeman</div>
+          <div class="book-year">2009</div>
+          <p class="book-summary">Two doctors investigate medical folklore and old wives' tales, revealing which health "facts" are fiction and what peer-reviewed science actually shows about everyday health myths.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0312538577" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+    </div><!-- /.books-grid -->
+  </section>
+
+  <!-- ── SECTION 2 ─────────────────────────────────────────────── -->
+  <section class="section" id="why-misinformation-persists">
+    <div class="section-header">
+      <span class="section-icon">🧠</span>
+      <h2>Why Misinformation Persists</h2>
+    </div>
+    <p class="section-desc">
+      Even when hard evidence debunks a belief, many people hold on to it anyway.
+      These books explore the psychology, sociology, and neuroscience behind why
+      false beliefs spread—and why they're so hard to dislodge.
+    </p>
+    <hr class="section-divider" />
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0300234015-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="The Misinformation Age cover" />
+          <div class="cover-fallback" style="display:none">The Misinformation Age</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">The Misinformation Age: How False Beliefs Spread</div>
+          <div class="book-author">Cailin O'Connor &amp; James Weatherall</div>
+          <div class="book-year">2019</div>
+          <p class="book-summary">Two philosophers of science argue that social networks—not individual irrationality—drive false beliefs, using game theory and social epistemology to reveal why truth so often loses.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0300234015" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0393881490-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Foolproof cover" />
+          <div class="cover-fallback" style="display:none">Foolproof</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Foolproof: Why Misinformation Infects Our Minds and How to Build Immunity</div>
+          <div class="book-author">Sander van der Linden</div>
+          <div class="book-year">2023</div>
+          <p class="book-summary">A leading misinformation researcher explains why fake news spreads and introduces "prebunking"—a psychological inoculation strategy that builds resistance to disinformation before it takes hold.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0393881490" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0805070893-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Why People Believe Weird Things cover" />
+          <div class="cover-fallback" style="display:none">Why People Believe Weird Things</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Why People Believe Weird Things</div>
+          <div class="book-author">Michael Shermer</div>
+          <div class="book-year">2002</div>
+          <p class="book-summary">Science historian Shermer explores the psychology behind pseudoscience, superstition, and conspiracy theories—from creationism to Holocaust denial—and what it might take to change minds.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0805070893" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0345409469-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="The Demon-Haunted World cover" />
+          <div class="cover-fallback" style="display:none">The Demon-Haunted World</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">The Demon-Haunted World: Science as a Candle in the Dark</div>
+          <div class="book-author">Carl Sagan</div>
+          <div class="book-year">1996</div>
+          <p class="book-summary">Sagan's enduring masterwork on scientific thinking, offering his famous "baloney detection kit"—a set of tools for questioning dubious claims in a world full of pseudoscience.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0345409469" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1250107814-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Factfulness cover" />
+          <div class="cover-fallback" style="display:none">Factfulness</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Factfulness: Ten Reasons We're Wrong About the World</div>
+          <div class="book-author">Hans Rosling</div>
+          <div class="book-year">2018</div>
+          <p class="book-summary">The late Swedish physician reveals that most people—including experts—hold profoundly wrong ideas about global trends, and explains how media and cognitive instincts distort our worldview.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1250107814" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0805091254-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="The Believing Brain cover" />
+          <div class="cover-fallback" style="display:none">The Believing Brain</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">The Believing Brain</div>
+          <div class="book-author">Michael Shermer</div>
+          <div class="book-year">2011</div>
+          <p class="book-summary">Shermer argues that humans form beliefs first, then construct justifications for them—a cognitive pattern that explains everything from superstition and astrology to conspiracy thinking.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0805091254" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1592407366-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="You Are Not So Smart cover" />
+          <div class="cover-fallback" style="display:none">You Are Not So Smart</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">You Are Not So Smart</div>
+          <div class="book-author">David McRaney</div>
+          <div class="book-year">2011</div>
+          <p class="book-summary">A journalist catalogs the cognitive biases and self-delusions that lead smart people into irrational thinking—entertaining, accessible, and uncomfortably accurate.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1592407366" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+    </div><!-- /.books-grid -->
+  </section>
+
+  <!-- ── SECTION 3 ─────────────────────────────────────────────── -->
+  <section class="section" id="critical-thinking">
+    <div class="section-header">
+      <span class="section-icon">🔬</span>
+      <h2>The Critical Thinking Toolkit</h2>
+    </div>
+    <p class="section-desc">
+      Knowing that misinformation exists is just the start. These books give you
+      practical tools to evaluate claims, spot logical fallacies, and—perhaps hardest
+      of all—change your own mind when the evidence demands it.
+    </p>
+    <hr class="section-divider" />
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0374533555-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Thinking, Fast and Slow cover" />
+          <div class="cover-fallback" style="display:none">Thinking, Fast and Slow</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Thinking, Fast and Slow</div>
+          <div class="book-author">Daniel Kahneman</div>
+          <div class="book-year">2011</div>
+          <p class="book-summary">Nobel laureate Kahneman explains the two systems driving our thinking—one fast and intuitive, one slow and deliberate—revealing why we're prone to systematic, predictable mental errors.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0374533555" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1984878107-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Think Again cover" />
+          <div class="cover-fallback" style="display:none">Think Again</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Think Again: The Power of Knowing What You Don't Know</div>
+          <div class="book-author">Adam Grant</div>
+          <div class="book-year">2021</div>
+          <p class="book-summary">Organizational psychologist Adam Grant argues that the ability to rethink and unlearn is one of our most valuable skills—and explains how to cultivate the intellectual humility it requires.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1984878107" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1538760053-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="The Skeptic's Guide to the Universe cover" />
+          <div class="cover-fallback" style="display:none">The Skeptic's Guide to the Universe</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">The Skeptic's Guide to the Universe</div>
+          <div class="book-author">Steven Novella</div>
+          <div class="book-year">2018</div>
+          <p class="book-summary">Neurologist and Science-Based Medicine host Steven Novella delivers a comprehensive guide to practical skepticism: cognitive biases, logical fallacies, and evaluating scientific claims.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1538760053" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0525955224-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="A Field Guide to Lies cover" />
+          <div class="cover-fallback" style="display:none">A Field Guide to Lies</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">A Field Guide to Lies: Critical Thinking in the Information Age</div>
+          <div class="book-author">Daniel J. Levitin</div>
+          <div class="book-year">2016</div>
+          <p class="book-summary">A neuroscientist's handbook for spotting misleading statistics, deceptive graphs, and faulty arguments—essential tools for navigating a world awash in spin and misinformation.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0525955224" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1982160624-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="How Minds Change cover" />
+          <div class="cover-fallback" style="display:none">How Minds Change</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">How Minds Change</div>
+          <div class="book-author">David McRaney</div>
+          <div class="book-year">2022</div>
+          <p class="book-summary">McRaney profiles people who reversed deeply held convictions and examines the communication techniques that actually work to shift minds—surprisingly, it's rarely facts and arguments.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1982160624" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0061176044-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Being Wrong cover" />
+          <div class="cover-fallback" style="display:none">Being Wrong</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Being Wrong: Adventures in the Margin of Error</div>
+          <div class="book-author">Kathryn Schulz</div>
+          <div class="book-year">2010</div>
+          <p class="book-summary">A journalist explores the rich, underexamined experience of being wrong—what it feels like, why it happens, and why our instinct to believe we're right is often our biggest blind spot.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0061176044" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+    </div><!-- /.books-grid -->
+  </section>
+
+  <!-- ── SECTION 4 ─────────────────────────────────────────────── -->
+  <section class="section" id="junk-science">
+    <div class="section-header">
+      <span class="section-icon">🧪</span>
+      <h2>Junk Science &amp; Research Under the Microscope</h2>
+    </div>
+    <p class="section-desc">
+      Not all misinformation comes from bad actors—sometimes it comes from
+      flawed studies, bad statistics, and a broken publish-or-perish culture.
+      These books pull back the curtain on how "scientific" claims can mislead us.
+    </p>
+    <hr class="section-divider" />
+    <div class="books-grid">
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0865479186-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Bad Science cover" />
+          <div class="cover-fallback" style="display:none">Bad Science</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Bad Science: Quacks, Hacks, and Big Pharma Flacks</div>
+          <div class="book-author">Ben Goldacre</div>
+          <div class="book-year">2008</div>
+          <p class="book-summary">A British physician skewers misleading media health reporting, dubious supplement claims, and pseudoscientific fads, arming readers with the tools to recognize flawed evidence.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0865479186" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/1250222699-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Science Fictions cover" />
+          <div class="cover-fallback" style="display:none">Science Fictions</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Science Fictions: How Fraud, Bias, Negligence, and Hype Undermine the Search for Truth</div>
+          <div class="book-author">Stuart Ritchie</div>
+          <div class="book-year">2020</div>
+          <p class="book-summary">A psychologist exposes the replication crisis rocking modern science, examining how publication bias and perverse incentives corrupt the research we rely on to understand the world.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/1250222699" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0385539304-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="The Body: A Guide for Occupants cover" />
+          <div class="cover-fallback" style="display:none">The Body: A Guide for Occupants</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">The Body: A Guide for Occupants</div>
+          <div class="book-author">Bill Bryson</div>
+          <div class="book-year">2019</div>
+          <p class="book-summary">Bryson's entertaining tour of the human body debunks decades of medical mythology while celebrating the astonishing complexity modern science has uncovered—warm, funny, and full of surprises.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0385539304" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <div class="book-cover-wrap">
+          <img src="https://covers.openlibrary.org/b/isbn/0143120077-L.jpg"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+               alt="Proofiness cover" />
+          <div class="cover-fallback" style="display:none">Proofiness</div>
+        </div>
+        <div class="book-info">
+          <div class="book-title">Proofiness: How You're Being Fooled by the Numbers</div>
+          <div class="book-author">Charles Seife</div>
+          <div class="book-year">2010</div>
+          <p class="book-summary">A science journalist reveals how statistics are routinely weaponized to deceive—from manipulated polling data to misleading health advertising—and teaches readers how to push back.</p>
+          <a class="btn-amazon" href="https://www.amazon.com/dp/0143120077" target="_blank" rel="noopener">Buy on Amazon ↗</a>
+        </div>
+      </div>
+
+    </div><!-- /.books-grid -->
+  </section>
+
+</main><!-- /.container -->
+
+<!-- ════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════ -->
+<footer class="page-footer">
+  <p>
+    Book links may contain affiliate tags — see the notice above for details.
+    Have a recommendation that belongs here?
+    <a href="mailto:contact@theretrocodex.com">Let us know</a>.
+  </p>
+</footer>
+
+</body>
+</html>
