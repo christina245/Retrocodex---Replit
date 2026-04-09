@@ -23,6 +23,7 @@ import skepticsGuideCover from "@assets/skeptic's_guide_1775722616715.jpeg";
 import beingWrongCover from "@assets/being_wrong_1775722616714.jpg";
 import badScienceCover from "@assets/bad_science_1775722611408.jpg";
 import scienceFictionsCover from "@assets/science_fictions_1775722611407.jpg";
+import theBodyCover from "@assets/the_body_1775723000753.jpeg";
 import scrungyImg from "@assets/scrungy/recommended reading.png";
 
 import "./RecommendedBooksPage.css";
@@ -252,7 +253,7 @@ const sections: Section[] = [
         summary:
           "Bryson's entertaining tour of the human body debunks decades of medical mythology while celebrating the astonishing complexity modern science has uncovered.",
         amazonLink: "https://amzn.to/3Or8676",
-        cover: null,
+        cover: theBodyCover,
       },
     ],
   },
