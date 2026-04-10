@@ -46,27 +46,24 @@ export default function AboutPage() {
       <main className="about-main">
         <div className="about-content-wrapper">
           <div className="about-text-column">
-            <h1 className="about-header" data-testid="text-about-header">About</h1>
+            <h1 className="about-header" data-testid="text-about-header">What is Retrocodex?</h1>
             
-            <h2 className="about-subheader" data-testid="text-about-subheader">
-              "What have you been taught that <span className="about-subheader-italic">isn't true?</span>"
-            </h2>
-
-            <p className="about-body">
-              Retrocodex: Stuff You Learned Wrong is a community-driven encyclopedia exploring how common misconceptions and outdated facts emerged, evolved, and persisted while accounting for diverse and contradictory perspectives.
-            </p>
-
-            <p className="about-body">
-              In a community-driven platform, you and everyone else are welcome to submit new topics you believe are worth questioning and suggestions to existing topics you believe validate or even invalidate the facts. Each entry is updated when new relevant discoveries arise. When user accounts become available, you'll be able to learn how other users were affected by each misconception, contribute your own experiences, and receive email updates when new information is discovered that further verifies or refutes the myth. 
-            </p>
             
 
             <p className="about-body">
-              At Retrocodex, facts are treated as something to be continually examined, not permanently settled. Even with the misconceptions debunked by the strongest evidence, new information can always emerge. Many of the topics on this site were once considered verified facts until they were disproven by time and new research. Some may still be taught as facts in certain places. 
+              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts. It's a place to give your brain a system update.
+            </p>
+            <p className="about-body">
+              ⚠️ Note: This site it NOT a political fact-checker to discuss current political events or news media. However, it does feature broader topics that may be inadvertently politicized by the public, such as false or contested scientific and historical claims used to support current political agendas.
+            </p>
+            <p className="about-body">
+              What everyone was taught varies so much all throughout the world. That's why Retrocodex is a space where you can find other users from the same state or country -- by seeing what topics and comments they submit, you can revisit and patch up the education of your upbringing.</p>
+              
+            <p className="about-body"> But wait! Everything you learn on this site might still evolve depending on new discoveries. That's what the Follow button on each individual fact page is for -- you'll receive emails every time a fact gets a major update! 
             </p>
 
             <p className="about-body">
-              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research and web development will require much more investment of resources than this beta, the rest of the pages and user accounts will only be added after reaching a certain amount of traffic and email signups.
+              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research and web development will take a substantial amount of work, the rest of the pages will only be added after reaching a certain amount of traffic and user activity.
             </p>
 
           
@@ -77,21 +74,15 @@ export default function AboutPage() {
 
             <ul className="about-list">
               <li>
-                <strong>Pages by country:</strong> An interactive map that shows topics unique to that region, with a list of the most common topics taught in that region as determined by users.
+                <strong>Pages by country:</strong> Learn what other people from your state or country were taught growing up! An interactive map that shows topics unique to that region, with a list of the most common topics taught in that region as determined by users.
               </li>
-              <li>
-                <strong>A personalized dashboard:</strong> See what other topics users in your county (and any other selected locations) report through their submissions and comments.
-              </li>
-              <li>
-                <strong>User messaging & community tools:</strong> A private messaging and public profile creation system that'll let you connect, compare experiences, show off where you grew up and your professional credentials, and even organize local advocacy or education campaigns together.
-              </li>
+             
+             
               
               <li>
                 <strong>Global heatmaps:</strong> Visual representations of where specific myths were most commonly taught, powered by user voting and regional submissions.
               </li>
-              <li>
-                <strong>A personalized misinformation report:</strong> A chatbot generating a personalized report of what you may have been taught incorrectly based on your graduation year and location, refined by user feedback. (Note: AI will only be used for curating the website's own human-researched facts, not generating facts itself.)
-              </li>
+              
             </ul>
 
             <p className="about-body">

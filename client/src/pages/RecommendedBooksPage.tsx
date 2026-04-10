@@ -222,9 +222,9 @@ const sections: Section[] = [
   },
   {
     id: "junk-science",
-    heading: "When Even Science Gets I Wrong",
+    heading: "When Even Science Gets It Wrong",
     description:
-      'Not all misinformation comes from pure malice\u2014sometimes it comes from flawed studies, misrepresented statistics, and an environment that pushes publication at all costs. These books pull back the curtain on how \u201cscientific\u201d claims can mislead us.',
+      'Not all misinformation comes from pure malice\u2014sometimes it comes from flawed studies, misrepresented statistics, and an environment that pushes publication at all costs. These books pull back the curtain on how even \u201cscientific\u201d claims can mislead us. This is why Retrocodex has the comment section.',
     books: [
       {
         title: "Bad Science",
