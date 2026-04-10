@@ -40,19 +40,20 @@ export function CirculationFilter({ selectedFilters, onFilterChange }: Circulati
       </div>
       <div className="circulation-filter-options">
         {CIRCULATION_OPTIONS.map((option) => (
-          <label
-            key={option.key}
-            className="circulation-filter-option"
-            data-testid={`label-filter-${option.key}`}
-          >
-            <input
-              type="checkbox"
-              checked={selectedFilters.includes(option.key)}
-              onChange={() => handleToggle(option.key)}
-              data-testid={`checkbox-filter-${option.key}`}
-            />
-            <span className="circulation-filter-checkbox"></span>
-            <span className="circulation-filter-option-text">{option.label}</span>
+          <div key={option.key} className="circulation-filter-option-row">
+            <label
+              className="circulation-filter-option"
+              data-testid={`label-filter-${option.key}`}
+            >
+              <input
+                type="checkbox"
+                checked={selectedFilters.includes(option.key)}
+                onChange={() => handleToggle(option.key)}
+                data-testid={`checkbox-filter-${option.key}`}
+              />
+              <span className="circulation-filter-checkbox"></span>
+              <span className="circulation-filter-option-text">{option.label}</span>
+            </label>
             <Tooltip>
               <TooltipTrigger asChild>
                 <span
@@ -66,7 +67,7 @@ export function CirculationFilter({ selectedFilters, onFilterChange }: Circulati
                 <p>{option.tooltip}</p>
               </TooltipContent>
             </Tooltip>
-          </label>
+          </div>
         ))}
       </div>
     </div>
