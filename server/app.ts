@@ -43,6 +43,7 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: false }));
 
 const PgSession = connectPgSimple(session);
+app.set('trust proxy', 1);
 app.use(session({
   store: new PgSession({
     pool,
