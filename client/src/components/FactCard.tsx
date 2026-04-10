@@ -45,6 +45,7 @@ export interface Fact {
   factFilters?: string[];
   revisionYear?: number;
   taughtUntilYear?: string;
+  originDecade?: string;
   commentCount?: number;
 }
 
@@ -156,7 +157,9 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
                   })}
                   {showTaughtUntil && (
                     <span className="fact-filter-tag fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
-                      Widely Taught Until {fact.taughtUntilYear}
+                      {fact.originDecade && fact.taughtUntilYear
+                        ? `Taught From ${fact.originDecade} to ${fact.taughtUntilYear}`
+                        : `Widely Taught Until ${fact.taughtUntilYear}`}
                     </span>
                   )}
                 </div>

@@ -17,6 +17,7 @@ export interface CategoryFact {
   betaOnly?: boolean;
   revisionYear?: number;
   taughtUntilYear?: string;
+  originDecade?: string;
   commentCount?: number;
 }
 
@@ -141,7 +142,9 @@ export function CategoryFactCard({
                   })}
                   {showTaughtUntil && (
                     <span className="category-fact-tag category-fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
-                      Widely Taught Until {fact.taughtUntilYear}
+                      {fact.originDecade && fact.taughtUntilYear
+                        ? `Taught From ${fact.originDecade} to ${fact.taughtUntilYear}`
+                        : `Widely Taught Until ${fact.taughtUntilYear}`}
                     </span>
                   )}
                 </div>

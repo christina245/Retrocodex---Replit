@@ -55,6 +55,7 @@ export default function MusicPage() {
         betaOnly: fact.betaOnly ?? false,
         revisionYear: fact.revisionYear ?? undefined,
         taughtUntilYear: fact.taughtUntilYear ?? undefined,
+        originDecade: fact.originDecade ?? undefined,
         commentCount: fact.commentCount ?? 0,
       }));
   }, [dbFacts]);
