@@ -9,7 +9,7 @@ import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
-import { CategoryFilter } from "@/components/CategoryFilter";
+import { CirculationFilter } from "@/components/CirculationFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
 import { SourcesModal } from "@/components/SourcesModal";
 import { FactKey } from "@/components/FactKey";
@@ -32,7 +32,7 @@ const SUBCATEGORY_COLOR = "#2C2C2C";
 export default function LinguisticsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("recent");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>(["still-circulating", "in-the-past"]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
@@ -121,11 +121,11 @@ export default function LinguisticsPage() {
     return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
   });
 
-  const filteredFacts = selectedFilters.length > 0
-    ? sortedFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.some(sf => sf.toLowerCase() === filter.toLowerCase()))
-      )
-    : sortedFacts;
+  const filteredFacts = sortedFacts.filter(fact => {
+    const isPhased = !!fact.taughtUntilYear;
+    if (isPhased) return selectedFilters.includes("in-the-past");
+    return selectedFilters.includes("still-circulating");
+  });
 
   return (
     <div className="linguistics-page">
@@ -158,7 +158,7 @@ export default function LinguisticsPage() {
             </div>
             <SortSelector selectedSort={sortOption} onSortChange={setSortOption} />
             <div className="linguistics-filter-container">
-              <CategoryFilter 
+              <CirculationFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={setSelectedFilters} 
               />
@@ -176,7 +176,7 @@ export default function LinguisticsPage() {
                     data-testid="img-loading-logo"
                   />
                 </div>
-              ) : filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              ) : filteredFacts.length === 0 ? (
                 <EmptyFilterState />
               ) : (
                 <div className="linguistics-facts-grid">

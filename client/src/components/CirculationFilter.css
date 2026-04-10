@@ -1,0 +1,106 @@
+.circulation-filter {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  flex-wrap: wrap;
+  padding-top: 9px;
+  padding-left: 10px;
+}
+
+.circulation-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+}
+
+.circulation-filter-icon {
+  color: #2C2C2C;
+}
+
+.circulation-filter-text {
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #2C2C2C;
+  white-space: nowrap;
+}
+
+.circulation-filter-options {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.circulation-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  color: #2C2C2C;
+  user-select: none;
+}
+
+.circulation-filter-option input[type="checkbox"] {
+  display: none;
+}
+
+.circulation-filter-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.circulation-filter-option input[type="checkbox"]:checked + .circulation-filter-checkbox {
+  background: #2C2C2C;
+  border-color: #2C2C2C;
+}
+
+.circulation-filter-option input[type="checkbox"]:checked + .circulation-filter-checkbox::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.circulation-filter-option-text {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.circulation-filter-option:hover .circulation-filter-option-text {
+  color: #FF5353;
+}
+
+.circulation-filter-info {
+  display: flex;
+  align-items: center;
+  color: #aaaaaa;
+  cursor: help;
+  transition: color 0.2s;
+  margin-top: 1px;
+}
+
+.circulation-filter-info:hover {
+  color: #2C2C2C;
+}
+
+.circulation-filter-tooltip-content {
+  max-width: 260px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}

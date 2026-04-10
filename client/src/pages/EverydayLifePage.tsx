@@ -17,7 +17,7 @@ import { useSavedFacts } from "@/lib/useSavedFacts";
 import { ShareModal } from "@/components/ShareModal";
 import { SourcesModal } from "@/components/SourcesModal";
 import { Footer } from "@/components/Footer";
-import { CategoryFilter } from "@/components/CategoryFilter";
+import { CirculationFilter } from "@/components/CirculationFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
 import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
@@ -42,7 +42,7 @@ const CATEGORY_COLOR = "#2A9BEC";
 export default function EverydayLifePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("recent");
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>(["still-circulating", "in-the-past"]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
   const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
@@ -153,11 +153,11 @@ export default function EverydayLifePage() {
   });
 
   // Apply filters
-  const filteredFacts = selectedFilters.length > 0
-    ? sortedFacts.filter(fact => 
-        fact.factFilters && fact.factFilters.some(filter => selectedFilters.some(sf => sf.toLowerCase() === filter.toLowerCase()))
-      )
-    : sortedFacts;
+  const filteredFacts = sortedFacts.filter(fact => {
+    const isPhased = !!fact.taughtUntilYear;
+    if (isPhased) return selectedFilters.includes("in-the-past");
+    return selectedFilters.includes("still-circulating");
+  });
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredFacts.length / FACTS_PER_PAGE);
@@ -207,7 +207,7 @@ export default function EverydayLifePage() {
             </div>
             <SortSelector selectedSort={sortOption} onSortChange={handleSortChange} />
             <div className="everyday-life-filter-container">
-              <CategoryFilter 
+              <CirculationFilter 
                 selectedFilters={selectedFilters} 
                 onFilterChange={handleFilterChange} 
               />
@@ -216,7 +216,7 @@ export default function EverydayLifePage() {
 
           <div className="everyday-life-content-container">
             <div className="everyday-life-facts-column">
-              {filteredFacts.length === 0 && selectedFilters.length > 0 ? (
+              {filteredFacts.length === 0 ? (
                 <EmptyFilterState />
               ) : (
                 <>
