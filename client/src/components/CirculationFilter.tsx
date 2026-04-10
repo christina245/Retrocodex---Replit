@@ -11,7 +11,7 @@ const CIRCULATION_OPTIONS = [
   },
   {
     key: "in-the-past",
-    label: "Mostly in the Past",
+    label: "Lessons of the Past",
     tooltip:
       "These facts were mostly publicly overturned and are unlikely to still be taught in 2026.",
   },
