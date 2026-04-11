@@ -63,6 +63,16 @@
   font-weight: 700;
 }
 
+.about-inline-link {
+  text-decoration: underline;
+  color: inherit;
+  transition: color 0.15s ease;
+}
+
+.about-inline-link:hover {
+  color: #ff5353;
+}
+
 .about-list {
   font-family: 'Public Sans', sans-serif;
   font-weight: 400;

@@ -52,7 +52,7 @@ export default function PublicProfile() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [username, activeTab]);
+  }, [username]);
 
   const { data: apiProfile } = useQuery<{
     id: string;

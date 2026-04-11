@@ -51,10 +51,10 @@ export default function AboutPage() {
             
 
             <p className="about-body">
-              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts. It's a place to give your brain a system update.
+              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1" className="about-inline-link">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts. It's a place to give your brain a system update.
             </p>
             <p className="about-body">
-              ⚠️ Note: This site it NOT a political fact-checker to discuss current political events or news media. However, it does feature broader topics that may be inadvertently politicized by the public, such as false or contested scientific and historical claims used to support current political agendas.
+              ⚠️ Note: This site is NOT a political fact-checker to discuss current political events or news media. However, it does feature broader topics that may be inadvertently politicized by the public, such as false or contested scientific and historical claims used to support current political agendas.
             </p>
             <p className="about-body">
               What everyone was taught varies so much all throughout the world. That's why Retrocodex is a space where you can find other users from the same state or country -- by seeing what topics and comments they submit, you can revisit and patch up the education of your upbringing.</p>
@@ -89,9 +89,7 @@ export default function AboutPage() {
               Understanding our shared history of misinformation is critical to preventing future misinformation, from the benign to the downright harmful. By learning from the past, we can better navigate the present and shape a more informed future.
             </p>
 
-            <h2 className="about-cta-text" data-testid="text-about-cta">
-              What's a misconception that bothers you? Send it over to be featured!
-            </h2>
+            <p>Retrocodex was created by <a href ="https://theretrocodex.com/user/retro_christina" className="about-inline-link">retro_christina.</a></p>
 
             <div className="about-buttons">
               <a 
