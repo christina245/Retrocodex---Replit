@@ -550,8 +550,34 @@
   cursor: pointer;
 }
 
+.signin-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.signin-back-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: #2c2c2c;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 2px;
+  transition: opacity 0.15s;
+}
+
+.signin-back-button:hover {
+  opacity: 0.6;
+}
+
 .signin-skip-button-top {
-  align-self: flex-start;
   background: rgba(44, 44, 44, 0.05);
   color: #FF5353;
   border: none;

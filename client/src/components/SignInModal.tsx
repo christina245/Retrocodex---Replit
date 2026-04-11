@@ -1,4 +1,4 @@
-import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle, RotateCcw } from "lucide-react";
+import { X, Eye, EyeOff, MapPin, Plus, Minus, XCircle, RotateCcw, ArrowLeft } from "lucide-react";
 import envelopeImage from "@assets/email_1774815930235.png";
 import scrungyWavingImage from "@assets/scrungy_waving_signin_1775206753767.png";
 import { useState, useRef, useEffect } from "react";
@@ -819,15 +819,26 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
             </div>
           ) : screen === "topicSelection" ? (
             <div className="signin-topic-selection" data-testid="screen-topic-selection">
-              <button
-                type="button"
-                className="signin-skip-button-top"
-                data-testid="button-skip-topics"
-                onClick={doRegisterAndVerify}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Creating account…" : "Skip for now"}
-              </button>
+              <div className="signin-nav-row">
+                <button
+                  type="button"
+                  className="signin-back-button"
+                  onClick={() => setScreen("locationSetup")}
+                  data-testid="button-back-topics"
+                >
+                  <ArrowLeft size={15} />
+                  Back
+                </button>
+                <button
+                  type="button"
+                  className="signin-skip-button-top"
+                  data-testid="button-skip-topics"
+                  onClick={doRegisterAndVerify}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Creating account…" : "Skip for now"}
+                </button>
+              </div>
 
               <h2 className="signin-confirmation-title" data-testid="text-topic-title">
                 What are your favorite subjects?
@@ -939,14 +950,25 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
             </div>
           ) : screen === "locationSetup" ? (
             <div className="signin-location-setup" data-testid="screen-location-setup">
-              <button
-                type="button"
-                className="signin-skip-button-top"
-                onClick={() => setScreen("topicSelection")}
-                data-testid="button-skip-location"
-              >
-                Skip for now
-              </button>
+              <div className="signin-nav-row">
+                <button
+                  type="button"
+                  className="signin-back-button"
+                  onClick={() => setScreen("auth")}
+                  data-testid="button-back-location"
+                >
+                  <ArrowLeft size={15} />
+                  Back
+                </button>
+                <button
+                  type="button"
+                  className="signin-skip-button-top"
+                  onClick={() => setScreen("topicSelection")}
+                  data-testid="button-skip-location"
+                >
+                  Skip for now
+                </button>
+              </div>
               <h2 className="signin-confirmation-title" data-testid="text-location-title">
                 <span className="signin-optional-tag">[Optional]</span>
                 What we learn wrong often depends on where we're from.
