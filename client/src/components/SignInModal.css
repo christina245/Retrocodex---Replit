@@ -561,6 +561,7 @@
 .signin-back-button {
   display: flex;
   align-items: center;
+  align-self: flex-start;
   gap: 5px;
   background: none;
   border: none;
@@ -575,6 +576,14 @@
 
 .signin-back-button:hover {
   opacity: 0.6;
+}
+
+.signin-bottom-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
 }
 
 .signin-skip-button-top {

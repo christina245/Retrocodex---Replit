@@ -819,26 +819,15 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
             </div>
           ) : screen === "topicSelection" ? (
             <div className="signin-topic-selection" data-testid="screen-topic-selection">
-              <div className="signin-nav-row">
-                <button
-                  type="button"
-                  className="signin-back-button"
-                  onClick={() => setScreen("locationSetup")}
-                  data-testid="button-back-topics"
-                >
-                  <ArrowLeft size={15} />
-                  Back
-                </button>
-                <button
-                  type="button"
-                  className="signin-skip-button-top"
-                  data-testid="button-skip-topics"
-                  onClick={doRegisterAndVerify}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Creating account…" : "Skip for now"}
-                </button>
-              </div>
+              <button
+                type="button"
+                className="signin-back-button"
+                onClick={() => setScreen("locationSetup")}
+                data-testid="button-back-topics"
+              >
+                <ArrowLeft size={15} />
+                Back
+              </button>
 
               <h2 className="signin-confirmation-title" data-testid="text-topic-title">
                 What are your favorite subjects?
@@ -938,37 +927,38 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
               {loginError && (
                 <p className="signin-error-text" style={{ textAlign: "center" }} data-testid="text-register-error">{loginError}</p>
               )}
-              <button
-                type="button"
-                className="signin-submit-button"
-                data-testid="button-finish-onboarding"
-                disabled={isSubmitting}
-                onClick={doRegisterAndVerify}
-              >
-                {isSubmitting ? "Creating account…" : "Finish"}
-              </button>
-            </div>
-          ) : screen === "locationSetup" ? (
-            <div className="signin-location-setup" data-testid="screen-location-setup">
-              <div className="signin-nav-row">
+              <div className="signin-bottom-actions">
                 <button
                   type="button"
-                  className="signin-back-button"
-                  onClick={() => setScreen("auth")}
-                  data-testid="button-back-location"
+                  className="signin-submit-button"
+                  data-testid="button-finish-onboarding"
+                  disabled={isSubmitting}
+                  onClick={doRegisterAndVerify}
                 >
-                  <ArrowLeft size={15} />
-                  Back
+                  {isSubmitting ? "Creating account…" : "Finish"}
                 </button>
                 <button
                   type="button"
                   className="signin-skip-button-top"
-                  onClick={() => setScreen("topicSelection")}
-                  data-testid="button-skip-location"
+                  data-testid="button-skip-topics"
+                  onClick={doRegisterAndVerify}
+                  disabled={isSubmitting}
                 >
-                  Skip for now
+                  {isSubmitting ? "Creating account…" : "Skip for now"}
                 </button>
               </div>
+            </div>
+          ) : screen === "locationSetup" ? (
+            <div className="signin-location-setup" data-testid="screen-location-setup">
+              <button
+                type="button"
+                className="signin-back-button"
+                onClick={() => setScreen("auth")}
+                data-testid="button-back-location"
+              >
+                <ArrowLeft size={15} />
+                Back
+              </button>
               <h2 className="signin-confirmation-title" data-testid="text-location-title">
                 <span className="signin-optional-tag">[Optional]</span>
                 What we learn wrong often depends on where we're from.
@@ -1087,14 +1077,24 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                 </div>
               </div>
 
-              <button
-                type="button"
-                className="signin-submit-button"
-                onClick={() => setScreen("topicSelection")}
-                data-testid="button-next-step"
-              >
-                Next step
-              </button>
+              <div className="signin-bottom-actions">
+                <button
+                  type="button"
+                  className="signin-submit-button"
+                  onClick={() => setScreen("topicSelection")}
+                  data-testid="button-next-step"
+                >
+                  Next step
+                </button>
+                <button
+                  type="button"
+                  className="signin-skip-button-top"
+                  onClick={() => setScreen("topicSelection")}
+                  data-testid="button-skip-location"
+                >
+                  Skip for now
+                </button>
+              </div>
             </div>
           ) : screen === "googleUsernameSetup" ? (
             <div className="signin-location-setup" data-testid="screen-google-username-setup">
