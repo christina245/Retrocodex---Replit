@@ -13,7 +13,7 @@ const CIRCULATION_OPTIONS = [
     key: "in-the-past",
     label: "Lessons of the Past",
     tooltip:
-      "These facts were mostly publicly overturned and are unlikely to still be taught in 2026.",
+      "These facts have mostly been overturned and thus are unlikely to still be taught in 2026.",
   },
 ];
 

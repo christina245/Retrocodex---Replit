@@ -144,7 +144,7 @@ export function CategoryFactCard({
                     <span className="category-fact-tag category-fact-taught-until-tag" data-testid={`label-taught-until-${fact.id}`}>
                       {fact.originDecade && fact.taughtUntilYear
                         ? `Taught From ${fact.originDecade} to ${fact.taughtUntilYear}`
-                        : `Widely Taught Until ${fact.taughtUntilYear}`}
+                        : `Taught Until ${fact.taughtUntilYear}`}
                     </span>
                   )}
                 </div>
