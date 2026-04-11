@@ -70,7 +70,7 @@ export default function SocialSciencesPage() {
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
 
-  const { data: dbFacts = [] } = useQuery<FactWithCommentCount[]>({
+  const { data: dbFacts = [], isLoading: factsLoading } = useQuery<FactWithCommentCount[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -216,7 +216,11 @@ export default function SocialSciencesPage() {
 
           <div className="social-sciences-content-container">
             <div className="social-sciences-facts-column">
-              {filteredFacts.length === 0 ? (
+              {factsLoading ? (
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: "40px" }}>
+                  <img src="/loading-bar.gif" style={{ width: "500px", maxWidth: "100%", height: "auto" }} alt="" />
+                </div>
+              ) : filteredFacts.length === 0 ? (
                 <EmptyFilterState />
               ) : (
                 <>

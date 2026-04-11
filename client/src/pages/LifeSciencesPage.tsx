@@ -63,7 +63,7 @@ export default function LifeSciencesPage() {
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
 
   // Fetch facts from database
-  const { data: dbFacts = [] } = useQuery<FactWithCommentCount[]>({
+  const { data: dbFacts = [], isLoading: factsLoading } = useQuery<FactWithCommentCount[]>({
     queryKey: ["/api/facts"],
   });
 
@@ -212,7 +212,11 @@ export default function LifeSciencesPage() {
 
           <div className="life-sciences-content-container">
             <div className="life-sciences-facts-column">
-              {filteredFacts.length === 0 ? (
+              {factsLoading ? (
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: "40px" }}>
+                  <img src="/loading-bar.gif" style={{ width: "500px", maxWidth: "100%", height: "auto" }} alt="" />
+                </div>
+              ) : filteredFacts.length === 0 ? (
                 <EmptyFilterState />
               ) : (
                 <>
