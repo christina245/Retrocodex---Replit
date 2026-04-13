@@ -2710,6 +2710,11 @@ a.following-post-fact-link:hover {
   border-bottom: 1px solid #f0f0f0;
   background: none;
   flex-direction: column;
+  gap: 8px;
+}
+
+.following-post--fact .following-post-attribution {
+  margin-bottom: 0;
 }
 
 .following-post--fact .following-post-main,
