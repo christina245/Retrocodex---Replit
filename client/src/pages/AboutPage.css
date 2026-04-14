@@ -50,12 +50,33 @@
   font-style: italic;
 }
 
+.about-image-center {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 24px 0;
+}
+
+.about-page-image {
+  border-radius: 10px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.about-scrungy-image {
+  max-width: 600px;
+}
+
+.about-follow-image {
+  max-width: 380px;
+}
+
 .about-body {
   font-family: 'Public Sans', sans-serif;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   color: #2C2C2C;
-  line-height: 25px;
+  line-height: 24px;
   margin: 0 0 20px 0;
 }
 
@@ -76,9 +97,9 @@
 .about-list {
   font-family: 'Public Sans', sans-serif;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   color: #2C2C2C;
-  line-height: 25px;
+  line-height: 24px;
   margin: 0 0 20px 0;
   padding-left: 25px;
   list-style-type: disc;

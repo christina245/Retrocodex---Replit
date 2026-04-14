@@ -8,6 +8,8 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import scrungyAbout from "@assets/about_page_scrungy_1776195789664.png";
+import followButton from "@assets/follow_button_1776196363919.png";
 import "./AboutPage.css";
 
 export default function AboutPage() {
@@ -47,8 +49,10 @@ export default function AboutPage() {
         <div className="about-content-wrapper">
           <div className="about-text-column">
             <h1 className="about-header" data-testid="text-about-header">What is Retrocodex?</h1>
-            
-            
+
+            <div className="about-image-center">
+              <img src={scrungyAbout} alt="Scrungy the squirrel introducing Retrocodex" className="about-page-image about-scrungy-image" />
+            </div>
 
             <p className="about-body">
               Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1" className="about-inline-link">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts. It's a place to give your brain a system update.
@@ -61,6 +65,10 @@ export default function AboutPage() {
               
             <p className="about-body"> But wait! Everything you learn on this site might still evolve depending on new discoveries. That's what the Follow button on each individual fact page is for -- you'll receive emails every time a fact gets a major update! 
             </p>
+
+            <div className="about-image-center">
+              <img src={followButton} alt="Follow button on a fact page" className="about-page-image about-follow-image" />
+            </div>
 
             <p className="about-body">
               The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research and web development will take a substantial amount of work, the rest of the pages will only be added after reaching a certain amount of traffic and user activity.
