@@ -285,16 +285,10 @@
   padding: 60px 0;
 }
 
-.fact-form-success-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #31A66B;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
+.fact-form-success-img {
+  width: 200px;
+  height: auto;
+  margin-bottom: 16px;
 }
 
 .fact-form-success-title {

@@ -13,7 +13,7 @@
   width: 515px;
   height: 310px;
   background: #ffffff;
-  box-shadow: 2px 4px 0 color-mix(in srgb, var(--card-category-color) 50%, transparent);
+  box-shadow: 2px 4px 0 color-mix(in srgb, var(--card-category-color) 70%, transparent);
   border: 1px solid color-mix(in srgb, var(--card-category-color) 25%, transparent);
   border-radius: 8px;
   overflow: hidden;
@@ -60,7 +60,8 @@
   white-space: nowrap;
 }
 
-.fact-taught-until-tag {
+.fact-taught-until-tag,
+.fact-official-revision-tag {
   background: #7B4E9E;
 }
 

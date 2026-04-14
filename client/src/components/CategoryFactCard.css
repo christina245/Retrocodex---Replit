@@ -67,7 +67,8 @@
   white-space: nowrap;
 }
 
-.category-fact-taught-until-tag {
+.category-fact-taught-until-tag,
+.category-fact-official-revision-tag {
   background: #7B4E9E;
 }
 

@@ -132,10 +132,10 @@ export function CategoryFactCard({
                   {displayFilters.map((filter, index) => {
                     const isOfficialRevision = filter.toLowerCase() === "official revision";
                     const label = isOfficialRevision && fact.revisionYear
-                      ? `Official Revision - ${fact.revisionYear}`
+                      ? `Official Revision \u00a0-\u00a0 ${fact.revisionYear}`
                       : toTitleCase(filter);
                     return (
-                      <span key={index} className="category-fact-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                      <span key={index} className={`category-fact-tag${isOfficialRevision ? " category-fact-official-revision-tag" : ""}`} data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
                         {label}
                       </span>
                     );

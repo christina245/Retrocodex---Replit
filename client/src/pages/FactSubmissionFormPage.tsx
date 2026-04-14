@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { X, Check, BookOpen, Plus, Trash2 } from "lucide-react";
+import squirrelSuccess from "@assets/Cheerful_squirrel_with_checkmark_sign_1776139374734.png";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -132,9 +133,7 @@ export default function FactSubmissionFormPage() {
 
             {submitted ? (
               <div className="fact-form-success" data-testid="submission-success">
-                <div className="fact-form-success-icon">
-                  <Check size={36} strokeWidth={2.5} />
-                </div>
+                <img src={squirrelSuccess} alt="" className="fact-form-success-img" />
                 <h1 className="fact-form-success-title">Submission received!</h1>
                 <p className="fact-form-success-body">
                   If your topic is approved, we'll reach out to you if we need any additional information or for you to confirm our editorial changes.

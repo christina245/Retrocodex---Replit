@@ -138,11 +138,11 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
                   {displayFilters.map((filter, index) => {
                     const isOfficialRevision = filter.toLowerCase() === "official revision";
                     const label = isOfficialRevision && fact.revisionYear
-                      ? `Official Revision - ${fact.revisionYear}`
+                      ? `Official Revision \u00a0-\u00a0 ${fact.revisionYear}`
                       : toTitleCase(filter);
                     const tooltipText = FILTER_TOOLTIPS[filter.toLowerCase()];
                     const chip = (
-                      <span key={index} className="fact-filter-tag" data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
+                      <span key={index} className={`fact-filter-tag${isOfficialRevision ? " fact-official-revision-tag" : ""}`} data-testid={`filter-${filter.toLowerCase().replace(/\s+/g, '-')}`}>
                         {label}
                       </span>
                     );
