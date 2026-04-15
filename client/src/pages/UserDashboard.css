@@ -2717,6 +2717,17 @@ a.following-post-fact-link:hover {
   margin-bottom: 0;
 }
 
+.following-post--fact .following-post-attribution-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.following-post--fact .following-post-attribution .following-post-header {
+  flex: none;
+}
+
 .following-post--fact .following-post-main,
 .following-post--article .following-post-main {
   width: 100%;
@@ -2727,7 +2738,7 @@ a.following-post-fact-link:hover {
 }
 
 .following-post--fact .comment-user-info {
-  margin-left: 52px;
+  margin-left: 0;
 }
 
 .following-post-fact-card-wrap .fact-card-wrapper {
@@ -3041,11 +3052,6 @@ a.following-post-fact-link:hover {
   .following-post-fact-card-wrap .fact-card-wrapper {
     max-width: 100%;
     width: 100%;
-  }
-
-  /* Remove the 52px indent on the user-location row inside fact posts */
-  .following-post--fact .comment-user-info {
-    margin-left: 0;
   }
 
   /* Tighten the attribution row below the avatar */

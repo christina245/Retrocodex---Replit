@@ -617,18 +617,20 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
         {hasAttribution && (
           <div className="following-post-attribution">
             <img src={avatarSrc!} alt={item.username} className="following-post-avatar" />
-            <div className="following-post-header">
-              <div className="following-post-header-text">
-                <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
-                  {item.username}
-                </Link>
-                <span className="following-post-action">submitted a topic</span>
+            <div className="following-post-attribution-body">
+              <div className="following-post-header">
+                <div className="following-post-header-text">
+                  <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
+                    {item.username}
+                  </Link>
+                  <span className="following-post-action">submitted a topic</span>
+                </div>
+                <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
               </div>
-              <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
+              <FeedUserLocation item={item} index={index} />
             </div>
           </div>
         )}
-        <FeedUserLocation item={item} index={index} />
         <div className="following-post-fact-card-wrap">
           <FactCard
             fact={fact}
