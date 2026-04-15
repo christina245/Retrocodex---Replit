@@ -13,7 +13,7 @@ function init() {
   initialized = true;
 }
 
-const FROM = () => process.env.EMAIL_FROM || "noreply@retrocodex.com";
+const FROM = () => process.env.EMAIL_FROM2 || process.env.EMAIL_FROM || "noreply@theretrocodex.com";
 const BASE_URL = () => (process.env.APP_URL || "https://theretrocodex.com").replace(/\/$/, "");
 
 const VERIFICATION_TEMPLATE_ID          = "d-4fb365d89cf2451cac18a51f55a5383f";
