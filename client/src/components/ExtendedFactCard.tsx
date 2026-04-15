@@ -4,6 +4,10 @@ import ReactMarkdown from "react-markdown";
 import rehypeSanitize from "rehype-sanitize";
 import "./ExtendedFactCard.css";
 
+function normalizeMarkdown(text: string): string {
+  return text.replace(/\n(?!\n)/g, "\n\n");
+}
+
 interface Source {
   id: string;
   citation: string;
@@ -63,7 +67,7 @@ export default function ExtendedFactCard({ fact, onSave, isSaved }: ExtendedFact
                   ),
                 }}
               >
-                {fact.details}
+                {normalizeMarkdown(fact.details)}
               </ReactMarkdown>
             </div>
           </div>
@@ -87,7 +91,7 @@ export default function ExtendedFactCard({ fact, onSave, isSaved }: ExtendedFact
                     ),
                   }}
                 >
-                  {fact.moreDetails}
+                  {normalizeMarkdown(fact.moreDetails)}
                 </ReactMarkdown>
               </div>
             )}

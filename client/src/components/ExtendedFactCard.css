@@ -105,6 +105,16 @@
   letter-spacing: normal;
 }
 
+.fact-details p,
+.fact-more-details p {
+  margin: 0 0 12px 0;
+}
+
+.fact-details p:last-child,
+.fact-more-details p:last-child {
+  margin-bottom: 0;
+}
+
 .fact-details a,
 .fact-more-details a {
   color: #2C2C2C;
