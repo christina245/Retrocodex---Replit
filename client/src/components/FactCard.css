@@ -240,6 +240,16 @@
   background: none;
 }
 
+@media (max-width: 900px) {
+  .fact-card-wrapper {
+    width: 100%;
+  }
+
+  .fact-card {
+    width: 100%;
+  }
+}
+
 /* Mobile layout */
 @media (max-width: 768px) {
   .fact-card-wrapper {

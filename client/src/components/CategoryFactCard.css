@@ -236,11 +236,22 @@
   stroke: #FF5353;
 }
 
+@media (max-width: 900px) {
+  .category-fact-card-wrapper {
+    width: 100%;
+    margin: 0;
+  }
+
+  .category-fact-card {
+    width: 100%;
+  }
+}
+
 /* Mobile layout - photo on right like homepage */
 @media (max-width: 768px) {
   .category-fact-card-wrapper {
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
   }
 
   .category-fact-card {

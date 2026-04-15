@@ -2191,7 +2191,7 @@ a.following-post-fact-link:hover {
 
 @media (max-width: 900px) {
   .user-dashboard-content {
-    padding: 1rem;
+    padding: 1rem 8px;
   }
 
   .dashboard-two-column {
