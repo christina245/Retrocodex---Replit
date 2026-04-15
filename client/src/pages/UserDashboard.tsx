@@ -41,8 +41,8 @@ type ProfileActivityTab = "submissions" | "edits" | "comments";
 type SavedTab = "facts" | "articles" | "comments";
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string; tooltip?: string }[] = [
-  { id: "for-you", label: "For You", tooltip: "New topics and articles based on your interests." },
   { id: "following", label: "Following", tooltip: "Activity from users you follow." },
+  { id: "for-you", label: "For You", tooltip: "New topics and articles based on your interests." },
   { id: "local", label: "Local", tooltip: "Activity from users currently based in your current or past locations." },
   { id: "fact-updates", label: "Fact Updates", tooltip: "Updates from facts you follow." },
 ];
@@ -788,7 +788,7 @@ export default function UserDashboard() {
   const [isSavingBio, setIsSavingBio] = useState(false);
   const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
   const [editProfilePhoto, setEditProfilePhoto] = useState(user?.profilePhoto || "");
-  const [feedTab, setFeedTab] = useState<DashboardTab>("for-you");
+  const [feedTab, setFeedTab] = useState<DashboardTab>("following");
   const [localPage, setLocalPage] = useState(1);
   const [hoveredFeedTab, setHoveredFeedTab] = useState<DashboardTab | null>(null);
   const [sideTab, setSideTab] = useState<SideTab>(initialTab);
