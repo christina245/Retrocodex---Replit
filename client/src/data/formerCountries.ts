@@ -37,12 +37,13 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1501',
     presentNations: 'Iran',
     endedBy: 'Renamed',
-    summary: `Reza Shah's nationalist agenda sought to shed the Greco-Roman colonial exonym and assert the name Persians had always used domestically. The rename was part of the Pahlavi dynasty's broader drive to modernize and redefine Iran's national identity.`,
+    summary: `A nationalist agenda sought to shed the Greco-Roman colonial exonym of Persia and assert the name Persians had always used domestically. The rename was part of the drive to restore the nation's historical legacy with a name that was relatively free of outside control.`,
+    sourceUrl: 'https://www.historyhit.com/when-did-persia-become-iran-and-why/',
   },
 
   {
     yearEnded: '1938',
-    formerNation: 'Austrian First Republic',
+    formerNation: 'First Austrian Republic',
     yearEstablished: '1919',
     presentNations: 'Germany (annexed); independent Austria restored 1945',
     endedBy: 'Annexed',
@@ -56,17 +57,11 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1238',
     presentNations: 'Thailand',
     endedBy: 'Renamed',
-    summary: `Prime Minister Phibun's ultra-nationalist government sought to promote an exclusive Tai ethnic identity and shed the multi-ethnic colonial-era name, aiming to symbolically unify all Tai-speaking peoples under a single national idea.`,
+    summary: `The Thai dictator Phibun sought to shed the antiquated colonial name. The name Thailand was also purposely chosen to be exclusionary to the Chinese population within the country.`,
+    sourceUrl: 'https://www.historytoday.com/archive/months-past/siam-becomes-thailand'
   },
 
-  {
-    yearEnded: '1939',
-    formerNation: 'Second Spanish Republic',
-    yearEstablished: '1931',
-    presentNations: 'Spain (Francoist State, 1939–1975; Kingdom of Spain thereafter)',
-    endedBy: 'Military Defeat',
-    summary: `Deep ideological polarization, a hostile military, Church opposition to republican secularism, and direct military intervention by Nazi Germany and Fascist Italy on Franco's behalf overwhelmed the young democracy before it could take root.`,
-  },
+ 
 
   // ── 1940s ──────────────────────────────────────────────────────────────────
 
@@ -75,9 +70,10 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Manchukuo',
     altName: 'State of Manchuria / Manchukuo Empire',
     yearEstablished: '1932',
-    presentNations: "People's Republic of China (Manchuria / Northeast China)",
+    presentNations: "People's Republic of China",
     endedBy: 'Military Defeat',
-    summary: `Manchukuo had no independent existence — it was sustained entirely by Japanese military power and had no popular legitimacy. When Japan was defeated, the puppet state instantly collapsed; it had no means of self-defence or governance of its own.`,
+    summary: `Manchukuo was a puppet state in northeastern China controlled by the Japanese. It collapsed when Japan was defeated in World War II in 1945.`,
+    sourceUrl: 'https://www.nippon.com/en/in-depth/d00815/'
   },
 
   {
