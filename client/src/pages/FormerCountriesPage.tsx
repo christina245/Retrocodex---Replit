@@ -59,7 +59,7 @@ export default function FormerCountriesPage() {
     <>
       <SEO
         title="List of Former Countries (1930–2026) | Retrocodex"
-        description="What countries existed during your lifetime that no longer do? Sort this list by 'Year Ended' to see which countries you may have been taught in school that dissolved, merged, became independent, or was renamed since you graduated."
+        description="A list of former countries sorted by the year they ceased to exist."
       />
       <Header onMenuToggle={() => setMenuOpen(true)} />
       <HamburgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
@@ -69,9 +69,7 @@ export default function FormerCountriesPage() {
         <div className="fc-content">
           <h1 className="fc-title">List of former countries from 1930-2026</h1>
           <p className="fc-description">
-            What countries existed during your lifetime that no longer do? Sort this list by
-            &lsquo;Year Ended&rsquo; to see which countries you may have been taught in school
-            that dissolved, merged, became independent, or was renamed since you graduated.
+            What countries were you taught about in school that no longer exist? Here's a list sorted by the year they merged, dissolved, or were simply renamed.
           </p>
 
           <div className="fc-table-scroll">
@@ -134,7 +132,7 @@ export default function FormerCountriesPage() {
                         {row.yearEstablished}
                       </td>
 
-                      <td className="fc-td fc-td-present-nations" data-testid={`text-present-nations-${idx}`}>
+                      <td className="fc-td" data-testid={`text-present-nations-${idx}`}>
                         {row.presentNations}
                       </td>
 

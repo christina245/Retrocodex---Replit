@@ -1,6 +1,16 @@
 /**
- * formerCountries.ts
+ * former-countries-1930-2026.ts
  * Data for the "List of Former Countries (1930–2026)" page on theretrocodex.com
+ *
+ * Ended By terms map to the colour-coded legend:
+ *   Split / Dissolved        →  'Split' | 'Dissolved'
+ *   Merged / Unified         →  'Merged'
+ *   Reunified                →  'Reunified'
+ *   Annexed                  →  'Annexed'
+ *   Military Defeat          →  'Military Defeat' | 'Independence War' | 'Independence Transition' | 'Reintegrated'
+ *   Renamed                  →  'Renamed'
+ *
+ * Summary field: max 250 characters. Focuses on the key reasons WHY the nation ceased to exist.
  */
 
 export type EndedBy =
@@ -16,14 +26,18 @@ export type EndedBy =
   | 'Renamed';
 
 export interface FormerCountry {
+  /** Year (or year range) the nation ceased to exist, e.g. "1991" or "1991–1992" */
   yearEnded: string;
   formerNation: string;
+  /** Optional formal or alternative name */
   altName?: string;
+  /** Year the nation was established or first internationally recognised */
   yearEstablished: string;
+  /** Present-day nation(s) that occupy the same territory */
   presentNations: string;
   endedBy: EndedBy;
+  /** Max 250 characters. Focuses on the key reasons WHY the nation ceased to exist. */
   summary: string;
-  sourceUrl?: string;
 }
 
 export const formerCountries: FormerCountry[] = [
@@ -75,7 +89,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Manchukuo',
     altName: 'State of Manchuria / Manchukuo Empire',
     yearEstablished: '1932',
-    presentNations: "People's Republic of China (Manchuria / Northeast China)",
+    presentNations: `People's Republic of China (Manchuria / Northeast China)`,
     endedBy: 'Military Defeat',
     summary: `Manchukuo had no independent existence — it was sustained entirely by Japanese military power and had no popular legitimacy. When Japan was defeated, the puppet state instantly collapsed; it had no means of self-defence or governance of its own.`,
   },
@@ -125,7 +139,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Tibet',
     altName: 'De facto independent state, 1913–1950',
     yearEstablished: '1913',
-    presentNations: "People's Republic of China (Tibet Autonomous Region)",
+    presentNations: `People's Republic of China (Tibet Autonomous Region)`,
     endedBy: 'Annexed',
     summary: `China had never accepted Tibetan independence as legitimate. Tibet's military weakness, geographic isolation, and complete lack of international support — no major power was willing to confront Mao's China over Tibet — left it unable to resist.`,
   },
@@ -163,7 +177,7 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1964',
     formerNation: 'Zanzibar',
-    altName: "People's Republic of Zanzibar",
+    altName: `People's Republic of Zanzibar`,
     yearEstablished: '1963',
     presentNations: 'United Republic of Tanzania (retains significant internal autonomy)',
     endedBy: 'Merged',
@@ -274,7 +288,7 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1989',
     formerNation: 'Kampuchea',
-    altName: "Democratic Kampuchea / People's Republic of Kampuchea",
+    altName: `Democratic Kampuchea / People's Republic of Kampuchea`,
     yearEstablished: '1975',
     presentNations: 'Kingdom of Cambodia',
     endedBy: 'Renamed',
@@ -296,7 +310,7 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1990',
     formerNation: 'South Yemen',
-    altName: "People's Democratic Republic of Yemen",
+    altName: `People's Democratic Republic of Yemen`,
     yearEstablished: '1967',
     presentNations: 'Republic of Yemen',
     endedBy: 'Merged',
@@ -388,7 +402,7 @@ export const formerCountries: FormerCountry[] = [
     yearEnded: '2010',
     formerNation: 'Netherlands Antilles',
     yearEstablished: '1954',
-    presentNations: "Curaçao, Sint Maarten (autonomous countries); Bonaire, Sint Eustatius, Saba (Dutch special municipalities)",
+    presentNations: `Curaçao, Sint Maarten (autonomous countries); Bonaire, Sint Eustatius, Saba (Dutch special municipalities)`,
     endedBy: 'Dissolved',
     summary: `The six islands had fundamentally different sizes, economies, and political interests that made collective governance unworkable. Curaçao wanted autonomy; smaller islands wanted direct Dutch protection. No federation could satisfy all parties.`,
   },

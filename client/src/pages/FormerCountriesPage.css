@@ -18,7 +18,7 @@
 .fc-title {
   font-family: 'Public Sans', sans-serif;
   font-size: 40px;
-  font-weight: 800;
+  font-weight: 900;
   color: #2c2c2c;
   margin: 0 0 16px;
   line-height: 1.25;
@@ -26,7 +26,7 @@
 
 .fc-description {
   font-family: 'Public Sans', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   color: #2c2c2c;
   line-height: 1.7;
@@ -131,6 +131,10 @@
   white-space: nowrap;
 }
 
+.fc-td-nation {
+  max-width: 200px;
+}
+
 /* ── Former nation cell ─────────────────────────────────────────── */
 
 .fc-nation-bold {
@@ -150,12 +154,6 @@
 
 .fc-nation-link:hover {
   text-decoration-color: #2c2c2c;
-}
-
-/* ── Present nations column ─────────────────────────────────────── */
-
-.fc-td-present-nations {
-  max-width: 160px;
 }
 
 /* ── Summary column ─────────────────────────────────────────────── */
