@@ -731,6 +731,8 @@ export function CommentsSection({ factId, pageId, onLoginClick }: CommentsSectio
 
   const tree = buildTree(comments);
 
+  if (!entityId) return null;
+
   return (
     <div className="comments-section">
       <div className="comment-input-area">
