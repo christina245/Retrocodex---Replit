@@ -44,7 +44,7 @@ export default function FormerCountriesPage() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState("");
 
-  const { data: pageData } = useQuery<Page>({
+  const { data: pageData, isError: pageError } = useQuery<Page>({
     queryKey: ["/api/pages/by-slug/former-countries"],
   });
 
@@ -165,12 +165,14 @@ export default function FormerCountriesPage() {
 
           <div className="fc-below-grid">
             <div className="fc-comments-col" id="comments">
-              {pageData?.id && (
+              {pageData?.id ? (
                 <CommentsSection
                   pageId={pageData.id}
                   onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
                 />
-              )}
+              ) : pageError ? (
+                <p className="text-sm text-muted-foreground">Comments are temporarily unavailable.</p>
+              ) : null}
             </div>
             <div className="fc-sidebar-col">
               <CategoryLinks categories={["HISTORY"]} />

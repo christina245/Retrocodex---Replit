@@ -25,6 +25,18 @@ ALTER TABLE comments ALTER COLUMN fact_id DROP NOT NULL;
 -- 4. Add page_id FK column to comments
 ALTER TABLE comments ADD COLUMN IF NOT EXISTS page_id VARCHAR REFERENCES pages(id);
 
+-- 4a. Add DB-level XOR constraint: exactly one of fact_id or page_id must be set
+--     This protects data integrity against direct SQL writes bypassing application validation
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'comments_fact_xor_page'
+  ) THEN
+    ALTER TABLE comments ADD CONSTRAINT comments_fact_xor_page
+      CHECK ((fact_id IS NOT NULL) <> (page_id IS NOT NULL));
+  END IF;
+END $$;
+
 -- 5. Re-anchor the former-countries comment(s) from the stub fact to the page
 --    (stub fact slug was 'former-countries-page'; update any comments that pointed to it)
 UPDATE comments
