@@ -10,7 +10,8 @@ import exclamationImg from "@assets/alert.png";
 import "./CommentsSection.css";
 
 interface CommentsSectionProps {
-  factId: string;
+  factId?: string;
+  pageId?: string;
   onLoginClick?: (msg: string) => void;
 }
 
@@ -585,7 +586,7 @@ function CommentNode({
 
 // ─── Comments section (root) ──────────────────────────────────────────────────
 
-export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) {
+export function CommentsSection({ factId, pageId, onLoginClick }: CommentsSectionProps) {
   const { user, isLoggedIn } = useAuth();
   const [inputBody, setInputBody] = useState("");
   const [inputError, setInputError] = useState<string | null>(null);
@@ -595,21 +596,27 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
   const [pendingEdit, setPendingEdit] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const entityId = factId ?? pageId;
+  const apiBase = factId ? `/api/facts/${factId}/comments` : `/api/pages/${pageId}/comments`;
+  const commentsQueryKey = factId
+    ? ["/api/facts", factId, "comments"]
+    : ["/api/pages", pageId, "comments"];
+
   const { data: comments = [], isLoading } = useQuery<CommentWithUser[]>({
-    queryKey: ["/api/facts", factId, "comments"],
+    queryKey: commentsQueryKey,
     queryFn: async () => {
-      const res = await fetch(`/api/facts/${factId}/comments`);
+      const res = await fetch(apiBase);
       if (!res.ok) throw new Error("Failed to fetch comments");
       return res.json();
     },
-    enabled: !!factId,
+    enabled: !!entityId,
   });
 
   const postMutation = useMutation({
     mutationFn: async (data: { body: string; parentId?: string }) =>
-      apiRequest("POST", `/api/facts/${factId}/comments`, data),
+      apiRequest("POST", apiBase, data),
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+      queryClient.invalidateQueries({ queryKey: commentsQueryKey });
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/facts/popular"] });
       queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
@@ -645,7 +652,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       return apiRequest("DELETE", `/api/comments/${commentId}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+      queryClient.invalidateQueries({ queryKey: commentsQueryKey });
       queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
       queryClient.invalidateQueries({ queryKey: ["/api/facts/popular"] });
       queryClient.invalidateQueries({ queryKey: ["/api/user/saved-facts"] });
@@ -660,7 +667,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       return apiRequest("PATCH", `/api/comments/${id}`, { body });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+      queryClient.invalidateQueries({ queryKey: commentsQueryKey });
       setPendingEdit(null);
     },
     onError: () => setPendingEdit(null),
@@ -672,7 +679,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
       return apiRequest("POST", `/api/comments/${commentId}/upvote`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+      queryClient.invalidateQueries({ queryKey: commentsQueryKey });
       setPendingUpvote(null);
     },
     onError: () => setPendingUpvote(null),
@@ -682,7 +689,7 @@ export function CommentsSection({ factId, onLoginClick }: CommentsSectionProps) 
     mutationFn: async ({ commentId, isSaved }: { commentId: string; isSaved: boolean }) =>
       apiRequest(isSaved ? "DELETE" : "POST", `/api/comments/${commentId}/save`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/facts", factId, "comments"] });
+      queryClient.invalidateQueries({ queryKey: commentsQueryKey });
     },
   });
 

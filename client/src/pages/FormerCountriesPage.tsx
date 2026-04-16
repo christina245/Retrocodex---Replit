@@ -10,7 +10,7 @@ import { SignInModal } from "@/components/SignInModal";
 import { formerCountries, FormerCountry } from "@/data/formerCountries";
 import "./FormerCountriesPage.css";
 
-const FORMER_COUNTRIES_FACT_ID = "ffffffff-0000-0000-0000-000000000001";
+const FORMER_COUNTRIES_PAGE_ID = "97e5dfa9-25bf-4470-8c47-4d8dc8905b6c";
 
 type SortKey = keyof Pick<
   FormerCountry,
@@ -162,7 +162,7 @@ export default function FormerCountriesPage() {
           <div className="fc-below-grid">
             <div className="fc-comments-col" id="comments">
               <CommentsSection
-                factId={FORMER_COUNTRIES_FACT_ID}
+                pageId={FORMER_COUNTRIES_PAGE_ID}
                 onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
               />
             </div>

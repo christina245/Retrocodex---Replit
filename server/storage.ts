@@ -1,6 +1,7 @@
 import { 
   emailSubscriptions, 
   facts,
+  pages,
   blogPosts,
   externalArticles,
   newsletterSubscriptions,
@@ -19,6 +20,7 @@ import {
   type InsertEmailSubscription,
   type Fact,
   type InsertFact,
+  type Page,
   type BlogPost,
   type InsertBlogPost,
   type ExternalArticle,
@@ -98,10 +100,15 @@ export interface IStorage {
   getPollVotesByUser(userId: string): Promise<PollVoteWithFact[]>;
   getPollVoteForFact(userId: string, factId: string): Promise<PollVote | null>;
 
+  // Pages
+  getPageBySlug(slug: string): Promise<Page | undefined>;
+  getPageById(id: string): Promise<Page | undefined>;
+
   // Comments
-  getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]>;
+  getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string | null; factSlug: string | null; factCoverPhoto: string | null; pageSlug: string | null; pageTitle: string | null }[]>;
   getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]>;
-  createComment(userId: string, data: InsertComment & { factId: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser>;
+  getCommentsByPageId(pageId: string, viewerId?: string): Promise<CommentWithUser[]>;
+  createComment(userId: string, data: InsertComment & { factId?: string; pageId?: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser>;
   updateComment(id: string, userId: string, body: string): Promise<boolean>;
   deleteComment(id: string, userId: string, isAdmin: boolean): Promise<boolean>;
   toggleCommentUpvote(commentId: string, userId: string): Promise<{ upvotes: number; isUpvoted: boolean }>;
@@ -115,9 +122,11 @@ export interface IStorage {
     upvotes: number;
     commentCreatedAt: Date;
     savedAt: Date;
-    factMythHeader: string;
-    factSlug: string;
+    factMythHeader: string | null;
+    factSlug: string | null;
     factCoverPhoto: string | null;
+    pageSlug: string | null;
+    pageTitle: string | null;
     commenterUsername: string | null;
     commenterAvatarUrl: string | null;
   }[]>;
@@ -210,8 +219,17 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(facts)
-      .where(ne(facts.slug, "former-countries-page"))
       .orderBy(desc(facts.createdAt));
+  }
+
+  async getPageBySlug(slug: string): Promise<Page | undefined> {
+    const [row] = await db.select().from(pages).where(eq(pages.slug, slug)).limit(1);
+    return row;
+  }
+
+  async getPageById(id: string): Promise<Page | undefined> {
+    const [row] = await db.select().from(pages).where(eq(pages.id, id)).limit(1);
+    return row;
   }
 
   async getFactBySlug(slug: string): Promise<Fact | undefined> {
@@ -535,7 +553,7 @@ export class DatabaseStorage implements IStorage {
     return result || null;
   }
 
-  async getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string; factSlug: string; factCoverPhoto: string | null }[]> {
+  async getCommentsByUserId(userId: string): Promise<{ id: string; body: string; createdAt: Date; upvotes: number; isUpvotedByMe: boolean; factTitle: string | null; factSlug: string | null; factCoverPhoto: string | null; pageSlug: string | null; pageTitle: string | null }[]> {
     const rows = await db
       .select({
         id: comments.id,
@@ -545,9 +563,12 @@ export class DatabaseStorage implements IStorage {
         factTitle: facts.mythHeader,
         factSlug: facts.slug,
         factCoverPhoto: facts.coverPhoto,
+        pageSlug: pages.slug,
+        pageTitle: pages.title,
       })
       .from(comments)
-      .innerJoin(facts, eq(comments.factId, facts.id))
+      .leftJoin(facts, eq(comments.factId, facts.id))
+      .leftJoin(pages, eq(comments.pageId, pages.id))
       .where(and(eq(comments.userId, userId), eq(comments.deletedByAdmin, false)))
       .orderBy(desc(comments.createdAt));
 
@@ -560,11 +581,16 @@ export class DatabaseStorage implements IStorage {
     return rows.map(row => ({ ...row, isUpvotedByMe: upvotedSet.has(row.id) }));
   }
 
-  async getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]> {
+  private async _fetchCommentsWithUser(
+    where: any,
+    viewerId?: string,
+  ): Promise<CommentWithUser[]> {
+    // shared logic — caller passes a where clause built from eq(comments.factId, ...) or eq(comments.pageId, ...)
     const rows = await db
       .select({
         id: comments.id,
         factId: comments.factId,
+        pageId: comments.pageId,
         userId: comments.userId,
         parentId: comments.parentId,
         body: comments.body,
@@ -583,7 +609,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(comments)
       .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
-      .where(eq(comments.factId, factId))
+      .where(where)
       .orderBy(comments.createdAt);
 
     const upvotedSet = new Set<string>();
@@ -603,6 +629,8 @@ export class DatabaseStorage implements IStorage {
 
     return rows.map(r => ({
       ...r,
+      factId: r.factId ?? null,
+      pageId: r.pageId ?? null,
       userId: r.userId ?? null,
       username: r.username ?? null,
       deletedByAdmin: r.deletedByAdmin ?? false,
@@ -619,22 +647,38 @@ export class DatabaseStorage implements IStorage {
     }));
   }
 
-  async createComment(userId: string, data: InsertComment & { factId: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser> {
+  async getCommentsByFactId(factId: string, viewerId?: string): Promise<CommentWithUser[]> {
+    return this._fetchCommentsWithUser(eq(comments.factId, factId), viewerId);
+  }
+
+  async getCommentsByPageId(pageId: string, viewerId?: string): Promise<CommentWithUser[]> {
+    return this._fetchCommentsWithUser(eq(comments.pageId, pageId), viewerId);
+  }
+
+  async createComment(userId: string, data: InsertComment & { factId?: string; pageId?: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser> {
+    if (!data.factId && !data.pageId) {
+      throw new Error("Either factId or pageId is required");
+    }
     if (data.parentId) {
       const [parent] = await db
-        .select({ id: comments.id, factId: comments.factId })
+        .select({ id: comments.id, factId: comments.factId, pageId: comments.pageId })
         .from(comments)
         .where(eq(comments.id, data.parentId))
         .limit(1);
-      if (!parent || parent.factId !== data.factId) {
-        throw new Error("Invalid parentId: parent comment does not exist or belongs to a different fact");
+      if (!parent) throw new Error("Invalid parentId: parent comment does not exist");
+      if (data.factId && parent.factId !== data.factId) {
+        throw new Error("Invalid parentId: parent comment belongs to a different fact");
+      }
+      if (data.pageId && parent.pageId !== data.pageId) {
+        throw new Error("Invalid parentId: parent comment belongs to a different page");
       }
     }
 
     const [comment] = await db
       .insert(comments)
       .values({
-        factId: data.factId,
+        factId: data.factId ?? null,
+        pageId: data.pageId ?? null,
         userId,
         parentId: data.parentId ?? null,
         body: data.body,
@@ -776,9 +820,11 @@ export class DatabaseStorage implements IStorage {
     upvotes: number;
     commentCreatedAt: Date;
     savedAt: Date;
-    factMythHeader: string;
-    factSlug: string;
+    factMythHeader: string | null;
+    factSlug: string | null;
     factCoverPhoto: string | null;
+    pageSlug: string | null;
+    pageTitle: string | null;
     commenterUsername: string | null;
     commenterAvatarUrl: string | null;
   }[]> {
@@ -793,13 +839,16 @@ export class DatabaseStorage implements IStorage {
         factMythHeader: facts.mythHeader,
         factSlug: facts.slug,
         factCoverPhoto: facts.coverPhoto,
+        pageSlug: pages.slug,
+        pageTitle: pages.title,
         commenterUsername: userProfiles.username,
         commenterAvatarUrl: userProfiles.avatarUrl,
         deletedByAdmin: comments.deletedByAdmin,
       })
       .from(savedComments)
       .innerJoin(comments, eq(comments.id, savedComments.commentId))
-      .innerJoin(facts, eq(facts.id, comments.factId))
+      .leftJoin(facts, eq(facts.id, comments.factId))
+      .leftJoin(pages, eq(pages.id, comments.pageId))
       .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
       .where(and(eq(savedComments.userId, userId), eq(comments.deletedByAdmin, false)))
       .orderBy(desc(savedComments.savedAt));
@@ -811,9 +860,11 @@ export class DatabaseStorage implements IStorage {
       upvotes: r.upvotes,
       commentCreatedAt: r.commentCreatedAt,
       savedAt: r.savedAt,
-      factMythHeader: r.factMythHeader,
-      factSlug: r.factSlug,
+      factMythHeader: r.factMythHeader ?? null,
+      factSlug: r.factSlug ?? null,
       factCoverPhoto: r.factCoverPhoto ?? null,
+      pageSlug: r.pageSlug ?? null,
+      pageTitle: r.pageTitle ?? null,
       commenterUsername: r.commenterUsername ?? null,
       commenterAvatarUrl: r.commenterAvatarUrl ?? null,
     }));
@@ -1013,10 +1064,14 @@ export class DatabaseStorage implements IStorage {
         factSlug: facts.slug,
         factTitle: facts.mythHeader,
         factCoverPhoto: facts.coverPhoto,
+        pageId: pages.id,
+        pageSlug: pages.slug,
+        pageTitle: pages.title,
       })
       .from(comments)
       .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
       .leftJoin(facts, eq(comments.factId, facts.id))
+      .leftJoin(pages, eq(comments.pageId, pages.id))
       .where(inArray(comments.userId, followingIds))
       .orderBy(desc(comments.createdAt))
       .limit(limit);
@@ -1063,6 +1118,9 @@ export class DatabaseStorage implements IStorage {
       factSlug: c.factSlug ?? undefined,
       factTitle: c.factTitle ?? undefined,
       factCoverPhoto: c.factCoverPhoto ?? undefined,
+      pageId: c.pageId ?? undefined,
+      pageSlug: c.pageSlug ?? undefined,
+      pageTitle: c.pageTitle ?? undefined,
       commentUpvotes: c.upvotes ?? 0,
       commentIsUpvotedByMe: upvotedCommentIds.has(c.id),
     }));
@@ -1159,10 +1217,14 @@ export class DatabaseStorage implements IStorage {
         factSlug: facts.slug,
         factTitle: facts.mythHeader,
         factCoverPhoto: facts.coverPhoto,
+        pageId: pages.id,
+        pageSlug: pages.slug,
+        pageTitle: pages.title,
       })
       .from(comments)
       .leftJoin(userProfiles, eq(comments.userId, userProfiles.id))
       .leftJoin(facts, eq(comments.factId, facts.id))
+      .leftJoin(pages, eq(comments.pageId, pages.id))
       .where(and(inArray(comments.userId, localUserIds), ne(comments.userId, userId)))
       .orderBy(desc(comments.createdAt));
 
@@ -1213,6 +1275,9 @@ export class DatabaseStorage implements IStorage {
       factSlug: c.factSlug ?? undefined,
       factTitle: c.factTitle ?? undefined,
       factCoverPhoto: c.factCoverPhoto ?? undefined,
+      pageId: c.pageId ?? undefined,
+      pageSlug: c.pageSlug ?? undefined,
+      pageTitle: c.pageTitle ?? undefined,
       commentUpvotes: c.upvotes ?? 0,
       commentIsUpvotedByMe: localUpvotedCommentIds.has(c.id),
       userCurrentLocation: c.currentLocation ?? "",

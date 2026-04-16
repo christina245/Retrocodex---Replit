@@ -455,10 +455,21 @@ export type PollVoteWithFact = PollVote & {
   factCoverPhoto: string | null;
 };
 
-// Comments table — user comments on facts
+// Pages table — content pages that are not facts (e.g. Former Countries)
+export const pages = pgTable("pages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  slug: varchar("slug").notNull().unique(),
+  title: text("title").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export type Page = typeof pages.$inferSelect;
+
+// Comments table — user comments on facts OR pages
 export const comments = pgTable("comments", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  factId: varchar("fact_id").notNull().references(() => facts.id, { onDelete: "cascade" }),
+  factId: varchar("fact_id").references(() => facts.id, { onDelete: "cascade" }),
+  pageId: varchar("page_id").references(() => pages.id, { onDelete: "cascade" }),
   userId: varchar("user_id").references(() => userAccounts.id, { onDelete: "set null" }),
   parentId: varchar("parent_id"),
   body: text("body").notNull(),
@@ -523,7 +534,8 @@ export type SavedComment = typeof savedComments.$inferSelect;
 
 export type CommentWithUser = {
   id: string;
-  factId: string;
+  factId: string | null;
+  pageId: string | null;
   userId: string | null;
   parentId: string | null;
   body: string;
@@ -619,6 +631,9 @@ export type FeedItem = {
   factSlug?: string;
   factTitle?: string;
   factCoverPhoto?: string | null;
+  pageId?: string;
+  pageSlug?: string;
+  pageTitle?: string;
   // fact fields (For You feed)
   factCategories?: string[];
   factCoverPhoto2?: string | null;

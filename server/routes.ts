@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, insertCommentReportSchema, commentReports, comments, facts, factFollows, passwordResetTokens } from "@shared/schema";
+import { insertEmailSubscriptionSchema, insertFactSchema, insertBlogPostSchema, insertNewsletterSubscriptionSchema, userAccounts, userProfiles, registerSchema, updateProfileSchema, OTHER_SUBCATEGORIES, factSubmissions, insertFactSubmissionSchema, insertExternalArticleSchema, externalArticles, insertCommentSchema, insertCommentReportSchema, commentReports, comments, facts, factFollows, passwordResetTokens, pages } from "@shared/schema";
 import { z } from "zod";
 import multer from "multer";
 import path from "path";
@@ -2563,6 +2563,91 @@ Sitemap: ${SITE_URL}/sitemap.xml
         return res.status(400).json({ message: error.message });
       }
       console.error("POST /api/facts/:id/comments error:", error);
+      res.status(500).json({ message: "Failed to post comment" });
+    }
+  });
+
+  // GET /api/pages/:id/comments — fetch all comments for a page (public; viewer used for upvote status)
+  app.get("/api/pages/:id/comments", async (req, res) => {
+    try {
+      const pageId = req.params.id;
+      const viewerId = req.session?.userId;
+      const result = await storage.getCommentsByPageId(pageId, viewerId);
+      return res.json(result);
+    } catch (error) {
+      console.error("GET /api/pages/:id/comments error:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
+  // POST /api/pages/:id/comments — post a new comment on a page
+  app.post("/api/pages/:id/comments", requireUser, async (req, res) => {
+    try {
+      const pageId = req.params.id;
+      const data = insertCommentSchema.parse(req.body);
+
+      const modResult = await moderateText(data.body);
+      if (modResult?.flagged) {
+        return res.status(400).json({ message: "Your comment was flagged by our content filter. Please review our community guidelines and try again." });
+      }
+
+      const comment = await storage.createComment(req.session.userId!, {
+        ...data,
+        pageId,
+        needsReview: modResult?.needsReview ?? false,
+        aiCategories: modResult?.needsReview ? modResult.categories : undefined,
+      });
+
+      // Fire-and-forget: reply notification email if this is a reply
+      (async () => {
+        try {
+          if (!data.parentId) return;
+          const commenterId = req.session.userId!;
+          const [commenterProfile] = await db.select({ username: userProfiles.username, avatarUrl: userProfiles.avatarUrl })
+            .from(userProfiles)
+            .where(eq(userProfiles.id, commenterId))
+            .limit(1);
+          if (!commenterProfile?.username) return;
+
+          const [parentComment] = await db.select({ userId: comments.userId, body: comments.body })
+            .from(comments)
+            .where(eq(comments.id, data.parentId))
+            .limit(1);
+          if (!parentComment?.userId || parentComment.userId === commenterId) return;
+          const [parentAuthorAccount] = await db.select({ email: userAccounts.email })
+            .from(userAccounts)
+            .where(eq(userAccounts.id, parentComment.userId))
+            .limit(1);
+          if (!parentAuthorAccount?.email) return;
+
+          const [pageRow] = await db.select({ title: pages.title, slug: pages.slug })
+            .from(pages)
+            .where(eq(pages.id, pageId))
+            .limit(1);
+
+          await sendNewReplyEmail(parentAuthorAccount.email, {
+            replierUsername: commenterProfile.username,
+            replierAvatarUrl: commenterProfile.avatarUrl ?? null,
+            factMythHeader: pageRow?.title ?? "Former Countries",
+            replyBody: comment.body,
+            parentBody: parentComment.body,
+            factUrl: `${process.env.PUBLIC_URL ?? "https://theretrocodex.com"}/${pageRow?.slug ?? "former-countries"}`,
+            dashboardUrl: buildDashboardUrl(),
+          });
+        } catch (mailErr) {
+          console.error("[sendgrid] Page comment reply email failed:", mailErr);
+        }
+      })();
+
+      return res.status(201).json(comment);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
+      }
+      if (error instanceof Error && error.message.startsWith("Invalid parentId")) {
+        return res.status(400).json({ message: error.message });
+      }
+      console.error("POST /api/pages/:id/comments error:", error);
       res.status(500).json({ message: "Failed to post comment" });
     }
   });

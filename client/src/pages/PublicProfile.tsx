@@ -180,9 +180,11 @@ export default function PublicProfile() {
     createdAt: string;
     upvotes: number;
     isUpvotedByMe?: boolean;
-    factTitle: string;
-    factSlug: string;
+    factTitle: string | null;
+    factSlug: string | null;
     factCoverPhoto: string | null;
+    pageSlug: string | null;
+    pageTitle: string | null;
   };
 
   const { data: submissionsData, isLoading: submissionsLoading } = useQuery<SubmissionRow[]>({
@@ -451,21 +453,21 @@ export default function PublicProfile() {
                       <div className="public-comment-entry" key={c.id} data-testid={`public-comment-${c.id}`}>
                         <div className="following-post-body-content">
                           <div className="following-post-body-left">
-                            <Link href={c.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${c.factSlug}`} className="following-post-link">
-                              <p className="fact-myth">{c.factSlug === "former-countries-page" ? c.factTitle : `"${c.factTitle}"`}</p>
+                            <Link href={c.pageSlug ? `/${c.pageSlug}` : `/fact/${c.factSlug}`} className="following-post-link">
+                              <p className="fact-myth">{c.pageSlug ? (c.pageTitle ?? c.factTitle) : `"${c.factTitle}"`}</p>
                             </Link>
                             <p className="following-plain-comment" data-testid={`public-comment-text-${c.id}`}>{c.body}</p>
                             <span className="public-comment-timestamp" data-testid={`public-comment-time-${c.id}`}>{formatRelativeTime(c.createdAt)}</span>
                           </div>
                           {c.factCoverPhoto && (
-                            <Link href={c.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${c.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-public-comment-${c.id}`}>
+                            <Link href={c.pageSlug ? `/${c.pageSlug}` : `/fact/${c.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-public-comment-${c.id}`}>
                               <img src={c.factCoverPhoto} alt="" className="following-post-cover-photo" />
                             </Link>
                           )}
                         </div>
                         <div className="comment-actions">
                           <Link
-                            href={c.factSlug === "former-countries-page" ? "/former-countries#comments" : `/fact/${c.factSlug}#comments`}
+                            href={c.pageSlug ? `/${c.pageSlug}#comments` : `/fact/${c.factSlug}#comments`}
                             className="comment-action"
                             data-testid={`link-profile-reply-${c.id}`}
                           >

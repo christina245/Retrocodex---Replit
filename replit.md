@@ -109,9 +109,11 @@ Preferred communication style: Simple, everyday language.
 - `email_subscriptions`: Captures user emails with source tracking ('signup-banner' or 'save-modal')
 - `newsletter_subscriptions`: Separate table for newsletter signups (distinct from account emails)
 - `facts`: Fact entries with title, slug, coverPhoto, categories (array), subcategory, factFilters, searchTags, featured, betaOnly, isTrending, isDebated (for homepage tab filtering), mythHeader, mythDetails, truthHeader, truthDetails, sources (JSON), timeline (JSON), nuances (JSON)
+- `pages`: Non-fact admin pages with slug, title, description. Used for standalone pages like Former Countries (`slug: "former-countries"`, UUID: `97e5dfa9-25bf-4470-8c47-4d8dc8905b6c`). Comments attach via `pageId` FK rather than `factId`.
 - `blog_posts`: WordPress-style blog posts with title, slug, summary, coverImage, category, tags (array), content (rich text), authorName, authorType (Staff/Guest), authorLink, authorPhoto, heroFeatured, published status, publishedAt, relatedManualIds (optional array for manual related article selection)
 - `users`: Planned table for future user authentication (currently unused)
 - `saved_facts`: User-fact bookmarks with `userId` (FK → user_accounts) and `factId` (FK → facts). Unique constraint on (userId, factId). API: `GET /api/user/saved-facts`, `POST /api/user/saved-facts`, `DELETE /api/user/saved-facts/:factId`
+- `comments`: Now supports both fact comments (`factId` nullable FK → facts) and page comments (`pageId` nullable FK → pages). Exactly one of factId or pageId must be set.
 - UUID primary keys using PostgreSQL's `gen_random_uuid()`
 - Timestamps with automatic `defaultNow()` for creation tracking
 
