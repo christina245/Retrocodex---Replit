@@ -596,11 +596,19 @@ export function CommentsSection({ factId, pageId, onLoginClick }: CommentsSectio
   const [pendingEdit, setPendingEdit] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  if (process.env.NODE_ENV !== "production" && !factId && !pageId) {
+    console.warn("CommentsSection: either factId or pageId must be provided");
+  }
+
   const entityId = factId ?? pageId;
-  const apiBase = factId ? `/api/facts/${factId}/comments` : `/api/pages/${pageId}/comments`;
+  const apiBase = factId
+    ? `/api/facts/${factId}/comments`
+    : pageId
+    ? `/api/pages/${pageId}/comments`
+    : "";
   const commentsQueryKey = factId
     ? ["/api/facts", factId, "comments"]
-    : ["/api/pages", pageId, "comments"];
+    : ["/api/pages", pageId ?? "__none__", "comments"];
 
   const { data: comments = [], isLoading } = useQuery<CommentWithUser[]>({
     queryKey: commentsQueryKey,
