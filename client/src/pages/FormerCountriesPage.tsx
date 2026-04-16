@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Header } from "@/components/Header";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
@@ -8,9 +9,8 @@ import { CommentsSection } from "@/components/CommentsSection";
 import { CategoryLinks } from "@/components/CategoryLinks";
 import { SignInModal } from "@/components/SignInModal";
 import { formerCountries, FormerCountry } from "@/data/formerCountries";
+import type { Page } from "@shared/schema";
 import "./FormerCountriesPage.css";
-
-const FORMER_COUNTRIES_PAGE_ID = "97e5dfa9-25bf-4470-8c47-4d8dc8905b6c";
 
 type SortKey = keyof Pick<
   FormerCountry,
@@ -43,6 +43,10 @@ export default function FormerCountriesPage() {
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState("");
+
+  const { data: pageData } = useQuery<Page>({
+    queryKey: ["/api/pages/by-slug/former-countries"],
+  });
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -161,10 +165,12 @@ export default function FormerCountriesPage() {
 
           <div className="fc-below-grid">
             <div className="fc-comments-col" id="comments">
-              <CommentsSection
-                pageId={FORMER_COUNTRIES_PAGE_ID}
-                onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
-              />
+              {pageData?.id && (
+                <CommentsSection
+                  pageId={pageData.id}
+                  onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
+                />
+              )}
             </div>
             <div className="fc-sidebar-col">
               <CategoryLinks categories={["HISTORY"]} />

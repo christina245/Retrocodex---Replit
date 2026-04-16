@@ -10,14 +10,14 @@ CREATE TABLE IF NOT EXISTS pages (
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- 2. Seed the Former Countries page
+-- 2. Seed the Former Countries page (idempotent — skip if slug already exists)
 INSERT INTO pages (id, slug, title)
 VALUES (
   '97e5dfa9-25bf-4470-8c47-4d8dc8905b6c',
   'former-countries',
   'List of former countries from 1930-2026'
 )
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (slug) DO NOTHING;
 
 -- 3. Allow comments.fact_id to be NULL (page comments won't have a fact anchor)
 ALTER TABLE comments ALTER COLUMN fact_id DROP NOT NULL;

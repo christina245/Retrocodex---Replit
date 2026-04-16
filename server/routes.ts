@@ -2567,6 +2567,18 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
+  // GET /api/pages/by-slug/:slug — look up a page record by its slug (public)
+  app.get("/api/pages/by-slug/:slug", async (req, res) => {
+    try {
+      const page = await storage.getPageBySlug(req.params.slug);
+      if (!page) return res.status(404).json({ message: "Page not found" });
+      return res.json(page);
+    } catch (error) {
+      console.error("GET /api/pages/by-slug/:slug error:", error);
+      res.status(500).json({ message: "Failed to fetch page" });
+    }
+  });
+
   // GET /api/pages/:id/comments — fetch all comments for a page (public; viewer used for upvote status)
   app.get("/api/pages/:id/comments", async (req, res) => {
     try {
