@@ -2562,6 +2562,12 @@ Sitemap: ${SITE_URL}/sitemap.xml
       if (error instanceof Error && error.message.startsWith("Invalid parentId")) {
         return res.status(400).json({ message: error.message });
       }
+      if (error instanceof Error && (
+        error.message.startsWith("Either factId or pageId") ||
+        error.message.startsWith("A comment cannot belong to both")
+      )) {
+        return res.status(400).json({ message: error.message });
+      }
       console.error("POST /api/facts/:id/comments error:", error);
       res.status(500).json({ message: "Failed to post comment" });
     }
@@ -2657,6 +2663,12 @@ Sitemap: ${SITE_URL}/sitemap.xml
         return res.status(400).json({ message: error.errors[0]?.message || "Invalid input" });
       }
       if (error instanceof Error && error.message.startsWith("Invalid parentId")) {
+        return res.status(400).json({ message: error.message });
+      }
+      if (error instanceof Error && (
+        error.message.startsWith("Either factId or pageId") ||
+        error.message.startsWith("A comment cannot belong to both")
+      )) {
         return res.status(400).json({ message: error.message });
       }
       console.error("POST /api/pages/:id/comments error:", error);
