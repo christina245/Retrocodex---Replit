@@ -67,7 +67,7 @@ export default function FormerCountriesPage() {
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">List of former countries from 1930–2026</h1>
+          <h1 className="fc-title">List of former countries from 1930-2026</h1>
           <p className="fc-description">
             What countries existed during your lifetime that no longer do? Sort this list by
             &lsquo;Year Ended&rsquo; to see which countries you may have been taught in school

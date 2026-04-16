@@ -47,13 +47,13 @@
   border-radius: 10px;
   border: 1px solid #f0f0f0;
   overflow: hidden;
-  min-width: 700px;
 }
 
 /* ── Table base ─────────────────────────────────────────────────── */
 
 .fc-table {
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
   table-layout: auto;
 }
