@@ -136,7 +136,7 @@ export default function FormerCountriesPage() {
                         {row.presentNations}
                       </td>
 
-                      <td className="fc-td" data-testid={`text-ended-by-${idx}`}>
+                      <td className="fc-td fc-td-ended-by" data-testid={`text-ended-by-${idx}`}>
                         {row.endedBy}
                       </td>
 

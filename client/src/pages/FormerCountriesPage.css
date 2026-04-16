@@ -129,9 +129,21 @@
 
 .fc-td-year {
   white-space: nowrap;
+  color: #7B4E9E;
+  font-weight: 700;
 }
 
 .fc-td-nation {
+  max-width: 200px;
+}
+
+.fc-td-ended-by {
+  color: #7B4E9E;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fc-td-present-nations {
   max-width: 200px;
 }
 
