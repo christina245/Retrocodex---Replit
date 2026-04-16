@@ -88,7 +88,7 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1947',
     formerNation: 'British India',
-    altName: 'British Raj',
+    
     yearEstablished: '1858',
     presentNations: 'India, Pakistan, Bangladesh',
     endedBy: 'Split',
@@ -141,16 +141,18 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1916',
     presentNations: 'Rwanda, Burundi',
     endedBy: 'Split',
-    summary: `Belgium had always administered Rwanda and Burundi as legally distinct kingdoms with separate ethnic and political dynamics. UN-driven decolonization pressure left splitting them into two independent states as the only practical path to independence.`,
+    summary: `They were already distinct kingdoms before colonial rule. After independence from the Belgians, each territory differed in its interethnic relations between the Hutus and Tutsis.`,
+    sourceUrl: 'https://history.state.gov/milestones/1953-1960/dien-bien-phu',
   },
 
   {
     yearEnded: '1964',
     formerNation: 'Tanganyika',
     yearEstablished: '1961',
-    presentNations: 'United Republic of Tanzania',
+    presentNations: 'Tanzania',
     endedBy: 'Merged',
-    summary: `Nyerere's pan-African vision and strategic concern about Cold War influence from revolutionary Zanzibar made union attractive. Tanganyika saw stability and regional authority as the gains from absorbing the volatile island.`,
+    summary: `Tanganyika merged with Zanzibar after gaining independence. The people of each had prior sociocultural and economic ties. Zanzibar's popularity as a tourist destination would give Tanganyika an economic boost.`,
+    sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
   },
 
   {
@@ -158,20 +160,21 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Zanzibar',
     altName: "People's Republic of Zanzibar",
     yearEstablished: '1963',
-    presentNations: 'United Republic of Tanzania (retains significant internal autonomy)',
+    presentNations: 'Tanzania (retains significant internal autonomy)',
     endedBy: 'Merged',
-    summary: `Centuries of Arab minority domination over an African majority had created explosive resentment. After revolution toppled the Arab sultan, the new government sought the security and legitimacy of mainland union to consolidate its hold on power.`,
+    summary: `After independence from Arab rule, the new independent government merged with Tanganyika strengthen its ties to the African mainland.`,
   },
 
   // ── 1970s ──────────────────────────────────────────────────────────────────
 
   {
     yearEnded: '1970',
-    formerNation: 'Republic of Biafra',
+    formerNation: 'Biafra',
     yearEstablished: '1967',
     presentNations: 'Nigeria',
     endedBy: 'Military Defeat',
-    summary: `Anti-Igbo pogroms in 1966 convinced Igbo leaders that survival required separation. The federal government refused to negotiate, and control of the oil-rich east made both sides fight to the end. Nigeria's superior size and resources prevailed.`,
+    summary: `Biafra was a seccesionist state that declared independence from the nation of Nigeria in 1967 due to resentment against its predominantly Igbo population. In 1970, it was defeated by the Nigerian federal government who wanted it back.`,
+    sourceUrl: 'https://www.britannica.com/place/Biafra',
   },
 
   {
@@ -179,38 +182,41 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'East Pakistan',
     yearEstablished: '1947',
     presentNations: 'Bangladesh',
-    endedBy: 'Independence War',
-    summary: `East Pakistan's Awami League won the 1970 elections outright, but the military junta refused to hand over power. Decades of discrimination and economic exploitation meant only full independence would satisfy Bengali leaders.`,
+    endedBy: 'Renamed',
+    summary: `East Pakistan was the eastern province of Pakistan between 1956 and 1971. Upon gaining independence from Western Pakistan, it was renamed Bangladesh after its predominant Bengali population.`,
+    sourceUrl:'https://www.nationalarchives.gov.uk/education/resources/the-independence-of-bangladesh-in-1971/',
   },
 
   {
     yearEnded: '1971',
     formerNation: 'United Arab Republic',
-    altName: 'UAR; joint Egypt–Syria state 1958–1961',
+    
     yearEstablished: '1958',
-    presentNations: 'Egypt (Arab Republic of Egypt), Syria',
-    endedBy: 'Renamed',
-    summary: `Nasser imposed Egyptian dominance over Syria, generating deep resentment among Syrian officers who staged a coup in 1961. The union had been driven by ideology rather than genuine integration and had no structural foundation.`,
+    presentNations: 'Egypt, Syria',
+    endedBy: 'Split',
+    summary: `Egypt and Syria merged to form the United Arab Republic in 1958. A marginalized Syria seceded in 1961, leaving Egypt alone to retain the name United Arab Republic until 1971.`,
   },
 
   {
     yearEnded: '1972',
     formerNation: 'Ceylon',
-    altName: 'Dominion of Ceylon',
+   
     yearEstablished: '1948',
     presentNations: 'Sri Lanka',
     endedBy: 'Renamed',
-    summary: `Post-independence Sinhalese Buddhist nationalism sought to shed a name of Portuguese colonial origin and assert a pre-colonial identity. The 1972 republican constitution provided the political moment to complete that break.`,
+    summary: `Post-independence nationalist sentiments sought to shed a name of Portuguese and British colonial origin, choosing a name similar to the country's original name of Sinhala. "Sri" is an honorific.`,
+    sourceUrl:'https://www.bbc.com/news/world-south-asia-12099596',
   },
 
   {
     yearEnded: '1975',
     formerNation: 'South Vietnam',
-    altName: 'Republic of Vietnam',
+    
     yearEstablished: '1955',
-    presentNations: 'Socialist Republic of Vietnam',
+    presentNations: 'Vietnam',
     endedBy: 'Military Defeat',
-    summary: `The Paris Peace Accords removed U.S. military involvement, leaving South Vietnam dependent on aid Congress later cut. Without American air power or funding, and hobbled by endemic corruption, the ARVN could not withstand a North Vietnamese offensive.`,
+    summary: `After losing support from the American military, South Vietnam was defeated by the communist forces of North Vietnam on April 30, 1975.`,
+    sourceUrl:'https://www.britannica.com/event/Fall-of-Saigon',
   },
 
   {
