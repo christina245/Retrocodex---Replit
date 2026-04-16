@@ -44,6 +44,9 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
           <a href="/recommended-reading" className="menu-link" data-testid="link-recommended-reading">
             Recommended Reading
           </a>
+          <a href="/former-countries" className="menu-link" data-testid="link-former-countries">
+            List of Former Countries (1930–2026)
+          </a>
           <a href="/articles" className="menu-link" data-testid="link-blog">
             Articles
           </a>
