@@ -157,6 +157,8 @@ export default function FormerCountriesPage() {
             </div>
           </div>
 
+          <div className="fc-divider" />
+
           <div className="fc-below-grid">
             <div className="fc-comments-col" id="comments">
               <CommentsSection

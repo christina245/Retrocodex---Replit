@@ -102,7 +102,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1800',
     presentNations: 'Republic of Indonesia',
     endedBy: 'Independence War',
-    summary: `Japan's wartime occupation had destroyed the myth of Dutch colonial invincibility. Sukarno's independence movement had broad mass support, and sustained US and UN pressure made military reconquest politically untenable for the Netherlands.`,
+    summary: `Japan's 1945-1949 occupation of the Dutch East Indies weakened Dutch colonial rule. By then, Indonesians resented centuries of Dutch exploitation, forced labor, and resource extraction. `,
     sourceUrl: 'https://www.britannica.com/place/Dutch-East-Indies',
       },
  
@@ -112,11 +112,11 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1950',
     formerNation: 'Tibet',
-    altName: 'De facto independent state, 1913–1950',
+    
     yearEstablished: '1913',
     presentNations: "People's Republic of China (Tibet Autonomous Region)",
     endedBy: 'Annexed',
-    summary: `China had never accepted Tibetan independence as legitimate. Tibet's military weakness, geographic isolation, and complete lack of international support — no major power was willing to confront Mao's China over Tibet — left it unable to resist.`,
+    summary: `China never formally recognized Tibet as an independent state. It sought to "liberate" Tibet from theocracy. `,
   },
 
   {
