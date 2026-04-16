@@ -4,31 +4,31 @@
 
 .fc-main {
   min-height: calc(100vh - 120px);
-  padding: 40px 0 60px;
+  padding: 40px 0 20px;
 }
 
 .fc-content {
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 4px;
 }
 
 /* ── Heading + description ──────────────────────────────────────── */
 
 .fc-title {
   font-family: 'Public Sans', sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-size: 40px;
+  font-weight: 800;
+  color: #2c2c2c;
   margin: 0 0 16px;
   line-height: 1.25;
 }
 
 .fc-description {
-  font-family: 'Merriweather', serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 15px;
   font-weight: 400;
-  color: #4a4a4a;
+  color: #2c2c2c;
   line-height: 1.7;
   max-width: 820px;
   margin: 0 0 32px;
@@ -152,11 +152,17 @@
   text-decoration-color: #2c2c2c;
 }
 
+/* ── Present nations column ─────────────────────────────────────── */
+
+.fc-td-present-nations {
+  max-width: 160px;
+}
+
 /* ── Summary column ─────────────────────────────────────────────── */
 
 .fc-td-summary {
   min-width: 240px;
-  max-width: 380px;
+  max-width: 650px;
 }
 
 /* ── Dark mode tweaks ───────────────────────────────────────────── */

@@ -18,7 +18,7 @@ const COLUMNS: { key: SortKey | null; label: string; sortable: boolean }[] = [
   { key: "yearEnded", label: "Year Ended", sortable: true },
   { key: "formerNation", label: "Former Country Name", sortable: true },
   { key: "yearEstablished", label: "Year Established", sortable: true },
-  { key: "presentNations", label: "Name(s) of Present Nation(s)", sortable: true },
+  { key: "presentNations", label: "Present Name(s)", sortable: true },
   { key: "endedBy", label: "Ended By", sortable: true },
   { key: null, label: "Summary", sortable: false },
 ];
@@ -134,7 +134,7 @@ export default function FormerCountriesPage() {
                         {row.yearEstablished}
                       </td>
 
-                      <td className="fc-td" data-testid={`text-present-nations-${idx}`}>
+                      <td className="fc-td fc-td-present-nations" data-testid={`text-present-nations-${idx}`}>
                         {row.presentNations}
                       </td>
 
