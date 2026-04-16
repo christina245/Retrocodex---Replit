@@ -42,7 +42,7 @@ import {
   type FactUpdateWithFact,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, arrayContains, inArray, sql, notInArray, ne, or, isNull, isNotNull } from "drizzle-orm";
+import { eq, desc, and, arrayContains, inArray, sql, notInArray, ne, or, isNull, isNotNull, SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import crypto from "crypto";
 
@@ -582,7 +582,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   private async _fetchCommentsWithUser(
-    where: any,
+    where: SQL<unknown>,
     viewerId?: string,
   ): Promise<CommentWithUser[]> {
     // shared logic — caller passes a where clause built from eq(comments.factId, ...) or eq(comments.pageId, ...)
@@ -658,6 +658,9 @@ export class DatabaseStorage implements IStorage {
   async createComment(userId: string, data: InsertComment & { factId?: string; pageId?: string; needsReview?: boolean; aiCategories?: Record<string, number> }): Promise<CommentWithUser> {
     if (!data.factId && !data.pageId) {
       throw new Error("Either factId or pageId is required");
+    }
+    if (data.factId && data.pageId) {
+      throw new Error("A comment cannot belong to both a fact and a page");
     }
     if (data.parentId) {
       const [parent] = await db

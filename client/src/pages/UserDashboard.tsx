@@ -1024,9 +1024,11 @@ export default function UserDashboard() {
     createdAt: string;
     upvotes: number;
     isUpvotedByMe: boolean;
-    factTitle: string;
-    factSlug: string;
+    factTitle: string | null;
+    factSlug: string | null;
     factCoverPhoto: string | null;
+    pageSlug: string | null;
+    pageTitle: string | null;
   }
 
   const { data: myComments = [], isLoading: myCommentsLoading } = useQuery<MyCommentItem[]>({
@@ -1145,11 +1147,13 @@ export default function UserDashboard() {
     upvotes: number;
     commentCreatedAt: string;
     savedAt: string;
-    factMythHeader: string;
-    factSlug: string;
+    factMythHeader: string | null;
+    factSlug: string | null;
     factCoverPhoto: string | null;
     commenterUsername: string | null;
     commenterAvatarUrl: string | null;
+    pageSlug: string | null;
+    pageTitle: string | null;
   }
 
   const { data: savedCommentItems = [], isLoading: savedCommentsLoading } = useQuery<SavedCommentItem[]>({
