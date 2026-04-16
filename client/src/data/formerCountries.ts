@@ -37,7 +37,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1501',
     presentNations: 'Iran',
     endedBy: 'Renamed',
-    summary: `A nationalist agenda sought to shed the Greco-Roman colonial exonym of Persia and assert the name Persians had always used domestically. The rename was part of the drive to restore the nation's historical legacy with a name that was relatively free of outside control.`,
+    summary: `A nationalist agenda sought to shed the Greco-Roman colonial exonym of Persia and assert the name Persians had always used domestically. Iran was chosen to restore the nation's historical legacy with a name that was relatively free of outside control.`,
     sourceUrl: 'https://www.historyhit.com/when-did-persia-become-iran-and-why/',
   },
 
@@ -70,27 +70,17 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Manchukuo',
     altName: 'State of Manchuria / Manchukuo Empire',
     yearEstablished: '1932',
-    presentNations: "People's Republic of China",
+    presentNations: "China",
     endedBy: 'Military Defeat',
-    summary: `Manchukuo was a puppet state in northeastern China controlled by the Japanese. It collapsed when Japan was defeated in World War II in 1945.`,
-    sourceUrl: 'https://www.nippon.com/en/in-depth/d00815/'
-  },
-
-  {
-    yearEnded: '1945',
-    formerNation: 'Third Reich',
-    altName: 'Nazi Germany / Greater German Reich',
-    yearEstablished: '1933',
-    presentNations: 'West Germany (FRG) and East Germany (GDR); reunified as Federal Republic of Germany 1990',
-    endedBy: 'Military Defeat',
-    summary: `Strategic overextension on multiple fronts, the overwhelming industrial and manpower superiority of the Allied coalition, catastrophic military decisions by Hitler, and the moral and political bankruptcy of a genocidal state made defeat inevitable.`,
+    summary: `Manchukuo was a puppet state in northeastern China controlled by the Japanese. It collapsed when it was invaded by the Soviets and when Japan was defeated in World War II in 1945.`,
+    sourceUrl: 'https://www.nippon.com/en/in-depth/d00815/',
   },
 
   {
     yearEnded: '1946',
     formerNation: 'Kingdom of Italy',
     yearEstablished: '1861',
-    presentNations: 'Italian Republic',
+    presentNations: 'Italy',
     endedBy: 'Renamed',
     summary: `The monarchy had enabled Mussolini's 1922 rise to power and was deeply complicit in Italy's disastrous WWII losses. Italians, disgusted by its collaboration with fascism, voted to abolish the institution in a 1946 referendum and establish a republic.`,
   },
@@ -100,19 +90,22 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'British India',
     altName: 'British Raj',
     yearEstablished: '1858',
-    presentNations: 'India, Pakistan (Bangladesh subsequently separated from Pakistan in 1971)',
+    presentNations: 'India, Pakistan, Bangladesh',
     endedBy: 'Split',
-    summary: `Post-WWII British exhaustion, the Labour government's independence commitment, and deadlock between the Congress party and Muslim League over power-sharing made partition along communal lines effectively unavoidable under the rushed Mountbatten plan.`,
+    summary: `After India became independent of the British in 1947, it sought to divide along religious lines to separate Hindus and Muslims. However, the demarcation was rushed, messy, and harmful, for example cutting through and dividing the Sikh population in the state of Punjab.`,
+    sourceUrl: 'https://www.britannica.com/event/Partition-of-India',
   },
 
   {
     yearEnded: '1949',
-    formerNation: 'Netherlands East Indies',
+    formerNation: 'Dutch East Indies',
     yearEstablished: '1800',
     presentNations: 'Republic of Indonesia',
     endedBy: 'Independence War',
     summary: `Japan's wartime occupation had destroyed the myth of Dutch colonial invincibility. Sukarno's independence movement had broad mass support, and sustained US and UN pressure made military reconquest politically untenable for the Netherlands.`,
-  },
+    sourceUrl: 'https://www.britannica.com/place/Dutch-East-Indies',
+      },
+ 
 
   // ── 1950s ──────────────────────────────────────────────────────────────────
 
