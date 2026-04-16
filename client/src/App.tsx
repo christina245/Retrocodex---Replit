@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -44,6 +44,12 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import RecommendedBooksPage from "@/pages/RecommendedBooksPage";
 import FormerCountriesPage from "@/pages/FormerCountriesPage";
+
+function FormerCountriesRedirect() {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation("/former-countries"); }, [setLocation]);
+  return null;
+}
 
 function OAuthCallbackHandler() {
   const { refetchUser } = useAuth();
@@ -98,6 +104,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomePage} />
       <Route path="/backstage-admin-415" component={AdminPage} />
+      <Route path="/fact/former-countries-page" component={FormerCountriesRedirect} />
       <Route path="/fact/:id" component={SingleFactPage} />
       <Route path="/articles" component={ArticlesPage} />
       <Route path="/articles/:slug" component={SingleBlogPage} />

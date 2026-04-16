@@ -116,16 +116,20 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1913',
     presentNations: "People's Republic of China (Tibet Autonomous Region)",
     endedBy: 'Annexed',
-    summary: `China never formally recognized Tibet as an independent state. It sought to "liberate" Tibet from theocracy. `,
+    summary: `China sought control over Tibet under the guise of "liberating" it from theocracy while actually positioning it as a geographical buffer zone for disputes with its southern neighbor, India. `,
+    sourceUrl: 'https://savetibet.org/why-tibet/history/',
   },
+  
+    
 
   {
     yearEnded: '1954',
     formerNation: 'French Indochina',
     yearEstablished: '1887',
-    presentNations: 'Vietnam (North and South), Laos, Cambodia',
+    presentNations: 'Vietnam, Laos, Cambodia',
     endedBy: 'Split',
-    summary: `Ho Chi Minh's Viet Minh blended nationalist and communist appeal with effective guerrilla tactics. French public opinion tired of a costly unwinnable war, and the catastrophic defeat at Dien Bien Phu destroyed remaining political will to continue.`,
+    summary: `French rule failed to significantly improve quality of local life. Japanese occupation of Indochina briefly toppled French rule, suggesting they could be defeated.`,
+    sourceUrl: 'https://history.state.gov/milestones/1953-1960/dien-bien-phu',
   },
 
   // ── 1960s ──────────────────────────────────────────────────────────────────

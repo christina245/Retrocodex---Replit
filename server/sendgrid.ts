@@ -159,6 +159,9 @@ export async function sendGoogleWelcomeEmail(to: string, data: { username: strin
 }
 
 export function buildFactUrl(slug: string): string {
+  if (slug === "former-countries-page") {
+    return `${BASE_URL()}/former-countries`;
+  }
   return `${BASE_URL()}/fact/${slug}`;
 }
 
