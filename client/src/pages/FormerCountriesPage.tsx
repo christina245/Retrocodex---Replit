@@ -4,8 +4,13 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
+import { CommentsSection } from "@/components/CommentsSection";
+import { CategoryLinks } from "@/components/CategoryLinks";
+import { SignInModal } from "@/components/SignInModal";
 import { formerCountries, FormerCountry } from "@/data/formerCountries";
 import "./FormerCountriesPage.css";
+
+const FORMER_COUNTRIES_FACT_ID = "ffffffff-0000-0000-0000-000000000001";
 
 type SortKey = keyof Pick<
   FormerCountry,
@@ -36,6 +41,8 @@ export default function FormerCountriesPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sortKey, setSortKey] = useState<SortKey>("yearEnded");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [signInContext, setSignInContext] = useState("");
 
   const handleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -149,8 +156,28 @@ export default function FormerCountriesPage() {
               </table>
             </div>
           </div>
+
+          <div className="fc-below-grid">
+            <div className="fc-comments-col" id="comments">
+              <CommentsSection
+                factId={FORMER_COUNTRIES_FACT_ID}
+                onLoginClick={(msg) => { setSignInContext(msg); setShowSignIn(true); }}
+              />
+            </div>
+            <div className="fc-sidebar-col">
+              <CategoryLinks categories={["HISTORY"]} />
+            </div>
+          </div>
         </div>
       </main>
+
+      {showSignIn && (
+        <SignInModal
+          isOpen={showSignIn}
+          onClose={() => setShowSignIn(false)}
+          context={signInContext}
+        />
+      )}
 
       <Footer />
     </>

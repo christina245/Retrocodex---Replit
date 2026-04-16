@@ -698,8 +698,12 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
               <>
                 <span className="following-post-action">commented on</span>
                 {item.factSlug ? (
-                  <Link href={`/fact/${item.factSlug}`} className="following-post-action following-post-fact-link" data-testid={`link-feed-fact-${index}`}>
-                    &ldquo;{item.factTitle}&rdquo;
+                  <Link
+                    href={item.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${item.factSlug}`}
+                    className="following-post-action following-post-fact-link"
+                    data-testid={`link-feed-fact-${index}`}
+                  >
+                    {item.factSlug === "former-countries-page" ? item.factTitle : <>&ldquo;{item.factTitle}&rdquo;</>}
                   </Link>
                 ) : (
                   <span className="following-post-action">&ldquo;{item.factTitle}&rdquo;</span>
@@ -721,7 +725,7 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
                   <p className="following-plain-comment" data-testid={`feed-comment-body-${index}`}>{item.commentBody}</p>
                 </div>
                 {item.factCoverPhoto && (
-                  <Link href={item.factSlug ? `/fact/${item.factSlug}` : "#"} className="following-post-cover-link">
+                  <Link href={item.factSlug ? (item.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${item.factSlug}`) : "#"} className="following-post-cover-link">
                     <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
                   </Link>
                 )}
@@ -729,7 +733,7 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
               <div className="comment-actions feed-comment-actions">
                 {item.factSlug && (
                   <Link
-                    href={`/fact/${item.factSlug}#comments`}
+                    href={item.factSlug === "former-countries-page" ? "/former-countries#comments" : `/fact/${item.factSlug}#comments`}
                     className="comment-action"
                     data-testid={`link-feed-reply-${index}`}
                   >
@@ -2887,8 +2891,8 @@ export default function UserDashboard() {
                               <div className="public-comment-entry" key={c.id} data-testid={`activity-comment-${c.id}`}>
                                 <div className="following-post-body-content">
                                   <div className="following-post-body-left">
-                                    <Link href={`/fact/${c.factSlug}`} className="following-post-link">
-                                      <p className="fact-myth">"{c.factTitle}"</p>
+                                                    <Link href={c.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${c.factSlug}`} className="following-post-link">
+                                      <p className="fact-myth">{c.factSlug === "former-countries-page" ? c.factTitle : `"${c.factTitle}"`}</p>
                                     </Link>
                                     {dashboardEditingId === c.id ? (
                                       <div className="dashboard-comment-edit-box" data-testid={`edit-box-comment-${c.id}`}>
@@ -2955,7 +2959,7 @@ export default function UserDashboard() {
                                     </span>
                                   </div>
                                   {c.factCoverPhoto && (
-                                    <Link href={`/fact/${c.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-activity-comment-${c.id}`}>
+                                    <Link href={c.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${c.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-activity-comment-${c.id}`}>
                                       <img src={c.factCoverPhoto} alt="" className="following-post-cover-photo" />
                                     </Link>
                                   )}
@@ -3136,8 +3140,8 @@ export default function UserDashboard() {
                             <div key={item.commentId} className="saved-comment" data-testid={`saved-comment-${item.commentId}`}>
                               <div className="following-post-body-content">
                                 <div className="following-post-body-left">
-                                  <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-saved-fact-${item.commentId}`}>
-                                    <p className="fact-myth">"{item.factMythHeader}"</p>
+                                                  <Link href={item.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-saved-fact-${item.commentId}`}>
+                                    <p className="fact-myth">{item.factSlug === "former-countries-page" ? item.factMythHeader : `"${item.factMythHeader}"`}</p>
                                   </Link>
                                   <div className="saved-comment-meta" data-testid={`saved-comment-meta-${item.commentId}`}>
                                     {item.commenterUsername ? (
@@ -3187,7 +3191,7 @@ export default function UserDashboard() {
                                   </div>
                                 </div>
                                 {item.factCoverPhoto && (
-                                  <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-saved-comment-${item.commentId}`}>
+                                  <Link href={item.factSlug === "former-countries-page" ? "/former-countries" : `/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-saved-comment-${item.commentId}`}>
                                     <img src={item.factCoverPhoto} alt="" className="following-post-cover-photo" />
                                   </Link>
                                 )}

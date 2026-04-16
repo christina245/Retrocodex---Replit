@@ -228,3 +228,36 @@
     font-size: 14px;
   }
 }
+
+/* ── Below-table grid (comments + sidebar) ──────────────────────── */
+
+.fc-below-grid {
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 2rem;
+  align-items: start;
+  margin-top: 20px;
+}
+
+.fc-comments-col {
+  max-width: 700px;
+}
+
+.fc-sidebar-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .fc-below-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .fc-comments-col {
+    width: 100%;
+    max-width: 100%;
+  }
+}
