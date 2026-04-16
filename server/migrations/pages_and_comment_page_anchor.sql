@@ -2,20 +2,20 @@
 -- Applied: 2026-04-16
 
 -- 1. Create the pages table for standalone non-fact pages (e.g. Former Countries)
+--    Schema matches shared/schema.ts: id, slug, title, created_at
 CREATE TABLE IF NOT EXISTS pages (
-  id        VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
-  slug      VARCHAR NOT NULL UNIQUE,
-  title     VARCHAR NOT NULL,
-  description TEXT
+  id         VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug       VARCHAR NOT NULL UNIQUE,
+  title      TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 -- 2. Seed the Former Countries page
-INSERT INTO pages (id, slug, title, description)
+INSERT INTO pages (id, slug, title)
 VALUES (
   '97e5dfa9-25bf-4470-8c47-4d8dc8905b6c',
   'former-countries',
-  'List of former countries from 1930-2026',
-  'A list of former countries sorted by the year they ceased to exist.'
+  'List of former countries from 1930-2026'
 )
 ON CONFLICT (id) DO NOTHING;
 
