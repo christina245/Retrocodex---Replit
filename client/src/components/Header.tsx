@@ -124,41 +124,44 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
           </Link>
 
           <div className="header-actions">
-            {isSearchOpen ? (
-              <form onSubmit={handleSearchSubmit} className="header-search-form">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  placeholder="Search facts..."
-                  className="header-search-input"
-                  data-testid="input-search"
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsSearchOpen(false);
-                    setSearchQuery("");
-                  }}
-                  className="header-search-close"
-                  data-testid="button-search-close"
-                  aria-label="Close search"
-                >
-                  <X size={18} />
-                </button>
-              </form>
-            ) : (
+            <div className="header-search-anchor">
               <button 
-                className="search-button" 
+                className={`search-button ${isSearchOpen ? "search-button-hidden" : ""}`}
                 data-testid="button-search"
                 aria-label="Search facts"
                 onClick={() => setIsSearchOpen(true)}
+                tabIndex={isSearchOpen ? -1 : 0}
+                aria-hidden={isSearchOpen}
               >
                 <Search size={20} />
               </button>
-            )}
+              {isSearchOpen && (
+                <form onSubmit={handleSearchSubmit} className="header-search-form">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearchKeyDown}
+                    placeholder="Search facts..."
+                    className="header-search-input"
+                    data-testid="input-search"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      setSearchQuery("");
+                    }}
+                    className="header-search-close"
+                    data-testid="button-search-close"
+                    aria-label="Close search"
+                  >
+                    <X size={18} />
+                  </button>
+                </form>
+              )}
+            </div>
             <a 
               href="/submit"
               className="submit-fact-button header-only-submit"
