@@ -1,37 +1,44 @@
 # Retrocodex
 
 ## Overview
-
-Retrocodex is a fact-checking website designed to challenge and correct common misconceptions across various domains like History, Life Sciences, and Health. It aims to "unlearn" outdated beliefs by presenting common myths alongside current scientific understanding. The platform allows users to browse curated facts, with future plans for features like saving, sharing, and commenting. The project's vision is to become a go-to resource for accurate information, fostering critical thinking and promoting evidence-based understanding in everyday life. It's built as a full-stack web application, adhering strictly to a meticulously designed Figma specification for a high-quality user experience.
+Retrocodex is a fact-checking website designed to challenge and correct common misconceptions across various categories like History, Life Sciences, and Health & Fitness. It presents common myths alongside current scientific understanding, aiming to "unlearn" outdated beliefs. The platform is a full-stack web application built with React and Express, meticulously designed to match Figma specifications, focusing on typography, color, and spacing for a polished user experience. Key capabilities include browsing curated facts, with future plans for user accounts, saving, sharing, and commenting features. The project aims to become a primary resource for evidence-based information, fostering critical thinking and promoting accurate understanding.
 
 ## User Preferences
-
 Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
 ### Frontend Architecture
-
-The frontend is built with React 18 and TypeScript, using Vite for development and Wouter for routing. Server state management is handled by TanStack Query. The UI leverages Shadcn/ui (based on Radix UI) and Tailwind CSS, following a "New York" design system with specific typography (Merriweather, Public Sans) and a defined color palette. Key components include `FactCard` for displaying myth vs. truth, `HomepageCategoryNav` for navigation, and `SourcesModal` for beta-only fact details. User dashboard functionality includes a profile page, editable profile modal with an `AvatarPickerModal` (DiceBear-powered), and tabbed feeds for "For You", "Following", "Local", and "Saved" facts. A comprehensive blog system features `ArticlesPage`, `SingleBlogPage`, and `BlogCard` components, with content creation managed via `TiptapEditor` in the admin panel. SEO is managed through a reusable `SEO` component and `FAQSchema` for structured data.
+- **Framework & Build Tools**: React 18 with TypeScript, Vite, Wouter for routing, and TanStack Query for server state management.
+- **UI Component System**: Shadcn/ui based on Radix UI, styled with Tailwind CSS following a "New York" style variant. Custom CSS modules for complex components.
+- **Design System**: Employs Merriweather (serif) and Public Sans (sans-serif) fonts, a primary brand red (#FF5353), and category-specific colors, strictly adhering to Figma designs for responsiveness and visual consistency.
+- **Key Components**: Includes `FactCard` for myth vs. truth display, `HomepageCategoryNav`, `EmailSignupBanner`, `SaveModal`, `ShareModal`, and `SourcesModal` for detailed fact information. A `HamburgerMenu` for navigation and an `SEO` component for page metadata are also central.
+- **Dashboard Components**: Features a `UserDashboard` with profile editing, a 4-tab feed (For You, Following, Local, Saved), and an `AvatarPickerModal` using DiceBear for avatar generation.
+- **Blog System Components**: Includes `ArticlesPage`, `SingleBlogPage`, `BlogCard`, `HeroSection` for featured posts, `TiptapEditor` for content creation (admin), and `BeehiivBanner` for newsletter subscriptions.
 
 ### Backend Architecture
-
-The backend is an Express.js application with TypeScript, designed for both development (Vite integration) and production environments. It provides a RESTful API under the `/api` prefix for managing email subscriptions, blog posts (CRUD), facts by tags, and saved facts. Authentication for admin routes uses simple HTTP Basic Auth and role-based authorization via an `isAdmin` flag in the user profile. Request payloads are validated using Zod schemas.
+- **Server Framework**: Express.js with TypeScript, supporting separate development and production environments.
+- **API Design**: RESTful API endpoints (`/api`) for managing emails, newsletter subscriptions, blog posts (CRUD), facts by tags, and saved facts. It also includes file upload and basic HTTP authentication for admin routes.
+- **Authentication & Authorization**: Basic HTTP authentication for admin access, with an `isAdmin` flag in the user profile. Admin management features are available.
 
 ### Data Storage Solutions
-
-The application uses a PostgreSQL database hosted on Neon, accessed via Drizzle ORM for type-safe operations. The schema includes tables for `email_subscriptions`, `newsletter_subscriptions`, `facts` (with detailed myth/truth, sources, timeline, nuances), `pages` (for standalone content), `blog_posts` (WordPress-style), `users` (planned for authentication), `saved_facts` (user bookmarks), and `comments` (supporting both facts and pages). UUIDs are used as primary keys.
+- **Database**: PostgreSQL via Neon serverless platform, utilizing Drizzle ORM for type-safe operations.
+- **Schema Design**: Tables include `email_subscriptions`, `newsletter_subscriptions`, `facts` (with detailed myth/truth, sources, timeline, nuances), `pages`, `blog_posts`, `users`, `saved_facts`, and `comments` (supporting both fact and page comments). UUIDs are used for primary keys and timestamps for tracking.
+- **Data Access Layer**: Implements a repository pattern with a `DatabaseStorage` class for clear separation of concerns.
 
 ### Key Architectural Decisions
-
-A monorepo structure with shared schema definitions in a `/shared` folder promotes code reuse. State management relies on TanStack Query for server state and local component state for UI interactions, avoiding global client-side state managers. Zod is used for consistent client-side and server-side form validation. Static assets are managed with custom Vite aliases.
+- **Monorepo Structure**: Shared schema definitions and path aliases for client and server code.
+- **State Management**: TanStack Query for server state, local component state for UI, avoiding global client state management for current scope.
+- **Form Validation**: Zod for both client-side and server-side validation, integrated with Drizzle-zod.
+- **Static Assets**: Stored locally and loaded via CDN for fonts, with custom Vite aliases.
+- **Error Handling**: Custom error overlay in development and structured error responses.
 
 ## External Dependencies
 
-**Database & ORM:** Neon Serverless PostgreSQL, Drizzle ORM, `ws`.
-**UI Component Libraries:** Radix UI, Shadcn/ui, Lucide React, React Icons, DiceBear (for avatar generation).
-**Styling & Forms:** Tailwind CSS, `class-variance-authority`, React Hook Form with Zod resolvers.
-**Developer Experience:** Replit plugins, TypeScript, ESBuild.
-**External Services:** Typeform (for fact submission), Buy Me a Coffee (for donations), social media platforms (Instagram, Bluesky, X/Twitter).
-**Analytics:** Google Analytics 4.
-**External Articles CMS:** Integration with `externalArticles` table and an `/api/articles` endpoint to merge blog posts and curated third-party content.
+- **Database & ORM**: Neon Serverless PostgreSQL, Drizzle ORM, `ws` package.
+- **UI Component Libraries**: Radix UI primitives, Shadcn/ui, Lucide React, React Icons, DiceBear for avatar generation.
+- **Styling & Forms**: Tailwind CSS, `class-variance-authority`, React Hook Form with Zod resolvers.
+- **Developer Experience**: Replit-specific plugins, TypeScript, ESBuild.
+- **External Services**: Typeform (fact submission), Buy Me a Coffee (donations), social media platforms (Instagram, Bluesky, X/Twitter).
+- **SEO Implementation**: Reusable `SEO` and `FAQSchema` components, dynamic sitemap and `robots.txt` generation, Google Analytics 4 integration.
+- **External Articles CMS**: `externalArticles` table for curated third-party articles, with server-side OG metadata parsing and a unified public endpoint (`/api/articles`) merging blog posts and external content.

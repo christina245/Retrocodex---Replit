@@ -407,32 +407,17 @@
   }
 }
 
-/* Search button slot: lets the expanded form be absolutely positioned
-   relative to the search button's own right edge, so the form visually
-   replaces the search button without shifting any of the right-side
-   buttons (Submit a Fact / Sign In / hamburger). */
-.header-search-anchor {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 .search-button-hidden {
   visibility: hidden;
 }
 
-/* Desktop: anchor the expanded search form to the search button slot
-   and let it extend leftward. The max-width caps it just shy of the
-   240px-wide centered logo so "Search facts..." is never clipped. */
 @media (min-width: 769px) {
   .header-search-form {
     position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    width: max-content;
-    max-width: calc(50vw - 130px - 16px);
-    min-width: 180px;
+    top: 10px;
+    left: calc(50% + 130px);
+    right: 290px;
+    min-width: 0;
     z-index: 5;
   }
 
@@ -443,8 +428,6 @@
   }
 }
 
-/* Mobile: collapse the hidden search button entirely so the existing
-   inline mobile search layout is unchanged. */
 @media (max-width: 768px) {
   .search-button-hidden {
     display: none;
