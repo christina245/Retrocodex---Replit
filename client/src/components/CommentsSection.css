@@ -70,7 +70,7 @@
 .comment-textarea {
   width: 100%;
   padding: 14px 16px;
-  border: 1px solid #D9D9D9;
+  border: 1px solid #878787;
   border-radius: 10px;
   font-family: 'Public Sans', sans-serif;
   font-size: 14px;
@@ -82,7 +82,7 @@
 }
 
 .comment-textarea::placeholder {
-  color: #D9D9D9;
+  color: #878787;
 }
 
 .comment-textarea:focus {
@@ -402,7 +402,7 @@
   margin-top: 2px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 0px;
   align-items: center;
 }
 

@@ -192,8 +192,8 @@ export default function EverydayLifePage() {
             <h1 className="category-page-h1" data-testid="text-category-title">All Common Misconceptions In Everyday Life</h1>
             <h2 className="category-page-h2" data-testid="text-category-subtitle">What's the evidence debunking (or validating) the everyday folklore, superstitions, and urban legends we learned from our elders, friends, or the media?</h2>
             <p>
-              These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.
-              This collection explores both untrue information in today's popular culture and the classic old wives' tales we were taught at home growing up.</p> 
+              These informal, familiar, intuitive, traditional lessons often originated as attempts to explain everyday experiences, teach caution, or impose order on the unpredictable, long before scientific research was accessible to the public.</p>
+              <p>This collection explores the classic life lessons we were taught growing up, today's media misinformation and questionable claims, as well as everyday slang that evolved over time.</p> 
             
           </div>
           <div className="everyday-life-scrungy-promo-wrapper">

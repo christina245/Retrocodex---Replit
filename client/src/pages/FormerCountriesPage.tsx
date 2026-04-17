@@ -78,9 +78,9 @@ export default function FormerCountriesPage() {
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">Countries that no longer exist (1930-2026)</h1>
+          <h1 className="fc-title">Countries and territories that no longer exist (1930-2026)</h1>
           <p className="fc-description">
-            What countries, states, or territories were you taught about in school that didn't stick around after you graduated? Here's a list sorted by the year they merged, dissolved, or were renamed to assert a new identity.
+            What countries, states, kingdoms, federations, or geopolitical unions did you learn about in school that didn't last? Here's a list sorted by the year they merged, dissolved, or were renamed to assert a fresh new identity.
           </p>
 
           <div className="fc-table-scroll">

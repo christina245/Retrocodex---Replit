@@ -33,7 +33,7 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1935',
     formerNation: 'Persia',
-    altName: 'Imperial State of Persia',
+    
     yearEstablished: '1501',
     presentNations: 'Iran',
     endedBy: 'Renamed',
@@ -46,7 +46,7 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1939',
     formerNation: 'Siam',
-    altName: 'Kingdom of Siam',
+    
     yearEstablished: '1238',
     presentNations: 'Thailand',
     endedBy: 'Renamed',
@@ -61,9 +61,9 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1945',
     formerNation: 'Manchukuo',
-    altName: 'State of Manchuria / Manchukuo Empire',
+    
     yearEstablished: '1932',
-    presentNations: "China",
+    presentNations: "part of China",
     endedBy: 'Military Defeat',
     summary: `Manchukuo was a puppet state in northeastern China controlled by the Japanese. It collapsed when it was invaded by the Soviets and when Japan was defeated in World War II in 1945.`,
     sourceUrl: 'https://www.nippon.com/en/in-depth/d00815/',
@@ -86,7 +86,7 @@ export const formerCountries: FormerCountry[] = [
     yearEnded: '1949',
     formerNation: 'Dutch East Indies',
     yearEstablished: '1800',
-    presentNations: 'Republic of Indonesia',
+    presentNations: 'Indonesia',
     endedBy: 'Independence',
     summary: `Japan's 1945-1949 occupation of the Dutch East Indies weakened Dutch colonial rule. By then, Indonesians resented centuries of Dutch exploitation, forced labor, and resource extraction. `,
     sourceUrl: 'https://www.britannica.com/place/Dutch-East-Indies',
@@ -123,19 +123,19 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1962',
     formerNation: 'Ruanda-Urundi',
-    altName: 'Belgian trust territory',
+    
     yearEstablished: '1916',
     presentNations: 'Rwanda, Burundi',
     endedBy: 'Independence, Split',
-    summary: `They were already distinct kingdoms before colonial rule. After independence from the Belgians, each territory differed in its interethnic relations between the Hutus and Tutsis.`,
-    sourceUrl: 'https://history.state.gov/milestones/1953-1960/dien-bien-phu',
+    summary: `Ruanda-Urundi was a trust territory administered by Belgium comprising of two distinct kingdoms. After gaining independence, each territory differed in its interethnic relations between the Hutus and Tutsis.`,
+    sourceUrl: 'https://www.britannica.com/place/Ruanda-Urundi',
   },
 
   {
     yearEnded: '1964',
     formerNation: 'Tanganyika',
     yearEstablished: '1961',
-    presentNations: 'Tanzania',
+    presentNations: 'part of Tanzania',
     endedBy: 'Independence, Merged',
     summary: `Tanganyika merged with Zanzibar after gaining independence. The people of each had prior sociocultural and economic ties. Zanzibar's popularity as a tourist destination would give Tanganyika an economic boost.`,
     sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
@@ -144,9 +144,9 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1964',
     formerNation: 'Zanzibar',
-    altName: "People's Republic of Zanzibar",
+    
     yearEstablished: '1963',
-    presentNations: 'Tanzania (retains significant internal autonomy)',
+    presentNations: 'part of Tanzania',
     endedBy: 'Independence, Merged',
     summary: `After independence from Arab rule, the new independent government merged with Tanganyika strengthen its ties to the African mainland.`,
     sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
@@ -182,6 +182,7 @@ export const formerCountries: FormerCountry[] = [
     presentNations: 'Egypt, Syria',
     endedBy: 'Split',
     summary: `Egypt and Syria merged to form the United Arab Republic in 1958. A marginalized Syria seceded in 1961, leaving Egypt alone to retain the name United Arab Republic until 1971.`,
+    sourceUrl:'https://www.britannica.com/place/United-Arab-Republic',
   },
 
   {
@@ -200,7 +201,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'South Vietnam',
     
     yearEstablished: '1955',
-    presentNations: 'Vietnam',
+    presentNations: 'part of Vietnam',
     endedBy: 'Military Defeat, Merged',
     summary: `After losing support from the United States, South Vietnam was defeated by the military forces of North Vietnam on April 30, 1975. It merged with North Vietnam to form the Socialist Republic of Vietnam.`,
     sourceUrl:'https://www.britannica.com/event/Fall-of-Saigon',
@@ -208,7 +209,7 @@ export const formerCountries: FormerCountry[] = [
 
   {
     yearEnded: '1975',
-    formerNation: 'Kingdom of Sikkim',
+    formerNation: 'Sikkim',
     yearEstablished: '1642',
     presentNations: 'part of India',
     endedBy: 'Annexed',
@@ -221,7 +222,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'North Vietnam',
     
     yearEstablished: '1945',
-    presentNations: 'Vietnam',
+    presentNations: 'part of Vietnam',
     endedBy: 'Military Conquest, Merged',
     summary: `After South Vietnam's 1975 defeat, North Vietnam and South Vietnam were officially reunified in 1976. North Vietnam established "re-education camps" for former South Vietnamese officials.`,
     sourceUrl:'https://www.ebsco.com/research-starters/history/north-and-south-vietnam-are-reunited',
@@ -291,7 +292,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'South Yemen',
     
     yearEstablished: '1967',
-    presentNations: 'Republic of Yemen',
+    presentNations: 'part of Yemen',
     endedBy: 'Merged',
     summary: `South Yemen was relatively destitute and saw unification as a potential economic boost. It already had many shared cultural norms with North Yemen.`,
      sourceUrl:'https://www.remitly.com/blog/lifestyle-culture/yemen-unity-day-history-and-meaning/'
@@ -302,7 +303,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'North Yemen',
     
     yearEstablished: '1962',
-    presentNations: 'Republic of Yemen',
+    presentNations: 'part of Yemen',
     endedBy: 'Merged',
     summary: `Oil discoveries in the border region created economic incentive for unity. North Yemen's leader Ali Abdullah Saleh felt that absorbing the south would exacerbate his power, while South Yemen's leadership saw union as a substantial survival strategy.`,
     sourceUrl:'https://www.merip.org/1991/05/yemen-unification-and-the-gulf-war/'
@@ -345,7 +346,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'South African Bantustans',
     altName: 'Transkei (1976), Bophuthatswana (1977), Venda (1979), Ciskei (1981), etc',
     yearEstablished: '1976',
-    presentNations: 'South Africa',
+    presentNations: 'part of South Africa',
     endedBy: 'Reintegrated',
     summary: `The Bantustans were pseudo-national lands designated for South Africa's Black population under apartheid. They attempted to, but never became independent states and were dismantled when apartheid ended.`,
     sourceUrl:'https://www.britannica.com/topic/Bantustan'

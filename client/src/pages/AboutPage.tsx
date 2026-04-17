@@ -39,7 +39,7 @@ export default function AboutPage() {
     <div className="about-page">
       <SEO 
         title="About Retrocodex: What You Might Have Learned Wrong"
-        description="Learn about Retrocodex, a community-driven encyclopedia dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
+        description="Explore Retrocodex, a community-driven encyclopedia dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
@@ -55,7 +55,7 @@ export default function AboutPage() {
             </div>
 
             <p className="about-body">
-              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1" className="about-inline-link">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts. It's a place to give your brain a system update.
+              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1" className="about-inline-link">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts in school, media, or in everyday life. It's a place to give your brain a system update.
             </p>
             <p className="about-body">
               ⚠️ Note: This site is NOT a political fact-checker to discuss current political events or news media. However, it does feature broader topics that may be inadvertently politicized by the public, such as false or contested scientific and historical claims used to support current political agendas.
