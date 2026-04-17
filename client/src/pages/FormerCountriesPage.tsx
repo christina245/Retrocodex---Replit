@@ -72,15 +72,15 @@ export default function FormerCountriesPage() {
         title="List of Former Countries (1930–2026) | Retrocodex"
         description="A list of former countries sorted by the year they ceased to exist."
       />
-      <Header onMenuToggle={() => setMenuOpen(true)} />
+      <Header onMenuClick={() => setMenuOpen(true)} />
       <HamburgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <HomepageCategoryNav />
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">List of former countries from 1930-2026</h1>
+          <h1 className="fc-title">Countries that no longer exist (1930-2026)</h1>
           <p className="fc-description">
-            What countries were you taught about in school that no longer exist? Here's a list sorted by the year they merged, dissolved, or were simply renamed.
+            What countries, states, or territories were you taught about in school that didn't stick around after you graduated? Here's a list sorted by the year they merged, dissolved, or were renamed to assert a new identity.
           </p>
 
           <div className="fc-table-scroll">

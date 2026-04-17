@@ -214,8 +214,8 @@ export const formerCountries: FormerCountry[] = [
     
     yearEstablished: '1955',
     presentNations: 'Vietnam',
-    endedBy: 'Military Defeat',
-    summary: `After losing support from the American military, South Vietnam was defeated by the communist forces of North Vietnam on April 30, 1975.`,
+    endedBy: 'Military Defeat, Merged',
+    summary: `After losing support from the United States, South Vietnam was defeated by the military forces of North Vietnam on April 30, 1975. It merged with North Vietnam to form the Socialist Republic of Vietnam.`,
     sourceUrl:'https://www.britannica.com/event/Fall-of-Saigon',
   },
 
@@ -225,17 +225,19 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1642',
     presentNations: 'India (22nd state)',
     endedBy: 'Annexed',
-    summary: `India had long viewed Sikkim as a critical Himalayan buffer against China. When pro-India political parties won elections and the Chogyal proved unable to build popular support, India exploited the opening to engineer incorporation into the union.`,
+    summary: `India had long viewed Sikkim as a critical Himalayan buffer against China. Sikkim felt threatened by its neighbors Nepal and China, prompting it to seek support from a more powerful entity. `,
+    sourceUrl:'https://indianexpress.com/article/explained/explained-sikkim-history-culture-became-a-part-of-india-7920790/',
   },
 
   {
     yearEnded: '1976',
     formerNation: 'North Vietnam',
-    altName: 'Democratic Republic of Vietnam',
+    
     yearEstablished: '1945',
-    presentNations: 'Socialist Republic of Vietnam',
-    endedBy: 'Merged',
-    summary: `The ideological goal of a unified Vietnam under communist rule had driven the entire conflict. Military victory removed the last obstacle; no force capable of resisting reunification remained, and Hanoi had the will to complete it.`,
+    presentNations: 'Vietnam',
+    endedBy: 'Military Conquest, Merged',
+    summary: `After South Vietnam's 1975 defeat, North Vietnam and South Vietnam were officially reunified in 1976. North Vietnam established "re-education camps" for former South Vietnamese officials.`,
+    sourceUrl:'https://www.ebsco.com/research-starters/history/north-and-south-vietnam-are-reunited',
   },
 
   // ── 1980s ──────────────────────────────────────────────────────────────────
@@ -243,9 +245,9 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1980',
     formerNation: 'Rhodesia',
-    altName: 'Also "Zimbabwe Rhodesia" (1979)',
+    
     yearEstablished: '1965',
-    presentNations: 'Republic of Zimbabwe',
+    presentNations: 'Zimbabwe',
     endedBy: 'Independence Transition',
     summary: `A white minority of under 5% could not indefinitely deny political rights to the majority. Guerrilla war, sanctions, and loss of rear bases after Mozambique's independence eroded the regime until negotiation was unavoidable.`,
   },
