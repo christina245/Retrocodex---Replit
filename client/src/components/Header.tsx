@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Search, HandHeart, X, UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth";
@@ -25,6 +25,29 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
   const [searchQuery, setSearchQuery] = useState("");
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [, navigate] = useLocation();
+  const headerRef = useRef<HTMLElement>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const searchBtnRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const header = headerRef.current;
+    const actions = actionsRef.current;
+    const searchBtn = searchBtnRef.current;
+    if (!header || !actions || !searchBtn) return;
+    const updateClusterWidth = () => {
+      const actionsRect = actions.getBoundingClientRect();
+      const btnRect = searchBtn.getBoundingClientRect();
+      const reserve = Math.max(0, actionsRect.right - btnRect.right);
+      header.style.setProperty("--header-right-reserve", `${Math.ceil(reserve)}px`);
+    };
+    updateClusterWidth();
+    const ro = new ResizeObserver(updateClusterWidth);
+    ro.observe(actions);
+    window.addEventListener("resize", updateClusterWidth);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", updateClusterWidth);
+    };
+  }, [isLoggedIn]);
   const [since, setSince] = useState(() => {
     try {
       return localStorage.getItem("activityLastSeenAt") || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -68,7 +91,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
   };
   return (
     <>
-      <header className={`header ${variant === "simplified" ? "header-simplified" : ""}`}>
+      <header ref={headerRef} className={`header ${variant === "simplified" ? "header-simplified" : ""}`}>
         <div className="header-container">
           {variant === "default" && (
             <div className="header-left-section">
@@ -123,34 +146,9 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             <img src="/transparent logo.png" alt="Retrocodex" className="logo-icon-mobile" />
           </Link>
 
-          {isSearchOpen && (
-            <form onSubmit={handleSearchSubmit} className="header-search-form">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                placeholder="Search facts..."
-                className="header-search-input"
-                data-testid="input-search"
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSearchOpen(false);
-                  setSearchQuery("");
-                }}
-                className="header-search-close"
-                data-testid="button-search-close"
-                aria-label="Close search"
-              >
-                <X size={18} />
-              </button>
-            </form>
-          )}
-          <div className="header-actions">
+          <div ref={actionsRef} className="header-actions">
             <button 
+              ref={searchBtnRef}
               className={`search-button ${isSearchOpen ? "search-button-hidden" : ""}`}
               data-testid="button-search"
               aria-label="Search facts"
@@ -160,6 +158,32 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
             >
               <Search size={20} />
             </button>
+            {isSearchOpen && (
+              <form onSubmit={handleSearchSubmit} className="header-search-form">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="Search facts..."
+                  className="header-search-input"
+                  data-testid="input-search"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSearchOpen(false);
+                    setSearchQuery("");
+                  }}
+                  className="header-search-close"
+                  data-testid="button-search-close"
+                  aria-label="Close search"
+                >
+                  <X size={18} />
+                </button>
+              </form>
+            )}
             <a 
               href="/submit"
               className="submit-fact-button header-only-submit"

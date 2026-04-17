@@ -416,7 +416,7 @@
     position: absolute;
     top: 10px;
     left: calc(50% + 130px);
-    right: 290px;
+    right: var(--header-right-reserve, 290px);
     min-width: 0;
     z-index: 5;
   }
