@@ -41,14 +41,7 @@ export const formerCountries: FormerCountry[] = [
     sourceUrl: 'https://www.historyhit.com/when-did-persia-become-iran-and-why/',
   },
 
-  {
-    yearEnded: '1938',
-    formerNation: 'First Austrian Republic',
-    yearEstablished: '1919',
-    presentNations: 'Germany (annexed); independent Austria restored 1945',
-    endedBy: 'Annexed',
-    summary: `Post-WWI economic devastation, domestic fascism, and pan-German nationalist sentiment eroded Austrian sovereignty. The democratic republic lacked the political will or military strength to resist Hitler's expansionist agenda.`,
-  },
+  
 
   {
     yearEnded: '1939',
@@ -76,14 +69,7 @@ export const formerCountries: FormerCountry[] = [
     sourceUrl: 'https://www.nippon.com/en/in-depth/d00815/',
   },
 
-  {
-    yearEnded: '1946',
-    formerNation: 'Kingdom of Italy',
-    yearEstablished: '1861',
-    presentNations: 'Italy',
-    endedBy: 'Renamed',
-    summary: `The monarchy had enabled Mussolini's 1922 rise to power and was deeply complicit in Italy's disastrous WWII losses. Italians, disgusted by its collaboration with fascism, voted to abolish the institution in a 1946 referendum and establish a republic.`,
-  },
+  
 
   {
     yearEnded: '1947',
@@ -101,7 +87,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Dutch East Indies',
     yearEstablished: '1800',
     presentNations: 'Republic of Indonesia',
-    endedBy: 'Independence War',
+    endedBy: 'Independence',
     summary: `Japan's 1945-1949 occupation of the Dutch East Indies weakened Dutch colonial rule. By then, Indonesians resented centuries of Dutch exploitation, forced labor, and resource extraction. `,
     sourceUrl: 'https://www.britannica.com/place/Dutch-East-Indies',
       },
@@ -114,7 +100,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Tibet',
     
     yearEstablished: '1913',
-    presentNations: "People's Republic of China (Tibet Autonomous Region)",
+    presentNations: "part of China",
     endedBy: 'Annexed',
     summary: `China sought control over Tibet under the guise of "liberating" it from theocracy while actually positioning it as a geographical buffer zone for disputes with its southern neighbor, India. `,
     sourceUrl: 'https://savetibet.org/why-tibet/history/',
@@ -127,7 +113,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'French Indochina',
     yearEstablished: '1887',
     presentNations: 'Vietnam, Laos, Cambodia',
-    endedBy: 'Split',
+    endedBy: 'Independence, Split',
     summary: `French rule failed to significantly improve quality of local life. Japanese occupation of Indochina briefly toppled French rule, suggesting they could be defeated.`,
     sourceUrl: 'https://history.state.gov/milestones/1953-1960/dien-bien-phu',
   },
@@ -140,7 +126,7 @@ export const formerCountries: FormerCountry[] = [
     altName: 'Belgian trust territory',
     yearEstablished: '1916',
     presentNations: 'Rwanda, Burundi',
-    endedBy: 'Split',
+    endedBy: 'Independence, Split',
     summary: `They were already distinct kingdoms before colonial rule. After independence from the Belgians, each territory differed in its interethnic relations between the Hutus and Tutsis.`,
     sourceUrl: 'https://history.state.gov/milestones/1953-1960/dien-bien-phu',
   },
@@ -150,7 +136,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Tanganyika',
     yearEstablished: '1961',
     presentNations: 'Tanzania',
-    endedBy: 'Merged',
+    endedBy: 'Independence, Merged',
     summary: `Tanganyika merged with Zanzibar after gaining independence. The people of each had prior sociocultural and economic ties. Zanzibar's popularity as a tourist destination would give Tanganyika an economic boost.`,
     sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
   },
@@ -161,8 +147,9 @@ export const formerCountries: FormerCountry[] = [
     altName: "People's Republic of Zanzibar",
     yearEstablished: '1963',
     presentNations: 'Tanzania (retains significant internal autonomy)',
-    endedBy: 'Merged',
+    endedBy: 'Independence, Merged',
     summary: `After independence from Arab rule, the new independent government merged with Tanganyika strengthen its ties to the African mainland.`,
+    sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
   },
 
   // ── 1970s ──────────────────────────────────────────────────────────────────
@@ -171,7 +158,7 @@ export const formerCountries: FormerCountry[] = [
     yearEnded: '1970',
     formerNation: 'Biafra',
     yearEstablished: '1967',
-    presentNations: 'Nigeria',
+    presentNations: 'part of Nigeria',
     endedBy: 'Military Defeat',
     summary: `Biafra was a seccesionist state that declared independence from the nation of Nigeria in 1967 due to resentment against its predominantly Igbo population. In 1970, it was defeated by the Nigerian federal government who wanted it back.`,
     sourceUrl: 'https://www.britannica.com/place/Biafra',
@@ -203,7 +190,7 @@ export const formerCountries: FormerCountry[] = [
    
     yearEstablished: '1948',
     presentNations: 'Sri Lanka',
-    endedBy: 'Renamed',
+    endedBy: 'Independence, Renamed',
     summary: `Post-independence nationalist sentiments sought to shed a name of Portuguese and British colonial origin, choosing a name similar to the country's original name of Sinhala. "Sri" is an honorific.`,
     sourceUrl:'https://www.bbc.com/news/world-south-asia-12099596',
   },
@@ -223,7 +210,7 @@ export const formerCountries: FormerCountry[] = [
     yearEnded: '1975',
     formerNation: 'Kingdom of Sikkim',
     yearEstablished: '1642',
-    presentNations: 'India (22nd state)',
+    presentNations: 'part of India',
     endedBy: 'Annexed',
     summary: `India had long viewed Sikkim as a critical Himalayan buffer against China. Sikkim felt threatened by its neighbors Nepal and China, prompting it to seek support from a more powerful entity. `,
     sourceUrl:'https://indianexpress.com/article/explained/explained-sikkim-history-culture-became-a-part-of-india-7920790/',
@@ -248,38 +235,42 @@ export const formerCountries: FormerCountry[] = [
     
     yearEstablished: '1965',
     presentNations: 'Zimbabwe',
-    endedBy: 'Independence Transition',
-    summary: `A white minority of under 5% could not indefinitely deny political rights to the majority. Guerrilla war, sanctions, and loss of rear bases after Mozambique's independence eroded the regime until negotiation was unavoidable.`,
+    endedBy: 'Independence',
+    summary: `Ruled by the British, a white minority held a disproportionate amount of political and social power in Rhodesia. The Black population pushed back, causing white emigration. It became Black-ruled and independent in 1980 as Zimbabwe.`,
+    sourceUrl:'https://courses.lumenlearning.com/suny-worldhistory/chapter/zimbabwe/',
   },
 
   {
     yearEnded: '1984',
     formerNation: 'Upper Volta',
-    altName: 'Republic of Upper Volta',
+    
     yearEstablished: '1960',
     presentNations: 'Burkina Faso',
-    endedBy: 'Renamed',
-    summary: `Thomas Sankara believed nations must decolonize psychologically by rejecting European-imposed names. 'Upper Volta' named the country after a French river measurement — to Sankara, a humiliating colonial relic with no African meaning.`,
+    endedBy: 'Independence, Renamed',
+    summary: `Upon gaining independence, the nation's first president Thomas Sankara saw the European-imposed name of Upper Volta as a colonial relic.`,
+    sourceUrl:'https://digitalcommons.usf.edu/etd/4612/',
   },
 
   {
     yearEnded: '1989',
     formerNation: 'Burma',
-    altName: 'Union of Burma',
+    
     yearEstablished: '1948',
     presentNations: 'Myanmar',
     endedBy: 'Renamed',
-    summary: `The military junta sought to delegitimize the pro-democracy opposition — 'Burma' had become associated with Aung San Suu Kyi's movement — and to impose a new national identity under military control, detached from the legacy of democratic governance.`,
+    summary: `Myanmar was seen as more inclusive of the country's ethnic minorities and relatively detached from colonial ties.`,
+    sourceUrl:'https://apnews.com/article/myanmar-burma-different-names-explained-8af64e33cf89c565b074eec9cbe22b72'
   },
 
   {
     yearEnded: '1989',
     formerNation: 'Kampuchea',
-    altName: "Democratic Kampuchea / People's Republic of Kampuchea",
+    
     yearEstablished: '1975',
-    presentNations: 'Kingdom of Cambodia',
+    presentNations: 'Cambodia',
     endedBy: 'Renamed',
-    summary: `'Kampuchea' was inseparable from the Khmer Rouge genocide. The Vietnamese-installed government, and later the UN peace process, required restoring a name untainted by mass atrocity to achieve the legitimacy needed for reconstruction aid.`,
+    summary: `The name 'Kampuchea' echoed from the Cambodian Genocide. The new government required a name untainted by mass atrocity to achieve the legitimacy needed for reconstruction aid.`,
+    sourceUrl:'https://www.asianstudies.org/publications/eaa/archives/the-rise-and-fall-of-democratic-kampuchea/'
   },
 
   // ── 1990s ──────────────────────────────────────────────────────────────────
@@ -287,31 +278,34 @@ export const formerCountries: FormerCountry[] = [
   {
     yearEnded: '1990',
     formerNation: 'East Germany',
-    altName: 'German Democratic Republic (GDR)',
+   
     yearEstablished: '1949',
-    presentNations: 'Federal Republic of Germany',
+    presentNations: 'Germany',
     endedBy: 'Reunified',
-    summary: `The communist economic model had visibly failed; East Germans could see West German prosperity on television. When Gorbachev signalled no Soviet intervention, the regime had no legitimate basis to survive and the population simply walked away.`,
+    summary: `Germany previously split into a capitalist West Germany and communist East Germany. The people of East Germany felt that their government was behind relative to West Germany and wanted a more prosperous environment to keep their skilled workers from emigrating.`,
+     sourceUrl:'https://www.britannica.com/topic/German-reunification'
   },
 
   {
     yearEnded: '1990',
     formerNation: 'South Yemen',
-    altName: "People's Democratic Republic of Yemen",
+    
     yearEstablished: '1967',
     presentNations: 'Republic of Yemen',
     endedBy: 'Merged',
-    summary: `South Yemen's Marxist economy was wholly dependent on Soviet subsidies. When Gorbachev cut aid during Perestroika, the economy collapsed. A 1986 internal power struggle had also decimated the leadership, leaving the state too weak to survive alone.`,
+    summary: `South Yemen was relatively destitute and saw unification as a potential economic boost. It already had many shared cultural norms with North Yemen.`,
+     sourceUrl:'https://www.remitly.com/blog/lifestyle-culture/yemen-unity-day-history-and-meaning/'
   },
 
   {
     yearEnded: '1990',
     formerNation: 'North Yemen',
-    altName: 'Yemen Arab Republic',
+    
     yearEstablished: '1962',
     presentNations: 'Republic of Yemen',
     endedBy: 'Merged',
-    summary: `Oil discoveries in the border region created economic incentive for unity. President Saleh calculated that absorbing the weakened south would extend his political control, while South Yemen's leadership saw union as the only path to survival.`,
+    summary: `Oil discoveries in the border region created economic incentive for unity. North Yemen's leader Ali Abdullah Saleh felt that absorbing the south would exacerbate his power, while South Yemen's leadership saw union as a substantial survival strategy.`,
+    sourceUrl:'https://www.merip.org/1991/05/yemen-unification-and-the-gulf-war/'
   },
 
   {
@@ -319,19 +313,21 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Soviet Union',
     altName: 'Union of Soviet Socialist Republics (USSR)',
     yearEstablished: '1922',
-    presentNations: 'Russia, Ukraine, Belarus, and 12 other independent republics',
+    presentNations: 'Russia, Ukraine, Belarus, Estonia, Latvia, Lithuania, Moldova, Georgia, Armenia, Azerbaijan, Kazakhstan, Kyrgyzstan, Uzbekistan, Turkmenistan, and Tajikistan',
     endedBy: 'Split',
-    summary: `Decades of economic stagnation left the USSR unable to compete with the West. Gorbachev's reforms unleashed independence movements he could not control; the failed August 1991 coup then destroyed the Communist Party's last shred of legitimacy.`,
+    summary: `The Soviet Union collapsed for several reasons, including economic destitution under communism, opposition to war with Afghanistan, the Chernobyl incident, and influences by the relatively democratic, capitalist, and liberal United States.`,
+    sourceUrl:'https://www.britannica.com/story/why-did-the-soviet-union-collapse'
   },
 
   {
     yearEnded: '1991–1992',
     formerNation: 'Yugoslavia',
-    altName: 'Socialist Federal Republic of Yugoslavia',
+  
     yearEstablished: '1945',
-    presentNations: 'Slovenia, Croatia, Bosnia-Herzegovina, North Macedonia, Serbia, Montenegro, Kosovo',
+    presentNations: 'Slovenia, Croatia, Bosnia-Herzegovina, Macedonia, Serbia, Montenegro, Kosovo',
     endedBy: 'Split',
-    summary: `Tito's death left a power vacuum; economic crisis deepened ethnic grievances; Milošević weaponised Serbian nationalism. Wealthier republics saw more future in European integration than in a Serb-dominated federation, and armed conflict followed.`,
+    summary: `Yugoslavia was divided by ethnic and religious tensions. The fall of the Soviet Union removed much of its threat and thus its incentive to stay unionized.`,
+    sourceUrl:'https://history.state.gov/milestones/1989-1992/breakup-yugoslavia'
   },
 
   {
@@ -340,48 +336,55 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1918',
     presentNations: 'Czech Republic (Czechia), Slovakia',
     endedBy: 'Split',
-    summary: `After communism fell, Czech leaders pushed rapid privatization while Slovak leaders favoured gradualism. Neither side was willing to renegotiate the federal structure, and separation proved easier than compromise for both sides.`,
+    summary: `The Czechs were economically prosperous relative to the Slovaks, who felt marginalized, dominated, and sought greater autonomy.`,
+    sourceUrl:'https://scalar.usc.edu/works/dissolution-of-czechoslovakia/the-dissolution-of-czechoslovakia'
   },
 
   {
     yearEnded: '1994',
     formerNation: 'South African Bantustans',
-    altName: 'Transkei (1976), Bophuthatswana (1977), Venda (1979), Ciskei (1981)',
+    altName: 'Transkei (1976), Bophuthatswana (1977), Venda (1979), Ciskei (1981), etc',
     yearEstablished: '1976',
     presentNations: 'South Africa',
     endedBy: 'Reintegrated',
-    summary: `The homelands were always a legal fiction with no genuine economy or sovereignty. When apartheid collapsed under internal resistance, international sanctions, and economic pressure, the homelands had no independent basis for existence.`,
+    summary: `The Bantustans were pseudo-national lands designated for South Africa's Black population under apartheid. They attempted to, but never became independent states and were dismantled when apartheid ended.`,
+    sourceUrl:'https://www.britannica.com/topic/Bantustan'
   },
 
   {
     yearEnded: '1997',
     formerNation: 'Zaire',
     yearEstablished: '1971',
-    presentNations: 'Democratic Republic of the Congo (DRC)',
+    presentNations: 'Congo',
     endedBy: 'Renamed',
-    summary: `Mobutu's three decades of kleptocracy had gutted every state institution. The 1994 Rwandan genocide destabilized eastern Congo with a million refugees; Rwanda and Uganda backed Kabila's rebellion, exploiting a state too hollowed-out to defend itself.`,
+    summary: `Congo was renamed Zaire in 1971 by leader Joseph Mobutu. After he was overthrown, its name was reverted to Congo to distance the country from his inefficient, corrupt rule.`,
+    sourceUrl:'https://emro.libraries.psu.edu/record/index.php?id=958'
   },
 
   // ── 2000s ──────────────────────────────────────────────────────────────────
-
   {
-    yearEnded: '2003',
-    formerNation: 'Federal Republic of Yugoslavia',
-    yearEstablished: '1992',
-    presentNations: 'Serbia and Montenegro (itself dissolved in 2006 into Serbia and Montenegro)',
-    endedBy: 'Renamed',
-    summary: `Montenegro increasingly chafed at a union that tied its EU integration prospects to Serbia's complicated Kosovo situation. The EU brokered the 2003 restructuring as a stepping stone, as the FRY name was an untenable claim to Yugoslavia's succession.`,
+    yearEnded: '2002',
+    formerNation: 'East Timor (part of Indonesia)',
+    yearEstablished: 'Unknown',
+    presentNations: "Timor-Leste",
+    endedBy: 'Independence',
+    summary: `Indonesian occupation of East Timor had proved harmful, leading to violence and famine. After Indonesia and Portugal sign an agreement allowing the Timorese to vote for independence after decades of struggle, 78% of its people voted yes.`,
+    sourceUrl:'https://www.ebsco.com/research-starters/history/east-timor-declares-independence-annexed-indonesia'
   },
-
+  
+  
+  
   {
     yearEnded: '2006',
     formerNation: 'Serbia and Montenegro',
-    altName: 'Formerly Federal Republic of Yugoslavia (1992–2003)',
-    yearEstablished: '2003',
+    yearEstablished: '1992',
     presentNations: 'Serbia, Montenegro',
     endedBy: 'Split',
-    summary: `Montenegro's coastal economy was naturally aligned with Europe, but EU and NATO integration was blocked while linked to Serbia's Kosovo complications. When the EU set a referendum mechanism, 55.5% of Montenegrins voted to go their own way.`,
+    summary: `Montenegro did not want to stay involved in Serbia's conflict with Kosovo and sought greater economic autonomy.`,
+    sourceUrl:'https://www.pbs.org/newshour/world/former-allies-serbia-and-montenegro-agree-to-repair-strained-relations'
   },
+
+  
 
   // ── 2010s ──────────────────────────────────────────────────────────────────
 
@@ -392,6 +395,26 @@ export const formerCountries: FormerCountry[] = [
     presentNations: "Curaçao, Sint Maarten (autonomous countries); Bonaire, Sint Eustatius, Saba (Dutch special municipalities)",
     endedBy: 'Dissolved',
     summary: `The six islands had fundamentally different sizes, economies, and political interests that made collective governance unworkable. Curaçao wanted autonomy; smaller islands wanted direct Dutch protection. No federation could satisfy all parties.`,
+    sourceUrl:'https://www.britannica.com/place/Netherlands-Antilles'
+  },
+
+  {
+    yearEnded: '2018',
+    formerNation: 'Swaziland',
+    yearEstablished: '1968',
+    presentNations: "Eswatini",
+    endedBy: 'Renamed',
+    summary: `Africa's last absolute monarch, King Mswati III, renamed the country Eswatini, which means "Land of the Swazis". He claimed that "Swaziland" was often confused with "Switzerland" abroad.`,
+    sourceUrl:'https://www.bbc.com/news/world-africa-43821512'
+  },
+  {
+    yearEnded: '2019',
+    formerNation: 'Macedonia',
+    yearEstablished: '1991',
+    presentNations: "North Macedonia",
+    endedBy: 'Renamed',
+    summary: `Macedonia renamed to North Macedonia in 2019 to resolve a long dispute with Greece, which objected to the name “Macedonia” due to historical and regional claims tied to its own region.`,
+    sourceUrl:'https://history.state.gov/countries/macedonia'
   },
 
 ];
