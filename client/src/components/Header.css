@@ -417,7 +417,7 @@
     top: 10px;
     left: calc(50% + 130px);
     right: var(--header-right-reserve, 290px);
-    min-width: 0;
+    min-width: 140px;
     z-index: 5;
   }
 
