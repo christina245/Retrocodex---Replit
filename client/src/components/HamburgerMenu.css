@@ -62,6 +62,7 @@
 
 .menu-link:hover {
   background: rgba(255, 83, 83, 0.1);
+  color: #ff5353;
 }
 
 @keyframes fadeIn {
