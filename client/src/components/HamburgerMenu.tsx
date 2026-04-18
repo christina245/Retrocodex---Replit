@@ -50,6 +50,9 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
           <a href="/former-countries" className="menu-link" data-testid="link-former-countries">
             List of Countries that No Longer Exist (1930–2026)
           </a>
+          <a href="/evolving-slang" className="menu-link" data-testid="link-evolving-slang">
+            List of Evolving Slang Terms
+          </a>
           
       
         </nav>
