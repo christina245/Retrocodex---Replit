@@ -171,10 +171,11 @@
   color: #7B4E9E;
   font-weight: 700;
   white-space: nowrap;
+  min-width: 180px;
 }
 
 .fc-td-present-nations {
-  max-width: 200px;
+  max-width: 180px;
 }
 
 /* ── Former nation cell ─────────────────────────────────────────── */

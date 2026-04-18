@@ -77,7 +77,7 @@ export const formerCountries: FormerCountry[] = [
     
     yearEstablished: '1858',
     presentNations: 'India, Pakistan, Bangladesh',
-    endedBy: 'Split',
+    endedBy: 'Independence, Split',
     summary: `After India became independent of the British in 1947, it sought to divide along religious lines to separate Hindus and Muslims. However, the demarcation was rushed, messy, and harmful, for example cutting through and dividing the Sikh population in the state of Punjab.`,
     sourceUrl: 'https://www.britannica.com/event/Partition-of-India',
   },
@@ -87,7 +87,7 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'Dutch East Indies',
     yearEstablished: '1800',
     presentNations: 'Indonesia',
-    endedBy: 'Independence',
+    endedBy: 'Independence, Renamed',
     summary: `Japan's 1945-1949 occupation of the Dutch East Indies weakened Dutch colonial rule. By then, Indonesians resented centuries of Dutch exploitation, forced labor, and resource extraction. `,
     sourceUrl: 'https://www.britannica.com/place/Dutch-East-Indies',
       },
@@ -114,7 +114,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1887',
     presentNations: 'Vietnam, Laos, Cambodia',
     endedBy: 'Independence, Split',
-    summary: `French rule failed to significantly improve quality of local life. Japanese occupation of Indochina briefly toppled French rule, suggesting they could be defeated.`,
+    summary: `French Indochina was a federation in Southeast Asia that failed to significantly improve quality of local life. Japanese occupation of Indochina briefly toppled French rule, suggesting they could be defeated.`,
     sourceUrl: 'https://history.state.gov/milestones/1953-1960/dien-bien-phu',
   },
 
@@ -137,7 +137,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1961',
     presentNations: 'part of Tanzania',
     endedBy: 'Independence, Merged',
-    summary: `Tanganyika merged with Zanzibar after gaining independence. The people of each had prior sociocultural and economic ties. Zanzibar's popularity as a tourist destination would give Tanganyika an economic boost.`,
+    summary: `Tanganyika was a sovereign state that merged with Zanzibar after gaining independence from the British. The people of each had prior sociocultural and economic ties. Zanzibar's popularity as a tourist destination would give Tanganyika an economic boost.`,
     sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
   },
 
@@ -148,7 +148,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1963',
     presentNations: 'part of Tanzania',
     endedBy: 'Independence, Merged',
-    summary: `After independence from Arab rule, the new independent government merged with Tanganyika strengthen its ties to the African mainland.`,
+    summary: `After independence from Arab rule, the island state merged with Tanganyika strengthen its ties to the African mainland.`,
     sourceUrl: 'https://theconversation.com/tanganyika-and-zanzibar-tanzanias-60-year-old-union-may-need-a-restructure-229933',
   },
 
@@ -169,8 +169,8 @@ export const formerCountries: FormerCountry[] = [
     formerNation: 'East Pakistan',
     yearEstablished: '1947',
     presentNations: 'Bangladesh',
-    endedBy: 'Renamed',
-    summary: `East Pakistan was the eastern province of Pakistan between 1956 and 1971. Upon gaining independence from Western Pakistan, it was renamed Bangladesh after its predominant Bengali population.`,
+    endedBy: 'Independence, Renamed',
+    summary: `East Pakistan was the eastern province of Pakistan between 1956 and 1971. It was renamed Bangladesh after its predominant Bengali population, becoming an independent country.`,
     sourceUrl:'https://www.nationalarchives.gov.uk/education/resources/the-independence-of-bangladesh-in-1971/',
   },
 
@@ -223,7 +223,7 @@ export const formerCountries: FormerCountry[] = [
     
     yearEstablished: '1945',
     presentNations: 'part of Vietnam',
-    endedBy: 'Military Conquest, Merged',
+    endedBy: 'Military Victory, Merged',
     summary: `After South Vietnam's 1975 defeat, North Vietnam and South Vietnam were officially reunified in 1976. North Vietnam established "re-education camps" for former South Vietnamese officials.`,
     sourceUrl:'https://www.ebsco.com/research-starters/history/north-and-south-vietnam-are-reunited',
   },
@@ -236,8 +236,8 @@ export const formerCountries: FormerCountry[] = [
     
     yearEstablished: '1965',
     presentNations: 'Zimbabwe',
-    endedBy: 'Independence',
-    summary: `Ruled by the British, a white minority held a disproportionate amount of political and social power in Rhodesia. The Black population pushed back, causing white emigration. It became Black-ruled and independent in 1980 as Zimbabwe.`,
+    endedBy: 'Independence, Renamed',
+    summary: `Ruled by the British, a white minority held a disproportionate amount of political and social power in the unrecognized state of Rhodesia. The Black population pushed back, causing white emigration. It became Black-ruled and independent in 1980 as the recognized country of Zimbabwe.`,
     sourceUrl:'https://courses.lumenlearning.com/suny-worldhistory/chapter/zimbabwe/',
   },
 
@@ -248,7 +248,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1960',
     presentNations: 'Burkina Faso',
     endedBy: 'Independence, Renamed',
-    summary: `Upon gaining independence, the nation's first president Thomas Sankara saw the European-imposed name of Upper Volta as a colonial relic.`,
+    summary: `Upon gaining independence from French rule, the nation's first president Thomas Sankara saw the European-imposed name of Upper Volta as a colonial relic.`,
     sourceUrl:'https://digitalcommons.usf.edu/etd/4612/',
   },
 
@@ -270,7 +270,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: '1975',
     presentNations: 'Cambodia',
     endedBy: 'Renamed',
-    summary: `The name 'Kampuchea' echoed from the Cambodian Genocide. The new government required a name untainted by mass atrocity to achieve the legitimacy needed for reconstruction aid.`,
+    summary: `The name 'Kampuchea' was a reminder of the Cambodian Genocide. The new government required a name untainted by mass atrocity to achieve the legitimacy needed for reconstruction aid.`,
     sourceUrl:'https://www.asianstudies.org/publications/eaa/archives/the-rise-and-fall-of-democratic-kampuchea/'
   },
 
@@ -369,7 +369,7 @@ export const formerCountries: FormerCountry[] = [
     yearEstablished: 'Unknown',
     presentNations: "Timor-Leste",
     endedBy: 'Independence',
-    summary: `Indonesian occupation of East Timor had proved harmful, leading to violence and famine. After Indonesia and Portugal sign an agreement allowing the Timorese to vote for independence after decades of struggle, 78% of its people voted yes.`,
+    summary: `Indonesian occupation of the island East Timor had proved harmful, leading to violence and famine. After Indonesia and Portugal sign an agreement allowing the Timorese to vote for independence after decades of struggle, 78% of its people voted yes.`,
     sourceUrl:'https://www.ebsco.com/research-starters/history/east-timor-declares-independence-annexed-indonesia'
   },
   
