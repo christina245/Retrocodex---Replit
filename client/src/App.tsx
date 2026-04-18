@@ -44,6 +44,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import RecommendedBooksPage from "@/pages/RecommendedBooksPage";
 import FormerCountriesPage from "@/pages/FormerCountriesPage";
+import EvolvingSlangPage from "@/pages/EvolvingSlangPage";
 
 function OAuthCallbackHandler() {
   const { refetchUser } = useAuth();
@@ -129,6 +130,7 @@ function Router() {
       <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/recommended-reading" component={RecommendedBooksPage} />
       <Route path="/former-countries" component={FormerCountriesPage} />
+      <Route path="/evolving-slang" component={EvolvingSlangPage} />
       <Route path="/decade/:decade" component={HomePage} />
       <Route component={NotFound} />
     </Switch>

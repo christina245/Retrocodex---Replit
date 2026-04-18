@@ -1,0 +1,70 @@
+/* Evolving Slang page — extends FormerCountriesPage.css for shared fc-* styles */
+
+.es-section-heading {
+  font-family: "Merriweather", Georgia, "Times New Roman", serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+  font-weight: 700;
+  color: #2c2c2c;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+.es-section + .es-section {
+  margin-top: 36px;
+}
+
+/* Era column — purple, regular weight, bold only via .es-td-term/.es-td-direction */
+.es-td-era {
+  white-space: nowrap;
+  color: #7B4E9E;
+  font-weight: 400;
+}
+
+.es-td-direction {
+  white-space: nowrap;
+  color: #7B4E9E;
+  font-weight: 700;
+  min-width: 140px;
+}
+
+.es-td-term {
+  font-weight: 700;
+  min-width: 140px;
+  max-width: 220px;
+}
+
+.es-td-originated {
+  min-width: 220px;
+  max-width: 320px;
+}
+
+.es-td-original,
+.es-td-current {
+  min-width: 240px;
+  max-width: 360px;
+}
+
+.es-term-link {
+  color: #2c2c2c;
+  text-decoration: underline;
+  text-decoration-color: rgba(44, 44, 44, 0.35);
+  text-underline-offset: 2px;
+  font-weight: 700;
+}
+
+.es-term-link:hover {
+  text-decoration-color: #2c2c2c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .es-section-heading {
+    color: hsl(var(--foreground));
+  }
+  .es-term-link {
+    color: hsl(var(--foreground));
+    text-decoration-color: hsl(var(--muted-foreground));
+  }
+  .es-term-link:hover {
+    text-decoration-color: hsl(var(--foreground));
+  }
+}
