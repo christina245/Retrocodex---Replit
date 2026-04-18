@@ -11,6 +11,7 @@ import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { SignInModal } from "@/components/SignInModal";
 import { RelatedFacts } from "@/components/RelatedFacts";
+import { SourcesModal } from "@/components/SourcesModal";
 import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
@@ -32,6 +33,7 @@ export default function SingleFactPage() {
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
+  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isLoggedIn, user } = useAuth();
@@ -333,7 +335,7 @@ export default function SingleFactPage() {
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
                 {relatedFacts.length > 0 && (
-                  <RelatedFacts facts={relatedFacts} />
+                  <RelatedFacts facts={relatedFacts} onBetaClick={(slug) => setSourcesModalFactId(slug)} />
                 )}
                 <div className="tags-banner-column">
                   <CategoryLinks categories={factData.categories} />
@@ -392,6 +394,10 @@ export default function SingleFactPage() {
         isOpen={showSignIn}
         onClose={() => { setShowSignIn(false); setSignInContext(undefined); }}
         contextMessage={signInContext}
+      />
+      <SourcesModal
+        factId={sourcesModalFactId}
+        onClose={() => setSourcesModalFactId(null)}
       />
       {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
     </div>

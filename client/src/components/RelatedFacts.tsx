@@ -16,6 +16,7 @@ interface RelatedFact {
 
 interface RelatedFactsProps {
   facts?: RelatedFact[];
+  onBetaClick?: (factId: string) => void;
 }
 
 const defaultRelatedFacts: RelatedFact[] = [
@@ -41,10 +42,14 @@ const defaultRelatedFacts: RelatedFact[] = [
   }
 ];
 
-export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps) {
+export function RelatedFacts({ facts = defaultRelatedFacts, onBetaClick }: RelatedFactsProps) {
   const { toast } = useToast();
 
-  const handleBetaClick = () => {
+  const handleBetaClick = (factId: string) => {
+    if (onBetaClick) {
+      onBetaClick(factId);
+      return;
+    }
     toast({
       title: "Unavailable in Beta",
       description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
@@ -61,7 +66,7 @@ export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps)
               <button 
                 type="button"
                 className="related-fact-item related-fact-button"
-                onClick={handleBetaClick}
+                onClick={() => handleBetaClick(fact.id)}
                 data-testid={`button-related-fact-${fact.id}`}
               >
                 <div className="related-fact-image-container">

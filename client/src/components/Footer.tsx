@@ -82,16 +82,6 @@ export function Footer() {
             >
               <FaReddit />
             </a>
-            <a 
-              href="https://bsky.app/profile/the-retrocodex.bsky.social" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="footer-social-link"
-              data-testid="link-footer-bluesky"
-              aria-label="Follow us on Bluesky"
-            >
-              <FaBluesky />
-            </a>
           </div>
           <a 
             href="https://buymeacoffee.com/retrocodex" 

@@ -117,16 +117,6 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
                   <img src={redditLogo} alt="Reddit" className="social-logo social-logo-reddit" />
                 </a>
                 <a 
-                  href="https://bsky.app/profile/the-retrocodex.bsky.social" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="social-icon social-icon-bluesky"
-                  data-testid="link-bluesky"
-                  aria-label="Visit us on Bluesky"
-                >
-                  <img src={blueskyLogo} alt="Bluesky" className="social-logo social-logo-bluesky" />
-                </a>
-                <a 
                   href="https://buymeacoffee.com/retrocodex" 
                   target="_blank" 
                   rel="noopener noreferrer"

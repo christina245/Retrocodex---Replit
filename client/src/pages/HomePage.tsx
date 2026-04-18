@@ -21,6 +21,7 @@ import { Pagination } from "@/components/Pagination";
 import { SEO } from "@/components/SEO";
 import type { Fact as DbFact } from "@shared/schema";
 import { DECADES } from "@shared/schema";
+import { ArrowBigDownDash } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
 import { useVerificationGuard } from "@/lib/useVerificationGuard";
@@ -484,7 +485,7 @@ export default function HomePage() {
           What have you learned that's <u>now outdated</u>?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
-          Pick the decade you graduated high school. Then discover what you may have been taught growing up that has since been disproven.
+          Pick the decade you graduated high school below. Discover what you may have been taught that has since been disproven.
         </p>
 
         <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">
@@ -494,6 +495,7 @@ export default function HomePage() {
               onClick={() => setLocation("/")}
               data-testid="button-decade-all"
             >
+              <ArrowBigDownDash size={18} color="#FFFFFF" style={{ marginRight: 6, verticalAlign: "middle" }} />
               View all topics
             </button>
             {DECADES.filter(d => d >= "1950s").map((decade) => (
