@@ -25,7 +25,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     originalMeaning:
       "An Asian American woman affiliated with gang culture or the import car scene.",
     currentMeaning:
-      "An everyday aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and specific fashion sensibility — with no gang affiliation implied or expected. It still may be considered derogatory by some due to its association with a lower socioeconomic class.",
+      "An everyday aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and specific fashion sensibility — with no gang affiliation implied or expected. ⚠️ It still may be considered derogatory by some due to its association with a lower socioeconomic class.",
     directionOfShift: "Broadened",
   },
   {
@@ -120,7 +120,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "2010s",
     term: "Stan",
     sourceUrl: "https://en.wikipedia.org/wiki/Stan_(slang)",
-    originatedFrom: "Eminem's 2000 song \"Stan\"",
+    originatedFrom: "A 2000 song by Eminem about a stalker who kills his idol",
     originalMeaning:
       "A dangerously obsessive, unstable fan who spirals into violence upon not eliciting a response from their targeted idol.",
     currentMeaning:
