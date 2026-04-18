@@ -23,9 +23,9 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     sourceUrl: "https://aesthetics.fandom.com/wiki/Asian_Baby_Girl",
     originatedFrom: "Vietnamese American street communities (New York, Southern California)",
     originalMeaning:
-      "An Asian American woman affiliated with gang culture or the import car scene.",
+      "A Southeast Asian-American woman affiliated with gang culture or the import car scene. ⚠️ Several social media users insist on using the term only in its original context.",
     currentMeaning:
-      "An everyday aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and specific fashion sensibility — with no gang affiliation implied or expected. ⚠️ It still may be considered derogatory by some due to its association with a lower socioeconomic class.",
+      "East or Southeast-Asian women with a specific aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and bold fashion — with no gang affiliation implied or expected. ⚠️ It is often considered derogatory by some due to its association with a lower socioeconomic class.",
     directionOfShift: "Broadened",
   },
   {
@@ -54,22 +54,22 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "2000s",
     term: "GOAT",
     sourceUrl: "https://www.dictionary.com/culture/slang/g-o-a-t",
-    originatedFrom: "Sports culture / Hip-hop (popularized via Muhammad Ali's legacy and LL Cool J's 2000 album)",
+    originatedFrom: "Sports culture, hip-hop",
     originalMeaning:
-      "The animal; or colloquially, the person blamed when things go wrong — a scapegoat.",
+      "Short for scapegoat — someone to blame when things go wrong.",
     currentMeaning:
-      "Greatest Of All Time — the highest possible compliment for anyone's skill or legacy, applied freely across sports, music, food, and everyday life.",
+      "Greatest Of All Time: a compliment for anyone's skill or legacy, applied freely across sports, music, food, and everyday life.",
     directionOfShift: "Reversed",
   },
   {
     era: "2000s",
     term: "Otaku (オタク)",
     sourceUrl: "https://en.wikipedia.org/wiki/Otaku",
-    originatedFrom: "Japan — stigmatized in the late 1980s after crimes linked to a self-described otaku; exported globally through anime fandom",
+    originatedFrom: "Japan  → exported globally through anime fandom",
     originalMeaning:
       "A socially dysfunctional, antisocial person consumed by obsessive hobbies — a serious social stigma in Japan.",
     currentMeaning:
-      "Globally: an enthusiastic, knowledgeable fan of anime, manga, gaming, or Japanese pop culture — used as a proud self-identifier with little negative connotation.",
+      "Globally: an enthusiastic, knowledgeable fan of anime, manga, gaming, or Japanese pop culture. Used as a proud self-identifier with little negative connotation.",
     directionOfShift: "Reclaimed",
   },
   {
@@ -111,7 +111,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     sourceUrl: "https://www.etymonline.com/word/straight",
     originatedFrom: "14th century English to the LGBTQIA+ community",
     originalMeaning:
-      "Conventional, law-abiding",
+      "Conventional, law-abiding, conservative",
     currentMeaning:
     'This slang definition of "straight" evolved to "straight-laced" when "straight" was claimed by the LGBTQIA+ community to mean "heterosexual."',
     directionOfShift: "Diluted",
@@ -133,9 +133,9 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     sourceUrl: "https://en.wikipedia.org/wiki/Woke",
     originatedFrom: "African American Vernacular English (AAVE) / Civil rights tradition",
     originalMeaning:
-      "Being alert to racial injustice and systemic oppression — serious political language rooted in the civil rights movement (\"stay woke\"). James Brown used it as early as 1938.",
+      "Being alert to racial injustice and systemic oppression. Early usage traces back to 1938.",
     currentMeaning:
-      "A contested buzzword. Used approvingly to commend consciousness of social justice issues; used pejoratively to mean overly sensitive or ideologically rigid.",
+      "A contested, casual term often used similarly to its original meaning to commend consciousness of social justice issues, but is often used pejoratively to mean overly sensitive or ideologically rigid.",
     directionOfShift: "Politicized",
   },
 ]
