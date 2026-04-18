@@ -167,9 +167,9 @@ export default function EvolvingSlangPage() {
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">List of American English slang that evolved over time</h1>
+          <h1 className="fc-title">List of American English everyday terms that evolved over time</h1>
           <p className="fc-description">
-            What terms for people and things no longer mean what you thought they did? Here's a list of slang you might have heard in everyday life that have generally shifted in meaning from their origins.
+            What casual terms for people and things no longer mean what you thought they did? Here's a list of slang and other words you might have heard in everyday life that have generally shifted in meaning from their origins.
           </p>
 
           <section className="es-section">

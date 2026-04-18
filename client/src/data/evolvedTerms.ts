@@ -98,9 +98,9 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "2010s",
     term: "Desi",
     sourceUrl: "https://en.wikipedia.org/wiki/Desi",
-    originatedFrom: "Sanskrit deśa (\"homeland\") → South Asian diaspora communities (US, UK, Canada)",
+    originatedFrom: "The Sanskrit word deśa (\"homeland\") → South Asian diaspora communities (US, UK, Canada)",
     originalMeaning:
-      "In diaspora contexts: a mildly dismissive label for someone seen as too traditionally South Asian, unsophisticated, or insufficiently assimilated — \"fresh off the boat.\"",
+      "In diaspora contexts: a mildly dismissive label for someone seen as too traditionally South Asian, unsophisticated, or insufficiently assimilated and \"fresh off the boat.\"",
     currentMeaning:
       "A proud pan-ethnic identifier for South Asians — anchoring music genres, fashion aesthetics, food culture, and community spaces, particularly in cities like Los Angeles, New York, and London.",
     directionOfShift: "Reclaimed",
@@ -120,11 +120,11 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "2010s",
     term: "Stan",
     sourceUrl: "https://en.wikipedia.org/wiki/Stan_(slang)",
-    originatedFrom: "Eminem's 2000 song \"Stan\",",
+    originatedFrom: "Eminem's 2000 song \"Stan\"",
     originalMeaning:
       "A dangerously obsessive, unstable fan who spirals into violence upon not eliciting a response from their targeted idol.",
     currentMeaning:
-      "Any enthusiastic, devoted fan — usually self-applied and celebratory, with no implication of danger. \"I stan\" is a positive declaration. Entered the Oxford English Dictionary in 2017.",
+      "Any enthusiastic, devoted fan, usually self-applied and celebratory, with no implication of danger. \"I stan\" is generally a positive declaration. Entered the Oxford English Dictionary in 2017.",
     directionOfShift: "Softened",
   },
   {
