@@ -23,26 +23,26 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     sourceUrl: "https://aesthetics.fandom.com/wiki/Asian_Baby_Girl",
     originatedFrom: "Vietnamese American street communities (New York, Southern California)",
     originalMeaning:
-      "A Southeast Asian-American woman affiliated with gang culture or the import car scene. ⚠️ Several social media users insist on using the term only in its original context.",
+      "A Southeast Asian-American woman affiliated with gang culture or the import car scene.  ⚠️ Several social media users insist on using the term only in its original context.",
     currentMeaning:
-      "East or Southeast-Asian women with a specific aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and bold fashion — with no gang affiliation implied or expected. ⚠️ It is often considered derogatory by some due to its association with a lower socioeconomic class.",
+      "East or Southeast-Asian women with a specific aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and bold fashion — with no gang affiliation implied or expected.  ⚠️ It is often considered derogatory due to its association with a lower socioeconomic class.",
     directionOfShift: "Broadened",
   },
   {
     era: "2010s",
     term: "Baddie",
-    sourceUrl: "https://www.revolt.tv/article/51-hip-hop-terms-that-went-mainstream",
-    originatedFrom: "Black American slang, Hip-hop culture",
+    sourceUrl: "https://www.merriam-webster.com/slang/baddie",
+    originatedFrom: "Early 20th century colloquial speech → AAVE → 2010s social media",
     originalMeaning:
-      "A villain, criminal, or dangerous person — someone literally \"bad,\" often used in gang and street-culture contexts.",
+      "A villain, criminal, or dangerous person — someone literally \"bad,\" often used in gang and street culture contexts.",
     currentMeaning:
-      "An attractive, confident, put-together person whose appearance commands attention. It generally may be a compliment unless intended otherwise.",
+      "An attractive, confident, put-together woman whose appearance commands attention. It generally may be a compliment unless intended otherwise.",
     directionOfShift: "Softened",
   },
   {
     era: "2020s",
     term: "Bimbo",
-    sourceUrl: "https://en.wikipedia.org/wiki/Bimbo",
+    sourceUrl: "https://aesthetics.fandom.com/wiki/Bimbocore",
     originatedFrom: "Italian (bambino) → 1980s American tabloid culture → Gen Z TikTok (BimboTok)",
     originalMeaning:
       "A sexist insult for a conventionally attractive but unintelligent woman, weaponized especially in 1980s tabloid media. (Earlier still: a put-down for a dumb, brutish man.)",
@@ -80,7 +80,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     originalMeaning:
       "Short for \"Original Gangster\" — a senior, respected, and feared member of a street gang.",
     currentMeaning:
-      "Anyone who pioneered something or commands long-earned respect, used warmly across all contexts: sports, food, family, business.",
+      "Anyone who pioneered something, such as a subculture, commanding a respected legacy. Generally used warmly across all contexts.",
     directionOfShift: "Diluted",
   },
   {
