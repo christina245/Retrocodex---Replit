@@ -158,7 +158,7 @@ export default function EvolvingSlangPage() {
   return (
     <>
       <SEO
-        title="American English slang that evolved over time | Retrocodex"
+        title="List of American English slang that evolved over time | Retrocodex"
         description="A list of everyday American English slang terms whose meanings have shifted over time, with their origins, original meanings, and current usage."
       />
       <Header onMenuClick={() => setMenuOpen(true)} />
@@ -167,9 +167,9 @@ export default function EvolvingSlangPage() {
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">American English slang that evolved over time</h1>
+          <h1 className="fc-title">List of American English slang that evolved over time</h1>
           <p className="fc-description">
-            What terms no longer mean what you thought they did? Here's a list of slang you might have heard in everyday life that have generally shifted in meaning from their origins.
+            What terms for people and things no longer mean what you thought they did? Here's a list of slang you might have heard in everyday life that have generally shifted in meaning from their origins.
           </p>
 
           <section className="es-section">

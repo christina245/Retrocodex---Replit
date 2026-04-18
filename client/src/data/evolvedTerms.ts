@@ -19,11 +19,11 @@ export interface EvolvedTerm {
 export const evolvedTermsPeople: EvolvedTerm[] = [
   {
     era: "2010s",
-    term: "Asian Baby Girl (ABG)",
-    sourceUrl: "https://en.wikipedia.org/wiki/Asian_baby_girl",
+    term: "ABG (Asian Baby Girl)",
+    sourceUrl: "https://aesthetics.fandom.com/wiki/Asian_Baby_Girl",
     originatedFrom: "Vietnamese American street communities (New York, Southern California)",
     originalMeaning:
-      "A young Asian American woman affiliated with gang culture or the import car scene who aligned with a rebellious, sexually provocative aesthetic as a rejection of the \"model minority\" label.",
+      "An Asian American woman affiliated with gang culture or the import car scene.",
     currentMeaning:
       "An everyday aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and specific fashion sensibility — with no gang affiliation implied or expected. It still may be considered derogatory by some due to its association with a lower socioeconomic class.",
     directionOfShift: "Broadened",
@@ -32,7 +32,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "2010s",
     term: "Baddie",
     sourceUrl: "https://www.revolt.tv/article/51-hip-hop-terms-that-went-mainstream",
-    originatedFrom: "Black American slang / Hip-hop culture",
+    originatedFrom: "Black American slang, Hip-hop culture",
     originalMeaning:
       "A villain, criminal, or dangerous person — someone literally \"bad,\" often used in gang and street-culture contexts.",
     currentMeaning:
@@ -109,18 +109,18 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "1940s",
     term: "Straight",
     sourceUrl: "https://www.etymonline.com/word/straight",
-    originatedFrom: "Gay community slang — ironic use of \"straight and narrow\" to describe someone leaving the scene or re-closeting",
+    originatedFrom: "14th century English to the LGBTQIA+ community",
     originalMeaning:
-      "Originally gay in-community slang: someone \"going straight\" meant dropping out of the queer social scene or entering a heterosexual relationship. The moral connotation (straight = correct, proper) was intentional and pointed.",
+      "Conventional, law-abiding",
     currentMeaning:
-      "Simply heterosexual — the irony of its gay-slang origins is entirely lost, and the term is used neutrally across all contexts with no implied moral judgment.",
+    'This slang definition of "straight" evolved to "straight-laced" when "straight" was claimed by the LGBTQIA+ community to mean "heterosexual."',
     directionOfShift: "Diluted",
   },
   {
     era: "2010s",
     term: "Stan",
     sourceUrl: "https://en.wikipedia.org/wiki/Stan_(slang)",
-    originatedFrom: "Eminem's 2000 song \"Stan\" (depicting a violently obsessive fan)",
+    originatedFrom: "Eminem's 2000 song \"Stan\",",
     originalMeaning:
       "A dangerously obsessive, unstable fan who spirals into violence upon not eliciting a response from their targeted idol.",
     currentMeaning:
