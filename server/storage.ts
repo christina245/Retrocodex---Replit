@@ -55,6 +55,8 @@ export interface IStorage {
   // Facts
   createFact(fact: InsertFact): Promise<Fact>;
   getAllFacts(): Promise<Fact[]>;
+  getArchivedFacts(): Promise<Fact[]>;
+  setFactArchived(id: string, archived: boolean): Promise<Fact | undefined>;
   getFactBySlug(slug: string): Promise<Fact | undefined>;
   getFactById(id: string): Promise<Fact | undefined>;
   getFactsByIds(ids: string[]): Promise<Fact[]>;
@@ -219,7 +221,25 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(facts)
+      .where(eq(facts.archived, false))
       .orderBy(desc(facts.createdAt));
+  }
+
+  async getArchivedFacts(): Promise<Fact[]> {
+    return await db
+      .select()
+      .from(facts)
+      .where(eq(facts.archived, true))
+      .orderBy(desc(facts.createdAt));
+  }
+
+  async setFactArchived(id: string, archived: boolean): Promise<Fact | undefined> {
+    const [result] = await db
+      .update(facts)
+      .set({ archived })
+      .where(eq(facts.id, id))
+      .returning();
+    return result || undefined;
   }
 
   async getPageBySlug(slug: string): Promise<Page | undefined> {
@@ -236,7 +256,7 @@ export class DatabaseStorage implements IStorage {
     const [result] = await db
       .select()
       .from(facts)
-      .where(eq(facts.slug, slug));
+      .where(and(eq(facts.slug, slug), eq(facts.archived, false)));
     return result || undefined;
   }
 
@@ -250,7 +270,10 @@ export class DatabaseStorage implements IStorage {
 
   async getFactsByIds(ids: string[]): Promise<Fact[]> {
     if (ids.length === 0) return [];
-    const rows = await db.select().from(facts).where(inArray(facts.id, ids));
+    const rows = await db
+      .select()
+      .from(facts)
+      .where(and(inArray(facts.id, ids), eq(facts.archived, false)));
     const map = new Map(rows.map(f => [f.id, f]));
     return ids.map(id => map.get(id)).filter((f): f is Fact => f !== undefined);
   }

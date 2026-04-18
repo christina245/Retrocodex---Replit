@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2 } from "lucide-react";
+import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2, Archive, ArchiveRestore } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
@@ -9,7 +9,7 @@ import "./AdminPage.css";
 import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
 
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "view-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "view-facts" | "archived-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports";
 
 interface FactSubmission {
   id: string;
@@ -373,6 +373,54 @@ export default function AdminPage() {
     },
     enabled: isAuthenticated && (currentView === "view-facts" || currentView === "add-fact"),
   });
+
+  const { data: archivedFacts, isLoading: archivedFactsLoading, error: archivedFactsError } = useQuery<Fact[]>({
+    queryKey: ["/api/admin/facts/archived"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/facts/archived", {
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:' + password)
+        }
+      });
+      if (response.status === 401) throw new Error("Invalid password");
+      if (!response.ok) throw new Error("Failed to fetch archived facts");
+      return response.json();
+    },
+    enabled: isAuthenticated && currentView === "archived-facts",
+  });
+
+  const archiveFact = async (factId: string) => {
+    if (!confirm("Archive this fact? It will be hidden from the public site but kept in storage.")) return;
+    try {
+      const response = await fetch(`/api/facts/${factId}/archive`, {
+        method: "POST",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to archive fact");
+      queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/facts/archived"] });
+      resetForm();
+      setCurrentView("view-facts");
+      toast({ title: "Fact archived", description: "The fact has been hidden from the site." });
+    } catch (err) {
+      toast({ title: "Archive failed", description: "Could not archive this fact.", variant: "destructive" });
+    }
+  };
+
+  const unarchiveFact = async (factId: string) => {
+    try {
+      const response = await fetch(`/api/facts/${factId}/unarchive`, {
+        method: "POST",
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to unarchive fact");
+      queryClient.invalidateQueries({ queryKey: ["/api/facts"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/facts/archived"] });
+      toast({ title: "Fact restored", description: "The fact is now visible on the site again." });
+    } catch (err) {
+      toast({ title: "Restore failed", description: "Could not restore this fact.", variant: "destructive" });
+    }
+  };
 
   const { data: blogPosts, isLoading: blogPostsLoading, error: blogPostsError } = useQuery<BlogPost[]>({
     queryKey: ["/api/blog-posts"],
@@ -1591,13 +1639,24 @@ export default function AdminPage() {
                   Back to Submissions
                 </button>
               ) : editingFactId ? (
-                <button 
-                  onClick={resetForm}
-                  className="cancel-edit-button"
-                  data-testid="button-cancel-edit"
-                >
-                  Cancel Edit
-                </button>
+                <div className="header-actions-row">
+                  <button 
+                    onClick={resetForm}
+                    className="cancel-edit-button"
+                    data-testid="button-cancel-edit"
+                  >
+                    Cancel Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => archiveFact(editingFactId)}
+                    className="archive-fact-button"
+                    data-testid="button-archive-fact"
+                  >
+                    <Archive size={16} />
+                    Archive Fact
+                  </button>
+                </div>
               ) : null}
             </div>
             
@@ -2510,6 +2569,15 @@ export default function AdminPage() {
                   {factsSearch ? `${filteredFacts.length} of ${facts?.length || 0}` : (facts?.length || 0)} {facts?.length === 1 ? 'fact' : 'facts'}{factsSearch ? ' matching' : ' total'}
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={() => setCurrentView('archived-facts')}
+                className="view-archived-button"
+                data-testid="button-view-archived-facts"
+              >
+                <Archive size={16} />
+                View Archived Facts
+              </button>
             </header>
             
             <div className="search-container">
@@ -2643,6 +2711,92 @@ export default function AdminPage() {
                     ? `No facts found matching "${factsSearch}". Try a different search term.`
                     : 'No facts created yet. Click "Add New Fact" to create one.'}
                 </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {currentView === 'archived-facts' && (
+          <div className="admin-content admin-content-wide">
+            <header className="content-header">
+              <div>
+                <h1 className="content-title">Archived Facts</h1>
+                <p className="content-subtitle" data-testid="text-archived-count">
+                  {archivedFacts?.length || 0} archived {archivedFacts?.length === 1 ? 'fact' : 'facts'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCurrentView('view-facts')}
+                className="cancel-edit-button"
+                data-testid="button-back-to-view-facts"
+              >
+                <ChevronLeft size={16} style={{ marginRight: 4 }} />
+                Back to View Facts
+              </button>
+            </header>
+
+            {archivedFactsLoading ? (
+              <div className="loading-message">Loading archived facts...</div>
+            ) : archivedFactsError ? (
+              <div className="error-container">
+                <div className="error-message">
+                  {archivedFactsError instanceof Error ? archivedFactsError.message : "Failed to load archived facts"}
+                </div>
+              </div>
+            ) : archivedFacts && archivedFacts.length > 0 ? (
+              <div className="facts-grid" data-testid="archived-facts-grid">
+                {archivedFacts.map((fact) => (
+                  <div
+                    key={fact.id}
+                    className="admin-fact-card"
+                    data-testid={`card-archived-fact-${fact.id}`}
+                  >
+                    <div className="admin-fact-card-image">
+                      {fact.coverPhoto ? (
+                        <img src={fact.coverPhoto} alt={fact.title} />
+                      ) : (
+                        <div className="admin-fact-card-placeholder">
+                          <FileText size={32} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="admin-fact-card-content">
+                      <div className="admin-fact-card-category" style={{ backgroundColor: getCategoryColor(fact.categories) }}>
+                        {fact.categories[0] || 'Uncategorized'}
+                      </div>
+                      <div className="admin-fact-card-section">
+                        <div className="admin-fact-card-label myth-label">
+                          <X size={14} className="admin-fact-icon myth-icon" />
+                          <span>MYTH</span>
+                        </div>
+                        <p className="admin-fact-card-myth">"{fact.mythHeader}"</p>
+                      </div>
+                      <div className="admin-fact-card-section">
+                        <div className="admin-fact-card-label truth-label">
+                          <Check size={14} className="admin-fact-icon truth-icon" />
+                          <span>TRUTH</span>
+                        </div>
+                        <p className="admin-fact-card-truth">{fact.truthHeader}</p>
+                      </div>
+                      <div className="admin-fact-card-meta" style={{ justifyContent: 'flex-end' }}>
+                        <button
+                          type="button"
+                          onClick={() => unarchiveFact(fact.id)}
+                          className="archive-fact-button"
+                          data-testid={`button-unarchive-${fact.id}`}
+                        >
+                          <ArchiveRestore size={16} />
+                          Restore
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <p data-testid="text-archived-empty">No archived facts yet.</p>
               </div>
             )}
           </div>

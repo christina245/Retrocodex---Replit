@@ -978,6 +978,37 @@
   color: #FF5353;
 }
 
+/* Archive Fact / View Archived Facts buttons (dark blue) */
+.archive-fact-button,
+.view-archived-button {
+  background-color: #1E3A8A;
+  border: 1px solid #1E3A8A;
+  color: #FFFFFF;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  font-family: 'Public Sans', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.archive-fact-button:hover,
+.view-archived-button:hover {
+  background-color: #16306E;
+  border-color: #16306E;
+}
+
+.header-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 /* View Facts Grid */
 .admin-content-wide {
   max-width: 1200px;

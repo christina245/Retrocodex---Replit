@@ -1549,6 +1549,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/admin/facts/archived - List archived facts (admin)
+  app.get("/api/admin/facts/archived", requireAuth, async (_req, res) => {
+    try {
+      const rows = await storage.getArchivedFacts();
+      res.json(rows);
+    } catch (error) {
+      console.error("Error fetching archived facts:", error);
+      res.status(500).json({ message: "Failed to fetch archived facts" });
+    }
+  });
+
+  // POST /api/facts/:id/archive - Archive a fact (admin)
+  app.post("/api/facts/:id/archive", requireAuth, async (req, res) => {
+    try {
+      const fact = await storage.setFactArchived(req.params.id, true);
+      if (!fact) return res.status(404).json({ message: "Fact not found" });
+      res.json(fact);
+    } catch (error) {
+      console.error("Error archiving fact:", error);
+      res.status(500).json({ message: "Failed to archive fact" });
+    }
+  });
+
+  // POST /api/facts/:id/unarchive - Unarchive a fact (admin)
+  app.post("/api/facts/:id/unarchive", requireAuth, async (req, res) => {
+    try {
+      const fact = await storage.setFactArchived(req.params.id, false);
+      if (!fact) return res.status(404).json({ message: "Fact not found" });
+      res.json(fact);
+    } catch (error) {
+      console.error("Error unarchiving fact:", error);
+      res.status(500).json({ message: "Failed to unarchive fact" });
+    }
+  });
+
   // DELETE /api/facts/:id - Delete a fact (password protected)
   app.delete("/api/facts/:id", requireAuth, async (req, res) => {
     try {
