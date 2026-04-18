@@ -80,18 +80,18 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     originalMeaning:
       "Short for \"Original Gangster\" — a senior, respected, and feared member of a street gang.",
     currentMeaning:
-      "Anyone who pioneered something or commands long-earned respect, used warmly across all contexts: sports, food, family, business. The gang origin is invisible to most current users.",
+      "Anyone who pioneered something or commands long-earned respect, used warmly across all contexts: sports, food, family, business.",
     directionOfShift: "Diluted",
   },
   {
     era: "1990s",
     term: "Queer",
     sourceUrl: "https://en.wikipedia.org/wiki/Queer",
-    originatedFrom: "Early English (\"strange/odd\") → 20th-century homophobic slur → reclaimed by Queer Nation (1990) and LGBTQ+ activist communities",
+    originatedFrom: "Early English (\"strange/odd\") → 20th-century homophobic slur → reclaimed by LGBTQIA+ communities",
     originalMeaning:
       "Strange, odd, or peculiar — a general adjective with no sexual connotation. By the late 19th century it had become a homophobic slur targeting gay men.",
     currentMeaning:
-      "A reclaimed, inclusive umbrella term for LGBTQ+ identities — especially those that don't fit neatly into binary categories. Particularly embraced by Gen Z as a positive, flexible self-identifier.",
+      "A reclaimed, inclusive umbrella term for identities that are not strictly heterosexual or cisgender.",
     directionOfShift: "Reclaimed",
   },
   {
@@ -102,7 +102,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     originalMeaning:
       "In diaspora contexts: a mildly dismissive label for someone seen as too traditionally South Asian, unsophisticated, or insufficiently assimilated and \"fresh off the boat.\"",
     currentMeaning:
-      "A proud pan-ethnic identifier for South Asians — anchoring music genres, fashion aesthetics, food culture, and community spaces, particularly in cities like Los Angeles, New York, and London.",
+      "'Desi' is generally intended to be proud pan-ethnic identifier for the South Asians diaspora throughout the world, describing people and cultural traditions such as art and music. ⚠️ Some may not consider it inclusive enough due to disproportionate representation of North Indian cultures.",
     directionOfShift: "Reclaimed",
   },
   {
