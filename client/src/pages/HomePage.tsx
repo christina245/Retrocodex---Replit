@@ -495,7 +495,9 @@ export default function HomePage() {
               onClick={() => setLocation("/")}
               data-testid="button-decade-all"
             >
-              <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 6, verticalAlign: "middle" }} />
+              {selectedDecade === "all" && (
+                <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 6, verticalAlign: "middle" }} />
+              )}
               View all topics
             </button>
             {DECADES.filter(d => d >= "1950s").map((decade) => (
