@@ -25,7 +25,7 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     originalMeaning:
       "A Southeast Asian-American woman affiliated with gang culture or the import car scene.  ⚠️ Several social media users insist on using the term only in its original context.",
     currentMeaning:
-      "East or Southeast-Asian women with a specific aesthetic: dramatic makeup, bleached or ombré hair, boba tea, rave culture, and bold fashion — with no gang affiliation implied or expected.  ⚠️ It is often considered derogatory due to its association with a lower socioeconomic class.",
+      "East or Southeast Asian-Asian women with a specific aesthetic: dramatic makeup and bold, provocative fashion — with no gang affiliation implied or expected. Contemporary ABGs typically are associated with rave culture and milk tea consumption. ⚠️ Calling someone this is often considered offensive.",
     directionOfShift: "Broadened",
   },
   {
@@ -43,11 +43,11 @@ export const evolvedTermsPeople: EvolvedTerm[] = [
     era: "2020s",
     term: "Bimbo",
     sourceUrl: "https://aesthetics.fandom.com/wiki/Bimbocore",
-    originatedFrom: "Italian (bambino) → 1980s American tabloid culture → Gen Z TikTok (BimboTok)",
+    originatedFrom: "Italian (bambino) → 1980s American tabloid culture → 2020s TikTok",
     originalMeaning:
-      "A sexist insult for a conventionally attractive but unintelligent woman, weaponized especially in 1980s tabloid media. (Earlier still: a put-down for a dumb, brutish man.)",
+      "A sexist insult for a conventionally attractive but unintelligent woman, weaponized especially in 1980s tabloid media.",
     currentMeaning:
-      "A reclaimed feminist-adjacent identity embracing hyper-femininity, bold style, and deliberate rejection of respectability politics — often politically aware and worn as a badge of pride.",
+      "A reclaimed, self-empowering identity embracing hyper-femininity, bold style, social activism, and deliberate rejection of conventional expectations. ⚠️ Calling someone this may still be offensive depending on context and intent.",
     directionOfShift: "Reclaimed",
   },
   {

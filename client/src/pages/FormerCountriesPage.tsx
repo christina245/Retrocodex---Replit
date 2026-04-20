@@ -72,7 +72,7 @@ export default function FormerCountriesPage() {
         title="List of Former Countries (1930–2026) | Retrocodex"
         description="A list of former countries sorted by the year they ceased to exist."
       />
-      <Header onMenuClick={() => setMenuOpen(true)} />
+      <Header onMenuClick={() => setMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <HomepageCategoryNav />
 

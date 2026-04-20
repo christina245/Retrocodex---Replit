@@ -1,7 +1,7 @@
 /* Evolving Slang page — extends FormerCountriesPage.css for shared fc-* styles */
 
 .es-section-heading {
-  font-family: "Merriweather", Georgia, "Times New Roman", serif;
+  font-family: "DM Serif Text", Georgia, "Times New Roman", serif;
   font-size: clamp(1.2rem, 2.5vw, 1.55rem);
   font-weight: 700;
   color: #2c2c2c;

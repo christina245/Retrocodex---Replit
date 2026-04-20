@@ -301,7 +301,7 @@ export default function RecommendedBooksPage() {
         title="Recommended Reading | Retrocodex"
         description="Books for curious minds who like questioning what they were told. From debunked history to the psychology of misinformation, these are the reads we think belong on every skeptic's shelf."
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 

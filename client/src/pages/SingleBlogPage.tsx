@@ -130,7 +130,7 @@ export default function SingleBlogPage() {
     return (
       <div className="single-blog-page">
         <SEO title="Loading..." description="Loading article on Retrocodex." noIndex={true} />
-        <Header onMenuClick={() => setIsMenuOpen(true)} />
+        <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
         <main className="single-blog-main">
           <div className="loading-container">
             <img 
@@ -150,7 +150,7 @@ export default function SingleBlogPage() {
     return (
       <div className="single-blog-page">
         <SEO title="Article Not Found" description="The article you're looking for doesn't exist or has been removed." noIndex={true} />
-        <Header onMenuClick={() => setIsMenuOpen(true)} />
+        <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
         <main className="single-blog-main">
           <div className="error-container">
             <h1>Article Not Found</h1>
@@ -176,7 +176,7 @@ export default function SingleBlogPage() {
         image={post.coverImage || undefined}
       />
       <div className="sticky-header-wrapper">
-        <Header onMenuClick={() => setIsMenuOpen(true)} />
+        <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
         <HomepageCategoryNav sticky />
       </div>
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

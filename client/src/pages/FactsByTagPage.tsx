@@ -121,7 +121,7 @@ export default function FactsByTagPage() {
           noIndex={true}
         />
       )}
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 

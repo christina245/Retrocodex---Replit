@@ -41,7 +41,7 @@ export default function AboutPage() {
         title="About Retrocodex: What You Might Have Learned Wrong"
         description="Explore Retrocodex, a community-driven encyclopedia dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 

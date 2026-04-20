@@ -32,7 +32,7 @@ export default function SubmitFactPage() {
         title="Fact Submission Rules | Retrocodex"
         description="Review the submission guidelines before submitting a fact to Retrocodex. Learn what types of claims are accepted and how to format your submission."
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 

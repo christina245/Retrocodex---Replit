@@ -161,7 +161,7 @@ export default function EvolvingSlangPage() {
         title="List of American English slang that evolved over time | Retrocodex"
         description="A list of everyday American English slang terms whose meanings have shifted over time, with their origins, original meanings, and current usage."
       />
-      <Header onMenuClick={() => setMenuOpen(true)} />
+      <Header onMenuClick={() => setMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <HomepageCategoryNav />
 
@@ -173,12 +173,12 @@ export default function EvolvingSlangPage() {
           </p>
 
           <section className="es-section">
-            <h2 className="es-section-heading" data-testid="heading-people">Evolving Slang for People</h2>
+            <h2 className="es-section-heading" data-testid="heading-people">Descriptions of people</h2>
             <SlangTable rows={evolvedTermsPeople} testIdPrefix="people" />
           </section>
 
           <section className="es-section">
-            <h2 className="es-section-heading" data-testid="heading-actions">Evolving Slang for Actions</h2>
+            <h2 className="es-section-heading" data-testid="heading-actions">Adjectives and verbs</h2>
             <SlangTable rows={evolvedTermsActions} testIdPrefix="actions" />
           </section>
 

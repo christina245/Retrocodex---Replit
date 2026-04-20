@@ -120,7 +120,7 @@ export default function ArticlesPage() {
         title="Articles"
         description="Articles exploring misconceptions across history, science, health, and everyday life. Discover the stories behind common myths."
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 

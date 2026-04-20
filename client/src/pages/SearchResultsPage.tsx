@@ -237,7 +237,7 @@ export default function SearchResultsPage() {
         description={`Search results for "${decodedQuery}" on Retrocodex. Find facts and misconceptions related to your query.`}
         noIndex={true}
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 

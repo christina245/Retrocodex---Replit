@@ -123,7 +123,7 @@ export default function FactSubmissionFormPage() {
         title="Submit a New Fact | Retrocodex"
         description="Submit a widely believed myth or misconception to Retrocodex for review."
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav sticky />
 
