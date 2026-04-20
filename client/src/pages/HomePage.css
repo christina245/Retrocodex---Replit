@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #FFFFFF;
+  background: #Fbfbf9;
 }
 
 .main-content {
@@ -55,10 +55,10 @@
   gap: 1px;
   padding: 8px 10px;
   border-radius: 20px;
-  border: 3px solid #d9d9d9;
+  border: 2px solid #d9d9d9;
   cursor: pointer;
   white-space: nowrap;
-  background-color: #FBFCFA;
+  background-color: #Ffffff;
   color: #2c2c2c;
   font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
@@ -72,6 +72,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   filter: brightness(1.05);
   background-color: #ff5353;
+  border: 4px solid #ff5353;
+  color: #ffffff;
 }
 
 .homepage-decade-chip-selected {
@@ -309,13 +311,13 @@
 }
 
 .decade-disclaimer-item {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
   font-weight: 500;
   color: #2C2C2C;
   line-height: 1.5;
   display: flex;
-  gap: 3px;
+  gap: 5px;
   align-items: flex-start;
 }
 

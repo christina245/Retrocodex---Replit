@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, HandHeart, X, UserRound } from "lucide-react";
+import { Search, HandHeart, X, UserRound, MessageCirclePlus } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
@@ -179,6 +179,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
               className="submit-fact-button header-only-submit"
               data-testid="button-submit-fact"
             >
+              <MessageCirclePlus size={16} className="submit-fact-icon" />
               Submit a Fact
             </a>
             {isLoggedIn ? (
