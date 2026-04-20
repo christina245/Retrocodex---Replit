@@ -98,7 +98,7 @@
 .fact-more-details {
   font-family: 'Merriweather', sans-serif;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 400;
   color: #2C2C2C;
   line-height: 1.5;
   margin: 1px 0;
@@ -185,7 +185,7 @@
 }
 
 .source-text-item {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Merriweather', sans-serif;
   font-size: 12px;
   font-weight: 250;
   color: #2C2C2C;
