@@ -59,7 +59,7 @@
 }
 
 .sources-modal-body {
-  padding: 0.75rem 2rem 0rem;
+  padding: 1rem 5rem 0rem;
 }
 
 .sources-modal-empty {
@@ -81,7 +81,7 @@
 }
 
 .sources-modal-list-item {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Merriweather', sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -116,9 +116,9 @@
 
 .sources-modal-squirrel-text {
   flex: 1;
-  font-family: 'Merriweather', serif;
+  font-family: 'DM Sans', serif;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 400;
   color: #878787;
   line-height: 1.5;
   margin: 0;

@@ -97,7 +97,7 @@ export default function OtherCategoriesPage() {
         title="Other Categories"
         description="Explore additional fact categories including Animals, Astronomy, Beauty, Food, Music, Technology, and more. Discover misconceptions beyond the main topics."
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

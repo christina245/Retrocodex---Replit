@@ -124,7 +124,7 @@ export default function HolidaysPage() {
         title="Holidays" 
         description="Discover the real stories behind holiday traditions and celebrations. Separate fact from legend in holiday lore." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

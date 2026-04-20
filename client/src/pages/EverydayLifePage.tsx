@@ -182,7 +182,7 @@ export default function EverydayLifePage() {
         title="Misconceptions About Everyday Life" 
         description="Challenge everyday assumptions and common knowledge from all over the world. Find out what's true and what's myth in everyday sayings you might hear from friends and family." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="EVERYDAY LIFE" sticky />
 

@@ -173,7 +173,7 @@ export default function HealthFitnessPage() {
         title="Misconceptions About Health & Fitness" 
         description="Get the facts about health, nutrition, and fitness. Discover what science says about popular health beliefs and workout myths." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="HEALTH & FITNESS" sticky />
 

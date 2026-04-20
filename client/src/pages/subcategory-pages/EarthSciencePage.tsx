@@ -124,7 +124,7 @@ export default function EarthSciencePage() {
         title="Earth Science" 
         description="Explore misconceptions about geology, weather, climate, and our planet. Discover what science says about Earth." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

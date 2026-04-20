@@ -173,7 +173,7 @@ export default function GenderSexualityPage() {
         title="Misconceptions About Gender & Sexuality" 
         description="Explore misconceptions about gender, sexuality, and relationships. Discover evidence-based perspectives on common beliefs." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="GENDER & SEXUALITY" sticky />
 

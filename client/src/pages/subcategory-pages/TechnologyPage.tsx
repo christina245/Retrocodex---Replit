@@ -124,7 +124,7 @@ export default function TechnologyPage() {
         title="Technology" 
         description="Get the facts about tech capabilities and limitations. Challenge common misconceptions about modern technology." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

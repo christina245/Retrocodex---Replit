@@ -124,7 +124,7 @@ export default function AstronomyPage() {
         title="Astronomy" 
         description="Explore space and cosmos misconceptions. Learn what science reveals about stars, planets, and the universe." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

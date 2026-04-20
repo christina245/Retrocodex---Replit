@@ -178,7 +178,7 @@ export default function HistoryPage() {
         title="Misconceptions About History" 
         description="What have you learned about historical figures or societies that isn't true? Separate fact from legend in history's most persistent myths." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="HISTORY" sticky />
 

@@ -374,6 +374,7 @@
   border-top: none;
   text-align: left;
   transition: background 0.1s;
+  background: #ffffff;
 }
 
 .decade-type-toggle-item:last-child {

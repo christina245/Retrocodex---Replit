@@ -136,7 +136,7 @@ export default function AnimalsPage() {
         title="Animals" 
         description="Discover the truth about animal behavior, biology, and ecology. Separate fact from fiction in wildlife misconceptions." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

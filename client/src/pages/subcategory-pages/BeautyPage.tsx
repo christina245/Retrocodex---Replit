@@ -124,7 +124,7 @@ export default function BeautyPage() {
         title="Beauty" 
         description="Uncover the truth about beauty products, skincare, and cosmetic claims. Get the facts behind common beauty myths." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

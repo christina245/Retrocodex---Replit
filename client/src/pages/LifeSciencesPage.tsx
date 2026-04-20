@@ -176,7 +176,7 @@ export default function LifeSciencesPage() {
         title="Misconceptions About Life Sciences" 
         description="What facts have you been taught in the life sciences that are now outdated? Learn how the discoveries evolved." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="LIFE SCIENCES" sticky />
 

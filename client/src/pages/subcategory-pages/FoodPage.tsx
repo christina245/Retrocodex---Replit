@@ -146,7 +146,7 @@ export default function FoodPage() {
         title="Food" 
         description="Get the facts about food, nutrition, and cooking. Challenge common culinary myths and dietary misconceptions." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="OTHER" sticky />
 

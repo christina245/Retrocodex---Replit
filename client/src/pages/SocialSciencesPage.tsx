@@ -181,7 +181,7 @@ export default function SocialSciencesPage() {
         title="Misconceptions In Social Sciences" 
         description="Examine misconceptions about human behavior, society, and culture." 
       />
-      <Header onMenuClick={() => setIsMenuOpen(true)} />
+      <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <HomepageCategoryNav activeCategory="SOCIAL SCIENCES" sticky />
 
