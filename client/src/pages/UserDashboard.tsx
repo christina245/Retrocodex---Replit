@@ -3487,7 +3487,7 @@ export default function UserDashboard() {
                 data-testid="input-edit-username"
               />
               {editUsernameError && (
-                <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-edit-username-error">
+                <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-edit-username-error">
                   {editUsernameError}
                 </p>
               )}

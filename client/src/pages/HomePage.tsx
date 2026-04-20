@@ -482,7 +482,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What have you learned that's <u>now outdated</u>?
+          What have you learned that's <u>now <em>outdated</em></u>?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
           Pick the decade you graduated high school below. Discover what you may have been taught that has since been disproven or revised.
@@ -495,7 +495,7 @@ export default function HomePage() {
               onClick={() => setLocation("/")}
               data-testid="button-decade-all"
             >
-              <ArrowBigDownDash size={18} color="#FFFFFF" style={{ marginRight: 6, verticalAlign: "middle" }} />
+              <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 6, verticalAlign: "middle" }} />
               View all topics
             </button>
             {DECADES.filter(d => d >= "1950s").map((decade) => (

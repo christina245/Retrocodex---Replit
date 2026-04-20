@@ -12,7 +12,7 @@
 }
 
 .banner-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 800;
   color: #2C2C2C;
@@ -28,7 +28,7 @@
 }
 
 .banner-input {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   color: #2C2C2C;
   background: white;
@@ -54,7 +54,7 @@
   border: none;
   padding: 12px 20px;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -79,7 +79,7 @@
 }
 
 .benefits-intro {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   color: #2C2C2C;
   margin: 0;
@@ -96,7 +96,7 @@
 }
 
 .benefits-list li {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.8125rem;
   color: #555;
   line-height: 1.5;
@@ -113,7 +113,7 @@
 }
 
 .benefits-note {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.8125rem;
   color: #555;
   line-height: 1.5;

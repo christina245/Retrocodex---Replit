@@ -105,10 +105,10 @@
 }
 
 .tab-subheader {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
   font-weight: 600;
-  color: #2C2C2C;
+  color: #4d4d4d;
   margin: 0 0 20px 0;
   text-align: left;
 }
@@ -145,7 +145,7 @@
   text-align: center;
   padding: 60px 20px;
   color: #666;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
 }
 
@@ -285,7 +285,7 @@
 }
 
 .decade-loading-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 500;
   color: #878787;
@@ -350,7 +350,7 @@
 
 .decade-type-card-head {
   padding: 9px 12px 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
   color: hsl(var(--muted-foreground));
@@ -391,14 +391,14 @@
 }
 
 .decade-type-toggle-name {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: hsl(var(--foreground));
 }
 
 .decade-type-toggle-sub {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: hsl(var(--muted-foreground));
   line-height: 1.35;
@@ -481,7 +481,7 @@
   text-align: center;
   padding: 60px 20px;
   color: #888;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
 }
 
@@ -504,7 +504,7 @@
 }
 
 .decade-sticky-category-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #2C2C2C;
@@ -529,7 +529,7 @@
   cursor: pointer;
   white-space: nowrap;
   background: transparent;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.025em;

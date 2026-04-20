@@ -1123,7 +1123,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                   autoFocus
                 />
                 {usernameError && (
-                  <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-google-username-error">
+                  <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-google-username-error">
                     {usernameError}
                   </p>
                 )}
@@ -1178,7 +1178,7 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                       data-testid="input-signin-username"
                     />
                     {usernameError && (
-                      <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-username-error">
+                      <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-username-error">
                         {usernameError}
                       </p>
                     )}
@@ -1199,12 +1199,12 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
                     data-testid="input-signin-email"
                   />
                   {isCheckingEmail && (
-                    <p style={{ color: '#999', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }}>
+                    <p style={{ color: '#999', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", marginTop: '4px', marginBottom: 0 }}>
                       Checking…
                     </p>
                   )}
                   {emailError && !isCheckingEmail && (
-                    <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'Public Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-email-error">
+                    <p style={{ color: '#FF5353', fontSize: '12px', fontFamily: "'DM Sans', sans-serif", marginTop: '4px', marginBottom: 0 }} data-testid="text-email-error">
                       {emailError}
                     </p>
                   )}

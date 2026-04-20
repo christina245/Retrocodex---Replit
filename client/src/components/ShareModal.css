@@ -4,7 +4,7 @@
 }
 
 .share-modal-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1.375rem;
   font-weight: 700;
   color: #2C2C2C;
@@ -55,7 +55,7 @@
   color: white;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   white-space: nowrap;
   opacity: 0;
@@ -69,7 +69,7 @@
 }
 
 .share-option span {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.8125rem;
   text-align: center;
 }
@@ -86,7 +86,7 @@
 }
 
 .share-preview-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   color: #999;
@@ -112,7 +112,7 @@
 }
 
 .preview-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: #2C2C2C;
@@ -120,7 +120,7 @@
 }
 
 .preview-subtitle {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.8125rem;
   color: #666;
   margin: 0;
@@ -147,7 +147,7 @@
 }
 
 .preview-fact-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.625rem;
   font-weight: 700;
   color: #999;
@@ -184,7 +184,7 @@
   color: white;
   padding: 0.875rem 1.5rem;
   border-radius: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

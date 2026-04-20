@@ -28,7 +28,7 @@
 }
 
 .articles-header {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 900;
   font-size: 40px;
   color: #2C2C2C;
@@ -36,7 +36,7 @@
 }
 
 .submit-article-btn {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   color: white;
@@ -65,7 +65,7 @@
 }
 
 .filter-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 14px;
   color: #2C2C2C;
@@ -79,7 +79,7 @@
 }
 
 .filter-chip {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 300;
   font-size: 14px;
   color: #2C2C2C;

@@ -172,8 +172,6 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
-    font-optical-sizing: auto;
-    font-variation-settings: "opsz" 40;
   }
 }
 
@@ -291,7 +289,7 @@
 
 /* Category Page Headings - Shared styles for all category pages */
 .category-page-h1 {
-  font-family: 'Public Sans', serif;
+  font-family: 'DM Sans', serif;
   font-size: 28px;
   font-weight: 900;
   color: #2C2C2C;
@@ -300,7 +298,7 @@
 }
 
 .category-page-h2 {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 800;
   color: #2C2C2C;

@@ -415,7 +415,7 @@
 
 @media (min-width: 900px) {
   .header-only-submit {
-    display: inline-block !important;
+    display: inline-flex !important;
   }
 }
 

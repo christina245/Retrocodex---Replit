@@ -16,7 +16,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #2C2C2C;
@@ -40,7 +40,7 @@
 }
 
 .beauty-intro-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
   color: #2C2C2C;
@@ -48,7 +48,7 @@
 }
 
 .beauty-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 40px;
   font-weight: 900;
   color: #2C2C2C;
@@ -118,7 +118,7 @@
 }
 
 .beauty-no-facts {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   color: #666;
   grid-column: 1 / -1;

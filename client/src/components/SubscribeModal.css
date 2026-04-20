@@ -50,7 +50,7 @@
 }
 
 .subscribe-modal-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
   color: #2C2C2C;
@@ -59,7 +59,7 @@
 }
 
 .subscribe-modal-description {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.9375rem;
   color: #555;
   margin: 0;
@@ -77,7 +77,7 @@
 }
 
 .subscribe-modal-input {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   color: #2C2C2C;
   background: white;
@@ -103,7 +103,7 @@
   border: none;
   padding: 0.875rem 1.5rem;
   border-radius: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
@@ -129,7 +129,7 @@
 }
 
 .community-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.9375rem;
   color: #555;
   margin: 0;
@@ -165,7 +165,7 @@
   border: 2px solid #FF5353;
   padding: 0.625rem 1.25rem;
   border-radius: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;

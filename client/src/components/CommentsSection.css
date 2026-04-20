@@ -20,7 +20,7 @@
   border: 1px solid #D9D9D9;
   border-radius: 10px;
   background: white;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   cursor: pointer;
@@ -40,7 +40,7 @@
 }
 
 .comment-error {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #FF5353;
   margin: 0;
@@ -61,7 +61,7 @@
 }
 
 .markdown-hint {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   margin: 0;
@@ -72,7 +72,7 @@
   padding: 14px 16px;
   border: 1px solid #878787;
   border-radius: 10px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
   background: white;
@@ -111,7 +111,7 @@
   border: 1px solid #D9D9D9;
   border-radius: 6px;
   background: #D9D9D9;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #2C2C2C;
   cursor: pointer;
@@ -126,7 +126,7 @@
   border: none;
   border-radius: 6px;
   background: #FF5353;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: white;
@@ -162,7 +162,7 @@
 }
 
 .delete-confirm-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
   margin: 0;
@@ -191,7 +191,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   cursor: not-allowed;
@@ -211,7 +211,7 @@
   background: #2C2C2C;
   color: #fff;
   font-size: 11px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   padding: 4px 8px;
   border-radius: 4px;
   white-space: nowrap;
@@ -233,7 +233,7 @@
 
 .comments-loading,
 .comments-empty {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   padding: 20px 0;
@@ -305,14 +305,14 @@
 }
 
 .comment-username {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
 }
 
 .comment-username--link {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -325,7 +325,7 @@
 }
 
 .comment-username--deleted {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #aaa;
@@ -348,7 +348,7 @@
   background: #2C2C2C;
   color: #fff;
   font-size: 11px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   padding: 4px 8px;
   border-radius: 4px;
   white-space: nowrap;
@@ -370,7 +370,7 @@
 }
 
 .admin-badge {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   font-weight: 400;
   color: #2c2c2c;
@@ -388,14 +388,14 @@
 }
 
 .comment-date {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #878787;
 }
 
 .comment-user-info {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #878787;
@@ -427,7 +427,7 @@
 }
 
 .comment-body p {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 400;
   color: #2C2C2C;
@@ -468,7 +468,7 @@
   background: none;
   border: none;
   padding: 4px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 300;
   color: #878787;
@@ -523,7 +523,7 @@
   padding: 9px 14px;
   background: none;
   border: none;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #2C2C2C;
   cursor: pointer;
@@ -549,7 +549,7 @@
   gap: 10px;
   width: 100%;
   padding: 9px 14px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #B0B0B0;
   cursor: default;
@@ -569,7 +569,7 @@
   background: #2C2C2C;
   color: white;
   font-size: 11px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   padding: 4px 8px;
   border-radius: 4px;
   white-space: nowrap;
@@ -584,7 +584,7 @@
 /* ─── Edited label ───────────────────────────── */
 
 .comment-edited-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   font-style: italic;
@@ -593,7 +593,7 @@
 /* ─── Admin-removed body ─────────────────────── */
 
 .comment-removed-by-admin {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-style: italic;
   color: #878787;
@@ -665,7 +665,7 @@
 }
 
 .report-modal-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #2C2C2C;
@@ -674,7 +674,7 @@
 }
 
 .report-modal-subtitle {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #878787;
   margin: 0;
@@ -693,7 +693,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
   cursor: pointer;
@@ -712,7 +712,7 @@
   padding: 10px 12px;
   border: 1px solid #D9D9D9;
   border-radius: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #2C2C2C;
   resize: none;
@@ -740,7 +740,7 @@
   border: none;
   border-radius: 6px;
   background: #FF5353;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: white;

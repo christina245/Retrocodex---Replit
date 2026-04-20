@@ -44,7 +44,7 @@
 }
 
 .error-container p {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   color: #878787;
   margin: 0 0 24px 0;
@@ -54,7 +54,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #FF5353;
@@ -87,7 +87,7 @@
 }
 
 .article-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #878787;
@@ -143,7 +143,7 @@
 }
 
 .article-image-caption {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   text-align: left;
@@ -166,7 +166,7 @@
   background: none;
   border: none;
   color: #999;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   cursor: pointer;
   padding: 8px 5px;
@@ -183,7 +183,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #878787;
 }
@@ -192,7 +192,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #878787;
@@ -311,7 +311,7 @@
 }
 
 .blog-body figcaption {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   text-align: center;
@@ -320,7 +320,7 @@
 
 /* Style italic text immediately after images as captions */
 .blog-body img + p > em:first-child:last-child {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   font-style: italic;
@@ -330,7 +330,7 @@
 
 /* Caption class for explicit styling */
 .blog-body .image-caption {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   text-align: center;
@@ -346,7 +346,7 @@
 }
 
 .comments-heading {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: #2C2C2C;
@@ -362,7 +362,7 @@
   background: #f8f8f8;
   border-radius: 12px;
   color: #878787;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .comments-placeholder svg {
@@ -370,7 +370,7 @@
 }
 
 .comments-unavailable-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
   font-weight: 500;
@@ -378,7 +378,7 @@
 }
 
 .comments-redirect-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #878787;
   margin: 0;
@@ -411,7 +411,7 @@
 }
 
 .sidebar-heading {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -424,7 +424,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
   color: #2C2C2C;
@@ -454,7 +454,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   background: #f8f8f8;
@@ -476,7 +476,7 @@
 }
 
 .related-heading {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: #2C2C2C;

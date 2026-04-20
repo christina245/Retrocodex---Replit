@@ -30,7 +30,7 @@
 }
 
 .submit-fact-header {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 900;
   font-size: 40px;
   color: #2C2C2C;
@@ -38,7 +38,7 @@
 }
 
 .submit-fact-body {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #2C2C2C;
@@ -53,7 +53,7 @@
 }
 
 .submit-fact-rule-number {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: #2C2C2C;
@@ -65,7 +65,7 @@
 }
 
 .submit-fact-rule-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: #2C2C2C;
@@ -74,7 +74,7 @@
 }
 
 .submit-fact-list {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #2C2C2C;
@@ -151,7 +151,7 @@
 }
 
 .submit-fact-checkbox-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   font-size: 18px;
   color: #2C2C2C;
@@ -167,7 +167,7 @@
 .submit-fact-button {
   padding: 0.625rem 0.8rem;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;

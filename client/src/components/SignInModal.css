@@ -66,7 +66,7 @@
 }
 
 .signin-description {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #555;
@@ -89,7 +89,7 @@
 }
 
 .signin-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: #878787;
@@ -97,7 +97,7 @@
 }
 
 .signin-input {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   color: #2C2C2C;
   background: white;
@@ -155,7 +155,7 @@
 }
 
 .signin-error-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #FF5353;
@@ -163,7 +163,7 @@
 }
 
 .signin-context-message {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: #c97000;
@@ -179,7 +179,7 @@
   background: none;
   border: none;
   color: #FF5353;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -199,7 +199,7 @@
   border: none;
   padding: 0.75rem 1rem;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -230,7 +230,7 @@
 }
 
 .signin-divider-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: #878787;
@@ -254,7 +254,7 @@
   border: 1px solid #d5d5d5;
   border-radius: 6px;
   padding: 0.65rem 1rem;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #2C2C2C;
@@ -271,7 +271,7 @@
   background: none;
   border: none;
   color: #2C2C2C;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -294,7 +294,7 @@
 }
 
 .signin-confirmation-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #2C2C2C;
@@ -310,7 +310,7 @@
 }
 
 .signin-code-input {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
@@ -339,7 +339,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
 }
@@ -370,7 +370,7 @@
   border: none;
   padding: 0.75rem 1rem;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -397,7 +397,7 @@
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -424,7 +424,7 @@
 }
 
 .signin-resend-message {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: #6FCF97;
@@ -466,7 +466,7 @@
 }
 
 .signin-location-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: #2C2C2C;
@@ -510,7 +510,7 @@
 }
 
 .signin-country-option {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
   padding: 0.5rem 0.75rem;
@@ -543,7 +543,7 @@
 }
 
 .signin-checkbox-row label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #555;
@@ -566,7 +566,7 @@
   background: none;
   border: none;
   color: #2c2c2c;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -592,7 +592,7 @@
   border: none;
   padding: 6px 8px;
   border-radius: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -611,7 +611,7 @@
 }
 
 .signin-topic-subtitle {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
@@ -734,7 +734,7 @@
 }
 
 .signin-topic-tile-name {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
   color: #FFFFFF;
@@ -749,7 +749,7 @@
 }
 
 .signin-subcategory-link {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 400;
   color: #2C2C2C;
@@ -778,7 +778,7 @@
 }
 
 .signin-tag-counter {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #2C2C2C;
@@ -809,7 +809,7 @@
   gap: 6px;
   background: #2C2C2C;
   color: #FFFFFF;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   padding: 10px;
@@ -844,7 +844,7 @@
 }
 
 .signin-topic-tags-empty {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #999;
   font-style: italic;
@@ -852,7 +852,7 @@
 }
 
 .signin-topic-tags-placeholder {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   color: #d9d9d9;
   margin-top: 4rem;
@@ -932,7 +932,7 @@
   border: 1px solid rgba(44, 44, 44, 0.12);
   padding: 8px 18px;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;

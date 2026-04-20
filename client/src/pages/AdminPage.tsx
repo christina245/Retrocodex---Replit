@@ -2488,7 +2488,7 @@ export default function AdminPage() {
                         <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#31A66B", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
                           <Check size={36} strokeWidth={2.5} />
                         </div>
-                        <h3 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 900, fontSize: 24, color: "#2C2C2C", margin: "0 0 12px 0" }}>Fact successfully published</h3>
+                        <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 900, fontSize: 24, color: "#2C2C2C", margin: "0 0 12px 0" }}>Fact successfully published</h3>
                         <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", width: "100%", marginTop: "1.5rem" }}>
                           <a
                             href={publishSuccessCategory}
@@ -3714,7 +3714,7 @@ export default function AdminPage() {
                       }}
                     />
                     {extCoverUploading && (
-                      <span style={{ fontSize: "0.85rem", color: "#878787", fontFamily: "'Public Sans', sans-serif", marginLeft: "0.5rem" }}>
+                      <span style={{ fontSize: "0.85rem", color: "#878787", fontFamily: "'DM Sans', sans-serif", marginLeft: "0.5rem" }}>
                         Uploading...
                       </span>
                     )}
@@ -3781,7 +3781,7 @@ export default function AdminPage() {
                       style={{
                         color: extSubmitMsg.toLowerCase().includes("published") ? "#22863a" : "#cc3333",
                         fontSize: "0.85rem",
-                        fontFamily: "'Public Sans', sans-serif",
+                        fontFamily: "'DM Sans', sans-serif",
                         alignSelf: "center",
                       }}
                     >
@@ -3827,15 +3827,15 @@ export default function AdminPage() {
                     )}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem", flexWrap: "wrap" }}>
-                        <span style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#2C2C2C" }}>{article.title}</span>
-                        {article.isPaywalled && <span style={{ fontSize: "0.75rem", background: "#f4e4b5", color: "#92680a", borderRadius: 4, padding: "2px 8px", fontFamily: "'Public Sans', sans-serif" }}>Paywalled</span>}
-                        {!article.published && <span style={{ fontSize: "0.75rem", background: "#f0f0f0", color: "#878787", borderRadius: 4, padding: "2px 8px", fontFamily: "'Public Sans', sans-serif" }}>Draft</span>}
-                        {article.published && <span style={{ fontSize: "0.75rem", background: "rgba(45,122,62,0.12)", color: "#2d7a3e", borderRadius: 4, padding: "2px 8px", fontFamily: "'Public Sans', sans-serif" }}>Published</span>}
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.9375rem", color: "#2C2C2C" }}>{article.title}</span>
+                        {article.isPaywalled && <span style={{ fontSize: "0.75rem", background: "#f4e4b5", color: "#92680a", borderRadius: 4, padding: "2px 8px", fontFamily: "'DM Sans', sans-serif" }}>Paywalled</span>}
+                        {!article.published && <span style={{ fontSize: "0.75rem", background: "#f0f0f0", color: "#878787", borderRadius: 4, padding: "2px 8px", fontFamily: "'DM Sans', sans-serif" }}>Draft</span>}
+                        {article.published && <span style={{ fontSize: "0.75rem", background: "rgba(45,122,62,0.12)", color: "#2d7a3e", borderRadius: 4, padding: "2px 8px", fontFamily: "'DM Sans', sans-serif" }}>Published</span>}
                       </div>
-                      <div style={{ fontSize: "0.8125rem", color: "#878787", fontFamily: "'Public Sans', sans-serif" }}>
+                      <div style={{ fontSize: "0.8125rem", color: "#878787", fontFamily: "'DM Sans', sans-serif" }}>
                         {article.publicationName}{article.authorName ? ` · ${article.authorName}` : ""}{article.publishedAt ? ` · ${article.publishedAt}` : ""} · {article.category}
                       </div>
-                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "#FF5353", fontFamily: "'Public Sans', sans-serif", wordBreak: "break-all" }}>
+                      <a href={article.externalUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.8125rem", color: "#FF5353", fontFamily: "'DM Sans', sans-serif", wordBreak: "break-all" }}>
                         {article.externalUrl}
                       </a>
                     </div>
@@ -3883,7 +3883,7 @@ export default function AdminPage() {
             ) : (
               <>
                 {/* ── User Reports ── */}
-                <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: "1rem", color: "#2C2C2C", margin: "1.5rem 0 0.75rem" }}>
+                <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: "1rem", color: "#2C2C2C", margin: "1.5rem 0 0.75rem" }}>
                   User Reports ({reportsData?.userReports.length ?? 0})
                 </h2>
                 {!reportsData?.userReports.length ? (
@@ -3898,14 +3898,14 @@ export default function AdminPage() {
                       >
                         <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#2C2C2C", marginBottom: "0.25rem" }}>
+                            <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#2C2C2C", marginBottom: "0.25rem" }}>
                               Comment by <span style={{ color: "#FF5353" }}>{report.authorUsername ?? "deleted user"}</span>
                               {" on "}<em style={{ fontWeight: 400, color: "#555" }}>{report.factMythHeader}</em>
                             </div>
-                            <div style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#f9f9f9", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.5rem 0", borderLeft: "3px solid #e0e0e0" }}>
+                            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#f9f9f9", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.5rem 0", borderLeft: "3px solid #e0e0e0" }}>
                               {report.commentBody}
                             </div>
-                            <div style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.8125rem", color: "#878787" }}>
+                            <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8125rem", color: "#878787" }}>
                               Reported by <strong>{report.reporterUsername ?? "unknown"}</strong> · Reasons: {(report.reasons ?? []).join(", ")}
                               {report.detail && <span> · "{report.detail}"</span>}
                             </div>
@@ -3937,7 +3937,7 @@ export default function AdminPage() {
                 )}
 
                 {/* ── AI-Flagged ── */}
-                <h2 style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 700, fontSize: "1rem", color: "#2C2C2C", margin: "0 0 0.75rem" }}>
+                <h2 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: "1rem", color: "#2C2C2C", margin: "0 0 0.75rem" }}>
                   AI-Flagged for Review ({reportsData?.aiFlagged.length ?? 0})
                 </h2>
                 {!reportsData?.aiFlagged.length ? (
@@ -3960,17 +3960,17 @@ export default function AdminPage() {
                         >
                           <div style={{ display: "flex", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ fontFamily: "'Public Sans', sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#2C2C2C", marginBottom: "0.25rem" }}>
+                              <div style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#2C2C2C", marginBottom: "0.25rem" }}>
                                 Comment by <span style={{ color: "#FF5353" }}>{item.authorUsername ?? "deleted user"}</span>
                                 {" on "}<em style={{ fontWeight: 400, color: "#555" }}>{item.factMythHeader}</em>
                               </div>
-                              <div style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#fff3e0", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.5rem 0", borderLeft: "3px solid #ff9800" }}>
+                              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#fff3e0", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.5rem 0", borderLeft: "3px solid #ff9800" }}>
                                 {item.commentBody}
                               </div>
                               {topCategories.length > 0 && (
                                 <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
                                   {topCategories.map(([cat, score]) => (
-                                    <span key={cat} style={{ fontFamily: "'Public Sans', sans-serif", fontSize: "0.7rem", background: "rgba(229,57,53,0.1)", color: "#c62828", borderRadius: 4, padding: "2px 7px" }}>
+                                    <span key={cat} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.7rem", background: "rgba(229,57,53,0.1)", color: "#c62828", borderRadius: 4, padding: "2px 7px" }}>
                                       {cat}: {(score * 100).toFixed(0)}%
                                     </span>
                                   ))}

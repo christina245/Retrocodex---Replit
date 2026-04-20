@@ -16,7 +16,7 @@
 }
 
 .timeline-tab {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   background: transparent;
@@ -68,7 +68,7 @@
 }
 
 .timeline-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -112,7 +112,7 @@
 }
 
 .timeline-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
@@ -167,7 +167,7 @@
 }
 
 .timeline-photo-caption {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 300;
   color: #878787;
@@ -182,7 +182,7 @@
 
 .nuances-content {
   padding: 0 50px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
 }
@@ -203,7 +203,7 @@
   background: #2C2C2C;
   color: #FFFFFF;
   padding: 10px 12px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -217,7 +217,7 @@
 }
 
 .nuance-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #2C2C2C;
@@ -248,7 +248,7 @@
 }
 
 .accordion-empty-message {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   font-style: italic;
@@ -286,7 +286,7 @@
 }
 
 .timeline-master-accordion-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -313,7 +313,7 @@
 }
 
 .timeline-entry-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #2C2C2C;

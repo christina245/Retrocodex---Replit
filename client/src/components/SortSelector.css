@@ -17,7 +17,7 @@
 }
 
 .sort-selector-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #2C2C2C;
@@ -33,7 +33,7 @@
   gap: 4px;
   background: none;
   border: none;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #2C2C2C;
@@ -76,7 +76,7 @@
   text-align: left;
   background: none;
   border: none;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #2C2C2C;
@@ -111,7 +111,7 @@
   color: white;
   padding: 6px 10px;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   white-space: nowrap;

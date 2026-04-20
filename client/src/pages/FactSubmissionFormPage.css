@@ -24,7 +24,7 @@
 }
 
 .fact-form-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 900;
   font-size: 36px;
   color: #2C2C2C;
@@ -32,7 +32,7 @@
 }
 
 .fact-form-subtitle {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 15px;
   color: #555555;
@@ -68,7 +68,7 @@
 }
 
 .fact-form-label-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: #2C2C2C;
@@ -93,7 +93,7 @@
 }
 
 .fact-form-field-hint {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 12px;
   color: #666666;
@@ -107,7 +107,7 @@
   padding: 10px 12px;
   border: 1px solid #D0D0D0;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   color: #2C2C2C;
   background: #FFFFFF;
@@ -124,7 +124,7 @@
 }
 
 .fact-form-char-count {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #AAAAAA;
   display: block;
@@ -139,7 +139,7 @@
   padding: 10px 12px;
   border: 1px solid #D0D0D0;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   color: #2C2C2C;
   background: #FFFFFF;
@@ -200,7 +200,7 @@
   border: 1px dashed #CCCCCC;
   border-radius: 6px;
   padding: 7px 14px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #666666;
   cursor: pointer;
@@ -218,7 +218,7 @@
 }
 
 .fact-form-other-note {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #666666;
   margin: 12px 0 0 0;
@@ -231,7 +231,7 @@
 }
 
 .fact-form-error {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #FF5353;
   margin: 20px 0 0 0;
@@ -252,7 +252,7 @@
   color: #FFFFFF;
   border: none;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
@@ -269,7 +269,7 @@
 }
 
 .fact-form-submit-note {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #AAAAAA;
   margin: 0;
@@ -292,7 +292,7 @@
 }
 
 .fact-form-success-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 900;
   font-size: 32px;
   color: #2C2C2C;
@@ -300,7 +300,7 @@
 }
 
 .fact-form-success-body {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #555555;
@@ -321,7 +321,7 @@
   background: none;
   border: 1px solid #D0D0D0;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   font-size: 15px;
   color: #2C2C2C;

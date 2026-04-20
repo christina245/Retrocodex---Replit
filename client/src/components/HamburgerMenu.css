@@ -49,7 +49,7 @@
 }
 
 .menu-link {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   color: #2C2C2C;
   text-decoration: none;
@@ -105,7 +105,7 @@
     border: none;
     padding: 0.625rem 1.25rem;
     border-radius: 6px;
-    font-family: 'Public Sans', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
@@ -125,7 +125,7 @@
     border: none;
     color: #2C2C2C;
     padding: 0.5rem;
-    font-family: 'Public Sans', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 12px;
     font-weight: 500;
     text-decoration: none;

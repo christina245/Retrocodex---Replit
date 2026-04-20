@@ -35,7 +35,7 @@
   padding: 8px 20px;
   background: #FF5353;
   color: #FFFFFF;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
@@ -132,7 +132,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #878787;
@@ -158,7 +158,7 @@
 }
 
 .user-profile-place-item {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #878787;
@@ -174,7 +174,7 @@
 }
 
 .user-profile-empty-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -192,7 +192,7 @@
 }
 
 .profile-bio-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
@@ -272,7 +272,7 @@
 }
 
 .profile-activity-empty-desc {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -281,7 +281,7 @@
 }
 
 .user-profile-section-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 12px;
   color: #878787;
@@ -306,7 +306,7 @@
   display: inline-block;
   background: #2C2C2C;
   color: #FFFFFF;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   padding: 10px;
@@ -322,7 +322,7 @@
 }
 
 .user-profile-view-more {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 300;
   color: #2C2C2C;
@@ -339,7 +339,7 @@
 }
 
 .user-profile-misinfo-answer {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   color: #2C2C2C;
@@ -347,7 +347,7 @@
 }
 
 .user-profile-empty {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #878787;
@@ -392,7 +392,7 @@
 }
 
 .edit-profile-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 24px;
   font-weight: 700;
   color: #2C2C2C;
@@ -404,7 +404,7 @@
 }
 
 .edit-profile-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: #2C2C2C;
@@ -422,7 +422,7 @@
 }
 
 .edit-profile-input {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   color: #2C2C2C;
   background: white;
@@ -439,7 +439,7 @@
 }
 
 .edit-profile-textarea {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   color: #2C2C2C;
   background: white;
@@ -487,7 +487,7 @@
 }
 
 .edit-profile-tag-search-input {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   color: #2C2C2C;
   border: none;
@@ -516,7 +516,7 @@
 }
 
 .edit-profile-tag-dropdown-item {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
   color: #2C2C2C;
@@ -539,7 +539,7 @@
 }
 
 .edit-profile-tag-dropdown-empty {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
   color: #878787;
@@ -552,7 +552,7 @@
 }
 
 .edit-profile-char-count {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   text-align: right;
@@ -573,7 +573,7 @@
 }
 
 .edit-profile-photo-upload {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: white;
@@ -595,7 +595,7 @@
   border: none;
   padding: 0.75rem 2rem;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -623,7 +623,7 @@
 }
 
 .edit-profile-location-column-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   color: #2C2C2C;
@@ -673,7 +673,7 @@
 }
 
 .edit-profile-checkbox-row label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #555;
@@ -699,7 +699,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #878787;
@@ -818,7 +818,7 @@
 }
 
 a.following-post-username {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #2C2C2C;
@@ -831,14 +831,14 @@ a.following-post-username:hover {
 }
 
 .following-post-action {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
 }
 
 .following-post-fact-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #2C2C2C;
@@ -852,7 +852,7 @@ a.following-post-username:hover {
 }
 
 .following-post-timestamp {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #878787;
@@ -887,7 +887,7 @@ a.following-post-username:hover {
 }
 
 .feed-submission-truth {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: hsl(var(--muted-foreground));
@@ -908,7 +908,7 @@ a.following-post-fact-link:hover {
 }
 
 .local-feed-description {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
   font-weight: 400;
   color: #2C2C2C;
@@ -917,7 +917,7 @@ a.following-post-fact-link:hover {
 }
 
 .local-feed-us-banner {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -943,7 +943,7 @@ a.following-post-fact-link:hover {
 }
 
 .following-post-location {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #2C2C2C;
@@ -1017,7 +1017,7 @@ a.following-post-fact-link:hover {
 }
 
 .following-poll-question {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: #2C2C2C;
@@ -1054,7 +1054,7 @@ a.following-post-fact-link:hover {
 }
 
 .following-poll-answer {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #2C2C2C;
@@ -1069,7 +1069,7 @@ a.following-post-fact-link:hover {
 }
 
 .following-comment-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #2C2C2C;
@@ -1080,7 +1080,7 @@ a.following-post-fact-link:hover {
 
 /* Plain Comment (no quote block) */
 .following-plain-comment {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #2C2C2C;
@@ -1089,7 +1089,7 @@ a.following-post-fact-link:hover {
 }
 
 .poll-vote-location-display {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #777;
   margin: 0 0 8px 0;
@@ -1158,7 +1158,7 @@ a.following-post-fact-link:hover {
   padding: 10px 12px;
   border: 1px solid #d0d0d0;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #2C2C2C;
   resize: vertical;
@@ -1186,7 +1186,7 @@ a.following-post-fact-link:hover {
   border: none;
   border-radius: 4px;
   padding: 6px 16px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -1306,7 +1306,7 @@ a.following-post-fact-link:hover {
 }
 
 .activity-status-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: #878787;
@@ -1321,7 +1321,7 @@ a.following-post-fact-link:hover {
 }
 
 .activity-submitted-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #878787;
@@ -1329,7 +1329,7 @@ a.following-post-fact-link:hover {
 }
 
 .edit-section-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   margin: 4px 0 0 0;
@@ -1341,7 +1341,7 @@ a.following-post-fact-link:hover {
 }
 
 .activity-submitted-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #2C2C2C;
@@ -1457,7 +1457,7 @@ a.following-post-fact-link:hover {
   border: none;
   padding: 12px 15px 12px 10px;
   border-radius: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -1484,7 +1484,7 @@ a.following-post-fact-link:hover {
 }
 
 .activity-follow-button {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: white;
@@ -1537,7 +1537,7 @@ a.following-post-fact-link:hover {
 }
 
 .activity-admin-feedback-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #2C2C2C;
@@ -1565,7 +1565,7 @@ a.following-post-fact-link:hover {
 }
 
 .activity-thread-username {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #2C2C2C;
@@ -1587,7 +1587,7 @@ a.following-post-fact-link:hover {
 }
 
 .dashboard-feed-empty-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
   color: #878787;
@@ -1595,7 +1595,7 @@ a.following-post-fact-link:hover {
 }
 
 .dashboard-feed-empty-desc {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -1647,7 +1647,7 @@ a.following-post-fact-link:hover {
 }
 
 .saved-empty-message {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   padding: 12px 0;
@@ -1668,7 +1668,7 @@ a.following-post-fact-link:hover {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   margin: 4px 0 8px 0;
@@ -1697,7 +1697,7 @@ a.following-post-fact-link:hover {
 }
 
 .dashboard-feed-empty-action {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: white;
@@ -1714,7 +1714,7 @@ a.following-post-fact-link:hover {
 }
 
 .for-you-select-tags-button {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: white;
@@ -1740,7 +1740,7 @@ a.following-post-fact-link:hover {
 }
 
 .dashboard-feed-loading p {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   margin: 0;
@@ -1759,7 +1759,7 @@ a.following-post-fact-link:hover {
 }
 
 .dashboard-feed-load-more-btn {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -1819,7 +1819,7 @@ a.following-post-fact-link:hover {
 }
 
 .settings-section-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: #2C2C2C;
@@ -1851,7 +1851,7 @@ a.following-post-fact-link:hover {
 }
 
 .settings-row-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 500;
   color: #2C2C2C;
@@ -1859,7 +1859,7 @@ a.following-post-fact-link:hover {
 }
 
 .settings-row-desc {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #878787;
@@ -1880,7 +1880,7 @@ a.following-post-fact-link:hover {
 }
 
 .settings-toggle-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: #878787;
@@ -1949,14 +1949,14 @@ a.following-post-fact-link:hover {
 }
 
 .settings-info-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #878787;
 }
 
 .settings-info-value {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 500;
   color: #2C2C2C;
@@ -1972,7 +1972,7 @@ a.following-post-fact-link:hover {
 }
 
 .settings-danger-desc {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -1981,7 +1981,7 @@ a.following-post-fact-link:hover {
 }
 
 .settings-delete-button {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #FF5353;
@@ -2024,7 +2024,7 @@ a.following-post-fact-link:hover {
 }
 
 .delete-modal-desc {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -2038,7 +2038,7 @@ a.following-post-fact-link:hover {
 }
 
 .delete-modal-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #2C2C2C;
@@ -2062,7 +2062,7 @@ a.following-post-fact-link:hover {
 .delete-modal-input {
   width: 100%;
   padding: 0.7rem 0.75rem 0.7rem 2.5rem;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   border: 1px solid #d1d1d1;
   border-radius: 8px;
@@ -2076,7 +2076,7 @@ a.following-post-fact-link:hover {
 }
 
 .delete-modal-error {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #FF5353;
   margin: 0.5rem 0 0 0;
@@ -2089,7 +2089,7 @@ a.following-post-fact-link:hover {
 }
 
 .delete-modal-cancel {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -2106,7 +2106,7 @@ a.following-post-fact-link:hover {
 }
 
 .delete-modal-confirm {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: white;
@@ -2156,7 +2156,7 @@ a.following-post-fact-link:hover {
 }
 
 .notifications-tab {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 600;
   color: #878787;
@@ -2349,7 +2349,7 @@ a.following-post-fact-link:hover {
 }
 
 .submission-timestamp {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #878787;
@@ -2365,7 +2365,7 @@ a.following-post-fact-link:hover {
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -2388,7 +2388,7 @@ a.following-post-fact-link:hover {
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -2410,7 +2410,7 @@ a.following-post-fact-link:hover {
 }
 
 .denial-reason-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   font-style: italic;
@@ -2438,7 +2438,7 @@ a.following-post-fact-link:hover {
 }
 
 .denial-reason-view-more {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   font-style: normal;
@@ -2459,7 +2459,7 @@ a.following-post-fact-link:hover {
 }
 
 .submissions-page-button {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #2C2C2C;
@@ -2482,7 +2482,7 @@ a.following-post-fact-link:hover {
 }
 
 .submissions-page-info {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #878787;
@@ -2521,7 +2521,7 @@ a.following-post-fact-link:hover {
   padding: 10px 16px;
   background: none;
   border: none;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   cursor: not-allowed;
@@ -2544,7 +2544,7 @@ a.following-post-fact-link:hover {
   color: white;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem;
   white-space: nowrap;
   opacity: 0;
@@ -2559,7 +2559,7 @@ a.following-post-fact-link:hover {
 
 .submissions-loading,
 .submissions-empty {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: #878787;
   padding: 32px 0;
@@ -2572,7 +2572,7 @@ a.following-post-fact-link:hover {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
@@ -2674,7 +2674,7 @@ a.following-post-fact-link:hover {
 }
 
 .under-review-heading {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: #2C2C2C;
@@ -2686,7 +2686,7 @@ a.following-post-fact-link:hover {
 }
 
 .under-review-body {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: #878787;
@@ -2694,7 +2694,7 @@ a.following-post-fact-link:hover {
 }
 
 .under-review-submitted-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #878787;
@@ -2770,7 +2770,7 @@ a.following-post-fact-link:hover {
 }
 
 .feed-factcard-category-name {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 700;
   color: #fff;
@@ -2852,7 +2852,7 @@ a.following-post-fact-link:hover {
 }
 
 .feed-article-publication {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -2870,7 +2870,7 @@ a.following-post-fact-link:hover {
 }
 
 .feed-article-summary {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: hsl(var(--muted-foreground));
   margin: 0;
@@ -2894,7 +2894,7 @@ a.following-post-fact-link:hover {
 
 /* ── For You empty state with add-topics link ── */
 .feed-empty-add-topics {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   text-align: center;
 }
@@ -2969,7 +2969,7 @@ a.following-post-fact-link:hover {
 
 .edit-requests-beta-text {
   color: #878787;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
@@ -2992,7 +2992,7 @@ a.following-post-fact-link:hover {
 }
 
 .feed-pagination-btn {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #FF5353;
@@ -3015,7 +3015,7 @@ a.following-post-fact-link:hover {
 }
 
 .feed-pagination-info {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #888;
 }

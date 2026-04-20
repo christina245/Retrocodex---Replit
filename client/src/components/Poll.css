@@ -12,7 +12,7 @@
 }
 
 .poll-title {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: #2C2C2C;
@@ -83,7 +83,7 @@
 }
 
 .poll-option-text {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: #2C2C2C;
@@ -114,7 +114,7 @@
 }
 
 .poll-location-label {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #555;
@@ -123,7 +123,7 @@
 .poll-location-select,
 .poll-decade-select {
   width: 100%;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #2C2C2C;
   background: #f9f9f9;
@@ -141,7 +141,7 @@
 }
 
 .poll-location-hint {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #777;
   margin: 0;
@@ -155,14 +155,14 @@
 
 /* Error & login prompt */
 .poll-error {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #e53e3e;
   margin: 10px 0 0;
 }
 
 .poll-login-prompt {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #555;
   margin: 14px 0 0;
@@ -189,7 +189,7 @@
   border: none;
   padding: 10px 20px;
   border-radius: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -254,14 +254,14 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #777;
   margin: 0;
 }
 
 .poll-voted-thanks {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
   color: #555;
   margin: 12px 0 0;
@@ -271,7 +271,7 @@
   background: none;
   border: none;
   padding: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #FF5353;
   text-decoration: underline;

@@ -20,7 +20,7 @@
 }
 
 .public-profile-bio {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #555;
   margin: 6px 0 12px 0;
@@ -46,7 +46,7 @@
 
 .public-comment-timestamp {
   display: block;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   margin-top: 10px;
@@ -81,7 +81,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: hsl(var(--muted-foreground));
   margin-top: 4px;

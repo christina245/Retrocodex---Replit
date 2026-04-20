@@ -203,7 +203,7 @@
 }
 
 .tiptap-content .ProseMirror figcaption.blog-image-caption {
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: #878787;
   margin-top: 8px;
@@ -250,7 +250,7 @@
 
 .image-modal-header h3 {
   margin: 0;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 600;
   color: #2C2C2C;
@@ -290,7 +290,7 @@
 
 .image-modal-field label {
   display: block;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #2C2C2C;
@@ -303,7 +303,7 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .image-modal-field input:focus {
@@ -323,7 +323,7 @@
   background: white;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   transition: all 0.15s ease;
 }
@@ -352,7 +352,7 @@
   background: white;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
 }
 
@@ -367,7 +367,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Public Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
 }
