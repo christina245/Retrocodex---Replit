@@ -615,19 +615,22 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="decade-content-area" id="decade-content-area">
-                <div className="decade-header-row">
-                  <div className="decade-header-label">If you graduated from high school in the</div>
-                  <div className="decade-header-selected">{selectedDecade}</div>
-                </div>
-                <div className="decade-disclaimers">
-                  <p className="decade-disclaimer-item">
-                    <span className="decade-disclaimer-icon">⚠️</span>
-                    This list includes facts that were factually disproven before you graduated, but continued to persist in popular culture or academia. 
-                  </p>
-                  <p className="decade-disclaimer-item">
-                    <span className="decade-disclaimer-icon">🌎</span>
-                    Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. To improve accuracy, all topics are continuously revised through user submissions and commentary.
-                  </p>
+                <div className="decade-intro-row">
+                  <div className="decade-header-text">
+                    <span className="decade-header-line">If you graduated from high school in the</span>
+                    <span className="decade-header-year">{selectedDecade},</span>
+                    <span className="decade-header-line">here's what changed since:</span>
+                  </div>
+                  <div className="decade-disclaimers">
+                    <p className="decade-disclaimer-item">
+                      <span className="decade-disclaimer-icon">⚠️</span>
+                      This list includes facts that were factually disproven before you graduated, but continued to persist in popular culture or academia. 
+                    </p>
+                    <p className="decade-disclaimer-item">
+                      <span className="decade-disclaimer-icon">🌎</span>
+                      Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. To improve accuracy, all topics are continuously revised through user submissions and commentary.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="decade-divider" />
