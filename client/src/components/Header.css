@@ -1,7 +1,7 @@
 .header {
   background: white;
   padding: 10px 0 0.3rem 0;
-  border-bottom: 1px solid #fbfaf2;
+  border-bottom: 2px solid #d9d9d9;
 }
 
 .header-simplified .header-container {
@@ -121,7 +121,7 @@
 }
 
 .logo-image {
-  width: 240px;
+  width: 200px;
   height: auto;
   object-fit: contain;
 }
@@ -202,7 +202,7 @@
   border: none;
   background: transparent;
   outline: none;
-  width: 140px;
+  width: 100px;
   color: #2C2C2C;
 }
 
@@ -241,6 +241,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .submit-fact-icon {
@@ -343,7 +345,7 @@
   }
 
   .logo-image {
-    width: 180px;
+    width: 140px;
   }
 
   .logo-full {
@@ -425,7 +427,7 @@
   .header-search-form {
     position: absolute;
     top: 10px;
-    left: calc(50% + 130px);
+    left: calc(50% + 110px);
     right: var(--header-right-reserve, 290px);
     min-width: 140px;
     z-index: 5;
