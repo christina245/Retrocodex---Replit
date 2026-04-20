@@ -14,7 +14,7 @@
 }
 
 .homepage-headline {
-  font-family: 'Playfair Display', serif;
+  font-family: 'DM Serif Text', serif;
   font-size: 40px;
   font-weight: 900;
   color: #2C2C2C;
@@ -62,7 +62,7 @@
   color: #2c2c2c;
   font-family: 'DM Sans', sans-serif;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.010em;
   transition: all 0.2s;
 }
@@ -87,7 +87,7 @@
 }
 
 .homepage-category-subtitle {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #2C2C2C;
@@ -103,7 +103,7 @@
 }
 
 .tab-subheader {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 18px;
   font-weight: 600;
   color: #2C2C2C;
@@ -143,7 +143,7 @@
   text-align: center;
   padding: 60px 20px;
   color: #666;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 16px;
 }
 
@@ -283,7 +283,7 @@
 }
 
 .decade-loading-text {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 16px;
   font-weight: 500;
   color: #878787;
@@ -309,7 +309,7 @@
 }
 
 .decade-disclaimer-item {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #2C2C2C;
@@ -348,7 +348,7 @@
 
 .decade-type-card-head {
   padding: 9px 12px 8px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
   color: hsl(var(--muted-foreground));
@@ -389,14 +389,14 @@
 }
 
 .decade-type-toggle-name {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: hsl(var(--foreground));
 }
 
 .decade-type-toggle-sub {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   color: hsl(var(--muted-foreground));
   line-height: 1.35;
@@ -479,7 +479,7 @@
   text-align: center;
   padding: 60px 20px;
   color: #888;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 16px;
 }
 
@@ -502,7 +502,7 @@
 }
 
 .decade-sticky-category-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: #2C2C2C;
@@ -527,7 +527,7 @@
   cursor: pointer;
   white-space: nowrap;
   background: transparent;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.025em;
