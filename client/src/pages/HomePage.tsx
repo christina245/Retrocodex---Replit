@@ -485,7 +485,7 @@ export default function HomePage() {
           What have you learned that's <u>now outdated</u>?
         </h1>
         <p className="homepage-tagline" data-testid="text-homepage-tagline">
-          Pick the decade you graduated high school below. Discover what you may have been taught that has since been disproven.
+          Pick the decade you graduated high school below. Discover what you may have been taught that has since been disproven or revised.
         </p>
 
         <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">

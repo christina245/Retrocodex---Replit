@@ -56,11 +56,12 @@
 }
 
 .homepage-category-name {
-  font-family: 'Public Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 800;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+  font-variation-settings: "opsz" 40, "wght" 900;
   color: #FFFFFF;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.020em;
 }
 
 @media (max-width: 768px) {
