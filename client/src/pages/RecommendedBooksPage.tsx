@@ -308,7 +308,7 @@ export default function RecommendedBooksPage() {
       <main className="books-main">
         <div className="books-intro-wrap">
           <div className="books-intro-text">
-            <h1 className="books-h1" data-testid="text-books-heading">Recommended reading</h1>
+            <h1 className="books-h1" data-testid="text-books-heading">Recommended books</h1>
             <p className="books-subtitle">
               Looking to learn more about common misconceptions and myths? Here&rsquo;s some
               books for curious minds who like questioning what they were told. From debunked

@@ -25,7 +25,7 @@ const COLUMNS: { key: SortKey | null; label: string; sortable: boolean }[] = [
   { key: "yearEstablished", label: "Year Established", sortable: true },
   { key: "presentNations", label: "Present Name(s)", sortable: true },
   { key: "endedBy", label: "Ended By", sortable: true },
-  { key: null, label: "Summary", sortable: false },
+  { key: null, label: "Reason", sortable: false },
 ];
 
 function SortArrow({ active, dir }: { active: boolean; dir: SortDir }) {

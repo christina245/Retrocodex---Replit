@@ -51,7 +51,7 @@ export function HamburgerMenu({ isOpen, onClose }: HamburgerMenuProps) {
             List of Countries that No Longer Exist (1930–2026)
           </a>
           <a href="/evolving-slang" className="menu-link" data-testid="link-evolving-slang">
-            List of Evolving Slang Terms
+            List of Slang that Evolved Over Time
           </a>
           
       

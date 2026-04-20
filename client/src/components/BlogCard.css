@@ -70,6 +70,9 @@
   padding: 4px 10px;
   border-radius: 30px;
   white-space: nowrap;
+}
+
+.blog-card-category-pill span {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
@@ -218,11 +221,11 @@
 }
 
 .blog-card-action--saved {
-  color: #2c2c2c;
+  color: #ff5353;
 }
 
 .blog-card-action--saved .blog-card-action-icon--filled {
-  fill: #2c2c2c;
+  fill: #ff5353;
 }
 
 .blog-card-action--pending {
