@@ -51,7 +51,7 @@
 }
 
 .fact-filter-tag {
-  font-family: 'Merriweather', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 10px;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -60,6 +60,7 @@
   padding: 4px 10px;
   border-radius: 30px;
   white-space: nowrap;
+  text-transform: none;
 }
 
 .fact-taught-until-tag,
@@ -210,7 +211,7 @@
   background: none;
   border: none;
   color: #999;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Public Sans', sans-serif;
   font-size: 0.75rem;
   cursor: pointer;
   padding: 0.375rem 0.5rem;

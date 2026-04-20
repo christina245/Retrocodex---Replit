@@ -119,7 +119,7 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
               style={{ backgroundColor: `${fact.categoryColor}33`, color: fact.categoryColor }}
             >
               <CategoryIcon size={12} style={{ color: fact.categoryColor }} className="category-icon-small" />
-              <span className="category-badge" style={{ color: fact.categoryColor }}>{fact.category}</span>
+              <span className="category-badge" style={{ color: fact.categoryColor }}>{toTitleCase(fact.category)}</span>
             </div>
             {(() => {
               const FACT_TYPE_KEYS = ["school", "folk wisdom", "media claims"];
