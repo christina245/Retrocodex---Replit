@@ -12,7 +12,7 @@
 .category-fact-card {
   width: 515px;
   height: 310px;
-  background: #FDfDfD;
+  background: #Ffffff;
   box-shadow: 2px 4px 0 color-mix(in srgb, var(--card-category-color) 50%, transparent);
   border: 1px solid color-mix(in srgb, var(--card-category-color) 20%, transparent);
   border-radius: 8px;
@@ -71,7 +71,7 @@
 }
 
 .category-fact-content {
-  padding: 1.5rem;
+  padding: 0.10rem;
   padding-left: 15px;
   padding-right: 25px;
   display: flex;
