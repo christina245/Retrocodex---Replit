@@ -327,8 +327,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 1360px;
-  margin: 0 auto 24px;
+  margin-bottom: 24px;
 }
 
 .decade-disclaimer-item {

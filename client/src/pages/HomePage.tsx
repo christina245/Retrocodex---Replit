@@ -615,19 +615,6 @@ export default function HomePage() {
               </div>
             ) : (
               <div className="decade-content-area" id="decade-content-area">
-                <div className="decade-disclaimers">
-                  <p className="decade-disclaimer-item">
-                    <span className="decade-disclaimer-icon">⚠️</span>
-                    This list includes facts that were factually disproven before you graduated, but continued to persist in popular culture or academia. 
-                  </p>
-                  <p className="decade-disclaimer-item">
-                    <span className="decade-disclaimer-icon">🌎</span>
-                    Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. To improve accuracy, all topics are continuously revised through user submissions and commentary.
-                  </p>
-                </div>
-
-                <div className="decade-divider" />
-
                 <div className="decade-main-layout">
                   <aside className="decade-type-sidebar">
                     <div className="decade-header-text">
@@ -661,6 +648,19 @@ export default function HomePage() {
                   </aside>
 
                   <div className="decade-facts-column">
+                    <div className="decade-disclaimers">
+                      <p className="decade-disclaimer-item">
+                        <span className="decade-disclaimer-icon">⚠️</span>
+                        This list includes facts that were factually disproven before you graduated, but continued to persist in popular culture or academia.
+                      </p>
+                      <p className="decade-disclaimer-item">
+                        <span className="decade-disclaimer-icon">🌎</span>
+                        Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. To improve accuracy, all topics are continuously revised through user submissions and commentary.
+                      </p>
+                    </div>
+
+                    <div className="decade-divider" />
+
                     <div className="decade-controls-bar">
                       <FactKey />
                       <div className="decade-sort-filter">
