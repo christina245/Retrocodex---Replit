@@ -7,8 +7,8 @@
 
 .main-content {
   flex: 1;
-  padding: 0 20 1rem 0;
-  margin: 0 20 0 10;
+  padding: 0 10 1rem 0;
+  margin: 0 10 0 10;
   display: flex;
   flex-direction: column;
 }
@@ -98,7 +98,7 @@
 }
 
 .content-area {
-  padding: 0 2px;
+  padding: 0 8px;
   max-width: 100%;
   margin: 0 auto;
   margin-top: 24px;
@@ -300,20 +300,12 @@
   padding-bottom: 100px;
 }
 
-.decade-intro-row {
-  display: grid;
-  grid-template-columns: 225px 1fr;
-  gap: 30px;
-  max-width: 1360px;
-  margin: 0 auto 24px;
-  align-items: center;
-}
-
 .decade-header-text {
   display: flex;
   flex-direction: column;
   gap: 4px;
   font-family: "DM Serif Text", serif;
+  margin-bottom: 16px;
 }
 
 .decade-header-line {
@@ -335,13 +327,15 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 1360px;
+  margin: 0 auto 24px;
 }
 
 .decade-disclaimer-item {
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
   font-weight: 500;
-  color: #2C2C2C;
+  color: #4d4d4d;
   line-height: 1.5;
   display: flex;
   gap: 5px;
@@ -464,6 +458,7 @@
 
 .decade-facts-column {
   min-width: 0;
+  padding-right: 3.5rem;
 }
 
 .decade-controls-bar {
@@ -589,10 +584,6 @@
   .decade-content-area {
     padding: 0 6px;
     max-width: 100%;
-  }
-
-  .decade-intro-row {
-    grid-template-columns: 1fr;
   }
 
   .decade-header-year {
