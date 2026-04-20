@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #FFFFFF;
+  background: #fbfbf9;
 }
 
 .page-content {
@@ -22,7 +22,7 @@
 }
 
 .fact-page-title {
-  font-family: 'Merriweather', sans-serif;
+  font-family: 'DM Serif Text', sans-serif;
   font-size: 28px;
   font-weight: 800;
   color: #2C2C2C;
