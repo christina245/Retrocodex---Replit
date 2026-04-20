@@ -36,18 +36,6 @@
   flex-shrink: 0;
 }
 
-.category-fact-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--card-category-color);
-  opacity: 0.3;
-  z-index: 0;
-}
-
 .category-fact-tags {
   display: flex;
   gap: 0.5rem;
@@ -96,13 +84,18 @@
 .category-fact-photo {
   width: 140px;
   flex-shrink: 0;
-  background: #e0e0e0;
+  background: transparent;
+  margin: 5px 5px 5px 0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .category-fact-photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 10px;
+  display: block;
 }
 
 .category-fact-section {

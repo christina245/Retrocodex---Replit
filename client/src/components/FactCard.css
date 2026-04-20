@@ -29,7 +29,6 @@
 .fact-category {
   height: 35px;
   padding: 0 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,9 +37,12 @@
 }
 
 .fact-category-left {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  padding: 4px 10px;
+  border-radius: 30px;
+  white-space: nowrap;
 }
 
 .fact-filter-tags {
@@ -77,7 +79,6 @@
   font-family: 'Public Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
-  color: #2C2C2C;
   letter-spacing: 0.04em;
 }
 
@@ -101,13 +102,18 @@
 .fact-photo {
   width: 140px;
   flex-shrink: 0;
-  background: #e0e0e0;
+  background: transparent;
+  margin: 5px 5px 5px 0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .fact-photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 10px;
+  display: block;
 }
 
 .fact-section {

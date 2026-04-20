@@ -113,13 +113,13 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
           data-testid={`card-fact-${fact.id}`}
           style={{ '--card-category-color': fact.categoryColor } as React.CSSProperties}
         >
-          <div 
-            className="fact-category"
-            style={{ backgroundColor: `${fact.categoryColor}33` }}
-          >
-            <div className="fact-category-left">
+          <div className="fact-category">
+            <div
+              className="fact-category-left"
+              style={{ backgroundColor: `${fact.categoryColor}33`, color: fact.categoryColor }}
+            >
               <CategoryIcon size={12} style={{ color: fact.categoryColor }} className="category-icon-small" />
-              <span className="category-badge">{fact.category}</span>
+              <span className="category-badge" style={{ color: fact.categoryColor }}>{fact.category}</span>
             </div>
             {(() => {
               const FACT_TYPE_KEYS = ["school", "folk wisdom", "media claims"];
