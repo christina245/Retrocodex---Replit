@@ -574,7 +574,7 @@ export default function HomePage() {
                       ))
                     ) : activeTab === "explore" && isFactsLoading ? (
                       <div className="decade-loading-state" data-testid="featured-loading">
-                        <img src="/loading-bar.gif" className="decade-loading-gif" alt="" />
+                        <img src="/loading_bar_gif_cotton_1776663498184.gif" className="decade-loading-gif" alt="" />
                       </div>
                     ) : (
                       <div className="empty-state" data-testid="empty-facts">
@@ -610,11 +610,15 @@ export default function HomePage() {
           <>
             {isDecadeLoading ? (
               <div className="decade-loading-state" data-testid="decade-loading">
-                <img src="/loading-bar.gif" className="decade-loading-gif" alt="" />
+                <img src="/loading_bar_gif_cotton_1776663498184.gif" className="decade-loading-gif" alt="" />
                 <p className="decade-loading-text">Generating your {selectedDecade} results…</p>
               </div>
             ) : (
               <div className="decade-content-area" id="decade-content-area">
+                <div className="decade-header-row">
+                  <div className="decade-header-label">If you graduated from high school in the</div>
+                  <div className="decade-header-selected">{selectedDecade}</div>
+                </div>
                 <div className="decade-disclaimers">
                   <p className="decade-disclaimer-item">
                     <span className="decade-disclaimer-icon">⚠️</span>

@@ -1,4 +1,4 @@
-import scrungyMailImage from "@assets/scrungy_holding_mail_edited_1775203867688.png";
+import scrungyMailImage from "@assets/scrungy/scrungy mail transparent.png";
 import "./SendgridBanner.css";
 
 export function SendgridBanner({ hideMascot = false }: { hideMascot?: boolean }) {
