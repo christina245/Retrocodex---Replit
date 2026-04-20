@@ -46,7 +46,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
 }
 
 .homepage-decade-chip {
@@ -473,7 +473,7 @@
 .decade-sort-filter {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 

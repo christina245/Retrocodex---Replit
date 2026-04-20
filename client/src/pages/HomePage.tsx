@@ -9,7 +9,6 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HomepageTabs, type HomepageTabType } from "@/components/HomepageTabs";
 import { FactCard, type Fact } from "@/components/FactCard";
 import { FactKey } from "@/components/FactKey";
-import { CategoryFilter } from "@/components/CategoryFilter";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CATEGORIES } from "@shared/categories";
 import { SendgridBanner } from "@/components/SendgridBanner";
@@ -54,7 +53,6 @@ export default function HomePage() {
   const [popularPage, setPopularPage] = useState(1);
   const [selectedDecade, setSelectedDecade] = useState<string>("all");
   const [isDecadeLoading, setIsDecadeLoading] = useState(false);
-  const [decadeFilters, setDecadeFilters] = useState<string[]>([]);
   const [decadeSort, setDecadeSort] = useState<SortOption>("recent");
   const [decadePage, setDecadePage] = useState(1);
   const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string[]>([]);
@@ -346,7 +344,7 @@ export default function HomePage() {
           commentCount: fact.commentCount ?? 0,
         };
       });
-  }, [dbFacts, selectedDecade, decadeFilters, decadeCategoryFilter, decadeTypeToggles]);
+  }, [dbFacts, selectedDecade, decadeCategoryFilter, decadeTypeToggles]);
 
   const decadeTotalPages = Math.max(1, Math.ceil(decadeFacts.length / DECADE_FACTS_PER_PAGE));
   const clampedDecadePage = Math.min(decadePage, decadeTotalPages);
@@ -665,7 +663,6 @@ export default function HomePage() {
                       <FactKey />
                       <div className="decade-sort-filter">
                         <SortSelector selectedSort={decadeSort} onSortChange={setDecadeSort} />
-                        <CategoryFilter selectedFilters={decadeFilters} onFilterChange={(f) => { setDecadeFilters(f); setDecadePage(1); }} />
                       </div>
                     </div>
 
@@ -707,34 +704,6 @@ export default function HomePage() {
               </div>
             )}
 
-            <div className="decade-sticky-category-nav" data-testid="decade-sticky-category-nav">
-              <span className="decade-sticky-category-label">Filter by category:</span>
-              <div className="decade-sticky-category-chips">
-                {CATEGORIES.map((cat) => {
-                  const Icon = cat.icon;
-                  const isActive = decadeCategoryFilter.some(f => f.toLowerCase() === cat.name.toLowerCase());
-                  return (
-                    <button
-                      key={cat.name}
-                      className={`decade-sticky-chip${isActive ? " decade-sticky-chip-active" : ""}`}
-                      style={{
-                        '--chip-color': cat.color,
-                        borderColor: cat.color,
-                        color: isActive ? "#fff" : cat.color,
-                        backgroundColor: isActive ? cat.color : "#fff",
-                      } as React.CSSProperties}
-                      onClick={() => setDecadeCategoryFilter(prev =>
-                        isActive ? prev.filter(f => f.toLowerCase() !== cat.name.toLowerCase()) : [...prev, cat.name]
-                      )}
-                      data-testid={`button-decade-category-${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
-                    >
-                      <Icon size={14} strokeWidth={2.5} style={{ color: isActive ? "#fff" : cat.color }} />
-                      <span>{cat.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
           </>
         )}
       </main>
