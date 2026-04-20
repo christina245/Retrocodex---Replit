@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExternalLink, CircleDollarSign, MessageSquare, Bookmark, Share2, Clipboard } from 'lucide-react';
+import { ExternalLink, CircleDollarSign, MessageSquare, Bookmark, Share2, Clipboard, Scroll, Dna, Home, Activity, Users, HeartHandshake, DiamondPlus } from 'lucide-react';
 import { Link } from 'wouter';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/lib/auth';
@@ -9,6 +9,34 @@ import { SignInModal } from '@/components/SignInModal';
 import { useVerificationGuard } from '@/lib/useVerificationGuard';
 import { VerifyEmailModal } from '@/components/VerifyEmailModal';
 import './BlogCard.css';
+
+const BLOG_CATEGORY_ICONS: Record<string, typeof Scroll> = {
+  "history": Scroll,
+  "life sciences": Dna,
+  "everyday life": Home,
+  "health & fitness": Activity,
+  "social sciences": Users,
+  "gender & sexuality": HeartHandshake,
+  "other": DiamondPlus,
+};
+
+const BLOG_CATEGORY_COLORS: Record<string, string> = {
+  "history": "#D29E00",
+  "life sciences": "#419F36",
+  "health & fitness": "#EC7200",
+  "social sciences": "#9D0085",
+  "gender & sexuality": "#FF6F98",
+  "everyday life": "#0167A2",
+  "other": "#2C2C2C",
+};
+
+function getBlogCategoryIcon(category: string) {
+  return BLOG_CATEGORY_ICONS[category.toLowerCase()] || DiamondPlus;
+}
+
+function getBlogCategoryColor(category: string) {
+  return BLOG_CATEGORY_COLORS[category.toLowerCase()] || "#2C2C2C";
+}
 
 interface SavedArticle {
   id: string;
@@ -46,6 +74,8 @@ export default function BlogCard({
   originalPublishedAt,
   publishedAtIso,
 }: BlogCardProps) {
+  const CategoryIcon = getBlogCategoryIcon(category);
+  const categoryColor = getBlogCategoryColor(category);
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -199,12 +229,14 @@ export default function BlogCard({
           <span className="blog-card-date" data-testid={`blog-card-date-${id}`}>
             {date}
           </span>
-          <span
-            className="blog-card-category"
+          <div
+            className="blog-card-category-pill"
             data-testid={`blog-card-category-${id}`}
+            style={{ backgroundColor: `${categoryColor}33`, color: categoryColor }}
           >
-            {category}
-          </span>
+            <CategoryIcon size={12} style={{ color: categoryColor }} />
+            <span>{category}</span>
+          </div>
         </div>
 
         <h3 className="blog-card-title" data-testid={`blog-card-title-${id}`}>

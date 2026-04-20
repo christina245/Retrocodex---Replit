@@ -2,6 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #fbfbf9;
 }
 
 .articles-page .hero-wrapper {
@@ -28,7 +29,7 @@
 }
 
 .articles-header {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Serif Text', sans-serif;
   font-weight: 900;
   font-size: 40px;
   color: #2C2C2C;
