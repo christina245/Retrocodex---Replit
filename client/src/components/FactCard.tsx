@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap, Activity, HeartHandshake, DiamondPlus } from "lucide-react";
+import { MessageCircle, Bookmark, Share2, X, Check, Scroll, Dna, Home, Dumbbell, Users, Heart, Zap, Activity, HeartHandshake, DiamondPlus, BookOpen } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import forwardArrow from "@assets/forward triangle red.png";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
 import "./FactCard.css";
 
@@ -251,7 +250,7 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
           data-testid={`button-learn-more-${fact.id}`}
           onClick={handleBetaLinkClick}
         >
-          <img src={forwardArrow} alt="" className="learn-more-arrow" />
+          <BookOpen size={14} className="learn-more-arrow" />
           {fact.betaOnly ? "View sources" : "Learn more"}
         </Link>
       </div>

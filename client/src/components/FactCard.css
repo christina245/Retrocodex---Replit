@@ -173,7 +173,7 @@
 
 .learn-more-button {
   background: rgba(44, 44, 44, 0.05);
-  color: #FF5353;
+  color: #2c2c2c;
   border: none;
   padding: 12px 15px 12px 10px;
   border-radius: 5px;
@@ -193,15 +193,14 @@
   color: white;
 }
 
-.learn-more-button:hover .learn-more-arrow {
-  filter: brightness(0) saturate(100%) invert(1);
+.learn-more-arrow {
+  color: #2c2c2c;
+  flex-shrink: 0;
+  transition: color 0.2s;
 }
 
-.learn-more-arrow {
-  width: 20px;
-  height: 10px;
-  object-fit: contain;
-  transition: filter 0.2s;
+.learn-more-button:hover .learn-more-arrow {
+  color: #ffffff;
 }
 
 .action-button {
@@ -313,10 +312,6 @@
     padding: 10px 12px 10px 8px;
   }
 
-  .learn-more-arrow {
-    width: 16px;
-    height: 8px;
-  }
 }
 
 .fact-filter-tooltip {

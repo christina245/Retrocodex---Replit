@@ -175,15 +175,14 @@
   color: white;
 }
 
-.category-learn-more-button:hover .category-learn-more-arrow {
-  filter: brightness(0) saturate(100%) invert(1);
+.category-learn-more-arrow {
+  color: #2c2c2c;
+  flex-shrink: 0;
+  transition: color 0.2s;
 }
 
-.category-learn-more-arrow {
-  width: 20px;
-  height: 10px;
-  object-fit: contain;
-  transition: filter 0.2s;
+.category-learn-more-button:hover .category-learn-more-arrow {
+  color: #ffffff;
 }
 
 .category-action-button {
@@ -300,10 +299,6 @@
     padding: 10px 12px 10px 8px;
   }
 
-  .category-learn-more-arrow {
-    width: 16px;
-    height: 8px;
-  }
 }
 
 /* Search highlight */
