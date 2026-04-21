@@ -135,6 +135,9 @@
 }
 
 .submit-fact-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -230,8 +233,7 @@
   }
 
   .header-mobile-username {
-    display: flex;
-    align-items: center;
+    display: none;
   }
 
   .header-search-form {

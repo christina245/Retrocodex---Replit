@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, X, UserRound, Bell, CircleEllipsis } from "lucide-react";
+import { Search, X, UserRound, Bell, CircleEllipsis, MessageCirclePlus } from "lucide-react";
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/red black gray logo.png";
@@ -122,6 +122,7 @@ export function SingleFactHeader({ onMenuClick, onMobileSidebarToggle }: SingleF
             className="submit-fact-button"
             data-testid="button-submit-fact"
           >
+            <MessageCirclePlus size={16} className="submit-fact-icon" />
             Submit a Fact
           </a>
           {isLoggedIn ? (
