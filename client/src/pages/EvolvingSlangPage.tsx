@@ -11,6 +11,7 @@ import { SignInModal } from "@/components/SignInModal";
 import { evolvedTermsPeople, type EvolvedTerm } from "@/data/evolvedTerms";
 import { evolvedTermsActions } from "@/data/evolvedTermsActions";
 import type { Page } from "@shared/schema";
+import scrungyAndSeal from "@assets/scrungy_and_seal_talking_1776809939153.png";
 import "./FormerCountriesPage.css";
 import "./EvolvingSlangPage.css";
 
@@ -167,10 +168,17 @@ export default function EvolvingSlangPage() {
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">List of American English everyday terms that evolved over time</h1>
-          <p className="fc-description">
-            What casual terms for people and things no longer mean what you thought they did? Here's a list of slang and other words you might have heard in everyday life that have generally shifted in meaning from their origins.
-          </p>
+          <div className="fc-intro-row">
+            <div className="fc-intro-left">
+              <h1 className="fc-title">List of American English everyday terms that evolved over time</h1>
+              <p className="fc-description">
+                What casual terms for people and things no longer mean what you thought they did? Here's a list of slang and other words you might have heard in everyday life that have generally shifted in meaning from their origins.
+              </p>
+            </div>
+            <div className="fc-intro-image-col">
+              <img src={scrungyAndSeal} alt="Scrungy and a seal talking" className="fc-intro-image" />
+            </div>
+          </div>
 
           <section className="es-section">
             <h2 className="es-section-heading" data-testid="heading-people">Descriptions of people</h2>
