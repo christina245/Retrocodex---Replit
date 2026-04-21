@@ -252,4 +252,8 @@
   .header-signin-button {
     display: none;
   }
+
+  .search-button {
+    display: none;
+  }
 }

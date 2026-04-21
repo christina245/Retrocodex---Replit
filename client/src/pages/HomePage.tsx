@@ -610,7 +610,7 @@ export default function HomePage() {
             {isDecadeLoading ? (
               <div className="decade-loading-state" data-testid="decade-loading">
                 <img src="/loading_bar_gif_cotton_1776663498184.gif" className="decade-loading-gif" alt="" />
-                <p className="decade-loading-text">Generating your {selectedDecade} results…</p>
+                <p className="decade-loading-text">Pulling up your {selectedDecade} results…</p>
               </div>
             ) : (
               <div className="decade-content-area" id="decade-content-area">
