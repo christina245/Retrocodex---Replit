@@ -10,6 +10,7 @@ import { CategoryLinks } from "@/components/CategoryLinks";
 import { SignInModal } from "@/components/SignInModal";
 import { formerCountries, FormerCountry } from "@/data/formerCountries";
 import type { Page } from "@shared/schema";
+import scrungyWorldMap from "@assets/scrungy_world_map_1776760529860.png";
 import "./FormerCountriesPage.css";
 
 type SortKey = keyof Pick<
@@ -78,10 +79,17 @@ export default function FormerCountriesPage() {
 
       <main className="fc-main">
         <div className="fc-content">
-          <h1 className="fc-title">Countries and territories that no longer exist (1930-2026)</h1>
-          <p className="fc-description">
-            What countries, states, kingdoms, federations, or geopolitical unions did you learn about in school that didn't last? Here's a list sorted by the year they merged, dissolved, or were renamed to assert a fresh new identity.
-          </p>
+          <div className="fc-intro-row">
+            <div className="fc-intro-left">
+              <h1 className="fc-title">Countries and territories that no longer exist (1930-2026)</h1>
+              <p className="fc-description">
+                What countries, states, kingdoms, federations, or geopolitical unions did you learn about in school that didn't last? Here's a list sorted by the year they merged, dissolved, or were renamed to assert a fresh new identity.
+              </p>
+            </div>
+            <div className="fc-intro-image-col">
+              <img src={scrungyWorldMap} alt="Scrungy pointing at a world map" className="fc-intro-image" />
+            </div>
+          </div>
 
           <div className="fc-table-scroll">
             <div className="fc-table-container">
