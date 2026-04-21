@@ -135,7 +135,7 @@
 }
 
 .submit-fact-button {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   gap: 6px;
   font-family: 'DM Sans', sans-serif;
