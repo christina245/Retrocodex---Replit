@@ -315,6 +315,7 @@ export const factSubmissions = pgTable("fact_submissions", {
   sources: text("sources").array().default([]),
   considerations: text("considerations").default(""),
   otherDetails: text("other_details").default(""),
+  learnedFrom: text("learned_from").array().default([]),
   // status: pending | saved | rejected | published
   status: text("status").notNull().default("pending"),
   adminNote: text("admin_note"),
@@ -332,6 +333,7 @@ export const insertFactSubmissionSchema = z.object({
   sources: z.array(z.string().min(1)).min(1, "At least one source is required"),
   considerations: z.string().max(4000, "Considerations must be 4000 characters or less").optional().default(""),
   otherDetails: z.string().max(4000, "Other details must be 4000 characters or less").optional().default(""),
+  learnedFrom: z.array(z.string()).optional().default([]),
 });
 
 export type InsertFactSubmission = z.infer<typeof insertFactSubmissionSchema>;

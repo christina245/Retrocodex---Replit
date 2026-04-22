@@ -25,6 +25,7 @@ export default function FactSubmissionFormPage() {
   const [truthHeader, setTruthHeader] = useState("");
   const [truthDetails, setTruthDetails] = useState("");
   const [sources, setSources] = useState<SourceEntry[]>([{ value: "" }, { value: "" }]);
+  const [learnedFrom, setLearnedFrom] = useState<string[]>([]);
   const [considerations, setConsiderations] = useState("");
   const [otherDetails, setOtherDetails] = useState("");
 
@@ -58,6 +59,12 @@ export default function FactSubmissionFormPage() {
     }
   };
 
+  const toggleLearnedFrom = (option: string) => {
+    setLearnedFrom(prev =>
+      prev.includes(option) ? prev.filter(o => o !== option) : [...prev, option]
+    );
+  };
+
   const updateSource = (index: number, value: string) => {
     const updated = [...sources];
     updated[index] = { value };
@@ -70,6 +77,7 @@ export default function FactSubmissionFormPage() {
     setTruthHeader("");
     setTruthDetails("");
     setSources([{ value: "" }, { value: "" }]);
+    setLearnedFrom([]);
     setConsiderations("");
     setOtherDetails("");
     setSubmitError("");
@@ -93,6 +101,7 @@ export default function FactSubmissionFormPage() {
         sources: validSources,
         considerations: considerations.trim(),
         otherDetails: otherDetails.trim(),
+        learnedFrom,
       });
 
       resetForm();
@@ -208,6 +217,35 @@ export default function FactSubmissionFormPage() {
                       data-testid="input-myth-details"
                     />
                     <span className="fact-form-char-count">{mythDetails.length}/2000</span>
+                  </div>
+
+                  {/* Section: Where did you learn this? */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <X className="fact-form-section-icon myth-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">WHERE DID YOU LEARN THIS?</span>
+                    </div>
+                    <p className="fact-form-field-hint">
+                      Select all that apply.
+                    </p>
+                    <div className="fact-form-checkboxes" data-testid="learned-from-checkboxes">
+                      {["School", "Family", "Social Media", "News Media"].map(option => (
+                        <label
+                          key={option}
+                          className={`fact-form-checkbox-label${learnedFrom.includes(option) ? " checked" : ""}`}
+                          data-testid={`checkbox-learned-${option.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                          <input
+                            type="checkbox"
+                            className="fact-form-checkbox-input"
+                            checked={learnedFrom.includes(option)}
+                            onChange={() => toggleLearnedFrom(option)}
+                          />
+                          <span className="fact-form-checkbox-box" />
+                          <span className="fact-form-checkbox-text">{option}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Section 3: Current Understanding (truth header) */}

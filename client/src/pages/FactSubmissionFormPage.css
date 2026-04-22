@@ -340,6 +340,59 @@
   }
 }
 
+.fact-form-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.fact-form-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #2C2C2C;
+  user-select: none;
+}
+
+.fact-form-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.fact-form-checkbox-box {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #CCCCCC;
+  border-radius: 3px;
+  background: #FFFFFF;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.fact-form-checkbox-label.checked .fact-form-checkbox-box {
+  background: #2C2C2C;
+  border-color: #2C2C2C;
+}
+
+.fact-form-checkbox-label.checked .fact-form-checkbox-box::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
 @media (max-width: 600px) {
   .fact-form-title {
     font-size: 28px;

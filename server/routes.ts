@@ -1982,6 +1982,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           sources: data.sources,
           considerations: data.considerations || "",
           otherDetails: data.otherDetails || "",
+          learnedFrom: data.learnedFrom || [],
           status: "pending",
         })
         .returning();
