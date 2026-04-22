@@ -2035,6 +2035,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           sources: factSubmissions.sources,
           considerations: factSubmissions.considerations,
           otherDetails: factSubmissions.otherDetails,
+          learnedFrom: factSubmissions.learnedFrom,
           status: factSubmissions.status,
           adminNote: factSubmissions.adminNote,
           draftData: factSubmissions.draftData,

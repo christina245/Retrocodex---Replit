@@ -343,8 +343,43 @@
 .fact-form-checkboxes {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: 4px;
+}
+
+.fact-form-checkboxes-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.fact-form-checkboxes-other-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fact-form-other-input {
+  flex: 1;
+  min-width: 180px;
+  max-width: 400px;
+  height: 34px;
+  border: 1px solid #DDDDDD;
+  border-radius: 6px;
+  padding: 0 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #2C2C2C;
+  background: #FFFFFF;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.fact-form-other-input:focus {
+  border-color: #2C2C2C;
 }
 
 .fact-form-checkbox-label {

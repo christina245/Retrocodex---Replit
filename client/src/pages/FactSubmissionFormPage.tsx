@@ -26,6 +26,8 @@ export default function FactSubmissionFormPage() {
   const [truthDetails, setTruthDetails] = useState("");
   const [sources, setSources] = useState<SourceEntry[]>([{ value: "" }, { value: "" }]);
   const [learnedFrom, setLearnedFrom] = useState<string[]>([]);
+  const [otherLearnedFrom, setOtherLearnedFrom] = useState("");
+  const [otherChecked, setOtherChecked] = useState(false);
   const [considerations, setConsiderations] = useState("");
   const [otherDetails, setOtherDetails] = useState("");
 
@@ -78,6 +80,8 @@ export default function FactSubmissionFormPage() {
     setTruthDetails("");
     setSources([{ value: "" }, { value: "" }]);
     setLearnedFrom([]);
+    setOtherChecked(false);
+    setOtherLearnedFrom("");
     setConsiderations("");
     setOtherDetails("");
     setSubmitError("");
@@ -101,7 +105,10 @@ export default function FactSubmissionFormPage() {
         sources: validSources,
         considerations: considerations.trim(),
         otherDetails: otherDetails.trim(),
-        learnedFrom,
+        learnedFrom: [
+          ...learnedFrom,
+          ...(otherChecked && otherLearnedFrom.trim() ? [`Other: ${otherLearnedFrom.trim()}`] : otherChecked ? ["Other"] : []),
+        ],
       });
 
       resetForm();
@@ -229,22 +236,51 @@ export default function FactSubmissionFormPage() {
                       Select all that apply.
                     </p>
                     <div className="fact-form-checkboxes" data-testid="learned-from-checkboxes">
-                      {["School", "Family", "Social Media", "News Media"].map(option => (
+                      <div className="fact-form-checkboxes-row">
+                        {["School", "Family", "Social Media", "News Media"].map(option => (
+                          <label
+                            key={option}
+                            className={`fact-form-checkbox-label${learnedFrom.includes(option) ? " checked" : ""}`}
+                            data-testid={`checkbox-learned-${option.toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            <input
+                              type="checkbox"
+                              className="fact-form-checkbox-input"
+                              checked={learnedFrom.includes(option)}
+                              onChange={() => toggleLearnedFrom(option)}
+                            />
+                            <span className="fact-form-checkbox-box" />
+                            <span className="fact-form-checkbox-text">{option}</span>
+                          </label>
+                        ))}
+                      </div>
+
+                      <div className="fact-form-checkboxes-other-row">
                         <label
-                          key={option}
-                          className={`fact-form-checkbox-label${learnedFrom.includes(option) ? " checked" : ""}`}
-                          data-testid={`checkbox-learned-${option.toLowerCase().replace(/\s+/g, '-')}`}
+                          className={`fact-form-checkbox-label${otherChecked ? " checked" : ""}`}
+                          data-testid="checkbox-learned-other"
                         >
                           <input
                             type="checkbox"
                             className="fact-form-checkbox-input"
-                            checked={learnedFrom.includes(option)}
-                            onChange={() => toggleLearnedFrom(option)}
+                            checked={otherChecked}
+                            onChange={() => setOtherChecked(prev => !prev)}
                           />
                           <span className="fact-form-checkbox-box" />
-                          <span className="fact-form-checkbox-text">{option}</span>
+                          <span className="fact-form-checkbox-text">Other</span>
                         </label>
-                      ))}
+                        {otherChecked && (
+                          <input
+                            type="text"
+                            className="fact-form-other-input"
+                            value={otherLearnedFrom}
+                            onChange={e => setOtherLearnedFrom(e.target.value)}
+                            maxLength={300}
+                            placeholder="Please specify..."
+                            data-testid="input-learned-other"
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
 
