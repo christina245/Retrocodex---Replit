@@ -53,6 +53,7 @@ export function CategoryLinks({ categories }: CategoryLinksProps) {
               className="category-link-chip"
               style={{ backgroundColor: color }}
               data-testid={`category-link-${category.toLowerCase().replace(/\s+/g, '-')}`}
+              onClick={() => window.scrollTo(0, 0)}
             >
               {upperCategory}
             </Link>
