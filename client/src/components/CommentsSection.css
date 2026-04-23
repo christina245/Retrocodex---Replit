@@ -455,6 +455,16 @@
   overflow-x: auto;
 }
 
+.comment-body a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+
+.comment-body a:hover {
+  color: #ff5353;
+}
+
 /* ─── Actions ────────────────────────────────── */
 
 .comment-actions {

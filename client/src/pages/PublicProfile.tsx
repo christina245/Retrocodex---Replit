@@ -456,7 +456,7 @@ export default function PublicProfile() {
                             <Link href={c.pageSlug ? `/${c.pageSlug}` : `/fact/${c.factSlug}`} className="following-post-link">
                               <p className="fact-myth">{c.pageSlug ? (c.pageTitle ?? c.factTitle) : `"${c.factTitle}"`}</p>
                             </Link>
-                            <p className="following-plain-comment" data-testid={`public-comment-text-${c.id}`}>{c.body}</p>
+                            <div className="following-plain-comment" data-testid={`public-comment-text-${c.id}`}><ReactMarkdown>{c.body}</ReactMarkdown></div>
                             <span className="public-comment-timestamp" data-testid={`public-comment-time-${c.id}`}>{formatRelativeTime(c.createdAt)}</span>
                           </div>
                           {c.factCoverPhoto && (

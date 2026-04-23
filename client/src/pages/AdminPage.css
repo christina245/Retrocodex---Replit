@@ -650,11 +650,11 @@
 }
 
 .export-button.submission-btn-save {
-  background: #2e7d32;
+  background: #5964f7;
 }
 
 .export-button.submission-btn-save:hover:not(:disabled) {
-  background: #1b5e20;
+  background: #282697;
 }
 
 .export-button.submission-btn-reject {

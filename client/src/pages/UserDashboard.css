@@ -1089,6 +1089,20 @@ a.following-post-fact-link:hover {
   margin: 0 0 10px 0;
 }
 
+.following-plain-comment p {
+  margin: 0;
+}
+
+.following-plain-comment a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-word;
+}
+
+.following-plain-comment a:hover {
+  color: #ff5353;
+}
+
 .poll-vote-location-display {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 12px;

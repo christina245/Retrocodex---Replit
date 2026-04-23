@@ -722,7 +722,7 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
             <>
               <div className="following-post-body-content" data-testid={`feed-comment-${index}`}>
                 <div className="following-post-body-left">
-                  <p className="following-plain-comment" data-testid={`feed-comment-body-${index}`}>{item.commentBody}</p>
+                  <div className="following-plain-comment" data-testid={`feed-comment-body-${index}`}><ReactMarkdown>{item.commentBody}</ReactMarkdown></div>
                 </div>
                 {item.factCoverPhoto && (
                   <Link href={item.pageSlug ? `/${item.pageSlug}` : (item.factSlug ? `/fact/${item.factSlug}` : "#")} className="following-post-cover-link">
@@ -2096,7 +2096,7 @@ export default function UserDashboard() {
                                         <Link href={`/fact/${item.factSlug}`} className="following-post-link" data-testid={`link-comment-fact-${item.commentId}`}>
                                           <p className="fact-myth">"{item.factMythHeader}"</p>
                                         </Link>
-                                        <p className="following-plain-comment" data-testid={`comment-text-${item.commentId}`}>{item.body}</p>
+                                        <div className="following-plain-comment" data-testid={`comment-text-${item.commentId}`}><ReactMarkdown>{item.body}</ReactMarkdown></div>
                                       </div>
                                       {item.factCoverPhoto && (
                                         <Link href={`/fact/${item.factSlug}`} className="following-post-cover-link" data-testid={`cover-link-comment-${item.commentId}`}>
@@ -2152,7 +2152,7 @@ export default function UserDashboard() {
                                             <div className="activity-thread-author">
                                               <span className="activity-thread-username">{item.replierUsername || "[deleted]"}</span>
                                             </div>
-                                            <p className="following-plain-comment" data-testid={`reply-body-${item.replyId}`}>{item.replyBody}</p>
+                                            <div className="following-plain-comment" data-testid={`reply-body-${item.replyId}`}><ReactMarkdown>{item.replyBody}</ReactMarkdown></div>
                                           </div>
                                         </div>
                                       </div>
@@ -2925,7 +2925,7 @@ export default function UserDashboard() {
                                         </div>
                                       </div>
                                     ) : (
-                                      <p className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}>{c.body}</p>
+                                      <div className="following-plain-comment" data-testid={`activity-comment-text-${c.id}`}><ReactMarkdown>{c.body}</ReactMarkdown></div>
                                     )}
                                     <div className="comment-actions" data-testid={`activity-comment-actions-${c.id}`}>
                                       <button
@@ -3157,7 +3157,7 @@ export default function UserDashboard() {
                                     <span className="saved-comment-dot">·</span>
                                     <span className="saved-comment-time" data-testid={`saved-comment-time-${item.commentId}`}>{timeAgo}</span>
                                   </div>
-                                  <p className="following-plain-comment" data-testid={`saved-comment-text-${item.commentId}`}>{item.body}</p>
+                                  <div className="following-plain-comment" data-testid={`saved-comment-text-${item.commentId}`}><ReactMarkdown>{item.body}</ReactMarkdown></div>
                                   <div className="comment-actions" data-testid={`saved-comment-actions-${item.commentId}`}>
                                     <button className="comment-action disabled-action" data-tooltip="Unavailable in beta" data-testid={`button-reply-saved-${item.commentId}`}>
                                       <CornerUpLeft size={14} />
