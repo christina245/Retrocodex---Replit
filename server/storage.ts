@@ -1083,6 +1083,10 @@ export class DatabaseStorage implements IStorage {
         userId: comments.userId,
         username: userProfiles.username,
         avatarUrl: userProfiles.avatarUrl,
+        currentLocation: userProfiles.currentLocation,
+        showCurrentLocation: userProfiles.showCurrentLocation,
+        placesLived: userProfiles.placesLived,
+        showPlacesLived: userProfiles.showPlacesLived,
         body: comments.body,
         upvotes: comments.upvotes,
         createdAt: comments.createdAt,
@@ -1149,6 +1153,10 @@ export class DatabaseStorage implements IStorage {
       pageTitle: c.pageTitle ?? undefined,
       commentUpvotes: c.upvotes ?? 0,
       commentIsUpvotedByMe: upvotedCommentIds.has(c.id),
+      userCurrentLocation: c.currentLocation ?? "",
+      userShowCurrentLocation: c.showCurrentLocation ?? false,
+      userPlacesLived: c.placesLived ?? [],
+      userShowPlacesLived: c.showPlacesLived ?? false,
     }));
 
     return [...factItems, ...commentItems]
