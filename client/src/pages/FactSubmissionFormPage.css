@@ -340,6 +340,71 @@
   }
 }
 
+/* Location & Decade row — mirrors Poll layout */
+.fact-form-location-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.fact-form-location-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fact-form-location-col--wide {
+  flex: 1.5;
+  min-width: 160px;
+}
+
+.fact-form-location-col--narrow {
+  flex: 1;
+  min-width: 120px;
+}
+
+.fact-form-location-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555555;
+}
+
+.fact-form-location-select,
+.fact-form-decade-select {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #2C2C2C;
+  background: #f9f9f9;
+  border: 1px solid #D0D0D0;
+  border-radius: 6px;
+  padding: 7px 10px;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.fact-form-location-select:focus,
+.fact-form-decade-select:focus {
+  border-color: #888888;
+}
+
+.fact-form-location-hint {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #777777;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.fact-form-location-hint-link {
+  color: #FF5353;
+  text-decoration: underline;
+}
+
 .fact-form-checkboxes {
   display: flex;
   flex-direction: column;

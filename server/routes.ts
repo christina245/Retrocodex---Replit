@@ -1983,6 +1983,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           considerations: data.considerations || "",
           otherDetails: data.otherDetails || "",
           learnedFrom: data.learnedFrom || [],
+          learnedLocation: data.learnedLocation || "",
+          learnedDecade: data.learnedDecade || "",
           status: "pending",
         })
         .returning();
@@ -2036,6 +2038,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           considerations: factSubmissions.considerations,
           otherDetails: factSubmissions.otherDetails,
           learnedFrom: factSubmissions.learnedFrom,
+          learnedLocation: factSubmissions.learnedLocation,
+          learnedDecade: factSubmissions.learnedDecade,
           status: factSubmissions.status,
           adminNote: factSubmissions.adminNote,
           draftData: factSubmissions.draftData,

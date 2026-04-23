@@ -23,6 +23,8 @@ interface FactSubmission {
   considerations: string;
   otherDetails: string;
   learnedFrom: string[] | null;
+  learnedLocation: string | null;
+  learnedDecade: string | null;
   status: "pending" | "saved" | "rejected" | "published";
   adminNote: string | null;
   draftData: Record<string, any> | null;
@@ -134,6 +136,8 @@ export default function AdminPage() {
   const [editingSubmissionId, setEditingSubmissionId] = useState<string | null>(null);
   const [submissionUsername, setSubmissionUsername] = useState("");
   const [submissionLearnedFrom, setSubmissionLearnedFrom] = useState<string[]>([]);
+  const [submissionLearnedLocation, setSubmissionLearnedLocation] = useState<string>("");
+  const [submissionLearnedDecade, setSubmissionLearnedDecade] = useState<string>("");
   const [submittedByUserId, setSubmittedByUserId] = useState("");
   const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
@@ -698,6 +702,8 @@ export default function AdminPage() {
     setEditingSubmissionId(null);
     setSubmissionUsername("");
     setSubmissionLearnedFrom([]);
+    setSubmissionLearnedLocation("");
+    setSubmissionLearnedDecade("");
     setSubmittedByUserId("");
     setSubmissionActionMsg(null);
     setSavedFactSnapshot(null);
@@ -967,6 +973,8 @@ export default function AdminPage() {
     setRelatedMythIds(d.relatedMythIds ?? []);
     setSubmittedByUserId(sub.userId || "");
     setSubmissionLearnedFrom(sub.learnedFrom && sub.learnedFrom.length > 0 ? sub.learnedFrom : []);
+    setSubmissionLearnedLocation(sub.learnedLocation || "");
+    setSubmissionLearnedDecade(sub.learnedDecade || "");
     window.scrollTo(0, 0);
   };
 
@@ -1630,17 +1638,30 @@ export default function AdminPage() {
                 {editingSubmissionId && (
                   <>
                     <p className="content-subtitle">Submitted by <strong>{submissionUsername}</strong></p>
-                    {submissionLearnedFrom.length > 0 && (
-                      <div style={{ marginTop: "6px", display: "flex", flexWrap: "wrap", gap: "4px", alignItems: "center" }}>
-                        <span style={{ fontSize: "0.72rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, marginRight: "4px" }}>Where they learned it:</span>
-                        {submissionLearnedFrom.map((item, idx) => (
-                          <span
-                            key={idx}
-                            style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}
-                          >
-                            {item}
-                          </span>
-                        ))}
+                    {(submissionLearnedFrom.length > 0 || submissionLearnedLocation || submissionLearnedDecade) && (
+                      <div style={{ marginTop: "8px", display: "flex", flexWrap: "wrap", gap: "16px" }}>
+                        {submissionLearnedFrom.length > 0 && (
+                          <div>
+                            <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, display: "block", marginBottom: "4px" }}>Source</span>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                              {submissionLearnedFrom.map((item, idx) => (
+                                <span key={idx} style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}>{item}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {submissionLearnedLocation && (
+                          <div>
+                            <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, display: "block", marginBottom: "4px" }}>Location</span>
+                            <span style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}>{submissionLearnedLocation}</span>
+                          </div>
+                        )}
+                        {submissionLearnedDecade && (
+                          <div>
+                            <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, display: "block", marginBottom: "4px" }}>Decade</span>
+                            <span style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}>{submissionLearnedDecade}</span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </>
@@ -3454,21 +3475,33 @@ export default function AdminPage() {
                           </div>
                         )}
 
-                        {/* Learned From */}
-                        {sub.learnedFrom && sub.learnedFrom.length > 0 && (
-                          <div style={{ marginBottom: "0.75rem" }}>
-                            <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>Where they learned it</span>
-                            <div style={{ marginTop: "4px", display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                              {sub.learnedFrom.map((item, idx) => (
-                                <span
-                                  key={idx}
-                                  data-testid={`learned-from-tag-${sub.id}-${idx}`}
-                                  style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}
-                                >
-                                  {item}
-                                </span>
-                              ))}
-                            </div>
+                        {/* Learned From / Location / Decade */}
+                        {((sub.learnedFrom && sub.learnedFrom.length > 0) || sub.learnedLocation || sub.learnedDecade) && (
+                          <div style={{ marginBottom: "0.75rem", display: "flex", flexWrap: "wrap", gap: "16px" }}>
+                            {sub.learnedFrom && sub.learnedFrom.length > 0 && (
+                              <div>
+                                <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, display: "block", marginBottom: "4px" }}>Source</span>
+                                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                                  {sub.learnedFrom.map((item, idx) => (
+                                    <span key={idx} data-testid={`learned-from-tag-${sub.id}-${idx}`} style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}>
+                                      {item}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {sub.learnedLocation && (
+                              <div>
+                                <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, display: "block", marginBottom: "4px" }}>Location</span>
+                                <span style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}>{sub.learnedLocation}</span>
+                              </div>
+                            )}
+                            {sub.learnedDecade && (
+                              <div>
+                                <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600, display: "block", marginBottom: "4px" }}>Decade</span>
+                                <span style={{ fontSize: "0.75rem", background: "var(--muted)", color: "var(--foreground)", borderRadius: "4px", padding: "2px 8px", fontWeight: 500 }}>{sub.learnedDecade}</span>
+                              </div>
+                            )}
                           </div>
                         )}
 

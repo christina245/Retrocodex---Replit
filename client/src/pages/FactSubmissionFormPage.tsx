@@ -11,12 +11,14 @@ import { useAuth } from "@/lib/auth";
 import { apiRequest } from "@/lib/queryClient";
 import "./FactSubmissionFormPage.css";
 
+const DECADES = ["1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020s"];
+
 interface SourceEntry {
   value: string;
 }
 
 export default function FactSubmissionFormPage() {
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn, isLoading, user } = useAuth();
   const [, navigate] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,6 +30,8 @@ export default function FactSubmissionFormPage() {
   const [learnedFrom, setLearnedFrom] = useState<string[]>([]);
   const [otherLearnedFrom, setOtherLearnedFrom] = useState("");
   const [otherChecked, setOtherChecked] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedDecade, setSelectedDecade] = useState("");
   const [considerations, setConsiderations] = useState("");
   const [otherDetails, setOtherDetails] = useState("");
 
@@ -35,6 +39,15 @@ export default function FactSubmissionFormPage() {
   const [submitError, setSubmitError] = useState("");
   const [rateLimited, setRateLimited] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const locationOptions: string[] = [];
+  if (user?.currentLocation) locationOptions.push(user.currentLocation);
+  if (user?.placesLived?.length) {
+    user.placesLived.forEach((p: string) => {
+      if (p && !locationOptions.includes(p)) locationOptions.push(p);
+    });
+  }
+  const hasLocations = isLoggedIn && locationOptions.length > 0;
 
   if (!isLoading && !isLoggedIn) {
     navigate("/submit");
@@ -82,6 +95,8 @@ export default function FactSubmissionFormPage() {
     setLearnedFrom([]);
     setOtherChecked(false);
     setOtherLearnedFrom("");
+    setSelectedLocation("");
+    setSelectedDecade("");
     setConsiderations("");
     setOtherDetails("");
     setSubmitError("");
@@ -109,6 +124,8 @@ export default function FactSubmissionFormPage() {
           ...learnedFrom,
           ...(otherChecked && otherLearnedFrom.trim() ? [`Other: ${otherLearnedFrom.trim()}`] : otherChecked ? ["Other"] : []),
         ],
+        learnedLocation: selectedLocation || "",
+        learnedDecade: selectedDecade || "",
       });
 
       resetForm();
@@ -280,6 +297,71 @@ export default function FactSubmissionFormPage() {
                             data-testid="input-learned-other"
                           />
                         )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section: Location & Decade */}
+                  <div className="fact-form-section">
+                    <div className="fact-form-section-label">
+                      <X className="fact-form-section-icon myth-icon" size={14} strokeWidth={2.5} />
+                      <span className="fact-form-label-text">WHERE & WHEN DID YOU LEARN IT?</span>
+                    </div>
+                    <p className="fact-form-field-hint">
+                      Optional — helps us understand where misconceptions spread.
+                    </p>
+                    <div className="fact-form-location-row" data-testid="location-decade-section">
+                      <div className="fact-form-location-col fact-form-location-col--wide">
+                        <label className="fact-form-location-label" htmlFor="form-location-select">
+                          I learned this in:
+                        </label>
+                        {hasLocations ? (
+                          <>
+                            <select
+                              id="form-location-select"
+                              className="fact-form-location-select"
+                              value={selectedLocation}
+                              onChange={e => setSelectedLocation(e.target.value)}
+                              data-testid="select-form-location"
+                            >
+                              <option value="">---</option>
+                              {locationOptions.map(loc => (
+                                <option key={loc} value={loc}>{loc}</option>
+                              ))}
+                            </select>
+                            {locationOptions.length === 1 && (
+                              <p className="fact-form-location-hint">
+                                Learned this somewhere else?{" "}
+                                <a href="/dashboard?editProfile=true" className="fact-form-location-hint-link">
+                                  Add other locations to your profile
+                                </a>
+                              </p>
+                            )}
+                          </>
+                        ) : (
+                          <p className="fact-form-location-hint">
+                            <a href="/dashboard?editProfile=true" className="fact-form-location-hint-link">
+                              Add locations to your profile
+                            </a>{" "}to enable this field.
+                          </p>
+                        )}
+                      </div>
+                      <div className="fact-form-location-col fact-form-location-col--narrow">
+                        <label className="fact-form-location-label" htmlFor="form-decade-select">
+                          In this decade:
+                        </label>
+                        <select
+                          id="form-decade-select"
+                          className="fact-form-decade-select"
+                          value={selectedDecade}
+                          onChange={e => setSelectedDecade(e.target.value)}
+                          data-testid="select-form-decade"
+                        >
+                          <option value="">---</option>
+                          {DECADES.map(decade => (
+                            <option key={decade} value={decade}>{decade}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                   </div>
