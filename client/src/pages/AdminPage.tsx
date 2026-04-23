@@ -138,6 +138,8 @@ export default function AdminPage() {
   const [submissionLearnedFrom, setSubmissionLearnedFrom] = useState<string[]>([]);
   const [submissionLearnedLocation, setSubmissionLearnedLocation] = useState<string>("");
   const [submissionLearnedDecade, setSubmissionLearnedDecade] = useState<string>("");
+  const [submissionConsiderations, setSubmissionConsiderations] = useState<string>("");
+  const [submissionOtherDetails, setSubmissionOtherDetails] = useState<string>("");
   const [submittedByUserId, setSubmittedByUserId] = useState("");
   const [submissionActionMsg, setSubmissionActionMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
@@ -704,6 +706,8 @@ export default function AdminPage() {
     setSubmissionLearnedFrom([]);
     setSubmissionLearnedLocation("");
     setSubmissionLearnedDecade("");
+    setSubmissionConsiderations("");
+    setSubmissionOtherDetails("");
     setSubmittedByUserId("");
     setSubmissionActionMsg(null);
     setSavedFactSnapshot(null);
@@ -975,6 +979,8 @@ export default function AdminPage() {
     setSubmissionLearnedFrom(sub.learnedFrom && sub.learnedFrom.length > 0 ? sub.learnedFrom : []);
     setSubmissionLearnedLocation(sub.learnedLocation || "");
     setSubmissionLearnedDecade(sub.learnedDecade || "");
+    setSubmissionConsiderations(sub.considerations || "");
+    setSubmissionOtherDetails(sub.otherDetails || "");
     window.scrollTo(0, 0);
   };
 
@@ -2276,7 +2282,18 @@ export default function AdminPage() {
               {/* Section 5: Nuances & Controversies */}
               <section className="form-section">
                 <h2 className="section-title">Section 5 — Nuances & Controversies</h2>
-                
+
+                {editingSubmissionId && submissionConsiderations && (
+                  <div style={{ background: "var(--muted)", border: "1px solid var(--border)", borderRadius: "6px", padding: "12px 14px", marginBottom: "1.25rem" }}>
+                    <p style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700, color: "var(--muted-foreground)", margin: "0 0 6px 0" }}>
+                      Submitter's Considerations
+                    </p>
+                    <p style={{ fontSize: "0.875rem", color: "var(--foreground)", margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
+                      {submissionConsiderations}
+                    </p>
+                  </div>
+                )}
+
                 {nuances.map((nuance, index) => (
                   <div key={nuance.id} className="repeatable-item">
                     <div className="repeatable-header">
@@ -2327,6 +2344,21 @@ export default function AdminPage() {
                   Add Nuance
                 </button>
               </section>
+
+              {/* Submitter Notes — only shown when editing a submission */}
+              {editingSubmissionId && submissionOtherDetails && (
+                <section className="form-section">
+                  <h2 className="section-title">Submitter Notes</h2>
+                  <div style={{ background: "var(--muted)", border: "1px solid var(--border)", borderRadius: "6px", padding: "12px 14px" }}>
+                    <p style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700, color: "var(--muted-foreground)", margin: "0 0 6px 0" }}>
+                      Other Details from Submitter
+                    </p>
+                    <p style={{ fontSize: "0.875rem", color: "var(--foreground)", margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
+                      {submissionOtherDetails}
+                    </p>
+                  </div>
+                </section>
+              )}
 
               {/* Section 6: Related Myths */}
               <section className="form-section">
