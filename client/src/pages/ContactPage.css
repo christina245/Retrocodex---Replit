@@ -12,7 +12,7 @@
 }
 
 .contact-layout {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 40px;
   display: flex;
@@ -33,7 +33,7 @@
 }
 
 .contact-scrungy-image {
-  width: 300px;
+  width: 450px;
   height: auto;
   display: block;
 }

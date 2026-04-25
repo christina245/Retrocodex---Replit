@@ -100,7 +100,7 @@ export function Footer() {
             className="footer-brand-logo"
           />
           <p className="footer-brand-description">
-            <b>Retrocodex: Stuff You Learned Wrong</b> is an evolving library of commonly taught misconceptions and outdated information from all over the world. 
+            <b>Retrocodex: Stuff You Learned Wrong</b> is an evolving, interactive library of commonly taught misconceptions and outdated information from all over the world. 
           </p>
         </div>
       </div>

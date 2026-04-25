@@ -25,7 +25,7 @@ export default function ContactPage() {
       <main className="contact-main">
         <div className="contact-layout">
           <div className="contact-text-column">
-            <h1 className="contact-header" data-testid="text-contact-header">Contact</h1>
+            <h1 className="contact-header" data-testid="text-contact-header">Get in touch</h1>
 
             <p className="contact-body" data-testid="text-contact-body">
               Have any questions, concerns, or suggestions on how Retrocodex could be a more inclusive and factually accurate platform? The best way to reach us is through our social media:
@@ -59,7 +59,7 @@ export default function ContactPage() {
             </p>
 
             <p className="contact-body" data-testid="text-contact-history">
-              This site is just getting started! Retrocodex was first designed in September 2025 with the first read-only version launched in December 2025. Its current beta with user accounts has only been up since April 2026.
+              This site is just getting started. Retrocodex was first designed in September 2025 with the first read-only version launched in December 2025. Its current beta with user accounts has only been up since April 2026.
             </p>
           </div>
 
