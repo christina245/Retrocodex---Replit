@@ -37,10 +37,8 @@ export function Footer() {
           <ul className="footer-links">
             <li>
               <a 
-                href="https://form.typeform.com/to/tC2dk1xb" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                data-testid="link-footer-donate"
+                href="/contact"
+                data-testid="link-footer-contact"
               >
                 Contact
               </a>

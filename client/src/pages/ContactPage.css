@@ -1,0 +1,75 @@
+.contact-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+}
+
+.contact-main {
+  flex: 1;
+  padding-top: 30px;
+  padding-bottom: 60px;
+}
+
+.contact-content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.contact-header {
+  font-family: 'DM Serif Text', serif;
+  font-size: 40px;
+  font-weight: 400;
+  color: #2C2C2C;
+  margin: 0 0 24px 0;
+}
+
+.contact-image-center {
+  margin-bottom: 24px;
+}
+
+.contact-scrungy-image {
+  height: 300px;
+  width: auto;
+  display: block;
+}
+
+.contact-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #2C2C2C;
+  margin: 0 0 24px 0;
+}
+
+.contact-social-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.contact-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-social-logo {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  display: block;
+}
+
+.contact-social-logo-reddit {
+  width: auto;
+  height: 2rem;
+}

@@ -22,6 +22,7 @@ import SocialSciencesPage from "@/pages/SocialSciencesPage";
 import GenderSexualityPage from "@/pages/GenderSexualityPage";
 import OtherCategoriesPage from "@/pages/OtherCategoriesPage";
 import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
 import SubmitFactPage from "@/pages/SubmitFactPage";
 import FactSubmissionFormPage from "@/pages/FactSubmissionFormPage";
 import NotFound from "@/pages/not-found";
@@ -120,6 +121,7 @@ function Router() {
       <Route path="/category/other/technology" component={TechnologyPage} />
       <Route path="/category/other/holidays" component={HolidaysPage} />
       <Route path="/about" component={AboutPage} />
+      <Route path="/contact" component={ContactPage} />
       <Route path="/submit" component={SubmitFactPage} />
       <Route path="/submit/form" component={FactSubmissionFormPage} />
       <Route path="/tags/:tagSlug" component={FactsByTagPage} />
