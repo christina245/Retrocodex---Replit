@@ -57,7 +57,6 @@ interface FactCardProps {
   onSave: () => void;
   onShare?: () => void;
   onComment?: () => void;
-  onBetaClick?: (factId: string) => void;
   isSaved?: boolean;
   showTaughtUntilLabel?: boolean;
 }

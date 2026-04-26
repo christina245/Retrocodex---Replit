@@ -25,7 +25,6 @@ interface CategoryFactCardProps {
   onSave?: () => void;
   onShare?: () => void;
   onComment?: () => void;
-  onBetaClick?: (factId: string) => void;
   highlightQuery?: string;
   isSaved?: boolean;
 }

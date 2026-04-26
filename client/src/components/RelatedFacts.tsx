@@ -15,7 +15,6 @@ interface RelatedFact {
 
 interface RelatedFactsProps {
   facts?: RelatedFact[];
-  onBetaClick?: (factId: string) => void;
 }
 
 
