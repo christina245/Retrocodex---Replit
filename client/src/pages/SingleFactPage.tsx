@@ -11,7 +11,7 @@ import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { SignInModal } from "@/components/SignInModal";
 import { RelatedFacts } from "@/components/RelatedFacts";
-import { SourcesModal } from "@/components/SourcesModal";
+import squirrelImg from "@assets/scrungy_at_work_painted_1775522114338.png";
 import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
@@ -33,7 +33,6 @@ export default function SingleFactPage() {
   const [showSubscribeTooltip, setShowSubscribeTooltip] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
-  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isLoggedIn, user } = useAuth();
@@ -123,6 +122,8 @@ export default function SingleFactPage() {
 
   const isFollowing = followStatusData?.following ?? false;
 
+  const isBeta = factData?.betaOnly ?? false;
+
   const followMutation = useMutation({
     mutationFn: async () => {
       const method = isFollowing ? "DELETE" : "POST";
@@ -133,7 +134,9 @@ export default function SingleFactPage() {
       if (!isFollowing) {
         toast({
           title: "Following this topic",
-          description: "You'll be notified when this topic is updated.",
+          description: isBeta
+            ? "You'll be notified when this topic's full details are ready."
+            : "You'll be notified when this topic is updated.",
         });
       }
     },
@@ -148,7 +151,11 @@ export default function SingleFactPage() {
 
   const handleFollowClick = () => {
     if (!isLoggedIn) {
-      setSignInContext("Sign in to follow this topic and get notified when it's updated.");
+      setSignInContext(
+        isBeta
+          ? "Sign in to follow this topic and get notified when its full details are ready."
+          : "Sign in to follow this topic and get notified when it's updated."
+      );
       setShowSignIn(true);
       return;
     }
@@ -255,7 +262,11 @@ export default function SingleFactPage() {
               </button>
               {showSubscribeTooltip && (
                 <div className="subscribe-tooltip" data-testid="tooltip-subscribe">
-                  {isFollowing ? "Stop receiving updates for this topic." : "Stay updated if this information evolves."}
+                  {isFollowing
+                    ? "Stop receiving updates for this topic."
+                    : isBeta
+                      ? "Get notified when this topic's full details are ready."
+                      : "Stay updated if this information evolves."}
                 </div>
               )}
             </div>
@@ -285,10 +296,24 @@ export default function SingleFactPage() {
           </div>
 
           <div className="right-column">
-            <TimelineSection 
-              timeline={factData.timeline || []} 
-              nuances={factData.nuances || []}
-            />
+            {isBeta ? (
+              <div className="beta-right-column-placeholder">
+                <img
+                  src={squirrelImg}
+                  alt="Scrungy the squirrel working on this entry"
+                  className="beta-placeholder-img"
+                  data-testid="img-beta-placeholder"
+                />
+                <p className="beta-placeholder-text">
+                  This topic's details are currently unavailable in the beta. Scrungy's working on it!
+                </p>
+              </div>
+            ) : (
+              <TimelineSection 
+                timeline={factData.timeline || []} 
+                nuances={factData.nuances || []}
+              />
+            )}
           </div>
         </div>
 
@@ -319,7 +344,7 @@ export default function SingleFactPage() {
             <div className="sidebar-bottom-section">
               <div className="sidebar-top-row">
                 {relatedFacts.length > 0 && (
-                  <RelatedFacts facts={relatedFacts} onBetaClick={(slug) => setSourcesModalFactId(slug)} />
+                  <RelatedFacts facts={relatedFacts} />
                 )}
                 <div className="tags-banner-column">
                   <CategoryLinks categories={factData.categories} />
@@ -345,7 +370,10 @@ export default function SingleFactPage() {
             <img src={envelopeImage} alt="" className="follow-fact-modal-image" />
             <h2 className="follow-fact-modal-title">Follow this topic</h2>
             <p className="follow-fact-modal-body">
-              You'll receive an email to <strong>{user?.email ?? "your email"}</strong> whenever this topic is updated or evolves. 
+              {isBeta
+                ? <>You'll receive an email to <strong>{user?.email ?? "your email"}</strong> when this topic's full details are ready.</>
+                : <>You'll receive an email to <strong>{user?.email ?? "your email"}</strong> whenever this topic is updated or evolves.</>
+              }
             </p>
             <div className="follow-fact-modal-actions">
               <button
@@ -378,10 +406,6 @@ export default function SingleFactPage() {
         isOpen={showSignIn}
         onClose={() => { setShowSignIn(false); setSignInContext(undefined); }}
         contextMessage={signInContext}
-      />
-      <SourcesModal
-        factId={sourcesModalFactId}
-        onClose={() => setSourcesModalFactId(null)}
       />
       {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
     </div>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { X, Check, MessageCircle, Bookmark, Share2, BookOpen } from "lucide-react";
 import { Link, useLocation } from "wouter";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import placeholderPhoto from "@assets/stock_images/ancient_history_colo_d71bf0e6.jpg";
 import "./CategoryFactCard.css";
 
@@ -59,7 +58,6 @@ export function CategoryFactCard({
   categoryColor,
   onSave, 
   onComment,
-  onBetaClick,
   highlightQuery,
   isSaved,
 }: CategoryFactCardProps) {
@@ -69,7 +67,6 @@ export function CategoryFactCard({
   const [showCopiedToast, setShowCopiedToast] = useState(false);
 
   const handleShare = async () => {
-    if (fact.betaOnly) return;
     try {
       await navigator.clipboard.writeText(`${window.location.origin}${factLink}`);
       setShowCopiedToast(true);
@@ -79,30 +76,12 @@ export function CategoryFactCard({
     }
   };
 
-  const handleBetaLinkClick = (e: React.MouseEvent) => {
-    if (fact.betaOnly) {
-      e.preventDefault();
-      if (onBetaClick) {
-        const slug = factLink.split('/fact/').pop() || fact.id;
-        onBetaClick(slug);
-      }
-    }
-  };
-
   const handleCommentClick = (e: React.MouseEvent) => {
-    if (fact.betaOnly) {
-      e.preventDefault();
-      if (onBetaClick) {
-        const slug = factLink.split('/fact/').pop() || fact.id;
-        onBetaClick(slug);
-      }
-      return;
-    }
     e.preventDefault();
     setLocation(`${factLink}#comments`);
   };
 
-  const count = fact.betaOnly ? 0 : (fact.commentCount ?? 0);
+  const count = fact.commentCount ?? 0;
   const commentLabel = count === 1 ? "1 comment" : `${count} comments`;
 
   return (
@@ -196,45 +175,23 @@ export function CategoryFactCard({
             <Bookmark size={16} className={isSaved ? 'saved-icon' : ''} />
             <span>{isSaved ? 'Saved' : 'Save'}</span>
           </button>
-          {fact.betaOnly ? (
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <span style={{ cursor: 'not-allowed', display: 'inline-flex' }}>
-                  <button
-                    className="category-action-button category-action-button-disabled"
-                    data-testid={`button-share-${fact.id}`}
-                    disabled
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    <Share2 size={16} />
-                    <span>Share</span>
-                  </button>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999] text-[10px] px-2 py-0.5">
-                Unavailable in beta
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <button
-              className="category-action-button"
-              onClick={handleShare}
-              data-testid={`button-share-${fact.id}`}
-            >
-              <Share2 size={16} />
-              <span>Share</span>
-            </button>
-          )}
+          <button
+            className="category-action-button"
+            onClick={handleShare}
+            data-testid={`button-share-${fact.id}`}
+          >
+            <Share2 size={16} />
+            <span>Share</span>
+          </button>
         </div>
 
         <Link 
           href={factLink}
           className="category-learn-more-button"
           data-testid={`button-learn-more-${fact.id}`}
-          onClick={handleBetaLinkClick}
         >
           <BookOpen size={14} className="category-learn-more-arrow" />
-          {fact.betaOnly ? "View sources" : "Learn more"}
+          View Sources
         </Link>
       </div>
 

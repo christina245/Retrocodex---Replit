@@ -9,7 +9,6 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
-import { SourcesModal } from "@/components/SourcesModal";
 import { FactKey } from "@/components/FactKey";
 import { SaveModal } from "@/components/SaveModal";
 import { useAuth } from "@/lib/auth";
@@ -27,7 +26,6 @@ export default function FactsByTagPage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
-  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const { toast } = useToast();
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
@@ -108,9 +106,6 @@ export default function FactsByTagPage() {
     });
   };
 
-  const handleBetaClick = (factId: string) => {
-    setSourcesModalFactId(factId);
-  };
 
   return (
     <div className="facts-by-tag-page">
@@ -163,7 +158,6 @@ export default function FactsByTagPage() {
                       onSave={() => handleSaveClick(fact.id)}
                       onShare={() => handleShareClick(fact)}
                       onComment={handleCommentClick}
-                      onBetaClick={handleBetaClick}
                       isSaved={savedFactIds.has(fact.id)}
                     />
                   ))
@@ -196,10 +190,7 @@ export default function FactsByTagPage() {
           }}
         />
       )}
-      <SourcesModal
-        factId={sourcesModalFactId}
-        onClose={() => setSourcesModalFactId(null)}
-      />
+
     </div>
   );
 }

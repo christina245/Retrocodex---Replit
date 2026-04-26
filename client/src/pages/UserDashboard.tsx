@@ -17,7 +17,6 @@ import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { validateUsername } from "@/lib/usernameValidation";
 import { AvatarPickerModal } from "@/components/AvatarPickerModal";
-import { SourcesModal } from "@/components/SourcesModal";
 import placeholderPhoto from "@assets/elementor-placeholder-image_1770884094599.png";
 import { NotificationBell } from "@/components/NotificationBell";
 import "../components/ExtendedFactCard.css";
@@ -537,7 +536,6 @@ interface FeedPostHandlers {
   savedFactIds: Set<string>;
   onSaveFact: (id: string) => void;
   onUnsaveFact: (id: string) => void;
-  onBetaClick: (slug: string) => void;
   onNavigate: (path: string) => void;
 }
 
@@ -589,7 +587,7 @@ function FeedUserLocation({ item, index }: { item: FeedItem; index: number }) {
 }
 
 function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; handlers: FeedPostHandlers }) {
-  const { savedFactIds, onSaveFact, onUnsaveFact, onBetaClick, onNavigate } = handlers;
+  const { savedFactIds, onSaveFact, onUnsaveFact, onNavigate } = handlers;
   const { isLoggedIn } = useAuth();
   const { toast } = useToast();
   const [feedUpvotes, setFeedUpvotes] = useState(item.commentUpvotes ?? 0);
@@ -644,7 +642,6 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
               }
             }}
             onComment={() => onNavigate(`/fact/${item.factSlug}#comments`)}
-            onBetaClick={onBetaClick}
             showTaughtUntilLabel
           />
         </div>
@@ -831,7 +828,7 @@ export default function UserDashboard() {
   const [savedArticlesSort, setSavedArticlesSort] = useState<"saved" | "posted">("saved");
   const [savedArticlesSortOpen, setSavedArticlesSortOpen] = useState(false);
   const savedArticlesSortRef = useRef<HTMLDivElement>(null);
-  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -1174,7 +1171,6 @@ export default function UserDashboard() {
     savedFactIds: savedFactIdSet,
     onSaveFact: (id) => saveFactMutation.mutate(id),
     onUnsaveFact: (id) => unsaveFactMutation.mutate(id),
-    onBetaClick: (slug) => setSourcesModalFactId(slug),
     onNavigate: (path) => navigate(path),
   };
 
@@ -3051,7 +3047,6 @@ export default function UserDashboard() {
                             onShare={() => {}}
                             onComment={() => {}}
                             isSaved={true}
-                            onBetaClick={(factId) => setSourcesModalFactId(factId)}
                           />
                         ))
                       )}
@@ -3809,10 +3804,6 @@ export default function UserDashboard() {
         onClose={() => setIsAvatarPickerOpen(false)}
         currentAvatar={editProfilePhoto}
         onSave={(uri) => setEditProfilePhoto(uri)}
-      />
-      <SourcesModal
-        factId={sourcesModalFactId}
-        onClose={() => setSourcesModalFactId(null)}
       />
       <TopicsModal
         isOpen={topicsModalOpen}

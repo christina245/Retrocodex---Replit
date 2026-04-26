@@ -11,7 +11,6 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CirculationFilter } from "@/components/CirculationFilter";
 import { CategoryFactCard, type CategoryFact } from "@/components/CategoryFactCard";
-import { SourcesModal } from "@/components/SourcesModal";
 import { FactKey } from "@/components/FactKey";
 import { SendgridBanner } from "@/components/SendgridBanner";
 import { SaveModal } from "@/components/SaveModal";
@@ -35,7 +34,6 @@ export default function LinguisticsPage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>(["still-circulating", "in-the-past"]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
-  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const { toast } = useToast();
   const { isLoggedIn } = useAuth();
   const { savedFactIds, toggleSave } = useSavedFacts(isLoggedIn);
@@ -113,9 +111,6 @@ export default function LinguisticsPage() {
     });
   };
 
-  const handleBetaClick = (factId: string) => {
-      setSourcesModalFactId(factId);
-    };
 
   const sortedFacts = [...allFacts].sort((a, b) => {
     if (!a.dateAdded || !b.dateAdded) return 0;
@@ -189,7 +184,6 @@ export default function LinguisticsPage() {
                       onSave={() => handleSaveClick(fact.id)}
                       onShare={() => handleShareClick(fact)}
                       onComment={handleCommentClick}
-                      onBetaClick={handleBetaClick}
                       isSaved={savedFactIds.has(fact.id)}
                     />
                   ))}
@@ -225,10 +219,7 @@ export default function LinguisticsPage() {
           }}
         />
       )}
-      <SourcesModal
-        factId={sourcesModalFactId}
-        onClose={() => setSourcesModalFactId(null)}
-      />
+
     </div>
   );
 }

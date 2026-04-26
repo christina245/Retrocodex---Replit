@@ -15,7 +15,6 @@ import { SaveModal } from "@/components/SaveModal";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
 import { ShareModal } from "@/components/ShareModal";
-import { SourcesModal } from "@/components/SourcesModal";
 import { Footer } from "@/components/Footer";
 import { CirculationFilter } from "@/components/CirculationFilter";
 import { Pagination } from "@/components/Pagination";
@@ -47,7 +46,6 @@ export default function SocialSciencesPage() {
   const [selectedFilters, setSelectedFilters] = useState<string[]>(["still-circulating", "in-the-past"]);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [shareModalFact, setShareModalFact] = useState<CategoryFact | null>(null);
-  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const isInitialMount = useRef(true);
@@ -142,9 +140,6 @@ export default function SocialSciencesPage() {
     });
   };
 
-  const handleBetaClick = (factId: string) => {
-    setSourcesModalFactId(factId);
-  };
 
   // Sort facts by most recently added (only enabled sort option for now)
   const sortedFacts = [...allSocialSciencesFacts].sort((a, b) => {
@@ -233,7 +228,6 @@ export default function SocialSciencesPage() {
                         onSave={() => handleSaveClick(fact.id)}
                         onShare={() => handleShareClick(fact)}
                         onComment={handleCommentClick}
-                        onBetaClick={handleBetaClick}
                         isSaved={savedFactIds.has(fact.id)}
                       />
                     ))}
@@ -276,10 +270,7 @@ export default function SocialSciencesPage() {
           }}
         />
       )}
-      <SourcesModal
-        factId={sourcesModalFactId}
-        onClose={() => setSourcesModalFactId(null)}
-      />
+
     </div>
   );
 }

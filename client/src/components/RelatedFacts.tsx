@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { useToast } from "@/hooks/use-toast";
 import "./RelatedFacts.css";
 
 import leftRightBrainImg from "@assets/left and right brain_1764566485121.png";
@@ -18,6 +17,7 @@ interface RelatedFactsProps {
   facts?: RelatedFact[];
   onBetaClick?: (factId: string) => void;
 }
+
 
 const defaultRelatedFacts: RelatedFact[] = [
   {
@@ -42,66 +42,31 @@ const defaultRelatedFacts: RelatedFact[] = [
   }
 ];
 
-export function RelatedFacts({ facts = defaultRelatedFacts, onBetaClick }: RelatedFactsProps) {
-  const { toast } = useToast();
-
-  const handleBetaClick = (factId: string) => {
-    if (onBetaClick) {
-      onBetaClick(factId);
-      return;
-    }
-    toast({
-      title: "Unavailable in Beta",
-      description: "At this time, only the Featured facts on the homepage have published entries. Subscribe to be notified when all entries are available!",
-    });
-  };
-
+export function RelatedFacts({ facts = defaultRelatedFacts }: RelatedFactsProps) {
   return (
     <div className="related-facts" data-testid="related-facts">
       <h3 className="related-facts-header">Related topics</h3>
       <div className="related-facts-list">
         {facts.map((fact, index) => (
           <div key={fact.id} className="related-fact-wrapper">
-            {fact.betaOnly ? (
-              <button 
-                type="button"
-                className="related-fact-item related-fact-button"
-                onClick={() => handleBetaClick(fact.id)}
-                data-testid={`button-related-fact-${fact.id}`}
-              >
-                <div className="related-fact-image-container">
-                  {fact.image ? (
-                    <img 
-                      src={fact.image} 
-                      alt="" 
-                      className="related-fact-image"
-                    />
-                  ) : (
-                    <div className="related-fact-image-placeholder" />
-                  )}
-                </div>
-                <span className="related-fact-text">"{fact.myth}"</span>
-              </button>
-            ) : (
-              <Link 
-                href={`/fact/${fact.id}`}
-                className="related-fact-item"
-                data-testid={`link-related-fact-${fact.id}`}
-              >
-                <div className="related-fact-image-container">
-                  {fact.image ? (
-                    <img 
-                      src={fact.image} 
-                      alt="" 
-                      className="related-fact-image"
-                    />
-                  ) : (
-                    <div className="related-fact-image-placeholder" />
-                  )}
-                </div>
-                <span className="related-fact-text">"{fact.myth}"</span>
-              </Link>
-            )}
+            <Link 
+              href={`/fact/${fact.id}`}
+              className="related-fact-item"
+              data-testid={`link-related-fact-${fact.id}`}
+            >
+              <div className="related-fact-image-container">
+                {fact.image ? (
+                  <img 
+                    src={fact.image} 
+                    alt="" 
+                    className="related-fact-image"
+                  />
+                ) : (
+                  <div className="related-fact-image-placeholder" />
+                )}
+              </div>
+              <span className="related-fact-text">"{fact.myth}"</span>
+            </Link>
             {index < facts.length - 1 && (
               <div className="related-fact-separator" />
             )}

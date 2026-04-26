@@ -14,7 +14,6 @@ import { CATEGORIES } from "@shared/categories";
 import { SendgridBanner } from "@/components/SendgridBanner";
 import { ShareModal } from "@/components/ShareModal";
 import { SignInModal } from "@/components/SignInModal";
-import { SourcesModal } from "@/components/SourcesModal";
 import { Footer } from "@/components/Footer";
 import { Pagination } from "@/components/Pagination";
 import { SEO } from "@/components/SEO";
@@ -48,7 +47,6 @@ export default function HomePage() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
-  const [sourcesModalFactId, setSourcesModalFactId] = useState<string | null>(null);
   const [recentPage, setRecentPage] = useState(1);
   const [popularPage, setPopularPage] = useState(1);
   const [selectedDecade, setSelectedDecade] = useState<string>("all");
@@ -242,10 +240,6 @@ export default function HomePage() {
       title: "Coming Soon",
       description: "Individual fact pages with comments are in development.",
     });
-  };
-
-  const handleBetaClick = (factId: string) => {
-    setSourcesModalFactId(factId);
   };
 
   useEffect(() => {
@@ -566,7 +560,6 @@ export default function HomePage() {
                           onSave={() => handleSaveClick(fact.id)}
                           onShare={() => handleShareClick(fact)}
                           onComment={handleCommentClick}
-                          onBetaClick={handleBetaClick}
                           isSaved={savedFactIds.has(fact.id)}
                           showTaughtUntilLabel
                         />
@@ -680,7 +673,6 @@ export default function HomePage() {
                               onSave={() => handleSaveClick(fact.id)}
                               onShare={() => handleShareClick(fact)}
                               onComment={handleCommentClick}
-                              onBetaClick={handleBetaClick}
                               isSaved={savedFactIds.has(fact.id)}
                             />
                           </div>
@@ -748,10 +740,6 @@ export default function HomePage() {
         isOpen={shareModalFact !== null}
         onClose={() => setShareModalFact(null)}
         fact={shareModalFact}
-      />
-      <SourcesModal
-        factId={sourcesModalFactId}
-        onClose={() => setSourcesModalFactId(null)}
       />
       {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
     </div>

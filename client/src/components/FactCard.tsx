@@ -62,36 +62,18 @@ interface FactCardProps {
   showTaughtUntilLabel?: boolean;
 }
 
-export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTaughtUntilLabel }: FactCardProps) {
+export function FactCard({ fact, onSave, onComment, isSaved, showTaughtUntilLabel }: FactCardProps) {
   const CategoryIcon = getCategoryIcon(fact.category);
   const factLink = fact.link || `/fact/${fact.id}`;
   const photoSrc = fact.coverPhoto || placeholderPhoto;
   const [, setLocation] = useLocation();
   const [showCopiedToast, setShowCopiedToast] = useState(false);
 
-  const handleBetaLinkClick = (e: React.MouseEvent) => {
-    if (fact.betaOnly) {
-      e.preventDefault();
-      if (onBetaClick) {
-        const slug = factLink.split('/fact/').pop() || fact.id;
-        onBetaClick(slug);
-      }
-    }
-  };
-
   const handleCommentClick = () => {
-    if (fact.betaOnly) {
-      if (onBetaClick) {
-        const slug = factLink.split('/fact/').pop() || fact.id;
-        onBetaClick(slug);
-      }
-      return;
-    }
     setLocation(`${factLink}#comments`);
   };
 
   const handleShare = async () => {
-    if (fact.betaOnly) return;
     try {
       await navigator.clipboard.writeText(`${window.location.origin}${factLink}`);
       setShowCopiedToast(true);
@@ -101,7 +83,7 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
     }
   };
 
-  const count = fact.betaOnly ? 0 : (fact.commentCount ?? 0);
+  const count = fact.commentCount ?? 0;
   const commentLabel = count === 1 ? "1 comment" : `${count} comments`;
   
   return (
@@ -213,45 +195,23 @@ export function FactCard({ fact, onSave, onComment, onBetaClick, isSaved, showTa
             <Bookmark size={16} className={isSaved ? 'unsave-icon' : ''} />
             <span>{isSaved ? 'Unsave' : 'Save'}</span>
           </button>
-          {fact.betaOnly ? (
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <span style={{ cursor: 'not-allowed', display: 'inline-flex' }}>
-                  <button
-                    className="action-button action-button-disabled"
-                    data-testid={`button-share-${fact.id}`}
-                    disabled
-                    style={{ pointerEvents: 'none' }}
-                  >
-                    <Share2 size={16} />
-                    <span>Share</span>
-                  </button>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent side="top" className="bg-[#2C2C2C] text-white border-0 z-[9999] text-[10px] px-2 py-0.5">
-                Unavailable in beta
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <button
-              className="action-button"
-              onClick={handleShare}
-              data-testid={`button-share-${fact.id}`}
-            >
-              <Share2 size={16} />
-              <span>Share</span>
-            </button>
-          )}
+          <button
+            className="action-button"
+            onClick={handleShare}
+            data-testid={`button-share-${fact.id}`}
+          >
+            <Share2 size={16} />
+            <span>Share</span>
+          </button>
         </div>
 
         <Link 
           href={factLink}
           className="learn-more-button"
           data-testid={`button-learn-more-${fact.id}`}
-          onClick={handleBetaLinkClick}
         >
           <BookOpen size={14} className="learn-more-arrow" />
-          {fact.betaOnly ? "View sources" : "Learn more"}
+          View Sources
         </Link>
       </div>
 
