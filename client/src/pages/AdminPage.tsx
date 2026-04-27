@@ -2048,7 +2048,6 @@ export default function AdminPage() {
                     placeholder="Explain the myth in detail..."
                     data-testid="input-myth-details"
                     rows={4}
-                    required
                   />
                 </div>
 
@@ -2078,7 +2077,6 @@ export default function AdminPage() {
                     placeholder="Explain the truth in detail..."
                     data-testid="input-truth-details"
                     rows={4}
-                    required
                   />
                 </div>
               </section>
