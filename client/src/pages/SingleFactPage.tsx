@@ -305,8 +305,14 @@ export default function SingleFactPage() {
                   data-testid="img-beta-placeholder"
                 />
                 <p className="beta-placeholder-text">
-                  This topic's details are currently unavailable in the beta. Scrungy's working on it!
+                  This topic's details are currently unavailable in the beta. 
+                  <br /><br />
+                  <p>⬆️ Click the "Follow" button above to be notified when Scrungy the squirrel has finished working on it.</p>
+                  <br /><br />
+                  <p>⬅️ At the moment, you can <b>view this topic's sources </b> on the left. </p>
+                  
                 </p>
+              
               </div>
             ) : (
               <TimelineSection 
