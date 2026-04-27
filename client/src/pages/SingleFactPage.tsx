@@ -11,7 +11,7 @@ import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";
 import { SignInModal } from "@/components/SignInModal";
 import { RelatedFacts } from "@/components/RelatedFacts";
-import squirrelImg from "@assets/scrungy_at_work_painted_1775522114338.png";
+import squirrelImg from "@assets/scrungy/scrungy at work cotton.png";
 import { FactTags } from "@/components/FactTags";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
