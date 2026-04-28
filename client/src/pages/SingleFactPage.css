@@ -188,7 +188,7 @@
 
 .beta-placeholder-text {
   font-size: 0.9rem;
-  color: var(--muted-foreground, #888);
+  color: #878787;
   max-width: 240px;
   line-height: 1.5;
 }
