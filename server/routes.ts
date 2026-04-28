@@ -16,6 +16,7 @@ import {
   sendSubmissionReviewingEmail,
   sendSubmissionPublishedEmail,
   sendFactUpdateEmail,
+  sendBetaFactReadyEmail,
   sendNewFollowerEmail,
   sendNewCommentEmail,
   sendNewReplyEmail,
@@ -1532,11 +1533,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/facts/:id", requireAuth, async (req, res) => {
     try {
       const validatedData = insertFactSchema.partial().parse(req.body);
+
+      // Snapshot old betaOnly before update so we can detect the transition
+      const [oldRow] = await db
+        .select({ betaOnly: facts.betaOnly })
+        .from(facts)
+        .where(eq(facts.id, req.params.id))
+        .limit(1);
+
       const fact = await storage.updateFact(req.params.id, validatedData);
       if (!fact) {
         return res.status(404).json({ message: "Fact not found" });
       }
       res.json(fact);
+
+      // Fire betaOnly → live notification emails — fire and forget
+      if (oldRow?.betaOnly === true && validatedData.betaOnly === false) {
+        (async () => {
+          try {
+            const followerRows = await db
+              .select({ email: userAccounts.email })
+              .from(factFollows)
+              .innerJoin(userAccounts, eq(userAccounts.id, factFollows.userId))
+              .where(eq(factFollows.factId, fact.id));
+
+            if (followerRows.length === 0) return;
+
+            const escHtml = (s: string) =>
+              s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+            const stripMd = (s: string) =>
+              s.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*([^*]+)\*\*/g, "$1").replace(/\*([^*]+)\*/g, "$1").replace(/_([^_]+)_/g, "$1");
+
+            const timeline: Array<{ year: string; description: string; order: number }> =
+              Array.isArray(fact.timeline) ? (fact.timeline as any[]) : [];
+            const sorted = [...timeline].sort((a, b) => a.order - b.order);
+            const preview = sorted.slice(0, 3);
+            const remainder = sorted.length - preview.length;
+
+            const rows = preview.map((entry, i) => {
+              const isLast = i === preview.length - 1 && remainder === 0;
+              return `<tr><td style="width:52px;vertical-align:top;padding:8px 12px 16px 0;"><span style="font-size:13px;font-weight:700;color:#888;white-space:nowrap;">${escHtml(entry.year)}</span></td><td style="vertical-align:top;padding-top:8px;padding-bottom:16px;${isLast ? "" : "border-bottom:1px solid #eee;"}"><p style="margin:0;font-size:14px;line-height:1.5;color:#333;">${escHtml(stripMd(entry.description))}</p></td></tr>`;
+            }).join("");
+
+            const overflowNote = remainder > 0
+              ? `<p style="margin:0 0 1.5em;font-size:13px;color:#888;">+ ${remainder} more ${remainder === 1 ? "entry" : "entries"} on the full page</p>`
+              : "";
+
+            const timelineHtml = preview.length > 0
+              ? `<table style="width:100%;border-collapse:collapse;margin-bottom:1.5em;">${rows}</table>${overflowNote}`
+              : "";
+
+            const factUrl = buildFactUrl(fact.slug);
+
+            await Promise.allSettled(
+              followerRows
+                .filter((r) => !!r.email)
+                .map((r) => sendBetaFactReadyEmail(r.email!, {
+                  mythHeader: fact.mythHeader,
+                  truthHeader: fact.truthHeader,
+                  timelineHtml,
+                  factUrl,
+                }))
+            );
+          } catch (mailErr) {
+            console.error("[sendgrid] Beta fact ready emails failed:", mailErr);
+          }
+        })();
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ 
