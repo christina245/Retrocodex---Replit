@@ -1073,7 +1073,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(facts)
       .innerJoin(userProfiles, eq(facts.submittedByUserId, userProfiles.id))
-      .where(inArray(facts.submittedByUserId, followingIds))
+      .where(and(inArray(facts.submittedByUserId, followingIds), eq(facts.archived, false)))
       .orderBy(desc(facts.createdAt))
       .limit(limit);
 
@@ -1230,7 +1230,7 @@ export class DatabaseStorage implements IStorage {
       })
       .from(facts)
       .innerJoin(userProfiles, eq(facts.submittedByUserId, userProfiles.id))
-      .where(and(inArray(facts.submittedByUserId, localUserIds), ne(facts.submittedByUserId, userId)))
+      .where(and(inArray(facts.submittedByUserId, localUserIds), ne(facts.submittedByUserId, userId), eq(facts.archived, false)))
       .orderBy(desc(facts.createdAt));
 
     // Step 4: Fetch comments by local users (excluding self as belt-and-suspenders)
@@ -1366,7 +1366,7 @@ export class DatabaseStorage implements IStorage {
         createdAt: facts.createdAt,
       })
       .from(facts)
-      .where(sql`${facts.searchTags} && ${tagsArray}`)
+      .where(and(sql`${facts.searchTags} && ${tagsArray}`, eq(facts.archived, false)))
       .orderBy(desc(facts.createdAt))
       .limit(limit);
 
