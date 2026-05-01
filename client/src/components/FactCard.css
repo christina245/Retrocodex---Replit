@@ -10,7 +10,8 @@
 }
 
 .fact-card {
-  width: 515px;
+  width: 100%;
+  max-width: 515px;
   height: 310px;
   background: #ffffff;
   box-shadow: 2px 4px 0 color-mix(in srgb, var(--card-category-color) 70%, transparent);
