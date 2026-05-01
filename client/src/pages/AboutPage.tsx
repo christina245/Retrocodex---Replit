@@ -8,7 +8,7 @@ import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import scrungyAbout from "@assets/scrungy/about page scrungy 2.png";
+import scrungyAbout from "@assets/about_page_scrungy_3_1777613783150.png";
 import followButton from "@assets/follow_button_1776196363919.png";
 import "./AboutPage.css";
 

@@ -205,6 +205,11 @@
     padding: 0 20px;
   }
 
+  .about-scrungy-image {
+    max-width: 100%;
+    width: 100%;
+  }
+
   .about-header {
     font-size: 32px;
   }
