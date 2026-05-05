@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { X, Loader2 } from "lucide-react";
 import type { Fact as DbFact } from "@shared/schema";
@@ -24,8 +24,8 @@ type DbFactWithCount = DbFact & { commentCount?: number };
 function dbFactToCardFact(fact: DbFactWithCount): FactCardFact {
   const primaryCategory = fact.categories[0] || "Other";
   const categoryDisplay =
-    primaryCategory === "Other" && (fact as any).subcategories?.[0]
-      ? `OTHER • ${(fact as any).subcategories[0].toUpperCase()}`
+    primaryCategory === "Other" && fact.subcategories?.[0]
+      ? `OTHER • ${fact.subcategories[0].toUpperCase()}`
       : primaryCategory.toUpperCase();
   return {
     id: fact.id,
@@ -48,6 +48,10 @@ interface RegionModalProps {
 export function RegionModal({ region, onClose }: RegionModalProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [region]);
 
   const { data: facts, isLoading } = useQuery<DbFactWithCount[]>({
     queryKey: ["/api/facts/by-region", region],
