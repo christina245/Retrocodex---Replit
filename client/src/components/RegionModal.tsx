@@ -4,7 +4,7 @@ import { X, Loader2 } from "lucide-react";
 import type { Fact as DbFact } from "@shared/schema";
 import { FactCard, type Fact as FactCardFact } from "./FactCard";
 import { SaveModal } from "./SaveModal";
-import { getCountryFlag, COUNTRY_NAMES } from "@/lib/countryFlags";
+import { getCountryFlag } from "@/lib/countryFlags";
 import "./RegionModal.css";
 
 const CATEGORY_COLORS: Record<string, string> = {
