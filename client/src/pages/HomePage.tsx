@@ -46,7 +46,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<HomepageTabType>("explore");
-  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<{ name: string; isCountry: boolean } | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
@@ -535,7 +535,7 @@ export default function HomePage() {
                             <button
                               key={state}
                               className="region-map-btn"
-                              onClick={() => setSelectedRegion(state)}
+                              onClick={() => setSelectedRegion({ name: state, isCountry: false })}
                               data-testid={`button-region-${state.toLowerCase().replace(/\s+/g, '-')}`}
                             >
                               {state}
@@ -550,7 +550,7 @@ export default function HomePage() {
                             <button
                               key={country}
                               className="region-map-btn"
-                              onClick={() => setSelectedRegion(country)}
+                              onClick={() => setSelectedRegion({ name: country, isCountry: true })}
                               data-testid={`button-region-${country.toLowerCase().replace(/\s+/g, '-')}`}
                             >
                               {country}
@@ -783,7 +783,7 @@ export default function HomePage() {
         fact={shareModalFact}
       />
       {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
-      <RegionModal region={selectedRegion} onClose={() => setSelectedRegion(null)} />
+      <RegionModal region={selectedRegion?.name ?? null} isCountry={selectedRegion?.isCountry ?? false} onClose={() => setSelectedRegion(null)} />
     </div>
   );
 }

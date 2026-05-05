@@ -249,6 +249,8 @@ const COUNTRY_FLAGS: Record<string, string> = {
   "Zimbabwe": "🇿🇼",
 };
 
+export const COUNTRY_NAMES: ReadonlySet<string> = new Set(Object.keys(COUNTRY_FLAGS));
+
 export function getCountryFlag(location: string): string {
   if (!location) return "";
   const trimmed = location.trim();

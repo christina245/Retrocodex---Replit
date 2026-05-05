@@ -4,7 +4,7 @@ import { X, Loader2 } from "lucide-react";
 import type { Fact as DbFact } from "@shared/schema";
 import { FactCard, type Fact as FactCardFact } from "./FactCard";
 import { SaveModal } from "./SaveModal";
-import { getCountryFlag } from "@/lib/countryFlags";
+import { getCountryFlag, COUNTRY_NAMES } from "@/lib/countryFlags";
 import "./RegionModal.css";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -42,10 +42,11 @@ function dbFactToCardFact(fact: DbFactWithCount): FactCardFact {
 
 interface RegionModalProps {
   region: string | null;
+  isCountry?: boolean;
   onClose: () => void;
 }
 
-export function RegionModal({ region, onClose }: RegionModalProps) {
+export function RegionModal({ region, isCountry = false, onClose }: RegionModalProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
 
@@ -65,7 +66,7 @@ export function RegionModal({ region, onClose }: RegionModalProps) {
 
   if (!region) return null;
 
-  const flag = getCountryFlag(region);
+  const flag = isCountry ? getCountryFlag(region) : "";
   const totalPages = facts ? Math.ceil(facts.length / ITEMS_PER_PAGE) : 0;
   const pagedFacts = facts
     ? facts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
