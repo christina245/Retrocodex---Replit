@@ -1,8 +1,9 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2, Archive, ArchiveRestore } from "lucide-react";
+import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2, Archive, ArchiveRestore, Globe } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
+import { SAMPLE_US_STATES, PINNED_COUNTRIES, ALL_COUNTRIES } from "@/lib/locationData";
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
 import "./AdminPage.css";
@@ -119,6 +120,8 @@ export default function AdminPage() {
   const [nuances, setNuances] = useState<Nuance[]>([]);
   const [relatedMythIds, setRelatedMythIds] = useState<string[]>([]);
   const [relatedMythSearch, setRelatedMythSearch] = useState("");
+  const [mapRegions, setMapRegions] = useState<string[]>([]);
+  const [regionSearch, setRegionSearch] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -700,6 +703,8 @@ export default function AdminPage() {
     setNuances([]);
     setRelatedMythIds([]);
     setRelatedMythSearch("");
+    setMapRegions([]);
+    setRegionSearch("");
     setSubmitMessage("");
     setEditingSubmissionId(null);
     setSubmissionUsername("");
@@ -927,6 +932,7 @@ export default function AdminPage() {
     setTimeline(fact.timeline || []);
     setNuances(fact.nuances || []);
     setRelatedMythIds(fact.relatedMythIds || []);
+    setMapRegions(fact.mapRegions || []);
     setSubmittedByUserId(fact.submittedByUserId || "");
     setSavedFactSnapshot({
       mythHeader: fact.mythHeader ?? "",
@@ -975,6 +981,7 @@ export default function AdminPage() {
     setTimeline(d.timeline ?? []);
     setNuances(d.nuances ?? []);
     setRelatedMythIds(d.relatedMythIds ?? []);
+    setMapRegions(d.mapRegions ?? []);
     setSubmittedByUserId(sub.userId || "");
     setSubmissionLearnedFrom(sub.learnedFrom && sub.learnedFrom.length > 0 ? sub.learnedFrom : []);
     setSubmissionLearnedLocation(sub.learnedLocation || "");
@@ -996,7 +1003,7 @@ export default function AdminPage() {
         isTrending, isDebated, isPopular,
         revisionYear, originDecade, taughtUntilYear,
         mythHeader, mythDetails, truthHeader, truthDetails,
-        sources, timeline, nuances, relatedMythIds,
+        sources, timeline, nuances, relatedMythIds, mapRegions,
       };
       await patchSubmissionMutation.mutateAsync({ id: editingSubmissionId, draftData });
       setSubmissionActionMsg({ type: "success", text: "Draft saved." });
@@ -1025,6 +1032,7 @@ export default function AdminPage() {
         sources: validSources, timeline: timeline.filter(t => t.year && t.description),
         nuances: nuances.filter(n => n.type && n.body), relatedMythIds: relatedMythIds.filter(id => id),
         submittedByUserId: submittedByUserId.trim() || undefined,
+        mapRegions,
       };
       const factRes = await fetch("/api/facts", {
         method: "POST",
@@ -1407,6 +1415,7 @@ export default function AdminPage() {
       originDecade: originDecade || null,
       taughtUntilYear: taughtUntilYear || null,
       submittedByUserId: submittedByUserId.trim() || undefined,
+      mapRegions,
     };
 
     try {
@@ -1878,6 +1887,96 @@ export default function AdminPage() {
                         <span>{filter}</span>
                       </label>
                     ))}
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginTop: "1.25rem" }}>
+                  <label className="form-label">
+                    <Globe size={14} style={{ display: "inline", marginRight: 6, verticalAlign: "middle" }} />
+                    Map Regions
+                  </label>
+                  <p className="form-hint">Assign this fact to specific countries or US states. Users clicking that region on the world map will see this fact.</p>
+                  {mapRegions.length > 0 && (
+                    <div className="search-tags-chips" style={{ marginBottom: 8 }}>
+                      {mapRegions.map((r) => (
+                        <span
+                          key={r}
+                          className="search-tag-chip"
+                          onClick={() => setMapRegions(mapRegions.filter((x) => x !== r))}
+                          data-testid={`region-chip-${r.toLowerCase().replace(/\s+/g, '-')}`}
+                        >
+                          {r}
+                          <X size={13} />
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="region-picker-wrapper">
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Search states or countries…"
+                      value={regionSearch}
+                      onChange={(e) => setRegionSearch(e.target.value)}
+                      data-testid="input-region-search"
+                    />
+                    {regionSearch.trim() && (() => {
+                      const term = regionSearch.toLowerCase();
+                      const matchedStates = SAMPLE_US_STATES.filter((s) => s.toLowerCase().includes(term));
+                      const allCountries = [...PINNED_COUNTRIES, ...ALL_COUNTRIES].filter(
+                        (c, i, arr) => arr.indexOf(c) === i
+                      );
+                      const matchedCountries = allCountries.filter((c) => c.toLowerCase().includes(term));
+                      if (matchedStates.length === 0 && matchedCountries.length === 0) return null;
+                      return (
+                        <div className="region-dropdown">
+                          {matchedStates.length > 0 && (
+                            <>
+                              <div className="region-group-label">US States</div>
+                              {matchedStates.slice(0, 10).map((s) => (
+                                <div
+                                  key={s}
+                                  className={`region-option${mapRegions.includes(s) ? " region-option-selected" : ""}`}
+                                  onClick={() => {
+                                    if (mapRegions.includes(s)) {
+                                      setMapRegions(mapRegions.filter((x) => x !== s));
+                                    } else {
+                                      setMapRegions([...mapRegions, s]);
+                                    }
+                                  }}
+                                  data-testid={`region-option-${s.toLowerCase().replace(/\s+/g, '-')}`}
+                                >
+                                  {mapRegions.includes(s) && <Check size={13} />}
+                                  {s}
+                                </div>
+                              ))}
+                            </>
+                          )}
+                          {matchedCountries.length > 0 && (
+                            <>
+                              <div className="region-group-label">Countries</div>
+                              {matchedCountries.slice(0, 10).map((c) => (
+                                <div
+                                  key={c}
+                                  className={`region-option${mapRegions.includes(c) ? " region-option-selected" : ""}`}
+                                  onClick={() => {
+                                    if (mapRegions.includes(c)) {
+                                      setMapRegions(mapRegions.filter((x) => x !== c));
+                                    } else {
+                                      setMapRegions([...mapRegions, c]);
+                                    }
+                                  }}
+                                  data-testid={`region-option-${c.toLowerCase().replace(/\s+/g, '-')}`}
+                                >
+                                  {mapRegions.includes(c) && <Check size={13} />}
+                                  {c}
+                                </div>
+                              ))}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 

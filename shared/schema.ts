@@ -206,6 +206,7 @@ export const facts = pgTable("facts", {
   taughtUntilYear: text("taught_until_year"),
   originDecade: text("origin_decade"),
   submittedByUserId: varchar("submitted_by_user_id"),
+  mapRegions: text("map_regions").array().default([]),
   archived: boolean("archived").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -236,6 +237,7 @@ export const insertFactSchema = z.object({
   taughtUntilYear: z.string().nullable().optional(),
   originDecade: z.string().nullable().optional(),
   submittedByUserId: z.string().optional(),
+  mapRegions: z.array(z.string()).default([]),
 });
 
 export type InsertFact = z.infer<typeof insertFactSchema>;

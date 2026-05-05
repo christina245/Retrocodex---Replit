@@ -24,6 +24,8 @@ import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
 import { useVerificationGuard } from "@/lib/useVerificationGuard";
 import { VerifyEmailModal } from "@/components/VerifyEmailModal";
+import { RegionModal } from "@/components/RegionModal";
+import { ALL_REGIONS } from "@/lib/locationData";
 import "./HomePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -44,6 +46,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<HomepageTabType>("explore");
+  const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [showSignIn, setShowSignIn] = useState(false);
   const [signInContext, setSignInContext] = useState<string | undefined>(undefined);
   const [shareModalFact, setShareModalFact] = useState<Fact | null>(null);
@@ -517,9 +520,47 @@ export default function HomePage() {
 
             <div className="content-area" id="content-area">
               {activeTab === "regionally-taught" && (
-                <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
-                  Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
-                </p>
+                <>
+                  <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
+                    Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
+                  </p>
+                  <div className="region-map-container" data-testid="region-map-container">
+                    <p className="region-map-title">Browse by Region</p>
+                    <p className="region-map-hint">Click a region to see facts taught there.</p>
+                    <div className="region-map-groups">
+                      <div className="region-map-group">
+                        <span className="region-map-group-label">United States</span>
+                        <div className="region-map-buttons">
+                          {["California", "Texas", "New York", "Florida", "Illinois", "Ohio", "Pennsylvania", "Georgia"].map((state) => (
+                            <button
+                              key={state}
+                              className="region-map-btn"
+                              onClick={() => setSelectedRegion(state)}
+                              data-testid={`button-region-${state.toLowerCase().replace(/\s+/g, '-')}`}
+                            >
+                              {state}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="region-map-group">
+                        <span className="region-map-group-label">Countries</span>
+                        <div className="region-map-buttons">
+                          {["United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "Japan", "China", "India", "Brazil", "Mexico", "South Korea"].map((country) => (
+                            <button
+                              key={country}
+                              className="region-map-btn"
+                              onClick={() => setSelectedRegion(country)}
+                              data-testid={`button-region-${country.toLowerCase().replace(/\s+/g, '-')}`}
+                            >
+                              {country}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
               )}
               {activeTab === "popular" && (
                 <p className="tab-subheader" data-testid="text-popular-subheader">
@@ -742,6 +783,7 @@ export default function HomePage() {
         fact={shareModalFact}
       />
       {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
+      <RegionModal region={selectedRegion} onClose={() => setSelectedRegion(null)} />
     </div>
   );
 }

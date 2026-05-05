@@ -1549,3 +1549,52 @@
 .spinning {
   animation: spin 1s linear infinite;
 }
+
+/* Region picker */
+.region-picker-wrapper {
+  position: relative;
+}
+
+.region-dropdown {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  background: #fff;
+  margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.region-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #aaa;
+  padding: 8px 12px 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.region-option {
+  padding: 7px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #333;
+  transition: background 0.1s;
+}
+
+.region-option:hover {
+  background: #f5f5f5;
+}
+
+.region-option-selected {
+  background: #fff5f5;
+  color: #FF5353;
+  font-weight: 500;
+}
+
+.region-option-selected:hover {
+  background: #ffe8e8;
+}

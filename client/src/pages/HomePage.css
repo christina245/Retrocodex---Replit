@@ -650,3 +650,73 @@
     font-size: 0.625rem;
   }
 }
+
+/* Region map placeholder */
+.region-map-container {
+  background: #f9f9f7;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 20px 24px 24px;
+  margin: 12px 0 20px;
+}
+
+.region-map-title {
+  font-family: 'DM Serif Text', serif;
+  font-size: 18px;
+  color: #2C2C2C;
+  margin: 0 0 4px 0;
+  font-weight: 700;
+}
+
+.region-map-hint {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 18px 0;
+}
+
+.region-map-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.region-map-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.region-map-group-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #aaa;
+}
+
+.region-map-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.region-map-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #444;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.region-map-btn:hover {
+  background: #FF5353;
+  border-color: #FF5353;
+  color: #fff;
+}

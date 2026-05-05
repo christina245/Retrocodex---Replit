@@ -62,7 +62,8 @@ export interface IStorage {
   getFactsByIds(ids: string[]): Promise<Fact[]>;
   updateFact(id: string, fact: Partial<InsertFact>): Promise<Fact | undefined>;
   deleteFact(id: string): Promise<boolean>;
-  
+  getFactsByRegion(region: string): Promise<Fact[]>;
+
   // Blog posts
   createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
   getAllBlogPosts(): Promise<BlogPost[]>;
@@ -293,6 +294,13 @@ export class DatabaseStorage implements IStorage {
       .where(eq(facts.id, id))
       .returning();
     return result.length > 0;
+  }
+
+  async getFactsByRegion(region: string): Promise<Fact[]> {
+    return await db
+      .select()
+      .from(facts)
+      .where(and(eq(facts.archived, false), arrayContains(facts.mapRegions, [region])));
   }
 
   // Blog post methods

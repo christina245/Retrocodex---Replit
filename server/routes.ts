@@ -1269,6 +1269,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET /api/facts/by-region/:region - Get facts for a specific map region (public)
+  app.get("/api/facts/by-region/:region", async (req, res) => {
+    try {
+      const region = decodeURIComponent(req.params.region);
+      const regionFacts = await storage.getFactsByRegion(region);
+      res.json(regionFacts);
+    } catch (error) {
+      console.error("Error fetching facts by region:", error);
+      res.status(500).json({ message: "Failed to fetch facts by region" });
+    }
+  });
+
   // GET /api/notifications/comments — comments by others on the user's submitted facts
   app.get("/api/notifications/comments", requireUser, async (req, res) => {
     try {
