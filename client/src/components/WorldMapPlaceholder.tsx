@@ -1,5 +1,47 @@
 import { useEffect, useRef } from "react";
 
+interface FlaMapEntry {
+  name: string;
+  shortname: string;
+  comment: string;
+  link: string | null;
+  color: string | null;
+  colorOver: string | null;
+  nameColor?: string | null;
+  nameColorOver?: string | null;
+  nameFontSize?: string | null;
+  isNewWindow?: boolean | null;
+}
+
+interface FlaMapConfig {
+  mapWidth: string | number;
+  mapHeight: number;
+  isNewWindow: boolean;
+  iPhoneLink: boolean;
+  borderColor: string;
+  borderColorOver: string;
+  map_data: Record<string, FlaMapEntry>;
+  [key: string]: unknown;
+}
+
+interface FlaMapInstance {
+  drawOnDomReady(containerId: string, callback?: () => void): void;
+  on(
+    event: "click" | "dblclick" | "mousein" | "mouseout" | "mousemove" | "mousedown" | "mouseup",
+    callback: (ev: MouseEvent, sid: string, map: FlaMapInstance) => void
+  ): void;
+  fetchStateAttr(sid: string, attr: string): unknown;
+  setStateAttr(sid: string, cfg: Partial<FlaMapEntry>): void;
+  mapConfig: FlaMapConfig;
+}
+
+declare global {
+  interface Window {
+    map_cfg: FlaMapConfig;
+    FlaMap: new (cfg: FlaMapConfig) => FlaMapInstance;
+  }
+}
+
 interface WorldMapPlaceholderProps {
   onRegionClick: (region: { name: string; isCountry: boolean }) => void;
 }
@@ -59,8 +101,7 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
 
         if (cancelled) return;
 
-        const w = window as any;
-        const cfg = w.map_cfg;
+        const cfg = window.map_cfg;
         if (!cfg?.map_data) return;
 
         for (const sid of Object.keys(cfg.map_data)) {
@@ -77,23 +118,16 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
         if (!container || cancelled) return;
         container.innerHTML = "";
 
-        const map = new w.FlaMap(cfg);
-        map.drawOnDomReady(CONTAINER_ID);
+        const map = new window.FlaMap(cfg);
 
-        container.addEventListener("click", (e: Event) => {
-          let el = e.target as Element | null;
-          while (el && el !== container) {
-            const id = el.id ?? "";
-            const match = id.match(/^(st\d+)/);
-            if (match) {
-              const entry = cfg.map_data[match[1]];
-              if (entry?.name) {
-                onRegionClickRef.current({ name: entry.name, isCountry: true });
-              }
-              break;
+        map.drawOnDomReady(CONTAINER_ID, () => {
+          if (cancelled) return;
+          map.on("click", (_ev, sid) => {
+            const entry = cfg.map_data[sid];
+            if (entry?.name) {
+              onRegionClickRef.current({ name: entry.name, isCountry: true });
             }
-            el = el.parentElement;
-          }
+          });
         });
       } catch (err) {
         console.error("WorldMapPlaceholder: init failed", err);
