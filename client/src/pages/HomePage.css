@@ -651,6 +651,37 @@
   }
 }
 
+/* World map wrapper */
+.world-map-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 8px 0 0;
+  position: relative;
+}
+
+.world-map-wrapper #fla-world-map-container {
+  width: 100%;
+}
+
+/* FLA map tooltip override */
+.fm-tooltip-frame {
+  background-color: #fff !important;
+  border: 1.5px solid #e0e0e0 !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
+}
+
+.fm-tooltip-name {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #2c2c2c !important;
+  text-shadow: none !important;
+  padding: 2px 4px !important;
+  line-height: 1.3 !important;
+}
+
 /* Region map placeholder */
 .region-map-container {
   background: #f9f9f7;

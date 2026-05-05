@@ -25,6 +25,7 @@ import { useSavedFacts } from "@/lib/useSavedFacts";
 import { useVerificationGuard } from "@/lib/useVerificationGuard";
 import { VerifyEmailModal } from "@/components/VerifyEmailModal";
 import { RegionModal } from "@/components/RegionModal";
+import { WorldMapPlaceholder } from "@/components/WorldMapPlaceholder";
 import { ALL_REGIONS } from "@/lib/locationData";
 import "./HomePage.css";
 
@@ -544,19 +545,8 @@ export default function HomePage() {
                         </div>
                       </div>
                       <div className="region-map-group">
-                        <span className="region-map-group-label">Countries</span>
-                        <div className="region-map-buttons">
-                          {["United States", "United Kingdom", "Canada", "Australia", "Germany", "France", "Japan", "China", "India", "Brazil", "Mexico", "South Korea"].map((country) => (
-                            <button
-                              key={country}
-                              className="region-map-btn"
-                              onClick={() => setSelectedRegion({ name: country, isCountry: true })}
-                              data-testid={`button-region-${country.toLowerCase().replace(/\s+/g, '-')}`}
-                            >
-                              {country}
-                            </button>
-                          ))}
-                        </div>
+                        <span className="region-map-group-label">Countries — click to explore</span>
+                        <WorldMapPlaceholder onRegionClick={setSelectedRegion} />
                       </div>
                     </div>
                   </div>
