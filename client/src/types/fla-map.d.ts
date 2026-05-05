@@ -39,3 +39,5 @@ declare global {
     FlaMap: new (cfg: FlaMapConfig) => FlaMapInstance;
   }
 }
+
+export {};
