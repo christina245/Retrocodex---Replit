@@ -3,6 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <script src="/map/raphael.min.js"></script>
+  <script>
+    /**
+     * Patch Raphael.el.attr (element prototype) so any attribute set to a
+     * white fill is immediately suppressed.  This catches badge paths drawn
+     * by the library regardless of when .attr('fill', '#fff') is called.
+     */
+    (function patchRaphael() {
+      if (!window.Raphael || !window.Raphael.el) return;
+
+      var WHITE_RE = /^(#fff(fff)?|white|rgb\(255,\s*255,\s*255\))$/i;
+
+      var origAttr = window.Raphael.el.attr;
+      window.Raphael.el.attr = function(key, val) {
+        // If setting fill to white, suppress this element
+        var isFillWhite = false;
+        if (typeof key === 'string' && key === 'fill' && typeof val === 'string') {
+          isFillWhite = WHITE_RE.test(val.trim());
+        } else if (key && typeof key === 'object' && key.fill && typeof key.fill === 'string') {
+          isFillWhite = WHITE_RE.test(key.fill.trim());
+        }
+        var result = origAttr.apply(this, arguments);
+        if (isFillWhite && this.node) {
+          this.node.style.cssText += ';display:none!important;visibility:hidden!important;';
+        }
+        return result;
+      };
+    })();
+  </script>
   <script src="/map/map.js"></script>
   <script src="/map/settings.js"></script>
   <script src="/map/paths.js"></script>
@@ -11,15 +39,25 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { overflow: hidden; background: transparent; }
     #container { width: 100%; }
+
+    /*
+     * The FLA demo badge is injected as an HTML anchor/image element
+     * outside the SVG, overlaid on top of the map.
+     * Hiding ALL <a> and <img> elements is safe here because:
+     *   - Country paths use SVG <path> elements (unaffected)
+     *   - ignoreLinks is set true so countries have no <a> wrappers
+     *   - We do not use tooltips with images
+     */
+    a, img { display: none !important; visibility: hidden !important; }
+
+    /* Also hide any element with an href that's a child of the container */
+    [href] { display: none !important; }
   </style>
 </head>
 <body>
   <div id="container"></div>
   <script>
     (function () {
-      // Set default grey for all countries before the FlaMap is created.
-      // This runs as an inline body script — before DOMContentLoaded — so
-      // drawOnDomReady will fire naturally when DOMContentLoaded arrives.
       for (var sid in map_cfg.map_data) {
         map_cfg.map_data[sid].color = '#878787';
         map_cfg.map_data[sid].colorOver = '#878787';
@@ -28,11 +66,108 @@
       map_cfg.iPhoneLink = false;
       map_cfg.zoomEnable = false;
       map_cfg.zoomEnableControls = false;
+      map_cfg.demoLinkPosition = null;
+      map_cfg.noLogo = true;
+      map_cfg.demo = false;
+
+      var container = document.getElementById('container');
+
+      var WHITE_RE = /^(#fff(fff)?|white|rgb\(255,\s*255,\s*255\))$/i;
+
+      /**
+       * Hide an element that looks like a badge.
+       * Checks full document scope (not just SVG) to catch HTML overlays.
+       */
+      function hideIfBadge(el) {
+        if (!el || el.nodeType !== 1) return;
+        var tag = (el.tagName || '').toLowerCase();
+
+        // HTML and SVG anchors, images
+        if (tag === 'a' || tag === 'img' || tag === 'image') {
+          el.style.cssText += ';display:none!important;visibility:hidden!important;';
+          return;
+        }
+
+        // SVG text elements (badge captions)
+        if (tag === 'text' || tag === 'tspan') {
+          el.style.cssText += ';display:none!important;visibility:hidden!important;';
+          return;
+        }
+
+        // Computed fill check
+        try {
+          var cs = window.getComputedStyle(el);
+          var fill = cs.fill || cs.backgroundColor || '';
+          if (fill === 'rgb(255, 255, 255)' || fill === 'rgba(255, 255, 255, 1)') {
+            el.style.cssText += ';display:none!important;visibility:hidden!important;';
+            return;
+          }
+        } catch (_) {}
+
+        // Raw attribute fill check
+        var attrFill = (el.getAttribute ? el.getAttribute('fill') : '') || '';
+        if (WHITE_RE.test(attrFill.trim())) {
+          el.style.cssText += ';display:none!important;visibility:hidden!important;';
+        }
+      }
+
+      /**
+       * Sweep a root element and all its descendants.
+       * Scans the FULL document to catch HTML overlays outside the SVG.
+       */
+      function sweepAll() {
+        var allEls = document.querySelectorAll('a, img, image, text, tspan, [href]');
+        for (var i = 0; i < allEls.length; i++) {
+          hideIfBadge(allEls[i]);
+        }
+        // Also sweep SVG elements for white fill
+        var svgEls = document.querySelectorAll('svg *');
+        for (var j = 0; j < svgEls.length; j++) {
+          var el = svgEls[j];
+          var attrFill = (el.getAttribute ? el.getAttribute('fill') : '') || '';
+          if (WHITE_RE.test(attrFill.trim())) {
+            el.style.cssText += ';display:none!important;visibility:hidden!important;';
+          }
+        }
+      }
+
+      // MutationObserver on the ENTIRE body — catches HTML elements added
+      // anywhere in the frame, not just inside the SVG.
+      var badgeObserver = new MutationObserver(function (mutations) {
+        for (var m = 0; m < mutations.length; m++) {
+          var nodes = mutations[m].addedNodes;
+          for (var n = 0; n < nodes.length; n++) {
+            var node = nodes[n];
+            hideIfBadge(node);
+            // Also hide descendants
+            if (node.querySelectorAll) {
+              var kids = node.querySelectorAll('a, img, image, text, tspan, [href]');
+              for (var k = 0; k < kids.length; k++) hideIfBadge(kids[k]);
+            }
+          }
+          hideIfBadge(mutations[m].target);
+        }
+      });
+
+      badgeObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['fill', 'style', 'href', 'xlink:href']
+      });
 
       var flaMap = new FlaMap(map_cfg);
 
       flaMap.drawOnDomReady('container', function () {
-        // Wire up click → postMessage to parent
+        sweepAll();
+
+        var sweepCount = 0;
+        var sweepInterval = setInterval(function () {
+          sweepAll();
+          sweepCount++;
+          if (sweepCount >= 20) clearInterval(sweepInterval);
+        }, 500);
+
         flaMap.on('click', function (ev, sid) {
           var entry = map_cfg.map_data[sid];
           if (entry && entry.name) {
@@ -43,14 +178,10 @@
           }
         });
 
-        // Tell parent the map is ready; include actual rendered height so the
-        // iframe can be resized to exactly fit the SVG without clipping.
         var h = document.getElementById('container').scrollHeight || 400;
         window.parent.postMessage({ type: 'fla-ready', height: h }, '*');
       });
 
-      // Listen for color updates from the parent React app.
-      // setStateAttr(sid, {color, colorOver}) updates the already-drawn fill.
       window.addEventListener('message', function (e) {
         if (!e.data || e.data.type !== 'fla-set-colors') return;
         var assigned = e.data.assignedCountries || [];
