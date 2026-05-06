@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 
@@ -47,11 +47,20 @@ function isHighlightedGeo(geoName: string, highlighted: Set<string>): boolean {
   return aliases.some((a) => highlighted.has(a));
 }
 
+interface TooltipState {
+  name: string;
+  count: number;
+  x: number;
+  y: number;
+}
+
 interface WorldMapPlaceholderProps {
   onRegionClick: (region: { name: string; isCountry: boolean }) => void;
 }
 
 export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps) {
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+
   // Same queryKey as HomePage — TanStack Query deduplicates the network
   // request and serves from cache, so this does not cause a duplicate fetch.
   const { data: facts = [] } = useQuery<Array<{ mapRegions?: string[] }>>({
@@ -70,54 +79,102 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
     return s;
   }, [facts]);
 
+  const countryFactCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const fact of facts) {
+      if (Array.isArray(fact.mapRegions)) {
+        for (const r of fact.mapRegions) {
+          if (r) counts[r] = (counts[r] ?? 0) + 1;
+        }
+      }
+    }
+    return counts;
+  }, [facts]);
+
+  function getFactCount(geoName: string): number {
+    const dbName = resolveDbName(geoName);
+    return countryFactCounts[dbName] ?? countryFactCounts[geoName] ?? 0;
+  }
+
   return (
-    <div data-testid="world-map-container" className="world-map-wrapper">
-      <ComposableMap
-        projectionConfig={{ scale: 147, center: [0, 10] }}
-        style={{ width: "100%", height: "auto", display: "block" }}
-      >
-        <Geographies geography={GEO_URL}>
-          {({ geographies }) =>
-            geographies.map((geo) => {
-              const geoName: string = String(geo.properties.name ?? "");
-              const lit = isHighlightedGeo(geoName, highlighted);
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  onClick={() => {
-                    onRegionClick({
-                      name: resolveDbName(geoName),
-                      isCountry: true,
-                    });
-                  }}
-                  style={{
-                    default: {
-                      fill: lit ? "#FF5353" : "#878787",
-                      stroke: "#ffffff",
-                      strokeWidth: 0.5,
-                      outline: "none",
-                    },
-                    hover: {
-                      fill: lit ? "#e83d3d" : "#9E9E9E",
-                      stroke: "#ffffff",
-                      strokeWidth: 0.5,
-                      outline: "none",
-                      cursor: "pointer",
-                    },
-                    pressed: {
-                      fill: lit ? "#c73030" : "#757575",
-                      stroke: "#ffffff",
-                      strokeWidth: 0.5,
-                      outline: "none",
-                    },
-                  }}
-                />
-              );
-            })
-          }
-        </Geographies>
-      </ComposableMap>
-    </div>
+    <>
+      <div className="world-map-clip">
+        <div data-testid="world-map-container" className="world-map-wrapper">
+          <ComposableMap
+            projectionConfig={{ scale: 147, center: [0, 10] }}
+            style={{ width: "100%", height: "auto", display: "block" }}
+          >
+            <Geographies geography={GEO_URL}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const geoName: string = String(geo.properties.name ?? "");
+                  const lit = isHighlightedGeo(geoName, highlighted);
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      onClick={() => {
+                        onRegionClick({
+                          name: resolveDbName(geoName),
+                          isCountry: true,
+                        });
+                      }}
+                      onMouseEnter={(evt) => {
+                        setTooltip({
+                          name: resolveDbName(geoName),
+                          count: getFactCount(geoName),
+                          x: evt.clientX,
+                          y: evt.clientY,
+                        });
+                      }}
+                      onMouseMove={(evt) => {
+                        setTooltip((prev) =>
+                          prev ? { ...prev, x: evt.clientX, y: evt.clientY } : null
+                        );
+                      }}
+                      onMouseLeave={() => setTooltip(null)}
+                      style={{
+                        default: {
+                          fill: lit ? "#FF5353" : "#878787",
+                          stroke: "#ffffff",
+                          strokeWidth: 0.5,
+                          outline: "none",
+                        },
+                        hover: {
+                          fill: lit ? "#e83d3d" : "#9E9E9E",
+                          stroke: "#ffffff",
+                          strokeWidth: 0.5,
+                          outline: "none",
+                          cursor: "pointer",
+                        },
+                        pressed: {
+                          fill: lit ? "#c73030" : "#757575",
+                          stroke: "#ffffff",
+                          strokeWidth: 0.5,
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+          </ComposableMap>
+        </div>
+      </div>
+
+      {tooltip && (
+        <div
+          className="map-country-tooltip"
+          style={{ left: tooltip.x + 14, top: tooltip.y + 14 }}
+          aria-hidden="true"
+        >
+          <p className="map-tooltip-name">{tooltip.name}</p>
+          <p className="map-tooltip-count">
+            {tooltip.count} {tooltip.count === 1 ? "local topic" : "local topics"} submitted
+          </p>
+        </div>
+      )}
+    </>
   );
 }

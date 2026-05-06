@@ -651,11 +651,15 @@
   }
 }
 
-/* World map wrapper */
+/* World map wrapper — clip container trims ~60% of the blank SVG space above the continents */
+.world-map-clip {
+  overflow: hidden;
+}
+
 .world-map-wrapper {
   width: 100%;
   max-width: 900px;
-  margin: 0 auto;
+  margin: -7% auto 0;
   position: relative;
 }
 
@@ -663,6 +667,37 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Country hover tooltip */
+.map-country-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: #ffffff;
+  border: 1px solid #E5E5E5;
+  border-radius: 8px;
+  padding: 14px 18px;
+  min-width: 180px;
+  max-width: 260px;
+}
+
+.map-tooltip-name {
+  font-family: 'Merriweather', Georgia, serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.map-tooltip-count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #888888;
+  margin: 0;
+  line-height: 1.3;
 }
 
 /* "All Regionally Taught Topics" section header */
