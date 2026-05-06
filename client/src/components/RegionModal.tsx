@@ -5,6 +5,7 @@ import type { Fact as DbFact } from "@shared/schema";
 import { FactCard, type Fact as FactCardFact } from "./FactCard";
 import { SaveModal } from "./SaveModal";
 import { getCountryFlag } from "@/lib/countryFlags";
+import scrungyImg from "@assets/scrungy_at_work_painted_1775522114338.png";
 import "./RegionModal.css";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -110,9 +111,14 @@ export function RegionModal({ region, isCountry = false, onClose }: RegionModalP
                 <p>Loading facts…</p>
               </div>
             ) : !facts || facts.length === 0 ? (
-              <p className="region-modal-empty" data-testid="region-modal-empty">
-                No facts have been assigned to this region yet.
-              </p>
+              <div className="region-modal-empty" data-testid="region-modal-empty">
+                <p>No facts have been assigned to this region yet. Scrungy's reviewing user fact submissions to find them!</p>
+                <img
+                  src={scrungyImg}
+                  alt="Scrungy the squirrel at work"
+                  className="region-modal-empty-img"
+                />
+              </div>
             ) : (
               <>
                 <div className="region-modal-facts" data-testid="region-modal-facts">
