@@ -1,44 +1,45 @@
 # Retrocodex
 
-## Overview
-Retrocodex is a fact-checking website designed to challenge and correct common misconceptions across various categories like History, Life Sciences, and Health & Fitness. It presents common myths alongside current scientific understanding, aiming to "unlearn" outdated beliefs. The platform is a full-stack web application built with React and Express, meticulously designed to match Figma specifications, focusing on typography, color, and spacing for a polished user experience. Key capabilities include browsing curated facts, with future plans for user accounts, saving, sharing, and commenting features. The project aims to become a primary resource for evidence-based information, fostering critical thinking and promoting accurate understanding.
+A fact-checking website that challenges common misconceptions by presenting myths alongside current scientific understanding — helping users "unlearn" outdated beliefs.
+
+## Run & Operate
+- **Dev**: `npm run dev` → Express + Vite on port 5000
+- **DB push**: `npx drizzle-kit push`
+- **Required env vars**: `DATABASE_URL`, `SENDGRID_API_KEY`
+
+## Stack
+- **Frontend**: React 18, TypeScript, Vite, Wouter (routing), TanStack Query v5
+- **UI**: Shadcn/ui (Radix UI + Tailwind CSS, "New York" variant)
+- **Backend**: Express.js + TypeScript
+- **ORM**: Drizzle ORM → Neon serverless PostgreSQL
+- **Validation**: Zod + drizzle-zod
+
+## Where Things Live
+- `client/src/pages/` — page components (HomePage, ArticlesPage, SingleBlogPage, UserDashboard…)
+- `client/src/components/` — shared components (FactCard, WorldMapPlaceholder, HamburgerMenu, SEO…)
+- `server/routes.ts` — all API endpoints
+- `server/storage.ts` — DatabaseStorage class (repository pattern)
+- `shared/schema.ts` — Drizzle schema + Zod insert schemas (source of truth)
+- `client/public/countries-110m.json` — world-atlas TopoJSON served locally for the Regionally Taught map
+
+## Architecture Decisions
+- **Monorepo**: shared schema/types via `@shared/*` path alias
+- **World map**: Uses `react-simple-maps` (MIT) + local `countries-110m.json` — replaced the licensed FLA/Raphael map to eliminate the demo watermark; no iframe needed
+- **Server state**: TanStack Query caches all API responses; no global client state manager
+- **Static fonts**: Loaded via Google Fonts CDN; custom Vite aliases for assets
+- **Admin auth**: Basic HTTP auth on `/api/admin/*` routes; `isAdmin` flag on user row
+
+## Product
+- Browse curated fact cards by decade, category, tab (Featured / New / Popular / Current Events / Debated / Regionally Taught)
+- Regionally Taught tab: interactive world map (click country → filter facts) + US sub-region buttons
+- User accounts: save facts, avatar picker (DiceBear), follow system, notifications
+- Blog/Articles: full CMS with Tiptap editor (admin), Beehiiv newsletter banner, external article ingestion with OG metadata
+- SEO: per-page meta tags, Open Graph, JSON-LD FAQ schema, dynamic sitemap + robots.txt, GA4
 
 ## User Preferences
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language.
 
-## System Architecture
-
-### Frontend Architecture
-- **Framework & Build Tools**: React 18 with TypeScript, Vite, Wouter for routing, and TanStack Query for server state management.
-- **UI Component System**: Shadcn/ui based on Radix UI, styled with Tailwind CSS following a "New York" style variant. Custom CSS modules for complex components.
-- **Design System**: Employs Merriweather (serif) and Public Sans (sans-serif) fonts, a primary brand red (#FF5353), and category-specific colors, strictly adhering to Figma designs for responsiveness and visual consistency.
-- **Key Components**: Includes `FactCard` for myth vs. truth display, `HomepageCategoryNav`, `EmailSignupBanner`, `SaveModal`, `ShareModal`, and `SourcesModal` for detailed fact information. A `HamburgerMenu` for navigation and an `SEO` component for page metadata are also central.
-- **Dashboard Components**: Features a `UserDashboard` with profile editing, a 4-tab feed (For You, Following, Local, Saved), and an `AvatarPickerModal` using DiceBear for avatar generation.
-- **Blog System Components**: Includes `ArticlesPage`, `SingleBlogPage`, `BlogCard`, `HeroSection` for featured posts, `TiptapEditor` for content creation (admin), and `BeehiivBanner` for newsletter subscriptions.
-
-### Backend Architecture
-- **Server Framework**: Express.js with TypeScript, supporting separate development and production environments.
-- **API Design**: RESTful API endpoints (`/api`) for managing emails, newsletter subscriptions, blog posts (CRUD), facts by tags, and saved facts. It also includes file upload and basic HTTP authentication for admin routes.
-- **Authentication & Authorization**: Basic HTTP authentication for admin access, with an `isAdmin` flag in the user profile. Admin management features are available.
-
-### Data Storage Solutions
-- **Database**: PostgreSQL via Neon serverless platform, utilizing Drizzle ORM for type-safe operations.
-- **Schema Design**: Tables include `email_subscriptions`, `newsletter_subscriptions`, `facts` (with detailed myth/truth, sources, timeline, nuances), `pages`, `blog_posts`, `users`, `saved_facts`, and `comments` (supporting both fact and page comments). UUIDs are used for primary keys and timestamps for tracking.
-- **Data Access Layer**: Implements a repository pattern with a `DatabaseStorage` class for clear separation of concerns.
-
-### Key Architectural Decisions
-- **Monorepo Structure**: Shared schema definitions and path aliases for client and server code.
-- **State Management**: TanStack Query for server state, local component state for UI, avoiding global client state management for current scope.
-- **Form Validation**: Zod for both client-side and server-side validation, integrated with Drizzle-zod.
-- **Static Assets**: Stored locally and loaded via CDN for fonts, with custom Vite aliases.
-- **Error Handling**: Custom error overlay in development and structured error responses.
-
-## External Dependencies
-
-- **Database & ORM**: Neon Serverless PostgreSQL, Drizzle ORM, `ws` package.
-- **UI Component Libraries**: Radix UI primitives, Shadcn/ui, Lucide React, React Icons, DiceBear for avatar generation.
-- **Styling & Forms**: Tailwind CSS, `class-variance-authority`, React Hook Form with Zod resolvers.
-- **Developer Experience**: Replit-specific plugins, TypeScript, ESBuild.
-- **External Services**: Typeform (fact submission), Buy Me a Coffee (donations), social media platforms (Instagram, Bluesky, X/Twitter).
-- **SEO Implementation**: Reusable `SEO` and `FAQSchema` components, dynamic sitemap and `robots.txt` generation, Google Analytics 4 integration.
-- **External Articles CMS**: `externalArticles` table for curated third-party articles, with server-side OG metadata parsing and a unified public endpoint (`/api/articles`) merging blog posts and external content.
+## Gotchas
+- `client/public/countries-110m.json` must stay in sync with `world-atlas@2` if the npm package is updated
+- Country name mapping between the DB (`mapRegions` text[]) and world-atlas feature names lives in `WorldMapPlaceholder.tsx` (`DB_TO_GEO` / `GEO_TO_DB`)
+- Pre-existing TypeScript strict-mode errors in `HeroSection.tsx`, `CommentsSection.tsx`, `formerCountries.ts` — unrelated to map work

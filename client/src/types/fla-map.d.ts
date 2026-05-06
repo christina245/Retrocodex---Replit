@@ -1,43 +1,53 @@
-interface FlaMapEntry {
-  name: string;
-  shortname: string;
-  comment: string;
-  link: string | null;
-  color: string | null;
-  colorOver: string | null;
-  nameColor?: string | null;
-  nameColorOver?: string | null;
-  nameFontSize?: string | null;
-  isNewWindow?: boolean | null;
-}
+declare module "react-simple-maps" {
+  import { ComponentType, CSSProperties, MouseEvent, ReactNode } from "react";
 
-interface FlaMapConfig {
-  mapWidth: string | number;
-  mapHeight: number;
-  isNewWindow: boolean;
-  iPhoneLink: boolean;
-  borderColor: string;
-  borderColorOver: string;
-  map_data: Record<string, FlaMapEntry>;
-  [key: string]: unknown;
-}
-
-interface FlaMapInstance {
-  drawOnDomReady(containerId: string, callback?: () => void): void;
-  on(
-    event: "click" | "dblclick" | "mousein" | "mouseout" | "mousemove" | "mousedown" | "mouseup",
-    callback: (ev: MouseEvent, sid: string, map: FlaMapInstance) => void
-  ): void;
-  fetchStateAttr(sid: string, attr: string): unknown;
-  setStateAttr(sid: string, cfg: Partial<FlaMapEntry>): void;
-  mapConfig: FlaMapConfig;
-}
-
-declare global {
-  interface Window {
-    map_cfg: FlaMapConfig;
-    FlaMap: new (cfg: FlaMapConfig) => FlaMapInstance;
+  interface ProjectionConfig {
+    scale?: number;
+    center?: [number, number];
+    rotate?: [number, number, number];
   }
-}
 
-export {};
+  interface ComposableMapProps {
+    projection?: string;
+    projectionConfig?: ProjectionConfig;
+    width?: number;
+    height?: number;
+    style?: CSSProperties;
+    className?: string;
+    children?: ReactNode;
+  }
+
+  interface GeographiesProps {
+    geography: string | object;
+    children: (props: { geographies: Geography[] }) => ReactNode;
+  }
+
+  interface Geography {
+    rsmKey: string;
+    properties: Record<string, string | number | boolean | null | undefined>;
+    type: string;
+    id: string;
+  }
+
+  interface GeoStyle {
+    fill?: string;
+    stroke?: string;
+    strokeWidth?: number;
+    outline?: string;
+    cursor?: string;
+  }
+
+  interface GeographyProps {
+    key?: string;
+    geography: Geography;
+    style?: { default?: GeoStyle; hover?: GeoStyle; pressed?: GeoStyle };
+    onClick?: (event: MouseEvent) => void;
+    onMouseEnter?: (event: MouseEvent) => void;
+    onMouseLeave?: (event: MouseEvent) => void;
+    className?: string;
+  }
+
+  export const ComposableMap: ComponentType<ComposableMapProps>;
+  export const Geographies: ComponentType<GeographiesProps>;
+  export const Geography: ComponentType<GeographyProps>;
+}
