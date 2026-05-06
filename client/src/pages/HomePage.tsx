@@ -527,12 +527,12 @@ export default function HomePage() {
                   </p>
                   <div className="region-map-container" data-testid="region-map-container">
                     <p className="region-map-title">Browse by Region</p>
-                    <p className="region-map-hint">Click a region to see facts taught there.</p>
+                    <p className="region-map-hint">Highlighted regions feature topics reported being locally taught to users. They may have also been taught in other regions.</p>
                     <div className="region-map-groups">
                       <div className="region-map-group">
                         <span className="region-map-group-label">United States</span>
                         <div className="region-map-buttons">
-                          {["California", "Texas", "New York", "Florida", "Illinois", "Ohio", "Pennsylvania", "Georgia"].map((state) => (
+                          {["Southern States", "Alaska", "Hawaii"].map((state) => (
                             <button
                               key={state}
                               className="region-map-btn"
@@ -579,6 +579,10 @@ export default function HomePage() {
               <div className="key-container">
                 <FactKey />
               </div>
+
+              {activeTab === "regionally-taught" && (
+                <h2 className="regionally-taught-section-header">All Regionally Taught Topics</h2>
+              )}
 
               <div className="content-container">
                 <div className="facts-column">

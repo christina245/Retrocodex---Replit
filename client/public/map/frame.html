@@ -43,8 +43,10 @@
           }
         });
 
-        // Tell parent the map is ready to receive color data
-        window.parent.postMessage({ type: 'fla-ready' }, '*');
+        // Tell parent the map is ready; include actual rendered height so the
+        // iframe can be resized to exactly fit the SVG without clipping.
+        var h = document.getElementById('container').scrollHeight || 400;
+        window.parent.postMessage({ type: 'fla-ready', height: h }, '*');
       });
 
       // Listen for color updates from the parent React app.

@@ -1932,7 +1932,7 @@ export default function AdminPage() {
                         <div className="region-dropdown">
                           {matchedStates.length > 0 && (
                             <>
-                              <div className="region-group-label">US States</div>
+                              <div className="region-group-label">US States &amp; Regions</div>
                               {matchedStates.slice(0, 10).map((s) => (
                                 <div
                                   key={s}

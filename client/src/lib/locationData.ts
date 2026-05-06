@@ -124,6 +124,7 @@ export const ALL_COUNTRIES = [
 ];
 
 export const SAMPLE_US_STATES = [
+  "Southern States",
   "Alabama",
   "Alaska",
   "Arizona",

@@ -685,6 +685,15 @@
   line-height: 1.3 !important;
 }
 
+/* "All Regionally Taught Topics" section header */
+.regionally-taught-section-header {
+  font-family: 'DM Serif Text', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2C2C2C;
+  margin: 4px 0 16px;
+}
+
 /* Region map placeholder */
 .region-map-container {
   background: #f9f9f7;

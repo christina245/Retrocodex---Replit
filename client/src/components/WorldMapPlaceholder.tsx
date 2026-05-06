@@ -38,6 +38,10 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
 
       if (e.data.type === "fla-ready") {
         mapReadyRef.current = true;
+        // Resize iframe to the map's actual rendered height so nothing is clipped
+        if (iframeRef.current && e.data.height) {
+          iframeRef.current.style.height = `${e.data.height}px`;
+        }
         trySendColors();
       }
     }
