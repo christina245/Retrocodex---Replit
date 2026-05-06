@@ -52,6 +52,8 @@ interface WorldMapPlaceholderProps {
 }
 
 export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps) {
+  // Same queryKey as HomePage — TanStack Query deduplicates the network
+  // request and serves from cache, so this does not cause a duplicate fetch.
   const { data: facts = [] } = useQuery<Array<{ mapRegions?: string[] }>>({
     queryKey: ["/api/facts"],
   });
