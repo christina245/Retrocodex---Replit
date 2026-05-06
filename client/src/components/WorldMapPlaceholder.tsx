@@ -7,12 +7,8 @@ interface WorldMapPlaceholderProps {
 
 const CONTAINER_ID = "fla-world-map-container";
 
-function loadScript(src: string): Promise<void> {
+function appendScript(src: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) {
-      resolve();
-      return;
-    }
     const s = document.createElement("script");
     s.src = src;
     s.onload = () => resolve();
@@ -21,19 +17,44 @@ function loadScript(src: string): Promise<void> {
   });
 }
 
+let scriptsPromise: Promise<void> | null = null;
+
+function ensureScriptsLoaded(): Promise<void> {
+  if (!scriptsPromise) {
+    scriptsPromise = (async () => {
+      if (!document.querySelector('link[href="/map/map.css"]')) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = "/map/map.css";
+        document.head.appendChild(link);
+      }
+      await appendScript("/map/raphael.min.js");
+      await appendScript("/map/map.js");
+      await appendScript("/map/settings.js");
+      await appendScript("/map/paths.js");
+    })();
+  }
+  return scriptsPromise;
+}
+
 export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps) {
   const onRegionClickRef = useRef(onRegionClick);
   onRegionClickRef.current = onRegionClick;
 
   useEffect(() => {
     let cancelled = false;
-    let cssLink: HTMLLinkElement | null = null;
 
     async function init() {
       try {
-        const res = await fetch("/api/facts");
+        const [, factsRes] = await Promise.all([
+          ensureScriptsLoaded(),
+          fetch("/api/facts"),
+        ]);
+
         if (cancelled) return;
-        const facts: Array<{ mapRegions?: string[] }> = await res.json();
+
+        const facts: Array<{ mapRegions?: string[] }> = await factsRes.json();
+        if (cancelled) return;
 
         const assignedCountries = new Set<string>();
         for (const fact of facts) {
@@ -44,24 +65,11 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
           }
         }
 
-        if (cancelled) return;
-
-        if (!document.querySelector('link[href="/map/map.css"]')) {
-          cssLink = document.createElement("link");
-          cssLink.rel = "stylesheet";
-          cssLink.href = "/map/map.css";
-          document.head.appendChild(cssLink);
-        }
-
-        await loadScript("/map/raphael.min.js");
-        await loadScript("/map/settings.js");
-        await loadScript("/map/paths.js");
-        await loadScript("/map/map.js");
-
-        if (cancelled) return;
-
         const cfg = window.map_cfg;
-        if (!cfg?.map_data) return;
+        if (!cfg?.map_data) {
+          console.error("WorldMapPlaceholder: window.map_cfg not set after scripts loaded");
+          return;
+        }
 
         for (const sid of Object.keys(cfg.map_data)) {
           const entry = cfg.map_data[sid];
@@ -73,8 +81,10 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
         cfg.isNewWindow = false;
         cfg.iPhoneLink = false;
 
+        if (cancelled) return;
+
         const container = document.getElementById(CONTAINER_ID);
-        if (!container || cancelled) return;
+        if (!container) return;
         container.innerHTML = "";
 
         const map = new window.FlaMap(cfg);
@@ -88,6 +98,13 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
             }
           });
         });
+
+        // drawOnDomReady registers an internal DOMContentLoaded / load listener.
+        // In a React SPA those events have already fired, so new listeners will
+        // never be called organically. Dispatch synthetic events immediately
+        // after registration to fire the pending handler.
+        document.dispatchEvent(new Event("DOMContentLoaded"));
+        window.dispatchEvent(new Event("load"));
       } catch (err) {
         console.error("WorldMapPlaceholder: init failed", err);
       }
@@ -99,15 +116,11 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
       cancelled = true;
       const container = document.getElementById(CONTAINER_ID);
       if (container) container.innerHTML = "";
-      if (cssLink && cssLink.parentNode) cssLink.parentNode.removeChild(cssLink);
     };
   }, []);
 
   return (
-    <div
-      data-testid="world-map-container"
-      className="world-map-wrapper"
-    >
+    <div data-testid="world-map-container" className="world-map-wrapper">
       <div id={CONTAINER_ID} />
     </div>
   );

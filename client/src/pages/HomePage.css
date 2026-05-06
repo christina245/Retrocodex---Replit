@@ -661,6 +661,7 @@
 
 .world-map-wrapper #fla-world-map-container {
   width: 100%;
+  min-height: 400px;
 }
 
 /* FLA map tooltip override */
