@@ -27,6 +27,7 @@ export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps)
 
     function handleMessage(e: MessageEvent) {
       if (!e.data || cancelled) return;
+      if (e.source !== iframeRef.current?.contentWindow) return;
 
       if (e.data.type === "fla-click" && e.data.name) {
         onRegionClickRef.current({
