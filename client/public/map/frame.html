@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="/map/raphael.min.js"></script>
+  <script src="/map/map.js"></script>
+  <script src="/map/settings.js"></script>
+  <script src="/map/paths.js"></script>
+  <link rel="stylesheet" href="/map/map.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: transparent; }
+    #container { width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    (function () {
+      // Set default grey for all countries before the FlaMap is created.
+      // This runs as an inline body script — before DOMContentLoaded — so
+      // drawOnDomReady will fire naturally when DOMContentLoaded arrives.
+      for (var sid in map_cfg.map_data) {
+        map_cfg.map_data[sid].color = '#878787';
+        map_cfg.map_data[sid].colorOver = '#878787';
+      }
+      map_cfg.isNewWindow = false;
+      map_cfg.iPhoneLink = false;
+      map_cfg.zoomEnable = false;
+      map_cfg.zoomEnableControls = false;
+
+      var flaMap = new FlaMap(map_cfg);
+
+      flaMap.drawOnDomReady('container', function () {
+        // Wire up click → postMessage to parent
+        flaMap.on('click', function (ev, sid) {
+          var entry = map_cfg.map_data[sid];
+          if (entry && entry.name) {
+            window.parent.postMessage(
+              { type: 'fla-click', name: entry.name, isCountry: true },
+              '*'
+            );
+          }
+        });
+
+        // Tell parent the map is ready to receive color data
+        window.parent.postMessage({ type: 'fla-ready' }, '*');
+      });
+
+      // Listen for color updates from the parent React app.
+      // setStateAttr(sid, {color, colorOver}) updates the already-drawn fill.
+      window.addEventListener('message', function (e) {
+        if (!e.data || e.data.type !== 'fla-set-colors') return;
+        var assigned = e.data.assignedCountries || [];
+        var assignedSet = {};
+        for (var i = 0; i < assigned.length; i++) assignedSet[assigned[i]] = true;
+
+        for (var sid in map_cfg.map_data) {
+          var name = map_cfg.map_data[sid].name;
+          var highlighted = assignedSet[name] === true;
+          flaMap.setStateAttr(sid, {
+            color: highlighted ? '#FF5353' : '#878787',
+            colorOver: highlighted ? '#FF5353' : '#878787'
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

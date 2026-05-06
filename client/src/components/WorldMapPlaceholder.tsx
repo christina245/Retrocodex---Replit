@@ -1,127 +1,91 @@
-/// <reference types="../types/fla-map" />
 import { useEffect, useRef } from "react";
 
 interface WorldMapPlaceholderProps {
   onRegionClick: (region: { name: string; isCountry: boolean }) => void;
 }
 
-const CONTAINER_ID = "fla-world-map-container";
-
-function appendScript(src: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement("script");
-    s.src = src;
-    s.onload = () => resolve();
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-let scriptsPromise: Promise<void> | null = null;
-
-function ensureScriptsLoaded(): Promise<void> {
-  if (!scriptsPromise) {
-    scriptsPromise = (async () => {
-      if (!document.querySelector('link[href="/map/map.css"]')) {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = "/map/map.css";
-        document.head.appendChild(link);
-      }
-      await appendScript("/map/raphael.min.js");
-      await appendScript("/map/map.js");
-      await appendScript("/map/settings.js");
-      await appendScript("/map/paths.js");
-    })();
-  }
-  return scriptsPromise;
-}
-
 export function WorldMapPlaceholder({ onRegionClick }: WorldMapPlaceholderProps) {
   const onRegionClickRef = useRef(onRegionClick);
   onRegionClickRef.current = onRegionClick;
 
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const assignedCountriesRef = useRef<string[] | null>(null);
+  const mapReadyRef = useRef(false);
+
   useEffect(() => {
     let cancelled = false;
 
-    async function init() {
+    function trySendColors() {
+      if (cancelled) return;
+      if (!mapReadyRef.current) return;
+      if (assignedCountriesRef.current === null) return;
+      iframeRef.current?.contentWindow?.postMessage(
+        { type: "fla-set-colors", assignedCountries: assignedCountriesRef.current },
+        "*"
+      );
+    }
+
+    function handleMessage(e: MessageEvent) {
+      if (!e.data || cancelled) return;
+
+      if (e.data.type === "fla-click" && e.data.name) {
+        onRegionClickRef.current({
+          name: e.data.name,
+          isCountry: !!e.data.isCountry,
+        });
+      }
+
+      if (e.data.type === "fla-ready") {
+        mapReadyRef.current = true;
+        trySendColors();
+      }
+    }
+
+    window.addEventListener("message", handleMessage);
+
+    (async () => {
       try {
-        const [, factsRes] = await Promise.all([
-          ensureScriptsLoaded(),
-          fetch("/api/facts"),
-        ]);
-
+        const res = await fetch("/api/facts");
+        if (cancelled) return;
+        const facts: Array<{ mapRegions?: string[] }> = await res.json();
         if (cancelled) return;
 
-        const facts: Array<{ mapRegions?: string[] }> = await factsRes.json();
-        if (cancelled) return;
-
-        const assignedCountries = new Set<string>();
+        const seen = new Set<string>();
+        const assignedCountries: string[] = [];
         for (const fact of facts) {
           if (Array.isArray(fact.mapRegions)) {
             for (const r of fact.mapRegions) {
-              if (r) assignedCountries.add(r);
+              if (r && !seen.has(r)) {
+                seen.add(r);
+                assignedCountries.push(r);
+              }
             }
           }
         }
 
-        const cfg = window.map_cfg;
-        if (!cfg?.map_data) {
-          console.error("WorldMapPlaceholder: window.map_cfg not set after scripts loaded");
-          return;
-        }
-
-        for (const sid of Object.keys(cfg.map_data)) {
-          const entry = cfg.map_data[sid];
-          const hasData = assignedCountries.has(entry.name);
-          entry.color = hasData ? "#FF5353" : "#878787";
-          entry.colorOver = hasData ? "#FF5353" : "#878787";
-        }
-
-        cfg.isNewWindow = false;
-        cfg.iPhoneLink = false;
-
-        if (cancelled) return;
-
-        const container = document.getElementById(CONTAINER_ID);
-        if (!container) return;
-        container.innerHTML = "";
-
-        const map = new window.FlaMap(cfg);
-
-        map.drawOnDomReady(CONTAINER_ID, () => {
-          if (cancelled) return;
-          map.on("click", (_ev, sid) => {
-            const entry = cfg.map_data[sid];
-            if (entry?.name) {
-              onRegionClickRef.current({ name: entry.name, isCountry: true });
-            }
-          });
-        });
-
-        // drawOnDomReady registers an internal DOMContentLoaded / load listener.
-        // In a React SPA those events have already fired, so new listeners will
-        // never be called organically. Dispatch synthetic events immediately
-        // after registration to fire the pending handler.
-        document.dispatchEvent(new Event("DOMContentLoaded"));
-        window.dispatchEvent(new Event("load"));
+        assignedCountriesRef.current = assignedCountries;
+        trySendColors();
       } catch (err) {
-        console.error("WorldMapPlaceholder: init failed", err);
+        console.error("WorldMapPlaceholder: fetch failed", err);
       }
-    }
-
-    init();
+    })();
 
     return () => {
       cancelled = true;
-      const container = document.getElementById(CONTAINER_ID);
-      if (container) container.innerHTML = "";
+      window.removeEventListener("message", handleMessage);
+      mapReadyRef.current = false;
+      assignedCountriesRef.current = null;
     };
   }, []);
 
   return (
     <div data-testid="world-map-container" className="world-map-wrapper">
-      <div id={CONTAINER_ID} />
+      <iframe
+        ref={iframeRef}
+        src="/map/frame.html"
+        style={{ width: "100%", height: "400px", border: "none", display: "block" }}
+        title="World Map"
+      />
     </div>
   );
 }
