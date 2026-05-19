@@ -618,9 +618,9 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
             <div className="following-post-attribution-body">
               <div className="following-post-header">
                 <div className="following-post-header-text">
-                  <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
+                  <a href={`/user/${item.username}`} target="_blank" rel="noopener noreferrer" className="following-post-username" data-testid={`link-feed-user-${index}`}>
                     {item.username}
-                  </Link>
+                  </a>
                   <span className="following-post-action">submitted a topic</span>
                 </div>
                 <span className="following-post-timestamp">{formatRelativeTime(item.createdAt)}</span>
@@ -688,9 +688,9 @@ function FeedPost({ item, index, handlers }: { item: FeedItem; index: number; ha
       <div className="following-post-main">
         <div className="following-post-header">
           <div className="following-post-header-text">
-            <Link href={`/user/${item.username}`} className="following-post-username" data-testid={`link-feed-user-${index}`}>
+            <a href={`/user/${item.username}`} target="_blank" rel="noopener noreferrer" className="following-post-username" data-testid={`link-feed-user-${index}`}>
               {item.username}
-            </Link>
+            </a>
             {item.type === "comment" && (item.factTitle || item.pageTitle) && (
               <>
                 <span className="following-post-action">commented on</span>
@@ -2078,7 +2078,7 @@ export default function UserDashboard() {
                                   <div className="activity-post-header">
                                     <div className="activity-post-header-text">
                                       {item.commenterUsername ? (
-                                        <Link href={`/user/${item.commenterUsername}`} className="following-post-username" data-testid={`link-user-comment-${item.commentId}`}>{item.commenterUsername}</Link>
+                                        <a href={`/user/${item.commenterUsername}`} target="_blank" rel="noopener noreferrer" className="following-post-username" data-testid={`link-user-comment-${item.commentId}`}>{item.commenterUsername}</a>
                                       ) : (
                                         <span className="following-post-username">[deleted]</span>
                                       )}
@@ -2121,7 +2121,7 @@ export default function UserDashboard() {
                                   <div className="activity-post-header">
                                     <div className="activity-post-header-text">
                                       {item.replierUsername ? (
-                                        <Link href={`/user/${item.replierUsername}`} className="following-post-username" data-testid={`link-user-reply-${item.replyId}`}>{item.replierUsername}</Link>
+                                        <a href={`/user/${item.replierUsername}`} target="_blank" rel="noopener noreferrer" className="following-post-username" data-testid={`link-user-reply-${item.replyId}`}>{item.replierUsername}</a>
                                       ) : (
                                         <span className="following-post-username">[deleted]</span>
                                       )}
@@ -2230,7 +2230,7 @@ export default function UserDashboard() {
                                   <div className="activity-post-header">
                                     <div className="activity-post-header-text">
                                       {item.followerUsername ? (
-                                        <Link href={`/user/${item.followerUsername}`} className="following-post-username" data-testid={`link-user-follower-${item.followerId}`}>{item.followerUsername}</Link>
+                                        <a href={`/user/${item.followerUsername}`} target="_blank" rel="noopener noreferrer" className="following-post-username" data-testid={`link-user-follower-${item.followerId}`}>{item.followerUsername}</a>
                                       ) : (
                                         <span className="following-post-username">[deleted]</span>
                                       )}
@@ -3144,7 +3144,7 @@ export default function UserDashboard() {
                                   </Link>
                                   <div className="saved-comment-meta" data-testid={`saved-comment-meta-${item.commentId}`}>
                                     {item.commenterUsername ? (
-                                      <Link href={`/user/${item.commenterUsername}`} className="saved-comment-username" data-testid={`link-saved-user-${item.commentId}`}>{item.commenterUsername}</Link>
+                                      <a href={`/user/${item.commenterUsername}`} target="_blank" rel="noopener noreferrer" className="saved-comment-username" data-testid={`link-saved-user-${item.commentId}`}>{item.commenterUsername}</a>
                                     ) : (
                                       <span className="saved-comment-username" data-testid={`saved-user-deleted-${item.commentId}`}>[deleted]</span>
                                     )}
