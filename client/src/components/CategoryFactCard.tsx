@@ -77,7 +77,7 @@ export function CategoryFactCard({
 
   const handleCommentClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setLocation(`${factLink}#comments`);
+    window.open(`${factLink}#comments`, "_blank", "noopener,noreferrer");
   };
 
   const count = fact.commentCount ?? 0;
@@ -187,6 +187,8 @@ export function CategoryFactCard({
         <Link 
           href={factLink}
           className="category-learn-more-button"
+          target="_blank"
+          rel="noopener noreferrer"
           data-testid={`button-learn-more-${fact.id}`}
         >
           <BookOpen size={14} className="category-learn-more-arrow" />

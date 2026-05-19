@@ -69,7 +69,7 @@ export function FactCard({ fact, onSave, onComment, isSaved, showTaughtUntilLabe
   const [showCopiedToast, setShowCopiedToast] = useState(false);
 
   const handleCommentClick = () => {
-    setLocation(`${factLink}#comments`);
+    window.open(`${factLink}#comments`, "_blank", "noopener,noreferrer");
   };
 
   const handleShare = async () => {
@@ -207,6 +207,8 @@ export function FactCard({ fact, onSave, onComment, isSaved, showTaughtUntilLabe
         <Link 
           href={factLink}
           className="learn-more-button"
+          target="_blank"
+          rel="noopener noreferrer"
           data-testid={`button-learn-more-${fact.id}`}
         >
           <BookOpen size={14} className="learn-more-arrow" />
