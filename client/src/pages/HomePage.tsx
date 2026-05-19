@@ -523,7 +523,7 @@ export default function HomePage() {
               {activeTab === "regionally-taught" && (
                 <>
                   <p className="tab-subheader" data-testid="text-regionally-taught-subheader">
-                    Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, <br /> or communities shaped by local history and culture.
+                    Regionally Taught topics explore beliefs and narratives passed down in specific countries, states, regions, or communities shaped by local history and culture.
                   </p>
                   <div className="region-map-container" data-testid="region-map-container">
                     <p className="region-map-title">Browse by Region</p>
