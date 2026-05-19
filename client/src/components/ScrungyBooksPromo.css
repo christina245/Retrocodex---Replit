@@ -50,3 +50,9 @@
 .scrungy-speech-bubble-text a:hover {
   color: #ff5353;
 }
+
+@media (max-width: 768px) {
+  .scrungy-speech-bubble-text {
+    font-size: clamp(9px, 2.7vw, 12px);
+  }
+}
