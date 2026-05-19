@@ -204,7 +204,7 @@ export function FactCard({ fact, onSave, onComment, isSaved, showTaughtUntilLabe
           </button>
         </div>
 
-        <Link 
+        <a
           href={factLink}
           className="learn-more-button"
           target="_blank"
@@ -213,7 +213,7 @@ export function FactCard({ fact, onSave, onComment, isSaved, showTaughtUntilLabe
         >
           <BookOpen size={14} className="learn-more-arrow" />
           View Sources
-        </Link>
+        </a>
       </div>
 
       {showCopiedToast && (

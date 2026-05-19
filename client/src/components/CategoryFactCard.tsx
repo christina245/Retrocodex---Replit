@@ -184,7 +184,7 @@ export function CategoryFactCard({
           </button>
         </div>
 
-        <Link 
+        <a
           href={factLink}
           className="category-learn-more-button"
           target="_blank"
@@ -193,7 +193,7 @@ export function CategoryFactCard({
         >
           <BookOpen size={14} className="category-learn-more-arrow" />
           View Sources
-        </Link>
+        </a>
       </div>
 
       {showCopiedToast && (
