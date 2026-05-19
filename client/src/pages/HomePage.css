@@ -226,7 +226,7 @@
   .homepage-decade-nav-container {
     flex-wrap: nowrap;
     justify-content: flex-start;
-    padding: 0 8px;
+    padding: 0 2px;
   }
 
   .homepage-decade-chip {
@@ -240,7 +240,7 @@
   }
 
   .content-area {
-    padding: 0 2px;
+    padding: 0 1px;
     max-width: 100%;
     margin-top: 16px;
   }
@@ -636,9 +636,13 @@
     display: none;
   }
 
+  .decade-facts-column {
+    padding-right: 0;
+  }
+
   .decade-facts-grid {
     grid-template-columns: 1fr;
-    justify-items: center;
+    justify-items: stretch;
   }
 
   .decade-sticky-category-nav {
