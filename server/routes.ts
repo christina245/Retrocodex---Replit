@@ -3032,6 +3032,30 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
+  // GET /api/admin/stats — site-wide user and comment counts (admin only)
+  app.get("/api/admin/stats", requireAuth, async (req, res) => {
+    try {
+      const stats = await storage.getAdminStats();
+      return res.json(stats);
+    } catch (error) {
+      console.error("GET /api/admin/stats error:", error);
+      return res.status(500).json({ message: "Failed to fetch stats" });
+    }
+  });
+
+  // GET /api/admin/comments — paginated all-comments feed (admin only)
+  app.get("/api/admin/comments", requireAuth, async (req, res) => {
+    try {
+      const page = Math.max(1, parseInt(String(req.query.page ?? "1"), 10) || 1);
+      const pageSize = 30;
+      const result = await storage.getAllCommentsAdmin(page, pageSize);
+      return res.json(result);
+    } catch (error) {
+      console.error("GET /api/admin/comments error:", error);
+      return res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
   // GET /api/admin/reports — get all unresolved user reports + AI-flagged comments (admin only)
   app.get("/api/admin/reports", requireAuth, async (req, res) => {
     try {

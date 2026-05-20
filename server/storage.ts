@@ -2,6 +2,7 @@ import {
   emailSubscriptions, 
   facts,
   pages,
+  userAccounts,
   blogPosts,
   externalArticles,
   newsletterSubscriptions,
@@ -156,6 +157,27 @@ export interface IStorage {
     replierUsername: string | null;
     replierAvatarUrl: string | null;
   }[]>;
+
+  // Admin
+  getAllCommentsAdmin(page: number, pageSize: number): Promise<{
+    comments: {
+      commentId: string;
+      body: string;
+      upvotes: number;
+      createdAt: Date;
+      commenterUsername: string | null;
+      commenterAvatarUrl: string | null;
+      factMythHeader: string | null;
+      factSlug: string | null;
+      factCoverPhoto: string | null;
+      pageTitle: string | null;
+      pageSlug: string | null;
+      parentId: string | null;
+      needsReview: boolean;
+    }[];
+    total: number;
+  }>;
+  getAdminStats(): Promise<{ userCount: number; commentCount: number }>;
 
   // Follows
   followUser(followerId: string, followeeId: string): Promise<void>;
@@ -1701,6 +1723,70 @@ export class DatabaseStorage implements IStorage {
       (updateCount[0]?.count ?? 0) +
       (followerCount[0]?.count ?? 0)
     );
+  }
+
+  async getAllCommentsAdmin(page: number, pageSize: number) {
+    const offset = (page - 1) * pageSize;
+    const [countRow] = await db
+      .select({ total: sql<number>`count(*)::int` })
+      .from(comments)
+      .where(eq(comments.deletedByAdmin, false));
+    const rows = await db
+      .select({
+        commentId: comments.id,
+        body: comments.body,
+        upvotes: comments.upvotes,
+        createdAt: comments.createdAt,
+        commenterUsername: userProfiles.username,
+        commenterAvatarUrl: userProfiles.avatarUrl,
+        factMythHeader: facts.mythHeader,
+        factSlug: facts.slug,
+        factCoverPhoto: facts.coverPhoto,
+        pageTitle: pages.title,
+        pageSlug: pages.slug,
+        parentId: comments.parentId,
+        needsReview: comments.needsReview,
+      })
+      .from(comments)
+      .leftJoin(userProfiles, eq(userProfiles.id, comments.userId))
+      .leftJoin(facts, eq(facts.id, comments.factId))
+      .leftJoin(pages, eq(pages.id, comments.pageId))
+      .where(eq(comments.deletedByAdmin, false))
+      .orderBy(desc(comments.createdAt))
+      .limit(pageSize)
+      .offset(offset);
+    return {
+      comments: rows.map(r => ({
+        commentId: r.commentId,
+        body: r.body,
+        upvotes: r.upvotes,
+        createdAt: r.createdAt,
+        commenterUsername: r.commenterUsername ?? null,
+        commenterAvatarUrl: r.commenterAvatarUrl ?? null,
+        factMythHeader: r.factMythHeader ?? null,
+        factSlug: r.factSlug ?? null,
+        factCoverPhoto: r.factCoverPhoto ?? null,
+        pageTitle: r.pageTitle ?? null,
+        pageSlug: r.pageSlug ?? null,
+        parentId: r.parentId ?? null,
+        needsReview: r.needsReview,
+      })),
+      total: countRow?.total ?? 0,
+    };
+  }
+
+  async getAdminStats() {
+    const [userRow] = await db
+      .select({ userCount: sql<number>`count(*)::int` })
+      .from(userAccounts);
+    const [commentRow] = await db
+      .select({ commentCount: sql<number>`count(*)::int` })
+      .from(comments)
+      .where(eq(comments.deletedByAdmin, false));
+    return {
+      userCount: userRow?.userCount ?? 0,
+      commentCount: commentRow?.commentCount ?? 0,
+    };
   }
 }
 

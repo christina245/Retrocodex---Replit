@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2, Archive, ArchiveRestore, Globe } from "lucide-react";
+import { Lock, Plus, FileText, Mail, X, Check, GripVertical, Eye, Edit2, ChevronLeft, ChevronRight, Newspaper, Search, Shield, Inbox, Ban, AlertCircle, SearchCheck, ClipboardCheck, Link, Loader2, Archive, ArchiveRestore, Globe, MessageSquareText } from "lucide-react";
 import { CATEGORIES, OTHER_SUBCATEGORIES, BLOG_TAGS, AUTHOR_TYPES, DECADES, type Source, type TimelineEntry, type Nuance, type Fact, type BlogPost } from "@shared/schema";
 import { SAMPLE_US_STATES, PINNED_COUNTRIES, ALL_COUNTRIES } from "@/lib/locationData";
 import TiptapEditor from "@/components/TiptapEditor";
@@ -10,7 +10,7 @@ import "./AdminPage.css";
 import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
 
-type AdminView = "add-fact" | "add-blog" | "view-blog" | "view-facts" | "archived-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports";
+type AdminView = "add-fact" | "add-blog" | "view-blog" | "view-facts" | "archived-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports" | "all-comments";
 
 interface FactSubmission {
   id: string;
@@ -510,6 +510,50 @@ export default function AdminPage() {
     authorUsername: string | null;
     aiCategories: Record<string, number> | null;
   }
+
+  const [allCommentsPage, setAllCommentsPage] = useState(1);
+
+  const { data: adminStatsData } = useQuery<{ userCount: number; commentCount: number }>({
+    queryKey: ["/api/admin/stats"],
+    queryFn: async () => {
+      const response = await fetch("/api/admin/stats", {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to fetch stats");
+      return response.json();
+    },
+    enabled: isAuthenticated && currentView === "all-comments",
+    staleTime: 0,
+  });
+
+  interface AdminComment {
+    commentId: string;
+    body: string;
+    upvotes: number;
+    createdAt: string;
+    commenterUsername: string | null;
+    commenterAvatarUrl: string | null;
+    factMythHeader: string | null;
+    factSlug: string | null;
+    factCoverPhoto: string | null;
+    pageTitle: string | null;
+    pageSlug: string | null;
+    parentId: string | null;
+    needsReview: boolean;
+  }
+
+  const { data: allCommentsData, isLoading: allCommentsLoading, refetch: refetchAllComments } = useQuery<{ comments: AdminComment[]; total: number }>({
+    queryKey: ["/api/admin/comments", allCommentsPage],
+    queryFn: async () => {
+      const response = await fetch(`/api/admin/comments?page=${allCommentsPage}`, {
+        headers: { 'Authorization': 'Basic ' + btoa('admin:' + password) },
+      });
+      if (!response.ok) throw new Error("Failed to fetch comments");
+      return response.json();
+    },
+    enabled: isAuthenticated && currentView === "all-comments",
+    staleTime: 0,
+  });
 
   const { data: reportsData, isLoading: reportsLoading, refetch: refetchReports } = useQuery<{ userReports: UserReport[]; aiFlagged: AiFlaggedComment[] }>({
     queryKey: ["/api/admin/reports"],
@@ -1596,6 +1640,15 @@ export default function AdminPage() {
           >
             <Newspaper size={18} />
             <span>External Articles</span>
+          </button>
+
+          <button
+            className={`sidebar-nav-item ${currentView === 'all-comments' ? 'active' : ''}`}
+            onClick={() => { setAllCommentsPage(1); setCurrentView('all-comments'); }}
+            data-testid="nav-all-comments"
+          >
+            <MessageSquareText size={18} />
+            <span>All Comments</span>
           </button>
 
           <button
@@ -4206,6 +4259,202 @@ export default function AdminPage() {
             )}
           </div>
         )}
+        {currentView === 'all-comments' && (
+          <div className="admin-content" style={{ maxWidth: 900 }}>
+            <div className="content-header">
+              <div>
+                <h1 className="content-title">All Comments</h1>
+                <p className="content-subtitle">
+                  Every comment on the site, newest first
+                </p>
+              </div>
+              <button
+                className="cancel-edit-button"
+                onClick={() => { refetchAllComments(); }}
+                data-testid="button-refresh-all-comments"
+              >
+                Refresh
+              </button>
+            </div>
+
+            {/* Stats row */}
+            <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem", flexWrap: "wrap" }}>
+              <div
+                data-testid="stat-registered-users"
+                style={{ flex: 1, minWidth: 140, background: "white", border: "1px solid #e5e5e5", borderRadius: 8, padding: "1rem 1.25rem" }}
+              >
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8125rem", color: "#878787", marginBottom: "0.25rem" }}>Registered Users</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1.75rem", fontWeight: 700, color: "#2C2C2C" }}>
+                  {adminStatsData ? adminStatsData.userCount.toLocaleString() : "—"}
+                </div>
+              </div>
+              <div
+                data-testid="stat-total-comments"
+                style={{ flex: 1, minWidth: 140, background: "white", border: "1px solid #e5e5e5", borderRadius: 8, padding: "1rem 1.25rem" }}
+              >
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8125rem", color: "#878787", marginBottom: "0.25rem" }}>Total Comments</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "1.75rem", fontWeight: 700, color: "#2C2C2C" }}>
+                  {adminStatsData ? adminStatsData.commentCount.toLocaleString() : "—"}
+                </div>
+              </div>
+            </div>
+
+            {allCommentsLoading ? (
+              <div className="loading-message">Loading…</div>
+            ) : !allCommentsData?.comments.length ? (
+              <div className="empty-state"><p>No comments found.</p></div>
+            ) : (
+              <>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                  {allCommentsData.comments.map(comment => {
+                    const createdAt = new Date(comment.createdAt);
+                    const now = Date.now();
+                    const diffMs = now - createdAt.getTime();
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
+                    const timeAgo =
+                      diffMins < 1 ? "just now"
+                      : diffMins < 60 ? `${diffMins}m ago`
+                      : diffHours < 24 ? `${diffHours}h ago`
+                      : diffDays < 30 ? `${diffDays}d ago`
+                      : createdAt.toLocaleDateString();
+                    const contextTitle = comment.factMythHeader ?? comment.pageTitle ?? "unknown";
+                    const contextHref = comment.factSlug
+                      ? `/fact/${comment.factSlug}`
+                      : comment.pageSlug
+                      ? `/${comment.pageSlug}`
+                      : null;
+                    const commentsHref = contextHref ? `${contextHref}#comments` : null;
+                    return (
+                      <div
+                        key={comment.commentId}
+                        data-testid={`card-admin-comment-${comment.commentId}`}
+                        style={{ border: "1px solid #e5e5e5", borderRadius: 8, padding: "1rem 1.25rem", background: "white" }}
+                      >
+                        <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+                          {/* Avatar */}
+                          <img
+                            src={comment.commenterAvatarUrl || "https://api.dicebear.com/7.x/thumbs/svg?seed=unknown"}
+                            alt={comment.commenterUsername ?? "user"}
+                            data-testid={`avatar-comment-${comment.commentId}`}
+                            style={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                          />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            {/* Header row */}
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.25rem" }}>
+                              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.875rem", color: "#555", display: "flex", flexWrap: "wrap", gap: "0.25rem", alignItems: "center" }}>
+                                {comment.commenterUsername ? (
+                                  <a
+                                    href={`/user/${comment.commenterUsername}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    data-testid={`link-user-${comment.commentId}`}
+                                    style={{ fontWeight: 600, color: "#FF5353", textDecoration: "none" }}
+                                  >
+                                    {comment.commenterUsername}
+                                  </a>
+                                ) : (
+                                  <span style={{ fontWeight: 600 }}>[deleted]</span>
+                                )}
+                                <span>commented on</span>
+                                {contextHref ? (
+                                  <a
+                                    href={contextHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    data-testid={`link-context-${comment.commentId}`}
+                                    style={{ fontStyle: "italic", color: "#2C2C2C", textDecoration: "none" }}
+                                  >
+                                    "{contextTitle}"
+                                  </a>
+                                ) : (
+                                  <em style={{ color: "#2C2C2C" }}>"{contextTitle}"</em>
+                                )}
+                                {comment.parentId && (
+                                  <span style={{ fontSize: "0.75rem", color: "#878787" }}>(reply)</span>
+                                )}
+                                {comment.needsReview && (
+                                  <span style={{ fontSize: "0.75rem", color: "#FF5353", fontWeight: 600 }}>· flagged</span>
+                                )}
+                              </div>
+                              <span
+                                data-testid={`time-comment-${comment.commentId}`}
+                                style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8125rem", color: "#878787", flexShrink: 0 }}
+                              >
+                                {timeAgo}
+                              </span>
+                            </div>
+                            {/* Body */}
+                            <div
+                              data-testid={`body-comment-${comment.commentId}`}
+                              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.875rem", color: "#333", background: "#f9f9f9", borderRadius: 6, padding: "0.5rem 0.75rem", margin: "0.4rem 0 0.6rem", whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                            >
+                              {comment.body}
+                            </div>
+                            {/* Actions */}
+                            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                              {commentsHref && (
+                                <a
+                                  href={commentsHref}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  data-testid={`link-reply-${comment.commentId}`}
+                                  style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.8125rem", color: "#878787", textDecoration: "none", padding: "0.25rem 0.5rem", border: "1px solid #e5e5e5", borderRadius: 4 }}
+                                >
+                                  Reply
+                                </a>
+                              )}
+                              <button
+                                className="delete-button"
+                                style={{ fontSize: "0.8125rem", padding: "0.35rem 0.75rem" }}
+                                onClick={() => deleteCommentAdminMutation.mutate(comment.commentId)}
+                                disabled={deleteCommentAdminMutation.isPending}
+                                data-testid={`button-delete-comment-${comment.commentId}`}
+                              >
+                                <X size={14} /> Delete
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Pagination */}
+                {(() => {
+                  const totalPages = Math.ceil((allCommentsData.total) / 30);
+                  if (totalPages <= 1) return null;
+                  return (
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", paddingBottom: "1rem" }}>
+                      <button
+                        className="cancel-edit-button"
+                        onClick={() => setAllCommentsPage(p => Math.max(1, p - 1))}
+                        disabled={allCommentsPage <= 1}
+                        data-testid="button-prev-comments-page"
+                      >
+                        <ChevronLeft size={16} /> Prev
+                      </button>
+                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.9375rem", color: "#878787" }}>
+                        Page {allCommentsPage} of {totalPages}
+                      </span>
+                      <button
+                        className="cancel-edit-button"
+                        onClick={() => setAllCommentsPage(p => Math.min(totalPages, p + 1))}
+                        disabled={allCommentsPage >= totalPages}
+                        data-testid="button-next-comments-page"
+                      >
+                        Next <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  );
+                })()}
+              </>
+            )}
+          </div>
+        )}
+
       </main>
     </div>
   );
