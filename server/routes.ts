@@ -3101,6 +3101,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
         LEFT JOIN user_profiles ap ON ap.id = c.user_id
         LEFT JOIN user_profiles rp ON rp.id = cr.reporter_id
         WHERE cr.resolved_at IS NULL
+          AND c.deleted_by_admin = false
         ORDER BY cr.created_at DESC
       `);
       const userReports: UserReportRow[] = userReportsRaw.rows.map((row: Record<string, unknown>) => ({
