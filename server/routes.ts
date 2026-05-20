@@ -3195,10 +3195,13 @@ Sitemap: ${SITE_URL}/sitemap.xml
     }
   });
 
-  // DELETE /api/admin/comments/:id — hard-delete a comment from admin queue (admin only)
+  // DELETE /api/admin/comments/:id — soft-delete a comment from admin queue (admin only)
   app.delete("/api/admin/comments/:id", requireAuth, async (req, res) => {
     try {
-      await db.delete(comments).where(eq(comments.id, req.params.id));
+      await db
+        .update(comments)
+        .set({ deletedByAdmin: true, needsReview: false })
+        .where(eq(comments.id, req.params.id));
       return res.json({ message: "Comment deleted" });
     } catch (error) {
       console.error("DELETE /api/admin/comments/:id error:", error);

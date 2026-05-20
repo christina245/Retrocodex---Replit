@@ -623,6 +623,8 @@ export default function AdminPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/reports"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/reports/count"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/comments", allCommentsPage] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/stats"] });
     },
   });
 
