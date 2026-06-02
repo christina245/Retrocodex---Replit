@@ -328,28 +328,13 @@
   font-family: "DM Serif Text", serif;
 }
 
-.decade-disclaimers {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.decade-disclaimer-item {
+.decade-mini-disclaimer {
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
-  font-weight: 500;
-  color: #4d4d4d;
+  font-weight: 700;
+  color: #FF5353;
   line-height: 1.5;
-  display: flex;
-  gap: 5px;
-  align-items: flex-start;
-}
-
-.decade-disclaimer-icon {
-  flex-shrink: 0;
-  font-size: 16px;
-  line-height: 1.4;
+  margin: 0 0 20px;
 }
 
 .decade-main-layout {

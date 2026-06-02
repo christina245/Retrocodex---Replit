@@ -25,6 +25,7 @@ import { useSavedFacts } from "@/lib/useSavedFacts";
 import { useVerificationGuard } from "@/lib/useVerificationGuard";
 import { VerifyEmailModal } from "@/components/VerifyEmailModal";
 import { RegionModal } from "@/components/RegionModal";
+import { DisclaimerModal } from "@/components/DisclaimerModal";
 import { WorldMapPlaceholder } from "@/components/WorldMapPlaceholder";
 import { ALL_REGIONS } from "@/lib/locationData";
 import "./HomePage.css";
@@ -60,6 +61,7 @@ export default function HomePage() {
   const [decadePage, setDecadePage] = useState(1);
   const [decadeCategoryFilter, setDecadeCategoryFilter] = useState<string[]>([]);
   const [decadeTypeToggles, setDecadeTypeToggles] = useState({ school: true, folkWisdom: true, mediaClaims: false });
+  const [showDisclaimerModal, setShowDisclaimerModal] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isLoggedIn } = useAuth();
@@ -260,6 +262,9 @@ export default function HomePage() {
       setLocation("/");
     } else {
       setLocation(`/decade/${decade}`);
+      if (!sessionStorage.getItem("retrocodex_decade_disclaimer_shown")) {
+        setShowDisclaimerModal(true);
+      }
     }
   }, [selectedDecade, setLocation]);
 
@@ -675,16 +680,7 @@ export default function HomePage() {
                   </aside>
 
                   <div className="decade-facts-column">
-                    <div className="decade-disclaimers">
-                      <p className="decade-disclaimer-item">
-                        <span className="decade-disclaimer-icon">⚠️</span>
-                        This list includes facts that were factually disproven before you graduated, but continued to persist in popular culture or academia.
-                      </p>
-                      <p className="decade-disclaimer-item">
-                        <span className="decade-disclaimer-icon">🌎</span>
-                        Since what each person is taught can vary depending on where we're from, this list might not fully represent your lived experience. To improve accuracy, all topics are continuously revised through user submissions and commentary.
-                      </p>
-                    </div>
+                    <p className="decade-mini-disclaimer">Results reflect commonly reported information and may not reflect each person's experiences.</p>
 
                     <div className="decade-divider" />
 
@@ -778,6 +774,13 @@ export default function HomePage() {
       />
       {showVerifyModal && <VerifyEmailModal onClose={() => setShowVerifyModal(false)} />}
       <RegionModal region={selectedRegion?.name ?? null} isCountry={selectedRegion?.isCountry ?? false} onClose={() => setSelectedRegion(null)} />
+      <DisclaimerModal
+        isOpen={showDisclaimerModal}
+        onConfirm={() => {
+          sessionStorage.setItem("retrocodex_decade_disclaimer_shown", "1");
+          setShowDisclaimerModal(false);
+        }}
+      />
     </div>
   );
 }
