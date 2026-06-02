@@ -126,6 +126,10 @@
   line-height: 1.55;
 }
 
+.disclaimer-first-sentence {
+  font-weight: 700;
+}
+
 /* ── Footer ── */
 .disclaimer-footer {
   display: flex;

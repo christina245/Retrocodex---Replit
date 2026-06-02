@@ -7,8 +7,13 @@ const DISCLAIMERS = [
   "Your results may not fully reflect your lived experiences. Retrocodex features facts reported by social media users predominantly based in the United States. If you weren't actually taught the facts you'll read, that's great!",
   "Many of your results will include urban legends and other cultural misconceptions that were already disproven when you may have been taught them, if at all. They are included because their teaching persisted and may have been believed by some users.",
   "What counts as factually accurate information is always evolving! For example, many featured facts include countries that officially changed their names or dissolved, which means you were taught correctly at the time.",
-  
 ];
+
+function splitFirstSentence(text: string): [string, string] {
+  const match = text.match(/^(.+?[.!?])\s*([\s\S]*)$/);
+  if (!match) return [text, ""];
+  return [match[1], match[2]];
+}
 
 interface Props {
   isOpen: boolean;
@@ -16,7 +21,7 @@ interface Props {
 }
 
 export function DisclaimerModal({ isOpen, onConfirm }: Props) {
-  const [checked, setChecked] = useState<boolean[]>([false, false, false, false]);
+  const [checked, setChecked] = useState<boolean[]>(DISCLAIMERS.map(() => false));
 
   if (!isOpen) return null;
 
@@ -68,7 +73,12 @@ export function DisclaimerModal({ isOpen, onConfirm }: Props) {
                 onChange={() => toggle(i)}
                 data-testid={`disclaimer-checkbox-${i}`}
               />
-              <span className="disclaimer-item-text">{text}</span>
+              <span className="disclaimer-item-text">
+                {(() => {
+                  const [first, rest] = splitFirstSentence(text);
+                  return <><span className="disclaimer-first-sentence">{first}</span>{rest ? " " + rest : ""}</>;
+                })()}
+              </span>
             </label>
           ))}
         </div>
