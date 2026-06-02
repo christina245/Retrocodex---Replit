@@ -1,7 +1,7 @@
 .disclaimer-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.75);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -24,13 +24,13 @@
 
 /* ── Header row ── */
 .disclaimer-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: flex-start;
 }
 
 .disclaimer-header-left {
-  flex: 1;
   min-width: 0;
 }
 
@@ -45,7 +45,7 @@
 
 .disclaimer-subtitle {
   font-family: 'DM Sans', sans-serif;
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #2c2c2c;
   line-height: 1.4;
@@ -61,7 +61,7 @@
 }
 
 .disclaimer-scrungy-desktop {
-  width: 200px;
+  width: 100%;
 }
 
 .disclaimer-scrungy-mobile {
@@ -106,14 +106,14 @@
 }
 
 .disclaimer-item-checked {
-  border-color: #FF5353;
-  background: rgba(255, 83, 83, 0.04);
+  border-color: #6FCF97;
+  background: rgb(112, 207, 151, 0.10);
 }
 
 .disclaimer-checkbox {
   width: 18px;
   height: 18px;
-  accent-color: #FF5353;
+  accent-color: #6FCF97;
   cursor: pointer;
   flex-shrink: 0;
   margin-top: 2px;

@@ -7,7 +7,7 @@ const DISCLAIMERS = [
   "Your results may not fully reflect your lived experiences. Retrocodex features facts reported by social media users predominantly based in the United States. If you weren't actually taught the facts you'll read, that's great!",
   "Many of your results will include urban legends and other cultural misconceptions that were already disproven when you may have been taught them, if at all. They are included because their teaching persisted and may have been believed by some users.",
   "What counts as factually accurate information is always evolving! For example, many featured facts include countries that officially changed their names or dissolved, which means you were taught correctly at the time.",
-  "This means that any certain featured fact revision on this site may have evolved as you're reading this — you never know. That's why user commenting and submissions exist!",
+  
 ];
 
 interface Props {
