@@ -1,6 +1,7 @@
 import { Storage, File } from "@google-cloud/storage";
 import { Response } from "express";
 import { randomUUID } from "crypto";
+import sharp from "sharp";
 import {
   ObjectAclPolicy,
   ObjectPermission,
@@ -215,16 +216,32 @@ export class ObjectStorageService {
   async uploadBuffer(buffer: Buffer, filename: string, mimeType: string): Promise<string> {
     const privateObjectDir = this.getPrivateObjectDir();
     const objectId = randomUUID();
-    const ext = filename.includes('.') ? filename.split('.').pop() : '';
-    const objectName = ext ? `uploads/${objectId}.${ext}` : `uploads/${objectId}`;
+
+    const isImage = mimeType.startsWith("image/");
+    let finalBuffer = buffer;
+    let finalMime = mimeType;
+    let finalExt: string;
+
+    if (isImage) {
+      const animated = mimeType === "image/gif";
+      finalBuffer = await sharp(buffer, { animated })
+        .webp({ quality: 82, effort: 4 })
+        .toBuffer();
+      finalMime = "image/webp";
+      finalExt = "webp";
+    } else {
+      finalExt = filename.includes('.') ? filename.split('.').pop()! : 'bin';
+    }
+
+    const objectName = `uploads/${objectId}.${finalExt}`;
     const fullPath = `${privateObjectDir}/${objectName}`;
-    
+
     const { bucketName, objectName: objPath } = parseObjectPath(fullPath);
     const bucket = objectStorageClient.bucket(bucketName);
     const file = bucket.file(objPath);
-    
-    await file.save(buffer, {
-      contentType: mimeType,
+
+    await file.save(finalBuffer, {
+      contentType: finalMime,
       resumable: false,
     });
 

@@ -61,6 +61,9 @@ export default function AboutPage() {
               ⚠️ Note: This site is NOT a political fact-checker to discuss current political events or news media. However, it does feature broader topics that may be inadvertently politicized by the public, such as false or contested scientific and historical claims used to support current political agendas.
             </p>
             <p className="about-body">
+              It only launched in April 2026, so there's still a lot of work to do! The more feedback we can get from users like you, the more we can improve the site's experience for everyone.
+            </p>
+            <p className="about-body">
               What everyone was taught varies so much all throughout the world. That's why Retrocodex is a space where you can find other users from the same state or country -- by seeing what topics and comments they submit, you can revisit and patch up the education of your upbringing.</p>
               
             <p className="about-body"> But wait! Everything you learn on this site might still evolve depending on new discoveries. That's what the Follow button on each individual fact page is for -- you'll receive emails every time a fact gets a major update! 
@@ -71,7 +74,7 @@ export default function AboutPage() {
             </div>
 
             <p className="about-body">
-              The website is currently in a limited beta mode: only the featured facts on the homepage have individual detail pages. Since the research and web development will take a substantial amount of work, the rest of the pages will only be added after reaching a certain amount of traffic and user activity.
+              This site is currently in a limited beta mode: only the selected facts on the homepage have individual detail pages. Since the research and web development will take a substantial amount of work and resources, the rest of the pages will only be added after reaching a certain amount of traffic and user activity.
             </p>
 
           
