@@ -1856,6 +1856,15 @@ export default function AdminPage() {
                 <div className="form-group">
                   <label className="form-label">Cover Photo</label>
                   <p className="form-hint">This image will display on the fact card</p>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Paste image URL (e.g. from Cloudflare R2)..."
+                    value={coverPhoto || ""}
+                    onChange={(e) => setCoverPhoto(e.target.value)}
+                    data-testid="input-cover-photo-url"
+                  />
+                  <p className="form-hint" style={{ marginTop: "0.5rem" }}>Or upload a file:</p>
                   <div className="upload-area">
                     {coverPhoto ? (
                       <div className="uploaded-preview">
@@ -2282,6 +2291,15 @@ export default function AdminPage() {
                     <div className="form-group">
                       <label className="form-label">Logo (Optional)</label>
                       <p className="form-hint">If uploaded, this logo will display as the source. Max height: 4rem</p>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="Paste logo URL (e.g. from Cloudflare R2)..."
+                        value={source.logoUrl || ""}
+                        onChange={(e) => updateSource(index, 'logoUrl', e.target.value)}
+                        data-testid={`input-source-logo-url-${index}`}
+                      />
+                      <p className="form-hint" style={{ marginTop: "0.5rem" }}>Or upload a file:</p>
                       <div className="upload-area">
                         {source.logoUrl ? (
                           <div className="uploaded-preview">
@@ -2377,6 +2395,15 @@ export default function AdminPage() {
 
                     <div className="form-group">
                       <label className="form-label">Image (Optional)</label>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="Paste image URL (e.g. from Cloudflare R2)..."
+                        value={entry.imageUrl || ""}
+                        onChange={(e) => updateTimelineEntry(index, 'imageUrl', e.target.value)}
+                        data-testid={`input-timeline-image-url-${index}`}
+                      />
+                      <p className="form-hint" style={{ marginTop: "0.5rem" }}>Or upload a file:</p>
                       <div className="upload-area">
                         {entry.imageUrl ? (
                           <div className="uploaded-preview">
@@ -3094,6 +3121,15 @@ export default function AdminPage() {
                 <div className="form-group">
                   <label className="form-label">Cover Image</label>
                   <p className="form-hint">This image will display on the article card and hero</p>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Paste image URL (e.g. from Cloudflare R2)..."
+                    value={blogCoverImage || ""}
+                    onChange={(e) => setBlogCoverImage(e.target.value)}
+                    data-testid="input-blog-cover-url"
+                  />
+                  <p className="form-hint" style={{ marginTop: "0.5rem" }}>Or upload a file:</p>
                   <div className="upload-area">
                     {blogCoverImage ? (
                       <div className="uploaded-preview">
