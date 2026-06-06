@@ -6,6 +6,7 @@
  */
 
 import { Storage } from "@google-cloud/storage";
+import { S3Client, PutObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
@@ -17,7 +18,8 @@ const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
 const PRIVATE_OBJECT_DIR = process.env.PRIVATE_OBJECT_DIR!;
 const CF_ACCOUNT_ID = process.env.CF_ACCOUNT_ID!;
 const CF_R2_BUCKET = process.env.CF_R2_BUCKET!;
-const CF_R2_API_TOKEN = process.env.CF_R2_API_TOKEN!;
+const CF_R2_ACCESS_KEY_ID = process.env.CF_R2_ACCESS_KEY_ID!;
+const CF_R2_SECRET_ACCESS_KEY = process.env.CF_R2_SECRET_ACCESS_KEY!;
 const R2_PUBLIC_BASE = "https://images.theretrocodex.com";
 
 // ─── GCS client (Replit App Storage) ────────────────────────────────────────
@@ -37,6 +39,17 @@ const gcs = new Storage({
   projectId: "",
 });
 
+// ─── R2 S3-compatible client ─────────────────────────────────────────────────
+
+const r2 = new S3Client({
+  region: "auto",
+  endpoint: `https://${CF_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: CF_R2_ACCESS_KEY_ID,
+    secretAccessKey: CF_R2_SECRET_ACCESS_KEY,
+  },
+});
+
 // ─── DB ─────────────────────────────────────────────────────────────────────
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -51,8 +64,7 @@ function parseGcsPath(path: string): { bucketName: string; objectName: string } 
 }
 
 async function downloadFromAppStorage(dbPath: string): Promise<{ buffer: Buffer; contentType: string }> {
-  // dbPath is like /objects/uploads/<uuid>.webp
-  const entityId = dbPath.replace(/^\/objects\//, ""); // "uploads/<uuid>.webp"
+  const entityId = dbPath.replace(/^\/objects\//, "");
   let dir = PRIVATE_OBJECT_DIR;
   if (!dir.endsWith("/")) dir += "/";
   const fullPath = `${dir}${entityId}`;
@@ -68,23 +80,22 @@ async function downloadFromAppStorage(dbPath: string): Promise<{ buffer: Buffer;
   return { buffer, contentType: (meta.contentType as string) || "image/webp" };
 }
 
-async function uploadToR2(key: string, buffer: Buffer, contentType: string): Promise<string> {
-  const url = `https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/r2/buckets/${CF_R2_BUCKET}/objects/${encodeURIComponent(key)}`;
-
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${CF_R2_API_TOKEN}`,
-      "Content-Type": contentType,
-    },
-    body: buffer,
-  });
-
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`R2 upload failed ${res.status}: ${body}`);
+async function alreadyInR2(key: string): Promise<boolean> {
+  try {
+    await r2.send(new HeadObjectCommand({ Bucket: CF_R2_BUCKET, Key: key }));
+    return true;
+  } catch {
+    return false;
   }
+}
 
+async function uploadToR2(key: string, buffer: Buffer, contentType: string): Promise<string> {
+  await r2.send(new PutObjectCommand({
+    Bucket: CF_R2_BUCKET,
+    Key: key,
+    Body: buffer,
+    ContentType: contentType,
+  }));
   return `${R2_PUBLIC_BASE}/${key}`;
 }
 
@@ -93,7 +104,6 @@ async function uploadToR2(key: string, buffer: Buffer, contentType: string): Pro
 async function main() {
   console.log("=== Retrocodex App Storage → Cloudflare R2 Migration ===\n");
 
-  // 1. Collect all /objects/ paths from the DB
   const allFacts = await db.select().from(facts);
   const allPosts = await db.select().from(blogPosts);
   const allArticles = await db.select().from(externalArticles);
@@ -118,66 +128,71 @@ async function main() {
 
   console.log(`Found ${pathsToMigrate.size} unique images to migrate.\n`);
 
-  // 2. Download from App Storage, upload to R2
-  const migrationMap = new Map<string, string>(); // oldPath → newUrl
+  const migrationMap = new Map<string, string>();
   let ok = 0;
+  let skipped = 0;
   let fail = 0;
 
   for (const oldPath of pathsToMigrate) {
-    const key = oldPath.replace(/^\/objects\//, ""); // e.g. "uploads/<uuid>.webp"
-    process.stdout.write(`  ${oldPath} → `);
+    const key = oldPath.replace(/^\/objects\//, "");
+    process.stdout.write(`  [${ok + skipped + fail + 1}/${pathsToMigrate.size}] ${key} → `);
+
     try {
-      const { buffer, contentType } = await downloadFromAppStorage(oldPath);
-      const newUrl = await uploadToR2(key, buffer, contentType);
-      migrationMap.set(oldPath, newUrl);
-      console.log(newUrl);
-      ok++;
+      if (await alreadyInR2(key)) {
+        const newUrl = `${R2_PUBLIC_BASE}/${key}`;
+        migrationMap.set(oldPath, newUrl);
+        console.log("already in R2, skipping upload");
+        skipped++;
+      } else {
+        const { buffer, contentType } = await downloadFromAppStorage(oldPath);
+        const newUrl = await uploadToR2(key, buffer, contentType);
+        migrationMap.set(oldPath, newUrl);
+        console.log("done");
+        ok++;
+      }
     } catch (err: any) {
       console.log(`ERROR: ${err.message}`);
       fail++;
     }
   }
 
-  console.log(`\nUploads: ${ok} succeeded, ${fail} failed.\n`);
+  console.log(`\nUploads: ${ok} new, ${skipped} already existed, ${fail} failed.\n`);
 
   if (migrationMap.size === 0) {
     console.log("Nothing to update in the database.");
     return;
   }
 
-  // 3. Update DB records
-  console.log("Updating database...\n");
+  console.log("Updating database records...\n");
 
   // Facts
   for (const f of allFacts) {
     let changed = false;
     let newCoverPhoto = f.coverPhoto;
-    let newSources = f.sources;
-    let newTimeline = f.timeline;
+    let newSources = f.sources ? [...f.sources] : f.sources;
+    let newTimeline = f.timeline ? [...f.timeline] : f.timeline;
 
     if (f.coverPhoto && migrationMap.has(f.coverPhoto)) {
       newCoverPhoto = migrationMap.get(f.coverPhoto)!;
       changed = true;
     }
     if (f.sources) {
-      const updated = f.sources.map((s) => {
+      newSources = f.sources.map((s) => {
         if (s.logoUrl && migrationMap.has(s.logoUrl)) {
           changed = true;
           return { ...s, logoUrl: migrationMap.get(s.logoUrl)! };
         }
         return s;
       });
-      if (changed) newSources = updated;
     }
     if (f.timeline) {
-      const updated = f.timeline.map((t) => {
+      newTimeline = f.timeline.map((t) => {
         if (t.imageUrl && migrationMap.has(t.imageUrl)) {
           changed = true;
           return { ...t, imageUrl: migrationMap.get(t.imageUrl)! };
         }
         return t;
       });
-      if (changed) newTimeline = updated;
     }
 
     if (changed) {
@@ -204,12 +219,13 @@ async function main() {
       await db.update(externalArticles)
         .set({ coverImage: migrationMap.get(a.coverImage)! })
         .where(eq(externalArticles.id, a.id));
-      console.log(`  [ext]  ${a.id}`);
+      console.log(`  [ext]  ${a.title}`);
     }
   }
 
-  console.log("\n=== Migration complete! ===");
+  console.log(`\n=== Migration complete! ===`);
   console.log(`${migrationMap.size} images now served from ${R2_PUBLIC_BASE}`);
+  if (fail > 0) console.log(`WARNING: ${fail} images failed — re-run the script to retry them.`);
 }
 
 main().catch((err) => {
