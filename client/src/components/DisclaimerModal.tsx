@@ -18,9 +18,10 @@ function splitFirstSentence(text: string): [string, string] {
 interface Props {
   isOpen: boolean;
   onConfirm: () => void;
+  onClose?: () => void;
 }
 
-export function DisclaimerModal({ isOpen, onConfirm }: Props) {
+export function DisclaimerModal({ isOpen, onConfirm, onClose }: Props) {
   const [checked, setChecked] = useState<boolean[]>(DISCLAIMERS.map(() => false));
 
   if (!isOpen) return null;
@@ -47,6 +48,19 @@ export function DisclaimerModal({ isOpen, onConfirm }: Props) {
   return (
     <div className="disclaimer-overlay" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
       <div className="disclaimer-modal">
+
+        {onClose && (
+          <button
+            className="disclaimer-close-btn"
+            onClick={onClose}
+            aria-label="Close"
+            data-testid="button-disclaimer-close"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </button>
+        )}
 
         <div className="disclaimer-header">
           <div className="disclaimer-header-left">

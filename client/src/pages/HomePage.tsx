@@ -780,6 +780,7 @@ export default function HomePage() {
           sessionStorage.setItem("retrocodex_decade_disclaimer_shown", "1");
           setShowDisclaimerModal(false);
         }}
+        onClose={() => setShowDisclaimerModal(false)}
       />
     </div>
   );

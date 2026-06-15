@@ -10,7 +10,7 @@
 }
 
 .disclaimer-modal {
-  background: white;
+  background: #FBFBF9;
   border-radius: 12px;
   padding: 2.5rem 2.5rem 2rem;
   width: 100%;
@@ -20,6 +20,25 @@
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+  position: relative;
+}
+
+.disclaimer-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #878787;
+  padding: 0.25rem;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.disclaimer-close-btn:hover {
+  color: #2c2c2c;
 }
 
 /* ── Header row ── */
