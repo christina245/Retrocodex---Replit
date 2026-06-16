@@ -1172,12 +1172,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No file uploaded" });
       }
       const objectStorageService = new ObjectStorageService();
-      const objectPath = await objectStorageService.uploadBuffer(
+      const publicUrl = await objectStorageService.uploadBuffer(
         req.file.buffer,
         req.file.originalname,
         req.file.mimetype
       );
-      res.json({ url: objectPath });
+      res.json({ url: publicUrl });
     } catch (error) {
       console.error("Error uploading file:", error);
       res.status(500).json({ message: "Failed to upload file" });
@@ -1187,9 +1187,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve files from Object Storage
   app.get("/objects/:objectPath(*)", async (req, res) => {
     try {
+      const key = req.params.objectPath;
       const objectStorageService = new ObjectStorageService();
-      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
-      objectStorageService.downloadObject(objectFile, res);
+      await objectStorageService.downloadObject(key, res);
     } catch (error) {
       console.error("Error serving object:", error);
       if (error instanceof ObjectNotFoundError) {
