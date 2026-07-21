@@ -30,7 +30,9 @@ export const app = express();
 
 app.use(
   "/maintenance-assets",
-  express.static(path.join(import.meta.dirname, "maintenance-assets")),
+  express.static(path.join(import.meta.dirname, "maintenance-assets"), {
+    maxAge: "1h",
+  }),
 );
 app.use(maintenanceMiddleware);
 

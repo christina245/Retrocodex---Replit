@@ -6,7 +6,7 @@ const MAINTENANCE_HTML = `<!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Retrocodex — Down for Maintenance</title>
-<link rel="icon" type="image/png" href="/maintenance-assets/transparent-logo.png" />
+<link rel="icon" type="image/png" href="/maintenance-assets/transparent-logo.png?v=2" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Text&display=swap" rel="stylesheet">
@@ -74,12 +74,12 @@ const MAINTENANCE_HTML = `<!DOCTYPE html>
 </head>
 <body>
   <div class="wrap">
-    <img class="logo" src="/maintenance-assets/transparent-logo.png" alt="Retrocodex" />
+    <img class="logo" src="/maintenance-assets/transparent-logo.png?v=2" alt="Retrocodex" />
     <h1>Retrocodex is currently offline<br/>for maintenance.</h1>
     <p class="subtitle">Scrungy the squirrel is working on getting it back up!</p>
     <div class="media-row">
-      <img class="card-img" src="/maintenance-assets/pluto-fact-card.png" alt="Example fact card: Pluto is a planet" />
-      <img class="mascot-img" src="/maintenance-assets/scrungy-at-work.png" alt="Scrungy the squirrel working at a laptop" />
+      <img class="card-img" src="/maintenance-assets/pluto-fact-card.png?v=2" alt="Example fact card: Pluto is a planet" />
+      <img class="mascot-img" src="/maintenance-assets/scrungy-at-work.png?v=2" alt="Scrungy the squirrel working at a laptop" />
     </div>
     <p class="donate">To see more content like this, please <a href="https://buymeacoffee.com/retrocodex" target="_blank" rel="noopener noreferrer">make a donation</a> to help fund the site!</p>
     <p class="footnote">Scrungy is using very expensive tools to give your brain a system update.</p>
