@@ -1,3 +1,4 @@
+import path from "node:path";
 import { type Server } from "node:http";
 
 import express, {
@@ -12,6 +13,7 @@ import helmet from "helmet";
 
 import { registerRoutes } from "./routes";
 import { pool } from "./db";
+import { maintenanceMiddleware } from "./maintenance";
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -25,6 +27,12 @@ export function log(message: string, source = "express") {
 }
 
 export const app = express();
+
+app.use(
+  "/maintenance-assets",
+  express.static(path.join(import.meta.dirname, "maintenance-assets")),
+);
+app.use(maintenanceMiddleware);
 
 app.use(helmet({
   contentSecurityPolicy: false,
