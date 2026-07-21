@@ -12,6 +12,7 @@ import { FactKey } from "@/components/FactKey";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CATEGORIES } from "@shared/categories";
 import { SendgridBanner } from "@/components/SendgridBanner";
+import { useAuthModalVisibility } from "@/lib/authModalVisibility";
 import { ShareModal } from "@/components/ShareModal";
 import { SignInModal } from "@/components/SignInModal";
 import { Footer } from "@/components/Footer";
@@ -46,6 +47,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function HomePage() {
+  const { isAuthModalOpen } = useAuthModalVisibility();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<HomepageTabType>("explore");
   const [selectedRegion, setSelectedRegion] = useState<{ name: string; isCountry: boolean } | null>(null);
@@ -728,34 +730,36 @@ export default function HomePage() {
               </div>
             )}
 
-            <div className="decade-sticky-category-nav" data-testid="decade-sticky-category-nav">
-              <span className="decade-sticky-category-label">Filter by category:</span>
-              <div className="decade-sticky-category-chips">
-                {CATEGORIES.map((cat) => {
-                  const Icon = cat.icon;
-                  const isActive = decadeCategoryFilter.some(f => f.toLowerCase() === cat.name.toLowerCase());
-                  return (
-                    <button
-                      key={cat.name}
-                      className={`decade-sticky-chip${isActive ? " decade-sticky-chip-active" : ""}`}
-                      style={{
-                        '--chip-color': cat.color,
-                        borderColor: cat.color,
-                        color: isActive ? "#fff" : cat.color,
-                        backgroundColor: isActive ? cat.color : "#fff",
-                      } as React.CSSProperties}
-                      onClick={() => setDecadeCategoryFilter(prev =>
-                        isActive ? prev.filter(f => f.toLowerCase() !== cat.name.toLowerCase()) : [...prev, cat.name]
-                      )}
-                      data-testid={`button-decade-category-${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
-                    >
-                      <Icon size={14} strokeWidth={2.5} style={{ color: isActive ? "#fff" : cat.color }} />
-                      <span>{cat.name}</span>
-                    </button>
-                  );
-                })}
+            {!isAuthModalOpen && (
+              <div className="decade-sticky-category-nav" data-testid="decade-sticky-category-nav">
+                <span className="decade-sticky-category-label">Filter by category:</span>
+                <div className="decade-sticky-category-chips">
+                  {CATEGORIES.map((cat) => {
+                    const Icon = cat.icon;
+                    const isActive = decadeCategoryFilter.some(f => f.toLowerCase() === cat.name.toLowerCase());
+                    return (
+                      <button
+                        key={cat.name}
+                        className={`decade-sticky-chip${isActive ? " decade-sticky-chip-active" : ""}`}
+                        style={{
+                          '--chip-color': cat.color,
+                          borderColor: cat.color,
+                          color: isActive ? "#fff" : cat.color,
+                          backgroundColor: isActive ? cat.color : "#fff",
+                        } as React.CSSProperties}
+                        onClick={() => setDecadeCategoryFilter(prev =>
+                          isActive ? prev.filter(f => f.toLowerCase() !== cat.name.toLowerCase()) : [...prev, cat.name]
+                        )}
+                        data-testid={`button-decade-category-${cat.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      >
+                        <Icon size={14} strokeWidth={2.5} style={{ color: isActive ? "#fff" : cat.color }} />
+                        <span>{cat.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
       </main>

@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { initGA } from "./lib/analytics";
 import { useAnalytics } from "./hooks/use-analytics";
 import { AuthProvider, useAuth } from "./lib/auth";
+import { AuthModalVisibilityProvider } from "./lib/authModalVisibility";
 import { SignInModal } from "@/components/SignInModal";
 import { useToast } from "@/hooks/use-toast";
 import HomePage from "@/pages/HomePage";
@@ -152,11 +153,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider delayDuration={0}>
-          <Toaster />
-          <OAuthCallbackHandler />
-          <Router />
-        </TooltipProvider>
+        <AuthModalVisibilityProvider>
+          <TooltipProvider delayDuration={0}>
+            <Toaster />
+            <OAuthCallbackHandler />
+            <Router />
+          </TooltipProvider>
+        </AuthModalVisibilityProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

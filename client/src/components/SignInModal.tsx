@@ -8,6 +8,7 @@ import { useLocation } from "wouter";
 import { CATEGORIES } from "@shared/categories";
 import { OTHER_SUBCATEGORIES } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
+import { useAuthModalVisibility } from "@/lib/authModalVisibility";
 import { validateUsername } from "@/lib/usernameValidation";
 import { createAvatar } from "@dicebear/core";
 import { funEmoji, glass, icons, identicon, shapes } from "@dicebear/collection";
@@ -461,6 +462,7 @@ type TagsByCategory = Record<string, Record<string, string[]>>;
 
 export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, contextMessage, googleSetupMode }: SignInModalProps) {
   const { login, register, refetchUser } = useAuth();
+  const { setAuthModalOpen } = useAuthModalVisibility();
   const [currentPath, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -487,6 +489,12 @@ export function SignInModal({ isOpen, onClose, customTitle, onSuccessRedirect, c
       setScreen("googleUsernameSetup");
     }
   }, [isOpen, googleSetupMode]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setAuthModalOpen(true);
+    return () => setAuthModalOpen(false);
+  }, [isOpen, setAuthModalOpen]);
 
   const [residenceCountry, setResidenceCountry] = useState("");
   const [residenceUsState, setResidenceUsState] = useState("");
