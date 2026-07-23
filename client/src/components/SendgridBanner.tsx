@@ -9,7 +9,7 @@ export function SendgridBanner({ hideMascot = false }: { hideMascot?: boolean })
       )}
       <div className="sendgrid-banner-container">
         <iframe
-          src="https://cdn.forms-content-1.sg-form.com/baf39de1-2a2b-11f1-9436-7a05af6a6af3"
+          src="https://cdn.forms-content-1.sg-form.com/c0c22481-8647-11f1-b1b2-b2242c52482b"
           className="sendgrid-embed"
           frameBorder={0}
           scrolling="no"
