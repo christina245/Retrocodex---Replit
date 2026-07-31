@@ -18,7 +18,7 @@
 
 .sendgrid-banner-container {
   width: 330px;
-  height: 390px; /* 460 * 0.7 */
+  height: 440px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -38,7 +38,7 @@
   .sendgrid-banner-container {
     width: 90%;
     max-width: 400px;
-    height: 322px;
+    height: 372px;
     margin: 0 auto;
   }
 }
