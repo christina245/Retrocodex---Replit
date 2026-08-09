@@ -13,7 +13,7 @@ export function Pagination({ currentPage, totalPages, onPageChange, scrollTarget
 
   const handlePageChange = (page: number) => {
     onPageChange(page);
-    
+
     if (scrollTargetId) {
       const element = document.getElementById(scrollTargetId);
       if (element) {
@@ -25,23 +25,32 @@ export function Pagination({ currentPage, totalPages, onPageChange, scrollTarget
   };
 
   return (
-    <div className="pagination" data-testid="pagination">
+    <div className="retrocodex-pagination" data-testid="pagination">
       <button
         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        className="pagination-arrow"
+        className="pagination-chevron"
         data-testid="pagination-prev"
         aria-label="Previous page"
       >
         <ChevronLeft size={20} />
       </button>
-      <span className="pagination-info" data-testid="pagination-info">
-        Page {currentPage} of {totalPages}
-      </span>
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          onClick={() => handlePageChange(page)}
+          className={`pagination-number${page === currentPage ? " pagination-number-active" : ""}`}
+          data-testid={`pagination-page-${page}`}
+          aria-label={`Go to page ${page}`}
+          aria-current={page === currentPage ? "page" : undefined}
+        >
+          {page}
+        </button>
+      ))}
       <button
         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        className="pagination-arrow"
+        className="pagination-chevron"
         data-testid="pagination-next"
         aria-label="Next page"
       >

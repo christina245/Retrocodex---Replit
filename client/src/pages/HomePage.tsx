@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { useLocation, useParams } from "wouter";
+import { useLocation, useParams, Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HomepageTabs, type HomepageTabType } from "@/components/HomepageTabs";
@@ -20,7 +20,7 @@ import { Pagination } from "@/components/Pagination";
 import { SEO } from "@/components/SEO";
 import type { Fact as DbFact } from "@shared/schema";
 import { DECADES } from "@shared/schema";
-import { ArrowBigDownDash } from "lucide-react";
+import { ArrowBigDownDash, ExternalLink } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useSavedFacts } from "@/lib/useSavedFacts";
 import { useVerificationGuard } from "@/lib/useVerificationGuard";
@@ -29,11 +29,39 @@ import { RegionModal } from "@/components/RegionModal";
 import { DisclaimerModal } from "@/components/DisclaimerModal";
 import { WorldMapPlaceholder } from "@/components/WorldMapPlaceholder";
 import { ALL_REGIONS } from "@/lib/locationData";
+import BlogCard from "@/components/BlogCard";
 import "./HomePage.css";
 
 const FACTS_PER_PAGE = 10;
 const DECADE_FACTS_PER_PAGE = 20;
 const MAX_RECENT_FACTS = 30;
+
+interface UnifiedArticle {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  coverImage: string;
+  category: string;
+  tags: string[];
+  createdAt: string | null;
+  publishedAt: string | null;
+  originalPublishedAt: string | null;
+  isExternal: boolean;
+  externalUrl: string | null;
+  publicationName: string | null;
+  isPaywalled: boolean;
+}
+
+const formatArticleDate = (date: string | Date | null | undefined): string => {
+  if (!date) return "";
+  const d = new Date(date);
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
 
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -81,6 +109,12 @@ export default function HomePage() {
   const { data: popularDbFacts = [] } = useQuery<DbFactWithCount[]>({
     queryKey: ["/api/facts/popular"],
   });
+
+  const { data: homepageArticles = [] } = useQuery<UnifiedArticle[]>({
+    queryKey: ["/api/articles"],
+  });
+  const featuredArticle = homepageArticles[0];
+  const listArticles = homepageArticles.slice(1, 4);
 
   const recentDbFacts: Fact[] = useMemo(() => {
     return [...dbFacts]
@@ -323,6 +357,9 @@ export default function HomePage() {
         return true;
       })
       .sort((a, b) => {
+        const aIsRevision = (a.factFilters || []).some(f => f.toLowerCase() === "official revision") ? 1 : 0;
+        const bIsRevision = (b.factFilters || []).some(f => f.toLowerCase() === "official revision") ? 1 : 0;
+        if (aIsRevision !== bIsRevision) return bIsRevision - aIsRevision;
         const aDate = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const bDate = b.createdAt ? new Date(b.createdAt).getTime() : 0;
         return bDate - aDate;
@@ -478,52 +515,58 @@ export default function HomePage() {
   return (
     <div className="page-wrapper">
       <SEO 
-        title="Retrocodex: Stuff You Might Have Learned Wrong"
+        title="Retrocodex — Discover facts that have been disproven"
         description="What have you been taught that's actually untrue? Explore a library of myths and misconceptions across history, life sciences, health and fitness, gender, and more."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-      <main className="main-content">
-        <h1 className="homepage-headline" data-testid="text-homepage-headline">
-          What have you learned that's <u>now <em>outdated</em></u>?
-        </h1>
-        <p className="homepage-tagline" data-testid="text-homepage-tagline">
-          Pick the decade you graduated high school below. Discover what you may have been taught that has since been disproven or revised.
-        </p>
+      {selectedDecade === "all" && (
+        <div className="homepage-top-category-bar">
+          <p className="homepage-category-subtitle" data-testid="text-category-subtitle">
+            Browse all facts by category:
+          </p>
+          <HomepageCategoryNav />
+        </div>
+      )}
 
-        <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">
-          <div className="homepage-decade-nav-container">
-            <button
-              className={`homepage-decade-chip${selectedDecade === "all" ? " homepage-decade-chip-selected" : ""}`}
-              onClick={() => setLocation("/")}
-              data-testid="button-decade-all"
-            >
-              {selectedDecade === "all" && (
-                <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 6, verticalAlign: "middle" }} />
-              )}
-              View all topics
-            </button>
-            {DECADES.filter(d => d >= "1950s").map((decade) => (
+      <main className="main-content">
+        <div className="homepage-hero-dark">
+          <h1 className="homepage-headline" data-testid="text-homepage-headline">
+            Your knowledge might be <em>outdated</em>.
+          </h1>
+          <p className="homepage-tagline" data-testid="text-homepage-tagline">
+            Select the decade you graduated high school. Discover what facts you may have been taught that has since been disproven or revised.
+          </p>
+
+          <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">
+            <div className="homepage-decade-nav-container">
               <button
-                key={decade}
-                className={`homepage-decade-chip${selectedDecade === decade ? " homepage-decade-chip-selected" : ""}`}
-                onClick={() => handleDecadeClick(decade)}
-                data-testid={`button-decade-${decade}`}
+                className={`homepage-decade-chip${selectedDecade === "all" ? " homepage-decade-chip-selected" : ""}`}
+                onClick={() => setLocation("/")}
+                data-testid="button-decade-all"
               >
-                {decade}
+                {selectedDecade === "all" && (
+                  <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 3, verticalAlign: "middle" }} />
+                )}
+                View all
               </button>
-            ))}
-          </div>
-        </nav>
+              {DECADES.filter(d => d >= "1950s").map((decade) => (
+                <button
+                  key={decade}
+                  className={`homepage-decade-chip${selectedDecade === decade ? " homepage-decade-chip-selected" : ""}`}
+                  onClick={() => handleDecadeClick(decade)}
+                  data-testid={`button-decade-${decade}`}
+                >
+                  {decade}
+                </button>
+              ))}
+            </div>
+          </nav>
+        </div>
 
         {selectedDecade === "all" ? (
           <>
-            <p className="homepage-category-subtitle" data-testid="text-category-subtitle">
-              Or browse all topics by category:
-            </p>
-
-            <HomepageCategoryNav />
             <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
             <div className="content-area" id="content-area">
@@ -631,6 +674,83 @@ export default function HomePage() {
                       onPageChange={handlePopularPageChange}
                       scrollTargetId="content-area"
                     />
+                  )}
+
+                  {homepageArticles.length > 0 && (
+                    <section className="homepage-articles-section" data-testid="homepage-articles-section">
+                      <div className="homepage-articles-header">
+                        <h2 className="homepage-articles-title">Questioning the Facts</h2>
+                        <span className="homepage-articles-divider">/</span>
+                        <p className="homepage-articles-subtitle">
+                          Wondering whether this site's "disproven facts" really were disproven or not, rounding up selected topics, and more.
+                        </p>
+                      </div>
+
+                      <div className="homepage-articles-body">
+                        {featuredArticle && (
+                          <div className="homepage-articles-featured">
+                            <BlogCard
+                              id={featuredArticle.slug}
+                              image={featuredArticle.coverImage}
+                              date={formatArticleDate(featuredArticle.isExternal ? featuredArticle.createdAt : featuredArticle.publishedAt)}
+                              category={featuredArticle.category}
+                              title={featuredArticle.title}
+                              summary={featuredArticle.summary}
+                              tags={featuredArticle.tags || []}
+                              isExternal={featuredArticle.isExternal}
+                              externalUrl={featuredArticle.externalUrl}
+                              publicationName={featuredArticle.publicationName}
+                              isPaywalled={featuredArticle.isPaywalled}
+                              originalPublishedAt={featuredArticle.isExternal ? formatArticleDate(featuredArticle.originalPublishedAt) : null}
+                              publishedAtIso={featuredArticle.isExternal ? featuredArticle.createdAt : featuredArticle.publishedAt}
+                            />
+                          </div>
+                        )}
+
+                        {listArticles.length > 0 && (
+                          <div className="homepage-articles-list">
+                            {listArticles.map((article) => (
+                              <a
+                                key={article.id}
+                                href={article.isExternal && article.externalUrl ? article.externalUrl : `/articles/${article.slug}`}
+                                target={article.isExternal ? "_blank" : undefined}
+                                rel={article.isExternal ? "noopener noreferrer" : undefined}
+                                className="homepage-articles-list-item"
+                                data-testid={`link-homepage-article-${article.id}`}
+                              >
+                                <div className="homepage-articles-list-thumb">
+                                  {article.coverImage ? (
+                                    <img src={article.coverImage} alt="" className="homepage-articles-list-thumb-img" />
+                                  ) : (
+                                    <div className="homepage-articles-list-thumb-placeholder" />
+                                  )}
+                                </div>
+                                <div className="homepage-articles-list-content">
+                                  <h3 className="homepage-articles-list-title">{article.title}</h3>
+                                  {article.summary && (
+                                    <p className="homepage-articles-list-summary">{article.summary}</p>
+                                  )}
+                                  {article.isExternal && (
+                                    <span className="blog-card-badge blog-card-badge--external homepage-articles-list-badge">
+                                      <ExternalLink size={11} />
+                                      {article.publicationName && (
+                                        <span className="blog-card-badge-text">{article.publicationName}</span>
+                                      )}
+                                    </span>
+                                  )}
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="homepage-articles-view-all-row">
+                        <Link href="/articles" className="homepage-articles-view-all-button" data-testid="link-view-all-articles">
+                          View all articles
+                        </Link>
+                      </div>
+                    </section>
                   )}
                 </div>
 

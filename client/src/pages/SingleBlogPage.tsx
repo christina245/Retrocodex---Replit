@@ -16,7 +16,7 @@ import {
   Share2,
   LucideIcon
 } from "lucide-react";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { Footer } from "@/components/Footer";

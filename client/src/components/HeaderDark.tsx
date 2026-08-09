@@ -6,20 +6,20 @@ import { useQuery } from "@tanstack/react-query";
 import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png";
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
-import logoImage from "@assets/red black gray logo.png";
+import logoImage from "@assets/white transparent logo.png";
 import taglineImage from "@assets/tagline only lessons 3.png";
 import taglineMobileImage from "@assets/tagline_mobile_1766215766436.png";
 import { NotificationBell } from "./NotificationBell";
 import { SignInModal } from "./SignInModal";
-import "./Header.css";
+import "./HeaderDark.css";
 
-interface HeaderProps {
+interface HeaderDarkProps {
   onMenuClick?: () => void;
   variant?: "default" | "simplified";
   hideTagline?: boolean;
 }
 
-export function Header({ onMenuClick, variant = "default", hideTagline = false }: HeaderProps) {
+export function HeaderDark({ onMenuClick, variant = "default", hideTagline = false }: HeaderDarkProps) {
   const { isLoggedIn, user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,36 +91,36 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
   };
   return (
     <>
-      <header ref={headerRef} className={`header ${variant === "simplified" ? "header-simplified" : ""}`}>
-        <div className="header-container">
+      <header ref={headerRef} className={`dark-header ${variant === "simplified" ? "dark-header-simplified" : ""}`}>
+        <div className="dark-header-container">
           {variant === "default" && (
-            <div className="header-left-section">
-              <div className="social-icons-column">
-                
-                <a 
-                  href="https://buymeacoffee.com/retrocodex" 
-                  target="_blank" 
+            <div className="dark-header-left-section">
+              <div className="dark-social-icons-column">
+
+                <a
+                  href="https://buymeacoffee.com/retrocodex"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="header-donate-button"
+                  className="dark-header-donate-button"
                   data-testid="button-donate"
                   aria-label="Help fund Retrocodex"
                 >
-                  <HandHeart size={16} className="header-donate-icon" />
+                  <HandHeart size={16} className="dark-header-donate-icon" />
                   Help fund
                 </a>
               </div>
             </div>
           )}
 
-          <Link href="/" className="header-branding" data-testid="link-home-logo">
-            <img src={logoImage} alt="Retrocodex" className="logo-image logo-full" />
-            <img src="/transparent logo.png" alt="Retrocodex" className="logo-icon-mobile" />
+          <Link href="/" className="dark-header-branding" data-testid="link-home-logo">
+            <img src={logoImage} alt="Retrocodex" className="dark-logo-image dark-logo-full" />
+            <img src="/transparent logo.png" alt="Retrocodex" className="dark-logo-icon-mobile" />
           </Link>
 
-          <div ref={actionsRef} className="header-actions">
-            <button 
+          <div ref={actionsRef} className="dark-header-actions">
+            <button
               ref={searchBtnRef}
-              className={`search-button ${isSearchOpen ? "search-button-hidden" : ""}`}
+              className={`dark-search-button ${isSearchOpen ? "dark-search-button-hidden" : ""}`}
               data-testid="button-search"
               aria-label="Search facts"
               onClick={() => setIsSearchOpen(true)}
@@ -130,14 +130,14 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
               <Search size={20} />
             </button>
             {isSearchOpen && (
-              <form onSubmit={handleSearchSubmit} className="header-search-form">
+              <form onSubmit={handleSearchSubmit} className="dark-header-search-form">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
                   placeholder="Search facts..."
-                  className="header-search-input"
+                  className="dark-header-search-input"
                   data-testid="input-search"
                   autoFocus
                 />
@@ -147,7 +147,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
                     setIsSearchOpen(false);
                     setSearchQuery("");
                   }}
-                  className="header-search-close"
+                  className="dark-header-search-close"
                   data-testid="button-search-close"
                   aria-label="Close search"
                 >
@@ -155,39 +155,39 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
                 </button>
               </form>
             )}
-            <a 
+            <a
               href="/submit"
-              className="submit-fact-button header-only-submit"
+              className="dark-submit-fact-button dark-header-only-submit"
               data-testid="button-submit-fact"
             >
-              <MessageCirclePlus size={16} className="submit-fact-icon" />
+              <MessageCirclePlus size={16} className="dark-submit-fact-icon" />
               Submit a Fact
             </a>
             {isLoggedIn ? (
               <button
-                className="header-signin-button header-main-signin header-signin-button--desktop-only"
+                className="dark-header-signin-button dark-header-main-signin dark-header-signin-button--desktop-only"
                 onClick={() => navigate("/dashboard")}
                 data-testid="button-profile"
                 aria-label="Go to profile"
               >
-                <UserRound size={16} className="header-signin-icon" />
+                <UserRound size={16} className="dark-header-signin-icon" />
                 {user?.username || "Profile"}
               </button>
             ) : (
               <button
-                className="header-signin-button header-main-signin"
+                className="dark-header-signin-button dark-header-main-signin"
                 onClick={() => setIsSignInOpen(true)}
                 data-testid="button-signin"
                 aria-label="Sign in"
               >
-                <UserRound size={16} className="header-signin-icon" />
-                <span className="header-signin-text-full">Join the community</span>
-                <span className="header-signin-text-short">Join</span>
+                <UserRound size={16} className="dark-header-signin-icon" />
+                <span className="dark-header-signin-text-full">Join the community</span>
+                <span className="dark-header-signin-text-short">Join</span>
               </button>
             )}
             {isLoggedIn && user && (
               <button
-                className="header-mobile-username"
+                className="dark-header-mobile-username"
                 onClick={() => navigate("/dashboard")}
                 data-testid="button-profile-mobile"
                 aria-label="Go to profile"
@@ -202,18 +202,18 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
                 count={notificationCount}
                 size={18}
                 onClick={() => navigate("/dashboard?tab=notifications")}
-                className="notification-bell-header"
+                className="dark-notification-bell-header"
                 testId="header-notification-bell"
               />
             )}
             {onMenuClick && (
-              <button 
-                className="hamburger-button" 
+              <button
+                className="dark-hamburger-button"
                 onClick={onMenuClick}
                 data-testid="button-menu"
                 aria-label="Open menu"
               >
-                <div className="hamburger-icon">
+                <div className="dark-hamburger-icon">
                   <span></span>
                   <span></span>
                   <span></span>
@@ -223,16 +223,16 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
           </div>
         </div>
         {variant === "default" && !hideTagline && (
-          <div className="header-tagline-row">
-            <img 
-              src={taglineImage} 
-              alt="A place to unlearn outdated or untrue lessons in" 
-              className="tagline-image tagline-desktop"
+          <div className="dark-header-tagline-row">
+            <img
+              src={taglineImage}
+              alt="A place to unlearn outdated or untrue lessons in"
+              className="dark-tagline-image dark-tagline-desktop"
             />
-            <img 
-              src={taglineMobileImage} 
-              alt="A place to unlearn outdated or untrue lessons in" 
-              className="tagline-image tagline-mobile"
+            <img
+              src={taglineMobileImage}
+              alt="A place to unlearn outdated or untrue lessons in"
+              className="dark-tagline-image dark-tagline-mobile"
             />
           </div>
         )}

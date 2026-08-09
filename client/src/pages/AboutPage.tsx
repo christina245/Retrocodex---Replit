@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { HandHeart } from "lucide-react";
-import { Header } from "@/components/Header";
+import { HandHeart, MessageCirclePlus } from "lucide-react";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { SendgridBanner } from "@/components/SendgridBanner";
@@ -38,8 +38,8 @@ export default function AboutPage() {
   return (
     <div className="about-page">
       <SEO 
-        title="About Retrocodex: What You Might Have Learned Wrong"
-        description="Explore Retrocodex, a community-driven encyclopedia dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
+        title="About Retrocodex | Disproven Facts Archive"
+        description="Explore Retrocodex, a community-driven disproven facts encyclopedia dedicated to exploring how misconceptions emerge, evolve, and persist while accounting for diverse perspectives."
       />
       <Header onMenuClick={() => setIsMenuOpen(true)} hideTagline />
       <HamburgerMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
@@ -55,7 +55,7 @@ export default function AboutPage() {
             </div>
 
             <p className="about-body">
-              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1" className="about-inline-link">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated information that were once taught as facts in school, media, or in everyday life. It's a place to give your brain a system update.
+              Retrocodex: Stuff You Learned Wrong, initially inspired by a <a href ="https://www.instagram.com/p/DOqaJ5Gjj4a/?img_index=1" className="about-inline-link">viral social media post</a>, is a community to discover and discuss the misconceptions and outdated, disproven facts that were once taught in school, media, or in everyday life. It's a place to give your brain a system update.
             </p>
             <p className="about-body">
               ⚠️ Note: This site is NOT a political fact-checker to discuss current political events or news media. However, it does feature broader topics that may be inadvertently politicized by the public, such as false or contested scientific and historical claims used to support current political agendas.
@@ -66,7 +66,7 @@ export default function AboutPage() {
             <p className="about-body">
               What everyone was taught varies so much all throughout the world. That's why Retrocodex is a space where you can find other users from the same state or country -- by seeing what topics and comments they submit, you can revisit and patch up the education of your upbringing.</p>
               
-            <p className="about-body"> But wait! Everything you learn on this site might still evolve depending on new discoveries. That's what the Follow button on each individual fact page is for -- you'll receive emails every time a fact gets a major update! 
+            <p className="about-body"> But wait! The outdated facts you learn on this site might still evolve depending on new discoveries. That's what the Follow button on each individual fact page is for -- you'll receive emails every time a fact gets a major update! 
             </p>
 
             <div className="about-image-center">
@@ -74,7 +74,7 @@ export default function AboutPage() {
             </div>
 
             <p className="about-body">
-              This site is currently in a limited beta mode: only the selected facts on the homepage have individual detail pages. Since the research and web development will take a substantial amount of work and resources, the rest of the pages will only be added after reaching a certain amount of traffic and user activity.
+              This site is currently in a limited beta mode: only the selected topics on the homepage have individual detail pages. Since the research and web development will take a substantial amount of work and resources, the rest of the pages will only be added after reaching a certain amount of traffic and user activity.
             </p>
 
           
@@ -84,9 +84,7 @@ export default function AboutPage() {
             </p>
 
             <ul className="about-list">
-              <li>
-                <strong>Pages by country:</strong> Learn what other people from your state or country were taught growing up! An interactive map that shows topics unique to that region, with a list of the most common topics taught in that region as determined by users.
-              </li>
+              
              
              
               
@@ -110,17 +108,18 @@ export default function AboutPage() {
                 className="about-submit-button"
                 data-testid="button-about-submit-fact"
               >
+                <MessageCirclePlus size={16} className="about-submit-icon" />
                 Submit a Fact
               </a>
-              <a 
-                href="https://buymeacoffee.com/retrocodex" 
-                target="_blank" 
+              <a
+                href="https://buymeacoffee.com/retrocodex"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="about-donate-button"
                 data-testid="button-about-donate"
               >
                 <HandHeart size={16} className="about-donate-icon" />
-                Donate
+                Help fund
               </a>
             </div>
           </div>

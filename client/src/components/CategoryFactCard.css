@@ -13,8 +13,10 @@
   width: 515px;
   height: 310px;
   background: #Ffffff;
-  box-shadow: 2px 4px 0 color-mix(in srgb, var(--card-category-color) 50%, transparent);
-  border: 1px solid color-mix(in srgb, var(--card-category-color) 20%, transparent);
+  
+  border: none;
+  border-left: 4px solid color-mix(in srgb, var(--card-category-color) 90%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--card-category-color) 90%, transparent);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -46,7 +48,7 @@
 .category-fact-tag {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.02em;
   color: white;
   background: #2C2C2C;
@@ -154,14 +156,14 @@
 }
 
 .category-learn-more-button {
-  background: rgba(44, 44, 44, 0.05);
-  color: #2c2c2c;
-  border: none;
-  padding: 12px 15px 12px 12px;
-  border-radius: 6px;
+  background: #ffffff;
+  color: #ff5353;
+  border: 2px solid #ff5353;
+  padding: 8px 15px 8px 12px;
+  border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -176,7 +178,7 @@
 }
 
 .category-learn-more-arrow {
-  color: #2c2c2c;
+  color: #ff5353;
   flex-shrink: 0;
   transition: color 0.2s;
 }

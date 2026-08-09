@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Fact, FactWithCommentCount } from "@shared/schema";
 import { SEO } from "@/components/SEO";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { SortSelector, type SortOption } from "@/components/SortSelector";

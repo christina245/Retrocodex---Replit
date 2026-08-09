@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { MapPin, Home, MessageSquare, ArrowUp, CornerUpLeft } from "lucide-react";
 import scrungyAtWork from "@assets/scrungy_at_work_painted_1775522114338.png";
-import { SingleFactHeader } from "@/components/SingleFactHeader";
+import { SingleFactHeaderDark as SingleFactHeader } from "@/components/SingleFactHeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";

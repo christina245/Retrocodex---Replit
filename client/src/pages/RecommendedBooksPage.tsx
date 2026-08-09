@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";

@@ -170,13 +170,13 @@
 }
 
 .disclaimer-btn.disclaimer-btn-active {
-  background: #2c2c2c;
+  background: #ff5353;
   color: white;
   cursor: pointer;
 }
 
 .disclaimer-btn.disclaimer-btn-active:hover {
-  background: #444444;
+  background: #ff5353;
 }
 
 /* ── Mobile ── */

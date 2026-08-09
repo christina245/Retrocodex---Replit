@@ -4,7 +4,7 @@ import { useParams } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Fact, FactWithCommentCount } from "@shared/schema";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { CategoryFilter } from "@/components/CategoryFilter";

@@ -7,8 +7,9 @@ import { SAMPLE_US_STATES, PINNED_COUNTRIES, ALL_COUNTRIES } from "@/lib/locatio
 import TiptapEditor from "@/components/TiptapEditor";
 import "@/components/TiptapEditor.css";
 import "./AdminPage.css";
-import logoIcon from "@assets/line_logo_white_background_1764717128944.png";
 import adminAvatar from "@assets/favicon_round_1764970500110.png";
+
+const logoIcon = "/transparent logo.png";
 
 type AdminView = "add-fact" | "add-blog" | "view-blog" | "view-facts" | "archived-facts" | "manage-admins" | "submissions" | "add-external" | "view-external" | "reports" | "all-comments";
 

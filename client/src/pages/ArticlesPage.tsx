@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HeroSection } from "@/components/HeroSection";
@@ -66,6 +66,10 @@ export default function ArticlesPage() {
   const { data: articles, isLoading } = useQuery<UnifiedArticle[]>({
     queryKey: ["/api/articles"],
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleCategoryClick = (category: string) => {
     if (category === "All") {

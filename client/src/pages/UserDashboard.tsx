@@ -6,7 +6,7 @@ import scrungyConfetti from "@assets/scrungy_at_work_painted_1775522114338.png";
 import { Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { SingleFactHeader } from "@/components/SingleFactHeader";
+import { SingleFactHeaderDark as SingleFactHeader } from "@/components/SingleFactHeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { FactCard } from "@/components/FactCard";
 import type { Fact as FactCardFact } from "@/components/FactCard";

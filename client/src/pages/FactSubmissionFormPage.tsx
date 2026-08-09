@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { X, Check, BookOpen, Plus, Trash2 } from "lucide-react";
 import squirrelSuccess from "@assets/Cheerful_squirrel_with_checkmark_sign_1776139374734.png";
-import { Header } from "@/components/Header";
+import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";

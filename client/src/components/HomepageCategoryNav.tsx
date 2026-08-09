@@ -24,9 +24,8 @@ export function HomepageCategoryNav({ activeCategory, sticky = false }: Homepage
               key={category.name}
               href={category.path}
               className={`homepage-category-tile ${isActive ? 'homepage-category-tile-active' : ''} ${isInactive ? 'homepage-category-tile-inactive' : ''}`}
-              style={{ 
+              style={{
                 '--category-color': category.color,
-                backgroundColor: isInactive ? '#878787' : category.color 
               } as React.CSSProperties}
               data-testid={`link-homepage-category-${category.name.toLowerCase().replace(/\s+/g, '-')}`}
             >

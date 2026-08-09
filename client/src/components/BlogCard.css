@@ -68,15 +68,16 @@
   align-items: center;
   gap: 0.4rem;
   padding: 4px 10px;
-  border-radius: 30px;
+  border-radius: 5px;
   white-space: nowrap;
 }
 
 .blog-card-category-pill span {
   font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.00em;
 }
 
 .blog-card-title {

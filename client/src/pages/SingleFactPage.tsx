@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Pencil, BellRing, Bell, BellOff, X } from "lucide-react";
 import envelopeImage from "@assets/email_1774815930235.png";
-import { SingleFactHeader } from "@/components/SingleFactHeader";
+import { SingleFactHeaderDark as SingleFactHeader } from "@/components/SingleFactHeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { CommentsSection } from "@/components/CommentsSection";
 import { Poll } from "@/components/Poll";

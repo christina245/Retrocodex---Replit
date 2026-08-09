@@ -1,53 +1,65 @@
 .homepage-tabs-wrapper {
   width: 100%;
-  margin-top: 40px;
+  margin-top: 24px;
+  padding: 0 4px 0 max(8px, calc((100% - 1378px) / 2 + 8px));
 }
 
 .homepage-tabs {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 50px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 2px;
 }
 
 .homepage-tab {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  background: none;
+  justify-content: center;
+  background-color: transparent;
   border: none;
-  padding: 0;
-  padding-bottom: 12px;
+  border-radius: 5px;
+  padding: 5px 15px;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: background-color 0.25s ease;
 }
 
 .homepage-tab-text {
   font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 900;
-  color: #2C2C2C;
-  transition: color 0.2s;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #2c2c2c;
+  transition: color 0.15s ease;
 }
 
 .homepage-tab:hover .homepage-tab-text {
-  color: #FF5353;
+  color: #FFFFFF;
+  background-color: #FF5353;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+
+.homepage-tab-active,
+.homepage-tab-active:hover {
+  background-color: #2c2c2c;
 }
 
 .homepage-tab-active .homepage-tab-text {
-  color: #2C2C2C;
+  color: #ffffff;
+}
+
+.homepage-tab-active:hover .homepage-tab-text {
+  color: #ffffff;
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
 }
 
 .homepage-tab-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 4px;
-  background-color: #FF5353;
-  border-radius: 3px;
+  display: none;
 }
 
 .homepage-tabs-divider {
@@ -95,17 +107,16 @@
   }
 
   .homepage-tabs {
-    gap: 24px;
+    gap: 8px;
     padding: 0 16px;
     min-width: max-content;
   }
 
-  .homepage-tab-text {
-    font-size: 14px;
+  .homepage-tab {
+    padding: 8px 14px;
   }
 
-  .homepage-tab-indicator {
-    width: 40px;
-    height: 3px;
+  .homepage-tab-text {
+    font-size: 14px;
   }
 }

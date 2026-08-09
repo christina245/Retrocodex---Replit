@@ -100,7 +100,7 @@ export function Footer() {
             className="footer-brand-logo"
           />
           <p className="footer-brand-description">
-            <b>Launched in April 2026, Retrocodex: Stuff You Learned Wrong</b> is an evolving, interactive library of commonly taught misconceptions and outdated information from all over the world. 
+            Launched in late April 2026, <b>Retrocodex: Stuff You Learned Wrong</b> is an evolving, interactive library of commonly taught misconceptions and outdated facts from all over the world. 
           </p>
         </div>
       </div>
