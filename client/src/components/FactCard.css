@@ -10,19 +10,29 @@
 }
 
 .fact-card {
+  position: relative;
   width: 100%;
   max-width: 515px;
   height: 310px;
   background: #ffffff;
-  
-  border: none;
-  border-left: 4px solid color-mix(in srgb, var(--card-category-color) 90%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--card-category-color) 90%, transparent);
+
+  border: 2px solid #2c2c2c;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.2s;
+}
+
+.fact-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 8px;
+  background-color: var(--card-category-color);
+  pointer-events: none;
 }
 
 .fact-card:hover {
@@ -108,7 +118,7 @@
   flex-shrink: 0;
   background: transparent;
   margin: 5px 5px 5px 0;
-  border-radius: 10px;
+  border-radius: 5px;
   overflow: hidden;
 }
 
@@ -179,7 +189,7 @@
 .learn-more-button {
   background: #ffffff;
   color: #ff5353;
-  border: 2px solid #ff5353;
+  border: 2px solid #ffffff;
   padding: 8px 15px 8px 12px;
   border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
@@ -192,6 +202,7 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .learn-more-button:hover {
@@ -225,8 +236,8 @@
 }
 
 .action-button:hover {
-  color: #FF5353;
-  background: #f5f5f5;
+  color: #Ffffff;
+  background: #ff5353;
 }
 
 .action-button-unsave {

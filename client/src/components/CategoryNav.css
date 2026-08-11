@@ -63,19 +63,19 @@
 
 .category-name {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 800;
-  color: #2C2C2C;
+  color: #ffffff;
   letter-spacing: 0.025em;
 }
 
 .category-item-selected {
-  background: #2C2C2C;
+  background: #ffffff;
   border-color: #2C2C2C;
 }
 
 .category-item-selected:hover {
-  background: #2C2C2C;
+  background: #ffffff;
   border-color: #2C2C2C;
   transform: none;
   box-shadow: none;

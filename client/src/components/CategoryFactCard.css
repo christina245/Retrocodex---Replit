@@ -10,18 +10,28 @@
 }
 
 .category-fact-card {
+  position: relative;
   width: 515px;
   height: 310px;
   background: #Ffffff;
-  
-  border: none;
-  border-left: 4px solid color-mix(in srgb, var(--card-category-color) 90%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--card-category-color) 90%, transparent);
+
+  border: 2px solid #2c2c2c;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: box-shadow 0.2s;
+}
+
+.category-fact-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 8px;
+  background-color: var(--card-category-color);
+  pointer-events: none;
 }
 
 .category-fact-card:hover {

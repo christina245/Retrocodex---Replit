@@ -1,7 +1,8 @@
 .homepage-category-nav {
   width: 100%;
-  padding: 15 1rem 10 1rem;
+  padding: 10px 1rem 5px 1rem;
   margin: 5px 0;
+  background: #2c2c2c;
 }
 
 .homepage-category-nav-sticky {
@@ -11,7 +12,7 @@
   background: #ffffff;
   margin-top: 0;
   padding-top: 5px;
-  padding-bottom: 8px;
+  padding-bottom: 5px;
 }
 
 .homepage-category-nav-container {
@@ -19,14 +20,14 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 7px;
 }
 
 .homepage-category-tile {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 6px;
   padding: 8px 8px;
   border-radius: 6px;
   text-decoration: none;
@@ -58,7 +59,7 @@
   font-weight: 900;
   font-variation-settings: "opsz" 40, "wght" 900;
   color: #FFFFFF;
-  letter-spacing: 0.020em;
+  letter-spacing: 0.070em;
   transition: color 0.2s;
 }
 

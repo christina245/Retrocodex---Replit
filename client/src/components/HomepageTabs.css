@@ -1,6 +1,6 @@
 .homepage-tabs-wrapper {
   width: 100%;
-  margin-top: 24px;
+  margin-top: 8px;
   padding: 0 4px 0 max(8px, calc((100% - 1378px) / 2 + 8px));
 }
 
@@ -32,6 +32,7 @@
   font-weight: 700;
   text-transform: uppercase;
   color: #2c2c2c;
+  letter-spacing: 0.070em;
   transition: color 0.15s ease;
 }
 
@@ -117,6 +118,6 @@
   }
 
   .homepage-tab-text {
-    font-size: 14px;
+    font-size: 0.625rem;
   }
 }

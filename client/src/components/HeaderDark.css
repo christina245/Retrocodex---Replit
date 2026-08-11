@@ -72,9 +72,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #FFFFFF;
-  color: #ff5353;
-  border: 2px solid #d9d9d9;
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
   padding: 6px 8px;
   border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
@@ -95,7 +95,7 @@
 .dark-header-donate-icon {
   width: 16px;
   height: 16px;
-  color: #ff5353;
+  color: #ffffff;
   transition: color 0.2s;
 }
 
@@ -266,9 +266,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #FFFFFF;
-  color: #FF5353;
-  border: 2px solid #d9d9d9;
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
   padding: 6px 8px;
   border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
@@ -289,7 +289,7 @@
 .dark-header-signin-icon {
   width: 16px;
   height: 16px;
-  color: #FF5353;
+  color: #ffffff;
   transition: color 0.2s;
 }
 

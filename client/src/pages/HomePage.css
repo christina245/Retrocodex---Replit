@@ -13,12 +13,60 @@
   flex-direction: column;
 }
 
+.homepage-hero-graphic-container {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px 24px 40px;
+  border-bottom: none;
+}
+
 .homepage-hero-dark {
-  background: #2c2c2c;
-  border-radius: 0px;
-  margin: 0px 0px 0px;
-  padding: 10px 24px 65px;
-  
+  position: relative;
+  overflow: hidden;
+  background: #ff5353;
+  border-radius: 20px;
+  border: 3px solid #2c2c2c;
+  width: 95vw;
+  margin: 0 auto;
+  padding: 30px 35px 60px;
+  box-shadow: 12px 12px 2px 1px #2c2c2c;
+}
+
+.homepage-hero-dark::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+.homepage-hero-dark::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  right: 36px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+
+.homepage-hero-decor-circle-large {
+  position: absolute;
+  bottom: -90px;
+  right: -90px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  pointer-events: none;
 }
 
 .homepage-hero-dark .homepage-headline,
@@ -28,8 +76,8 @@
 
 .homepage-hero-dark .homepage-decade-chip {
   background-color: #ffffff;
-  border: 2px solid #d9d9d9;
-  color: #2c2c2c;
+  border: 2px solid #ff5353;
+  color: #ff5353;
 }
 
 .homepage-hero-dark .homepage-decade-chip:hover {
@@ -47,8 +95,8 @@
 
 .homepage-headline {
   font-family: 'DM Serif Text', serif;
-  font-size: 60px;
-  font-weight: 900;
+  font-size: 64px;
+  font-weight: 500;
   color: #2C2C2C;
   text-align: center;
   letter-spacing: 0em;
@@ -58,13 +106,23 @@
   padding: 0 20px;
 }
 
+.homepage-headline em {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+
+.homepage-hero-dark .homepage-headline em {
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+}
+
 .homepage-tagline {
   font-family: 'DM Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
   color: #4d4d4d;
   text-align: center;
-  margin: 25px 10px 20px;
+  margin: 35px 30px 20px;
 }
 
 .homepage-decade-nav {
@@ -79,21 +137,23 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 4px;
+  
 }
 
 .homepage-decade-chip {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: 5px;
+  gap: 6px;
+  margin-top: 1rem;
+  padding: 16px 20px;
+  border-radius: 10px;
   border: 2px solid #ff5353;
   cursor: pointer;
   white-space: nowrap;
   background-color: #ffffff;
   color: #2c2c2c;
   font-family: 'DM Sans', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.01em;
   transition: all 0.2s;
@@ -136,10 +196,10 @@
   flex-wrap: wrap;
   gap: 15px;
   width: 100%;
-  padding: 5px 24px;
+  padding: 0 24px;
   margin: 0;
-  background: #2c2c2c;
-  border-bottom: 1px solid #2c2c2c;
+  background: #ffffff;
+  border-bottom: #2c2c2c 3px solid;
 }
 
 .homepage-top-category-bar .homepage-category-subtitle {
@@ -149,13 +209,13 @@
   font-weight: 400;
   font-size: 12px;
   text-transform: none;
-  color: #ffffff;
+  color: #4d4d4d;
 }
 
 .homepage-top-category-bar .homepage-category-nav {
   width: auto;
-  padding: 0;
   margin-top: 5px;
+  background-color: #ffffff;
 }
 
 .homepage-top-category-bar .homepage-category-nav-container {
@@ -280,8 +340,7 @@
   }
 
   .homepage-hero-dark {
-    margin-left: 5px;
-    margin-right: 5px;
+    width: 95vw;
   }
 
   .homepage-headline {

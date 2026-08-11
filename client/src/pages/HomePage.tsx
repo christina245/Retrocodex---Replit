@@ -530,8 +530,9 @@ export default function HomePage() {
         </div>
       )}
 
-      <main className="main-content">
+      <div className="homepage-hero-graphic-container">
         <div className="homepage-hero-dark">
+          <div className="homepage-hero-decor-circle-large" aria-hidden="true" />
           <h1 className="homepage-headline" data-testid="text-homepage-headline">
             Your knowledge might be <em>outdated</em>.
           </h1>
@@ -547,9 +548,9 @@ export default function HomePage() {
                 data-testid="button-decade-all"
               >
                 {selectedDecade === "all" && (
-                  <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 3, verticalAlign: "middle" }} />
+                  <ArrowBigDownDash size={18} color="currentColor" style={{ marginRight: 0, verticalAlign: "middle" }} />
                 )}
-                View all
+                View all facts
               </button>
               {DECADES.filter(d => d >= "1950s").map((decade) => (
                 <button
@@ -564,7 +565,9 @@ export default function HomePage() {
             </div>
           </nav>
         </div>
+      </div>
 
+      <main className="main-content">
         {selectedDecade === "all" ? (
           <>
             <HomepageTabs activeTab={activeTab} onTabChange={handleTabChange} />
