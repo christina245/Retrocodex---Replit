@@ -46,7 +46,7 @@
   font-weight: 600;
   color: #FF5353;
   background: none;
-  border: none;
+  border: 2px solid #d9d9d9;
   cursor: pointer;
   padding: 4px 6px;
   white-space: nowrap;
@@ -77,7 +77,7 @@
 .sfh-dark-search-button {
   background: transparent;
   border: none;
-  color: #878787;
+  color: #FFFFFF;
   cursor: pointer;
   padding: 8px;
   display: flex;
@@ -131,7 +131,7 @@
 }
 
 .sfh-dark-search-close-button:hover {
-  color: #FF5353;
+  color: #FFFFFF;
 }
 
 .sfh-dark-submit-button {
@@ -160,9 +160,9 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: white;
-  color: #FF5353;
-  border: 2px solid #ff5353;
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
   padding: 6px 8px;
   border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
@@ -176,12 +176,13 @@
 .sfh-dark-header-signin-button:hover {
   background: #FF5353;
   color: white;
+  border: 2px solid #ff5353;
 }
 
 .sfh-dark-header-signin-icon {
   width: 16px;
   height: 16px;
-  color: #FF5353;
+  color: #ffffff;
   transition: color 0.2s;
 }
 
@@ -191,6 +192,16 @@
 
 .sfh-dark-header-signin-text-short {
   display: none;
+}
+
+.sfh-dark-notification-bell-header {
+  color: #FFFFFF;
+  transition: color 0.2s;
+  margin-right: 4px;
+}
+
+.sfh-dark-notification-bell-header:hover {
+  color: #FF5353;
 }
 
 .sfh-dark-hamburger-button {
@@ -238,6 +249,10 @@
 
   .sfh-dark-header-mobile-username {
     display: none;
+  }
+
+  .sfh-dark-header-signin-button--desktop-only {
+    display: none !important;
   }
 
   .sfh-dark-header-search-form {

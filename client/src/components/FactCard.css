@@ -30,7 +30,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 8px;
+  width: 4px;
   background-color: var(--card-category-color);
   pointer-events: none;
 }
@@ -69,9 +69,10 @@
   color: white;
   background: #2C2C2C;
   padding: 4px 10px;
-  border-radius: 30px;
+  border-radius: 20px;
   white-space: nowrap;
   text-transform: none;
+  border: 2px solid #2c2c2c;
 }
 
 .fact-taught-until-tag,

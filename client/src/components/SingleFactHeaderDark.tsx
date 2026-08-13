@@ -3,6 +3,7 @@ import { Search, X, UserRound, Bell, CircleEllipsis, MessageCirclePlus } from "l
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/white transparent logo.png";
+import logoIconMobile from "@assets/transparent logo red and white.png";
 import { SignInModal } from "./SignInModal";
 import { useAuth } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
@@ -67,7 +68,7 @@ export function SingleFactHeaderDark({ onMenuClick, onMobileSidebarToggle }: Sin
         <div className={`sfh-dark-header-logo ${isSearchOpen ? 'sfh-dark-header-logo-hidden-mobile' : ''}`}>
           <Link href="/" data-testid="link-home-logo">
             <img src={logoImage} alt="Retrocodex" className="sfh-dark-logo-image sfh-dark-logo-full" />
-            <img src="/transparent logo.png" alt="Retrocodex" className="sfh-dark-logo-icon-mobile" />
+            <img src={logoIconMobile} alt="Retrocodex" className="sfh-dark-logo-icon-mobile" />
           </Link>
         </div>
 
@@ -127,7 +128,7 @@ export function SingleFactHeaderDark({ onMenuClick, onMobileSidebarToggle }: Sin
           </a>
           {isLoggedIn ? (
             <button
-              className="sfh-dark-header-signin-button"
+              className="sfh-dark-header-signin-button sfh-dark-header-signin-button--desktop-only"
               onClick={() => navigate("/dashboard")}
               data-testid="button-profile"
               aria-label="Go to profile"

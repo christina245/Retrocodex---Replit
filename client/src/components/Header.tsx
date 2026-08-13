@@ -7,6 +7,7 @@ import instagramLogo from "@assets/Instagram_logo_2016.svg (1)_1763699400163.png
 import blueskyLogo from "@assets/Bluesky_Logo.svg_1763699419379.png";
 import redditLogo from "@assets/Reddit-Logo-500x281_1763705445995.png";
 import logoImage from "@assets/red black gray logo.png";
+import logoIconMobile from "@assets/transparent logo red and white.png";
 import taglineImage from "@assets/tagline only lessons 3.png";
 import taglineMobileImage from "@assets/tagline_mobile_1766215766436.png";
 import { NotificationBell } from "./NotificationBell";
@@ -114,7 +115,7 @@ export function Header({ onMenuClick, variant = "default", hideTagline = false }
 
           <Link href="/" className="header-branding" data-testid="link-home-logo">
             <img src={logoImage} alt="Retrocodex" className="logo-image logo-full" />
-            <img src="/transparent logo.png" alt="Retrocodex" className="logo-icon-mobile" />
+            <img src={logoIconMobile} alt="Retrocodex" className="logo-icon-mobile" />
           </Link>
 
           <div ref={actionsRef} className="header-actions">

@@ -3,6 +3,7 @@ import { Search, X, UserRound, Bell, CircleEllipsis, MessageCirclePlus } from "l
 import { NotificationBell } from "./NotificationBell";
 import { Link, useLocation } from "wouter";
 import logoImage from "@assets/red black gray logo.png";
+import logoIconMobile from "@assets/transparent logo red and white.png";
 import { SignInModal } from "./SignInModal";
 import { useAuth } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
@@ -67,7 +68,7 @@ export function SingleFactHeader({ onMenuClick, onMobileSidebarToggle }: SingleF
         <div className={`header-logo ${isSearchOpen ? 'header-logo-hidden-mobile' : ''}`}>
           <Link href="/" data-testid="link-home-logo">
             <img src={logoImage} alt="Retrocodex" className="logo-image logo-full" />
-            <img src="/transparent logo.png" alt="Retrocodex" className="logo-icon-mobile" />
+            <img src={logoIconMobile} alt="Retrocodex" className="logo-icon-mobile" />
           </Link>
         </div>
 
@@ -127,7 +128,7 @@ export function SingleFactHeader({ onMenuClick, onMobileSidebarToggle }: SingleF
           </a>
           {isLoggedIn ? (
             <button
-              className="header-signin-button"
+              className="header-signin-button header-signin-button--desktop-only"
               onClick={() => navigate("/dashboard")}
               data-testid="button-profile"
               aria-label="Go to profile"

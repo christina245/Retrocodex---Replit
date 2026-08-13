@@ -29,7 +29,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  width: 8px;
+  width: 4px;
   background-color: var(--card-category-color);
   pointer-events: none;
 }
