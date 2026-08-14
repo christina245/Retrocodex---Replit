@@ -537,7 +537,7 @@ export default function HomePage() {
             Your knowledge might be <em>outdated</em>.
           </h1>
           <p className="homepage-tagline" data-testid="text-homepage-tagline">
-            Select the decade you graduated high school. Discover what facts you may have been taught that has since been disproven or revised.
+            Select the decade you graduated high school. Discover what facts you may have been taught that have since been disproven or revised.
           </p>
 
           <nav className="homepage-decade-nav" data-testid="homepage-decade-nav">
