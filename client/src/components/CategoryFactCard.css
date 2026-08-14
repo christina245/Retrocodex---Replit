@@ -168,18 +168,20 @@
 .category-learn-more-button {
   background: #ffffff;
   color: #ff5353;
-  border: 2px solid #ff5353;
+  border: 2px solid #ffffff;
   padding: 8px 15px 8px 12px;
   border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   font-weight: 700;
+  letter-spacing: normal;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 8px;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .category-learn-more-button:hover {
