@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { Fragment, useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, useParams, Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -8,6 +8,8 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { HomepageTabs, type HomepageTabType } from "@/components/HomepageTabs";
 import { FactCard, type Fact } from "@/components/FactCard";
+import { InFeedAd } from "@/components/InFeedAd";
+import { DisplayAd } from "@/components/DisplayAd";
 import { FactKey } from "@/components/FactKey";
 import { SortSelector, type SortOption } from "@/components/SortSelector";
 import { CATEGORIES } from "@shared/categories";
@@ -641,17 +643,26 @@ export default function HomePage() {
                 <div className="facts-column">
                   <div className="facts-grid">
                     {!showEmptyState ? (
-                      displayedFacts.map((fact) => (
-                        <FactCard
-                          key={fact.id}
-                          fact={fact}
-                          onSave={() => handleSaveClick(fact.id)}
-                          onShare={() => handleShareClick(fact)}
-                          onComment={handleCommentClick}
-                          isSaved={savedFactIds.has(fact.id)}
-                          showTaughtUntilLabel
-                        />
-                      ))
+                      displayedFacts.map((fact, index) => {
+                        const hasFirstAd = displayedFacts.length > 3;
+                        const totalGridSlots = displayedFacts.length + (hasFirstAd ? 1 : 0);
+                        const needsTrailingAd = totalGridSlots % 2 !== 0;
+                        const isLastCard = index === displayedFacts.length - 1;
+                        return (
+                          <Fragment key={fact.id}>
+                            <FactCard
+                              fact={fact}
+                              onSave={() => handleSaveClick(fact.id)}
+                              onShare={() => handleShareClick(fact)}
+                              onComment={handleCommentClick}
+                              isSaved={savedFactIds.has(fact.id)}
+                              showTaughtUntilLabel
+                            />
+                            {index === 3 && <InFeedAd />}
+                            {isLastCard && needsTrailingAd && <InFeedAd />}
+                          </Fragment>
+                        );
+                      })
                     ) : activeTab === "explore" && isFactsLoading ? (
                       <div className="decade-loading-state" data-testid="featured-loading">
                         <img src="/loading_bar_gif_cotton_1776663498184.gif" className="decade-loading-gif" alt="" />
@@ -680,7 +691,8 @@ export default function HomePage() {
                   )}
 
                   {homepageArticles.length > 0 && (
-                    <section className="homepage-articles-section" data-testid="homepage-articles-section">
+                    <Fragment>
+                    <section className="homepage-articles-section adsense-auto-ads-ignore" data-testid="homepage-articles-section">
                       <div className="homepage-articles-header">
                         <h2 className="homepage-articles-title">Questioning the Facts</h2>
                         <span className="homepage-articles-divider">/</span>
@@ -754,6 +766,11 @@ export default function HomePage() {
                         </Link>
                       </div>
                     </section>
+
+                    <div className="homepage-footer-ad-row">
+                      <DisplayAd />
+                    </div>
+                    </Fragment>
                   )}
                 </div>
 

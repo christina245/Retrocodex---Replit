@@ -410,6 +410,19 @@
   border-top: 2px solid #2c2c2c;
 }
 
+.homepage-footer-ad-row {
+  margin: 2rem 2rem 1rem 0.5rem;
+}
+
+@media (min-width: 901px) {
+  .homepage-footer-ad-row {
+    /* Above 900px the sidebar sits beside (not below) this row, so it directly
+       precedes the footer. -3rem offsets Footer.css's built-in margin-top: 4rem,
+       netting a 1rem gap above the footer. */
+    margin-bottom: -3rem;
+  }
+}
+
 .homepage-articles-header {
   display: flex;
   align-items: baseline;

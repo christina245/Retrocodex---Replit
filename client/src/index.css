@@ -305,3 +305,8 @@
   margin: 0 0 1rem 0;
   text-align: left;
 }
+
+/* Tells Google Auto ads not to insert ads inside this element */
+.adsense-auto-ads-ignore {
+  google-auto-ads: ignore;
+}
