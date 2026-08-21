@@ -210,7 +210,7 @@ export default function ArticlesPage() {
                     originalPublishedAt={article.isExternal ? formatDate(article.originalPublishedAt) : null}
                     publishedAtIso={article.isExternal ? article.createdAt : article.publishedAt}
                   />
-                  {index === 3 && <InFeedAd adSlot="3795887691" layoutKey="-6b+ck+47-u-7" />}
+                  {index === 4 && <InFeedAd adSlot="3795887691" layoutKey="-6b+ck+47-u-7" />}
                 </Fragment>
               ))}
             </div>

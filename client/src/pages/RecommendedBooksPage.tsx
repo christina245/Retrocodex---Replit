@@ -4,6 +4,8 @@ import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
+import { InArticleAd } from "@/components/InArticleAd";
+import { MultiplexAd } from "@/components/MultiplexAd";
 
 import liesCover from "@assets/lies_my_teacher_told_me_1775699033524.jpeg";
 import legendsCover from "@assets/legends,_lies_1775699143129.jpg";
@@ -338,6 +340,9 @@ export default function RecommendedBooksPage() {
                 {section.books.map((book) => (
                   <BookCard key={book.title} book={book} />
                 ))}
+                {section.id === "why-misinformation-persists" && (
+                  <InArticleAd adSlot="4897894995" />
+                )}
               </div>
             </section>
           ))}
@@ -350,6 +355,10 @@ export default function RecommendedBooksPage() {
           </a>
           .
         </p>
+
+        <div className="books-multiplex-ad-row">
+          <MultiplexAd adSlot="1848381200" />
+        </div>
       </main>
 
       <Footer />

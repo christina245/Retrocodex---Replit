@@ -194,6 +194,18 @@
   text-align: center;
 }
 
+.books-multiplex-ad-row {
+  margin-top: 2rem;
+}
+
+.books-grid ins.adsbygoogle,
+.books-multiplex-ad-row ins.adsbygoogle {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 .books-footer-link {
   color: #c0392b;
   text-decoration: none;
