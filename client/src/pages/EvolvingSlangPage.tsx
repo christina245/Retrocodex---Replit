@@ -6,6 +6,7 @@ import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { CommentsSection } from "@/components/CommentsSection";
+import { MultiplexAd } from "@/components/MultiplexAd";
 import { CategoryLinks } from "@/components/CategoryLinks";
 import { SignInModal } from "@/components/SignInModal";
 import { evolvedTermsPeople, type EvolvedTerm } from "@/data/evolvedTerms";
@@ -206,6 +207,10 @@ export default function EvolvingSlangPage() {
             <div className="fc-sidebar-col">
               <CategoryLinks categories={["EVERYDAY LIFE"]} />
             </div>
+          </div>
+
+          <div className="fc-multiplex-ad-row">
+            <MultiplexAd adSlot="1848381200" />
           </div>
         </div>
       </main>

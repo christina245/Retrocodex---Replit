@@ -322,6 +322,15 @@
   gap: 1rem;
 }
 
+.fc-multiplex-ad-row {
+  margin-top: 2rem;
+}
+
+.fc-multiplex-ad-row ins.adsbygoogle {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 @media (max-width: 768px) {
   .fc-below-grid {
     display: flex;
