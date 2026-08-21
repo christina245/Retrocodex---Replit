@@ -4,6 +4,7 @@ import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
 import { HomepageCategoryNav } from "@/components/HomepageCategoryNav";
 import { SendgridBanner } from "@/components/SendgridBanner";
+import { DisplayAd } from "@/components/DisplayAd";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
@@ -121,6 +122,10 @@ export default function AboutPage() {
                 <HandHeart size={16} className="about-donate-icon" />
                 Help fund
               </a>
+            </div>
+
+            <div className="about-ad-row">
+              <DisplayAd adSlot="8010464871" />
             </div>
           </div>
 

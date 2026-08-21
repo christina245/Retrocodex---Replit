@@ -650,7 +650,7 @@ export default function HomePage() {
                         const isLastCard = index === displayedFacts.length - 1;
                         return (
                           <Fragment key={fact.id}>
-                            {isLastCard && needsTrailingAd && <InFeedAd />}
+                            {isLastCard && needsTrailingAd && <InFeedAd adSlot="1126276141" />}
                             <FactCard
                               fact={fact}
                               onSave={() => handleSaveClick(fact.id)}
@@ -659,7 +659,7 @@ export default function HomePage() {
                               isSaved={savedFactIds.has(fact.id)}
                               showTaughtUntilLabel
                             />
-                            {index === 3 && <InFeedAd />}
+                            {index === 3 && <InFeedAd adSlot="9609281726" />}
                           </Fragment>
                         );
                       })
@@ -768,7 +768,7 @@ export default function HomePage() {
                     </section>
 
                     <div className="homepage-footer-ad-row">
-                      <DisplayAd />
+                      <DisplayAd adSlot="1730791706" />
                     </div>
                     </Fragment>
                   )}
