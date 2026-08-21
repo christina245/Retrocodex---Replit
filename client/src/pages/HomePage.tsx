@@ -650,6 +650,7 @@ export default function HomePage() {
                         const isLastCard = index === displayedFacts.length - 1;
                         return (
                           <Fragment key={fact.id}>
+                            {isLastCard && needsTrailingAd && <InFeedAd />}
                             <FactCard
                               fact={fact}
                               onSave={() => handleSaveClick(fact.id)}
@@ -659,7 +660,6 @@ export default function HomePage() {
                               showTaughtUntilLabel
                             />
                             {index === 3 && <InFeedAd />}
-                            {isLastCard && needsTrailingAd && <InFeedAd />}
                           </Fragment>
                         );
                       })
