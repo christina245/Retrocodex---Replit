@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { Fragment, useState, useMemo, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,6 +20,8 @@ import { CirculationFilter } from "@/components/CirculationFilter";
 import { Pagination } from "@/components/Pagination";
 import { EmptyFilterState } from "@/components/EmptyFilterState";
 import { ScrungyBooksPromo } from "@/components/ScrungyBooksPromo";
+import { InFeedAd } from "@/components/InFeedAd";
+import { DisplayAd } from "@/components/DisplayAd";
 import "./EverydayLifePage.css";
 
 const FACTS_PER_PAGE = 10;
@@ -221,24 +223,36 @@ export default function EverydayLifePage() {
               ) : (
                 <>
                   <div className="everyday-life-facts-grid">
-                    {displayedFacts.map((fact) => (
-                      <CategoryFactCard
-                        key={fact.id}
-                        fact={fact}
-                        categoryColor={CATEGORY_COLOR}
-                        onSave={() => handleSaveClick(fact.id)}
-                        onShare={() => handleShareClick(fact)}
-                        onComment={handleCommentClick}
-                        isSaved={savedFactIds.has(fact.id)}
-                      />
-                    ))}
+                    {displayedFacts.map((fact, index) => {
+                      const hasFirstAd = displayedFacts.length > 3;
+                      const totalGridSlots = displayedFacts.length + (hasFirstAd ? 1 : 0);
+                      const needsTrailingAd = totalGridSlots % 2 !== 0;
+                      const isLastCard = index === displayedFacts.length - 1;
+                      return (
+                        <Fragment key={fact.id}>
+                          {isLastCard && needsTrailingAd && <InFeedAd adSlot="1126276141" layoutKey="-fi+4+38-lk+vb" />}
+                          <CategoryFactCard
+                            fact={fact}
+                            categoryColor={CATEGORY_COLOR}
+                            onSave={() => handleSaveClick(fact.id)}
+                            onShare={() => handleShareClick(fact)}
+                            onComment={handleCommentClick}
+                            isSaved={savedFactIds.has(fact.id)}
+                          />
+                          {index === 3 && <InFeedAd adSlot="9609281726" layoutKey="-fi+4+38-lk+vb" />}
+                        </Fragment>
+                      );
+                    })}
                   </div>
-                  <Pagination 
+                  <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={setCurrentPage}
                     scrollTargetId="__noscroll__"
                   />
+                  <div className="everyday-life-display-ad-row">
+                    <DisplayAd adSlot="1730791706" />
+                  </div>
                 </>
               )}
             </div>

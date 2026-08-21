@@ -113,6 +113,17 @@
   gap: 18px;
 }
 
+.life-sciences-facts-grid ins.adsbygoogle {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.life-sciences-display-ad-row {
+  margin-top: 2rem;
+}
+
 .life-sciences-sidebar {
   flex-shrink: 0;
   width: 300px;

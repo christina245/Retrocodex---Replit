@@ -103,6 +103,17 @@
   gap: 18px;
 }
 
+.everyday-life-facts-grid ins.adsbygoogle {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.everyday-life-display-ad-row {
+  margin-top: 2rem;
+}
+
 .everyday-life-sidebar {
   flex-shrink: 0;
   width: 300px;

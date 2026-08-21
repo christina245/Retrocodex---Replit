@@ -103,6 +103,17 @@
   gap: 18px;
 }
 
+.social-sciences-facts-grid ins.adsbygoogle {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.social-sciences-display-ad-row {
+  margin-top: 2rem;
+}
+
 .social-sciences-sidebar {
   flex-shrink: 0;
   width: 300px;
