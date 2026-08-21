@@ -232,9 +232,8 @@ export default function BlogCard({
           <div
             className="blog-card-category-pill"
             data-testid={`blog-card-category-${id}`}
-            style={{ backgroundColor: categoryColor, color: '#ffffff' }}
           >
-            <CategoryIcon size={12} style={{ color: '#ffffff' }} />
+            <CategoryIcon size={12} style={{ color: categoryColor }} />
             <span>{category}</span>
           </div>
         </div>

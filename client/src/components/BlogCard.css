@@ -67,8 +67,6 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 4px 10px;
-  border-radius: 5px;
   white-space: nowrap;
 }
 
@@ -78,6 +76,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.00em;
+  color: #2c2c2c;
 }
 
 .blog-card-title {

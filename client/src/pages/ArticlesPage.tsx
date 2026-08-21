@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { HeaderDark as Header } from "@/components/HeaderDark";
 import { HamburgerMenu } from "@/components/HamburgerMenu";
@@ -7,6 +7,8 @@ import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import { SEO } from "@/components/SEO";
 import BlogCard from "@/components/BlogCard";
+import { InFeedAd } from "@/components/InFeedAd";
+import { DisplayAd } from "@/components/DisplayAd";
 import "./ArticlesPage.css";
 
 interface UnifiedArticle {
@@ -189,26 +191,34 @@ export default function ArticlesPage() {
             />
           </div>
         ) : hasArticles ? (
-          <div className="articles-grid" data-testid="articles-grid">
-            {filteredArticles.map(article => (
-              <BlogCard
-                key={article.id}
-                id={article.slug}
-                image={article.coverImage}
-                date={formatDate(article.isExternal ? article.createdAt : article.publishedAt)}
-                category={article.category}
-                title={article.title}
-                summary={article.summary}
-                tags={article.tags || []}
-                isExternal={article.isExternal}
-                externalUrl={article.externalUrl}
-                publicationName={article.publicationName}
-                isPaywalled={article.isPaywalled}
-                originalPublishedAt={article.isExternal ? formatDate(article.originalPublishedAt) : null}
-                publishedAtIso={article.isExternal ? article.createdAt : article.publishedAt}
-              />
-            ))}
-          </div>
+          <>
+            <div className="articles-grid" data-testid="articles-grid">
+              {filteredArticles.map((article, index) => (
+                <Fragment key={article.id}>
+                  <BlogCard
+                    id={article.slug}
+                    image={article.coverImage}
+                    date={formatDate(article.isExternal ? article.createdAt : article.publishedAt)}
+                    category={article.category}
+                    title={article.title}
+                    summary={article.summary}
+                    tags={article.tags || []}
+                    isExternal={article.isExternal}
+                    externalUrl={article.externalUrl}
+                    publicationName={article.publicationName}
+                    isPaywalled={article.isPaywalled}
+                    originalPublishedAt={article.isExternal ? formatDate(article.originalPublishedAt) : null}
+                    publishedAtIso={article.isExternal ? article.createdAt : article.publishedAt}
+                  />
+                  {index === 3 && <InFeedAd adSlot="3795887691" layoutKey="-6b+ck+47-u-7" />}
+                </Fragment>
+              ))}
+            </div>
+
+            <div className="articles-ad-row">
+              <DisplayAd adSlot="8010464871" />
+            </div>
+          </>
         ) : (
           <div className="loading-state" data-testid="empty-state">
             <img 

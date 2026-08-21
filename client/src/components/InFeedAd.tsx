@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-export function InFeedAd({ adSlot }: { adSlot: string }) {
+export function InFeedAd({ adSlot, layoutKey }: { adSlot: string; layoutKey: string }) {
   const pushedRef = useRef(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function InFeedAd({ adSlot }: { adSlot: string }) {
       className="adsbygoogle"
       style={{ display: "block" }}
       data-ad-format="fluid"
-      data-ad-layout-key="-fi+4+38-lk+vb"
+      data-ad-layout-key={layoutKey}
       data-ad-client="ca-pub-2301734370307739"
       data-ad-slot={adSlot}
       data-adtest={import.meta.env.DEV ? "on" : undefined}

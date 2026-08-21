@@ -113,6 +113,11 @@
   padding: 50px 110px;
 }
 
+.articles-ad-row {
+  max-width: 1140px;
+  margin: 0 0 50px 110px;
+}
+
 .empty-state,
 .loading-state {
   display: flex;
@@ -151,6 +156,11 @@
     padding: 50px;
     justify-content: center;
   }
+
+  .articles-ad-row {
+    max-width: 690px;
+    margin: 0 auto 50px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -185,5 +195,10 @@
     width: 100%;
     max-width: 330px;
     margin: 0 auto;
+  }
+
+  .articles-ad-row {
+    max-width: 330px;
+    margin: 0 auto 50px;
   }
 }
