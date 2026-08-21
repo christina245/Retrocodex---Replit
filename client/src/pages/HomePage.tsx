@@ -836,19 +836,22 @@ export default function HomePage() {
                     <div className="decade-facts-grid">
                       {paginatedDecadeFacts.length > 0 ? (
                         paginatedDecadeFacts.map((fact, index) => (
-                          <div
-                            key={fact.id}
-                            className="decade-fact-row-item"
-                            style={{ animationDelay: `${Math.floor(index / 2) * 80}ms` }}
-                          >
-                            <FactCard
-                              fact={fact}
-                              onSave={() => handleSaveClick(fact.id)}
-                              onShare={() => handleShareClick(fact)}
-                              onComment={handleCommentClick}
-                              isSaved={savedFactIds.has(fact.id)}
-                            />
-                          </div>
+                          <Fragment key={fact.id}>
+                            <div
+                              className="decade-fact-row-item"
+                              style={{ animationDelay: `${Math.floor(index / 2) * 80}ms` }}
+                            >
+                              <FactCard
+                                fact={fact}
+                                onSave={() => handleSaveClick(fact.id)}
+                                onShare={() => handleShareClick(fact)}
+                                onComment={handleCommentClick}
+                                isSaved={savedFactIds.has(fact.id)}
+                              />
+                            </div>
+                            {index === 7 && <InFeedAd adSlot="2052239805" layoutKey="-fi+4+38-lk+vb" />}
+                            {index === 15 && <InFeedAd adSlot="2723262990" layoutKey="-fi+4+38-lk+vb" />}
+                          </Fragment>
                         ))
                       ) : (
                         <div className="decade-empty-state" data-testid="decade-empty">

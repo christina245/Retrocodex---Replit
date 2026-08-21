@@ -813,6 +813,13 @@
   gap: 18px;
 }
 
+.decade-facts-grid ins.adsbygoogle {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 .decade-fact-row-item {
   animation: decade-fade-up 0.35s ease both;
 }
